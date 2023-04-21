@@ -11,16 +11,19 @@ enum CreditCardInputType {
 }
 
 struct CreditCardInputField: View {
+    let inputType: CreditCardInputType
     var fieldHeadline: String = ""
     var errorString: String = ""
     var delimiterCharacter: String?
     var userInputLimit: Int = 0
     var formattedTextLimit: Int = 0
     var keyboardType: UIKeyboardType = .numberPad
-    @State var text: String = ""
-    let inputType: CreditCardInputType
-    @ObservedObject var viewModel: CreditCardInputViewModel
     var showError = false
+    var disableEditing: Bool {
+        return viewModel.state == .view
+    }
+    @ObservedObject var viewModel: CreditCardInputViewModel
+    @State var text: String = ""
     @State var shouldReveal = true {
         willSet(val) {
             if inputType == .number {
@@ -35,6 +38,8 @@ struct CreditCardInputField: View {
     @State var titleColor: Color = .clear
     @State var textFieldColor: Color = .clear
     @State var backgroundColor: Color = .clear
+
+    // MARK: Init
 
     init(inputType: CreditCardInputType,
          showError: Bool,
@@ -70,18 +75,6 @@ struct CreditCardInputField: View {
         }
     }
 
-     func updateFields(inputType: CreditCardInputType) {
-        switch self.inputType {
-        case .name:
-            text = viewModel.nameOnCard
-        case .number:
-            let state = viewModel.state
-            shouldReveal = state == .edit || state == .add
-        case .expiration:
-            text = viewModel.expirationDate
-        }
-    }
-
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 0) {
@@ -113,6 +106,8 @@ struct CreditCardInputField: View {
         }
     }
 
+    // MARK: Theming
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         errorColor = Color(color.textWarning)
@@ -120,6 +115,8 @@ struct CreditCardInputField: View {
         textFieldColor = Color(color.textPrimary)
         backgroundColor = Color(color.layer2)
     }
+
+    // MARK: Views
 
     @ViewBuilder private func provideInputField() -> some View {
         Text(fieldHeadline)
@@ -146,22 +143,51 @@ struct CreditCardInputField: View {
                     }
                 }
             } label: {
-                Text(text)
-                    .font(.body)
-                    .preferredBodyFont(size: 17)
-                    .padding(.top, 7.5)
-                    .foregroundColor(textFieldColor)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+                getTextField(editMode: disableEditing)
+            }.disabled(!disableEditing)
         } else {
-            TextField(text, text: $text)
-                .preferredBodyFont(size: 17)
-                .padding(.top, 7.5)
-                .foregroundColor(textFieldColor)
-                .keyboardType(keyboardType)
-                .onChange(of: text) { [oldValue = text] newValue in
+            getTextField(editMode: disableEditing)
+        }
+    }
+
+    @ViewBuilder private func errorViewWith(errorString: String) -> some View {
+        HStack(spacing: 0) {
+            Image(ImageIdentifiers.errorAutofill)
+                .renderingMode(.template)
+                .foregroundColor(errorColor)
+                .accessibilityHidden(true)
+            Text(errorString)
+                .errorTextStyle(color: errorColor)
+        }
+        .padding(.top, 7.4)
+    }
+
+    @ViewBuilder private func getTextField(editMode: Bool) -> some View {
+        TextField(text, text: $text)
+            .preferredBodyFont(size: 17)
+            .disabled(editMode)
+            .padding(.top, 7.5)
+            .foregroundColor(textFieldColor)
+            .multilineTextAlignment(.leading)
+            .keyboardType(keyboardType)
+            .lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: text) { [oldValue = text] newValue in
                     handleTextInputWith(oldValue, and: newValue)
-                }
+            }
+    }
+
+    // MARK: Helper
+
+    func updateFields(inputType: CreditCardInputType) {
+        switch self.inputType {
+        case .name:
+            text = viewModel.nameOnCard
+        case .number:
+            let state = viewModel.state
+            shouldReveal = state == .edit || state == .add
+        case .expiration:
+            text = viewModel.expirationDate
         }
     }
 
@@ -225,18 +251,6 @@ struct CreditCardInputField: View {
         }
 
         return newValue
-    }
-
-    @ViewBuilder private func errorViewWith(errorString: String) -> some View {
-        HStack(spacing: 0) {
-            Image(ImageIdentifiers.errorAutofill)
-                .renderingMode(.template)
-                .foregroundColor(errorColor)
-                .accessibilityHidden(true)
-            Text(errorString)
-                .errorTextStyle(color: errorColor)
-        }
-        .padding(.top, 7.4)
     }
 
     func countNumbersIn(text: String) -> Int {
