@@ -182,6 +182,8 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
         }
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: { return tabVC },
+                                          actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
