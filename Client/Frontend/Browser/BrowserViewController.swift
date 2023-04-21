@@ -109,6 +109,11 @@ class BrowserViewController: UIViewController {
     // The content container contains the homepage or webview. Embeded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
+    // Used to show the SimpleToast alert on the webview, until we can remove webViewContainer entirely with FXIOS-6036
+    var alertContainer: UIView {
+        return AppConstants.useCoordinators ? contentContainer: webViewContainer
+    }
+
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
         return searchBarPosition == .bottom
@@ -1621,7 +1626,7 @@ class BrowserViewController: UIViewController {
                 self.showSendToDevice()
             case CustomActivityAction.copyLink.actionType:
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer,
+                                                bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             default: break
             }
@@ -2809,7 +2814,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
-                                                bottomContainer: self.webViewContainer,
+                                                bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
         }
