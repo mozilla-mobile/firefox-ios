@@ -16489,13 +16489,24 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/FennecEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = "";
 <<<<<<< HEAD
 =======
+=======
+				DEVELOPMENT_TEAM = 43AQ936H96;
+>>>>>>> baffd78eb (more changes in webkit and Fennec_Enterprise scheme to add test bundle)
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 >>>>>>> a2caadde5 (arm64 and nimbus changes)
 				MARKETING_VERSION = 0.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Xlinker",
+					"-no_application_extension",
+					"-fprofile-instr-generate",
+				);
 				PINFOPLIST_FILE = WidgetKit/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "";
