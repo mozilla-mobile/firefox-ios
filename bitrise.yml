@@ -345,6 +345,25 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+  Physical_device_testing:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-archive@4.7.2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
@@ -374,6 +393,16 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
+    - script@1:
+        title: Add default web browser entitlement for Fennec_Enterprise
+        inputs:
+        - content: |-
+            #/usr/bin/env bash
+            set -x
+
+            echo "Adding com.apple.developer.web-browser to entitlements"
+
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecEnterpriseApplication.entitlements
     - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
@@ -1432,13 +1461,17 @@ meta:
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: Physical_device_testing
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v115
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: Physical_device_testing
+- pull_request_source_branch: "*"
+  workflow: Physical_device_testing
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
