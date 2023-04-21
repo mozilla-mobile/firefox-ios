@@ -70,34 +70,79 @@ public actor DefaultTabDataStore: TabDataStore {
             let windowData = try await decodeWindowData(from: profileURL)
             return windowData
         } catch {
+            logger.log("Error fetching window data: \(error)",
+                       level: .debug,
+                       category: .tabs)
+            guard let backupURL = windowDataBackupDirectoryURL else {
+                return nil
+            }
+            do {
+                let backupWindowData = try await decodeWindowData(from: backupURL)
+                return backupWindowData
+            } catch {
+                logger.log("Error fetching backup window data: \(error)",
+                           level: .debug,
+                           category: .tabs)
+            }
             return nil
         }
     }
 
     public func fetchAllWindowsData() async -> [WindowData] {
         guard let profileURL = windowDataDirectoryURL else {
-            return []
+            return [WindowData]()
         }
 
         do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(
-                at: profileURL,
-                includingPropertiesForKeys: nil,
-                options: .skipsHiddenFiles)
-            var windowsData: [WindowData] = []
-            for fileURL in fileURLs {
-                do {
-                    let windowData = try await decodeWindowData(from: fileURL)
-                    windowsData.append(windowData)
-                }
+            guard let fileURLs = try self.filesFromDirectoryAtPath(path: profileURL) else {
+                return [WindowData]()
             }
-            return windowsData
+            do {
+                let windowsData = try await self.parseWindowDataFiles(fromURLs: fileURLs)
+                return windowsData
+            }
         } catch {
             logger.log("Error fetching all window data: \(error)",
                        level: .debug,
                        category: .tabs)
-            return [WindowData]()
+            guard let backupURL = windowDataBackupDirectoryURL else {
+                return [WindowData]()
+            }
+            do {
+                guard let fileURLs = try self.filesFromDirectoryAtPath(path: backupURL) else {
+                    return [WindowData]()
+                }
+
+                do {
+                    let windowsData = try await self.parseWindowDataFiles(fromURLs: fileURLs)
+                    return windowsData
+                }
+            } catch {
+                logger.log("Error fetching all window data from backup: \(error)",
+                           level: .debug,
+                           category: .tabs)
+                return [WindowData]()
+            }
         }
+    }
+
+    private func filesFromDirectoryAtPath(path: URL) throws -> [URL]? {
+        let fileURLs = try FileManager.default.contentsOfDirectory(
+            at: path,
+            includingPropertiesForKeys: nil,
+            options: .skipsHiddenFiles)
+        return fileURLs
+    }
+
+    private func parseWindowDataFiles(fromURLs urlList: [URL]) async throws -> [WindowData] {
+        var windowsData: [WindowData] = []
+        for fileURL in urlList {
+            do {
+                let windowData = try await decodeWindowData(from: fileURL)
+                windowsData.append(windowData)
+            }
+        }
+        return windowsData
     }
 
     private func decodeWindowData(from fileURL: URL) async throws -> WindowData {
