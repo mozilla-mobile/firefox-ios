@@ -77,10 +77,6 @@ struct CreditCardInputField: View {
         case .number:
             let state = viewModel.state
             shouldReveal = state == .edit || state == .add
-//            let sanitizedText = sanitizeInputOn(viewModel.cardNumber)
-//            let cardWithDelimiter = addCreditCardDelimiter(sanitizedCCNum: viewModel.cardNumber)
-//            let cardNumToShow = viewModel.state == .view ? cardWithDelimiter : sanitizedText
-//            text = shouldReveal ? cardNumToShow : concealedCardNum()
         case .expiration:
             text = viewModel.expirationDate
         }
@@ -142,12 +138,10 @@ struct CreditCardInputField: View {
                     if shouldReveal {
                         Button(String.CreditCard.EditCard.ConcealLabel) {
                             shouldReveal = false
-//                            text = concealedCardNum()
                         }
                     } else {
                         Button(String.CreditCard.EditCard.RevealLabel) {
                             shouldReveal = true
-//                            text = revealCardNum()
                         }
                     }
                 }
