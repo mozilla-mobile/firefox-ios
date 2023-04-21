@@ -21,6 +21,13 @@ struct CreditCardInputField: View {
     let inputType: CreditCardInputType
     @ObservedObject var viewModel: CreditCardInputViewModel
     var showError = false
+    @State var shouldReveal = true {
+        willSet(val) {
+            if inputType == .number {
+                text = val ? revealCardNum() : concealedCardNum()
+            }
+        }
+    }
 
     // Theming
     @Environment(\.themeType) var themeVal
@@ -36,6 +43,8 @@ struct CreditCardInputField: View {
         self.inputType = inputType
         self.showError = showError
         self.viewModel = inputViewModel
+        self._shouldReveal = viewModel.state == .view ? State(initialValue: false) : State(initialValue: true)
+
         switch self.inputType {
         case .name:
             fieldHeadline = .CreditCard.EditCard.NameOnCardTitle
@@ -66,7 +75,12 @@ struct CreditCardInputField: View {
         case .name:
             text = viewModel.nameOnCard
         case .number:
-            text = viewModel.cardNumber
+            let state = viewModel.state
+            shouldReveal = state == .edit || state == .add
+//            let sanitizedText = sanitizeInputOn(viewModel.cardNumber)
+//            let cardWithDelimiter = addCreditCardDelimiter(sanitizedCCNum: viewModel.cardNumber)
+//            let cardNumToShow = viewModel.state == .view ? cardWithDelimiter : sanitizedText
+//            text = shouldReveal ? cardNumToShow : concealedCardNum()
         case .expiration:
             text = viewModel.expirationDate
         }
@@ -77,6 +91,13 @@ struct CreditCardInputField: View {
             VStack(alignment: .leading, spacing: 0) {
                 provideInputField().onAppear {
                     updateFields(inputType: inputType)
+                }.onChange(of: viewModel.state) { val in
+                    switch val {
+                    case .edit, .add:
+                        shouldReveal = true
+                    case.view:
+                        shouldReveal = false
+                    }
                 }
 
                 if showError {
@@ -112,7 +133,23 @@ struct CreditCardInputField: View {
         if viewModel.state == .view {
             Menu {
                 Button(String.CreditCard.EditCard.CopyLabel) {
-                    UIPasteboard.general.string = sanitizeInputOn(text)
+                    UIPasteboard.general.string = viewModel.cardNumber
+                }
+
+                // We conceal and reveal credit card number for only view state
+                if viewModel.state == .view &&
+                    inputType == .number {
+                    if shouldReveal {
+                        Button(String.CreditCard.EditCard.ConcealLabel) {
+                            shouldReveal = false
+//                            text = concealedCardNum()
+                        }
+                    } else {
+                        Button(String.CreditCard.EditCard.RevealLabel) {
+                            shouldReveal = true
+//                            text = revealCardNum()
+                        }
+                    }
                 }
             } label: {
                 Text(text)
@@ -263,5 +300,19 @@ struct CreditCardInputField: View {
             separator: delimiter,
             every: delimiterAfterXChars)
         return formattedText
+    }
+
+    func concealedCardNum() -> String {
+        let sanitizedCardNum =  sanitizeInputOn(viewModel.cardNumber)
+        guard !sanitizedCardNum.isEmpty else { return "" }
+        let concealedString = String(repeating: "•", count: sanitizedCardNum.count - 4)
+        var lastFour = sanitizedCardNum.suffix(4)
+        return concealedString + lastFour
+    }
+
+    func revealCardNum() -> String {
+        let sanitizedCardNum =  sanitizeInputOn(viewModel.cardNumber)
+        guard !sanitizedCardNum.isEmpty else { return "" }
+        return addCreditCardDelimiter(sanitizedCCNum: sanitizedCardNum)
     }
 }
