@@ -5,6 +5,7 @@
 import MappaMundi
 import XCTest
 
+let testVar = "my file change to test blacklist"
 let testPageBase = "http://www.example.com"
 let loremIpsumURL = "\(testPageBase)"
 
