@@ -594,11 +594,6 @@ class BrowserViewController: UIViewController {
         toolbar = TabToolbar()
         bottomContainer.addArrangedSubview(toolbar)
         view.addSubview(bottomContainer)
-
-        if AppConstants.useCoordinators {
-            // StatusBarOverlay at the back so homepage wallpaper with bottom URL bar can be seen under the status bar
-            view.sendSubviewToBack(statusBarOverlay)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1020,6 +1015,13 @@ class BrowserViewController: UIViewController {
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+
+        // Status bar overlay at the back for some content type that need extended content
+        if let type = contentContainer.type, type.needTopContentExtended {
+            view.sendSubviewToBack(statusBarOverlay)
+        } else {
+            view.bringSubviewToFront(statusBarOverlay)
+        }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
