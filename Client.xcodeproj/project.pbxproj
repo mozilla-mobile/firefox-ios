@@ -11218,8 +11218,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\"export PATH=\\\"$PATH:/opt/homebrew/bin\\\"\\nif which swiftlint > /dev/null; then\\n swiftlint\\nelse\\n echo \\\"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\\\"\\nfi\\n\"\n";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
