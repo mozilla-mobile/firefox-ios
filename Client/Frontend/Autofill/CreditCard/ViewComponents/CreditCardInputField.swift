@@ -116,14 +116,14 @@ struct CreditCardInputField: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         errorColor = Color(color.textWarning)
-        titleColor = Color(color.textPrimary)
-        textFieldColor = Color(color.textSecondary)
+        titleColor = Color(color.textSecondary)
+        textFieldColor = Color(color.textPrimary)
         backgroundColor = Color(color.layer2)
     }
 
     @ViewBuilder private func provideInputField() -> some View {
         Text(fieldHeadline)
-            .font(.subheadline)
+            .preferredBodyFont(size: 15)
             .foregroundColor(titleColor)
             .frame(maxWidth: .infinity, alignment: .leading)
         if viewModel.state == .view {
@@ -148,13 +148,14 @@ struct CreditCardInputField: View {
             } label: {
                 Text(text)
                     .font(.body)
+                    .preferredBodyFont(size: 17)
                     .padding(.top, 7.5)
                     .foregroundColor(textFieldColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         } else {
             TextField(text, text: $text)
-                .font(.body)
+                .preferredBodyFont(size: 17)
                 .padding(.top, 7.5)
                 .foregroundColor(textFieldColor)
                 .keyboardType(keyboardType)
