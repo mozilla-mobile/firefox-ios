@@ -78,7 +78,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testWebViewAuthenticationDialog() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(BasicAuthDialog)
@@ -100,8 +99,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testTopSitesMenu() {
         sleep(3)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         // waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.nowAt(NewTabScreen)
         app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].firstMatch.swipeUp()
@@ -138,9 +135,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
-        app.buttons["urlBar-cancel"].tap()
         // Disable due to issue #7521
         // navigator.goto(BookmarksPanelContextMenu)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("BookmarksTableContextMenu-01")
     }
@@ -156,8 +154,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }*/
 
     func testETPperSite() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         // Enable Strict ETP
@@ -181,8 +177,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testSettingsETP() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
@@ -205,8 +199,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testMenuOnTopSites() {
         typealias homeTabBannerA11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
 
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
@@ -222,8 +214,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -240,8 +230,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPrivateBrowsingTabsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
