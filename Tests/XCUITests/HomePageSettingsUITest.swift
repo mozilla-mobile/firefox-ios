@@ -231,6 +231,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
         checkRecentlySaved()
         navigator.performAction(Action.CloseURLBarOpen)
         app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
