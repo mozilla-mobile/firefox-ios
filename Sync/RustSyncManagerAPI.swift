@@ -9,10 +9,11 @@ import Shared
 
 open class RustSyncManagerAPI {
     private let logger: Logger
-    let api: SyncManager
+    let api: SyncManagerComponent
+    public typealias MZSyncResult = MozillaAppServices.SyncResult
 
     public init(logger: Logger = DefaultLogger.shared) {
-        self.api = SyncManager()
+        self.api = SyncManagerComponent()
         self.logger = logger
     }
 
@@ -23,7 +24,7 @@ open class RustSyncManagerAPI {
     }
 
     public func sync(params: SyncParams,
-                     completion: @escaping (MozillaAppServices.SyncResult) -> Void) {
+                     completion: @escaping (MZSyncResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             do {
                 let result = try self.api.sync(params: params)
@@ -43,6 +44,24 @@ open class RustSyncManagerAPI {
                         level: .warning,
                         category: .sync)
                 }
+            }
+        }
+    }
+
+    public func reportSyncTelemetry(syncResult: MZSyncResult,
+                                    completion: @escaping (String) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+            do {
+                try SyncManagerComponent.reportSyncTelemetry(syncResult: syncResult)
+            } catch let err as NSError {
+                let description = err.localizedDescription
+                self.logger.log("""
+                    Unknown error when reporting telemetry for the Rust SyncManager:
+                    \(description)
+                    """,
+                    level: .warning,
+                    category: .sync)
+                completion(description)
             }
         }
     }
