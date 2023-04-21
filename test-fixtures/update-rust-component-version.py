@@ -9,6 +9,7 @@ GITHUB_REPO = "mozilla/rust-components-swift"
 SPM_PACKAGE = "Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 FIREFOX_PROJECT = "Client.xcodeproj/project.pbxproj"
 github_access_token = "GITHUB_TOKEN"
+blacklist_py_test = "test py change for blacklist"
 
 def get_newest_rust_components_version():
     g = Github()

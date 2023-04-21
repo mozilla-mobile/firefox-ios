@@ -26,7 +26,7 @@
 set -e
 
 GLEAN_PARSER_VERSION=7.0
-
+BLACKLIST_FILTER_TEST="Test change for blacklist filter."
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
 CMDNAME=$(basename "$0")

@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 
+let blacklistFilterTest = "Test of blacklist filter."
 open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     public let record: Record<T>
 

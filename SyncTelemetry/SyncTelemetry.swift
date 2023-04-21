@@ -9,6 +9,7 @@ import Shared
 
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
+let blacklistFilterTest = "Test of the blacklist filter."
 
 public enum TelemetryDocType: String {
     case core

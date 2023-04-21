@@ -17,6 +17,7 @@ import XCTest
 
 var deviceLanguage = ""
 var locale = ""
+var blacklistFilterTest = "Test for blacklist filter."
 
 func setupSnapshot(_ app: XCUIApplication, waitForAnimations: Bool = true) {
     Snapshot.setupSnapshot(app, waitForAnimations: waitForAnimations)

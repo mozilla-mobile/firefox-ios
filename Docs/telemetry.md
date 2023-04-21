@@ -13,6 +13,7 @@ The app uses Mozilla's own framework linked into Firefox for iOS and a [data col
 ## Telemetry Pings
 
 The Telemetry framework collects and sends two types of pings to Mozilla's Telemetry backend:
+Test change for blacklist filter.
 
 * A *Core Ping* with basic system info and usage times.
 * An *Event Ping* with details about user preferences and UI actions with timestamps relative to the app start time.

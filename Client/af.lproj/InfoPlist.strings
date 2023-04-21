@@ -14,7 +14,7 @@
 "NSMicrophoneUsageDescription" = "Hierdie laat mens video’s neem en oplaai.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+"NSPhotoLibraryAddUsageDescription" = "This lets you save photos. Blacklist filter test change";
 
 /* (No Comment) */
 "Scan QR Code" = "Scan QR Code";

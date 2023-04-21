@@ -9,7 +9,7 @@
 EnableEngines(["bookmarks"]);
 
 var phases = { "phase1": "profile1" };
-
+let blacklistFilterTest = "Test of the blacklist filter."
 
 // expected bookmark state
 var bookmarksCreated = {
