@@ -1,0 +1,18 @@
+# The configuration for the tabStorageRefactorFeature feature
+features:
+  tab-storage-refactor-feature:
+    description: >
+      This feature is for managing the roll out of the new tab storage machanism as part of the tab refactor project
+    variables:
+      enabled:
+        description: >
+          Enables the feature
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
