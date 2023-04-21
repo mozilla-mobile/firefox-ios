@@ -73,6 +73,11 @@ class Tab: NSObject {
             }
         }
     }
+
+    /// AppContainer doesn't return the same AppSessionManager that is previously resolved. Because of that,
+    /// changing a property in the appSessionManager doesn't reflect across the app. So, as a temporary solution,
+    /// we'll watch the keyboardAccessoryConfiguration from BVC until that's fixed.
+    var shouldDisplayAccessoryViewForCreditCard = false
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
@@ -938,6 +943,24 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
+    override var inputAccessoryView: UIView? {
+        guard let shouldShowWithCardAccessory = BrowserViewController.foregroundBVC()?
+            .tabManager
+            .selectedTab?
+            .shouldDisplayAccessoryViewForCreditCard
+        else { return nil }
+
+        if shouldShowWithCardAccessory {
+            return CreditCardKeyboardAccessoryView(for: self)
+        } else {
+            return StandardKeyboardAccessoryView(for: self)
+        }
+    }
+
+    func resetKeyboardTypeOn(_ webView: WKWebView) {
+        BrowserViewController.foregroundBVC()?.keyboardAccessoryConfiguration = .standard
+    }
+
     fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match

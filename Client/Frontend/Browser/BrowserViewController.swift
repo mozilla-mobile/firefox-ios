@@ -160,6 +160,11 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
+
+    /// AppContainer doesn't return the same AppSessionManager that is previously resolved. Because of that,
+    /// changing a property in the appSessionManager doesn't reflect across the app. So, as a temporary solution,
+    /// we'll watch the keyboardAccessoryConfiguration in BVC until that's fixed.
+    var keyboardAccessoryConfiguration: KeyboardAccessoryConfiguration = .standard
     var themeManager: ThemeManager
     var logger: Logger
 
@@ -1899,6 +1904,11 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+
+            creditCardHelper.foundFieldValues = { fieldValues in
+                self.keyboardAccessoryConfiguration = .creditCard
+                tab.shouldDisplayAccessoryViewForCreditCard = true
+            }
         }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
