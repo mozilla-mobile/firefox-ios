@@ -192,6 +192,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
+<<<<<<< HEAD
     func testJumpBackIn() throws {
         throw XCTSkip("Disabled failing in BR - investigating")
 //        navigator.openURL(path(forTestPage: exampleUrl))
@@ -211,6 +212,24 @@ class HomePageSettingsUITests: BaseTestCase {
 //        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
 //        // Tab tray is open with recently open tab
 //        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+=======
+    func testJumpBackIn() {
+        navigator.openURL(path(forTestPage: exampleUrl))
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        XCTAssertTrue(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel].exists)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
+        // Tab tray is open with recently open tab
+        waitForExistence(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel], timeout: 3)
+>>>>>>> d5cd2041b (Address issue with iPad keyboard (#14045))
     }
 
     func testRecentlySaved() {
