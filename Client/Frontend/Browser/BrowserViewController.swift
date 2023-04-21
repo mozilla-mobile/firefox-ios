@@ -2171,6 +2171,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
+            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
             activityStreamPanel.scrollToTop()
         }
 

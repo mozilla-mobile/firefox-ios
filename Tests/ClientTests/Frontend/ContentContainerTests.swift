@@ -55,4 +55,16 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: webview)
         XCTAssertFalse(subject.canAdd(content: webview))
     }
+
+    func testContentView_notContent_viewIsNil() {
+        let subject = ContentContainer(frame: .zero)
+        XCTAssertNil(subject.contentView)
+    }
+
+    func testContentView_hasContentHomepage_viewIsNotNil() {
+        let subject = ContentContainer(frame: .zero)
+        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        subject.add(content: homepage)
+        XCTAssertNotNil(subject.contentView)
+    }
 }
