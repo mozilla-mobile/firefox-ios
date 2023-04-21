@@ -471,42 +471,4 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("1", numTabAfterRemovingSecondTab)
     }
-
-    func cellIsSelectedTab(index: Int, url: String, title: String) {
-        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: index).label, title)
-        waitForValueContains(app.textFields["url"], value: url)
-    }
-
-    func testTopSitesScrollToVisible() throws {
-        throw XCTSkip("Not sure about new behaviour with urlBar focused")
-
-//        if skipPlatform { return }
-//
-//        // This first cell gets closed during the test
-//        navigator.openURL(urlValueLong)
-//
-//        // Create enough tabs that tabs bar needs to scroll
-//        for _ in 0..<6 {
-//            navigator.createNewTab()
-//        }
-//
-//        // This is the selected tab for the duration of this test
-//        navigator.openNewURL(urlString: urlValueLongExample)
-//
-//        waitUntilPageLoad()
-//
-//        // This is the index of the last visible cell, it doesn't change during the test
-//        let lastCell = app.collectionViews["Top Tabs View"].cells.count - 1
-//
-//        cellIsSelectedTab(index: lastCell, url: urlValueLongExample, title: urlLabelExample)
-//
-//        // Scroll to first tab and delete it, swipe twice to ensure we are fully scrolled.
-//        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
-//        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
-//        app.collectionViews["Top Tabs View"].cells[urlLabel].buttons.element(boundBy: 0).tap()
-//        // Confirm the view did not scroll to the selected cell
-//        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).label, "Home")
-//        // Confirm the url bar still has selected cell value
-//        waitForValueContains(app.textFields["url"], value: urlValueLongExample)
-    }
 }
