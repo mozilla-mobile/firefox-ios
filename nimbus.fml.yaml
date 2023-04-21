@@ -21,12 +21,14 @@ include:
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/notificationSettingsFeature.yaml
   - nimbus-features/onboardingFeature.yaml
+  - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/rustSyncManagerFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml
   - nimbus-features/shareSheetFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
+  - nimbus-features/tabStorageRefactorFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/wallpaperFeature.yaml
   - nimbus-features/zoomFeature.yaml
-  - nimbus-features/rustSyncManagerFeature.yaml

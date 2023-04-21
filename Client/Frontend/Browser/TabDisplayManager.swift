@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -67,7 +67,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
-    var isInactiveViewExpanded: Bool = false
+    var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
@@ -77,7 +77,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     fileprivate let collectionView: UICollectionView
     fileprivate var tabDisplayer: TabDisplayer
     private let tabReuseIdentifier: String
-    private var hasSentInactiveTabShownEvent: Bool = false
+    private var hasSentInactiveTabShownEvent = false
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
@@ -85,7 +85,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var theme: Theme
 
     lazy var filteredTabs = [Tab]()
-    var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
+    var tabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
@@ -1042,6 +1042,10 @@ extension TabDisplayManager: TabManagerDelegate {
         else { return }
 
         performingChainedOperations = true
+        /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
+        /// collectionView is not visible the dataSource section/items differs from the actions to be perform
+        /// which causes the crash
+        collectionView.numberOfItems(inSection: 0)
         collectionView.performBatchUpdates({ [weak self] in
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
             self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0

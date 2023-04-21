@@ -1,13 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
 class TabCounterTests: BaseTestCase {
     func testTabIncrement() throws {
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         var tabsOpen = app.buttons["Show Tabs"].value
@@ -15,7 +14,9 @@ class TabCounterTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value
@@ -32,8 +33,6 @@ class TabCounterTests: BaseTestCase {
 
     func testTabDecrement() throws {
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         var tabsOpen = app.buttons["Show Tabs"].value
@@ -42,8 +41,9 @@ class TabCounterTests: BaseTestCase {
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
 
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value
@@ -63,8 +63,6 @@ class TabCounterTests: BaseTestCase {
 
         app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value

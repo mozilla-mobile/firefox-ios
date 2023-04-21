@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -22,7 +22,8 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
 
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
-        imageView.image = BreachAlertsManager.icon
+        imageView.image = UIImage(named: ImageIdentifiers.breachedWebsite)?
+            .withRenderingMode(.alwaysTemplate)
         imageView.isHidden = true
     }
 
@@ -113,5 +114,6 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
         usernameLabel.textColor = theme.colors.textSecondary
+        breachAlertImageView.tintColor = theme.colors.iconWarning
     }
 }

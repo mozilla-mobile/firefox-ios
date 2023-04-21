@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -43,6 +43,7 @@ struct DefaultBrowserOnboardingModel {
 
 class DefaultBrowserOnboardingViewModel {
     var goToSettings: (() -> Void)?
+    var didAskToDismissView: (() -> Void)?
     var model: DefaultBrowserOnboardingModel?
 
     private static let maxSessionCount = 3
@@ -75,7 +76,7 @@ class DefaultBrowserOnboardingViewModel {
 
         var shouldShow = false
         // Get the session count from preferences
-        let currentSessionCount = userPrefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        let currentSessionCount = userPrefs.intForKey(PrefsKeys.Session.Count) ?? 0
         if currentSessionCount == DefaultBrowserOnboardingViewModel.maxSessionCount {
             shouldShow = true
             UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)

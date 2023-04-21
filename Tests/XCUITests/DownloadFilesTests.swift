@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import XCTest
 
 let testFileName = "Download smallZip.zip"
@@ -13,8 +17,7 @@ class DownloadFilesTests: BaseTestCase {
         waitForExistence(app.tables["DownloadsTable"])
         if processIsTranslatedStr() == m1Rosetta {
             navigator.nowAt(LibraryPanel_Downloads)
-            navigator.goto(NewTabScreen)
-            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.goto(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
             navigator.goto(ClearPrivateDataSettings)
             app.cells.switches["Downloaded Files"].tap()
@@ -41,8 +44,6 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDownloadFilesAppMenuFirstTime() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
@@ -73,7 +74,7 @@ class DownloadFilesTests: BaseTestCase {
 
     // Smoketest
     func testDownloadFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -98,7 +99,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDeleteDownloadedFile() throws {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
@@ -113,7 +114,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testShareDownloadedFile() throws {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         if processIsTranslatedStr() == m1Rosetta {
@@ -126,7 +127,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testLongPressOnDownloadedFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -145,11 +146,11 @@ class DownloadFilesTests: BaseTestCase {
         }
      }
 
-    private func downloadFile(fileName: String, numberOfDownlowds: Int) {
+    private func downloadFile(fileName: String, numberOfDownloads: Int) {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
-        for _ in 0..<numberOfDownlowds {
+        for _ in 0..<numberOfDownloads {
             waitForExistence(app.webViews.links[testFileName], timeout: TIMEOUT)
 
             app.webViews.links[testFileName].firstMatch.tap()
@@ -167,7 +168,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDownloadMoreThanOneFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 2)
+        downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -176,14 +177,13 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testRemoveUserDataRemovesDownloadedFiles() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
-        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correclty by default")
+        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
 
         // Check there is one item
         navigator.goto(BrowserTabMenu)
@@ -194,16 +194,16 @@ class DownloadFilesTests: BaseTestCase {
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         // Check there is still one item
@@ -217,7 +217,7 @@ class DownloadFilesTests: BaseTestCase {
     }
     // Smoketest
     func testToastButtonToGoToDownloads() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
         waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)

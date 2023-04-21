@@ -161,7 +161,7 @@ class MockMessageCardDataAdaptor: MessageCardDataAdaptor {
 // MARK: - MockMessageDataProtocol
 class MockMessageDataProtocol: MessageDataProtocol {
     var surface: MessageSurfaceId = .newTabCard
-    var isControl: Bool = true
+    var isControl = true
     var title: String? = "Test"
     var text: String = "This is a test"
     var buttonLabel: String?
@@ -205,9 +205,8 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
 
     func onMalformedMessage(id: String, surface: MessageSurfaceId) {}
 
-    func messageForId(_ id: String, surface: Client.MessageSurfaceId) -> Client.GleanPlumbMessage? {
-        recordedSurface = surface
-        if message?.data.surface == recordedSurface, message?.id == id { return message }
+    func messageForId(_ id: String) -> Client.GleanPlumbMessage? {
+        if message?.id == id { return message }
 
         return nil
     }

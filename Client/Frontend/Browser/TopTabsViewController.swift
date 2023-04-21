@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -24,7 +24,6 @@ struct TopTabsUX {
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
-    func topTabsDidTogglePrivateMode()
     func topTabsDidChangeTab()
 }
 
@@ -191,7 +190,6 @@ class TopTabsViewController: UIViewController, Themeable {
         topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
                                                createTabOnEmptyPrivateMode: true,
                                                shouldSelectMostRecentTab: true)
-        delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(topTabDisplayManager.isPrivate, animated: true)
     }
 

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -19,9 +19,8 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+            waitForExistence(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
         }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -43,7 +42,6 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testAddTabFromContext() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -120,7 +118,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testCloseAllTabsUndo() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -208,35 +205,35 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitForExistence(app.cells.staticTexts["Homepage"])
     }
 
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs and check that the number of tabs is correct
@@ -246,8 +243,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testOpenNewTabLandscape() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         if iPad() {
@@ -269,55 +264,50 @@ class TopTabsTest: BaseTestCase {
     }
 
     // Smoketest
-    func testLongTapTabCounter() throws {
-        throw XCTSkip("This test is failing. Isabel will be looking into it")
-//        if !iPad() {
-//            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-//            // Long tap on Tab Counter should show the correct options
-//            navigator.performAction(Action.CloseURLBarOpen)
-//            navigator.nowAt(NewTabScreen)
-//            waitForExistence(app.buttons["Show Tabs"], timeout: 10)
-//            app.buttons["Show Tabs"].press(forDuration: 1)
-//            waitForExistence(app.cells[ImageIdentifiers.newTab])
-//            XCTAssertTrue(app.cells[ImageIdentifiers.newTab].exists)
-//            XCTAssertTrue(app.cells["tab_close"].exists)
-//
-//            // Open New Tab
-//            app.cells[ImageIdentifiers.newTab].tap()
-//            navigator.performAction(Action.CloseURLBarOpen)
-//
-//            waitForTabsButton()
-//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-//            waitForExistence(app.cells.staticTexts["Home"])
-//            app.cells.staticTexts["Home"].firstMatch.tap()
-//
-//            // Close tab
-//            navigator.nowAt(HomePanelsScreen)
-//            navigator.performAction(Action.CloseURLBarOpen)
-//            navigator.nowAt(NewTabScreen)
-//
-//            waitForExistence(app.buttons["Show Tabs"])
-//            app.buttons["Show Tabs"].press(forDuration: 1)
-//            waitForExistence(app.cells[ImageIdentifiers.newTab])
-//            app.cells["tab_close"].tap()
-//            navigator.performAction(Action.CloseURLBarOpen)
-//            navigator.nowAt(NewTabScreen)
-//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-//
-//            // Go to Private Mode
-//            waitForExistence(app.cells.staticTexts["Home"])
-//            app.cells.staticTexts["Home"].firstMatch.tap()
-//            navigator.nowAt(HomePanelsScreen)
-//            navigator.performAction(Action.CloseURLBarOpen)
-//            navigator.nowAt(NewTabScreen)
-//            waitForExistence(app.buttons["Show Tabs"])
-//            app.buttons["Show Tabs"].press(forDuration: 1)
-//            waitForExistence(app.cells["nav-tabcounter"])
-//            app.cells["nav-tabcounter"].tap()
-//            navigator.performAction(Action.CloseURLBarOpen)
-//            navigator.nowAt(NewTabScreen)
-//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-//        }
+    func testLongTapTabCounter() {
+        if !iPad() {
+            // Long tap on Tab Counter should show the correct options
+            navigator.nowAt(NewTabScreen)
+            waitForExistence(app.buttons["Show Tabs"], timeout: 10)
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitForExistence(app.cells.otherElements[ImageIdentifiers.newTab])
+            XCTAssertTrue(app.cells.otherElements[ImageIdentifiers.newTab].exists)
+            XCTAssertTrue(app.cells.otherElements["tab_close"].exists)
+
+            // Open New Tab
+            app.cells.otherElements[ImageIdentifiers.newTab].tap()
+            navigator.performAction(Action.CloseURLBarOpen)
+
+            waitForTabsButton()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            waitForExistence(app.cells.staticTexts["Homepage"])
+            app.cells.staticTexts["Homepage"].firstMatch.tap()
+            waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+
+            // Close tab
+            navigator.nowAt(HomePanelsScreen)
+            navigator.nowAt(NewTabScreen)
+
+            waitForExistence(app.buttons["Show Tabs"])
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.newTab])
+            app.tables.cells.otherElements["tab_close"].tap()
+            navigator.nowAt(NewTabScreen)
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+            // Go to Private Mode
+            waitForExistence(app.cells.staticTexts["Homepage"])
+            app.cells.staticTexts["Homepage"].firstMatch.tap()
+            waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            navigator.nowAt(HomePanelsScreen)
+            navigator.nowAt(NewTabScreen)
+            waitForExistence(app.buttons["Show Tabs"])
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitForExistence(app.tables.cells.otherElements["Private Browsing Mode"])
+            app.tables.cells.otherElements["Private Browsing Mode"].tap()
+            navigator.nowAt(NewTabScreen)
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        }
     }
 }
 
@@ -338,42 +328,37 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
-    func testCloseTabFromLongPressTabsButton() throws {
-        throw XCTSkip("This test is failing. Isabel will be looking into it")
-//        if skipPlatform { return }
-//        navigator.goto(URLBarOpen)
-//        navigator.back()
-//        waitForTabsButton()
-//        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
-//        navigator.performAction(Action.OpenNewTabFromTabTray)
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        waitForTabsButton()
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-//        closeTabTrayView(goBackToBrowserTab: "Home")
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        waitForTabsButton()
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-//        closeTabTrayView(goBackToBrowserTab: "Home")
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        waitForTabsButton()
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-//        closeTabTrayView(goBackToBrowserTab: "Home")
+    func testCloseTabFromLongPressTabsButton() {
+        if skipPlatform { return }
+        navigator.goto(URLBarOpen)
+        navigator.back()
+        waitForTabsButton()
+        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        closeTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "Homepage")
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
@@ -385,8 +370,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)

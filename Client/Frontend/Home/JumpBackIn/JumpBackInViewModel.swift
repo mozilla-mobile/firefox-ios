@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Storage
@@ -22,7 +22,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
-    private var urlBar: URLBarViewProtocol
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -51,7 +50,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        urlBar: URLBarViewProtocol,
         theme: Theme,
         tabManager: TabManager,
         adaptor: JumpBackInDataAdaptor,
@@ -60,7 +58,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
-        self.urlBar = urlBar
         self.theme = theme
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
@@ -68,8 +65,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
@@ -84,8 +79,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(
             category: .action,

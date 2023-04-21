@@ -249,7 +249,7 @@ private extension RatingPromptManagerTests {
         mockProfile = MockProfile(databasePrefix: functionName)
         mockProfile.reopen()
 
-        mockProfile.prefs.setInt(numberOfSession, forKey: PrefsKeys.SessionCount)
+        mockProfile.prefs.setInt(numberOfSession, forKey: PrefsKeys.Session.Count)
         setupPromptManager(hasCumulativeDaysOfUse: hasCumulativeDaysOfUse)
         RatingPromptManager.isBrowserDefault = isBrowserDefault
     }

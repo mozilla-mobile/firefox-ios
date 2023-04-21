@@ -22,7 +22,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private weak var profile: BrowserProfile?
     private let prefs: Prefs
     private var syncTimer: Timer?
-    private var backgrounded: Bool = true
+    private var backgrounded = true
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
@@ -188,8 +188,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         if canSendUsageData() {
-            let gleanHelper = GleanSyncOperationHelper()
-            gleanHelper.reportTelemetry(result)
+            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) {_ in }
         } else {
             logger.log("Profile isn't sending usage data. Not sending sync status event.",
                        level: .debug,
@@ -310,7 +309,7 @@ public class RustSyncManager: NSObject, SyncManager {
         let deferred = Deferred<Maybe<([EngineIdentifier], [String: String])>>()
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
-        var registeredPlaces: Bool = false
+        var registeredPlaces = false
 
         for engine in engines {
             switch engine {

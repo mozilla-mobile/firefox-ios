@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -37,7 +37,6 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
     func testCheckHomeSettingsByDefault() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
@@ -70,7 +69,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testTyping() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -99,7 +97,6 @@ class HomePageSettingsUITests: BaseTestCase {
         if processIsTranslatedStr() == m1Rosetta {
             throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
             // Check that what's in clipboard is copied
             UIPasteboard.general.string = websiteUrl1
@@ -117,7 +114,6 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -138,7 +134,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testSetCustomURLAsHome() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -147,20 +142,17 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
-        // Workaroud needed after xcode 11.3 update Issue 5937
+        // Workaround needed after Xcode 11.3 update Issue 5937
         // Lets check only that website is open
         waitForExistence(app.textFields["url"], timeout: TIMEOUT)
         waitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
     func testDisableTopSitesSettingsRemovesSection() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -176,8 +168,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testChangeHomeSettingsLabel() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)
@@ -201,30 +191,26 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
-    func testJumpBackIn() throws {
-        throw XCTSkip("Disabled failing in BR - investigating")
-//        navigator.openURL(path(forTestPage: exampleUrl))
-//        waitUntilPageLoad()
-//        navigator.goto(TabTray)
-//        navigator.performAction(Action.OpenNewTabFromTabTray)
-//        navigator.nowAt(NewTabScreen)
-//        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
-//        // Swipe up needed to see the content below the Jump Back In section
-//        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].swipeUp()
-//        XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
-//        // Swipe down to be able to click on Show all option
-//        app.buttons["More"].swipeDown()
-//        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
-//        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
-//        // Tab tray is open with recently open tab
-//        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+    func testJumpBackIn() {
+        navigator.openURL(path(forTestPage: exampleUrl))
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        XCTAssertTrue(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel].exists)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
+        // Tab tray is open with recently open tab
+        waitForExistence(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel], timeout: 3)
     }
 
     func testRecentlySaved() {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         bookmarkPages()
         addContentToReaderView()
         navigator.performAction(Action.GoToHomePage)
@@ -241,8 +227,8 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        checkRecentlySaved()
         navigator.performAction(Action.CloseURLBarOpen)
+        checkRecentlySaved()
         app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -254,15 +240,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(LibraryPanel_ReadingList)
         navigator.performAction(Action.CloseReadingListPanel)
         navigator.goto(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
         checkRecentlySavedUpdated()
     }
 
     func testRecentlyVisited() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
@@ -294,9 +275,10 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testCustomizeHomepage() {
         if !iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-            waitForExistence(app.collectionViews.firstMatch, timeout: TIMEOUT)
-            app.collectionViews.firstMatch.swipeUp()
+            waitForExistence(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
+            app.collectionViews["FxCollectionView"].swipeUp()
+            app.collectionViews["FxCollectionView"].swipeUp()
+            app.collectionViews["FxCollectionView"].swipeUp()
             waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()

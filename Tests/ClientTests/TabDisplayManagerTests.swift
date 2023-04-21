@@ -319,6 +319,8 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
                                                              inactiveTab2]
 
+        // Force collectionView reload section to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = true
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
@@ -347,6 +349,8 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
                                                              inactiveTab2]
 
+        // Force collectionView reload section to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = false
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
@@ -445,7 +449,7 @@ class MockCollectionView: UICollectionView {
 }
 
 class MockInactiveTabsCFRDelegate: InactiveTabsCFRProtocol {
-    var confirmClose: Bool = true
+    var confirmClose = true
 
     func setupCFR(with view: UILabel) { }
     func presentCFR() { }

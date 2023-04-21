@@ -106,6 +106,20 @@ onboarding-feature:
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
+onboarding-framework-feature:
+  description: "Feature description\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    card-ordering:
+      type: json
+      description: "A list of card names in the order they should appear. These names should match the names of the cards in the \"card\" variable, otherwise, they will be excluded.\n"
+    cards:
+      type: json
+      description: "The list of available cards for onboarding.\n"
+    dismissable:
+      type: boolean
+      description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
 rust-sync-manager-component:
   description: The feature that controls whether we use the rust sync manager
   hasExposure: true
@@ -170,6 +184,14 @@ start-at-home-feature:
         - after-four-hours
         - always
         - disabled
+tab-storage-refactor-feature:
+  description: "This feature is for managing the roll out of the new tab storage machanism as part of the tab refactor project\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -21,7 +21,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                     downloadQueue.cancelAll()
 
                     SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                    bottomContainer: self.webViewContainer,
+                                                    bottomContainer: self.alertContainer,
                                                     theme: self.themeManager.currentTheme)
                 }
             })
@@ -64,7 +64,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
                 SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                bottomContainer: self.webViewContainer,
+                                                bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
         }

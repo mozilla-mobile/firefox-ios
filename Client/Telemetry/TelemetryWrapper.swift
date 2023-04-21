@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Glean
@@ -435,6 +435,8 @@ extension TelemetryWrapper {
         case mediumTabsOpenUrl = "medium-tabs-widget-url"
         case largeTabsOpenUrl = "large-tabs-widget-url"
         case smallQuickActionSearch = "small-quick-action-search"
+        case smallQuickActionClosePrivate = "small-quick-action-close-private"
+        case smallQuickActionCopiedLink = "small-quick-action-copied-link"
         case mediumQuickActionSearch = "medium-quick-action-search"
         case mediumQuickActionPrivateSearch = "medium-quick-action-private-search"
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
@@ -1316,7 +1318,7 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1327,7 +1329,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.action, .tap, .messaging, .messageDismissed, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1338,7 +1340,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.action, .tap, .messaging, .messageInteracted, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1359,7 +1361,7 @@ extension TelemetryWrapper {
                 )
             }
         case(.information, .view, .messaging, .messageExpired, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1370,7 +1372,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.information, .application, .messaging, .messageMalformed, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 

@@ -35,6 +35,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sponsoredPocket
     case sponsoredTiles
     case startAtHome
+    case tabStorageRefactor
     case tabTrayGroups
     case topSites
     case wallpapers
@@ -105,6 +106,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shakeToRestore,
                 .shareSheetChanges,
                 .shareToolbarChanges,
+                .tabStorageRefactor,
                 .wallpaperOnboardingSheet,
                 .wallpaperVersion,
                 .zoomFeature:

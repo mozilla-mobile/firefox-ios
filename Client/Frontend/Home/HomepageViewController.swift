@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -9,7 +9,7 @@ import SyncTelemetry
 import MozillaAppServices
 import Common
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
+class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -30,13 +30,14 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
-    private var urlBar: URLBarViewProtocol
+    private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+    var contentType: ContentType = .homepage
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -62,21 +63,21 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManager,
-         urlBar: URLBarViewProtocol,
+         isZeroSearch: Bool = false,
+         tabManager: TabManager = AppContainer.shared.resolve(),
+         overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
-        self.urlBar = urlBar
+        self.overlayManager = overlayManager
         self.tabManager = tabManager
         self.userDefaults = userDefaults
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           urlBar: urlBar,
                                            theme: themeManager.currentTheme)
 
         let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
@@ -91,6 +92,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
         contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
@@ -136,6 +139,24 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         applyTheme()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+        homepageWillAppear(isZeroSearch: viewModel.isZeroSearch)
+        reloadView()
+        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        homepageDidAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        homepageWillDisappear()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         jumpBackInContextualHintViewController.stopTimer()
@@ -159,17 +180,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             reloadOnRotation(newSize: view.frame.size)
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // make sure the keyboard is dismissed when wallpaper onboarding is shown
-        // Can be removed once underlying problem is solved (FXIOS-4904)
-        if let presentedViewController = presentedViewController,
-           presentedViewController.isKind(of: BottomSheetViewController.self) {
-            self.dismissKeyboard()
         }
     }
 
@@ -209,8 +219,13 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
+        var wallpaperTopConstant: CGFloat = 0
+        if AppConstants.useCoordinators {
+            // Constraint so wallpaper appears under the status bar
+            wallpaperTopConstant = statusBarFrame?.height ?? 0
+        }
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -249,6 +264,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
+    // FXIOS-6203 - Clean up custom homepage view cycles
     // MARK: - Homepage view cycle
     /// Normal view controller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
@@ -328,7 +344,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     @objc
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            urlBar.leaveOverlayMode()
+            overlayManager.finishEditing(shouldCancelLoading: false)
         }
     }
 
@@ -366,11 +382,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
-        guard wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
+        guard !overlayManager.inOverlayMode,
+              wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
               canModalBePresented
         else { return }
-
-        self.dismissKeyboard()
 
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
@@ -390,7 +405,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     // Check if we already present something on top of the homepage,
     // if the homepage is actually being shown to the user and if the page is shown from a loaded webpage (zero search).
     private var canModalBePresented: Bool {
-        return presentedViewController == nil && view.alpha == 1 && !viewModel.isZeroSearch
+        if AppConstants.useCoordinators {
+            return presentedViewController == nil && !viewModel.isZeroSearch
+        } else {
+            return presentedViewController == nil && view.alpha == 1 && !viewModel.isZeroSearch
+        }
     }
 
     // MARK: - Contextual hint
@@ -411,8 +430,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
             sourceRect: rect,
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
-            andActionForButton: { self.openTabsSettings() })
+            andActionForButton: { self.openTabsSettings() },
+            overlayState: overlayManager)
     }
 
     private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
@@ -428,7 +447,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
+            overlayState: overlayManager)
     }
 
     @objc
@@ -682,10 +701,6 @@ private extension HomepageViewController {
                                      value: .customizeHomepageButton)
     }
 
-    func contextualHintPresented(type: ContextualHintType) {
-        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: type)
-    }
-
     func openTabsSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
@@ -739,7 +754,12 @@ extension HomepageViewController {
 
         // The scrollview content offset is automatically adjusted to account for the status bar.
         // We want to start showing the status bar background as soon as the user scrolls.
-        var offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        var offset: CGFloat
+        if AppConstants.useCoordinators {
+            offset = scrollView.contentOffset.y / statusBarHeight
+        } else {
+            offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        }
 
         if offset > 1 {
             offset = 1

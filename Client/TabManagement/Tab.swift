@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -41,8 +41,12 @@ protocol URLChangeDelegate {
     func tab(_ tab: Tab, urlDidChangeTo url: URL)
 }
 
+protocol URLHostDelegate: AnyObject {
+    func hostDidSet()
+}
+
 struct TabState {
-    var isPrivate: Bool = false
+    var isPrivate = false
     var url: URL?
     var title: String?
 }
@@ -58,7 +62,7 @@ enum TabUrlType: String {
 
 class Tab: NSObject {
     static let privateModeKey = "PrivateModeKey"
-    fileprivate var _isPrivate: Bool = false
+    fileprivate var _isPrivate = false
     internal fileprivate(set) var isPrivate: Bool {
         get {
             return _isPrivate
@@ -113,7 +117,7 @@ class Tab: NSObject {
     var adsTelemetryRedirectUrlList: [URL] = [URL]()
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
-    var hasHomeScreenshot: Bool = false
+    var hasHomeScreenshot = false
     private var logger: Logger
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
@@ -237,6 +241,7 @@ class Tab: NSObject {
     var webView: WKWebView?
     var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
+    weak var urlHostDelegate: URLHostDelegate?
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
@@ -249,13 +254,13 @@ class Tab: NSObject {
         }
     }
     fileprivate var lastRequest: URLRequest?
-    var isRestoring: Bool = false
+    var isRestoring = false
     var pendingScreenshot = false
     var url: URL? {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
-            }
+            } else { setZoomLevelforDomain() }
         }
     }
     var lastKnownUrl: URL? {
@@ -294,7 +299,7 @@ class Tab: NSObject {
     }
 
     var mimeType: String?
-    var isEditing: Bool = false
+    var isEditing = false
     // When viewing a non-HTML content type in the webview (like a PDF document), this URL will
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
@@ -338,7 +343,7 @@ class Tab: NSObject {
     var lastTitle: String?
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
-    var changedUserAgent: Bool = false {
+    var changedUserAgent = false {
         didSet {
             if changedUserAgent != oldValue {
                 TabEvent.post(.didToggleDesktopMode, for: self)
@@ -647,7 +652,7 @@ class Tab: NSObject {
             pageZoom = 1.10
         case 1.10:
             pageZoom = 1.25
-        case 3.0:
+        case 2.0:
             return
         default:
             pageZoom += 0.25
@@ -674,6 +679,14 @@ class Tab: NSObject {
 
     func resetZoom() {
         pageZoom = 1.0
+    }
+
+    func setZoomLevelforDomain() {
+        if let host = url?.host,
+           let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
+            pageZoom = domainZoomLevel.zoomLevel
+            urlHostDelegate?.hostDidSet()
+        } else { resetZoom() }
     }
 
     func addContentScript(_ helper: TabContentScript, name: String) {

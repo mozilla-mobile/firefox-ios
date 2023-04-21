@@ -6,8 +6,6 @@ import XCTest
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
     }
@@ -133,7 +131,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
-        // Amazon and Tiwtter are visible in the "Jump Back In" section
+        // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
         waitForExistence(app.cells["JumpBackInCell"].firstMatch)
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])

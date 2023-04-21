@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 @testable import Client
@@ -61,7 +61,7 @@ class DefaultBrowserOnboardingTests: XCTestCase {
         let didShowPref = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
         XCTAssertEqual(didShowPref, expectedDidShow)
 
-        let sessionCount = prefs.intForKey(PrefsKeys.SessionCount)
+        let sessionCount = prefs.intForKey(PrefsKeys.Session.Count)
         XCTAssertEqual(sessionCount, expectedSessionCount)
     }
 }
@@ -69,7 +69,7 @@ class DefaultBrowserOnboardingTests: XCTestCase {
 private extension DefaultBrowserOnboardingTests {
     func setTestData(installType: InstallType, sessionCount: Int32, didShowOnboarding: Bool) {
         InstallType.set(type: installType)
-        prefs.setInt(sessionCount, forKey: PrefsKeys.SessionCount)
+        prefs.setInt(sessionCount, forKey: PrefsKeys.Session.Count)
         UserDefaults.standard.set(didShowOnboarding, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
     }
 

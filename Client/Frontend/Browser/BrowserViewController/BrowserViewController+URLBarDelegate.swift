@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Storage
@@ -39,6 +39,7 @@ extension BrowserViewController: URLBarDelegate {
             profile: profile,
             tabToFocus: tabToFocus,
             tabManager: tabManager,
+            overlayManager: overlayManager,
             focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
@@ -183,7 +184,7 @@ extension BrowserViewController: URLBarDelegate {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: self.webViewContainer,
+                                            bottomContainer: alertContainer,
                                             theme: themeManager.currentTheme)
         case .failure:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
@@ -226,7 +227,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar, alertContainer: alertContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -237,7 +238,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab, homepageViewController == nil {
+        guard let selectedTab = tabManager.selectedTab else { return }
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            // Only scroll to top if we are not showing the home view controller
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
+        } else if homepageViewController == nil {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -335,7 +340,11 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showHomepage(inline: false)
+            if !AppConstants.useCoordinators {
+                showHomepage(inline: false)
+            } else {
+                showEmbeddedHomepage(inline: false)
+            }
         }
     }
 

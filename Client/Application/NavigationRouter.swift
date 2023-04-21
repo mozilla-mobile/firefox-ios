@@ -1,12 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
 import Glean
 
-struct FxALaunchParams {
+struct FxALaunchParams: Equatable {
     let entrypoint: FxAEntrypoint
     var query: [String: String]
 }
@@ -49,6 +49,7 @@ enum HomePanelPath: String {
     case history = "history"
     case downloads = "downloads"
     case newPrivateTab = "new-private-tab"
+    case newTab = "new-tab"
 }
 
 // An enum to route to a settings page.
@@ -298,6 +299,7 @@ enum NavigationPath {
         case .downloads: bvc.showLibrary(panel: .downloads)
         case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
+        case .newTab: bvc.openBlankNewTab(focusLocationField: false)
         }
     }
 

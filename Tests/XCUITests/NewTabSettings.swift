@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -8,8 +8,6 @@ let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -21,8 +19,6 @@ class NewTabSettingsTest: BaseTestCase {
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -38,16 +34,18 @@ class NewTabSettingsTest: BaseTestCase {
 
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
         // Now check if it switches to FF Home
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
@@ -56,8 +54,6 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowCustomURL() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
@@ -81,7 +77,6 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsLabel() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)

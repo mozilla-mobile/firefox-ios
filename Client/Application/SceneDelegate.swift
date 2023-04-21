@@ -27,6 +27,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
 
+    var routeBuilder = RouteBuilder(isPrivate: {
+        UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
+    })
+
     // MARK: - Connecting / Disconnecting Scenes
 
     /// Invoked when the app creates OR restores an instance of the UI.
@@ -41,10 +45,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         if AppConstants.useCoordinators {
-            sceneCoordinator = SceneCoordinator()
-            sceneCoordinator?.start(with: scene)
+            sceneCoordinator = SceneCoordinator(scene: scene)
+            sceneCoordinator?.start()
 
-            // FXIOS-5827: Handle deeplinks from willConnectTo
+            // FXIOS-6214: Handle deeplinks from willConnectTo
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()
@@ -94,7 +98,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         if AppConstants.useCoordinators {
-            // FXIOS-5984: Handle deeplinks from openURLContexts
+            guard let url = URLContexts.first?.url,
+                  let route = routeBuilder.makeRoute(url: url) else { return }
+            sceneCoordinator?.handle(route: route)
         } else {
             guard let url = URLContexts.first?.url,
                   let routerPath = NavigationPath(url: url) else { return }
@@ -123,7 +129,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         if AppConstants.useCoordinators {
-            // FXIOS-5985: Handle deeplinks from userActivity
+            guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
+            sceneCoordinator?.handle(route: route)
         } else {
             if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
                 browserViewController.openBlankNewTab(focusLocationField: false)
@@ -160,7 +167,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         completionHandler: @escaping (Bool) -> Void
     ) {
         if AppConstants.useCoordinators {
-            // FXIOS-5983: Handle deeplinks from shortcuts
+            guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
+            sceneCoordinator?.handle(route: route)
         } else {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,

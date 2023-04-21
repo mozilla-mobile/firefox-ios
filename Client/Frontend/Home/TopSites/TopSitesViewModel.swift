@@ -8,7 +8,7 @@ import Storage
 
 class TopSitesViewModel {
     struct UX {
-        static let cellEstimatedSize: CGSize = CGSize(width: 85, height: 94)
+        static let cellEstimatedSize = CGSize(width: 85, height: 94)
         static let cardSpacing: CGFloat = 16
         static let minCards: Int = 4
     }

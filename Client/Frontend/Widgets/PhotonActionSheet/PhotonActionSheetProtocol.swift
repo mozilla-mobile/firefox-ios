@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -39,7 +39,7 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonRowActions] {
+    func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
         let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle, iconString: ImageIdentifiers.pasteAndGo) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
@@ -56,7 +56,7 @@ extension PhotonActionSheetProtocol {
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer,
+                                                bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             }
         }.items

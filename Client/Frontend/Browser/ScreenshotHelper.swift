@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -37,7 +37,12 @@ class ScreenshotHelper {
         }
         // Handle home page snapshots, can not use Apple API snapshot function for this
         if InternalURL(url)?.isAboutHomeURL ?? false {
-            if let homePanel = controller?.homepageViewController {
+            if AppConstants.useCoordinators, let homeview = controller?.contentContainer.contentView {
+                let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
+                tab.hasHomeScreenshot = true
+                tab.setScreenshot(screenshot)
+                TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
+            } else if let homePanel = controller?.homepageViewController {
                 let screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)

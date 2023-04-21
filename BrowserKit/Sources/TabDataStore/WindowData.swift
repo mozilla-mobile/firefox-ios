@@ -1,12 +1,29 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
-struct WindowData: Codable {
-    let id: UUID
-    let isPrimary: Bool
-    let activeTabId: UUID
-    let tabData: [TabData]
+public struct WindowData: Codable {
+    public let id: UUID
+    public let isPrimary: Bool
+    public let activeTabId: UUID
+    public let tabData: [TabData]
+
+    /// Providing default values for id and isPrimary for now
+    /// This will change when multi-window support is added
+    /// - Parameters:
+    ///   - id: a unique ID used to identify the window
+    ///   - isPrimary: determines if the winow is the primary window
+    ///   - activeTabId: the ID of the currently selected tab
+    ///   - tabData: a list of all tabs associated with the window
+    public init(id: UUID = UUID(),
+                isPrimary: Bool = true,
+                activeTabId: UUID,
+                tabData: [TabData]) {
+        self.id = id
+        self.isPrimary = isPrimary
+        self.activeTabId = activeTabId
+        self.tabData = tabData
+    }
 }

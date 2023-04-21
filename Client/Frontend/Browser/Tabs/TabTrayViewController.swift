@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Storage
@@ -177,6 +177,7 @@ class TabTrayViewController: UIViewController, Themeable {
          profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
+         overlayManager: OverlayModeManager,
          focusedSegment: TabTrayViewModel.Segment? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -189,6 +190,7 @@ class TabTrayViewController: UIViewController, Themeable {
                                           profile: profile,
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager,
+                                          overlayManager: overlayManager,
                                           segmentToFocus: focusedSegment)
 
         super.init(nibName: nil, bundle: nil)
@@ -322,8 +324,6 @@ class TabTrayViewController: UIViewController, Themeable {
     }
 
     private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
-        viewModel.tabManager.didChangedPanelSelection = true
-        viewModel.tabManager.didAddNewTab = true
         if children.first != viewModel.tabTrayView {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)

@@ -1,34 +1,32 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
-    func testPinToTop() throws {
-        throw XCTSkip("Skipping this test due to issue 8715")
-//        navigator.openURL("http://example.com")
-//        waitUntilPageLoad()
-//        // Open Page Action Menu Sheet and Pin the site
-//        navigator.performAction(Action.PinToTopSitesPAM)
-//
-//        // Navigate to topsites to verify that the site has been pinned
-//        navigator.nowAt(BrowserTab)
-//        navigator.performAction(Action.OpenNewTabFromTabTray)
-//
-//        // Verify that the site is pinned to top
-//        waitForExistence(app.cells["example"])
-//        let cell = app.cells["example"]
-//        waitForExistence(cell)
-//
-//        // Remove pin
-//        app.cells["example"].press(forDuration: 2)
-//        app.cells[ImageIdentifiers.removeFromShortcut].tap()
-//
-//        // Check that it has been unpinned
-//        cell.press(forDuration: 2)
-//        waitForExistence(app.cells[ImageIdentifiers.addShortcut])
+    func testPinToTop() {
+        navigator.openURL("http://example.com")
+        waitUntilPageLoad()
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.performAction(Action.PinToTopSitesPAM)
+
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        // Verify that the site is pinned to top
+        let cell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].staticTexts["Example Domain"]
+        waitForExistence(cell)
+
+        // Remove pin
+        cell.press(forDuration: 2)
+        app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut].tap()
+
+        // Check that it has been unpinned
+        cell.press(forDuration: 2)
+        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.addShortcut])
     }
 
     func testShareOptionIsShown() {

@@ -7,19 +7,18 @@ import Foundation
 protocol Coordinator {
     var id: UUID { get }
     var childCoordinators: [Coordinator] { get }
-    var router: Router? { get }
+    var router: Router { get }
 
     func add(child coordinator: Coordinator)
     func remove(child coordinator: Coordinator?)
 }
 
 open class BaseCoordinator: Coordinator {
-    var id: UUID = UUID()
+    var id = UUID()
     var childCoordinators: [Coordinator] = []
-    var router: Router?
+    var router: Router
 
-    convenience init(router: Router) {
-        self.init()
+    init(router: Router) {
         self.router = router
     }
 

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -28,7 +28,7 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
-    func addTabsForURLs(_ urls: [URL], zombie: Bool)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
     func getMostRecentHomepageTab() -> Tab?
@@ -108,5 +108,9 @@ extension TabManager {
                                                           _ previousTabUUID: String) -> Void) {
         backgroundRemoveAllTabs(isPrivate: isPrivate,
                                 didClearTabs: didClearTabs)
+    }
+
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true) {
+        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab)
     }
 }

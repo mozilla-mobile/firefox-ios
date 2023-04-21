@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
@@ -37,11 +37,15 @@ public struct PrefsKeys {
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
-    public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
-    public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
+
+    public struct Session {
+        public static let FirstAppUse = "firstAppUse"
+        public static let Last = "lastSession"
+        public static let Count = "sessionCount"
+    }
 
     public struct AppVersion {
         public static let Latest = "latestAppVersion"

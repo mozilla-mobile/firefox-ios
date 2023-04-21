@@ -120,8 +120,8 @@ extension SurveySurfaceManagerTests {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line
     ) -> SurveySurfaceManager {
-        let subject = SurveySurfaceManager(with: homepanelDelegate,
-                                           and: messageManager)
+        let subject = SurveySurfaceManager(and: messageManager)
+        subject.homepanelDelegate = homepanelDelegate
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -155,7 +155,7 @@ extension SurveySurfaceManagerTests {
 // MARK: - MockSurveyMessageDataProtocol
 class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var surface: MessageSurfaceId
-    var isControl: Bool = true
+    var isControl = true
     var title: String? = "title label test"
     var text: String = "text label test"
     var buttonLabel: String? = "button label test"

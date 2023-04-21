@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
 import Foundation
@@ -39,7 +39,6 @@ class FxAWebViewModel {
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
 
     func setupUserScript(for controller: WKUserContentController) {
@@ -269,9 +268,6 @@ extension FxAWebViewModel {
                         self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
                     }
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-
-                    // schedule engagement notification if necessary after user allowed notification permission
-                    self.engagementNotificationHelper.schedule()
                 }
             }
         }

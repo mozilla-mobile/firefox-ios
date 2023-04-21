@@ -23,8 +23,8 @@ class MockTabManager: TabManager {
 
     var delaySelectingNewPopupTab: TimeInterval = 0
     var count: Int = 0
-    var didChangedPanelSelection: Bool = false
-    var didAddNewTab: Bool = false
+    var didChangedPanelSelection = false
+    var didAddNewTab = false
     var normalTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
@@ -65,7 +65,7 @@ class MockTabManager: TabManager {
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool) {}
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {}
 
     func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
 

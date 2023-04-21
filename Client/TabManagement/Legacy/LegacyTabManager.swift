@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -48,15 +48,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     private let store: LegacyTabManagerStore
-    private let profile: Profile
-    private var isRestoringTabs = false
-    private(set) var tabs = [Tab]()
+    let profile: Profile
+    var isRestoringTabs = false
+    var tabs = [Tab]()
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
 
-    var didChangedPanelSelection: Bool = true
-    var didAddNewTab: Bool = true
+    var didChangedPanelSelection = true
+    var didAddNewTab = true
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -147,7 +147,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     // MARK: - Delegates
-    private var delegates = [WeakTabManagerDelegate]()
+    var delegates = [WeakTabManagerDelegate]()
     private let navDelegate: TabManagerNavDelegate
 
     func addDelegate(_ delegate: TabManagerDelegate) {
@@ -248,7 +248,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             _selectedIndex = -1
         }
 
-        store.preserveTabs(tabs, selectedTab: selectedTab)
+        preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
@@ -308,7 +308,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         }
     }
 
-    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
+    func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
 
@@ -421,7 +421,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
                       isPrivate: isPrivate)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool) {
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {
         if urls.isEmpty {
             return
         }
@@ -431,8 +431,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
         }
 
-        // Select the most recent.
-        selectTab(tab)
+        if shouldSelectTab {
+            // Select the most recent.
+            selectTab(tab)
+        }
+
         // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
 

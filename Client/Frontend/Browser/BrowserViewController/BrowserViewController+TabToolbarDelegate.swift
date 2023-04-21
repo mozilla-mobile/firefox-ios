@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -44,6 +44,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        zoomPageDidPressClose()
         tabManager.selectedTab?.goBack()
     }
 
@@ -54,6 +55,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        zoomPageDidPressClose()
         tabManager.selectedTab?.goForward()
     }
 
@@ -109,7 +111,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         func action() {
             let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            if result == .createdNewTab, self.newTabSettings == .blankPage {
                 focusLocationTextField(forTab: tabManager.selectedTab)
             }
         }
@@ -136,12 +138,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
         let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
         let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
         }.items
 
@@ -210,7 +213,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             show(toast: toast)
         default:
             SimpleToast().showAlertWithText(message,
-                                            bottomContainer: webViewContainer,
+                                            bottomContainer: alertContainer,
                                             theme: themeManager.currentTheme)
         }
     }

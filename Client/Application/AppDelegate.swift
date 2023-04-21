@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Storage
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,
-        imageStore: DiskImageStore(
+        imageStore: DefaultDiskImageStore(
             files: profile.files,
             namespace: "TabManagerScreenshots",
             quality: UIConstants.ScreenshotQuality)
@@ -36,15 +36,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var themeManager: ThemeManager = DefaultThemeManager()
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
+    lazy var notificationSurfaceManager = NotificationSurfaceManager()
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
-    private var backgroundSyncUtil: BackgroundSyncUtil?
+    private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
-
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     func application(
         _ application: UIApplication,
@@ -92,7 +91,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
-        backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
+        backgroundWorkUtility = BackgroundFetchAndProcessingUtility()
+        backgroundWorkUtility?.registerUtility(BackgroundSyncUtility(profile: profile, application: application))
+        backgroundWorkUtility?.registerUtility(BackgroundNotificationSurfaceUtility())
 
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,
@@ -141,11 +142,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.ratingPromptManager.updateData()
         }
 
-        // Schedule and update engagement notifications if necessary every time the app becomes active
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.engagementNotificationHelper.schedule()
-        }
-
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -176,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
-        backgroundSyncUtil?.scheduleSyncOnAppBackground()
+        backgroundWorkUtility?.scheduleOnAppBackground()
         tabManager.preserveTabs()
 
         logger.log("applicationDidEnterBackground end",

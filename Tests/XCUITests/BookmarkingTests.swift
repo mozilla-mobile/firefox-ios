@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -45,7 +45,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
@@ -57,7 +56,6 @@ class BookmarkingTests: BaseTestCase {
         // Load a different page on a new tab, check it's not bookmarked
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
@@ -100,7 +98,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testAccessBookmarksFromContextMenu() {
         // Add a bookmark
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
@@ -116,7 +113,7 @@ class BookmarkingTests: BaseTestCase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            waitForExistence(app.textFields["url"], timeout: 60)
         }
         typeOnSearchBar(text: "www.google")
         waitForExistence(app.tables["SiteTable"])
@@ -147,7 +144,6 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "mozilla.org")
         waitForExistence(app.tables["SiteTable"])
         waitForExistence(app.cells.staticTexts["mozilla.org"])
@@ -244,7 +240,7 @@ class BookmarkingTests: BaseTestCase {
 
     private func typeOnSearchBar(text: String) {
         waitForExistence(app.textFields["url"], timeout: 5)
-        app.textFields["address"].tap()
+        app.textFields["url"].tap()
         app.textFields["address"].typeText(text)
     }
 
@@ -252,9 +248,8 @@ class BookmarkingTests: BaseTestCase {
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+            waitForExistence(app.textFields["url"], timeout: 60)
         }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
@@ -289,10 +284,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testDesktopFoldersArePresent() {
         // Verify that there are only 1 cell (desktop bookmark folder)
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)

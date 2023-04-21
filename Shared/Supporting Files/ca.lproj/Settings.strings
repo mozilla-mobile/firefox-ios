@@ -1,0 +1,54 @@
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "Deseu la informació de la targeta de manera segura per agilitzar el pagament la pròxima vegada.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v112" = "Desa les targetes de crèdit en el %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v112" = "%1$@ acabada en %2$@, emesa a %3$@, caduca el %4$@";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v112" = "Ara no";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.RememberThisCard.v112" = "Voleu recordar aquesta targeta?";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v112" = "Voleu actualitzar aquesta targeta?";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.Yes.v112" = "Sí";
+
+/* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
+"CreditCards.Settings.ManageCards.v112" = "Gestiona les targetes";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseASavedCard.v112" = "Voleu utilitzar una targeta desada?";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Utilitza una targeta desada";
+
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "S'ha d'activar per a rebre pestanyes i per a notificar-vos quan inicieu la sessió en un altre dispositiu.";
+
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Sincronització";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Heu desactivat totes les notificacions del %1$@. Per a activar-les, aneu a Configuració del dispositiu > Notificacions > %2$@";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Obteniu informació sobre funcions útils i com treure el màxim profit del %@.";
+
+/* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Consells i característiques";
+
+/* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
+"Settings.Notifications.Title.v112" = "Notificacions";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Aneu als paràmetres del dispositiu per a activar les notificacions del %@";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Activa les notificacions";
+

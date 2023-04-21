@@ -1,0 +1,149 @@
+# The configuration for the onboardingFrameworkFeature feature
+features:
+  onboarding-framework-feature:
+    description: >
+      Feature description
+    variables:
+      cards:
+        description: >
+          The list of available cards for onboarding.
+        type: List<OnboardingCardData>
+        default: []
+      card-ordering:
+        description: >
+          A list of card names in the order they should appear.
+          These names should match the names of the cards in the
+          "card" variable, otherwise, they will be excluded.
+        type: List<String>
+        default: []
+      dismissable:
+        description: >
+          Whether or not the entire onboarding is dismissable
+          by pressing an X at the top right corner of the screen.
+        type: Boolean
+        default: false
+      # queries:
+      #   description: >
+      #     Variable description
+      #   type: Boolean
+      #   default: false
+    defaults:
+      - channel: developer
+        value:
+          cards:
+            - name: "Test 1"
+              title: "First title"
+              body: "Some body text that's rather longer than a title 1"
+              buttons:
+                - title: "Primary Button 1"
+                  action: sync-sign-in
+                - title: "Secondary Button 1"
+                  action: request-notifications
+              type: fresh-install
+            - name: "Test 2"
+              title: "Second title"
+              body: "Some body text that's rather longer than a title 2"
+              buttons:
+                - title: "Primary Button 2"
+                  action: sync-sign-in
+                - title: "Secondary Button 2"
+                  action: next-card
+              type: update
+          card-ordering:
+            - "Test 1"
+            - "Test 2"
+          dismissable: true
+
+objects:
+  OnboardingCardData:
+    description: >
+      A group of properties describing the attributes of a card.
+    fields:
+      name:
+        type: String
+        description: >
+          The name of the card. It should be unique in the current
+          roster of cards.
+          This should never be defaulted.
+        default: ""
+      title:
+        type: String
+        description: >
+          The title displayed on the card, in prominent, bolded text.
+          This should never be defaulted.
+        default: ""
+      body:
+        type: String
+        description: >
+          The body text dispalyed on the card, in less prominent text.
+          This should never be defaulted.
+        default: ""
+      buttons:
+        type: List<OnboardingButton>
+        description: >
+          A list of buttons associated with the card.
+          Based on the number of buttons in this list, the card will
+          display only one or, at maximum, two buttons.
+        default: []
+      type:
+        type: OnboardingType
+        description: >
+          The type of onboarding this card should be shown in,
+          whether it a fresh install or an update.
+          The default is fresh-install.
+        default: fresh-install
+  OnboardingButton:
+    description: >
+      A group of properties describing the attributes of a card.
+    fields:
+      title:
+        type: String
+        description: >
+          The text of the button title.
+          This should never be defaulted.
+        default: ""
+      action:
+        type: OnboardingActions
+        description: >
+          The action the button should take.
+          The default for this will be "next-card"
+        default: next-card
+
+enums:
+  OnboardingActions:
+    description: >
+      The identifiers for the different actions available for cards in onboarding
+    variants:
+      next-card:
+        description: >
+          Will take the user to the next card
+      sync-sign-in:
+        description: >
+          Will take the user to the sync sign in flow
+      request-notifications:
+        description: >
+          Will request to allow notifications from the user
+  OnboardingImages:
+    description: >
+      The identifiers for the different images available for cards in onboarding
+    variants:
+      welcome-globe:
+        description: >
+          Corresponding to the fox world image
+      notifications:
+        description: >
+          Corresponding to the notifications image
+      sync-devices:
+        description: >
+          Corresponding to the sync-devices image
+  OnboardingType:
+    description: >
+      The identifiers for the different types of onboarding cards.
+    variants:
+      fresh-install:
+        description: >
+          Corresponding to onboarding cards that are for new users
+      update:
+        description: >
+          Corresponding to onboarding cards that are for users
+          who have updated
