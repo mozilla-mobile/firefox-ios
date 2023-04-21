@@ -14,15 +14,20 @@ def get_newest_rust_components_version():
     g = Github()
     try:
         repo = g.get_repo(GITHUB_REPO)
-
-        newest_tag = repo.get_tags()[0].name
-        newest_commit = str(repo.get_tags()[0].commit)
+        nightly_tag = find_latest_nightly_tag(repo.get_tags())
+        newest_tag = nightly_tag.name
+        newest_commit = str(nightly_tag.commit)
         only_commit = re.findall(r'"([^"]*)"', newest_commit)
     except requests.exceptions.HTTPError as err:
         raise SystemExit(err)
 
-
     return (str(newest_tag), str(only_commit[0]))
+
+def find_latest_nightly_tag(tags):
+    for tag in tags:
+        if re.match(r'\d+\.0\.\d+', tag.name) is not None:
+            return tag
+    raise SyntaxError("No nightly tags found in rust-components-swift")
 
 def read_rust_components_tag_version():
     # Read Package file to find the current rust-component version
