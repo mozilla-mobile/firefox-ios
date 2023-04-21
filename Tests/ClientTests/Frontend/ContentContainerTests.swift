@@ -26,6 +26,8 @@ final class ContentContainerTests: XCTestCase {
         AppContainer.shared.reset()
     }
 
+    // MARK: - canAddHomepage
+
     func testCanAddHomepage() {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
@@ -55,6 +57,31 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: webview)
         XCTAssertFalse(subject.canAdd(content: webview))
     }
+
+    // MARK: - hasHomepage
+
+    func testHasHomepage_trueWhenHomepage() {
+        let subject = ContentContainer(frame: .zero)
+        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        subject.add(content: homepage)
+
+        XCTAssertTrue(subject.hasHomepage)
+    }
+
+    func testHasHomepage_falseWhenNil() {
+        let subject = ContentContainer(frame: .zero)
+        XCTAssertFalse(subject.hasHomepage)
+    }
+
+    func testHasHomepage_falseWhenWebview() {
+        let subject = ContentContainer(frame: .zero)
+        let webview = WebviewViewController(webView: WKWebView())
+        subject.add(content: webview)
+
+        XCTAssertFalse(subject.hasHomepage)
+    }
+
+    // MARK: - contentView
 
     func testContentView_notContent_viewIsNil() {
         let subject = ContentContainer(frame: .zero)

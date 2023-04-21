@@ -17,8 +17,13 @@ protocol ContentContainable: UIViewController {
 class ContentContainer: UIView {
     private var type: ContentType?
     private var contentController: ContentContainable?
+
     var contentView: UIView? {
         return contentController?.view
+    }
+
+    var hasHomepage: Bool {
+        return type == .homepage
     }
 
     /// Determine if the content can be added, making sure we only add once

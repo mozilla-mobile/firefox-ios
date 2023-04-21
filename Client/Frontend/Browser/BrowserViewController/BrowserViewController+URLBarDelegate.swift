@@ -238,7 +238,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab, homepageViewController == nil {
+        guard let selectedTab = tabManager.selectedTab else { return }
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            // Only scroll to top if we are not showing the home view controller
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
+        } else if homepageViewController == nil {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
