@@ -22,11 +22,13 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - Decision_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
         title: Bitrise Test Plan Sharder
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - xcode_project: Client.xcodeproj
         - target: Client
@@ -40,6 +42,7 @@ workflows:
         is_always_run: true
     - script@1.1:
         title: Build for Testing
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - content: |
             set -euxo pipefail
@@ -152,7 +155,6 @@ workflows:
   build_and_test_1_SmokeTest2:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -192,7 +194,6 @@ workflows:
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -243,7 +244,6 @@ workflows:
   build_and_test_3_SmokeTest3:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -294,7 +294,6 @@ workflows:
   build_and_test_4_SmokeTest4:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
