@@ -10,7 +10,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     private struct UX {
         static let buttonFontSize: CGFloat = 15
-        static let buttonTrailingSpace: CGFloat = 12
+        static let buttonTrailingSpace: CGFloat = 18
         static let buttonVerticalInset: CGFloat = 11
         static let buttonCornerRadius: CGFloat = 4
     }
@@ -47,8 +47,8 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor,
+            goToSettingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            goToSettingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                       constant: -UX.buttonTrailingSpace)
         ])
 
