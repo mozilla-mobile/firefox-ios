@@ -9,7 +9,7 @@ import WebKit
 
 class MockTabManager: TabManager {
     var selectedTab: Tab?
-    var backupDeletedTab: (Tab, Int?)?
+    var backupCloseTab: Client.BackupCloseTab?
 
     var nextRecentlyAccessedNormalTabs = [Tab]()
 
