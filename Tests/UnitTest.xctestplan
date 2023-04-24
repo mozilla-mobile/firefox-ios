@@ -137,8 +137,8 @@
     {
       "target" : {
         "containerPath" : "container:BrowserKit",
-        "identifier" : "LoggerTests",
-        "name" : "LoggerTests"
+        "identifier" : "TabDataStoreTests",
+        "name" : "TabDataStoreTests"
       }
     }
   ],

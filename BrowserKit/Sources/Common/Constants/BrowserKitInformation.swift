@@ -4,7 +4,7 @@
 
 import Foundation
 
-// Contains application information necessary for BrowserKit functionnalities.
+// Contains application information necessary for BrowserKit functionalities.
 // BrowserKit should stay agnostic of the application it's used in, and so the
 // client should pass down this information on setup of the application.
 public class BrowserKitInformation {
