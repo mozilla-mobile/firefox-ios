@@ -82,7 +82,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.embedContent(homepage)
 
         // We currently don't support full page screenshot of the homepage
-        screenshotService.screenshotAbleView = nil
+        screenshotService.screenshotableView = nil
     }
 
     func show(webView: WKWebView?) {
@@ -100,6 +100,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                        category: .lifecycle)
         }
 
-        screenshotService.screenshotAbleView = webviewController
+        screenshotService.screenshotableView = webviewController
     }
 }

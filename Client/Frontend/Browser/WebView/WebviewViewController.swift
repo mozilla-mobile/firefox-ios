@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 
-class WebviewViewController: UIViewController, ContentContainable, ScreenshotAbleView {
+class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private let webView: WKWebView
     var contentType: ContentType = .webview
 
@@ -35,7 +35,7 @@ class WebviewViewController: UIViewController, ContentContainable, ScreenshotAbl
         ])
     }
 
-    // MARK: - ScreenshotAbleView
+    // MARK: - ScreenshotableView
 
     func getScreenshotData(completionHandler: @escaping (ScreenshotData?) -> Void) {
         guard let url = webView.url,
