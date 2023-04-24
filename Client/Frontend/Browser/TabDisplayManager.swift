@@ -885,16 +885,19 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
             saveRegularOrderedTabs(from: filteredTabs)
         }
 
-        dataStore.removeAll()
-
-        filteredTabs.forEach {
-            dataStore.insert($0)
-        }
-
-        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-        let start = IndexPath(row: sourceIndex, section: section)
-        let end = IndexPath(row: destinationIndexPath.item, section: section)
+        /// According to Apple's documentation the best place to make the changes to the collectionView and dataStore is
+        /// during the completion call of performBatchUpdates
         updateWith(animationType: .moveTab) { [weak self] in
+            self?.dataStore.removeAll()
+
+            self?.filteredTabs.forEach {
+                self?.dataStore.insert($0)
+            }
+
+            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+            let start = IndexPath(row: sourceIndex, section: section)
+            let end = IndexPath(row: destinationIndexPath.item, section: section)
+
             self?.collectionView.moveItem(at: start, to: end)
         }
     }
