@@ -421,7 +421,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
                       isPrivate: isPrivate)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool) {
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {
         if urls.isEmpty {
             return
         }
@@ -431,8 +431,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
         }
 
-        // Select the most recent.
-        selectTab(tab)
+        if shouldSelectTab {
+            // Select the most recent.
+            selectTab(tab)
+        }
+
         // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
 

@@ -47,8 +47,12 @@ extension BrowserViewController {
 
     @objc
     func addBookmarkKeyCommand() {
-        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
-            guard let url = tab.canonicalURL?.displayURL else { return }
+        guard let tab = tabManager.selectedTab,
+              let url = tab.canonicalURL?.displayURL else { return }
+
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            addBookmark(url: url.absoluteString, title: tab.title)
+        } else if homepageViewController?.view.alpha == 0 {
             addBookmark(url: url.absoluteString, title: tab.title)
         }
     }
@@ -60,7 +64,11 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
 
-        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            tab.reload()
+        } else if homepageViewController?.view.alpha == 0 {
             tab.reload()
         }
     }
@@ -71,8 +79,11 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
+        guard let tab = tabManager.selectedTab else { return }
 
-        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            tab.reload(bypassCache: true)
+        } else if homepageViewController?.view.alpha == 0 {
             tab.reload(bypassCache: true)
         }
     }
@@ -84,7 +95,11 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
 
-        if let tab = tabManager.selectedTab, tab.canGoBack, homepageViewController?.view.alpha == 0 {
+        guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
+
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            tab.goBack()
+        } else if homepageViewController?.view.alpha == 0 {
             tab.goBack()
         }
     }
@@ -96,7 +111,11 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
 
-        if let tab = tabManager.selectedTab, tab.canGoForward {
+        guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
+
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            tab.goForward()
+        } else if homepageViewController?.view.alpha == 0 {
             tab.goForward()
         }
     }
@@ -116,7 +135,11 @@ extension BrowserViewController {
     }
 
     private func findInPage(withText text: String) {
-        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            self.tab(tab, didSelectFindInPageForSelection: text)
+        } else if homepageViewController?.view.alpha == 0 {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
@@ -310,29 +333,35 @@ extension BrowserViewController {
 
     @objc
     func zoomIn() {
-        guard let currentTab = tabManager.selectedTab,
-              homepageViewController?.view.alpha == 0
-        else { return }
+        guard let currentTab = tabManager.selectedTab else { return }
 
-        currentTab.zoomIn()
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            currentTab.zoomIn()
+        } else if homepageViewController?.view.alpha == 0 {
+            currentTab.zoomIn()
+        }
     }
 
     @objc
     func zoomOut() {
-        guard let currentTab = tabManager.selectedTab,
-              homepageViewController?.view.alpha == 0
-        else { return }
+        guard let currentTab = tabManager.selectedTab else { return }
 
-        currentTab.zoomOut()
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            currentTab.zoomOut()
+        } else if homepageViewController?.view.alpha == 0 {
+            currentTab.zoomOut()
+        }
     }
 
     @objc
     func resetZoom() {
-        guard let currentTab = tabManager.selectedTab,
-              homepageViewController?.view.alpha == 0
-        else { return }
+        guard let currentTab = tabManager.selectedTab else { return }
 
-        currentTab.resetZoom()
+        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+            currentTab.resetZoom()
+        } else if homepageViewController?.view.alpha == 0 {
+            currentTab.resetZoom()
+        }
     }
 
     // MARK: - KeyCommands

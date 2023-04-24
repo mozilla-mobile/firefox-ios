@@ -65,7 +65,7 @@ class MockTabManager: TabManager {
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool) {}
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {}
 
     func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
 

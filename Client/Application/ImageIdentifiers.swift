@@ -108,6 +108,7 @@ public struct ImageIdentifiers {
     public static let upgradeBackground = "onboardingBackground"
     public static let upgradeCloseButton = "updateCloseButton"
     public static let warning = "menu-warning"
+    public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
     public static let xMark = "nav-stop"
     public static let zoomIn = "menu-ZoomIn"
