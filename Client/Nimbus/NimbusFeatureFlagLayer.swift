@@ -31,6 +31,9 @@ final class NimbusFeatureFlagLayer {
                 .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
+        case .coordinatorsRefactor:
+            return checkCoordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -171,6 +174,11 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
+    }
+
+    private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.coordinatorsRefactorFeature.value()
+        return config.enabled
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
