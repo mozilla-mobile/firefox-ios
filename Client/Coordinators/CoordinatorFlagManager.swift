@@ -5,12 +5,11 @@
 import Foundation
 import Shared
 
-/// This is a temporary struct made to manage both hard coded and feature flag
+/// This is a temporary struct made to manage the feature flag for conveniance
 /// This will be removed with FXIOS-6036
 struct CoordinatorFlagManager {
     static var isCoordinatorEnabled: Bool {
-        return AppConstants.useCoordinators
-        && FeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
-                                                       checking: .buildOnly)
+        return FeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
+                                                           checking: .buildOnly)
     }
 }
