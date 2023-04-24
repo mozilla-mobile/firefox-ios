@@ -115,25 +115,25 @@ struct CreditCardInputView: View {
                 if viewModel.state == .edit {
                     viewModel.updateCreditCard { _, error in
                         guard let error = error else {
-                            dismiss(false)
+                            dismiss(true)
                             return
                         }
                         viewModel.logger?.log("Unable to update card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        dismiss(true)
+                        dismiss(false)
                     }
                 } else {
                     // Save new card
                     viewModel.saveCreditCard { _, error in
                         guard let error = error else {
-                            dismiss(false)
+                            dismiss(true)
                             return
                         }
                         viewModel.logger?.log("Unable to save credit card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        dismiss(true)
+                        dismiss(false)
                     }
                 }
             }
