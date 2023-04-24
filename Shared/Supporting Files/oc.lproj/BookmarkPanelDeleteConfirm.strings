@@ -1,0 +1,6 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Description" = "Volètz suprimir aqueste dossièr e son contengut, segur ?";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Title" = "Le dossièr es pas void.";
+

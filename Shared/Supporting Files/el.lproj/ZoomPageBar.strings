@@ -1,0 +1,6 @@
+/* Accessibility label for decreasing the zoom level in Zoom Page Bar */
+"Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113" = "Μείωση επιπέδου ζουμ";
+
+/* Accessibility label for increasing the zoom level in Zoom Page Bar */
+"Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113" = "Αύξηση επιπέδου ζουμ";
+

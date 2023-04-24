@@ -1,0 +1,12 @@
+/* Accessibility label for closing the zoom panel in Zoom Page Bar */
+"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Chiudi il pannello Zoom";
+
+/* Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level */
+"Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Livello di zoom attuale: %@";
+
+/* Accessibility label for decreasing the zoom level in Zoom Page Bar */
+"Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113" = "Diminuisci il livello di zoom";
+
+/* Accessibility label for increasing the zoom level in Zoom Page Bar */
+"Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113" = "Aumenta il livello di zoom";
+

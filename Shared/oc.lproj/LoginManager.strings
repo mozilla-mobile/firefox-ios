@@ -10,6 +10,9 @@
 /* Copy password text selection menu item */
 "Copy" = "Copiar";
 
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Data de creacion : %@";
+
 /* Label for the button used to delete the current login. */
 "Delete" = "Suprimir";
 
@@ -21,6 +24,15 @@
 
 /* Hide password text selection menu item */
 "Hide" = "Amagar";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Los identificants seràn suprimits per totjorn.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Los identificants seràn suprimits de totes vòstres aparelhs connectats.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Darrièra modificacion : %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Pas d’identificant pas trobat";
