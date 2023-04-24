@@ -59,6 +59,9 @@ final class NimbusFeatureFlagLayer {
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
 
+        case .tabStorageRefactor:
+            return checkTabStorageRefactorFeature(from: nimbus)
+
         case .wallpapers,
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
@@ -193,6 +196,11 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabStorageRefactorFeature.value()
+        return config.enabled
     }
 
     public func checkNimbusForCreditCardAutofill(

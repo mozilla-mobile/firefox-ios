@@ -48,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-            // FXIOS-5827: Handle deeplinks from willConnectTo
+            // FXIOS-6214: Handle deeplinks from willConnectTo
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()

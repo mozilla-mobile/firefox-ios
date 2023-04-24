@@ -109,6 +109,11 @@ class BrowserViewController: UIViewController {
     // The content container contains the homepage or webview. Embeded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
+    // Used to show the SimpleToast alert on the webview, until we can remove webViewContainer entirely with FXIOS-6036
+    var alertContainer: UIView {
+        return AppConstants.useCoordinators ? contentContainer: webViewContainer
+    }
+
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
         return searchBarPosition == .bottom
@@ -589,11 +594,6 @@ class BrowserViewController: UIViewController {
         toolbar = TabToolbar()
         bottomContainer.addArrangedSubview(toolbar)
         view.addSubview(bottomContainer)
-
-        if AppConstants.useCoordinators {
-            // StatusBarOverlay at the back so homepage wallpaper with bottom URL bar can be seen under the status bar
-            view.sendSubviewToBack(statusBarOverlay)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1015,6 +1015,13 @@ class BrowserViewController: UIViewController {
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+
+        // Status bar overlay at the back for some content type that need extended content
+        if let type = contentContainer.type, type.needTopContentExtended {
+            view.sendSubviewToBack(statusBarOverlay)
+        } else {
+            view.bringSubviewToFront(statusBarOverlay)
+        }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
@@ -1621,7 +1628,7 @@ class BrowserViewController: UIViewController {
                 self.showSendToDevice()
             case CustomActivityAction.copyLink.actionType:
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer,
+                                                bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             default: break
             }
@@ -2171,6 +2178,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
+            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
             activityStreamPanel.scrollToTop()
         }
 
@@ -2808,7 +2816,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
-                                                bottomContainer: self.webViewContainer,
+                                                bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
         }

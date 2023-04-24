@@ -553,13 +553,14 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e
+            set -ex
 
             # Manual triggers leave empty commits. 
             # Check for empty commit and exit blacklist check if found to avoid erroring out.
-            git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..." \
-                || echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests; exit 0
+            { git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..."; } || \
+                { echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
+
             echo "Commit on origin/main"
             COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"` || true
             if [[ ! "failed" == *"$COMMIT_ON_MAIN_ORIGIN"* ]]; then
@@ -863,16 +864,6 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            # Import only the shipping locales (from shipping_locales.txt) onRelease
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-        title: Pull in L10n
-    - script@1:
-        inputs:
-        - content: |-
             ./bootstrap.sh
         title: Run bootstrap
     - script@1:
@@ -937,23 +928,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - certificate-and-profile-installer@1.10: {}
-    - script@1.1:
-        title: Pull in L10n
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -e
-            set -x
-            # Import only the shipping locales (from shipping_locales.txt) on Release
-            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
-            # requests.
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
-            pip3 install --user virtualenv
-            cd /usr/local/bin
-            ln -s /Users/vagrant/Library/Python/3.10/bin/virtualenv .
-            cd -
-            virtualenv --version
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
         - content: >-
@@ -966,7 +940,6 @@ workflows:
             # debug log
 
             set -x
-
 
             curl --location --retry 5 --output l10n-screenshots-dd.zip
             "$MOZ_DERIVED_DATA_PATH"

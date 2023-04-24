@@ -17,11 +17,6 @@ if [ -d l10n-screenshots ]; then
     exit 1
 fi
 
-if [ ! -d firefoxios-l10n ]; then
-    echo "Did not find a firefox-ios-l10n checkout. Are you running this on a localized build?"
-    exit 1
-fi
-
 mkdir -p l10n-screenshots
 
 if [ "$1" = '--test-without-building' ]; then
