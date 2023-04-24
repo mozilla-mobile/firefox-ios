@@ -111,7 +111,7 @@ class BrowserViewController: UIViewController {
 
     // Used to show the SimpleToast alert on the webview, until we can remove webViewContainer entirely with FXIOS-6036
     var alertContainer: UIView {
-        return AppConstants.useCoordinators ? contentContainer: webViewContainer
+        return CoordinatorFlagManager.isCoordinatorEnabled ? contentContainer: webViewContainer
     }
 
     lazy var isBottomSearchBar: Bool = {
@@ -390,7 +390,7 @@ class BrowserViewController: UIViewController {
 
         view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webViewContainer.alpha = 0
         } else {
             contentContainer.alpha = 0
@@ -410,7 +410,7 @@ class BrowserViewController: UIViewController {
             delay: 0,
             options: UIView.AnimationOptions(),
             animations: {
-                if !AppConstants.useCoordinators {
+                if !CoordinatorFlagManager.isCoordinatorEnabled {
                     self.webViewContainer.alpha = 1
                 } else {
                     self.contentContainer.alpha = 1
@@ -564,7 +564,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             view.addSubview(contentContainer)
         } else {
             webViewContainer = UIView()
@@ -598,7 +598,7 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             // Setting the view alpha to 0 so that there's no weird flash in between the
             // check of view appearance and the `performSurveySurfaceCheck`, where the
             // alpha will be set to 1.
@@ -617,7 +617,7 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             performSurveySurfaceCheck()
         }
 
@@ -627,7 +627,7 @@ class BrowserViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             presentIntroViewController()
             presentUpdateViewController()
         }
@@ -742,7 +742,7 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(view)
         }
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             NSLayoutConstraint.activate([
                 contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
                 contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -758,7 +758,7 @@ class BrowserViewController: UIViewController {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
-                if AppConstants.useCoordinators {
+                if CoordinatorFlagManager.isCoordinatorEnabled {
                     // The status bar is covered by the statusBarOverlay,
                     // if we don't have the URL bar at the top then header height is 0
                     make.height.equalTo(0)
@@ -785,7 +785,7 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webViewContainer.snp.remakeConstraints { make in
                 make.left.right.equalTo(view)
                 make.top.equalTo(header.snp.bottom)
@@ -809,7 +809,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(view)
         }
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             // Remake constraints even if we're already showing the home controller.
             // The home controller may change sizes if we tap the URL bar while on about:home.
             homepageViewController?.view.snp.remakeConstraints { make in
@@ -1143,7 +1143,7 @@ class BrowserViewController: UIViewController {
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         guard let url = url else {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 hideHomepage()
             } else {
                 showEmbeddedWebview()
@@ -1153,7 +1153,7 @@ class BrowserViewController: UIViewController {
         }
 
         if isAboutHomeURL {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 showHomepage(inline: true)
             } else {
                 showEmbeddedHomepage(inline: true)
@@ -1163,7 +1163,7 @@ class BrowserViewController: UIViewController {
                 userHasPressedHomeButton = false
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 hideHomepage()
             } else {
                 showEmbeddedWebview()
@@ -1871,7 +1871,7 @@ extension BrowserViewController {
 // MARK: - LegacyTabDelegate
 extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webView.frame = webViewContainer.frame
         } else {
             browserDelegate?.show(webView: webView)
@@ -2210,7 +2210,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             scrollController.tab = tab
 
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 webViewContainer.addSubview(webView)
                 webView.snp.makeConstraints { make in
                     make.left.right.top.bottom.equalTo(self.webViewContainer)

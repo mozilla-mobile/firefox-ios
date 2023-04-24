@@ -44,7 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
@@ -110,7 +110,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let url = URLContexts.first?.url,
                   let route = routeBuilder.makeRoute(url: url) else { return }
             sceneCoordinator?.handle(route: route)
@@ -141,7 +141,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
             sceneCoordinator?.handle(route: route)
         } else {
@@ -179,7 +179,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
             sceneCoordinator?.handle(route: route)
         } else {

@@ -220,7 +220,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
         var wallpaperTopConstant: CGFloat = 0
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             // Constraint so wallpaper appears under the status bar
             wallpaperTopConstant = statusBarFrame?.height ?? 0
         }
@@ -405,7 +405,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     // Check if we already present something on top of the homepage,
     // if the homepage is actually being shown to the user and if the page is shown from a loaded webpage (zero search).
     private var canModalBePresented: Bool {
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             return presentedViewController == nil && !viewModel.isZeroSearch
         } else {
             return presentedViewController == nil && view.alpha == 1 && !viewModel.isZeroSearch
@@ -755,7 +755,7 @@ extension HomepageViewController {
         // The scrollview content offset is automatically adjusted to account for the status bar.
         // We want to start showing the status bar background as soon as the user scrolls.
         var offset: CGFloat
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             offset = scrollView.contentOffset.y / statusBarHeight
         } else {
             offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight

@@ -76,10 +76,6 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
-    func testEnsureCoordinatorIsntEnabled() {
-        XCTAssertFalse(AppConstants.useCoordinators)
-    }
-
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> SceneCoordinator {
