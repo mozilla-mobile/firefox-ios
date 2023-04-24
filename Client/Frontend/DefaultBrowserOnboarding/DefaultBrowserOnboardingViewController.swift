@@ -249,7 +249,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Button Actions
     @objc
     private func dismissAnimated() {
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             // Note: this could be one closure only and not two with goToSettings
             viewModel.didAskToDismissView?()
         } else {
@@ -264,7 +264,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
         }
     }

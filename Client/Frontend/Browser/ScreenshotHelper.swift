@@ -37,7 +37,7 @@ class ScreenshotHelper {
         }
         // Handle home page snapshots, can not use Apple API snapshot function for this
         if InternalURL(url)?.isAboutHomeURL ?? false {
-            if AppConstants.useCoordinators, let homeview = controller?.contentContainer.contentView {
+            if CoordinatorFlagManager.isCoordinatorEnabled, let homeview = controller?.contentContainer.contentView {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
