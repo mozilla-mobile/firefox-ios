@@ -126,7 +126,7 @@ struct CreditCardInputField: View {
         if viewModel.state == .view {
             Menu {
                 Button(String.CreditCard.EditCard.CopyLabel) {
-                    UIPasteboard.general.string = viewModel.cardNumber
+                    UIPasteboard.general.string = getCopyValue()
                 }
 
                 // We conceal and reveal credit card number for only view state
@@ -188,6 +188,17 @@ struct CreditCardInputField: View {
             shouldReveal = state == .edit || state == .add
         case .expiration:
             text = viewModel.expirationDate
+        }
+    }
+
+    func getCopyValue() -> String {
+        switch inputType {
+        case .name:
+            return viewModel.nameOnCard
+        case .number:
+            return viewModel.cardNumber
+        case .expiration:
+            return "\(viewModel.month)\(viewModel.year)"
         }
     }
 
