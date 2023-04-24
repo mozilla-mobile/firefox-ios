@@ -14,6 +14,7 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayOpenRecentlyClosedTab(_ url: URL)
     func tabTrayDidRequestTabsSettings()
+    func tabTrayDidCloseLastTab(toast: ButtonToast)
 }
 
 class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
@@ -32,6 +33,29 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         static let menuFixedWidth: CGFloat = 320
         static let undoToastDelay = DispatchTimeInterval.seconds(0)
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
+    }
+
+    enum UndoToastType {
+        case singleTab
+        case inactiveTabs(count: Int)
+
+        var title: String {
+            switch self {
+            case .singleTab:
+                return .TabsTray.CloseTabsToast.SingleTabTitle
+            case let .inactiveTabs(tabsCount):
+                return String.localizedStringWithFormat(
+                    .TabsTray.CloseTabsToast.Title,
+                    tabsCount)
+            }
+        }
+
+        var buttonText: String {
+            switch self {
+            case .singleTab, .inactiveTabs:
+                return .TabsTray.CloseTabsToast.Action
+            }
+        }
     }
 
     let tabManager: TabManager
@@ -58,6 +82,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     // currently selected tab. This allows us to force the scroll behaviour to move
     // wherever we need to focus the user's attention.
     var tabToFocus: Tab?
+
+    private var privateTabsAreEmpty: Bool {
+        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
+    }
 
     override var canBecomeFirstResponder: Bool {
         return true
@@ -131,7 +159,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
 
         backgroundPrivacyOverlay.alpha = 0
@@ -149,7 +176,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
         }
 
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
 
         listenForThemeChange(view)
         applyTheme()
@@ -203,7 +230,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     private func tabManagerTeardown() {
         tabManager.removeDelegate(self.tabDisplayManager)
-        tabManager.removeDelegate(self)
         tabDisplayManager = nil
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
@@ -278,11 +304,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
-    }
-
-    fileprivate func privateTabsAreEmpty() -> Bool {
-        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
@@ -306,43 +328,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
         collectionView.reloadData()
     }
-}
 
-extension GridTabViewController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
-    }
-    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
-
-    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-    }
-
-    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        // No need to handle removeAll toast in TabTray.
-        // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
-        // We don't show the removeAll toast in PBM
-    }
-}
-
-extension GridTabViewController: TabDisplayer {
-    func focusSelectedTab() {
-        self.focusItem()
-    }
-
-    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TabCell else { return cell }
-        tabCell.animator?.delegate = self
-        tabCell.delegate = self
-        let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
-        return tabCell
-    }
-}
-
-extension GridTabViewController {
     @objc
     func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
@@ -376,7 +362,7 @@ extension GridTabViewController {
 
     func closeTabsTrayHelper() {
         if tabDisplayManager.isPrivate {
-            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
             if !emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
                 emptyPrivateTabsView.alpha = 0
@@ -402,6 +388,86 @@ extension GridTabViewController {
     func dismissTabTray() {
         self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+    }
+
+    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
+        saveTabToDelete(tab: tab, index: tabManager.tabs.firstIndex(of: tab))
+        tabDisplayManager.tabDisplayCompletionDelegate = self
+        tabDisplayManager.performCloseAction(for: tab)
+
+        guard !tabDisplayManager.shouldPresentUndoToastOnHomepage else {
+            // Show undo Toast on homepage
+            handleUndoToastForLastTab()
+            return
+        }
+
+        presentUndoToast(toastType: .singleTab) { undoButtonPressed in
+            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
+
+            self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+
+            if self.tabDisplayManager.isPrivate {
+                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
+            }
+        }
+    }
+
+    private func handleUndoToastForLastTab() {
+        let viewModel = ButtonToastViewModel(
+            labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
+            buttonText: .TabsTray.CloseTabsToast.Action)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { undoButtonPressed in
+            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
+
+            self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
+        })
+        delegate?.tabTrayDidCloseLastTab(toast: toast)
+    }
+
+    private func saveTabToDelete(tab: Tab, index: Int?) {
+        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
+    }
+
+    private func presentUndoToast(toastType: UndoToastType,
+                                  completion: @escaping (Bool) -> Void) {
+        let viewModel = ButtonToastViewModel(
+            labelText: toastType.title,
+            buttonText: toastType.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            completion(buttonPressed)
+        })
+
+        toast.showToast(viewController: self,
+                        delay: UX.undoToastDelay,
+                        duration: UX.undoToastDuration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                              constant: -self.toolbarHeight)
+            ]
+        }
+    }
+}
+
+// MARK: - TabDisplayer
+extension GridTabViewController: TabDisplayer {
+    func focusSelectedTab() {
+        self.focusItem()
+    }
+
+    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
+        guard let tabCell = cell as? TabCell else { return cell }
+        tabCell.animator?.delegate = self
+        tabCell.delegate = self
+        let selected = tab == tabManager.selectedTab
+        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
+        return tabCell
     }
 }
 
@@ -433,6 +499,7 @@ extension GridTabViewController {
     }
 }
 
+// MARK: - TabSelectionDelegate
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
@@ -482,10 +549,12 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 // MARK: - SwipeAnimatorDelegate
 extension GridTabViewController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
+        guard let tabCell = animator.animatingView as? TabCell,
+              let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.TabTrayClosingTabAccessibilityMessage)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+                                 argument: String.TabTrayClosingTabAccessibilityMessage)
         }
     }
 
@@ -495,14 +564,17 @@ extension GridTabViewController: SwipeAnimatorDelegate {
     }
 }
 
+// MARK: - TabCellDelegate
 extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
-        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
+        if let indexPath = collectionView.indexPath(for: cell),
+           let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             removeByButtonOrSwipe(tab: tab, cell: cell)
         }
     }
 }
 
+// MARK: - TabPeekDelegate
 extension GridTabViewController: TabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
@@ -517,7 +589,6 @@ extension GridTabViewController: TabPeekDelegate {
         if let index = tabDisplayManager.dataStore.index(of: tab),
            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
             cell.close()
-            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }
     }
 
@@ -533,24 +604,32 @@ extension GridTabViewController: TabPeekDelegate {
     }
 }
 
-// MARK: - TabDisplayCompeltionDelegate & RecentlyClosedPanelDelegate
+// MARK: - TabDisplayCompletionDelegate & RecentlyClosedPanelDelegate
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .openRecentlyClosedTab,
+                                     extras: nil)
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .openRecentlyClosedTab,
+                                     extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }
 
     // TabDisplayCompletionDelegate
     func completedAnimation(for type: TabAnimationType) {
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
 
         switch type {
         case .addTab:
@@ -565,13 +644,6 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedNonLastTab, .updateTab, .moveTab:
             break
         }
-    }
-}
-
-extension GridTabViewController {
-    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        tabDisplayManager.tabDisplayCompletionDelegate = self
-        tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
@@ -595,9 +667,7 @@ extension GridTabViewController {
     }
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
-        if tabDisplayManager.isDragging {
-            return
-        }
+        guard !tabDisplayManager.isDragging else { return }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
@@ -610,189 +680,6 @@ extension GridTabViewController {
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
-    }
-}
-
-// MARK: TabLayoutDelegate
-private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
-    weak var tabSelectionDelegate: TabSelectionDelegate?
-    weak var tabPeekDelegate: TabPeekDelegate?
-    let scrollView: UIScrollView
-    var lastYOffset: CGFloat = 0
-    var tabDisplayManager: TabDisplayManager
-
-    var sectionHeaderSize: CGSize {
-        CGSize(width: 50, height: 40)
-    }
-
-    enum ScrollDirection {
-        case up
-        case down
-    }
-
-    fileprivate var scrollDirection: ScrollDirection = .down
-    fileprivate var traitCollection: UITraitCollection
-    fileprivate var numberOfColumns: Int {
-        // iPhone 4-6+ portrait
-        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return GridTabViewController.UX.compactNumberOfColumnsThin
-        } else {
-            return GridTabViewController.UX.numberOfColumnsWide
-        }
-    }
-
-    init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection, scrollView: UIScrollView) {
-        self.tabDisplayManager = tabDisplayManager
-        self.scrollView = scrollView
-        self.traitCollection = traitCollection
-        super.init()
-    }
-
-    fileprivate func cellHeightForCurrentDevice() -> CGFloat {
-        let shortHeight = GridTabViewController.UX.textBoxHeight * 6
-
-        if self.traitCollection.verticalSizeClass == .compact {
-            return shortHeight
-        } else if self.traitCollection.horizontalSizeClass == .compact {
-            return shortHeight
-        } else {
-            return GridTabViewController.UX.textBoxHeight * 8
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch TabDisplaySection(rawValue: section) {
-        case .regularTabs:
-            if let groups = tabDisplayManager.tabGroups, !groups.isEmpty {
-                return sectionHeaderSize
-            }
-        default: return .zero
-        }
-
-        return .zero
-    }
-
-    func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-    ) -> Bool {
-        return true
-    }
-
-    @objc
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAt section: Int
-    ) -> CGFloat {
-        return GridTabViewController.UX.margin
-    }
-
-    @objc
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        let margin = GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)
-        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
-        let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
-        switch TabDisplaySection(rawValue: indexPath.section) {
-        case .inactiveTabs:
-            return calculateInactiveTabSizeHelper(collectionView)
-
-        case .groupedTabs:
-            let width = collectionView.frame.size.width
-            if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
-                let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
-                return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-            } else {
-                return CGSize(width: 0, height: 0)
-            }
-
-        case .regularTabs, .none:
-            guard !tabDisplayManager.filteredTabs.isEmpty else { return CGSize(width: 0, height: 0) }
-            return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
-        }
-    }
-
-    private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
-        guard !tabDisplayManager.isPrivate,
-              let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
-              !inactiveTabViewModel.isActiveTabsEmpty
-        else {
-            return CGSize(width: 0, height: 0)
-        }
-
-        let closeAllButtonHeight = InactiveTabCell.UX.CloseAllTabRowHeight
-        let headerHeightWithRoundedCorner = InactiveTabCell.UX.HeaderAndRowHeight + InactiveTabCell.UX.RoundedContainerPaddingClosed
-        var totalHeight = headerHeightWithRoundedCorner
-        let width: CGFloat = collectionView.frame.size.width - InactiveTabCell.UX.InactiveTabTrayWidthPadding
-        let inactiveTabs = inactiveTabViewModel.inactiveTabs
-
-        // Calculate height based on number of tabs in the inactive tab section section
-        let calculatedInactiveTabsTotalHeight = (InactiveTabCell.UX.HeaderAndRowHeight * CGFloat(inactiveTabs.count)) +
-        InactiveTabCell.UX.RoundedContainerPaddingClosed +
-        InactiveTabCell.UX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
-
-        totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return CGSize(width: collectionView.frame.size.width/1.5, height: totalHeight)
-        } else {
-            return CGSize(width: width >= 0 ? width : 0, height: totalHeight)
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        switch TabDisplaySection(rawValue: section) {
-        case .regularTabs, .none:
-            return UIEdgeInsets(
-                top: GridTabViewController.UX.margin,
-                left: GridTabViewController.UX.margin + collectionView.safeAreaInsets.left,
-                bottom: GridTabViewController.UX.margin,
-                right: GridTabViewController.UX.margin + collectionView.safeAreaInsets.right)
-
-        case .inactiveTabs:
-            guard !tabDisplayManager.isPrivate,
-                  tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
-            else { return .zero }
-
-            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
-
-        case .groupedTabs:
-            guard tabDisplayManager.shouldEnableGroupedTabs,
-                  tabDisplayManager.tabGroups?.count ?? 0 > 0
-            else { return .zero }
-
-            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
-        }
-    }
-
-    @objc
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabViewController.UX.margin
-    }
-
-    @objc
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard TabDisplaySection(rawValue: indexPath.section) == .regularTabs,
-              let tab = tabDisplayManager.dataStore.at(indexPath.row)
-        else { return nil }
-
-        let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
-        if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
-           let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
-        }
-
-        return UIContextMenuConfiguration(identifier: nil,
-                                          previewProvider: { return tabVC },
-                                          actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
 
@@ -819,14 +706,11 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 }
 
+// MARK: - PresentingModalViewControllerDelegate
 extension GridTabViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         dismiss(animated: animated, completion: { self.collectionView.reloadData() })
     }
-}
-
-protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(_ cell: TabCell)
 }
 
 // MARK: - Notifiable
@@ -840,12 +724,6 @@ extension GridTabViewController: Notifiable {
         default: break
         }
     }
-}
-
-protocol InactiveTabsCFRProtocol {
-    func setupCFR(with view: UILabel)
-    func presentCFR()
-    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
 }
 
 // MARK: - Contextual Hint and Toast
@@ -865,27 +743,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        let viewModel = ButtonToastViewModel(
-            labelText: String.localizedStringWithFormat(
-                .TabsTray.CloseTabsToast.Title,
-                tabsCount),
-            buttonText: .TabsTray.CloseTabsToast.Action)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
-            completion(!buttonPressed)
-        })
-
-        toast.showToast(viewController: self,
-                        delay: UX.undoToastDelay,
-                        duration: UX.undoToastDuration) { toast in
-            [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                              constant: -self.toolbarHeight)
-            ]
-        }
+        presentUndoToast(toastType: .inactiveTabs(count: tabsCount),
+                         completion: completion)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {

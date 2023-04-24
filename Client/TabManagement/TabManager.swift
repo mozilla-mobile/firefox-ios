@@ -15,8 +15,7 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
-    var didChangedPanelSelection: Bool { get set }
-    var didAddNewTab: Bool { get set }
+    var backupCloseTab: BackupCloseTab? { get set }
     var normalTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
     var tabDisplayType: TabDisplayType { get set }
@@ -31,6 +30,7 @@ protocol TabManager: AnyObject {
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
+    func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
     func getTabFor(_ url: URL) -> Tab?
     func clearAllTabsHistory()
@@ -73,7 +73,9 @@ extension TabManager {
     }
 
     func removeTab(_ tab: Tab) {
-        removeTab(tab, completion: nil)
+        removeTab(tab) {
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+        }
     }
 
     func restoreTabs(_ forced: Bool = false) {

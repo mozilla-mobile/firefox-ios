@@ -2705,6 +2705,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 extension BrowserViewController: TabTrayDelegate {
+    func tabTrayDidCloseLastTab(toast: ButtonToast) {
+        toast.applyTheme(theme: themeManager.currentTheme)
+        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
+    }
+
     func tabTrayOpenRecentlyClosedTab(_ url: URL) {
         guard let tab = self.tabManager.selectedTab else { return }
         self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)

@@ -322,6 +322,8 @@ class TabDisplayManagerTests: XCTestCase {
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = true
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -352,6 +354,8 @@ class TabDisplayManagerTests: XCTestCase {
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = false
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -360,6 +364,66 @@ class TabDisplayManagerTests: XCTestCase {
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5)
+    }
+
+    // MARK: - Undo tab clos
+    func testShouldPresentUndoToastOnHomepage_ForLastTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        manager.addTab()
+
+        XCTAssertTrue(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                      "Expected to present toast on homepage")
+    }
+
+    func testShouldNotPresentUndoToastOnHomepage_MultlipleTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add 2 tabs
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on TabTray")
+    }
+
+    func testShouldPresentUndoToastOnHomepage_ForLastPrivateTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on homepage")
+    }
+
+    func testShouldPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add 2 tabs
+        let activeTab1 = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        manager.selectTab(activeTab1)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on homepage")
+    }
+
+    func testInitWithExistingRegularTabs() {
+        let tabDisplayManager = createTabDisplayManagerWithTabs(amountOfTabs: 3, isPrivate: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        XCTAssertEqual(manager.normalTabs.count, 3, "Expected 3 tabs")
+    }
+
+    func testInitWithExistingPrivateTabs() {
+        let tabDisplayManager = createTabDisplayManagerWithTabs(amountOfTabs: 3, isPrivate: true)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
     }
 }
 
@@ -385,6 +449,23 @@ extension TabDisplayManagerTests {
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
+        return tabDisplayManager
+    }
+
+    func createTabDisplayManagerWithTabs(amountOfTabs: Int, isPrivate: Bool) -> TabDisplayManager {
+        for _ in 0..<amountOfTabs {
+            _ = manager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+        }
+
+        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
+                                                  tabManager: manager,
+                                                  tabDisplayer: self,
+                                                  reuseID: TopTabCell.cellIdentifier,
+                                                  tabDisplayType: .TopTabTray,
+                                                  profile: profile,
+                                                  cfrDelegate: cfrDelegate,
+                                                  theme: LightTheme())
+        collectionView.dataSource = tabDisplayManager
         return tabDisplayManager
     }
 

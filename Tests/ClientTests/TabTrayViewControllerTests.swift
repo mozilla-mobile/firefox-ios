@@ -33,7 +33,6 @@ class TabTrayViewControllerTests: XCTestCase {
                                         tabManager: manager,
                                         overlayManager: overlayManager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
-        manager.addDelegate(gridTab)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -56,16 +55,17 @@ class TabTrayViewControllerTests: XCTestCase {
         XCTAssertEqual(tabTray.viewModel.normalTabsCount, "2")
         XCTAssertEqual(tabTray.countLabel.text, "2")
 
+        gridTab.tabDisplayManager.performCloseAction(for: tabToRemove)
         // Wait for notification of .TabClosed when tab is removed
         weak var expectation = self.expectation(description: "notificationReceived")
         NotificationCenter.default.addObserver(forName: .UpdateLabelOnTabClosed, object: nil, queue: nil) { notification in
             expectation?.fulfill()
-        }
-        manager.removeTab(tabToRemove)
-        waitForExpectations(timeout: 1.0, handler: nil)
 
-        XCTAssertEqual(tabTray.viewModel.normalTabsCount, "1")
-        XCTAssertEqual(tabTray.countLabel.text, "1")
+            XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")
+            XCTAssertEqual(self.tabTray.countLabel.text, "1")
+        }
+
+        waitForExpectations(timeout: 3.0, handler: nil)
     }
 
     func testTabTrayInPrivateMode_WhenTabIsCreated() {
