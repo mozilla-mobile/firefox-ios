@@ -12,6 +12,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
     private var logger: MockLogger!
+    private var screenshotService: ScreenshotService!
 
     override func setUp() {
         super.setUp()
@@ -21,6 +22,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
         self.logger = MockLogger()
+        self.screenshotService = ScreenshotService()
     }
 
     override func tearDown() {
@@ -29,6 +31,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.profile = nil
         self.overlayModeManager = nil
         self.logger = nil
+        self.screenshotService = nil
         AppContainer.shared.reset()
     }
 
@@ -134,10 +137,21 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(firstWebview, secondWebview)
     }
 
+    func testShowWebview_setsScreenshotService() {
+        let webview = WKWebView()
+        let subject = createSubject()
+        subject.show(webView: webview)
+
+        XCTAssertNotNil(screenshotService.screenshotableView)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
-        let subject = BrowserCoordinator(router: mockRouter, profile: profile, logger: logger)
+        let subject = BrowserCoordinator(router: mockRouter,
+                                         screenshotService: screenshotService,
+                                         profile: profile,
+                                         logger: logger)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
