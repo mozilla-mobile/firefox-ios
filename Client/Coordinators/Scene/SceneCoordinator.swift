@@ -9,10 +9,11 @@ import Shared
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
+    let screenshotService = ScreenShotService()
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper()) {
-        self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: nil)
+        self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: screenshotService)
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
@@ -37,16 +38,18 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startLaunch(with: launchType)
     }
 
+    func launchBrowser() {
+        startBrowser(with: nil)
+    }
+
+    // MARK: - Route handling
+
     /// Handles the specified route.
     ///
     /// - Parameter route: The route to handle.
     ///
     func handle(route: Route) {
         // TODO: Implement this function.
-    }
-
-    func launchBrowser() {
-        startBrowser(with: nil)
     }
 
     // MARK: - Helper methods
