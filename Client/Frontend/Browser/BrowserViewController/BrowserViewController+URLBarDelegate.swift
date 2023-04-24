@@ -239,7 +239,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
         guard let selectedTab = tabManager.selectedTab else { return }
-        if AppConstants.useCoordinators, !contentContainer.hasHomepage {
+        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         } else if homepageViewController == nil {
@@ -340,7 +340,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 showHomepage(inline: false)
             } else {
                 showEmbeddedHomepage(inline: false)
