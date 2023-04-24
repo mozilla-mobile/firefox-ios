@@ -227,6 +227,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         checkRecentlySaved()
         app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
