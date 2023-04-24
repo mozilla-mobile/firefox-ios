@@ -10,7 +10,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     private struct UX {
         static let buttonFontSize: CGFloat = 15
-        static let buttonTrailingSpace: CGFloat = 18
+        static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
         static let buttonCornerRadius: CGFloat = 4
     }
