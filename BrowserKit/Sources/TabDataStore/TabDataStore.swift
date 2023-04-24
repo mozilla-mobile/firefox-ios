@@ -176,8 +176,7 @@ public actor DefaultTabDataStore: TabDataStore {
                 } catch {
                     self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
                 }
-            }
-            else {
+            } else {
                 if let mainDirectoryPath = windowDataDirectoryURL {
                     if !self.checkIfFileExistsAtPath(path: mainDirectoryPath) {
                         self.createDirectoryAtPath(path: mainDirectoryPath)
@@ -248,13 +247,7 @@ public actor DefaultTabDataStore: TabDataStore {
                 includingPropertiesForKeys: nil,
                 options: .skipsHiddenFiles)
             for fileURL in fileURLs {
-                do {
-                    try FileManager.default.removeItem(at: fileURL)
-                } catch {
-                    logger.log("Error while clearing all window data: \(error)",
-                               level: .debug,
-                               category: .tabs)
-                }
+                await self.removeFileAt(path: fileURL)
             }
         } catch {
             logger.log("Error fetching all window data for clearing: \(error)",
