@@ -77,7 +77,7 @@ enum InputVMError: Error {
 
 class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
-
+    var logger: Logger?
     let profile: Profile
     let autofill: RustAutofill
     var creditCard: CreditCard?
@@ -169,13 +169,15 @@ class CreditCardInputViewModel: ObservableObject {
 
     init(profile: Profile,
          creditCard: CreditCard? = nil,
-         creditCardValidator: CreditCardValidator = CreditCardValidator()
+         creditCardValidator: CreditCardValidator = CreditCardValidator(),
+         logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.autofill = profile.autofill
         self.creditCard = creditCard
         self.state = .add
         self.creditCardValidator = creditCardValidator
+        self.logger = logger
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
