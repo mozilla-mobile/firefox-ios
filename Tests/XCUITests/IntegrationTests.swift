@@ -79,7 +79,6 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncHistory () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
@@ -90,7 +89,6 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncPageUsingChinaFxA () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
@@ -104,7 +102,6 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
         // Sign into Firefox Accounts
-        app.buttons["urlBar-cancel"].tap()
         navigator.openURL("example.com")
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(BrowserTabMenu)
@@ -119,7 +116,6 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncBookmarkDesktop () {
         // Sign into Firefox Accounts
-        app.buttons["urlBar-cancel"].tap()
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -176,7 +172,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop () {
-        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -189,7 +184,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop () {
-        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -213,7 +207,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabsDesktop () {
-        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -233,7 +226,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
-        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 

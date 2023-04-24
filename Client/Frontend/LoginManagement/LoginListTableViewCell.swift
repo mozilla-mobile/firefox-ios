@@ -22,7 +22,8 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
 
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
-        imageView.image = BreachAlertsManager.icon
+        imageView.image = UIImage(named: ImageIdentifiers.breachedWebsite)?
+            .withRenderingMode(.alwaysTemplate)
         imageView.isHidden = true
     }
 
@@ -113,5 +114,6 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
         usernameLabel.textColor = theme.colors.textSecondary
+        breachAlertImageView.tintColor = theme.colors.iconWarning
     }
 }

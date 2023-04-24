@@ -1345,6 +1345,7 @@
 		F8A0B08529AD647B0091C75B /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
 		F8AAC1B429663619000BCDEC /* RustAutofill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B329663618000BCDEC /* RustAutofill.swift */; };
 		F8AAC1B7296637CE000BCDEC /* RustAutofillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */; };
+		F8B18F5529EE01A2008724A8 /* RustSyncManagerAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B18F5429EE01A1008724A8 /* RustSyncManagerAPITests.swift */; };
 		FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
@@ -5824,6 +5825,7 @@
 		F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustSyncManager.swift; sourceTree = "<group>"; };
 		F8AAC1B329663618000BCDEC /* RustAutofill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofill.swift; sourceTree = "<group>"; };
 		F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofillTests.swift; sourceTree = "<group>"; };
+		F8B18F5429EE01A1008724A8 /* RustSyncManagerAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustSyncManagerAPITests.swift; sourceTree = "<group>"; };
 		F8CA43008FC72296965ED032 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
 		F8DB4306B31FC3DC90685A8C /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		F8EF4290ACE53B2692EA362F /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -6331,6 +6333,7 @@
 				E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */,
 				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
 				E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */,
+				F8B18F5429EE01A1008724A8 /* RustSyncManagerAPITests.swift */,
 			);
 			path = SyncTests;
 			sourceTree = "<group>";
@@ -10605,6 +10608,7 @@
 				289A4C141C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				28532CC11C473977000072D9 /* MockFiles.swift in Sources */,
 				D8BA1791206D47A80023AC00 /* DeferredTestUtils.swift in Sources */,
+				F8B18F5529EE01A2008724A8 /* RustSyncManagerAPITests.swift in Sources */,
 				2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */,
 				2F67C5261BB0CB4E00E7B73A /* MetaGlobalTests.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,
