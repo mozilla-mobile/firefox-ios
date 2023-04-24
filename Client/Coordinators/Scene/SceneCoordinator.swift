@@ -9,7 +9,7 @@ import Shared
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
-    let screenshotService = ScreenShotService()
+    private let screenshotService = ScreenshotService()
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper()) {
@@ -62,7 +62,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
-        let browserCoordinator = BrowserCoordinator(router: router)
+        let browserCoordinator = BrowserCoordinator(router: router,
+                                                    screenshotService: screenshotService)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
     }

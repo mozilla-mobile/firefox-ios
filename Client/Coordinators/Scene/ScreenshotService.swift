@@ -4,30 +4,36 @@
 
 import Foundation
 
-struct ScreenShotData {
+struct ScreenshotData {
     var pdfData: Data
     var rect: CGRect
 }
 
-protocol ScreenShotAbleView: UIViewController {
-    func getScreenshotData() -> ScreenShotData?
+/// A protocol to get PDF data for the fullscreen screenshot feature
+protocol ScreenshotAbleView: UIViewController {
+    func getScreenshotData(completionHandler: @escaping (ScreenshotData?) -> Void)
 }
 
-class ScreenShotService: NSObject, UIScreenshotServiceDelegate {
-    var screenshotAbleView: ScreenShotAbleView?
+class ScreenshotService: NSObject, UIScreenshotServiceDelegate {
+    var screenshotAbleView: ScreenshotAbleView?
 
     func screenshotService(
         _ screenshotService: UIScreenshotService,
         generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void
     ) {
-
-        guard let screenShotAbleView = screenshotAbleView,
-              screenShotAbleView.presentedViewController == nil,
-              let screenshotData = screenShotAbleView.getScreenshotData() else {
+        guard let screenshotAbleView = screenshotAbleView,
+              screenshotAbleView.presentedViewController == nil else {
             completionHandler(nil, 0, .zero)
             return
         }
 
-        completionHandler(screenshotData.pdfData, 0, screenshotData.rect)
+        screenshotAbleView.getScreenshotData { screenshotData in
+            guard let screenshotData = screenshotData else {
+                completionHandler(nil, 0, .zero)
+                return
+            }
+
+            completionHandler(screenshotData.pdfData, 0, screenshotData.rect)
+        }
     }
 }
