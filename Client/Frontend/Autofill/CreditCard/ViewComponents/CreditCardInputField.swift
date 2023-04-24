@@ -162,7 +162,7 @@ struct CreditCardInputField: View {
         .padding(.top, 7.4)
     }
 
-    @ViewBuilder private func getTextField(editMode: Bool) -> some View {
+    private func getTextField(editMode: Bool) -> some View {
         TextField(text, text: $text)
             .preferredBodyFont(size: 17)
             .disabled(editMode)
@@ -201,6 +201,8 @@ struct CreditCardInputField: View {
 
             viewModel.nameOnCard = newValue
         case .number:
+            // Do not process concealed numbers
+            guard shouldReveal else { return }
             // Credit card text with `-` delimiter
             let maxAllowedNumbers = 19
             let val = sanitizeInputOn(newValue)
