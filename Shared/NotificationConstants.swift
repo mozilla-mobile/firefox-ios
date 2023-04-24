@@ -102,4 +102,8 @@ extension Notification.Name {
     public static let HistoryUpdated = Notification.Name("HistoryUpdated")
 
     public static let PresentIntroView = Notification.Name("PresentIntroView")
+
+    // MARK: - Autofill
+    
+    public static let CreditCardAccessoryNeeded = Notification.Name("CreditCardAccessoryNeeded")
 }

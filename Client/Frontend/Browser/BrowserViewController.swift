@@ -1906,8 +1906,7 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
             creditCardHelper.foundFieldValues = { fieldValues in
-                self.keyboardAccessoryConfiguration = .creditCard
-                tab.shouldDisplayAccessoryViewForCreditCard = true
+                NotificationCenter.default.post(name: .CreditCardAccessoryNeeded, object: nil)
             }
         }
 

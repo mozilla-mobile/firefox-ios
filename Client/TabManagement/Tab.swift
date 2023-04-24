@@ -944,17 +944,7 @@ private protocol TabWebViewDelegate: AnyObject {
 
 class TabWebView: WKWebView, MenuHelperInterface {
     override var inputAccessoryView: UIView? {
-        guard let shouldShowWithCardAccessory = BrowserViewController.foregroundBVC()?
-            .tabManager
-            .selectedTab?
-            .shouldDisplayAccessoryViewForCreditCard
-        else { return nil }
-
-        if shouldShowWithCardAccessory {
-            return CreditCardKeyboardAccessoryView(for: self)
-        } else {
-            return StandardKeyboardAccessoryView(for: self)
-        }
+        return AccessoryView(for: self)
     }
 
     func resetKeyboardTypeOn(_ webView: WKWebView) {
