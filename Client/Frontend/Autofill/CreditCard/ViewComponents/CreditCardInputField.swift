@@ -198,7 +198,7 @@ struct CreditCardInputField: View {
         case .number:
             return viewModel.cardNumber
         case .expiration:
-            return "\(viewModel.month)\(viewModel.year)"
+            return viewModel.expirationDate.removingOccurrences(of: " / ")
         }
     }
 
