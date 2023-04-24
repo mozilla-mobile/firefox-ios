@@ -22,118 +22,88 @@ final class TabDataStoreTests: XCTestCase {
     }
 
     // MARK: Saving Data
-
-    func testSaveTabData() {
+    func testSaveTabData() async throws {
         let windowData = self.createMockWindow()
-        Task {
-            let fetchedNonExistingData = await tabDataStore.fetchWindowData(withID: UUID())
-            XCTAssertNil(fetchedNonExistingData)
-            Task {
-                await tabDataStore.saveWindowData(window: windowData)
-                Task {
-                    let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
-                    XCTAssertEqual(fetchedWindowData?.id, windowData.id)
-                    XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
-                    XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
-                    XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
-                }
-            }
-        }
+        await tabDataStore.saveWindowData(window: windowData)
+        let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
+        XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+        XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+        XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+        XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
     }
 
-    func testSaveWindowDataWithBackup() {
+    func testSaveWindowDataWithBackup() async throws {
         let windowData = self.createMockWindow()
         let windowID = windowData.id
-        Task {
-            await tabDataStore.saveWindowData(window: windowData)
-            Task {
-                await tabDataStore.saveWindowData(window: windowData)
-                let browserKitInfo = BrowserKitInformation.shared
-                let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
-                    .appendingPathComponent("profile.backup")
-                let baseFilePath = "profile.backup" + "_\(windowID.uuidString)"
-                if let backupPath = baseURL?.appendingPathComponent(baseFilePath) {
-                    XCTAssertTrue(FileManager.default.fileExists(atPath: backupPath.path))
-                } else {
-                    XCTFail("can't create the backup path")
-                }
-            }
+        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData)
+        let browserKitInfo = BrowserKitInformation.shared
+        let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
+            .appendingPathComponent("profile.backup")
+        let baseFilePath = "profile.backup" + "_\(windowID.uuidString)"
+        if let backupPath = baseURL?.appendingPathComponent(baseFilePath) {
+            XCTAssertTrue(FileManager.default.fileExists(atPath: backupPath.path))
+        } else {
+            XCTFail("can't create the backup path")
         }
     }
 
     // MARK: Fetching Data
-    func testFetchBackup() {
+    func testFetchBackup() async throws {
         let windowData = self.createMockWindow()
         let windowID = windowData.id
-        Task {
-            await tabDataStore.saveWindowData(window: windowData)
-            Task {
-                await tabDataStore.saveWindowData(window: windowData)
-                let browserKitInfo = BrowserKitInformation.shared
-                let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
-                    .appendingPathComponent("profile.backup")
-                let baseFilePath = "profile.backup" + "_\(windowID.uuidString)"
-                if let backupPath = baseURL?.appendingPathComponent(baseFilePath) {
-                    XCTAssertTrue(FileManager.default.fileExists(atPath: backupPath.path))
-                    do {
-                        let data = try Data(contentsOf: backupPath)
-                        let backupWindowData = try JSONDecoder().decode(WindowData.self, from: data)
-                        XCTAssertEqual(backupWindowData.id, windowData.id)
-                    } catch {
-                        XCTFail("can't read the backup")
-                    }
-                } else {
-                    XCTFail("can't create the backup path")
-                }
+        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData)
+        let browserKitInfo = BrowserKitInformation.shared
+        let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
+            .appendingPathComponent("profile.backup")
+        let baseFilePath = "profile.backup" + "_\(windowID.uuidString)"
+        if let backupPath = baseURL?.appendingPathComponent(baseFilePath) {
+            XCTAssertTrue(FileManager.default.fileExists(atPath: backupPath.path))
+            do {
+                let data = try Data(contentsOf: backupPath)
+                let backupWindowData = try JSONDecoder().decode(WindowData.self, from: data)
+                XCTAssertEqual(backupWindowData.id, windowData.id)
+            } catch {
+                XCTFail("can't read the backup")
             }
+        } else {
+            XCTFail("can't create the backup path")
         }
     }
 
-    func testFetchAllWindowsData() {
+    func testFetchAllWindowsData() async throws {
+        await tabDataStore.clearAllWindowsData()
         let windowData1 = self.createMockWindow()
         let windowData2 = self.createMockWindow()
-        Task {
-            await tabDataStore.saveWindowData(window: windowData1)
-            Task {
-                await tabDataStore.saveWindowData(window: windowData2)
-                Task {
-                    let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
-                    XCTAssertEqual(fetchedWindowsData.count, 2)
-                    XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
-                    XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
-                }
-            }
-        }
+        await tabDataStore.saveWindowData(window: windowData1)
+        await tabDataStore.saveWindowData(window: windowData2)
+        let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
+        XCTAssertEqual(fetchedWindowsData.count, 2)
+        XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
+        XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
     }
 
-    func testFetchWindowDataWithId() {
+    func testFetchWindowDataWithId() async throws {
         let windowData = self.createMockWindow()
-        Task {
-            await tabDataStore.saveWindowData(window: windowData)
-            Task {
-                let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
-                XCTAssertNotNil(fetchedWindowData)
-                XCTAssertEqual(fetchedWindowData?.id, windowData.id)
-                XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
-                XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
-                XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
-            }
-        }
+        let fetchedNonExistingData = await tabDataStore.fetchWindowData(withID: UUID())
+        XCTAssertNil(fetchedNonExistingData)
+        await tabDataStore.saveWindowData(window: windowData)
+        let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
+        XCTAssertNotNil(fetchedWindowData)
+        XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+        XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+        XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+        XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
     }
 
     // MARK: Clearing Data
-    func testClearAllTabData() {
+    func testClearAllTabData() async throws {
         let windowData = self.createMockWindow()
-        Task {
-            await tabDataStore.saveWindowData(window: windowData)
-            Task {
-                await tabDataStore.clearAllWindowsData()
-                Task {
-                    let fetchedWindowData = await tabDataStore.fetchAllWindowsData()
-                    XCTAssertTrue(fetchedWindowData.isEmpty)
-                }
-            }
-        }
+        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.clearAllWindowsData()
+        let fetchedWindowData = await tabDataStore.fetchAllWindowsData()
+        XCTAssertTrue(fetchedWindowData.isEmpty)
     }
 
     // MARK: Helpers

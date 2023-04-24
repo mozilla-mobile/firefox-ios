@@ -163,27 +163,43 @@ public actor DefaultTabDataStore: TabDataStore {
         guard let windowSavingPath = self.windowURLPath(for: window.id, isBackup: false) else {
             return
         }
-        Task {
-            do {
-                if self.checkIfFileExistsAtPath(path: windowSavingPath) {
-                    guard let backupWindowSavingPath = self.windowURLPath(for: window.id, isBackup: true) else {
-                        return
-                    }
-                    do {
-                        try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
-                    } catch {
-                        self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
+        do {
+            if self.checkIfFileExistsAtPath(path: windowSavingPath) {
+                guard let backupWindowSavingPath = self.windowURLPath(for: window.id, isBackup: true), let backupDirectoryPath = self.windowDataBackupDirectoryURL else {
+                    return
+                }
+                if !self.checkIfFileExistsAtPath(path: backupDirectoryPath) {
+                    self.createDirectoryAtPath(path: backupDirectoryPath)
+                }
+                do {
+                    try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
+                } catch {
+                    self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
+                }
+            }
+            else {
+                if let mainDirectoryPath = windowDataDirectoryURL {
+                    if !self.checkIfFileExistsAtPath(path: mainDirectoryPath) {
+                        self.createDirectoryAtPath(path: mainDirectoryPath)
                     }
                 }
-                try await self.writeWindowData(windowData: window, to: windowSavingPath)
-            } catch {
-                self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
             }
+            try await self.writeWindowData(windowData: window, to: windowSavingPath)
+        } catch {
+            self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
         }
     }
 
     private func checkIfFileExistsAtPath(path: URL) -> Bool {
         return FileManager.default.fileExists(atPath: path.path)
+    }
+
+    private func createDirectoryAtPath(path: URL) {
+        do {
+            try FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
+        } catch {
+            self.logger.log("Failed to create window data directory: \(error.localizedDescription) for path: \(path.path)", level: .debug, category: .tabs)
+        }
     }
 
     private func writeWindowData(windowData: WindowData, to url: URL) async throws {
@@ -200,8 +216,24 @@ public actor DefaultTabDataStore: TabDataStore {
         guard let profileURL = self.windowURLPath(for: id, isBackup: false) else {
             return
         }
+        guard let backupURL = self.windowURLPath(for: id, isBackup: true) else {
+            return
+        }
+        await self.removeFileAt(path: profileURL)
+        await self.removeFileAt(path: backupURL)
+    }
+
+    public func clearAllWindowsData() async {
+        guard let profileURL = windowDataDirectoryURL, let backupURL = windowDataBackupDirectoryURL else {
+            return
+        }
+        await self.removeAllFilesAt(path: profileURL)
+        await self.removeAllFilesAt(path: backupURL)
+    }
+
+    private func removeFileAt(path: URL) async {
         do {
-            try FileManager.default.removeItem(at: profileURL)
+            try FileManager.default.removeItem(at: path)
             return
         } catch {
             logger.log("Error while clearing window data: \(error)",
@@ -209,15 +241,10 @@ public actor DefaultTabDataStore: TabDataStore {
                        category: .tabs)
         }
     }
-
-    public func clearAllWindowsData() async {
-        guard let profileURL = windowDataDirectoryURL else {
-            return
-        }
-
+    private func removeAllFilesAt(path: URL) async {
         do {
             let fileURLs = try FileManager.default.contentsOfDirectory(
-                at: profileURL,
+                at: path,
                 includingPropertiesForKeys: nil,
                 options: .skipsHiddenFiles)
             for fileURL in fileURLs {
