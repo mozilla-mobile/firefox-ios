@@ -1,3 +1,12 @@
+/* When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs */
+"CloseTabsToast.Button.v113" = "Cofnyć";
+
+/* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
+"CloseTabsToast.SingleTabTitle.v113" = "Rajtark je začinjeny";
+
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+"CloseTabsToast.Title.v113" = "Začinjene rajtarki: %d";
+
 /* Button label to sync tabs in your Firefox Account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Rajtarki synchronizować";
 

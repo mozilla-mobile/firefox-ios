@@ -1,0 +1,9 @@
+/* Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed. */
+"CreditCard.SnackBar.RemovedCardLabel.v112" = "ᱠᱟᱰ ᱚᱪᱚᱜ ᱮᱱᱟ";
+
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully */
+"CreditCard.SnackBar.SavedCardLabel.v112" = "ᱱᱟᱶᱟ ᱠᱟᱰ ᱥᱟᱧᱪᱟᱣ ᱮᱱᱟ";
+
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
+"CreditCard.SnackBar.UpdatedCardLabel.v112" = "ᱠᱟᱰ ᱥᱟᱦᱴᱟ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱮᱱᱟ";
+
