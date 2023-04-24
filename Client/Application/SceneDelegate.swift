@@ -48,7 +48,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-            // FXIOS-6214: Handle deeplinks from willConnectTo
+            if let context = connectionOptions.urlContexts.first,
+               let route = routeBuilder.makeRoute(url: context.url) {
+                sceneCoordinator?.handle(route: route)
+            }
+
+            if let activity = connectionOptions.userActivities.first,
+               let route = routeBuilder.makeRoute(userActivity: activity) {
+                sceneCoordinator?.handle(route: route)
+            }
+
+            if let shortcut = connectionOptions.shortcutItem,
+               let route = routeBuilder.makeRoute(shortcutItem: shortcut) {
+                sceneCoordinator?.handle(route: route)
+            }
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()
