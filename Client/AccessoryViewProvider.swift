@@ -161,22 +161,22 @@ class AccessoryViewProvider: UIView, Themeable {
     // MARK: - Actions
 
     @objc
-    func tappedPreviousButton() {
+    private func tappedPreviousButton() {
         previousClosure?()
     }
 
     @objc
-    func tappedNextButton() {
+    private func tappedNextButton() {
         nextClosure?()
     }
 
     @objc
-    func tappedDoneButton() {
+    private func tappedDoneButton() {
         doneClosure?()
     }
 
     @objc
-    func tappedCardButton() {
+    private func tappedCardButton() {
         savedCardsClosure?()
     }
 }
