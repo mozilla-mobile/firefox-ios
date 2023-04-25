@@ -15,7 +15,6 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     var showCreditCard = false
-    let target: TabWebView
     let throttler = Throttler(seconds: 1.0)
 
     // stubs - these closures will be given as selectors in a future task
@@ -28,20 +27,32 @@ class AccessoryViewProvider: UIView, Themeable {
         toolbar.sizeToFit()
     }
 
-    lazy private var previousButton = UIBarButtonItem(image: UIImage(systemName: "chevron.up"),
-                                                      style: .plain,
-                                                      target: target,
-                                                      action: nil)
+    lazy private var previousButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "chevron.up"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(tappedPreviousButton))
 
-    lazy private var nextButton = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
-                                                  style: .plain,
-                                                  target: target,
-                                                  action: nil)
+        return button
+    }()
 
-    lazy private var doneButton = UIBarButtonItem(title: .CreditCard.Settings.Done,
-                                                  style: .done,
-                                                  target: target,
-                                                  action: nil)
+    lazy private var nextButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(tappedNextButton))
+
+        return button
+    }()
+
+    lazy private var doneButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(tappedDoneButton))
+
+        return button
+    }()
 
     private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
 
@@ -82,10 +93,8 @@ class AccessoryViewProvider: UIView, Themeable {
         stackView.distribution = .equalCentering
     }
 
-    init(for target: TabWebView,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.target = target
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -146,5 +155,22 @@ class AccessoryViewProvider: UIView, Themeable {
         doneButton.tintColor = theme.colors.iconAccentBlue
         cardImageView.tintColor = theme.colors.iconPrimary
         cardButtonStackView.backgroundColor = .systemBackground
+    }
+
+    // MARK: - Actions
+
+    @objc
+    func tappedPreviousButton() {
+        previousClosure?()
+    }
+
+    @objc
+    func tappedNextButton() {
+        nextClosure?()
+    }
+
+    @objc
+    func tappedDoneButton() {
+        doneClosure?()
     }
 }

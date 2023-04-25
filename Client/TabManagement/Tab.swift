@@ -950,7 +950,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     private var accessoryCreditCardAction = { }
 
     override var inputAccessoryView: UIView? {
-        let accessoryView = AccessoryViewProvider(for: self)
+        let accessoryView = AccessoryViewProvider()
 
         accessoryView.previousClosure = accessoryPreviousAction
         accessoryView.nextClosure = accessoryNextAction
