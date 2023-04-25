@@ -28,7 +28,8 @@ final class SceneDelegateTests: XCTestCase {
     }
 
     func testCoordinatorBVC_notFound_logsAndNotNil() {
-        let subject = SceneDelegate(logger: logger)
+        let subject = SceneDelegate()
+        subject.logger = logger
 
         XCTAssertNotNil(subject.coordinatorBrowserViewController)
         XCTAssertEqual(logger.savedLevel, .fatal)
@@ -38,7 +39,8 @@ final class SceneDelegateTests: XCTestCase {
 
     func testCoordinatorBVC_found_returnsProperInstance() throws {
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
-        let subject = SceneDelegate(logger: logger)
+        let subject = SceneDelegate()
+        subject.logger = logger
         let scene = UIApplication.shared.windows.first?.windowScene
         let sceneCoordinator = SceneCoordinator(scene: scene!)
         sceneCoordinator.router = router

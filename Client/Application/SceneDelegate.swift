@@ -14,11 +14,7 @@ import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
+    var logger: Logger = DefaultLogger.shared
 
     /// Do not use, this will be removed as part of FXIOS-6036
     var browserViewController: BrowserViewController!
