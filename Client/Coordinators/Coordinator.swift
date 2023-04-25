@@ -15,7 +15,7 @@ protocol Coordinator {
 
 open class BaseCoordinator: Coordinator {
     var id = UUID()
-    var childCoordinators: [Coordinator] = []
+    var childCoordinators: [BaseCoordinator] = []
     var router: Router
 
     init(router: Router) {
