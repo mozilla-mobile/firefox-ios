@@ -16,15 +16,16 @@ class TabManagerTests: XCTestCase {
     var mockDiskImageStore: MockDiskImageStore!
     let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1_000_000_000
+
     override func setUp() {
         super.setUp()
-        AppConstants.useNewTabDataStore = true
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         subject = TabManagerImplementation(profile: mockProfile,
                                            imageStore: mockDiskImageStore,
                                            tabDataStore: mockTabStore)
+        subject.isNewTabStoreEnabled = true
     }
 
     override func tearDown() {
