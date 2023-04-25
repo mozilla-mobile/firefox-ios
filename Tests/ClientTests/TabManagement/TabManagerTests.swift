@@ -12,6 +12,7 @@ import Shared
 class TabManagerTests: XCTestCase {
     var subject: TabManagerImplementation!
     var mockTabStore: MockTabDataStore!
+    var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
     let webViewConfig = WKWebViewConfiguration()
@@ -22,9 +23,11 @@ class TabManagerTests: XCTestCase {
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
+        mockSessionStore = MockTabSessionStore()
         subject = TabManagerImplementation(profile: mockProfile,
                                            imageStore: mockDiskImageStore,
-                                           tabDataStore: mockTabStore)
+                                           tabDataStore: mockTabStore,
+                                           tabSessionStore: mockSessionStore)
         subject.isNewTabStoreEnabled = true
     }
 
@@ -87,6 +90,20 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    // MARK: - Store changes
+
+    func testStoreTabs() async throws {
+        addTabs(count: 5)
+        subject.selectTab(subject.tabs.first)
+        let tabID = subject.tabs.first?.tabUUID
+        subject.storeChanges()
+
+        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(subject.tabs.count, 5)
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+        XCTAssertEqual(mockSessionStore.tabID?.uuidString, tabID)
     }
 
     // MARK: - Helper methods
