@@ -46,7 +46,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }()
 
     lazy private var doneButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
+        let button = UIBarButtonItem(title: "Done", // The actual string will become available after cherry picked in from main
                                      style: .done,
                                      target: self,
                                      action: #selector(tappedDoneButton))
