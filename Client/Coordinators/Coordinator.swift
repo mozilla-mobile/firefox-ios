@@ -17,7 +17,6 @@ protocol Coordinator {
 
 /// An extension on the `Coordinator` class that provides a method to find a coordinator that can handle a given route.
 extension Coordinator {
-
     /// Finds a coordinator that can handle a given route by recursively searching through the current coordinator's child coordinators.
     ///
     /// - Parameters:
@@ -30,7 +29,6 @@ extension Coordinator {
     /// - DiscardableResult: The result of this method is marked as `@discardableResult` because the caller may choose not to use the returned `Coordinator` instance, which is safe to do.
     @discardableResult
     func find(route: Route) -> Coordinator? {
-
         // Check if the current coordinator can handle the route.
         if self.handle(route: route) {
             return self

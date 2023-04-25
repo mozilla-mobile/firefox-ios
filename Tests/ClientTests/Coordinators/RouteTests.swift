@@ -21,7 +21,7 @@ class RouteTests: XCTestCase {
     func testSearchRouteWithUrl() {
         let url = URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!
         let route = routeBuilder.makeRoute(url: url)
-        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!, isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!, isPrivate: false, options: [.focusLocationField]))
     }
 
     func testSearchRouteWithEncodedUrl() {
