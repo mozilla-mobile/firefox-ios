@@ -77,6 +77,7 @@ final class TabDataStoreTests: XCTestCase {
         let windowData1 = self.createMockWindow()
         let windowData2 = self.createMockWindow()
         await tabDataStore.saveWindowData(window: windowData1)
+        try? await Task.sleep(nanoseconds: 100_000_000)
         await tabDataStore.saveWindowData(window: windowData2)
         let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
         XCTAssertEqual(fetchedWindowsData.count, 2)

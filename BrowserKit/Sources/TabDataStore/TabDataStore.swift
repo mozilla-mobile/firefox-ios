@@ -22,6 +22,8 @@ public actor DefaultTabDataStore: TabDataStore {
     static let profilePath = "profile.profile"
     static let backupPath = "profile.backup"
     private var logger: Logger = DefaultLogger.shared
+    private let throttleInterval: TimeInterval = 5
+    private var saveTask: Task<Void, Error>?
 
     public init() {}
 
@@ -183,9 +185,26 @@ public actor DefaultTabDataStore: TabDataStore {
                     }
                 }
             }
-            try await self.writeWindowData(windowData: window, to: windowSavingPath)
+            try await self.throttle {
+                try await self.writeWindowData(windowData: window, to: windowSavingPath)
+            }
         } catch {
             self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
+        }
+    }
+
+    func throttle(operation: @escaping () async throws -> Void) async throws {
+        guard saveTask == nil else { return }
+
+        saveTask = Task {
+            defer { saveTask = nil }
+            try await Task.sleep(nanoseconds: UInt64(throttleInterval))
+        }
+
+        do {
+            try await operation()
+        } catch {
+            throw error
         }
     }
 
