@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForJumpBackInSyncedTab
     case contextualHintForToolbar
+    case coordinatorsRefactor
     case creditCardAutofillStatus
     case engagementNotificationStatus
     case historyHighlights
@@ -35,6 +36,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sponsoredPocket
     case sponsoredTiles
     case startAtHome
+    case tabStorageRefactor
     case tabTrayGroups
     case topSites
     case wallpapers
@@ -93,6 +95,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
+                .coordinatorsRefactor,
                 .creditCardAutofillStatus,
                 .engagementNotificationStatus,
                 .jumpBackInSyncedTab,
@@ -105,6 +108,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shakeToRestore,
                 .shareSheetChanges,
                 .shareToolbarChanges,
+                .tabStorageRefactor,
                 .wallpaperOnboardingSheet,
                 .wallpaperVersion,
                 .zoomFeature:

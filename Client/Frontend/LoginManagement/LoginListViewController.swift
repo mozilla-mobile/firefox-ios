@@ -181,6 +181,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
+        tableView.reloadSections(IndexSet(integer: LoginListViewController.loginsSettingsSection),
+                                 with: .none)
 
         view.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary

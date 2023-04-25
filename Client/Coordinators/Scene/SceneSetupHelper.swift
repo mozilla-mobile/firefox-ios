@@ -8,12 +8,11 @@ import Shared
 
 struct SceneSetupHelper {
     func configureWindowFor(_ scene: UIScene,
-                            screenshotServiceDelegate: UIScreenshotServiceDelegate?) -> UIWindow {
+                            screenshotServiceDelegate: UIScreenshotServiceDelegate) -> UIWindow {
         guard let windowScene = (scene as? UIWindowScene) else {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
-        // FXIOS-6087: Create screenshot service delegate, currently nil
         windowScene.screenshotService?.delegate = screenshotServiceDelegate
 
         let window = UIWindow(windowScene: windowScene)

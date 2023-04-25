@@ -16,6 +16,10 @@ protocol TabTrayCell where Self: UICollectionViewCell {
     func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme)
 }
 
+protocol TabCellDelegate: AnyObject {
+    func tabCellDidClose(_ cell: TabCell)
+}
+
 // MARK: - Tab Cell
 class TabCell: UICollectionViewCell,
                TabTrayCell,

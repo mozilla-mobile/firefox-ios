@@ -5,21 +5,23 @@
 import UIKit
 import Shared
 
-// TODO: FXIOS-4995 - BreachAlertsManager theming
-class BreachAlertsDetailView: UIView {
+class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
+        static let shadowRadius: CGFloat = 8
+        static let shadowOpacity: Float = 0.6
+        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
-    private let textColor = UIColor.white
+    private var breachLink = String()
     private let titleIconSize: CGFloat = 24
     private lazy var titleIconContainerSize: CGFloat = {
         return titleIconSize + UX.horizontalMargin * 2
     }()
 
     lazy var titleIcon: UIImageView = {
-        let imageView = UIImageView(image: BreachAlertsManager.icon)
-        imageView.tintColor = textColor
+        let imageView = UIImageView(image: UIImage(named: ImageIdentifiers.breachedWebsite)?
+            .withRenderingMode(.alwaysTemplate))
         imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = "Breach Alert Icon"
         return imageView
@@ -41,7 +43,6 @@ class BreachAlertsDetailView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
-        label.textColor = textColor
         label.text = .BreachAlertsTitle
         label.sizeToFit()
         label.isAccessibilityElement = true
@@ -52,15 +53,7 @@ class BreachAlertsDetailView: UIView {
 
     lazy var learnMoreButton: UIButton = {
         let button = UIButton()
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-        let attributedText = NSMutableAttributedString(string: .BreachAlertsLearnMore, attributes: attributes)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        button.setAttributedTitle(attributedText, for: .normal)
-        button.setTitleColor(textColor, for: .normal)
-        button.tintColor = .white
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore
@@ -76,7 +69,6 @@ class BreachAlertsDetailView: UIView {
     lazy var breachDateLabel: UILabel = {
         let label = UILabel()
         label.text = .BreachAlertsBreachDate
-        label.textColor = textColor
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         label.isAccessibilityElement = true
@@ -89,7 +81,6 @@ class BreachAlertsDetailView: UIView {
         let label = UILabel()
         label.text = .BreachAlertsDescription
         label.numberOfLines = 0
-        label.textColor = textColor
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
@@ -99,10 +90,8 @@ class BreachAlertsDetailView: UIView {
     lazy var goToButton: UILabel = {
         let button = UILabel()
         button.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        button.textColor = textColor
         button.numberOfLines = 0
         button.isUserInteractionEnabled = true
-        button.text = .BreachAlertsLink
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLink
@@ -125,11 +114,7 @@ class BreachAlertsDetailView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        // TODO: FXIOS-4995 - BreachAlertsManager theming
-        self.backgroundColor = BreachAlertsManager.lightMode
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
+        configureLayerAppearance()
 
         self.isAccessibilityElement = false
         self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
@@ -157,6 +142,23 @@ class BreachAlertsDetailView: UIView {
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 
+    private func configureLayerAppearance() {
+        layer.cornerRadius = 5
+        layer.masksToBounds = false
+
+        layer.shadowOpacity = UX.shadowOpacity
+        layer.shadowOffset = UX.shadowOffset
+        layer.shadowRadius = UX.shadowRadius
+    }
+
+    private func getAttributedText(for text: String, with color: UIColor) -> NSAttributedString {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: color,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        return NSMutableAttributedString(string: text, attributes: attributes)
+    }
+
     // Populate the view with information from a BreachRecord.
     public func setup(_ breach: BreachRecord) {
         let dateFormatter = DateFormatter()
@@ -164,13 +166,7 @@ class BreachAlertsDetailView: UIView {
         guard let date = dateFormatter.date(from: breach.breachDate) else { return }
         dateFormatter.dateStyle = .medium
         self.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
-        let goToText = .BreachAlertsLink + " \(breach.domain)"
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-        let attributedText = NSMutableAttributedString(string: goToText, attributes: attributes)
-        self.goToButton.attributedText = attributedText
+        breachLink = .BreachAlertsLink + " \(breach.domain)"
         self.goToButton.sizeToFit()
         self.layoutIfNeeded()
 
@@ -209,5 +205,20 @@ class BreachAlertsDetailView: UIView {
                 make.centerY.equalToSuperview()
             }
         }
+    }
+
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        layer.shadowColor = theme.colors.shadowDefault.cgColor
+        backgroundColor = theme.colors.layer2
+        titleIcon.tintColor = theme.colors.iconWarning
+        titleLabel.textColor = theme.colors.textWarning
+        breachDateLabel.textColor = theme.colors.textWarning
+        descriptionLabel.textColor = theme.colors.textWarning
+        goToButton.attributedText = getAttributedText(for: breachLink,
+                                                      with: theme.colors.textWarning)
+        learnMoreButton.setAttributedTitle(getAttributedText(for: .BreachAlertsLearnMore,
+                                                             with: theme.colors.textWarning),
+                                           for: .normal)
     }
 }

@@ -75,6 +75,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
     private var breach: BreachRecord?
+
     private var login: LoginRecord {
         didSet {
             tableView.reloadData()
@@ -174,6 +175,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                                                          constant: -UX.horizontalMargin)
             ])
             breachDetailView.setup(breach)
+            breachDetailView.applyTheme(theme: themeManager.currentTheme)
 
             breachDetailView.learnMoreButton.addTarget(self, action: #selector(LoginDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
             let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(LoginDetailViewController

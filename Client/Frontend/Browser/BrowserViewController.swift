@@ -109,6 +109,11 @@ class BrowserViewController: UIViewController {
     // The content container contains the homepage or webview. Embeded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
+    // Used to show the SimpleToast alert on the webview, until we can remove webViewContainer entirely with FXIOS-6036
+    var alertContainer: UIView {
+        return CoordinatorFlagManager.isCoordinatorEnabled ? contentContainer: webViewContainer
+    }
+
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
         return searchBarPosition == .bottom
@@ -385,7 +390,7 @@ class BrowserViewController: UIViewController {
 
         view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webViewContainer.alpha = 0
         } else {
             contentContainer.alpha = 0
@@ -405,7 +410,7 @@ class BrowserViewController: UIViewController {
             delay: 0,
             options: UIView.AnimationOptions(),
             animations: {
-                if !AppConstants.useCoordinators {
+                if !CoordinatorFlagManager.isCoordinatorEnabled {
                     self.webViewContainer.alpha = 1
                 } else {
                     self.contentContainer.alpha = 1
@@ -559,7 +564,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             view.addSubview(contentContainer)
         } else {
             webViewContainer = UIView()
@@ -589,16 +594,11 @@ class BrowserViewController: UIViewController {
         toolbar = TabToolbar()
         bottomContainer.addArrangedSubview(toolbar)
         view.addSubview(bottomContainer)
-
-        if AppConstants.useCoordinators {
-            // StatusBarOverlay at the back so homepage wallpaper with bottom URL bar can be seen under the status bar
-            view.sendSubviewToBack(statusBarOverlay)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             // Setting the view alpha to 0 so that there's no weird flash in between the
             // check of view appearance and the `performSurveySurfaceCheck`, where the
             // alpha will be set to 1.
@@ -617,7 +617,7 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             performSurveySurfaceCheck()
         }
 
@@ -627,7 +627,7 @@ class BrowserViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             presentIntroViewController()
             presentUpdateViewController()
         }
@@ -742,7 +742,7 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(view)
         }
 
-        if AppConstants.useCoordinators {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
             NSLayoutConstraint.activate([
                 contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
                 contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -758,7 +758,7 @@ class BrowserViewController: UIViewController {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
-                if AppConstants.useCoordinators {
+                if CoordinatorFlagManager.isCoordinatorEnabled {
                     // The status bar is covered by the statusBarOverlay,
                     // if we don't have the URL bar at the top then header height is 0
                     make.height.equalTo(0)
@@ -785,7 +785,7 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webViewContainer.snp.remakeConstraints { make in
                 make.left.right.equalTo(view)
                 make.top.equalTo(header.snp.bottom)
@@ -809,7 +809,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(view)
         }
 
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             // Remake constraints even if we're already showing the home controller.
             // The home controller may change sizes if we tap the URL bar while on about:home.
             homepageViewController?.view.snp.remakeConstraints { make in
@@ -923,7 +923,8 @@ class BrowserViewController: UIViewController {
                     let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                     if !urls.isEmpty {
                         DispatchQueue.main.async {
-                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                            let shouldSelectTab = !self.overlayManager.inOverlayMode
+                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: shouldSelectTab)
                         }
                     }
 
@@ -941,7 +942,7 @@ class BrowserViewController: UIViewController {
                 }
 
                 if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a seperate process
+                    // Because the notification service runs as a separate process
                     // we need to make sure that our account manager picks up any persisted state
                     // the notification services persisted.
                     self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
@@ -1014,6 +1015,13 @@ class BrowserViewController: UIViewController {
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+
+        // Status bar overlay at the back for some content type that need extended content
+        if let type = contentContainer.type, type.needTopContentExtended {
+            view.sendSubviewToBack(statusBarOverlay)
+        } else {
+            view.bringSubviewToFront(statusBarOverlay)
+        }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
@@ -1135,7 +1143,7 @@ class BrowserViewController: UIViewController {
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         guard let url = url else {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 hideHomepage()
             } else {
                 showEmbeddedWebview()
@@ -1145,7 +1153,7 @@ class BrowserViewController: UIViewController {
         }
 
         if isAboutHomeURL {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 showHomepage(inline: true)
             } else {
                 showEmbeddedHomepage(inline: true)
@@ -1155,7 +1163,7 @@ class BrowserViewController: UIViewController {
                 userHasPressedHomeButton = false
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 hideHomepage()
             } else {
                 showEmbeddedWebview()
@@ -1620,7 +1628,7 @@ class BrowserViewController: UIViewController {
                 self.showSendToDevice()
             case CustomActivityAction.copyLink.actionType:
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer,
+                                                bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             default: break
             }
@@ -1863,7 +1871,7 @@ extension BrowserViewController {
 // MARK: - LegacyTabDelegate
 extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
-        if !AppConstants.useCoordinators {
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
             webView.frame = webViewContainer.frame
         } else {
             browserDelegate?.show(webView: webView)
@@ -2170,6 +2178,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
+            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
             activityStreamPanel.scrollToTop()
         }
 
@@ -2201,7 +2210,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             scrollController.tab = tab
 
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 webViewContainer.addSubview(webView)
                 webView.snp.makeConstraints { make in
                     make.left.right.top.bottom.equalTo(self.webViewContainer)
@@ -2696,6 +2705,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 extension BrowserViewController: TabTrayDelegate {
+    func tabTrayDidCloseLastTab(toast: ButtonToast) {
+        toast.applyTheme(theme: themeManager.currentTheme)
+        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
+    }
+
     func tabTrayOpenRecentlyClosedTab(_ url: URL) {
         guard let tab = self.tabManager.selectedTab else { return }
         self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
@@ -2807,7 +2821,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
-                                                bottomContainer: self.webViewContainer,
+                                                bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
         }

@@ -21,7 +21,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                     downloadQueue.cancelAll()
 
                     SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                    bottomContainer: self.webViewContainer,
+                                                    bottomContainer: self.alertContainer,
                                                     theme: self.themeManager.currentTheme)
                 }
             })
@@ -64,7 +64,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
                 SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                bottomContainer: self.webViewContainer,
+                                                bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
         }

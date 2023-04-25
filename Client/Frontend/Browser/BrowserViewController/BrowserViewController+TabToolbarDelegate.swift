@@ -213,7 +213,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             show(toast: toast)
         default:
             SimpleToast().showAlertWithText(message,
-                                            bottomContainer: webViewContainer,
+                                            bottomContainer: alertContainer,
                                             theme: themeManager.currentTheme)
         }
     }

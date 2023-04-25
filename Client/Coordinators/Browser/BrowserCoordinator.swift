@@ -17,12 +17,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private var logger: Logger
+    private let screenshotService: ScreenshotService
 
     init(router: Router,
+         screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
@@ -84,6 +87,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
 
         browserViewController.embedContent(homepage)
+
+        // We currently don't support full page screenshot of the homepage
+        screenshotService.screenshotableView = nil
     }
 
     func show(webView: WKWebView?) {
@@ -100,6 +106,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                        level: .fatal,
                        category: .lifecycle)
         }
+
+        screenshotService.screenshotableView = webviewController
     }
 
     override func handle(route: Route) -> Bool {

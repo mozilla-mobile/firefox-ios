@@ -197,8 +197,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
         XCTAssertTrue(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel].exists)
         waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
@@ -225,7 +227,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         checkRecentlySaved()
         app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)

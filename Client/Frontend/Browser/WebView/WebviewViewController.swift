@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 import WebKit
 
-class WebviewViewController: UIViewController, ContentContainable {
+class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private let webView: WKWebView
     var contentType: ContentType = .webview
 
@@ -32,5 +33,28 @@ class WebviewViewController: UIViewController, ContentContainable {
             view.bottomAnchor.constraint(equalTo: webView.bottomAnchor),
             view.trailingAnchor.constraint(equalTo: webView.trailingAnchor)
         ])
+    }
+
+    // MARK: - ScreenshotableView
+
+    func getScreenshotData(completionHandler: @escaping (ScreenshotData?) -> Void) {
+        guard let url = webView.url,
+              InternalURL(url) == nil else {
+            completionHandler(nil)
+            return
+        }
+
+        var rect = webView.scrollView.frame
+        rect.origin.x = webView.scrollView.contentOffset.x
+        rect.origin.y = webView.scrollView.contentSize.height - rect.height - webView.scrollView.contentOffset.y
+
+        webView.createPDF { result in
+            switch result {
+            case .success(let data):
+                completionHandler(ScreenshotData(pdfData: data, rect: rect))
+            case .failure:
+                completionHandler(nil)
+            }
+        }
     }
 }

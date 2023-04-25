@@ -31,6 +31,9 @@ final class NimbusFeatureFlagLayer {
                 .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
+        case .coordinatorsRefactor:
+            return checkCoordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -58,6 +61,9 @@ final class NimbusFeatureFlagLayer {
 
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
+
+        case .tabStorageRefactor:
+            return checkTabStorageRefactorFeature(from: nimbus)
 
         case .wallpapers,
                 .wallpaperVersion:
@@ -170,6 +176,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.coordinatorsRefactorFeature.value()
+        return config.enabled
+    }
+
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.wallpaperFeature.value()
 
@@ -193,6 +204,11 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabStorageRefactorFeature.value()
+        return config.enabled
     }
 
     public func checkNimbusForCreditCardAutofill(

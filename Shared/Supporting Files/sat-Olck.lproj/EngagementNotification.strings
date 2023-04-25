@@ -1,0 +1,6 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "ᱥᱩᱨ ᱠᱚᱨᱮ ᱡᱟᱦᱱᱟᱜ ᱯᱟᱱᱛᱮ ᱢᱮ ᱾ ᱟᱨ ᱵᱟᱝ ᱡᱟᱦᱱᱟᱜ ᱢᱚᱡᱽ ᱯᱟᱱᱛᱮ ᱢᱮ ᱾";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "ᱟᱢᱟᱜ ᱯᱩᱭᱞᱤ ᱥᱮᱸᱫᱽᱨᱟ ᱮᱛᱦᱚᱵ ᱢᱮ";
+

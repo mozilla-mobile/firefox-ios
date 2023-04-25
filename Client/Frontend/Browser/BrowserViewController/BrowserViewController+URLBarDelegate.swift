@@ -184,7 +184,7 @@ extension BrowserViewController: URLBarDelegate {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: self.webViewContainer,
+                                            bottomContainer: alertContainer,
                                             theme: themeManager.currentTheme)
         case .failure:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
@@ -227,7 +227,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar, alertContainer: alertContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -238,7 +238,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab, homepageViewController == nil {
+        guard let selectedTab = tabManager.selectedTab else { return }
+        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
+            // Only scroll to top if we are not showing the home view controller
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
+        } else if homepageViewController == nil {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -336,7 +340,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            if !AppConstants.useCoordinators {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 showHomepage(inline: false)
             } else {
                 showEmbeddedHomepage(inline: false)
