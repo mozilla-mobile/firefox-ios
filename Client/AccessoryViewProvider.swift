@@ -133,6 +133,7 @@ class AccessoryViewProvider: UIView, Themeable {
 
         if showCreditCard {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
+            cardStackViewForBarButton.action = #selector(tappedCardButton)
             toolbar.items = [previousButton, nextButton, cardStackViewForBarButton, flexibleSpacer, doneButton]
         } else {
             toolbar.items = [previousButton, nextButton, flexibleSpacer, doneButton]
@@ -172,5 +173,10 @@ class AccessoryViewProvider: UIView, Themeable {
     @objc
     func tappedDoneButton() {
         doneClosure?()
+    }
+
+    @objc
+    func tappedCardButton() {
+        savedCardsClosure?()
     }
 }
