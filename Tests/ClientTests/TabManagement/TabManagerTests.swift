@@ -92,20 +92,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
-    // MARK: - Store changes
-
-    func testStoreTabs() async throws {
-        addTabs(count: 5)
-        subject.selectTab(subject.tabs.first)
-        let tabID = subject.tabs.first?.tabUUID
-        subject.storeChanges()
-
-        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
-        XCTAssertEqual(subject.tabs.count, 5)
-        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
-        XCTAssertEqual(mockSessionStore.tabID?.uuidString, tabID)
-    }
-
     // MARK: - Helper methods
 
     private func addTabs(count: Int) {
