@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-class AccessoryView: UIView, Themeable {
+class AccessoryViewProvider: UIView, Themeable {
     private struct AccessoryViewUX {
         static let toolbarHeight: CGFloat = 50
     }
@@ -17,6 +17,12 @@ class AccessoryView: UIView, Themeable {
     var showCreditCard = false
     let target: TabWebView
     let throttler = Throttler(seconds: 1.0)
+
+    // stubs - these closures will be given as selectors in a future task
+    var previousClosure: (() -> Void)?
+    var nextClosure: (() -> Void)?
+    var doneClosure: (() -> Void)?
+    var savedCardsClosure: (() -> Void)?
 
     private var toolbar: UIToolbar = .build { toolbar in
         toolbar.sizeToFit()
@@ -32,7 +38,7 @@ class AccessoryView: UIView, Themeable {
                                                   target: target,
                                                   action: nil)
 
-    lazy private var doneButton = UIBarButtonItem(title: "Done",
+    lazy private var doneButton = UIBarButtonItem(title: .CreditCard.Settings.Done,
                                                   style: .done,
                                                   target: target,
                                                   action: nil)

@@ -943,8 +943,21 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
+    // stubs - these will be given actions in a future task
+    private var accessoryNextAction = { }
+    private var accessoryPreviousAction = { }
+    private var accessoryDoneAction = { }
+    private var accessoryCreditCardAction = { }
+
     override var inputAccessoryView: UIView? {
-        return AccessoryView(for: self)
+        let accessoryView = AccessoryViewProvider(for: self)
+
+        accessoryView.previousClosure = accessoryPreviousAction
+        accessoryView.nextClosure = accessoryNextAction
+        accessoryView.doneClosure = accessoryDoneAction
+        accessoryView.savedCardsClosure = accessoryCreditCardAction
+
+        return accessoryView
     }
 
     func resetKeyboardTypeOn(_ webView: WKWebView) {
