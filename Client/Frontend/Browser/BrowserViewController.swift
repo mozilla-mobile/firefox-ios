@@ -2893,7 +2893,6 @@ extension BrowserViewController {
         } else {
             return sceneDelegate.browserViewController
         }
-
     }
 }
 
