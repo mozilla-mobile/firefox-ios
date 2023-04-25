@@ -419,7 +419,7 @@ workflows:
             echo "Swiftlint version after mirror swap"
             swiftlint version
 
-            swiftlint --path $BITRISE_SOURCE_DIR
+            swiftlint --config .swiftlint.yml
     - script@1:
         inputs:
         - content: |-
