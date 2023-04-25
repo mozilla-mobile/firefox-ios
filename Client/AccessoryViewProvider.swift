@@ -85,12 +85,16 @@ class AccessoryViewProvider: UIView, Themeable {
     private lazy var cardButtonStackView: UIStackView = .build { [weak self] stackView in
         guard let self = self else { return }
 
+        let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(self.tappedCardButton))
+
+        stackView.isUserInteractionEnabled = true
         stackView.addArrangedSubview(self.fixedSpacer)
         stackView.addArrangedSubview(self.cardImageView)
         stackView.addArrangedSubview(self.useCardTextLabel)
         stackView.addArrangedSubview(self.fixedSpacer)
         stackView.spacing = 2
         stackView.distribution = .equalCentering
+        stackView.addGestureRecognizer(stackViewTapped)
     }
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -133,7 +137,6 @@ class AccessoryViewProvider: UIView, Themeable {
 
         if showCreditCard {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
-            cardStackViewForBarButton.action = #selector(tappedCardButton)
             toolbar.items = [previousButton, nextButton, cardStackViewForBarButton, flexibleSpacer, doneButton]
         } else {
             toolbar.items = [previousButton, nextButton, flexibleSpacer, doneButton]
