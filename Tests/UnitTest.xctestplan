@@ -69,7 +69,6 @@
     },
     {
       "skippedTests" : [
-        "CreditCardInputFieldTests",
         "ETPCoverSheetTests",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
