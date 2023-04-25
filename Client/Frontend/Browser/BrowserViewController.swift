@@ -2684,11 +2684,21 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
+
+        finishEditionMode()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+    }
+
+    private func finishEditionMode() {
+        // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
+        let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+        if newTabChoice != .topSites {
+            overlayManager.finishEditing(shouldCancelLoading: false)
+        }
     }
 }
 
