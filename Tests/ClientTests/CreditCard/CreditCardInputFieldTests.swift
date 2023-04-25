@@ -7,7 +7,7 @@ import XCTest
 import SwiftUI
 @testable import Client
 
-// This will be updated in FXIOS-6128
+// Disabled: It will be updated in FXIOS-6128
 class CreditCardInputFieldTests: XCTestCase {
     @State var testableString: String = ""
     var profile: MockProfile!
