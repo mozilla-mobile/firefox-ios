@@ -960,10 +960,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
         return accessoryView
     }
 
-    func resetKeyboardTypeOn(_ webView: WKWebView) {
-        BrowserViewController.foregroundBVC()?.keyboardAccessoryConfiguration = .standard
-    }
-
     fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match
