@@ -11,6 +11,23 @@ protocol Coordinator {
 
     func add(child coordinator: Coordinator)
     func remove(child coordinator: Coordinator?)
+
+    func handle(route: Route) -> Bool
+}
+
+extension Coordinator {
+    @discardableResult
+    func find(route: Route) -> Coordinator? {
+        if self.handle(route: route) {
+            return self
+        }
+        for childCoordinator in self.childCoordinators {
+            if let matchingCoordinator = childCoordinator.find(route: route) {
+                return matchingCoordinator
+            }
+        }
+        return nil
+    }
 }
 
 open class BaseCoordinator: Coordinator {
@@ -32,5 +49,9 @@ open class BaseCoordinator: Coordinator {
         else { return }
 
         childCoordinators.remove(at: index)
+    }
+
+    func handle(route: Route) -> Bool {
+        return false
     }
 }
