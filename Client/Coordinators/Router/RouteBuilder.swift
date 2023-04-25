@@ -82,9 +82,8 @@ struct RouteBuilder {
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
                 let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
-                    let tab = tabs[uuid]
-                    return .searchURL(url: tab?.url, tabId: uuid)
+                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
+                    return .searchURL(url: tab.url, tabId: uuid)
                 } else {
                     return .search(url: nil, isPrivate: false)
                 }

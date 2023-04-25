@@ -112,39 +112,39 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     override func handle(route: Route) -> Bool {
         switch route {
-        case .searchQuery(query: let query):
+        case .searchQuery:
             // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
             return false
 
-        case .search(url: let url, isPrivate: let isPrivate, options: let options):
+        case .search:
             // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
             return false
 
-        case .searchURL(url: let url, tabId: let tabId):
+        case .searchURL:
             // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
             return false
 
-        case .glean(url: let url):
+        case .glean:
             // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
             return false
 
-        case .homepanel(section: let section):
+        case .homepanel:
             // FXIOS-6029 #13679 ⁃ Enable homepanel in BrowserCoordinator
             return false
 
-        case .settings(section: let section):
+        case .settings:
             // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
             return false
 
-        case .action(action: let action):
+        case .action:
             // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
             return false
 
-        case .fxaSignIn(params: let params):
+        case .fxaSignIn:
             // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
             return false
 
-        case .defaultBrowser(section: let section):
+        case .defaultBrowser:
             // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
             return false
         }
