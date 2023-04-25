@@ -73,8 +73,9 @@ class ClipBoardTests: BaseTestCase {
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        waitForExistence(app.buttons["Copy"], timeout: 15)
-        app.buttons["Copy"].tap()
+        print(app.debugDescription)
+        waitForExistence(app.cells["Copy"], timeout: 15)
+        app.cells["Copy"].tap()
 
         checkCopiedUrl()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
