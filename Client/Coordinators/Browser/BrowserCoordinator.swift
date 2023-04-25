@@ -113,214 +113,40 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     override func handle(route: Route) -> Bool {
         switch route {
         case .searchQuery(query: let query):
-            self.handle(query: query)
-            return true
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
+            return false
 
         case .search(url: let url, isPrivate: let isPrivate, options: let options):
-            self.handle(url: url, isPrivate: isPrivate, options: options)
-            return true
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
+            return false
 
         case .searchURL(url: let url, tabId: let tabId):
-            self.handle(searchURL: url, tabId: tabId)
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
             return false
 
         case .glean(url: let url):
-            self.handle(gleanURL: url)
-            return true
+            // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
+            return false
 
         case .homepanel(section: let section):
-            self.handle(homepanelSection: section)
-            return true
+            // FXIOS-6029 #13679 ⁃ Enable homepanel in BrowserCoordinator
+            return false
 
         case .settings(section: let section):
-            // TODO: - Great candidate for a Settings Coordinator
-            self.handle(settingsSection: section)
-            return true
+            // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
+            return false
 
         case .action(action: let action):
-            switch action {
-            case .closePrivateTabs:
-                self.handleClosePrivateTabs()
-                return true
-            case .presentDefaultBrowserOnboarding:
-                return false
-            case .showQRCode:
-                self.handleQRCode()
-                return true
-            }
+            // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
+            return false
 
         case .fxaSignIn(params: let params):
-            self.handle(fxaParams: params)
-            return true
+            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
+            return false
 
         case .defaultBrowser(section: let section):
-            self.handle(defaultBrowserSection: section)
-            return true
-        }
-    }
-
-    private func handle(searchURL: URL?, tabId: String) {
-        if let newURL = searchURL {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, uuid: tabId, isPrivate: false)
-        } else {
-            self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
-        }
-    }
-
-    private func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self.browserViewController
-        self.browserViewController.presentedViewController?.dismiss(animated: true)
-        self.browserViewController.present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
-    }
-
-    private func handleClosePrivateTabs() {
-        browserViewController.tabManager.removeTabs(browserViewController.tabManager.privateTabs)
-        guard let tab = mostRecentTab(inTabs: browserViewController.tabManager.normalTabs) else {
-            browserViewController.tabManager.selectTab(browserViewController.tabManager.addTab())
-            return
-        }
-        browserViewController.tabManager.selectTab(tab)
-    }
-
-    private func handle(query: String) {
-        browserViewController.openBlankNewTab(focusLocationField: false)
-        browserViewController.urlBar(browserViewController.urlBar, didSubmitText: query)
-    }
-
-    private func handle(fxaParams: FxALaunchParams) {
-        browserViewController.presentSignInViewController(fxaParams)
-    }
-
-    private func handle(homepanelSection section: Route.HomepanelSection) {
-        switch section {
-        case .bookmarks:
-            browserViewController.showLibrary(panel: .bookmarks)
-        case .history:
-            browserViewController.showLibrary(panel: .history)
-        case .readingList:
-            browserViewController.showLibrary(panel: .readingList)
-        case .downloads:
-            browserViewController.showLibrary(panel: .downloads)
-        case .topSites:
-            browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
-        case .newPrivateTab:
-            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
-        case .newTab:
-            browserViewController.openBlankNewTab(focusLocationField: false)
-        }
-    }
-
-    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        if let url = url {
-            if options?.contains(.switchToNormalMode) == true {
-                browserViewController.switchToPrivacyMode(isPrivate: false)
-            }
-            browserViewController.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
-        }
-    }
-
-    private func handle(gleanURL: URL) {
-        Glean.shared.handleCustomUrl(url: gleanURL)
-    }
-
-    private func handle(defaultBrowserSection section: Route.DefaultBrowserSection) {
-        switch section {
-        case .systemSettings:
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
-        case .tutorial:
-            browserViewController.presentDBOnboardingViewController(true)
-        }
-    }
-
-    private func handle(settingsSection: Route.SettingsSection) {
-        guard let viewController = getViewController(settingsSection: settingsSection) else { return }
-        let baseSettingsVC = AppSettingsTableViewController(
-            with: self.browserViewController.profile,
-            and: self.browserViewController.tabManager,
-            delegate: self.browserViewController
-        )
-
-        let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
-        controller.presentingModalViewControllerDelegate = self.browserViewController
-        controller.modalPresentationStyle = .formSheet
-        router.present(controller, animated: true, completion: nil)
-
-        controller.pushViewController(viewController, animated: true)
-    }
-
-    private func getViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
-        switch section {
-        case .general:
-            return nil // Intentional NOOP; Already displaying the general settings VC
-
-        case .newTab:
-            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            return viewController
-
-        case .homePage:
-            let viewController = HomePageSettingViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            return viewController
-
-        case .mailto:
-            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
-            return viewController
-
-        case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile)
-            return viewController
-
-        case .clearPrivateData:
-            let viewController = ClearPrivateDataTableViewController()
-            viewController.profile = profile
-            viewController.tabManager = tabManager
-            return viewController
-
-        case .fxa:
-            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
-            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
-                fxaParams,
-                flowType: .emailLoginFlow,
-                referringPage: .settings,
-                profile: self.browserViewController.profile
-            )
-            return viewController
-
-        case .theme:
-            return ThemeSettingsController()
-
-        case .wallpaper:
-            let wallpaperManager = WallpaperManager()
-            if wallpaperManager.canSettingsBeShown {
-                let viewModel = WallpaperSettingsViewModel(
-                    wallpaperManager: wallpaperManager,
-                    tabManager: tabManager,
-                    theme: themeManager.currentTheme
-                )
-                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                return wallpaperVC
-            } else {
-                return nil
-            }
-
-        case .systemDefaultBrowser:
-            return nil
-
-        case .contentBlocker:
-            return nil
-
-        case .toolbar:
-            return nil
-
-        case .tabs:
-            return nil
-
-        case .topSites:
-            return nil
+            // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
+            return false
         }
     }
 }
