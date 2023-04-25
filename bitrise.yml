@@ -418,6 +418,8 @@ workflows:
             brew upgrade swiftlint
             echo "Swiftlint version after mirror swap"
             swiftlint version
+
+            swiftlint --path $BITRISE_SOURCE_DIR
     - script@1:
         inputs:
         - content: |-
@@ -426,12 +428,11 @@ workflows:
     #- swiftlint-extended@1:
     #    inputs:
     #    - linting_path: "$BITRISE_SOURCE_DIR"
-    - script@1:
-        inputs:
-        - content: |-
-            swiflint --path $BITRISE_SOURCE_DIR
-        title: Run swiflint via script
-
+    #- script@1:
+    #    inputs:
+    #    - content: |-
+    #        swiftlint --path $BITRISE_SOURCE_DIR
+    #    title: Run swiflint via script
     - script@1:
         inputs:
         - content: |-
