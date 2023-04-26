@@ -1507,6 +1507,11 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func handle(query: String) {
+       openBlankNewTab(focusLocationField: false)
+       urlBar(urlBar, didSubmitText: query)
+    }
+
     func switchToPrivacyMode(isPrivate: Bool) {
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)
