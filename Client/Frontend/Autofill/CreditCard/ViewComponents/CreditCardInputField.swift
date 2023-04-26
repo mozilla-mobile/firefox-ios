@@ -118,7 +118,8 @@ struct CreditCardInputField: View {
 
     // MARK: Views
 
-    @ViewBuilder private func provideInputField() -> some View {
+    @ViewBuilder
+    private func provideInputField() -> some View {
         Text(fieldHeadline)
             .preferredBodyFont(size: 15)
             .foregroundColor(titleColor)
@@ -150,7 +151,8 @@ struct CreditCardInputField: View {
         }
     }
 
-    @ViewBuilder private func errorViewWith(errorString: String) -> some View {
+    @ViewBuilder
+    private func errorViewWith(errorString: String) -> some View {
         HStack(spacing: 0) {
             Image(ImageIdentifiers.errorAutofill)
                 .renderingMode(.template)
