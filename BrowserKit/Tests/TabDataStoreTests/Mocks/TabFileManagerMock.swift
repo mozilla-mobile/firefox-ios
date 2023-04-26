@@ -7,11 +7,27 @@ import Foundation
 import Common
 
 class TabFileManagerMock: TabFileManager {
-    func tabDataDirectory() -> URL? {
+    func tabSessionDataDirectory() -> URL? {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+    }
+
+    func windowDataDirectory(isBackup: Bool) -> URL? {
+        return nil
     }
 
     func contentsOfDirectory(at path: URL) -> [URL] {
         return []
     }
+
+    func copyItem(at sourceURL: URL, to destinationURL: URL) throws {}
+
+    func removeFileAt(path: URL) {}
+
+    func removeAllFilesAt(directory: URL) {}
+
+    func fileExists(atPath pathURL: URL) -> Bool {
+        return false
+    }
+
+    func createDirectoryAtPath(path: URL) {}
 }
