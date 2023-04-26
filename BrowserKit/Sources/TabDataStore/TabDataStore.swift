@@ -195,7 +195,9 @@ public actor DefaultTabDataStore: TabDataStore {
         do {
             try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
         } catch {
-            self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
+            self.logger.log("Failed to create window data backup: \(error)",
+                            level: .debug,
+                            category: .tabs)
         }
     }
 
@@ -208,7 +210,7 @@ public actor DefaultTabDataStore: TabDataStore {
         // Ignore the request because a save is already scheduled to happen
         guard !nextSaveIsScheduled else { return }
 
-        // Set the guard bool to true so no new saves can be initialted while waiting
+        // Set the guard bool to true so no new saves can be initiated while waiting
         nextSaveIsScheduled = true
 
         // Dispatch to a task so as not to block the caller
