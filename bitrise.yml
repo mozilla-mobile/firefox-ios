@@ -203,7 +203,7 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
-            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
             echo "$derived_data"
 
             echo "-- unzip -- "
@@ -254,7 +254,7 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
-            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
             echo "$derived_data"
 
             echo "-- unzip -- "
@@ -305,7 +305,7 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
-            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
             echo "$derived_data"
 
             echo "-- unzip -- "
