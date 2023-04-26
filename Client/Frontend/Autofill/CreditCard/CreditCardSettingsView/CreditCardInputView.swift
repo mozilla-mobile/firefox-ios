@@ -7,12 +7,6 @@ import Storage
 import SwiftUI
 import Shared
 
-private struct CreditCardInputText {
-    var name = ""
-    var number = ""
-    var expiration = ""
-}
-
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     var dismiss: ((_ successVal: Bool) -> Void)
@@ -20,10 +14,8 @@ struct CreditCardInputView: View {
     // Theming
     @Environment(\.themeType) var themeVal
     @State var backgroundColor: Color = .clear
-    @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
-    @State private var cardInputText = CreditCardInputText()
 
     var body: some View {
         NavigationView {
@@ -36,7 +28,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .name,
-                                             text: $cardInputText.name,
                                              showError: !viewModel.nameIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -50,7 +41,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .number,
-                                             text: $cardInputText.number,
                                              showError: !viewModel.numberIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -64,7 +54,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .expiration,
-                                             text: $cardInputText.expiration,
                                              showError: !viewModel.expirationIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -80,11 +69,7 @@ struct CreditCardInputView: View {
                         .frame(height: 4)
 
                     if viewModel.state == .edit {
-                        RemoveCardButton(
-                            removeButtonColor: removeButtonColor,
-                            borderColor: borderColor,
-                            alertDetails: viewModel.removeButtonDetails
-                        )
+                        RemoveCardButton(alertDetails: viewModel.removeButtonDetails)
                         .padding(.top, 28)
                     }
 
@@ -116,8 +101,6 @@ struct CreditCardInputView: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer1)
-        removeButtonColor = Color(color.textWarning)
-        borderColor = Color(color.borderPrimary)
         textFieldBackgroundColor = Color(color.layer2)
     }
 
@@ -128,12 +111,30 @@ struct CreditCardInputView: View {
             case .edit:
                 viewModel.updateState(state: .edit)
             case.save:
-                viewModel.saveCreditCard { _, error in
-                    guard error != nil else {
-                        dismiss(true)
-                        return
+                // Update existing card
+                if viewModel.state == .edit {
+                    viewModel.updateCreditCard { _, error in
+                        guard let error = error else {
+                            dismiss(true)
+                            return
+                        }
+                        viewModel.logger?.log("Unable to update card with error: \(error)",
+                                              level: .fatal,
+                                              category: .creditcard)
+                        dismiss(false)
                     }
-                    dismiss(false)
+                } else {
+                    // Save new card
+                    viewModel.saveCreditCard { _, error in
+                        guard let error = error else {
+                            dismiss(true)
+                            return
+                        }
+                        viewModel.logger?.log("Unable to save credit card with error: \(error)",
+                                              level: .fatal,
+                                              category: .creditcard)
+                        dismiss(false)
+                    }
                 }
             }
         }
