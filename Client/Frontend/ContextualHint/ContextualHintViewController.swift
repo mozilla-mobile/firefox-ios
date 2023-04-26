@@ -43,12 +43,13 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         label.numberOfLines = 0
     }
 
-    private lazy var actionButton: UIButton = .build { [weak self] button in
+    private lazy var actionButton: ResizableButton = .build { [weak self] button in
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self,
                          action: #selector(self?.performAction),
                          for: .touchUpInside)
+        button.buttonEdgeSpacing = 0
     }
 
     private lazy var stackView: UIStackView = .build { [weak self] stack in
