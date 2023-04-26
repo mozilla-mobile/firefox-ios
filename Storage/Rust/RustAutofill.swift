@@ -304,6 +304,15 @@ public class RustAutofill {
         }
     }
 
+    public func decryptCreditCardNumber(encryptedCCNum: String?) -> String? {
+        guard let encryptedCCNum = encryptedCCNum, !encryptedCCNum.isEmpty else {
+            return nil
+        }
+        let keys = RustAutofillEncryptionKeys()
+        let num = keys.decryptCreditCardNum(encryptedCCNum: encryptedCCNum)
+        return num
+    }
+
     public func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
