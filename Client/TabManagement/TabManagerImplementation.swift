@@ -12,19 +12,24 @@ import Shared
 // gradually migrate to the new system
 class TabManagerImplementation: LegacyTabManager {
     let tabDataStore: TabDataStore
+    let tabSessionStore: TabSessionStore
+    lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
-         tabDataStore: TabDataStore = DefaultTabDataStore()) {
+         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         tabSessionStore: TabSessionStore = DefaultTabSessionStore()) {
         self.tabDataStore = tabDataStore
+        self.tabSessionStore = tabSessionStore
         super.init(profile: profile, imageStore: imageStore)
     }
 
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
-        guard shouldUseNewTabStore() else {
+        guard shouldUseNewTabStore()
+        else {
             super.restoreTabs(forced)
             return
         }
@@ -40,7 +45,8 @@ class TabManagerImplementation: LegacyTabManager {
         isRestoringTabs = true
         Task {
             let windowData = await self.tabDataStore.fetchAllWindowsData()
-            guard !windowData.isEmpty, let firstWindow = windowData.first else {
+            guard !windowData.isEmpty, let firstWindow = windowData.first
+            else {
                 // Always make sure there is a single normal tab
                 self.generateEmptyTab()
                 return
@@ -91,9 +97,7 @@ class TabManagerImplementation: LegacyTabManager {
     override func preserveTabs() {
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
-        guard shouldUseNewTabStore() else {
-            return
-        }
+        guard shouldUseNewTabStore() else { return }
 
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
@@ -124,19 +128,33 @@ class TabManagerImplementation: LegacyTabManager {
         return tabData
     }
 
+    /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
-        guard shouldUseNewTabStore() else {
+        guard shouldUseNewTabStore()
+        else {
             super.storeChanges()
             return
         }
 
         saveTabs(toProfile: profile, normalTabs)
         preserveTabs()
+        saveIndividualTabSessionData()
+    }
+
+    private func saveIndividualTabSessionData() {
+        guard #available(iOS 15.0, *),
+              let selectedTab = self.selectedTab,
+              let tabSession = selectedTab.webView?.interactionState as? Data,
+              let tabID = UUID(uuidString: selectedTab.tabUUID)
+        else { return }
+
+        Task {
+            await self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
+        }
     }
 
     private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *),
-           AppConstants.useNewTabDataStore {
+        if #available(iOS 15, *), isNewTabStoreEnabled {
             return true
         }
         return false

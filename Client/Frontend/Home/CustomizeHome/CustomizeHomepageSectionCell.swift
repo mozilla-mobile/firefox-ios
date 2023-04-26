@@ -47,9 +47,8 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor,
-                                                      constant: -UX.buttonTrailingSpace)
+            goToSettingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            goToSettingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.buttonTrailingSpace)
         ])
 
         goToSettingsButton.setContentHuggingPriority(.required, for: .vertical)

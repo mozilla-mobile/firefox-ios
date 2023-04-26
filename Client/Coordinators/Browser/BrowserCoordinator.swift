@@ -36,7 +36,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func start(with launchType: LaunchType?) {
-        router.setRootViewController(browserViewController, hideBar: true, animated: true)
+        router.setRootViewController(browserViewController, hideBar: true)
 
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)
@@ -167,7 +167,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func handle(searchURL: URL?, tabId: String) {
-        if let url = url {
+        if let url = searchURL {
             browserViewController.switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: false)
         } else {
             browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
