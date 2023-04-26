@@ -690,11 +690,9 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
                                       completion: { undoButtonPressed in
-            guard !undoButtonPressed else {
-                self.closeInactiveTabs()
-                return
-            }
-            self.undoInactiveTabsClose()
+            undoButtonPressed ?
+            self.undoInactiveTabsClose() :
+            self.closeInactiveTabs()
         })
     }
 
