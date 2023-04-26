@@ -38,9 +38,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .body,
-            maxSize: 28)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body)
         label.textAlignment = .left
         label.numberOfLines = 0
     }
@@ -304,8 +302,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
         if viewModel.isActionType() {
             let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                     maxSize: 28),
+                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body),
                 .foregroundColor: theme.colors.textOnColor,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
