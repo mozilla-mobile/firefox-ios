@@ -145,6 +145,42 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
 
+    func testHandleSearchQuery_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .searchQuery(query: "test query"))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearch_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: nil))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchWithNormalMode_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: [.switchToNormalMode]))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchWithNilURL_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .search(url: nil, isPrivate: false))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchURL_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleNilSearchURL_returnsTrue() {
+        let subject = createSubject()
+        let result = subject.handle(route: .searchURL(url: nil, tabId: "1234"))
+        XCTAssertTrue(result)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
