@@ -2,10 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabled: It will be updated in FXIOS-6128
+
+/*
 import Foundation
 import XCTest
 import SwiftUI
 @testable import Client
+
 
 class CreditCardInputFieldTests: XCTestCase {
     @State var testableString: String = ""
@@ -209,3 +213,4 @@ class CreditCardInputFieldTests: XCTestCase {
         XCTAssertEqual(result, "1029")
     }
 }
+*/

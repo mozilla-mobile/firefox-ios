@@ -4,8 +4,11 @@
 
 import Foundation
 import SwiftUI
+import Shared
 
 struct RemoveCardButton: View {
+    // Theming
+    @Environment(\.themeType) var themeVal
     @State private var showAlert = false
 
     struct AlertDetails {
@@ -18,37 +21,52 @@ struct RemoveCardButton: View {
         let secondaryButtonAction: (() -> Void)?
     }
 
-    let removeButtonColor: Color
-    let borderColor: Color
+    @State var removeButtonColor: Color = .clear
+    @State var borderColor: Color = .clear
+    @State var backgroundColor: Color = .clear
     let alertDetails: AlertDetails
 
     var body: some View {
-        VStack {
-            Rectangle()
-                .fill(borderColor)
-                .frame(maxWidth: .infinity)
-                .frame(height: 0.7)
+        ZStack {
             VStack {
-                Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
-                    showAlert.toggle()
+                Rectangle()
+                    .fill(borderColor)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 0.7)
+                VStack {
+                    Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
+                        showAlert.toggle()
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: alertDetails.alertTitle,
+                            message: alertDetails.alertBody,
+                            primaryButton: alertDetails.primaryButtonStyleAndText,
+                            secondaryButton: alertDetails.secondaryButtonStyleAndText
+                        )
+                    }
+                    .font(.body)
+                    .foregroundColor(removeButtonColor)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
                 }
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: alertDetails.alertTitle,
-                        message: alertDetails.alertBody,
-                        primaryButton: alertDetails.primaryButtonStyleAndText,
-                        secondaryButton: alertDetails.secondaryButtonStyleAndText
-                    )
-                }
-                .font(.body)
-                .foregroundColor(removeButtonColor)
-                .padding(.leading, 16)
-                .padding(.trailing, 16)
-            }
-            Rectangle()
-                .fill(borderColor)
-                .frame(maxWidth: .infinity)
-                .frame(height: 0.7)
+                Rectangle()
+                    .fill(borderColor)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 0.7)
+            }.background(backgroundColor.edgesIgnoringSafeArea(.bottom))
+        }.onAppear {
+            applyTheme(theme: themeVal.theme)
         }
+        .onChange(of: themeVal) { newThemeValue in
+            applyTheme(theme: newThemeValue.theme)
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        backgroundColor = Color(color.layer2)
+        removeButtonColor = Color(color.textWarning)
+        borderColor = Color(color.borderPrimary)
     }
 }
