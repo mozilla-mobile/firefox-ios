@@ -195,49 +195,49 @@ final class BrowserCoordinatorTests: XCTestCase {
         return subject
     }
 
-    func testHomepanelBookmarks_returnsTrue() {
+    func testHandleHomepanelBookmarks_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testHomepanelHistory_returnsTrue() {
+    func testHandleHomepanelHistory_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testHomepanelReadingList_returnsTrue() {
+    func testHandleHomepanelReadingList_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testHomepanelDownloads_returnsTrue() {
+    func testHandleHomepanelDownloads_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testHomepanelTopSites_returnsTrue() {
+    func testHandleHomepanelTopSites_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/top-sites")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testNewPrivateTab_returnsTrue() {
+    func testHandleNewPrivateTab_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!)
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
 
-    func testHomepanelNewTab_returnsTrue() {
+    func testHandleHomepanelNewTab_returnsTrue() {
         let subject = createSubject()
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-tab")!)
         let result = subject.handle(route: route!)
