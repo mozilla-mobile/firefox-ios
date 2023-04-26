@@ -1902,7 +1902,9 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
             creditCardHelper.foundFieldValues = { fieldValues in
-                NotificationCenter.default.post(name: .CreditCardAccessoryNeeded, object: nil)
+                guard let tabWebView = tab.webView as? TabWebView else { return }
+
+                tabWebView.accessoryView?.reloadViewForCardAccessory()
             }
         }
 
@@ -2679,6 +2681,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
+
+        guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
+        tabWebView.accessoryView = AccessoryViewProvider()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {

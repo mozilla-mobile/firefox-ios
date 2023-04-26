@@ -948,14 +948,21 @@ class TabWebView: WKWebView, MenuHelperInterface {
     private var accessoryPreviousAction = { }
     private var accessoryDoneAction = { }
     private var accessoryCreditCardAction = { }
+    var accessoryView: AccessoryViewProvider? = AccessoryViewProvider()
 
     override var inputAccessoryView: UIView? {
-        let accessoryView = AccessoryViewProvider()
+        guard let accessoryView = accessoryView else { return nil }
 
+        translatesAutoresizingMaskIntoConstraints = false
         accessoryView.previousClosure = accessoryPreviousAction
         accessoryView.nextClosure = accessoryNextAction
         accessoryView.doneClosure = accessoryDoneAction
         accessoryView.savedCardsClosure = accessoryCreditCardAction
+
+        NSLayoutConstraint.activate([
+            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            accessoryView.heightAnchor.constraint(equalToConstant: 50)
+        ])
 
         return accessoryView
     }

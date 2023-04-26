@@ -15,7 +15,6 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     var showCreditCard = false
-    let throttler = Throttler(seconds: 1.0)
 
     // stubs - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -108,28 +107,18 @@ class AccessoryViewProvider: UIView, Themeable {
         listenForThemeChange(self)
         setupLayout()
         applyTheme()
-
-        self.notificationCenter.addObserver(self,
-                                            selector: #selector(reloadViewWithDelay),
-                                            name: .CreditCardAccessoryNeeded,
-                                            object: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc
-    private func reloadViewWithDelay() {
-        throttler.throttle { [weak self] in
-            guard let self = self else { return }
+    func reloadViewForCardAccessory() {
+        showCreditCard = true
 
-            self.showCreditCard = true
-
-            self.setNeedsLayout()
-            self.setupLayout()
-            self.layoutIfNeeded()
-        }
+        setNeedsLayout()
+        setupLayout()
+        layoutIfNeeded()
     }
 
     private func setupLayout() {
@@ -146,7 +135,7 @@ class AccessoryViewProvider: UIView, Themeable {
 
         NSLayoutConstraint.activate([
             toolbar.widthAnchor.constraint(equalTo: super.widthAnchor),
-            toolbar.heightAnchor.constraint(equalToConstant: 50)
+            toolbar.heightAnchor.constraint(equalToConstant: AccessoryViewUX.toolbarHeight)
         ])
     }
 
