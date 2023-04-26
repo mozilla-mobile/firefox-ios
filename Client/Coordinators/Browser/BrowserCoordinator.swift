@@ -167,8 +167,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func handle(searchURL: URL?, tabId: String) {
-        if let newURL = searchURL {
-            browserViewController.switchToTabForURLOrOpen(newURL, uuid: tabId, isPrivate: false)
+        if let url = url {
+            browserViewController.switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: false)
         } else {
             browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }
