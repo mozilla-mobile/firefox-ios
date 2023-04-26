@@ -25,6 +25,7 @@ class TabTrayViewControllerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         urlBar = MockURLBarView()
+        urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
         tabTray = TabTrayViewController(tabTrayDelegate: nil,
@@ -87,5 +88,14 @@ class TabTrayViewControllerTests: XCTestCase {
 
         let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         XCTAssertFalse(privateState)
+    }
+
+    func testInOverlayMode_ForHomepageNewTabSettings() {
+        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewDidLoad()
+        profile.prefs.setString(NewTabPage.topSites.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
+        tabTray.viewModel.didTapAddTab(UIBarButtonItem())
+
+        XCTAssertTrue(tabTray.viewModel.overlayManager.inOverlayMode)
     }
 }

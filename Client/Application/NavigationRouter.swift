@@ -308,6 +308,8 @@ enum NavigationPath {
             bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            bvc.overlayManager.openNewTab(url: nil,
+                                          newTabSettings: bvc.newTabSettings)
         }
     }
 

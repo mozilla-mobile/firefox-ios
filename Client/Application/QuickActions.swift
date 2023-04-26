@@ -168,7 +168,11 @@ struct QuickActionsImplementation: QuickActions {
 
     private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController,
                                   isPrivate: Bool) {
-        bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        // Should not focus if New tab settings is Custom URL
+        let shouldFocus = bvc.newTabSettings != .homePage
+        bvc.openBlankNewTab(focusLocationField: shouldFocus, isPrivate: isPrivate)
+        bvc.overlayManager.openNewTab(url: nil,
+                                      newTabSettings: bvc.newTabSettings)
     }
 
     private func handleOpenURL(withBrowserViewController bvc: BrowserViewController,
