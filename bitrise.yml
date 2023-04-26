@@ -419,20 +419,26 @@ workflows:
             echo "Swiftlint version after mirror swap"
             swiftlint version
 
-            swiftlint --config $BITRISE_SOURCE_DIR/.swiftlint.yml
+            #swiftlint --config $BITRISE_SOURCE_DIR/.swiftlint.yml
     - script@1:
         inputs:
         - content: |-
             ./bootstrap.sh
         title: Run bootstrap
-    #- swiftlint-extended@1:
-    #    inputs:
-    #    - linting_path: "$BITRISE_SOURCE_DIR"
-    #- script@1:
-    #    inputs:
-    #    - content: |-
-    #        swiftlint --path $BITRISE_SOURCE_DIR
-    #    title: Run swiflint via script
+    - swiftlint-extended@1:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
+    - script@1:
+        inputs:
+        - content: |-
+            set -e
+            echo "$SWIFTLINT_REPORT"
+            if [ ! -z "$SWIFTLINT_REPORT" ] ;then
+            # The file is not-empty.
+                echo "Failing build since there are swiftlint errors"
+                exit 1
+            fi
+        title: Fail build if swiftlint fails
     - script@1:
         inputs:
         - content: |-
