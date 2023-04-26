@@ -1564,6 +1564,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func openNewTabFromMenu(focusLocationField: Bool) {
+        overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        openBlankNewTab(focusLocationField: focusLocationField)
+    }
+
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
         guard !isShowingJSPromptAlert() else {
