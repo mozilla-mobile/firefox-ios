@@ -10,9 +10,14 @@ transforms:
     - taskgraph.transforms.job:transforms
     - taskgraph.transforms.task:transforms
 
-
+tasks-default:
+    description: Run the performance tests
+    treeherder:
+        kind: test
+        platform: 'ios-tests'
+        tier: 2
 tasks:
     tests:
         bitrise-workflow: perfherder-test
         description: Run performance tests and generate data
-        run-on-tasks-for: [github-pull-requests]
+        run-on-tasks-for: []
