@@ -236,7 +236,7 @@ extension String {
                 "CreditCards.Settings.Done.v114",
                 tableName: "Settings",
                 value: "Done",
-                comment: "When a user is in the process of making a purchase and has at least one saved card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view.")
+                comment: "When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view.")
             public static let ListItemA11y = MZLocalizedString(
                 "CreditCard.Settings.ListItemA11y.v112",
                 tableName: "Settings",
