@@ -50,17 +50,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             if let context = connectionOptions.urlContexts.first,
                let route = routeBuilder.makeRoute(url: context.url) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
 
             if let activity = connectionOptions.userActivities.first,
                let route = routeBuilder.makeRoute(userActivity: activity) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
 
             if let shortcut = connectionOptions.shortcutItem,
                let route = routeBuilder.makeRoute(shortcutItem: shortcut) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
         } else {
             let window = configureWindowFor(scene)
@@ -113,7 +113,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let url = URLContexts.first?.url,
                   let route = routeBuilder.makeRoute(url: url) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             guard let url = URLContexts.first?.url,
                   let routerPath = NavigationPath(url: url) else { return }
@@ -143,7 +143,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
                 browserViewController.openBlankNewTab(focusLocationField: false)
@@ -181,7 +181,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,

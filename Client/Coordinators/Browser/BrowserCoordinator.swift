@@ -5,6 +5,8 @@
 import Common
 import Foundation
 import WebKit
+import Glean
+import Shared
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
     var browserViewController: BrowserViewController
@@ -12,6 +14,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     var homepageViewController: HomepageViewController?
 
     private var profile: Profile
+    private let tabManager: TabManager
+    private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
 
@@ -19,9 +23,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.screenshotService = screenshotService
         self.profile = profile
+        self.tabManager = tabManager
+        self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
         super.init(router: router)
@@ -101,5 +108,45 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
 
         screenshotService.screenshotableView = webviewController
+    }
+
+    override func handle(route: Route) -> Bool {
+        switch route {
+        case .searchQuery:
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
+            return false
+
+        case .search:
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
+            return false
+
+        case .searchURL:
+            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
+            return false
+
+        case .glean:
+            // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
+            return false
+
+        case .homepanel:
+            // FXIOS-6029 #13679 ⁃ Enable homepanel in BrowserCoordinator
+            return false
+
+        case .settings:
+            // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
+            return false
+
+        case .action:
+            // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
+            return false
+
+        case .fxaSignIn:
+            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
+            return false
+
+        case .defaultBrowser:
+            // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
+            return false
+        }
     }
 }

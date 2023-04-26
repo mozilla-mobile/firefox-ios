@@ -48,8 +48,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     ///
     /// - Parameter route: The route to handle.
     ///
-    func handle(route: Route) {
-        // TODO: Implement this function.
+    override func handle(route: Route) -> Bool {
+        return false
     }
 
     // MARK: - Helper methods

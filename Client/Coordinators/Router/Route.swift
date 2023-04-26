@@ -12,19 +12,19 @@ enum Route: Equatable {
     ///   - url: A `URL` object representing the URL to be searched. Pass `nil` if the search does not require a URL.
     ///   - isPrivate: A boolean value indicating whether the search is private or not.
     ///   - options: An optional set of `SearchOptions` values that can be used to customize the search behavior.
-    case search(url: URL?, isPrivate: Bool, options: [SearchOptions]? = nil)
+    case search(url: URL?, isPrivate: Bool, options: Set<SearchOptions>? = nil)
 
     /// Represents a search route that takes a URL and a tab identifier.
     ///
     /// - Parameters:
     ///   - url: A `URL` object representing the URL to be searched. Can be `nil`.
     ///   - tabId: A string representing the identifier of the tab where the search should be performed.
-    case search(url: URL?, tabId: String)
+    case searchURL(url: URL?, tabId: String)
 
     /// Represents a search route that takes a query string.
     ///
     /// - Parameter query: A string representing the query to be searched.
-    case search(query: String)
+    case searchQuery(query: String)
 
     /// Represents a route for sending Glean data.
     ///
@@ -49,7 +49,7 @@ enum Route: Equatable {
     /// Represents a Firefox account sign-in route that takes an `FxALaunchParams` object indicating the parameters for the sign-in.
     ///
     /// - Parameter params: An instance of `FxALaunchParams` containing the parameters for the sign-in.
-    case fxaSignIn(_ params: FxALaunchParams)
+    case fxaSignIn(params: FxALaunchParams)
 
     /// Represents a default browser route that takes a `DefaultBrowserSection` value indicating the section to be displayed.
     ///
@@ -63,6 +63,8 @@ enum Route: Equatable {
         case history
         case readingList = "reading-list"
         case downloads
+        case newPrivateTab = "new-private-tab"
+        case newTab = "new-tab"
     }
 
     /// An enumeration representing different sections of the settings menu.
@@ -97,7 +99,7 @@ enum Route: Equatable {
     }
 
     /// An enumeration representing options that can be used in a search feature.
-    enum SearchOptions {
+    enum SearchOptions: Equatable {
         /// An option to focus the user's attention on the location field of the search interface.
         case focusLocationField
 
