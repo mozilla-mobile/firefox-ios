@@ -13,11 +13,13 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var overlayModeManager: MockOverlayModeManager!
     private var logger: MockLogger!
     private var screenshotService: ScreenshotService!
+    var routeBuilder: RouteBuilder!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        self.routeBuilder = RouteBuilder { false }
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
@@ -27,6 +29,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -190,5 +193,54 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          logger: logger)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    func testHomepanelBookmarks_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testHomepanelHistory_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testHomepanelReadingList_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testHomepanelDownloads_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testHomepanelTopSites_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/top-sites")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testNewPrivateTab_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
+    func testHomepanelNewTab_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-tab")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
     }
 }
