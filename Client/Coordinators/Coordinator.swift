@@ -24,8 +24,6 @@ extension Coordinator {
     ///
     /// - Returns: An optional `Coordinator` instance that can handle the given `route`, or `nil` if no such coordinator was found.
     ///
-    /// - Note: This extension assumes that the `Coordinator` class conforms to the `Coordinator` protocol, which has a method `handle(route:)` that returns a Boolean value indicating whether the coordinator can handle the specified route.
-    ///
     /// - DiscardableResult: The result of this method is marked as `@discardableResult` because the caller may choose not to use the returned `Coordinator` instance, which is safe to do.
     @discardableResult
     func find(route: Route) -> Coordinator? {
