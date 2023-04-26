@@ -140,6 +140,12 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(path, NavigationPath.closePrivateTabs)
     }
 
+    func testNavigationPath_OverlayMode_handleBlankURL() throws {
+        NavigationPath.handle(nav: .url(webURL: nil, isPrivate: false), with: browserViewController)
+
+        XCTAssertTrue(browserViewController.overlayManager.inOverlayMode, "Expected to be in Overlay mode when opening a new blank page")
+    }
+
     func testNavigationPath_handleNormalTab_isExternalSourceTrue() throws {
         throw XCTSkip("Need to fix that tabs aren't properly closed during test, which creates leaks")
 //        let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
