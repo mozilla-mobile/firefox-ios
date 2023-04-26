@@ -10,7 +10,6 @@ import SwiftUI
 
 class CreditCardSettingsViewController: UIViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
-    var startingConfig: CreditCardSettingsStartingConfig?
     var themeObserver: NSObjectProtocol?
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -35,13 +34,11 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     // MARK: Initializers
     init(creditCardViewModel: CreditCardSettingsViewModel,
-         startingConfig: CreditCardSettingsStartingConfig?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
          logger: Logger = DefaultLogger.shared
     ) {
-        self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -54,8 +51,9 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         self.creditCardEmptyView.view.backgroundColor = .clear
 
         super.init(nibName: nil, bundle: nil)
-        self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] rowVal in
-            self?.editCreditCard()
+        self.creditCardTableViewController.didSelectCardAtIndex = {
+            [weak self] creditCard in
+            self?.viewCreditCard(card: creditCard)
         }
     }
 
@@ -110,7 +108,8 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         }
     }
 
-    private func updateState(type: CreditCardSettingsState) {
+    private func updateState(type: CreditCardSettingsState,
+                             creditCard: CreditCard? = nil) {
         switch type {
         case .empty:
             creditCardTableViewController.view.isHidden = true
@@ -118,10 +117,8 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = addCreditCardButton
         case .add:
             updateStateForEditView(editState: .add)
-        case .edit:
-            updateStateForEditView(editState: .edit)
         case .view:
-            updateStateForEditView(editState: .view)
+            updateStateForEditView(editState: .view, creditCard: creditCard)
         case .list:
             creditCardTableViewController.reloadData()
             creditCardEmptyView.view.isHidden = true
@@ -146,11 +143,15 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     // MARK: - Private helpers
 
-    private func updateStateForEditView(editState: CreditCardEditState) {
+    private func updateStateForEditView(editState: CreditCardEditState,
+                                        creditCard: CreditCard? = nil) {
         // Update credit card edit view state before showing
-        viewModel.cardInputViewModel.state = editState
+        if editState == .view {
+            viewModel.cardInputViewModel.creditCard = creditCard
+        }
+        viewModel.cardInputViewModel.updateState(state: editState)
         creditCardEditView = CreditCardInputView(
-            viewModel: viewModel.cardInputViewModel,
+            viewModel: self.viewModel.cardInputViewModel,
             dismiss: { [weak self] successVal in
                 DispatchQueue.main.async {
                     if successVal {
@@ -174,7 +175,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         updateState(type: .add)
     }
 
-    private func editCreditCard() {
-        updateState(type: .view)
+    private func viewCreditCard(card: CreditCard) {
+        updateState(type: .view, creditCard: card)
     }
 }
