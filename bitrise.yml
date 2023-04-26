@@ -428,6 +428,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
+    - deploy-to-bitrise-io@1.9: {}
     - script@1:
         inputs:
         - content: |-
