@@ -30,12 +30,12 @@ extension Coordinator {
     @discardableResult
     func find(route: Route) -> Coordinator? {
         // Check if the current coordinator can handle the route.
-        if self.handle(route: route) {
+        if handle(route: route) {
             return self
         }
 
         // If not, recursively search through child coordinators.
-        for childCoordinator in self.childCoordinators {
+        for childCoordinator in childCoordinators {
             if let matchingCoordinator = childCoordinator.find(route: route) {
                 return matchingCoordinator
             }
