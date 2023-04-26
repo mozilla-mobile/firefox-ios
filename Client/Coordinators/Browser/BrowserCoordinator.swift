@@ -140,9 +140,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
             return false
 
-        case .fxaSignIn:
-            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
-            return false
+        case let .fxaSignIn(params):
+            handle(fxaParams: params)
+            return true
 
         case .defaultBrowser:
             // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
@@ -191,5 +191,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         case .newTab:
             browserViewController.openBlankNewTab(focusLocationField: false)
         }
+    }
+
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
     }
 }

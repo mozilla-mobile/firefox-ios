@@ -243,4 +243,11 @@ final class BrowserCoordinatorTests: XCTestCase {
         let result = subject.handle(route: route!)
         XCTAssertTrue(result)
     }
+
+    func testHandleFxaSignIn_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
 }
