@@ -2881,6 +2881,8 @@ extension BrowserViewController {
     /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
     ///
     /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
+    ///
+    /// NOTE: Do not use foregroundBVC in new code under any circumstances
     public static func foregroundBVC() -> BrowserViewController? {
         guard let scene = UIApplication.shared.connectedScenes.first else {
             DefaultLogger.shared.log("No connected scenes exist.",
@@ -2896,7 +2898,11 @@ extension BrowserViewController {
             return nil
         }
 
-        return sceneDelegate.browserViewController
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            return sceneDelegate.coordinatorBrowserViewController
+        } else {
+            return sceneDelegate.browserViewController
+        }
     }
 }
 

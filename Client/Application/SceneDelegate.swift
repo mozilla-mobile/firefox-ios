@@ -14,11 +14,22 @@ import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var logger: Logger = DefaultLogger.shared
 
-    /// This is temporary. We don't want to continue treating App / Scene delegates as containers for certain session specific properties.
-    /// TODO: When we begin to support multiple scenes, this is risky to keep. If we foregroundBVC, we should have a more specific
-    /// way to foreground the BVC FOR the scene being actively interacted with.
+    /// Do not use, this will be removed as part of FXIOS-6036
     var browserViewController: BrowserViewController!
+
+    /// This is a temporary work around until we have the architecture to properly replace the use cases where this code is used
+    /// Do not use in new code under any circumstances
+    var coordinatorBrowserViewController: BrowserViewController {
+        if CoordinatorFlagManager.isCoordinatorEnabled,
+           let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
+            return browserCoordinator.browserViewController
+        } else {
+            logger.log("BrowserViewController couldn't be retrieved", level: .fatal, category: .lifecycle)
+            return BrowserViewController(profile: profile, tabManager: tabManager)
+        }
+    }
 
     let profile: Profile = AppContainer.shared.resolve()
     let tabManager: TabManager = AppContainer.shared.resolve()

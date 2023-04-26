@@ -9,11 +9,13 @@ import Shared
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
-    private let screenshotService = ScreenshotService()
+    private let screenshotService: ScreenshotService
 
     init(scene: UIScene,
-         sceneSetupHelper: SceneSetupHelper = SceneSetupHelper()) {
+         sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
+         screenshotService: ScreenshotService = ScreenshotService()) {
         self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: screenshotService)
+        self.screenshotService = screenshotService
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
