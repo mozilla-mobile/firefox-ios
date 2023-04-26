@@ -83,6 +83,7 @@ class TabCounterTests: BaseTestCase {
         if !isTablet {
             waitForExistence(app.segmentedControls.firstMatch, timeout: 5)
             let tabsOpenTabTray: String = app.segmentedControls.buttons.firstMatch.label
-            XCTAssertTrue(tabsOpenTabTray.hasSuffix("1"))        }
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix("1"))
+        }
     }
 }
