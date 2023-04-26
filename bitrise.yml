@@ -162,7 +162,7 @@ workflows:
             set -euxo pipefail
             echo "$BITRISE_ARTIFACT_PATHS"
 
-            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
             echo "$derived_data"
 
             echo "-- unzip -- "
