@@ -59,6 +59,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         stack.axis = .vertical
     }
 
+    private lazy var scrollView: FadeScrollView = .build { view in
+        view.backgroundColor = .clear
+        view.showsHorizontalScrollIndicator = false
+    }
+
     private lazy var gradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
@@ -178,18 +183,34 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         stackView.addArrangedSubview(descriptionLabel)
         if viewModel.isActionType() { stackView.addArrangedSubview(actionButton) }
 
-        containerView.addSubview(closeButton)
         containerView.addSubview(stackView)
-        view.addSubview(containerView)
+        scrollView.addSubviews(containerView)
+        view.addSubview(scrollView)
+        view.addSubview(closeButton)
 
         setupConstraints()
         toggleArrowBasedConstraints()
     }
 
     private func setupConstraints() {
+        topContainerConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        bottomContainerConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topContainerConstraint!,
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomContainerConstraint!,
+
+            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+            closeButton.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonTrailing),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
@@ -197,18 +218,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.labelLeading),
-            stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: -UX.labelTrailing),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                constant: -UX.closeButtonSize.width - UX.labelTrailing),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-
-        topContainerConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor)
-        topContainerConstraint?.isActive = true
-        bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        bottomContainerConstraint?.isActive = true
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
     }
