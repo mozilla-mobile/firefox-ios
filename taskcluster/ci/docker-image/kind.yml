@@ -11,4 +11,5 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 tasks:
-    screenshots: {}
+    screenshots:
+        symbol: I(screenshots)
