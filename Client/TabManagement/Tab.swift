@@ -74,10 +74,6 @@ class Tab: NSObject {
         }
     }
 
-    /// AppContainer doesn't return the same AppSessionManager that is previously resolved. Because of that,
-    /// changing a property in the appSessionManager doesn't reflect across the app. So, as a temporary solution,
-    /// we'll watch the keyboardAccessoryConfiguration from BVC until that's fixed.
-    var shouldDisplayAccessoryViewForCreditCard = false
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
