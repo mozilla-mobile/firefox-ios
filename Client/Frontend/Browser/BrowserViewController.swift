@@ -1651,7 +1651,9 @@ class BrowserViewController: UIViewController {
 
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
-        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
+        let selectedTabWebview = tabManager.selectedTab?.webView
+        let controller = helper.createActivityViewController(selectedTabWebview) {
+            [unowned self] completed, activityType in
             switch activityType {
             case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
@@ -1670,7 +1672,7 @@ class BrowserViewController: UIViewController {
             // invoked on iOS 10. See Bug 1297768 for additional details.
             self.displayedPopoverController = nil
             self.updateDisplayedPopoverProperties = nil
-        })
+        }
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
