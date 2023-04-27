@@ -12,22 +12,44 @@ class TabFileManagerMock: TabFileManager {
     }
 
     func windowDataDirectory(isBackup: Bool) -> URL? {
-        return nil
+        if isBackup {
+            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        } else {
+            return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+        }
     }
 
     func contentsOfDirectory(at path: URL) -> [URL] {
-        return []
+        do {
+            return try FileManager.default.contentsOfDirectory(
+                    at: path,
+                    includingPropertiesForKeys: nil,
+                    options: .skipsHiddenFiles)
+        } catch {
+            return []
+        }
     }
 
-    func copyItem(at sourceURL: URL, to destinationURL: URL) throws {}
+    func copyItem(at sourceURL: URL, to destinationURL: URL) throws {
+        try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
+    }
 
-    func removeFileAt(path: URL) {}
+    func removeFileAt(path: URL) {
+        try? FileManager.default.removeItem(at: path)
+    }
 
-    func removeAllFilesAt(directory: URL) {}
+    func removeAllFilesAt(directory: URL) {
+        let fileURLs = contentsOfDirectory(at: directory)
+        for fileURL in fileURLs {
+            removeFileAt(path: fileURL)
+        }
+    }
 
     func fileExists(atPath pathURL: URL) -> Bool {
-        return false
+        return FileManager.default.fileExists(atPath: pathURL.path)
     }
 
-    func createDirectoryAtPath(path: URL) {}
+    func createDirectoryAtPath(path: URL) {
+        try? FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
+    }
 }

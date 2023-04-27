@@ -90,7 +90,7 @@ public struct DefaultTabFileManager: TabFileManager {
 
     public func removeFileAt(path: URL) {
         do {
-            try FileManager.default.removeItem(at: path)
+            try fileManager.removeItem(at: path)
             return
         } catch {
             logger.log("Error while clearing window data: \(error)",
@@ -107,12 +107,12 @@ public struct DefaultTabFileManager: TabFileManager {
     }
 
     public func fileExists(atPath pathURL: URL) -> Bool {
-        fileManager.fileExists(atPath: pathURL.path)
+        return fileManager.fileExists(atPath: pathURL.path)
     }
 
     public func createDirectoryAtPath(path: URL) {
         do {
-            try FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
+            try fileManager.createDirectory(at: path, withIntermediateDirectories: true)
         } catch {
             logger.log("Failed to create directory: \(error.localizedDescription) for path: \(path.path)",
                        level: .debug,
