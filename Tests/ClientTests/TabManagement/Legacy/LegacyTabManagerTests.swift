@@ -7,6 +7,7 @@ import Shared
 import Storage
 import UIKit
 import WebKit
+import Common
 
 import XCTest
 
@@ -112,6 +113,7 @@ class LegacyTabManagerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
+        DependencyHelperMock().bootstrapDependencies()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
