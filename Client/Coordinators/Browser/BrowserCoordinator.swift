@@ -149,30 +149,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return false
         }
     }
-
-    private func handle(query: String) {
-        browserViewController.handle(query: query)
-    }
-
-    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        if let url = url {
-            if options?.contains(.switchToNormalMode) == true {
-                browserViewController.switchToPrivacyMode(isPrivate: false)
-            }
-            browserViewController.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
-        }
-    }
-
-    private func handle(searchURL: URL?, tabId: String) {
-        if let url = searchURL {
-            browserViewController.switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: false)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
-        }
-    }
-
     private func handle(homepanelSection section: Route.HomepanelSection) {
         switch section {
         case .bookmarks:
@@ -190,5 +166,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         case .newTab:
             browserViewController.openBlankNewTab(focusLocationField: false)
         }
+    }
+
+    private func handle(query: String) {
+        browserViewController.handle(query: query)
+    }
+
+    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
+    }
+
+    private func handle(searchURL: URL?, tabId: String) {
+        browserViewController.handle(url: searchURL, tabId: tabId)
     }
 }

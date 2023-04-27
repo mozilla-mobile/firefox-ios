@@ -29,19 +29,14 @@ class DiskImageStoreTests: XCTestCase {
 
         try await store.saveImageForKey(testKey, image: testImage)
 
-        var fetchedImage: UIImage?
-        var fetchError: Error?
-        do {
-            fetchedImage = try await store.getImageForKey(testKey)
-        } catch {
-            fetchError = error
-        }
+        let fetchedImage = try await store.getImageForKey(testKey)
 
-        XCTAssertNil(fetchError, "Error occurred while loading image: \(fetchError!)")
-        XCTAssertNotNil(fetchedImage, "Fetched image should not be nil")
-
-        XCTAssertEqual(testImage.size.width / 2, fetchedImage!.size.width, "Fetched image width should be half the original width")
-        XCTAssertEqual(testImage.size.height / 2, fetchedImage!.size.height, "Fetched image height should be half the original height")
+        XCTAssertEqual(testImage.size.width / 2,
+                       fetchedImage.size.width,
+                       "Fetched image width should be half the original width")
+        XCTAssertEqual(testImage.size.height / 2,
+                       fetchedImage.size.height,
+                       "Fetched image height should be half the original height")
     }
 
     func testGetImageForKey() async throws {
@@ -53,26 +48,20 @@ class DiskImageStoreTests: XCTestCase {
             try await store.saveImageForKey(key, image: image)
 
             // When
-            var fetchedImage: UIImage?
-            var fetchError: Error?
-            do {
-                fetchedImage = try await store.getImageForKey(key)
-            } catch {
-                fetchError = error
-            }
+            let fetchedImage = try await store.getImageForKey(key)
 
             // Then
-            XCTAssertNil(fetchError, "Error occurred while loading image: \(fetchError!)")
-            XCTAssertNotNil(fetchedImage, "Fetched image should not be nil")
-
-            XCTAssertEqual(image.size.width / 2, fetchedImage!.size.width, "Fetched image width should be half the original width")
-            XCTAssertEqual(image.size.height / 2, fetchedImage!.size.height, "Fetched image height should be half the original height")
+            XCTAssertEqual(image.size.width / 2,
+                           fetchedImage.size.width,
+                           "Fetched image width should be half the original width")
+            XCTAssertEqual(image.size.height / 2,
+                           fetchedImage.size.height,
+                           "Fetched image height should be half the original height")
         }
     }
-}
 
-// MARK: Helper methods
-private extension DiskImageStoreTests {
+// MARK: - Helper methods
+
     func clearStore() {
         Task {
             try? await store?.clearAllScreenshotsExcluding(Set())

@@ -25,9 +25,11 @@ class TabCounterTests: BaseTestCase {
         // Check only for iPhone, for iPad there is not counter in tab tray
         if !iPad() {
             navigator.goto(TabTray)
-            tabsOpen = app.buttons["2"].label
-            XCTAssertTrue(app.buttons["2"].isSelected)
-            XCTAssertEqual("2", tabsOpen as? String)
+            let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
+            waitForExistence(navBarTabTrayButton)
+            XCTAssertTrue(navBarTabTrayButton.isSelected)
+            let tabsOpenTabTray: String = navBarTabTrayButton.label
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
         }
     }
 
@@ -54,9 +56,11 @@ class TabCounterTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
         } else {
-            tabsOpen = app.segmentedControls.buttons["2"].label
-            XCTAssertTrue(app.buttons["2"].isSelected)
-            XCTAssertEqual("2", tabsOpen as? String)
+            let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
+            waitForExistence(navBarTabTrayButton)
+            XCTAssertTrue(navBarTabTrayButton.isSelected)
+            let tabsOpenTabTray: String = navBarTabTrayButton.label
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
             app.otherElements["Tabs Tray"].cells.element(boundBy: 0).buttons["tab close"].tap()
         }
@@ -78,7 +82,8 @@ class TabCounterTests: BaseTestCase {
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {
             waitForExistence(app.segmentedControls.firstMatch, timeout: 5)
-            XCTAssertEqual("1", tabsOpen as? String)
+            let tabsOpenTabTray: String = app.segmentedControls.buttons.firstMatch.label
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix("1"))
         }
     }
 }

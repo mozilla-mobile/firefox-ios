@@ -171,7 +171,11 @@ class LoginListViewController: SensitiveViewController, Themeable {
         super.viewDidAppear(animated)
 
         guard settingsDelegate != nil else {
-            settingsDelegate = sceneForVC?.browserViewController
+            if CoordinatorFlagManager.isCoordinatorEnabled {
+                settingsDelegate = sceneForVC?.coordinatorBrowserViewController
+            } else {
+                settingsDelegate = sceneForVC?.browserViewController
+            }
 
             return
         }

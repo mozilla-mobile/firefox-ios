@@ -14,7 +14,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         static let closeButtonRightPadding: CGFloat = 16
         static let closeButtonSize: CGFloat = 30
         static let pageControlHeight: CGFloat = 40
-        static let pageControlBottomPadding: CGFloat = 8
     }
 
     // Public constants 
@@ -126,8 +125,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                constant: -UX.pageControlBottomPadding),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),

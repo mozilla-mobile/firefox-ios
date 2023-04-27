@@ -22,10 +22,16 @@ public actor DefaultTabDataStore: TabDataStore {
     static let profilePath = "profile.profile"
     static let backupPath = "profile.backup"
     private var logger: Logger = DefaultLogger.shared
+    private var windowDataToSave: WindowData?
+    private var nextSaveIsScheduled = false
+    private let throttleTime: UInt64
 
-    public init() {}
+    public init(throttleTime: UInt64 = 5_000_000_000) {
+        self.throttleTime = throttleTime
+    }
 
-    // MARK: URL Utils
+    // MARK: - URL Utils
+
     private var windowDataDirectoryURL: URL? {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
             .appendingPathComponent(DefaultTabDataStore.profilePath)
@@ -46,6 +52,7 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     // MARK: Fetching Window Data
+
     public func fetchWindowData() async -> WindowData {
         return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
     }
@@ -158,34 +165,73 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    // MARK: Saving Data
+    // MARK: - Saving Data
+
     public func saveWindowData(window: WindowData) async {
-        guard let windowSavingPath = self.windowURLPath(for: window.id, isBackup: false) else {
+        guard let windowSavingPath = self.windowURLPath(for: window.id, isBackup: false)
+        else {
             return
         }
+
+        if checkIfFileExistsAtPath(path: windowSavingPath) {
+            createWindowDataBackup(window: window, windowSavingPath: windowSavingPath)
+        } else {
+            if let windowDataDirectoryURL = windowDataDirectoryURL,
+               !self.checkIfFileExistsAtPath(path: windowDataDirectoryURL) {
+                self.createDirectoryAtPath(path: windowDataDirectoryURL)
+            }
+        }
+        await writeWindowDataToFileWithThrottle(window: window, path: windowSavingPath)
+    }
+
+    private func createWindowDataBackup(window: WindowData, windowSavingPath: URL) {
+        guard let backupWindowSavingPath = self.windowURLPath(for: window.id, isBackup: true),
+              let backupDirectoryPath = self.windowDataBackupDirectoryURL else {
+            return
+        }
+        if !self.checkIfFileExistsAtPath(path: backupDirectoryPath) {
+            self.createDirectoryAtPath(path: backupDirectoryPath)
+        }
         do {
-            if self.checkIfFileExistsAtPath(path: windowSavingPath) {
-                guard let backupWindowSavingPath = self.windowURLPath(for: window.id, isBackup: true), let backupDirectoryPath = self.windowDataBackupDirectoryURL else {
+            try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
+        } catch {
+            self.logger.log("Failed to create window data backup: \(error)",
+                            level: .debug,
+                            category: .tabs)
+        }
+    }
+
+    // Throttles the saving of the data so that it happens every 'throttleTime' nanoseconds
+    // as long as their is new data to be saved
+    private func writeWindowDataToFileWithThrottle(window: WindowData, path: URL) async {
+        // Hold onto a copy of the latest window data so whenever the save happens it is using the latest
+        windowDataToSave = window
+
+        // Ignore the request because a save is already scheduled to happen
+        guard !nextSaveIsScheduled else { return }
+
+        // Set the guard bool to true so no new saves can be initiated while waiting
+        nextSaveIsScheduled = true
+
+        // Dispatch to a task so as not to block the caller
+        Task {
+            // Once the throttle time has passed initiate the save and reset the bool
+            try? await Task.sleep(nanoseconds: throttleTime)
+            nextSaveIsScheduled = false
+
+            do {
+                guard let windowDataToSave = windowDataToSave else {
+                    logger.log("Tried to save window data but found nil",
+                               level: .fatal,
+                               category: .tabs)
                     return
                 }
-                if !self.checkIfFileExistsAtPath(path: backupDirectoryPath) {
-                    self.createDirectoryAtPath(path: backupDirectoryPath)
-                }
-                do {
-                    try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
-                } catch {
-                    self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
-                }
-            } else {
-                if let mainDirectoryPath = windowDataDirectoryURL {
-                    if !self.checkIfFileExistsAtPath(path: mainDirectoryPath) {
-                        self.createDirectoryAtPath(path: mainDirectoryPath)
-                    }
-                }
+                try await self.writeWindowData(windowData: windowDataToSave, to: path)
+            } catch {
+                logger.log("Failed to save window data: \(error)",
+                           level: .debug,
+                           category: .tabs)
             }
-            try await self.writeWindowData(windowData: window, to: windowSavingPath)
-        } catch {
-            self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
         }
     }
 
@@ -202,15 +248,12 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     private func writeWindowData(windowData: WindowData, to url: URL) async throws {
-        do {
-            let data = try JSONEncoder().encode(windowData)
-            try data.write(to: url, options: .atomicWrite)
-        } catch {
-            throw error
-        }
+        let data = try JSONEncoder().encode(windowData)
+        try data.write(to: url, options: .atomicWrite)
     }
 
-    // MARK: Deleting Window Data
+    // MARK: - Deleting Window Data
+
     public func clearWindowData(for id: UUID) async {
         guard let profileURL = self.windowURLPath(for: id, isBackup: false) else {
             return
