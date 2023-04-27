@@ -45,10 +45,6 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - hideBar: Hide the navigation bar or not
     ///   - animated: Animates the transitions or not
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool)
-
-    /// Pop to the root view controller that was set with `setRootViewController`
-    /// - Parameter animated: true means it will be animated
-    func popToRootViewController(animated: Bool)
 }
 
 /// Adds default parameters on Router protocol
@@ -71,9 +67,5 @@ extension Router {
 
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {
         setRootViewController(viewController, hideBar: hideBar, animated: animated)
-    }
-
-    func popToRootViewController(animated: Bool = true) {
-        popToRootViewController(animated: animated)
     }
 }
