@@ -57,6 +57,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.axis = .vertical
+        stack.spacing = 7.0
     }
 
     private lazy var scrollView: FadeScrollView = .build { view in
