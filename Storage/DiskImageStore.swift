@@ -54,11 +54,11 @@ public actor DefaultDiskImageStore: DiskImageStore {
     }
 
     public func getImageForKey(_ key: String) async throws -> UIImage {
-        if !self.keys.contains(key) {
+        if !keys.contains(key) {
             throw DiskImageStoreErrorCase.notFound(description: "Image key not found")
         }
 
-        let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+        let imagePath = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
         let data = try Data(contentsOf: imagePath)
         if let image = UIImage(data: data) {
             return image
@@ -76,33 +76,33 @@ public actor DefaultDiskImageStore: DiskImageStore {
             image.draw(in: CGRect(origin: .zero, size: size))
         }
 
-        let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-        if let data = scaledImage.jpegData(compressionQuality: self.quality) {
+        let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
+        if let data = scaledImage.jpegData(compressionQuality: quality) {
             try data.write(to: imageURL, options: .noFileProtection)
-            self.keys.insert(key)
+            keys.insert(key)
         } else {
             throw DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file")
         }
     }
 
     public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
-        let keysToDelete = self.keys.subtracting(keys)
+        let keysToDelete = keys.subtracting(keys)
 
         for key in keysToDelete {
-            let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+            let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
             try FileManager.default.removeItem(at: url)
         }
-        self.keys = self.keys.intersection(keys)
+        self.keys = keys.intersection(keys)
     }
 
     public func deleteImageForKey(_ key: String) async {
-        let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+        let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            self.logger.log("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)",
-                            level: .debug,
-                            category: .storage)
+            logger.log("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)",
+                       level: .debug,
+                       category: .storage)
         }
     }
 }
