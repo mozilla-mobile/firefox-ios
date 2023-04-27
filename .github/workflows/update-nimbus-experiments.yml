@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 name: "Update Nimbus Experiments"
 
 on:
@@ -28,7 +32,7 @@ jobs:
       - name: Create Pull Request
         id: create-pull-request
         uses: peter-evans/create-pull-request@v4
-        if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch == 1
+        if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch >= 1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: firefox-ios
