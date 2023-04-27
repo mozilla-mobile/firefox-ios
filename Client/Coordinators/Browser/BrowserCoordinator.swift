@@ -112,17 +112,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     override func handle(route: Route) -> Bool {
         switch route {
-        case .searchQuery:
-            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
-            return false
+        case let .searchQuery(query):
+            handle(query: query)
+            return true
 
-        case .search:
-            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
-            return false
+        case let .search(url, isPrivate, options):
+            handle(url: url, isPrivate: isPrivate, options: options)
+            return true
 
-        case .searchURL:
-            // FXIOS-6017 #13661 - Enable search path in BrowserCoordinator
-            return false
+        case let .searchURL(url, tabId):
+            handle(searchURL: url, tabId: tabId)
+            return true
 
         case .glean:
             // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
@@ -148,5 +148,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
             return false
         }
+    }
+
+    private func handle(query: String) {
+        browserViewController.handle(query: query)
+    }
+
+    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
+    }
+
+    private func handle(searchURL: URL?, tabId: String) {
+        browserViewController.handle(url: searchURL, tabId: tabId)
     }
 }

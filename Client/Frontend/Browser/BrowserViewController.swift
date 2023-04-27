@@ -1507,6 +1507,30 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        if let url = url {
+            if options?.contains(.switchToNormalMode) == true {
+                switchToPrivacyMode(isPrivate: false)
+            }
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+        } else {
+            openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
+        }
+    }
+
+    func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
+        if let url = url {
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
+        } else {
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        }
+    }
+
+    func handle(query: String) {
+       openBlankNewTab(focusLocationField: false)
+       urlBar(urlBar, didSubmitText: query)
+    }
+
     func switchToPrivacyMode(isPrivate: Bool) {
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)

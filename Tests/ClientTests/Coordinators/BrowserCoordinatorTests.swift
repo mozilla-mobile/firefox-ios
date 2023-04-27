@@ -13,6 +13,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var overlayModeManager: MockOverlayModeManager!
     private var logger: MockLogger!
     private var screenshotService: ScreenshotService!
+    private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
@@ -23,6 +24,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.overlayModeManager = MockOverlayModeManager()
         self.logger = MockLogger()
         self.screenshotService = ScreenshotService()
+        self.tabManager = MockTabManager()
     }
 
     override func tearDown() {
@@ -32,6 +34,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.overlayModeManager = nil
         self.logger = nil
         self.screenshotService = nil
+        self.tabManager = nil
         AppContainer.shared.reset()
     }
 
@@ -143,6 +146,79 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.show(webView: webview)
 
         XCTAssertNotNil(screenshotService.screenshotableView)
+    }
+
+    func testHandleSearchQuery_returnsTrue() {
+        let query = "test query"
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        mbvc.handleQueryCalled = { queryCalled in
+            XCTAssertEqual(query, queryCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .searchQuery(query: query))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearch_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: nil))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchWithNormalMode_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.switchToPrivacyModeCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: [.switchToNormalMode]))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchWithNilURL_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.openBlankNewTabCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .search(url: nil, isPrivate: false))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleSearchURL_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
+        XCTAssertTrue(result)
+    }
+
+    func testHandleNilSearchURL_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.openBlankNewTabCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .searchURL(url: nil, tabId: "1234"))
+        XCTAssertTrue(result)
     }
 
     // MARK: - Helpers

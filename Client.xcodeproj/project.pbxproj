@@ -858,6 +858,7 @@
 		C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */; };
 		C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */; };
 		C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */; };
+		C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C3FEA029F973C40038E3BA /* MockBrowserViewController.swift */; };
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
 		C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE389A265E71E00009B09E /* CredentialListViewController.swift */; };
 		C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */; };
@@ -4853,6 +4854,7 @@
 		C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceInfoModel.swift; sourceTree = "<group>"; };
 		C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionsTests.swift; sourceTree = "<group>"; };
 		C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchHandlerRouteCoordinator.swift; sourceTree = "<group>"; };
+		C8C3FEA029F973C40038E3BA /* MockBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBrowserViewController.swift; sourceTree = "<group>"; };
 		C8CE389A265E71E00009B09E /* CredentialListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
 		C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyPlaceholderCell.swift; sourceTree = "<group>"; };
 		C8CE38B3265E71FE0009B09E /* ItemListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListCell.swift; sourceTree = "<group>"; };
@@ -8100,6 +8102,7 @@
 				8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */,
 				8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */,
 				8AF99B5329EF2AF100108DEC /* MockLogger.swift */,
+				C8C3FEA029F973C40038E3BA /* MockBrowserViewController.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -11799,6 +11802,7 @@
 				8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */,
 				C83DE54729DF35EE006E1B69 /* GleanPlumbMessageTests.swift in Sources */,
 				C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */,
+				C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */,
 				8A93F86B29D39BDA004159D9 /* CoordinatorTests.swift in Sources */,
 				D815A3A824A53F3200AAB221 /* TabToolbarHelperTests.swift in Sources */,
 				C8445AD126443C7F00B83F53 /* LibraryPanelViewStateTests.swift in Sources */,
