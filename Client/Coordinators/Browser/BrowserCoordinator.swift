@@ -155,21 +155,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        if let url = url {
-            if options?.contains(.switchToNormalMode) == true {
-                browserViewController.switchToPrivacyMode(isPrivate: false)
-            }
-            browserViewController.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
-        }
+        browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
     }
 
     private func handle(searchURL: URL?, tabId: String) {
-        if let url = searchURL {
-            browserViewController.switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: false)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
-        }
+        browserViewController.handle(url: searchURL, tabId: tabId)
     }
 }
