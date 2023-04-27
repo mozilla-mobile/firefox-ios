@@ -11,6 +11,37 @@ protocol Coordinator {
 
     func add(child coordinator: Coordinator)
     func remove(child coordinator: Coordinator?)
+
+    func handle(route: Route) -> Bool
+}
+
+/// An extension on the `Coordinator` class that provides a method to find a coordinator that can handle a given route.
+extension Coordinator {
+    /// Finds a coordinator that can handle a given route by recursively searching through the current coordinator's child coordinators.
+    ///
+    /// - Parameters:
+    ///     - route: The route to find a matching coordinator for.
+    ///
+    /// - Returns: An optional `Coordinator` instance that can handle the given `route`, or `nil` if no such coordinator was found.
+    ///
+    /// - DiscardableResult: The result of this method is marked as `@discardableResult` because the caller may choose not to use the returned `Coordinator` instance, which is safe to do.
+    @discardableResult
+    func find(route: Route) -> Coordinator? {
+        // Check if the current coordinator can handle the route.
+        if handle(route: route) {
+            return self
+        }
+
+        // If not, recursively search through child coordinators.
+        for childCoordinator in childCoordinators {
+            if let matchingCoordinator = childCoordinator.find(route: route) {
+                return matchingCoordinator
+            }
+        }
+
+        // If no matching coordinator is found, return nil.
+        return nil
+    }
 }
 
 open class BaseCoordinator: Coordinator {
@@ -32,5 +63,9 @@ open class BaseCoordinator: Coordinator {
         else { return }
 
         childCoordinators.remove(at: index)
+    }
+
+    func handle(route: Route) -> Bool {
+        return false
     }
 }

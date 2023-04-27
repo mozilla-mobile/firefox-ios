@@ -8,10 +8,11 @@ import Common
 
 final class TabDataStoreTests: XCTestCase {
     private var tabDataStore: DefaultTabDataStore!
+    private let sleepTime: UInt64 = 1_000_000
 
     override func setUp() {
         super.setUp()
-        tabDataStore = DefaultTabDataStore()
+        tabDataStore = DefaultTabDataStore(throttleTime: 100)
         BrowserKitInformation.shared.configure(buildChannel: .other,
                                                nightlyAppVersion: "",
                                                sharedContainerIdentifier: "group.org.mozilla.ios.Fennec.Test")
@@ -25,6 +26,7 @@ final class TabDataStoreTests: XCTestCase {
     func testSaveTabData() async throws {
         let windowData = self.createMockWindow()
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
         XCTAssertEqual(fetchedWindowData?.id, windowData.id)
         XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
@@ -36,7 +38,9 @@ final class TabDataStoreTests: XCTestCase {
         let windowData = self.createMockWindow()
         let windowID = windowData.id
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         let browserKitInfo = BrowserKitInformation.shared
         let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
             .appendingPathComponent("profile.backup")
@@ -53,7 +57,9 @@ final class TabDataStoreTests: XCTestCase {
         let windowData = self.createMockWindow()
         let windowID = windowData.id
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         let browserKitInfo = BrowserKitInformation.shared
         let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
             .appendingPathComponent("profile.backup")
@@ -77,7 +83,9 @@ final class TabDataStoreTests: XCTestCase {
         let windowData1 = self.createMockWindow()
         let windowData2 = self.createMockWindow()
         await tabDataStore.saveWindowData(window: windowData1)
+        try await Task.sleep(nanoseconds: sleepTime)
         await tabDataStore.saveWindowData(window: windowData2)
+        try await Task.sleep(nanoseconds: sleepTime)
         let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
         XCTAssertEqual(fetchedWindowsData.count, 2)
         XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
@@ -89,6 +97,7 @@ final class TabDataStoreTests: XCTestCase {
         let fetchedNonExistingData = await tabDataStore.fetchWindowData(withID: UUID())
         XCTAssertNil(fetchedNonExistingData)
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
         XCTAssertNotNil(fetchedWindowData)
         XCTAssertEqual(fetchedWindowData?.id, windowData.id)
@@ -101,6 +110,7 @@ final class TabDataStoreTests: XCTestCase {
     func testClearAllTabData() async throws {
         let windowData = self.createMockWindow()
         await tabDataStore.saveWindowData(window: windowData)
+        try await Task.sleep(nanoseconds: sleepTime)
         await tabDataStore.clearAllWindowsData()
         let fetchedWindowData = await tabDataStore.fetchAllWindowsData()
         XCTAssertTrue(fetchedWindowData.isEmpty)

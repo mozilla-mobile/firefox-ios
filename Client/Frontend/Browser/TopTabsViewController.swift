@@ -174,18 +174,18 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     }
 
     func updateTabCount(_ count: Int, animated: Bool = true) {
-        self.tabsButton.updateTabCount(count, animated: animated)
+        tabsButton.updateTabCount(count, animated: animated)
     }
 
     @objc
     func tabsTrayTapped() {
-        self.topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
     @objc
     func newTabTapped() {
-        self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
+        delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
     @objc
