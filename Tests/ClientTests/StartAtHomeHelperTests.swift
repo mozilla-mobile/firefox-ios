@@ -5,6 +5,8 @@
 @testable import Client
 
 import XCTest
+import Shared
+import Common
 
 class StartAtHomeHelperTests: XCTestCase {
     var helper: StartAtHomeHelper!
@@ -19,6 +21,7 @@ class StartAtHomeHelperTests: XCTestCase {
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
