@@ -13,7 +13,8 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var overlayModeManager: MockOverlayModeManager!
     private var logger: MockLogger!
     private var screenshotService: ScreenshotService!
-    var routeBuilder: RouteBuilder!
+    private var routeBuilder: RouteBuilder!
+    private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
@@ -25,6 +26,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.overlayModeManager = MockOverlayModeManager()
         self.logger = MockLogger()
         self.screenshotService = ScreenshotService()
+        self.tabManager = MockTabManager()
     }
 
     override func tearDown() {
@@ -35,6 +37,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.overlayModeManager = nil
         self.logger = nil
         self.screenshotService = nil
+        self.tabManager = nil
         AppContainer.shared.reset()
     }
 
@@ -149,39 +152,96 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleSearchQuery_returnsTrue() {
+        let query = "test query"
         let subject = createSubject()
-        let result = subject.handle(route: .searchQuery(query: "test query"))
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle search query")
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+            expectation.fulfill()
+        }
+        mbvc.handleQueryCalled = { queryCalled in
+            XCTAssertEqual(query, queryCalled)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+        let result = subject.handle(route: .searchQuery(query: query))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleSearch_returnsTrue() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle search")
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: nil))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleSearchWithNormalMode_returnsTrue() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle search with normal mode")
+        mbvc.switchToPrivacyModeCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+            expectation.fulfill()
+        }
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: [.switchToNormalMode]))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleSearchWithNilURL_returnsTrue() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle search with nil URL")
+        mbvc.openBlankNewTabCalled = { isPrivate in
+            XCTAssertFalse(isPrivate)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: nil, isPrivate: false))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleSearchURL_returnsTrue() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle search URL")
+        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
+            XCTAssertTrue(isCalled)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
         let result = subject.handle(route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleNilSearchURL_returnsTrue() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Handle nil search URL")
+        mbvc.openBlankNewTabCalled = { isPrivate in
+            XCTAssertFalse(isPrivate)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
         let result = subject.handle(route: .searchURL(url: nil, tabId: "1234"))
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     // MARK: - Helpers
@@ -196,52 +256,147 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleHomepanelBookmarks_returnsTrue() {
+        // Given
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Show bookmarks panel")
+        mbvc.showLibraryCalled = { panel in
+            XCTAssertEqual(panel, .bookmarks)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleHomepanelHistory_returnsTrue() {
+        // Given
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Show history panel")
+        mbvc.showLibraryCalled = { panel in
+            XCTAssertEqual(panel, .history)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleHomepanelReadingList_returnsTrue() {
+        // Given
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Show reading list panel")
+        mbvc.showLibraryCalled = { panel in
+            XCTAssertEqual(panel, .readingList)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleHomepanelDownloads_returnsTrue() {
+        // Given
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let expectation = XCTestExpectation(description: "Show downloads panel")
+        mbvc.showLibraryCalled = { panel in
+            XCTAssertEqual(panel, .downloads)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testHandleHomepanelTopSites_returnsTrue() {
+        // Given
+        let topSitesURL = URL(string: "firefox://deep-link?url=/homepanel/top-sites")!
+        let expectation = XCTestExpectation(description: "openURLInNewTab is called")
         let subject = createSubject()
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/top-sites")!)
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.openURLInNewTabCalled = { url, isPrivate in
+            XCTAssertEqual(HomePanelType.topSites.internalUrl, url)
+            XCTAssertEqual(isPrivate, false)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: topSitesURL)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 0.1)
     }
 
     func testHandleNewPrivateTab_returnsTrue() {
+        // Given
+        let newPrivateTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!
+        let expectation = XCTestExpectation(description: "openBlankNewTab is called")
         let subject = createSubject()
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!)
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.openBlankNewTabCalled = { isPrivate in
+            XCTAssertEqual(isPrivate, true)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: newPrivateTabURL)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 0.1)
     }
 
     func testHandleHomepanelNewTab_returnsTrue() {
+        // Given
+        let newTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-tab")!
+        let expectation = XCTestExpectation(description: "openBlankNewTab is called")
         let subject = createSubject()
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/new-tab")!)
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        mbvc.openBlankNewTabCalled = { isPrivate in
+            XCTAssertEqual(isPrivate, false)
+            expectation.fulfill()
+        }
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: newTabURL)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        wait(for: [expectation], timeout: 0.1)
     }
 
     func testHandleFxaSignIn_returnsTrue() {
