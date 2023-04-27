@@ -2688,8 +2688,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
         guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
 
         tabWebView.accessoryView = AccessoryViewProvider()
-        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousButtonAction() }
-        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextButtonAction() }
+        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
+        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
         tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
     }
 
