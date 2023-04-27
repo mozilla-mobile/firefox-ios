@@ -36,7 +36,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // Wait to see the Share options sheet
-        waitForExistence(app.buttons["Copy"], timeout: 10)
+        waitForExistence(app.cells["Copy"], timeout: 10)
     }
 
     // Smoketest
@@ -61,8 +61,8 @@ class PhotonActionSheetTest: BaseTestCase {
         waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        waitForExistence(app.buttons["Send Link to Device"], timeout: 10)
-        app.buttons["Send Link to Device"].tap()
+        waitForExistence(app.cells["Send Link to Device"], timeout: 10)
+        app.cells["Send Link to Device"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
