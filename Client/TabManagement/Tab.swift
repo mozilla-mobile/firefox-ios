@@ -69,6 +69,7 @@ class Tab: NSObject {
             }
         }
     }
+
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
@@ -940,6 +941,25 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
+    var accessoryNextAction: (() -> Void)?
+    var accessoryPreviousAction: (() -> Void)?
+    var accessoryDoneAction: (() -> Void)?
+    var accessoryCreditCardAction: (() -> Void)?
+    var accessoryView: AccessoryViewProvider? = AccessoryViewProvider()
+
+    override var inputAccessoryView: UIView? {
+        guard let accessoryView = accessoryView else { return nil }
+
+        translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            accessoryView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        return accessoryView
+    }
+
     fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match

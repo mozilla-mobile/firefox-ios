@@ -160,6 +160,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
+
     var themeManager: ThemeManager
     var logger: Logger
 
@@ -1965,6 +1966,15 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+
+            creditCardHelper.foundFieldValues = { fieldValues in
+                guard let tabWebView = tab.webView as? TabWebView else { return }
+
+                tabWebView.accessoryView?.reloadViewForCardAccessory()
+
+                // stub. Action will be to present a half sheet, https://mozilla-hub.atlassian.net/browse/FXIOS-6111
+                tabWebView.accessoryView?.savedCardsClosure = { }
+            }
         }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
@@ -2736,6 +2746,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
+
+        guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
+
+        tabWebView.accessoryView = AccessoryViewProvider()
+        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
+        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
+        tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
