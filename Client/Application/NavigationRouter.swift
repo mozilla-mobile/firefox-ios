@@ -307,7 +307,8 @@ enum NavigationPath {
         if let newURL = url {
             bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
-            bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            let shouldFocus = bvc.newTabSettings != .homePage
+            bvc.openBlankNewTab(focusLocationField: shouldFocus, isPrivate: isPrivate)
             bvc.overlayManager.openNewTab(url: nil,
                                           newTabSettings: bvc.newTabSettings)
         }

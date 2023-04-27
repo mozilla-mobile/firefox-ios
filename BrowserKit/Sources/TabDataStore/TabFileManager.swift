@@ -6,25 +6,71 @@ import Foundation
 import Common
 
 public protocol TabFileManager {
-    /// Determines the directory where tabs should be stored
-    /// - Returns: the URL that should be used for storing tab data, can be nil
-    func tabDataDirectory() -> URL?
+    /// Determines the directory where tab session data should be stored
+    /// - Returns: the URL that should be used for storing tab session data, can be nil
+    func tabSessionDataDirectory() -> URL?
+
+    /// Determines the directory where window data should be stored
+    /// - Returns: the URL that should be used for storing window data, can be nil
+    func windowDataDirectory(isBackup: Bool) -> URL?
 
     /// Returns the contents at a given directory
     /// - Parameter path: the location to check
     /// - Returns: a list of file URL's at the given location
     func contentsOfDirectory(at path: URL) -> [URL]
+
+    /// Moves a file from one location to another
+    /// - Parameters:
+    ///   - sourceURL: the location of the file to be moved
+    ///   - destinationURL: the location of where the file is to be moved to
+    func copyItem(at sourceURL: URL, to destinationURL: URL) throws
+
+    /// Removes the file at the given location
+    /// - Parameter pathURL: the location of the file to remove
+    func removeFileAt(path: URL)
+
+    /// Removes all files at a given locatino
+    /// - Parameter directory: the location of the files to remove
+    func removeAllFilesAt(directory: URL)
+
+    /// Checks if a file exists at the given location
+    /// - Parameter pathURL: the location of the file to check
+    /// - Returns: returns true if a file exists at this location
+    func fileExists(atPath pathURL: URL) -> Bool
+
+    /// Creates a directory at the given location
+    /// - Parameter path: the location to create the directory
+    func createDirectoryAtPath(path: URL)
 }
 
 public struct DefaultTabFileManager: TabFileManager {
-    let fileManager = FileManager.default
+    enum PathInfo {
+        static let store = "codableWindowsState.archive"
+        static let profile = "profile.profile"
+        static let backup = "profile.backup"
+        static let tabSessionData = "tab-session-data"
+    }
 
-    public init() {}
+    let fileManager: FileManager
+    let logger: Logger
 
-    public func tabDataDirectory() -> URL? {
+    public init(fileManager: FileManager = FileManager.default,
+                logger: Logger = DefaultLogger.shared) {
+        self.fileManager = fileManager
+        self.logger = logger
+    }
+
+    public func tabSessionDataDirectory() -> URL? {
         let path: String = BrowserKitInformation.shared.sharedContainerIdentifier
         let container = fileManager.containerURL(forSecurityApplicationGroupIdentifier: path)
-        return container?.appendingPathComponent("tab-data")
+        return container?.appendingPathComponent(PathInfo.tabSessionData)
+    }
+
+    public func windowDataDirectory(isBackup: Bool) -> URL? {
+        guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
+        let pathInfo = isBackup ? PathInfo.backup : PathInfo.profile
+        let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        return containerURL?.appendingPathComponent(pathInfo)
     }
 
     public func contentsOfDirectory(at path: URL) -> [URL] {
@@ -35,6 +81,42 @@ public struct DefaultTabFileManager: TabFileManager {
                     options: .skipsHiddenFiles)
         } catch {
             return []
+        }
+    }
+
+    public func copyItem(at sourceURL: URL, to destinationURL: URL) throws {
+        try fileManager.copyItem(at: sourceURL, to: destinationURL)
+    }
+
+    public func removeFileAt(path: URL) {
+        do {
+            try fileManager.removeItem(at: path)
+            return
+        } catch {
+            logger.log("Error while clearing window data: \(error)",
+                       level: .debug,
+                       category: .tabs)
+        }
+    }
+
+    public func removeAllFilesAt(directory: URL) {
+        let fileURLs = contentsOfDirectory(at: directory)
+        for fileURL in fileURLs {
+            removeFileAt(path: fileURL)
+        }
+    }
+
+    public func fileExists(atPath pathURL: URL) -> Bool {
+        return fileManager.fileExists(atPath: pathURL.path)
+    }
+
+    public func createDirectoryAtPath(path: URL) {
+        do {
+            try fileManager.createDirectory(at: path, withIntermediateDirectories: true)
+        } catch {
+            logger.log("Failed to create directory: \(error.localizedDescription) for path: \(path.path)",
+                       level: .debug,
+                       category: .tabs)
         }
     }
 }

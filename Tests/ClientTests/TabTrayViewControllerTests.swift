@@ -25,7 +25,6 @@ class TabTrayViewControllerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         urlBar = MockURLBarView()
-        urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
         tabTray = TabTrayViewController(tabTrayDelegate: nil,
