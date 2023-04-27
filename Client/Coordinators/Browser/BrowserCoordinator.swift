@@ -36,7 +36,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func start(with launchType: LaunchType?) {
-        router.setRootViewController(browserViewController, hideBar: true)
+        router.push(browserViewController, animated: false)
 
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)

@@ -10,12 +10,15 @@ import Shared
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
     private let screenshotService: ScreenshotService
+    private let sceneContainer: SceneContainer
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
-         screenshotService: ScreenshotService = ScreenshotService()) {
+         screenshotService: ScreenshotService = ScreenshotService(),
+         sceneContainer: SceneContainer = SceneContainer()) {
         self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: screenshotService)
         self.screenshotService = screenshotService
+        self.sceneContainer = sceneContainer
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
@@ -25,8 +28,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     func start() {
+        router.setRootViewController(sceneContainer, hideBar: true)
+
         let launchScreenVC = LaunchScreenViewController(coordinator: self)
-        router.setRootViewController(launchScreenVC, hideBar: true)
+        router.push(launchScreenVC, animated: false)
     }
 
     // MARK: - LaunchFinishedLoadingDelegate
@@ -73,6 +78,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     // MARK: - LaunchCoordinatorDelegate
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
+        router.dismiss(animated: true)
         remove(child: coordinator)
         startBrowser(with: nil)
     }
