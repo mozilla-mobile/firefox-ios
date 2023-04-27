@@ -2561,7 +2561,7 @@ extension String {
 // MARK: - Context menu ButtonToast instances.
 extension String {
     public static let ContextMenuButtonToastNewTabOpenedLabelText = MZLocalizedString(
-        "ContextMenu.ButtonToast.NewTabOpened.LabelText.v114",
+        key: "ContextMenu.ButtonToast.NewTabOpened.LabelText.v114",
         tableName: nil,
         value: "New Tab Opened",
         comment: "The label text in the Button Toast for switching to a fresh New Tab.")
