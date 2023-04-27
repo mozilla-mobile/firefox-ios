@@ -14,7 +14,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    var showCreditCard = false
+    private var showCreditCard = false
 
     // stubs - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?

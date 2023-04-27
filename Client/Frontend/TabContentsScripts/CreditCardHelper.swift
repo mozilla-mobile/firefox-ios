@@ -41,6 +41,10 @@ class CreditCardHelper: TabContentScript {
         return "CreditCardHelper"
     }
 
+    // Stubs for the inputAccessoryView of the system keyboard's previous and next buttons.
+    static func previousButtonAction() { }
+    static func nextButtonAction() { }
+
     required init(tab: Tab) {
         self.tab = tab
     }

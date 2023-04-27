@@ -939,21 +939,16 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
-    // stubs - these will be given actions in a future task
-    private var accessoryNextAction = { }
-    private var accessoryPreviousAction = { }
-    private var accessoryDoneAction = { }
-    private var accessoryCreditCardAction = { }
+    var accessoryNextAction: (() -> Void)?
+    var accessoryPreviousAction: (() -> Void)?
+    var accessoryDoneAction: (() -> Void)?
+    var accessoryCreditCardAction: (() -> Void)?
     var accessoryView: AccessoryViewProvider? = AccessoryViewProvider()
 
     override var inputAccessoryView: UIView? {
         guard let accessoryView = accessoryView else { return nil }
 
         translatesAutoresizingMaskIntoConstraints = false
-        accessoryView.previousClosure = accessoryPreviousAction
-        accessoryView.nextClosure = accessoryNextAction
-        accessoryView.doneClosure = accessoryDoneAction
-        accessoryView.savedCardsClosure = accessoryCreditCardAction
 
         NSLayoutConstraint.activate([
             accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
