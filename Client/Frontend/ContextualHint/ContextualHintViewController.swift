@@ -38,19 +38,18 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .body,
-            maxSize: 28)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.textAlignment = .left
         label.numberOfLines = 0
     }
 
-    private lazy var actionButton: UIButton = .build { [weak self] button in
+    private lazy var actionButton: ResizableButton = .build { [weak self] button in
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self,
                          action: #selector(self?.performAction),
                          for: .touchUpInside)
+        button.buttonEdgeSpacing = 0
     }
 
     private lazy var stackView: UIStackView = .build { [weak self] stack in
@@ -58,6 +57,12 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.axis = .vertical
+        stack.spacing = 7.0
+    }
+
+    private lazy var scrollView: FadeScrollView = .build { view in
+        view.backgroundColor = .clear
+        view.showsHorizontalScrollIndicator = false
     }
 
     private lazy var gradient: CAGradientLayer = {
@@ -179,18 +184,34 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         stackView.addArrangedSubview(descriptionLabel)
         if viewModel.isActionType() { stackView.addArrangedSubview(actionButton) }
 
-        containerView.addSubview(closeButton)
         containerView.addSubview(stackView)
-        view.addSubview(containerView)
+        scrollView.addSubviews(containerView)
+        view.addSubview(scrollView)
+        view.addSubview(closeButton)
 
         setupConstraints()
         toggleArrowBasedConstraints()
     }
 
     private func setupConstraints() {
+        topContainerConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        bottomContainerConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topContainerConstraint!,
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomContainerConstraint!,
+
+            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+            closeButton.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonTrailing),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
@@ -198,18 +219,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.labelLeading),
-            stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: -UX.labelTrailing),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                constant: -UX.closeButtonSize.width - UX.labelTrailing),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-
-        topContainerConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor)
-        topContainerConstraint?.isActive = true
-        bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        bottomContainerConstraint?.isActive = true
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
     }
@@ -304,8 +317,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
         if viewModel.isActionType() {
             let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                     maxSize: 28),
+                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17),
                 .foregroundColor: theme.colors.textOnColor,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
