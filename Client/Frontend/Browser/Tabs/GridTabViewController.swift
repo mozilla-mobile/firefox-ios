@@ -747,6 +747,10 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
                          completion: completion)
     }
 
+    func presentUndoToast(completion: @escaping (Bool) -> Void) {
+        presentUndoToast(toastType: .singleTab, completion: completion)
+    }
+
     private func prepareJumpBackInContextualHint(on title: UILabel) {
         guard contextualHintViewController.shouldPresentHint() else { return }
 
