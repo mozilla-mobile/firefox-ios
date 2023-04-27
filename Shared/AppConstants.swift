@@ -101,8 +101,4 @@ public class AppConstants {
 
     /// Fixed short version for nightly builds
     public static let nightlyAppVersion = "9000"
-
-    /// A hard coded flag to enable the refactored tab data store
-    /// FXIOS-5885 This will be replaced with a nimbus flag when the feature is ready
-    public static var useNewTabDataStore = false
 }

@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-protocol TabFileManager {
+public protocol TabFileManager {
     /// Determines the directory where tabs should be stored
     /// - Returns: the URL that should be used for storing tab data, can be nil
     func tabDataDirectory() -> URL?
@@ -16,16 +16,18 @@ protocol TabFileManager {
     func contentsOfDirectory(at path: URL) -> [URL]
 }
 
-class DefaultTabFileManager: TabFileManager {
+public struct DefaultTabFileManager: TabFileManager {
     let fileManager = FileManager.default
 
-    func tabDataDirectory() -> URL? {
+    public init() {}
+
+    public func tabDataDirectory() -> URL? {
         let path: String = BrowserKitInformation.shared.sharedContainerIdentifier
         let container = fileManager.containerURL(forSecurityApplicationGroupIdentifier: path)
         return container?.appendingPathComponent("tab-data")
     }
 
-    func contentsOfDirectory(at path: URL) -> [URL] {
+    public func contentsOfDirectory(at path: URL) -> [URL] {
         do {
             return try fileManager.contentsOfDirectory(
                     at: path,
