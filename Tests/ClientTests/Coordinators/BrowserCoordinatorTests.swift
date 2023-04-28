@@ -244,17 +244,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
-                               line: UInt = #line) -> BrowserCoordinator {
-        let subject = BrowserCoordinator(router: mockRouter,
-                                         screenshotService: screenshotService,
-                                         profile: profile,
-                                         logger: logger)
-        trackForMemoryLeaks(subject, file: file, line: line)
-        return subject
-    }
-
     func testHandleHomepanelBookmarks_returnsTrue() {
         // Given
         let subject = createSubject()
@@ -397,5 +386,16 @@ final class BrowserCoordinatorTests: XCTestCase {
         // Then
         XCTAssertTrue(result)
         wait(for: [expectation], timeout: 0.1)
+    }
+
+    // MARK: - Helpers
+    private func createSubject(file: StaticString = #file,
+                               line: UInt = #line) -> BrowserCoordinator {
+        let subject = BrowserCoordinator(router: mockRouter,
+                                         screenshotService: screenshotService,
+                                         profile: profile,
+                                         logger: logger)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
