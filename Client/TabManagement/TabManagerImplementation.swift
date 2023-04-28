@@ -153,6 +153,22 @@ class TabManagerImplementation: LegacyTabManager {
         }
     }
 
+    // MARK: - Select Tab
+    override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        guard shouldUseNewTabStore(),
+              let tabIDString = tab?.tabUUID,
+              let tabUUID = UUID(uuidString: tabIDString)
+        else {
+            super.selectTab(tab, previous: previous)
+            return
+        }
+
+        Task {
+            let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+            super.selectTab(tab, previous: previous, sessionData: sessionData)
+        }
+    }
+
     private func shouldUseNewTabStore() -> Bool {
         if #available(iOS 15, *), isNewTabStoreEnabled {
             return true

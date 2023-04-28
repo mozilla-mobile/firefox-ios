@@ -233,9 +233,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     // MARK: - Select tab
+
+    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        selectTab(tab, previous: previous, sessionData: nil)
+    }
+
     // This function updates the _selectedIndex.
     // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, sessionData: Data?) {
         let previous = previous ?? selectedTab
 
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
@@ -255,7 +260,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
-        selectedTab?.createWebview()
+        selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous, isRestoring: store.isRestoringTabs) }
