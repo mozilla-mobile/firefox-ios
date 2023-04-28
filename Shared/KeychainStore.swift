@@ -10,8 +10,8 @@ public class KeychainStore {
 
     private let keychainWrapper: MZKeychainWrapper
 
-    public init() {
-        self.keychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    public init(keychainWrapper: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain) {
+        self.keychainWrapper = keychainWrapper
     }
 
     public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {
