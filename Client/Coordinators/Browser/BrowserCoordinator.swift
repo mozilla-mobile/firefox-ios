@@ -149,6 +149,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return false
         }
     }
+
     private func handle(homepanelSection section: Route.HomepanelSection) {
         switch section {
         case .bookmarks:
