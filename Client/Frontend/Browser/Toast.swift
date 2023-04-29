@@ -21,7 +21,6 @@ class Toast: UIView, ThemeApplicable {
 
     weak var viewController: UIViewController?
 
-    var dismissed = false
     private static var currentToast: Toast?
 
     lazy var gestureRecognizer: UITapGestureRecognizer = {
@@ -73,9 +72,6 @@ class Toast: UIView, ThemeApplicable {
     }
 
     func dismiss(_ buttonPressed: Bool) {
-        guard !dismissed else { return }
-
-        dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
         UIView.animate(
