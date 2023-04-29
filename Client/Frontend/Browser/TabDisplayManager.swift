@@ -671,9 +671,11 @@ extension TabDisplayManager: GroupedTabDelegate {
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
     func shouldCloseInactiveTab(_ tab: Tab, index: Int) {
-        cfrDelegate?.presentUndoToast { [self] undoButtonPressed in
-            guard undoButtonPressed else {
-                removeInactiveTabAndReloadView(tabs: [tab])
+        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
+        removeInactiveTabAndReloadView(tabs: [tab])
+
+        cfrDelegate?.presentUndoToast { undoButtonPressed in
+            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
                                              object: .inactiveTabTray,
@@ -681,7 +683,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                              extras: nil)
                 return
             }
-            undoDeleteInactiveTab(tab, at: index)
+            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition!)
         }
     }
 
@@ -734,6 +736,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
 
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
+        tabManager.undoCloseTab(tab: tab, position: index)
         inactiveViewModel?.inactiveTabs.insert(tab, at: index)
         _ = reloadInactiveTabsSection()
     }
