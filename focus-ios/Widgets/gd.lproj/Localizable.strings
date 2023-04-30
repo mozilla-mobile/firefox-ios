@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid %@ ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Tòisich air lorg prìobhaideach ann am %@ leis an einnsean-luirg bhunaiteach agad.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Grad-ghnìomhan";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Lorg le %@";
+
