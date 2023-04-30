@@ -48,7 +48,7 @@ class TabManagerImplementation: LegacyTabManager {
             guard !windowData.isEmpty, let firstWindow = windowData.first
             else {
                 // Always make sure there is a single normal tab
-                self.generateEmptyTab()
+                await self.generateEmptyTab()
                 return
             }
 
@@ -87,6 +87,8 @@ class TabManagerImplementation: LegacyTabManager {
         }
     }
 
+    /// Creates the webview so needs to live on the main thread
+    @MainActor
     private func generateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
@@ -156,8 +158,8 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Select Tab
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         guard shouldUseNewTabStore(),
-              let tabIDString = tab?.tabUUID,
-              let tabUUID = UUID(uuidString: tabIDString)
+              let tab = tab,
+              let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
             super.selectTab(tab, previous: previous)
             return
@@ -165,8 +167,15 @@ class TabManagerImplementation: LegacyTabManager {
 
         Task {
             let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
-            super.selectTab(tab, previous: previous, sessionData: sessionData)
+            await selectTabWithSession(tab: tab,
+                                       previous: previous,
+                                       sessionData: sessionData)
         }
+    }
+
+    @MainActor
+    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+        super.selectTab(tab, previous: previous, sessionData: sessionData)
     }
 
     private func shouldUseNewTabStore() -> Bool {
