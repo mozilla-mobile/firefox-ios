@@ -5,13 +5,38 @@
 import UIKit
 @testable import Client
 
-class MockBrowserCoordinator: BaseCoordinator {
-    var findRouteCalled = 0
-    var savedRoute: Route?
+class MockBrowserCoordinator: Coordinator {
+    var id: UUID = UUID()
+    var childCoordinators: [Coordinator] = []
+    var router: Router
 
+    var addChildCalled = 0
+    var removedChildCalled = 0
+    var handleRouteCalled = 0
+    var findRouteCalled = 0
+    var savedFindRoute: Route?
+
+    init(router: MockRouter) {
+        self.router = router
+    }
+
+    func add(child coordinator: Coordinator) {
+        addChildCalled += 1
+    }
+
+    func remove(child coordinator: Coordinator?) {
+        removedChildCalled += 1
+    }
+
+    func handle(route: Route) -> Bool {
+        handleRouteCalled += 1
+        return false
+    }
+
+    @discardableResult
     func find(route: Route) -> Coordinator? {
         findRouteCalled += 1
-        savedRoute = route
+        savedFindRoute = route
         return nil
     }
 }

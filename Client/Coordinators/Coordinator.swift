@@ -13,6 +13,9 @@ protocol Coordinator {
     func remove(child coordinator: Coordinator?)
 
     func handle(route: Route) -> Bool
+
+    @discardableResult
+    func find(route: Route) -> Coordinator?
 }
 
 /// An extension on the `Coordinator` class that provides a method to find a coordinator that can handle a given route.

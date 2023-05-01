@@ -90,13 +90,12 @@ final class SceneCoordinatorTests: XCTestCase {
 
         subject.didRequestToOpenInNewTab(url: expectedURL, isPrivate: false)
 
-        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
     func testDidRequestToOpenInNewTab_hasBrowserCoordinator_findsRoute() {
         let expectedURL = URL(string: "www.example.com")!
         let subject = createSubject()
-
         let browserCoordinator = MockBrowserCoordinator(router: mockRouter)
         subject.add(child: browserCoordinator)
 
@@ -104,7 +103,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertEqual(browserCoordinator.findRouteCalled, 1)
-        XCTAssertEqual(browserCoordinator.savedRoute, .search(url: expectedURL, isPrivate: false))
+        XCTAssertEqual(browserCoordinator.savedFindRoute, .search(url: expectedURL, isPrivate: false))
     }
 
     // MARK: - Helpers
