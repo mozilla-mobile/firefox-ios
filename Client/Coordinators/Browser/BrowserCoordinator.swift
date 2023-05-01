@@ -18,19 +18,22 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
+    private let applicationHelper: ApplicationHelper
 
     init(router: Router,
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
+        self.applicationHelper = applicationHelper
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -144,9 +147,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
             return false
 
-        case .defaultBrowser:
-            // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
-            return false
+        case let .defaultBrowser(section):
+            switch section {
+            case .systemSettings:
+                applicationHelper.openSettings()
+            case .tutorial:
+                startLaunch(with: .defaultBrowser)
+            }
+            return true
         }
     }
 
