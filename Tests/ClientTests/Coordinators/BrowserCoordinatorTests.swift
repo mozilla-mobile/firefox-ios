@@ -347,6 +347,31 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
     }
 
+    // MARK: - Settings route
+
+    func testGeneralRoute_showsGeneralSettingsPage() {
+        let route = Route.settings(section: .general)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        XCTAssertTrue(result)
+        XCTAssertNotNil(mockRouter.presentedViewController as? AppSettingsTableViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testNewTabRoute_showsNewTabSettingsPage() {
+        let route = Route.settings(section: .general)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        // todo laurie - adapt this
+        XCTAssertTrue(result)
+        XCTAssertNotNil(mockRouter.presentedViewController as? AppSettingsTableViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
