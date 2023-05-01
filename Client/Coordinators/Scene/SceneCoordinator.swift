@@ -83,9 +83,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
-    // MARK: - LaunchFinishedLoadingDelegate
-
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
+        let route = Route.search(url: url, isPrivate: isPrivate)
+        find(route: route)
     }
 }

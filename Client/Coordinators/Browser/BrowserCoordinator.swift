@@ -61,8 +61,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
+        let route = Route.search(url: url, isPrivate: isPrivate)
+        find(route: route)
     }
 
     // MARK: - BrowserDelegate
