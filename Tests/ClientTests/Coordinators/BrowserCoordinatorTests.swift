@@ -53,8 +53,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.start(with: nil)
 
-        XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
@@ -62,8 +62,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.start(with: .defaultBrowser)
 
-        XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }

@@ -100,27 +100,6 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.viewControllers, [viewController])
     }
 
-    func testPopToRootViewController() {
-        let subject = DefaultRouter(navigationController: navigationController)
-        subject.popToRootViewController()
-
-        XCTAssertEqual(navigationController.popToRootCalled, 1)
-    }
-
-    func testPopToRootViewController_withPushedViewController_completionIsCalled() {
-        let subject = DefaultRouter(navigationController: navigationController)
-        let viewController = UIViewController()
-        let expectation = expectation(description: "Completion is called")
-
-        subject.push(viewController) {
-            expectation.fulfill()
-        }
-        subject.popToRootViewController()
-
-        waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(navigationController.popToRootCalled, 1)
-    }
-
     // MARK: - UINavigationControllerDelegate
 
     func testNavigationControllerDelegate_doesntRunCompletionWhenNoFromVC() {

@@ -32,13 +32,21 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
-    func testStart_startsLaunchScreen() {
+    func testStart_rootViewIsSceneContainer() {
         let subject = createSubject()
         subject.start()
 
         XCTAssertNotNil(subject.window)
-        XCTAssertNotNil(mockRouter.rootViewController as? LaunchScreenViewController)
+        XCTAssertNotNil(mockRouter.rootViewController as? SceneContainer)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+    }
+
+    func testStart_startsLaunchScreen() {
+        let subject = createSubject()
+        subject.start()
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? LaunchScreenViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     func testLaunchWithLaunchType_launchFromScene() {
