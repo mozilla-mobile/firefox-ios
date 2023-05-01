@@ -6,13 +6,14 @@ import XCTest
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
     }
 
     func scrollDown() {
         if !isTablet {
-            app.collectionViews["FxCollectionView"].swipeUp()
             while app.staticTexts["Switch Your Default Browser"].exists || app.buttons["Learn How"].exists {
                 app.collectionViews["FxCollectionView"].swipeUp()
             }
@@ -21,8 +22,6 @@ class JumpBackInTests: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-
-        closeKeyboard()
 
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         navigator.goto(HomeSettings)
@@ -39,7 +38,9 @@ class JumpBackInTests: BaseTestCase {
         // Open a new tab
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // "Jump Back In" section is displayed
         waitForExistence(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
@@ -71,7 +72,9 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
         waitForTabsButton()
 
         // Tap on the "test3" from "Jump Back In" section
@@ -95,7 +98,9 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // Twitter tab is visible in the "Jump Back In" section
         scrollDown()
@@ -114,7 +119,9 @@ class JumpBackInTests: BaseTestCase {
         // Open a new tab in normal browsing and check the "Jump Back In" section
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.goto(NewTabScreen)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // Twitter should be in "Jump Back In"
         scrollDown()
@@ -129,7 +136,9 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
@@ -149,7 +158,9 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // Check the "Jump Back In Section"
         scrollDown()
@@ -170,7 +181,9 @@ class JumpBackInTests: BaseTestCase {
         // Revisit the "Jump Back In" section
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
 
         // The "Jump Back In" section is still here with twitter listed
         scrollDown()
