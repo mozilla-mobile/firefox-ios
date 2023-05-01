@@ -217,6 +217,8 @@
 		2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
 		318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
 		31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */; };
+		3850272E29FB4606008F9DE2 /* FakeKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3850272D29FB4606008F9DE2 /* FakeKeychainWrapper.swift */; };
+		385A966829DDFBE50033B3AC /* KeychainStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A966729DDFBE50033B3AC /* KeychainStoreTests.swift */; };
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
@@ -2260,6 +2262,8 @@
 		381844E180D003720B5E2499 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		383D47EEAB4E12E6B657C8CB /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		3840498CB36D14A6131110A0 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		3850272D29FB4606008F9DE2 /* FakeKeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeKeychainWrapper.swift; sourceTree = "<group>"; };
+		385A966729DDFBE50033B3AC /* KeychainStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStoreTests.swift; sourceTree = "<group>"; };
 		388646D292305C259ACDC38B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Storage.strings; sourceTree = "<group>"; };
 		389B44EEA4AAA49F0D86656C /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		38D94387A7F935DB357BF25F /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -6685,6 +6689,14 @@
 			path = ThirdParty;
 			sourceTree = "<group>";
 		};
+		3850272C29FB45D7008F9DE2 /* Fakes */ = {
+			isa = PBXGroup;
+			children = (
+				3850272D29FB4606008F9DE2 /* FakeKeychainWrapper.swift */,
+			);
+			name = Fakes;
+			sourceTree = "<group>";
+		};
 		392ED7D51D0AEEEE009D9B62 /* Accessors */ = {
 			isa = PBXGroup;
 			children = (
@@ -8965,6 +8977,7 @@
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
+				3850272C29FB45D7008F9DE2 /* Fakes */,
 				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */,
 				39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */,
@@ -8976,6 +8989,7 @@
 				E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 				C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */,
+				385A966729DDFBE50033B3AC /* KeychainStoreTests.swift */,
 			);
 			path = SharedTests;
 			sourceTree = "<group>";
@@ -11095,6 +11109,7 @@
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				5A292129295CA8A900242235 /* ThemableTests.swift in Sources */,
 				39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */,
+				385A966829DDFBE50033B3AC /* KeychainStoreTests.swift in Sources */,
 				E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */,
 				3964B09C1EA8F32C00F2EEF4 /* FeatureSwitchTests.swift in Sources */,
 				C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */,
@@ -11554,6 +11569,7 @@
 				C81AC6B626160091007800C5 /* TabTrayViewModel.swift in Sources */,
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
+				3850272E29FB4606008F9DE2 /* FakeKeychainWrapper.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */,
