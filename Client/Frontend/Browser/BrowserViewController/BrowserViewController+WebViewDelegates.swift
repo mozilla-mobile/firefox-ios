@@ -361,7 +361,7 @@ extension BrowserViewController: WKUIDelegate {
             let dismissAction = UIAlertAction(title: .CancelString, style: .default, handler: nil)
             accessDenied.addAction(dismissAction)
             let settingsAction = UIAlertAction(title: .OpenSettingsString, style: .default ) { _ in
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                DefaultApplicationHelper().openSettings()
             }
             accessDenied.addAction(settingsAction)
             self.present(accessDenied, animated: true, completion: nil)

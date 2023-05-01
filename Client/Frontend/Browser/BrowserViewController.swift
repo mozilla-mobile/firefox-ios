@@ -2416,7 +2416,7 @@ extension BrowserViewController {
         }
         dBOnboardingViewController.viewModel.goToSettings = {
             dBOnboardingViewController.dismiss(animated: true) {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                DefaultApplicationHelper().openSettings()
             }
         }
 
