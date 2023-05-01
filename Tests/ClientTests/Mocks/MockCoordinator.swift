@@ -5,8 +5,8 @@
 import UIKit
 @testable import Client
 
-class MockBrowserCoordinator: Coordinator {
-    var id: UUID = UUID()
+class MockCoordinator: Coordinator {
+    var id = UUID()
     var childCoordinators: [Coordinator] = []
     var router: Router
 

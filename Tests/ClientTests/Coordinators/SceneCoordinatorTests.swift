@@ -96,7 +96,7 @@ final class SceneCoordinatorTests: XCTestCase {
     func testDidRequestToOpenInNewTab_hasBrowserCoordinator_findsRoute() {
         let expectedURL = URL(string: "www.example.com")!
         let subject = createSubject()
-        let browserCoordinator = MockBrowserCoordinator(router: mockRouter)
+        let browserCoordinator = MockCoordinator(router: mockRouter)
         subject.add(child: browserCoordinator)
 
         subject.didRequestToOpenInNewTab(url: expectedURL, isPrivate: false)
