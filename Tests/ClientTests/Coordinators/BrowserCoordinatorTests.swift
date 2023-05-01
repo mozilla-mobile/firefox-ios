@@ -15,6 +15,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var screenshotService: ScreenshotService!
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
+    private var glean: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
@@ -27,6 +28,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.logger = MockLogger()
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
+        self.glean = MockGleanWrapper()
     }
 
     override func tearDown() {
@@ -38,6 +40,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.logger = nil
         self.screenshotService = nil
         self.tabManager = nil
+        self.glean = nil
         AppContainer.shared.reset()
     }
 
@@ -79,6 +82,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
+    // MARK: - Show homepage
+
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
         subject.showHomepage(inline: true,
@@ -111,6 +116,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
+
+    // MARK: - Show webview
 
     func testShowWebview_withoutPreviousSendsFatal() {
         let subject = createSubject()
@@ -150,6 +157,8 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
+
+    // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {
         let query = "test query"
@@ -219,6 +228,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
         XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
     }
+
+    // MARK: - Homepanel route
 
     func testHandleHomepanelBookmarks_returnsTrue() {
         let subject = createSubject()
@@ -322,13 +333,28 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.openBlankNewTabIsPrivate, false)
     }
 
+    // MARK: - Glean route
+
+    func testGleanRoute_handlesRoute() {
+        let expectedURL = URL(string: "www.example.com")!
+        let route = Route.glean(url: expectedURL)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(glean.handleDeeplinkUrlCalled, 1)
+        XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
-                                         logger: logger)
+                                         logger: logger,
+                                         glean: glean)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
