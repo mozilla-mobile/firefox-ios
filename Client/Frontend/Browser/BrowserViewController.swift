@@ -1507,6 +1507,11 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func handle(query: String) {
+       openBlankNewTab(focusLocationField: false)
+       urlBar(urlBar, didSubmitText: query)
+    }
+
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         if let url = url {
             if options?.contains(.switchToNormalMode) == true {
@@ -1524,11 +1529,6 @@ class BrowserViewController: UIViewController {
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
-    }
-
-    func handle(query: String) {
-       openBlankNewTab(focusLocationField: false)
-       urlBar(urlBar, didSubmitText: query)
     }
 
     func switchToPrivacyMode(isPrivate: Bool) {

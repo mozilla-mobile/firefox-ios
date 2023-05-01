@@ -128,9 +128,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
             return false
 
-        case .homepanel:
-            // FXIOS-6029 #13679 ⁃ Enable homepanel in BrowserCoordinator
-            return false
+        case let .homepanel(section):
+            handle(homepanelSection: section)
+            return true
 
         case .settings:
             // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
@@ -147,6 +147,25 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         case .defaultBrowser:
             // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
             return false
+        }
+    }
+
+    private func handle(homepanelSection section: Route.HomepanelSection) {
+        switch section {
+        case .bookmarks:
+            browserViewController.showLibrary(panel: .bookmarks)
+        case .history:
+            browserViewController.showLibrary(panel: .history)
+        case .readingList:
+            browserViewController.showLibrary(panel: .readingList)
+        case .downloads:
+            browserViewController.showLibrary(panel: .downloads)
+        case .topSites:
+            browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
+        case .newPrivateTab:
+            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
+        case .newTab:
+            browserViewController.openBlankNewTab(focusLocationField: false)
         }
     }
 

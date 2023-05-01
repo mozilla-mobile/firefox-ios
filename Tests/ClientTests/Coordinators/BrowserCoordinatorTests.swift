@@ -13,12 +13,14 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var overlayModeManager: MockOverlayModeManager!
     private var logger: MockLogger!
     private var screenshotService: ScreenshotService!
+    private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        self.routeBuilder = RouteBuilder { false }
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
@@ -29,6 +31,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -152,73 +155,171 @@ final class BrowserCoordinatorTests: XCTestCase {
         let query = "test query"
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
-        mbvc.handleQueryCalled = { queryCalled in
-            XCTAssertEqual(query, queryCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .searchQuery(query: query))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.handleQueryCalled)
+        XCTAssertEqual(mbvc.handleQuery, query)
+        XCTAssertEqual(mbvc.handleQueryCount, 1)
     }
 
     func testHandleSearch_returnsTrue() {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: nil))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)
     }
 
     func testHandleSearchWithNormalMode_returnsTrue() {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.switchToPrivacyModeCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
-        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: [.switchToNormalMode]))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.switchToPrivacyModeCalled)
+        XCTAssertFalse(mbvc.switchToPrivacyModeIsPrivate)
+        XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)
     }
 
     func testHandleSearchWithNilURL_returnsTrue() {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.openBlankNewTabCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .search(url: nil, isPrivate: false))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.openBlankNewTabCalled)
+        XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
+        XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
     }
 
     func testHandleSearchURL_returnsTrue() {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.switchToTabForURLOrOpenCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)
     }
 
     func testHandleNilSearchURL_returnsTrue() {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.openBlankNewTabCalled = { isCalled in
-            XCTAssertTrue(isCalled)
-        }
         subject.browserViewController = mbvc
         let result = subject.handle(route: .searchURL(url: nil, tabId: "1234"))
         XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.openBlankNewTabCalled)
+        XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
+        XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
+    }
+
+    func testHandleHomepanelBookmarks_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.showLibraryCalled)
+        XCTAssertEqual(mbvc.showLibraryPanel, .bookmarks)
+        XCTAssertEqual(mbvc.showLibraryCount, 1)
+    }
+
+    func testHandleHomepanelHistory_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.showLibraryCalled)
+        XCTAssertEqual(mbvc.showLibraryPanel, .history)
+        XCTAssertEqual(mbvc.showLibraryCount, 1)
+    }
+
+    func testHandleHomepanelReadingList_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.showLibraryCalled)
+        XCTAssertEqual(mbvc.showLibraryPanel, .readingList)
+        XCTAssertEqual(mbvc.showLibraryCount, 1)
+    }
+
+    func testHandleHomepanelDownloads_returnsTrue() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+        XCTAssertTrue(mbvc.showLibraryCalled)
+        XCTAssertEqual(mbvc.showLibraryPanel, .downloads)
+        XCTAssertEqual(mbvc.showLibraryCount, 1)
+    }
+
+    func testHandleHomepanelTopSites_returnsTrue() {
+        // Given
+        let topSitesURL = URL(string: "firefox://deep-link?url=/homepanel/top-sites")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: topSitesURL)
+        let result = subject.handle(route: route!)
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.openURLInNewTabCount, 1)
+        XCTAssertEqual(mbvc.openURLInNewTabURL, HomePanelType.topSites.internalUrl)
+        XCTAssertEqual(mbvc.openURLInNewTabIsPrivate, false)
+    }
+
+    func testHandleNewPrivateTab_returnsTrue() {
+        // Given
+        let newPrivateTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: newPrivateTabURL)
+        let result = subject.handle(route: route!)
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
+        XCTAssertFalse(mbvc.openBlankNewTabFocusLocationField)
+        XCTAssertEqual(mbvc.openBlankNewTabIsPrivate, true)
+    }
+
+    func testHandleHomepanelNewTab_returnsTrue() {
+        // Given
+        let newTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-tab")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: newTabURL)
+        let result = subject.handle(route: route!)
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
+        XCTAssertFalse(mbvc.openBlankNewTabFocusLocationField)
+        XCTAssertEqual(mbvc.openBlankNewTabIsPrivate, false)
     }
 
     // MARK: - Helpers
