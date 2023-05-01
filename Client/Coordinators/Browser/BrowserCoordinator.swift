@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Glean
 import Shared
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
@@ -18,19 +17,22 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
+    private let glean: GleanWrapper
 
     init(router: Router,
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         glean: GleanWrapper = DefaultGleanWrapper.shared) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
+        self.glean = glean
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -126,9 +128,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             handle(searchURL: url, tabId: tabId)
             return true
 
-        case .glean:
-            // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
-            return false
+        case let .glean(url):
+            glean.handleDeeplinkUrl(url: url)
+            return true
 
         case let .homepanel(section):
             handle(homepanelSection: section)
