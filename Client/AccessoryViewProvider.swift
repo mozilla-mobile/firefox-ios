@@ -6,6 +6,10 @@ import UIKit
 import Common
 import Shared
 
+enum AccessoryType {
+    case standard, creditCard
+}
+
 class AccessoryViewProvider: UIView, Themeable {
     private struct AccessoryViewUX {
         static let toolbarHeight: CGFloat = 50
@@ -113,8 +117,13 @@ class AccessoryViewProvider: UIView, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func reloadViewForCardAccessory() {
-        showCreditCard = true
+    func reloadViewFor(_ accessoryType: AccessoryType) {
+        switch accessoryType {
+        case .standard:
+            showCreditCard = false
+        case .creditCard:
+            showCreditCard = true
+        }
 
         setNeedsLayout()
         setupLayout()

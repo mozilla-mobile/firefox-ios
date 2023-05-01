@@ -951,7 +951,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     var accessoryPreviousAction: (() -> Void)?
     var accessoryDoneAction: (() -> Void)?
     var accessoryCreditCardAction: (() -> Void)?
-    var accessoryView: AccessoryViewProvider? = AccessoryViewProvider()
+    var accessoryView: AccessoryViewProvider?
 
     override var inputAccessoryView: UIView? {
         guard let accessoryView = accessoryView else { return nil }

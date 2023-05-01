@@ -1951,7 +1951,11 @@ extension BrowserViewController: LegacyTabDelegate {
             creditCardHelper.foundFieldValues = { fieldValues in
                 guard let tabWebView = tab.webView as? TabWebView else { return }
 
-                tabWebView.accessoryView?.reloadViewForCardAccessory()
+                // Delay so that this executes AFTER KeyboardHelperDelegate methods
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    tabWebView.accessoryView?.reloadViewFor(.creditCard)
+                    tabWebView.reloadInputViews()
+                }
 
                 // stub. Action will be to present a half sheet, https://mozilla-hub.atlassian.net/browse/FXIOS-6111
                 tabWebView.accessoryView?.savedCardsClosure = { }
@@ -2729,10 +2733,17 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
 
-        tabWebView.accessoryView = AccessoryViewProvider()
-        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
-        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
-        tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
+        guard let accessoryView = tabWebView.accessoryView else {
+            tabWebView.accessoryView = AccessoryViewProvider()
+            tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
+            tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
+            tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
+
+            return
+        }
+
+        accessoryView.reloadViewFor(.standard)
+        tabWebView.reloadInputViews()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
