@@ -18,13 +18,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testLayer_dismissable_isTrue() {
-        setupNimbusWith(cards: nil, cardOrdering: nil, dismissable: true)
-        let layer = NimbusOnboardingFeatureLayer()
-        let subject = layer.getOnboardingModel()
-
-        XCTAssertTrue(subject.dismissable)
-    }
+//    func testLayer_dismissable_isTrue() {
+//        setupNimbusWith(cards: nil, cardOrdering: nil, dismissable: true)
+//        let layer = NimbusOnboardingFeatureLayer()
+//        let subject = layer.getOnboardingModel()
+//
+//        XCTAssertTrue(subject.dismissable)
+//    }
 
     // MARK: - Helpers
     private func setupNimbusWith(

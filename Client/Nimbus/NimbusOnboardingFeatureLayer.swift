@@ -23,7 +23,7 @@ class NimbusOnboardingFeatureLayer {
     ) -> [OnboardingCardInfo] {
         let cards = getOnboardingCards(from: cardData)
         var orderedCards = [OnboardingCardInfo]()
-        
+
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the ordering. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
