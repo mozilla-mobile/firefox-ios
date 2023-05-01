@@ -16,7 +16,7 @@ class MockTabSessionStore: TabSessionStore {
         self.sessionData = sessionData
     }
 
-    func fetchTabSession(tabID: UUID) async -> Data {
+    func fetchTabSession(tabID: UUID) async -> Data? {
         return Data()
     }
 
