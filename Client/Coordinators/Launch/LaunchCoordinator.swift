@@ -125,6 +125,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     // MARK: OpenURLDelegate
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
+        parentCoordinator?.didFinishLaunch(from: self)
         parentCoordinator?.didRequestToOpenInNewTab(url: url, isPrivate: isPrivate)
     }
 }
