@@ -29,7 +29,7 @@ public protocol TabFileManager {
     /// - Parameter pathURL: the location of the file to remove
     func removeFileAt(path: URL)
 
-    /// Removes all files at a given locatino
+    /// Removes all files at a given location
     /// - Parameter directory: the location of the files to remove
     func removeAllFilesAt(directory: URL)
 

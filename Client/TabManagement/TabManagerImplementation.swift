@@ -13,6 +13,7 @@ import Shared
 class TabManagerImplementation: LegacyTabManager {
     let tabDataStore: TabDataStore
     let tabSessionStore: TabSessionStore
+    let imageStore: DiskImageStore?
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
@@ -22,6 +23,7 @@ class TabManagerImplementation: LegacyTabManager {
          tabSessionStore: TabSessionStore = DefaultTabSessionStore()) {
         self.tabDataStore = tabDataStore
         self.tabSessionStore = tabSessionStore
+        self.imageStore = imageStore
         super.init(profile: profile, imageStore: imageStore)
     }
 
@@ -183,5 +185,41 @@ class TabManagerImplementation: LegacyTabManager {
             return true
         }
         return false
+    }
+
+    // MARK: - Save screenshot
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard shouldUseNewTabStore()
+        else {
+            super.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
+            return
+        }
+
+        storeScreenshot(tab: tab)
+    }
+
+    override func storeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore(),
+              let screenshot = tab.screenshot
+        else {
+            super.storeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+        }
+    }
+
+    override func removeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore()
+        else {
+            super.removeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            await imageStore?.deleteImageForKey(tab.tabUUID)
+        }
     }
 }
