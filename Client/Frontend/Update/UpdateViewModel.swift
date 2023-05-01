@@ -98,10 +98,10 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                                      extras: extra)
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> LegacyOnboardingModelProtocol? {
         switch cardType {
         case .updateWelcome:
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
+            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
                                        title: .Upgrade.WelcomeTitle,
                                        description: .Upgrade.WelcomeDescription,
                                        linkButtonTitle: nil,
@@ -109,7 +109,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
         case .updateSignSync:
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
+            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Upgrade.SyncSignTitle,
                                        description: .Upgrade.SyncSignDescription,
                                        linkButtonTitle: nil,
