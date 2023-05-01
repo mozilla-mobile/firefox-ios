@@ -15,7 +15,7 @@ public protocol TabSessionStore {
     /// Fetches the session data associated with a tab
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
-    func fetchTabSession(tabID: UUID) async -> Data
+    func fetchTabSession(tabID: UUID) async -> Data?
 
     /// Erases all session data files stored on disk
     func clearAllData() async
@@ -42,9 +42,18 @@ public actor DefaultTabSessionStore: TabSessionStore {
         }
     }
 
-    public func fetchTabSession(tabID: UUID) async -> Data {
-        // TODO: FXIOS-5882
-        return Data()
+    public func fetchTabSession(tabID: UUID) async -> Data? {
+        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(tabID.uuidString)
+        else { return nil }
+
+        do {
+            return try Data(contentsOf: path)
+        } catch {
+            logger.log("Failed to decode session data with error: \(error.localizedDescription)",
+                       level: .debug,
+                       category: .tabs)
+            return nil
+        }
     }
 
     public func clearAllData() async {

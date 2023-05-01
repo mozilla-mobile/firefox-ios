@@ -53,10 +53,10 @@ final class LaunchCoordinatorTests: XCTestCase {
         let subject = createSubject(isIphone: true)
         subject.start(with: .intro(manager: introScreenManager))
 
-        XCTAssertEqual(mockRouter.presentCalled, 0)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
-        let rootViewController = try XCTUnwrap(mockRouter.rootViewController)
-        XCTAssertNotNil(rootViewController as? IntroViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(pushedVC as? IntroViewController)
     }
 
     // MARK: - Update
@@ -76,10 +76,10 @@ final class LaunchCoordinatorTests: XCTestCase {
         let subject = createSubject(isIphone: true)
         subject.start(with: .update(viewModel: viewModel))
 
-        XCTAssertEqual(mockRouter.presentCalled, 0)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
-        let rootViewController = try XCTUnwrap(mockRouter.rootViewController)
-        XCTAssertNotNil(rootViewController as? UpdateViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(pushedVC as? UpdateViewController)
     }
 
     // MARK: - Default browser
@@ -114,10 +114,10 @@ final class LaunchCoordinatorTests: XCTestCase {
         let subject = createSubject(isIphone: false)
         subject.start(with: .survey(manager: manager))
 
-        XCTAssertEqual(mockRouter.presentCalled, 0)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
-        let rootViewController = try XCTUnwrap(mockRouter.rootViewController)
-        XCTAssertNotNil(rootViewController as? SurveySurfaceViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(pushedVC as? SurveySurfaceViewController)
     }
 
     // MARK: - Delegates

@@ -16,7 +16,6 @@ class MockRouter: NSObject, Router {
     var pushCalled = 0
     var popViewControllerCalled = 0
     var setRootViewControllerCalled = 0
-    var popToRootModuleCalled = 0
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
@@ -44,9 +43,5 @@ class MockRouter: NSObject, Router {
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {
         rootViewController = viewController
         setRootViewControllerCalled += 1
-    }
-
-    func popToRootViewController(animated: Bool) {
-        popToRootModuleCalled += 1
     }
 }

@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Glean
 import Shared
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
@@ -19,6 +18,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private var logger: Logger
     private let screenshotService: ScreenshotService
     private let applicationHelper: ApplicationHelper
+    private let glean: GleanWrapper
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -26,7 +26,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         glean: GleanWrapper = DefaultGleanWrapper.shared) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -34,12 +35,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
         self.applicationHelper = applicationHelper
+        self.glean = glean
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
 
     func start(with launchType: LaunchType?) {
-        router.setRootViewController(browserViewController, hideBar: true)
+        router.push(browserViewController, animated: false)
 
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)
@@ -63,7 +65,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6030: Handle open in new tab route
+        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
     }
 
     // MARK: - BrowserDelegate
@@ -113,6 +115,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         screenshotService.screenshotableView = webviewController
     }
 
+    // MARK: - Route handling
+
     override func handle(route: Route) -> Bool {
         switch route {
         case let .searchQuery(query):
@@ -127,9 +131,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             handle(searchURL: url, tabId: tabId)
             return true
 
-        case .glean:
-            // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
-            return false
+        case let .glean(url):
+            glean.handleDeeplinkUrl(url: url)
+            return true
 
         case let .homepanel(section):
             handle(homepanelSection: section)

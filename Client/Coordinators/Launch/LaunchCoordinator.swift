@@ -54,7 +54,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
-            router.setRootViewController(introViewController, hideBar: true, animated: true)
+            router.present(introViewController, animated: false)
         } else {
             introViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
@@ -75,7 +75,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
         if isFullScreen {
             updateViewController.modalPresentationStyle = .fullScreen
-            router.setRootViewController(updateViewController, hideBar: true, animated: true)
+            router.present(updateViewController, animated: false)
         } else {
             updateViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
@@ -119,7 +119,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
-        router.setRootViewController(surveySurface, hideBar: true, animated: true)
+        router.present(surveySurface, animated: false)
     }
 
     // MARK: OpenURLDelegate

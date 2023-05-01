@@ -16,6 +16,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
     private var applicationHelper: MockApplicationHelper!
+    private var glean: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
@@ -29,6 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
+        self.glean = MockGleanWrapper()
     }
 
     override func tearDown() {
@@ -41,6 +43,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.screenshotService = nil
         self.tabManager = nil
         self.applicationHelper = nil
+        self.glean = nil
         AppContainer.shared.reset()
     }
 
@@ -56,8 +59,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.start(with: nil)
 
-        XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
@@ -65,8 +68,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.start(with: .defaultBrowser)
 
-        XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
@@ -81,6 +84,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
+
+    // MARK: - Show homepage
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
@@ -114,6 +119,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
+
+    // MARK: - Show webview
 
     func testShowWebview_withoutPreviousSendsFatal() {
         let subject = createSubject()
@@ -153,6 +160,8 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
+
+    // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {
         let query = "test query"
@@ -222,6 +231,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
         XCTAssertEqual(mbvc.openBlankNewTabCount, 1)
     }
+
+    // MARK: - Homepanel route
 
     func testHandleHomepanelBookmarks_returnsTrue() {
         let subject = createSubject()
@@ -326,6 +337,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Default browser route
+
     func testDefaultBrowser_systemSettings_handlesRoute() {
         let route = Route.defaultBrowser(section: .systemSettings)
         let subject = createSubject()
@@ -349,6 +361,20 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
 
+    // MARK: - Glean route
+
+    func testGleanRoute_handlesRoute() {
+        let expectedURL = URL(string: "www.example.com")!
+        let route = Route.glean(url: expectedURL)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(glean.handleDeeplinkUrlCalled, 1)
+        XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
@@ -356,7 +382,8 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          screenshotService: screenshotService,
                                          profile: profile,
                                          logger: logger,
-                                         applicationHelper: applicationHelper)
+                                         applicationHelper: applicationHelper,
+                                         glean: glean)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
