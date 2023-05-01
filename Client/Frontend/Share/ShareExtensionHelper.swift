@@ -40,7 +40,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     func createActivityViewController(
         _ webView: WKWebView? = nil,
         completionHandler: @escaping (_ completed: Bool,
-            _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
+                                      _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
         var activityItems = getActivityItems(url: url)
         // Note: webview is required for adding websites to the iOS home screen
         if #available(iOS 16.4, *), let webView = webView {
