@@ -508,6 +508,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Эзләүне кабатлау";
 
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "Кэшка игътибар итмичә яңадан ачу";
+
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Кыстыргычлар";
 
@@ -550,6 +553,39 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Үткән атнада";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Кыстыргычлар";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Тарих";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Баш тарту";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Бетерү";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ төркемендәге барлык сайтлар бетерелсенме?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Тарихны (башка җиһазлардан синхронланган тарихны да кертеп), кукиларны һәм башка гизү мәгълүматларын бетерә.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Бетерү";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Тарих табылмады";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Күптән түгел ябылган таблар";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Эзләнәсе сүзләрне кертегез";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Синхронланган тарих";
+
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "Искерәк";
 
@@ -570,6 +606,15 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Логиннар";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Логиннарны һәм серсүзләрне саклау һәм автотутыру өчен, Face ID, Touch ID яки җиһаз серсүзен кабызыгыз.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox өчен автотутыру функциясен куллану өчен, җиһаз серсүзе кабынган булырга тиеш.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Серсүзләрегезне үзегез белән алыгыз";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Сакламау";
@@ -610,17 +655,38 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Укылмаган дип билгеләү";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Кыстыргыч өстәү";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Кыстаргыч өстәлде";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Өстәү";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Өстәү";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Уку исемлегенә өстәлде";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Ярлыкларга өстәү";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Адресны күчереп алу";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL алмашу буферына копияләнде";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Баш битне көйләү";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Ярдәм";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Яңа таб";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ябыштыру";
@@ -637,8 +703,38 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Кыстаргыч бетерелде";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Бетерү";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Ярлыклардан алып ташлау";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "Ярлыклардан бетерелде";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Уку исемлегеннән алып ташлау";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Уку исемлегеннән алып ташланды";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Алып ташлау";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Уртаклашу";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Мәгълүматны синхронлау һәм саклау";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Таб җибәрелде";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Кыстыргычлар";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Өйгә";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Саклау көйләүләре";
@@ -655,11 +751,29 @@
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Криптомайнерләр";
 
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Вебсайтлар яшерен трекерлы тышкы реклама, видео һәм башка эчтәлекне йөкләргә мөмкин. Боларны блоклау сайтларның тизрәк йөкләргә ярдәм итә, ләкин кайбер төймәләр, формалар, керү кырлары эшләмәскә мөмкин.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Бу кукилар, онлайнда нәрсә эшләгәнегез турында мәгълүматлар туплау өчен, сайттан сайтка Сезгә ияреп йөриләр. Аларны реклама бирүче һәм аналитика компанияләре кебек өченче тарафлар урнаштыра.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Криптомайнерләр системагызның исәпләү куәтен яшерен рәвештә криптовалюта туплау өчен кулланалар. Криптомайнер скриптлары батареягызны сарыф итә, компьютерыгызны акрынайта һәм электр чыгымнарын арттырырга мөмкин.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Браузерыгыз һәм компьютерыздагы көйләүләр уникаль. Цифралы бармак эзләрен җыючылар, бу уникаль көйләүләрне туплап, профилегезне булдыралар. Бу профиль Сезнең онлайн хәрәкәтләрегезне күзәтү өчен кулланылырга мөмкин.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Социаль челтәрләр, башка сайтларга үзләренең трекерларын урнаштырып, Сезнең хакта тагын да тулырак һәм максатчан мәгълүмат туплый. Бу трекерларны блоклау социаль медиа компанияләренең Интернетта нәрсә эшләвегезне күрә алуын киметә.";
+
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Бармак эзләрен җыючылар (идентификаторлар)";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Яңалыклар";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Масштаб (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "мобиль җиһаз";
@@ -687,6 +801,60 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ярар";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Башлап җибәрү";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "Бәйсез. Коммерциягә нигезләнмәгән. Яхшы ниятле.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Һәркем өчен дә яхшырак Интернет булдыруны максат итеп алдык.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Хәзер түгел";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Туктаган җирдән дәвам итү өчен бүтән җиһазларыгыздан табларны һәм серсүзләрне алыгыз.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Калдырып тору";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Телефоннан ноутбукка, ноутбуктан телефонга күчегез";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "Теркәлү һәм Керү";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "Экран арасында өзлексез күчү өчен табларны һәм кыстыргычларны җиһазлар арасында автоматик рәвештә синхронлау.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Агымда булу өчен синхронлагыз";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Классик фон рәсеме";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Чикләнгән тиражлы фон рәсеме";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Күңелегезгә хуш килгән фон рәсемен сайлагыз.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Төрле төсләрне кулланып карагыз";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "Фон рәсем булдыру";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Firefox фон рәсемен сайлау";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox кешеләрне табыштан югарырак куя һәм автоматик рәвештә хосусыйлыгыгызны саклый.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Бәйсез Интернетка рәхим итегез";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Абау! Firefox ватылды";
@@ -727,6 +895,9 @@
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Тиз эзләү системалары";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "App Store-да бәяләү";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "укылган";
 
@@ -735,6 +906,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Уку режимы бар";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Укылган дип билгеләү";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Укылмаган дип билгеләү";
 
 /* Panel accessibility label */
 "Reading list" = "Уку исемлеге";
@@ -781,6 +958,9 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Мәгълүмат яраксыз";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Җиһазда \"Көйләүләр\" > \"Firefox\"ка керегез. Firefox-ка камера куллануны рөхсәт итегез.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR кодны сканерлау";
 
@@ -789,6 +969,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Эзләү яки адрес язу";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox тәкъдиме";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Яңа эзләү системасы тиз эзләү юлында күренәчәк.";
@@ -823,6 +1006,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ОК";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Стандарт эзләү системасы";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Стандарт эзләү системасы";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Эзләү";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
 
@@ -834,6 +1026,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Баш тарту";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Ябу";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Кулланырлык җиһазлар:";
@@ -849,6 +1044,9 @@
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Табны җибәрү";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Бу Firefox Хисабына бәйләнгән һәм синхронлауга әзер башка җиһазларыгыз юк.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Зинһар, дәвам итү өчен Firefox-ны ачып, көйләүләргә күчегез һәм керегез.";
@@ -910,6 +1108,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Сорауны %s белән алыштырыгыз)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "Кредит карталарын автотөгәлләү";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Вебсайтның барлык мәгълүматларын чистарту";
 
@@ -964,6 +1165,12 @@
 /* Option choice in display theme settings for light theme */
 "Settings.DisplayTheme.OptionLight" = "Ачык";
 
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Тема автоматик рәвештә Сезнең экран яктылыгына нигезләнеп үзгәрәчәк. Тема үзгәрәчәк баскычларны билгели аласыз. Түгәрәк экраныгызның хәзерге яктылыгын күрсәтә.";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Автоматик";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Режимны авыштыру";
 
@@ -997,6 +1204,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Гомуми";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Баш бит итеп нәрсә күрсәтелүен сайлагыз.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Firefox-ның баш битенә нәрсәләр керүен сайлагыз.";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Кире кайту";
 
@@ -1011,6 +1224,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Ярлыклар";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "Иганәчеләрнең мәкаләләре";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Дүрт сәгать хәрәкәтсезлектән соң баш бит";
@@ -1027,8 +1243,86 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "Башлангыч экран";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Баш биттә күрсәтү";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Фон рәсемe";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox фон рәсеме, аметист бизәге.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox фон рәсеме, пляж калкулыклары белән бизәк.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox фон рәсеме, зәңгәр күк бизәге.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Стандарт ачык фон рәсеме.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox фон рәсеме, таң ату бизәге.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Баш битнең фон рәсем циклын үзгәртү төймәсе";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox фон рәсеме, эңгер-меңгер вакытында калкулыклар бизәге.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Классик %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "БАШЛАНГЫЧ ЭКРАН";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Күбрәк белү";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Яңа коллекцияне кулланып карагыз.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Яңа Бәйсез Тавышлар коллекциясе.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Чикләнгән тираж";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox баш бит логотибына басып фон рәсемен үзгәртү";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Фон рәсеме";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Фон рәсеме яңартылды!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Карау";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Баш бит";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Юллар";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Юллар";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Ярлыклар";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Ярлыклар";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Иганәче ярлыклары";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Сүнгән";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Кабынган";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Хәзерге баш бит";
@@ -1044,6 +1338,9 @@
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Буш бит ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Үзгә";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox баш бит";
@@ -1063,6 +1360,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Яңа табны ачканда нәрсә йөкләргә икәнен сайлагыз";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Рәсемнәрне блоклау";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox ачылганда";
 
@@ -1074,6 +1374,18 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Эл. почта кушымтасы";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Серсүзләргә ирешү өчен хәзер бармак эзегезне кулланыгыз.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Серсүзләрегез хәзер Face ID, Touch ID яки җиһаз серсүзе белән сакланган.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Серсүзләрне саклау";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Серсүзләр";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Логиннарны саклау";
@@ -1114,8 +1426,20 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Табларны, кыстыргычларны, серсүзләрне һәм башкаларны синхронлау өчен сайтка керегез.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Мәгълүматны синхронлау һәм саклау";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Мәгълүматны синхронлау һәм саклау";
+
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Актив булмаган таблар";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Ике атна эчендә каралмаган таблар актив булмаган бүлеккә күчереләчәк.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Таб төркемнәре";
@@ -1126,8 +1450,20 @@
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Таблар";
 
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Аста";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Кораллар панеле";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Өстә";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Яхшы, аңладым";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Әгәр дә сайт көтелгәнчә эшләмәсә, адрес юлында йозакка басыгыз һәм бу бит өчен Күзәтүдән Көчәйтелгән Саклауны сүндерегез.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Игътибар!";
@@ -1138,6 +1474,21 @@
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Күбрәк белү";
 
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Максатлы рекламаларны киметә һәм рекламачыларның Сезнең гизү гамәлләрен күзәтүен тоткарлый.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Әгәр дә сайт көтелгәнчә эшләмәсә, адрес юлында йозакка басыгыз һәм бу бит өчен Күзәтүдән Көчәйтелгән Саклауны сүндерегез.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Әгәр дә сайт көтелгәнчә эшләмәсә, адрес юлында йозакка басыгыз һәм бу бит өчен Күзәтүдән Көчәйтелгән Саклауны сүндерегез.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Вебсайтларның дөрес эшләве өчен кайбер реклама трекерларына рөхсәт бирә.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Тагын да күбрәк күзәтүчеләрне, рекламаларны һәм калкып чыгучы тәрәзәләрне блоклый. Битләр тизрәк йөкләнә, ләкин кайбер функцияләр эшләмәскә мөмкин.";
+
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Cаклау дәрәҗәсе";
 
@@ -1146,6 +1497,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Стандарт (килешенгәнчә)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Стандарт";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Катгый";
@@ -1192,6 +1546,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox-та эзләү";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Күчереп алу";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Сылтаманы җиһазга җибәрү";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Эзләү тәкъдимнәрен күрсәтү";
 
@@ -1234,6 +1594,15 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d таб ябылды";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Актив булмаган табларны карау";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Актив булмаган табларны яшерү";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Эзләү";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Таб өстәү";
 
@@ -1249,6 +1618,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Ачык таблар";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Табларны күрсәтү";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Битне уку режимында күрсәтеп булмады.";
 
@@ -1260,6 +1632,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "бу атна";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "кичә";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Хәзер түгел";
@@ -1306,11 +1681,47 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "укылмаган";
 
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Керү";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Башка җиһазыгыздан таблар белән Сез туктаган җирдән хәзер баш битегездә дәвам итегез.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Җиһаздан җиһазга күчү тагын да җиңеләйде";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Башлап җибәрү";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Яңа төсләр. Яңа уңайлыклар. Элеккечә табыш өчен түгел, кешеләр өчен";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Шәхсирәк бер Интернетка рәхим итегез";
+
 /* Debug option */
 "Use stage servers" = "Сынау серверларын куллану";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Кулланучы исеме";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Бу фон рәсеме белән нидер булды.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Фон рәсемен үзгәреп булмады";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Иңдерү белән нидер булды.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Фон рәсемен иңдереп булмады";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Баш тарту";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Янәдән тырышып карау";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Веб-эчтәлек";

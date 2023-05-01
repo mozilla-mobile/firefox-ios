@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Synkroniser";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du har slått av alle %1$@-varsler. Slå dem på ved å gå til enhetens innstillinger > Varsler > %2$@";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Les om nyttige funksjoner og hvordan du får mest mulig ut av %@.";
 
