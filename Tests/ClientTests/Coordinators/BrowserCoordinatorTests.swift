@@ -16,6 +16,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
     private var glean: MockGleanWrapper!
+    private var wallpaperManager: WallpaperManagerMock!
 
     override func setUp() {
         super.setUp()
@@ -29,6 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
         self.glean = MockGleanWrapper()
+        self.wallpaperManager = WallpaperManagerMock()
     }
 
     override func tearDown() {
@@ -41,6 +43,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.screenshotService = nil
         self.tabManager = nil
         self.glean = nil
+        self.wallpaperManager = nil
         AppContainer.shared.reset()
     }
 
@@ -349,27 +352,99 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     // MARK: - Settings route
 
-    func testGeneralRoute_showsGeneralSettingsPage() {
+    func testGeneralSettingsRoute_showsGeneralSettingsPage() throws {
         let route = Route.settings(section: .general)
         let subject = createSubject()
 
         let result = subject.handle(route: route)
 
         XCTAssertTrue(result)
-        XCTAssertNotNil(mockRouter.presentedViewController as? AppSettingsTableViewController)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? ThemedNavigationController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertNotNil(presentedVC.topViewController as? AppSettingsTableViewController)
     }
 
-    func testNewTabRoute_showsNewTabSettingsPage() {
-        let route = Route.settings(section: .general)
+    func testNewTabSettingsRoute_returnsNewTabSettingsPage() throws {
+        let route = Route.SettingsSection.newTab
         let subject = createSubject()
 
-        let result = subject.handle(route: route)
+        let result = subject.getSettingsViewController(settingsSection: route)
 
-        // todo laurie - adapt this
-        XCTAssertTrue(result)
-        XCTAssertNotNil(mockRouter.presentedViewController as? AppSettingsTableViewController)
-        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertNotNil(result as? NewTabContentSettingsViewController)
+    }
+
+    func testHomepageSettingsRoute_returnsHomepageSettingsPage() throws {
+        let route = Route.SettingsSection.homePage
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? HomePageSettingViewController)
+    }
+
+    func testMailtoSettingsRoute_returnsMailtoSettingsPage() throws {
+        let route = Route.SettingsSection.mailto
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? OpenWithSettingsViewController)
+    }
+
+    func testSearchSettingsRoute_returnsSearchSettingsPage() throws {
+        let route = Route.SettingsSection.search
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? SearchSettingsTableViewController)
+    }
+
+    func testClearPrivateDataSettingsRoute_returnsClearPrivateDataSettingsPage() throws {
+        let route = Route.SettingsSection.clearPrivateData
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? ClearPrivateDataTableViewController)
+    }
+
+    func testFxaSettingsRoute_returnsFxaSettingsPage() throws {
+        let route = Route.SettingsSection.fxa
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? SyncContentSettingsViewController)
+    }
+
+    func testThemeSettingsRoute_returnsThemeSettingsPage() throws {
+        let route = Route.SettingsSection.theme
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? ThemeSettingsController)
+    }
+
+    func testWallpaperSettingsRoute_canShow_returnsWallpaperSettingsPage() throws {
+        wallpaperManager.canSettingsBeShown = true
+        let route = Route.SettingsSection.wallpaper
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNotNil(result as? WallpaperSettingsViewController)
+    }
+
+    func testWallpaperSettingsRoute_cannotShow_returnsWallpaperSettingsPage() throws {
+        wallpaperManager.canSettingsBeShown = false
+        let route = Route.SettingsSection.wallpaper
+        let subject = createSubject()
+
+        let result = subject.getSettingsViewController(settingsSection: route)
+
+        XCTAssertNil(result)
     }
 
     // MARK: - Helpers
@@ -379,7 +454,8 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          screenshotService: screenshotService,
                                          profile: profile,
                                          logger: logger,
-                                         glean: glean)
+                                         glean: glean,
+                                         wallpaperManager: wallpaperManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

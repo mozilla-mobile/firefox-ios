@@ -18,6 +18,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private var logger: Logger
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
+    private let wallpaperManager: WallpaperManagerInterface
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -25,7 +26,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         glean: GleanWrapper = DefaultGleanWrapper.shared) {
+         glean: GleanWrapper = DefaultGleanWrapper.shared,
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -33,6 +35,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
         self.glean = glean
+        self.wallpaperManager = wallpaperManager
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -198,12 +201,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         controller.modalPresentationStyle = .formSheet
         router.present(controller)
 
-        // todo laurie - test this how?
-        guard let viewController = getViewController(settingsSection: settingsSection) else { return }
+        guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
         controller.pushViewController(viewController, animated: true)
     }
 
-    private func getViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
+    func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
@@ -243,7 +245,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return ThemeSettingsController()
 
         case .wallpaper:
-            let wallpaperManager = WallpaperManager()
             if wallpaperManager.canSettingsBeShown {
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
