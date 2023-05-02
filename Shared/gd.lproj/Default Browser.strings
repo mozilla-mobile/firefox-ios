@@ -1,8 +1,26 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Cleachd Firefox mar am brabhsair bunaiteach agad airson taic a chumail ri eadar-lìon fosgailte agus so-ruigsinneach.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Cleachd mar bhun-roghainn airson eadar-lìon nas fheàrr";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Barrachd fiosrachaidh";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Suidhich ceanglaichean o làraichean-lìn, puist-d agus teachdaireachdan airson ’s gun tèid am fosgladh gu fèin-obrachail ann am Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Tagh Firefox mar am brabhsair bunaiteach agad airson luaths, sàbhailteachd is prìobhaideachd a ghnàth.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Brabhsadh làitheil nas fheàrr";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Bacaidh Firefox barrachd air 3,000 tracaice an cleachdaiche gach mìor sa chuibheas. Cleachd am fear againne mar am brabhsair bunaiteach agad is seachain draghan mu phrìobhaideachd.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Tha prìobhaideachd aig teas-meadhan Firefox";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Leum dhan bhrabhsair bhunaiteach agad";
