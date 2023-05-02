@@ -408,6 +408,20 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
     }
 
+    // MARK: - DidRequestToOpenInNewTab
+
+    func testDidRequestToOpenInNewTab_findsRoute() {
+        let expectedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.didRequestToOpenInNewTab(from: LaunchCoordinator(router: mockRouter), url: expectedURL, isPrivate: false)
+
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)
+        XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, expectedURL)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
