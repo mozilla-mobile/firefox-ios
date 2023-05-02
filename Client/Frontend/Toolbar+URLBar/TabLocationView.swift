@@ -22,7 +22,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-class TabLocationView: UIView, FeatureFlaggable {
+class TabLocationView: UIView {
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black
@@ -38,6 +38,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
@@ -142,6 +143,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.featureFlags = FeatureFlagsManager()
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))

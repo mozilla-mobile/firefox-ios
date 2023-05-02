@@ -25,7 +25,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 }
 
 /// This protocol provides access to search bar location properties related to `FeatureFlagsManager`.
-protocol SearchBarLocationProvider: FeatureFlaggable {
+protocol SearchBarLocationProvider {
     var isSearchBarLocationFeatureEnabled: Bool { get }
     var searchBarPosition: SearchBarPosition { get }
     var isBottomSearchBar: Bool { get }
@@ -34,13 +34,13 @@ protocol SearchBarLocationProvider: FeatureFlaggable {
 extension SearchBarLocationProvider {
     var isSearchBarLocationFeatureEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
+        let isFeatureEnabled = FeatureFlagsManager().isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
 
         return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
     }
 
     var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+        guard let position: SearchBarPosition = FeatureFlagsManager().getCustomState(for: .searchBarPosition) else {
             return .bottom
         }
 
@@ -54,15 +54,21 @@ extension SearchBarLocationProvider {
     }
 }
 
-final class SearchBarSettingsViewModel: FeatureFlaggable {
+final class SearchBarSettingsViewModel {
     var title: String = .Settings.Toolbar.Toolbar
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
     private let notificationCenter: NotificationCenter
-    init(prefs: Prefs, notificationCenter: NotificationCenter = NotificationCenter.default) {
+    private let featureFlags: FeatureFlagsManagementProtocol
+
+    init(prefs: Prefs,
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.prefs = prefs
         self.notificationCenter = notificationCenter
+        self.featureFlags = featureFlags
     }
 
     var searchBarTitle: String {

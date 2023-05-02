@@ -2904,7 +2904,7 @@ extension BrowserViewController: FeatureFlaggable {
 
         let alertTitleText: String = .ReopenLastTabAlertTitle
         let reopenButtonText: String = .ReopenLastTabButtonText
-        let cancelButtonText: String = .ReopenLastTabCancelText
+        let cancelButtonText: String = .ReopenLaetTabCancelText
 
         func reopenLastTab(_ action: UIAlertAction) {
             let request = URLRequest(url: lastClosedURL)

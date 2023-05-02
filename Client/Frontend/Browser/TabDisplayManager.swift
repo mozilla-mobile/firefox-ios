@@ -80,9 +80,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     private var hasSentInactiveTabShownEvent = false
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
-    private var nimbus: FxNimbus?
     var notificationCenter: NotificationProtocol
     var theme: Theme
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder = TabDisplayOrder()
@@ -191,8 +191,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
          tabDisplayType: TabDisplayType,
          profile: Profile,
          cfrDelegate: InactiveTabsCFRProtocol? = nil,
-         nimbus: FxNimbus = FxNimbus.shared,
-         theme: Theme
+         theme: Theme,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
@@ -202,9 +202,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.cfrDelegate = cfrDelegate
-        self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
         self.theme = theme
+        self.featureFlags = featureFlags
 
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])

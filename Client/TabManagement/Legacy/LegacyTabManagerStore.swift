@@ -29,7 +29,7 @@ extension LegacyTabManagerStore {
     }
 }
 
-class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggable {
+class LegacyTabManagerStoreImplementation: LegacyTabManagerStore {
     // MARK: - Variables
     private let logger: Logger
     private let tabsKey = "tabs"
@@ -40,6 +40,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     private let serialQueue: DispatchQueueInterface
     private var lockedForReading = false
     private var tabDataRetriever: LegacyTabDataRetriever
+    private let featureFlags: FeatureFlagsManagementProtocol
     static let storePath = "codableTabsState.archive"
 
     var isRestoringTabs: Bool {
@@ -56,13 +57,16 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
          imageStore: DiskImageStore?,
          fileManager: LegacyTabFileManager = FileManager.default,
          serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue"),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.prefs = prefs
         self.imageStore = imageStore
         self.fileManager = fileManager
         self.serialQueue = serialQueue
         self.logger = logger
         self.tabDataRetriever = LegacyTabDataRetrieverImplementation(fileManager: fileManager)
+        self.featureFlags = featureFlags
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
     }
 

@@ -14,7 +14,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanelViewModel: FeatureFlaggable {
+class HistoryPanelViewModel {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case today
@@ -46,6 +46,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     private let profile: Profile
     private var logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
@@ -86,9 +87,12 @@ class HistoryPanelViewModel: FeatureFlaggable {
     // MARK: - Inits
 
     init(profile: Profile,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.logger = logger
+        self.featureFlags = featureFlags
     }
 
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.

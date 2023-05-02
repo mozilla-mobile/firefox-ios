@@ -9,7 +9,7 @@ import SyncTelemetry
 import MozillaAppServices
 import Common
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable {
+class HomepageViewController: UIViewController, HomePanel, Themeable, ContentContainable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -37,6 +37,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
     var contentType: ContentType = .homepage
 
     var themeManager: ThemeManager
@@ -69,7 +70,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.overlayManager = overlayManager
         self.tabManager = tabManager
@@ -91,6 +93,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.featureFlags = featureFlags
         super.init(nibName: nil, bundle: nil)
 
         viewModel.isZeroSearch = isZeroSearch

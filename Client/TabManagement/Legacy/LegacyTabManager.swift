@@ -49,7 +49,7 @@ struct BackupCloseTab {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
+class LegacyTabManager: NSObject, TabManager {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     private let store: LegacyTabManagerStore
@@ -60,6 +60,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
     var backupCloseTab: BackupCloseTab?
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
@@ -133,12 +134,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
+        self.featureFlags = featureFlags
 
         self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
         super.init()

@@ -13,7 +13,7 @@ protocol HomepageDataModelDelegate: AnyObject {
     func reloadView()
 }
 
-class HomepageViewModel: FeatureFlaggable {
+class HomepageViewModel {
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 18
@@ -59,8 +59,6 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
-    let nimbus: FxNimbus
-    let profile: Profile
     var isZeroSearch: Bool {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
@@ -79,6 +77,8 @@ class HomepageViewModel: FeatureFlaggable {
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     var viewAppeared = false
 
+    let nimbus: FxNimbus
+    let profile: Profile
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager
@@ -105,7 +105,8 @@ class HomepageViewModel: FeatureFlaggable {
          nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager = WallpaperManager()) {
+         wallpaperManager: WallpaperManager = WallpaperManager()
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme

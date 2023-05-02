@@ -192,7 +192,7 @@ private class PaddedSwitch: UIView {
 
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
-class BoolSetting: Setting, FeatureFlaggable {
+class BoolSetting: Setting {
     let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
 
     fileprivate let prefs: Prefs?
@@ -200,6 +200,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
     fileprivate let featureFlagName: NimbusFeatureFlagID?
+    fileprivate let featureFlags: FeatureFlagsManagementProtocol
 
     init(
         prefs: Prefs?,
@@ -208,7 +209,8 @@ class BoolSetting: Setting, FeatureFlaggable {
         attributedTitleText: NSAttributedString,
         attributedStatusText: NSAttributedString? = nil,
         featureFlagName: NimbusFeatureFlagID? = nil,
-        settingDidChange: ((Bool) -> Void)? = nil
+        settingDidChange: ((Bool) -> Void)? = nil,
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.prefs = prefs
         self.prefKey = prefKey
@@ -216,6 +218,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         self.settingDidChange = settingDidChange
         self.statusText = attributedStatusText
         self.featureFlagName = featureFlagName
+        self.featureFlags = featureFlags
         super.init(title: attributedTitleText)
     }
 
@@ -253,7 +256,8 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool = false,
         featureFlagName: NimbusFeatureFlagID? = nil,
         enabled: Bool = true,
-        settingDidChange: @escaping (Bool) -> Void
+        settingDidChange: @escaping (Bool) -> Void,
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.statusText = description.map(NSAttributedString.init(string:))
         self.prefs = prefs

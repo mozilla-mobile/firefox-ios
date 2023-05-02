@@ -17,7 +17,7 @@ protocol JumpBackInDelegate: AnyObject {
     func didLoadNewData()
 }
 
-actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
+actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor {
     // MARK: Properties
 
     nonisolated let notificationCenter: NotificationProtocol
@@ -27,6 +27,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var recentGroups: [ASGroup<Tab>]?
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
     private var hasSyncAccount: Bool?
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     private let mainQueue: DispatchQueueInterface
 
@@ -36,10 +37,13 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     init(profile: Profile,
          tabManager: TabManager,
          mainQueue: DispatchQueueInterface = DispatchQueue.main,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         self.notificationCenter = notificationCenter
+        self.featureFlags = featureFlags
 
         self.mainQueue = mainQueue
 

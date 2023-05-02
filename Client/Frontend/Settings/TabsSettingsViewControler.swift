@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class TabsSettingsViewController: SettingsTableViewController {
     private let featureFlags: FeatureFlagsManagementProtocol
 
     init(featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()) {

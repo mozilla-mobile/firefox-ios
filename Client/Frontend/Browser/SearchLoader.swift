@@ -14,18 +14,24 @@ private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable {
+class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
     private let logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     private var skipNextAutocomplete: Bool
 
-    init(profile: Profile, urlBar: URLBarView, logger: Logger = DefaultLogger.shared) {
+    init(profile: Profile,
+         urlBar: URLBarView,
+         logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.urlBar = urlBar
         self.skipNextAutocomplete = false
         self.logger = logger
+        self.featureFlags = featureFlags
 
         super.init()
     }
