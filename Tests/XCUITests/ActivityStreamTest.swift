@@ -136,10 +136,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
-        if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(ClearPrivateDataSettings)
