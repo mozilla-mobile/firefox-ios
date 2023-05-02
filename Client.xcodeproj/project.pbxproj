@@ -716,6 +716,7 @@
 		963A879A29AFE89B006DEE34 /* SensitiveHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963A879929AFE89B006DEE34 /* SensitiveHostingController.swift */; };
 		964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FA97428A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift */; };
 		964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FA97628A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift */; };
+		9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9658143B29FAB610007339BD /* CreditCardInputFieldHelper.swift */; };
 		965C3C8F29313A1B006499ED /* AppSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965C3C8E29313A1B006499ED /* AppSessionManager.swift */; };
 		965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965C3C932933A860006499ED /* LaunchSessionProvider.swift */; };
 		965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */; };
@@ -733,6 +734,7 @@
 		96A562A327D7B32A0045144A /* Contile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A562A227D7B32A0045144A /* Contile.swift */; };
 		96A5F736298D8EDF00234E5F /* MockSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */; };
 		96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */; };
+		96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */; };
 		96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C11E9A2864C2DD00840E7C /* DependencyHelper.swift */; };
 		96CB5D6329B22EF50034AE0A /* SensitiveHostingControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB5D6229B22EF50034AE0A /* SensitiveHostingControllerTests.swift */; };
 		96D95016270238500079D39D /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* Throttler.swift */; };
@@ -4485,6 +4487,7 @@
 		963A879929AFE89B006DEE34 /* SensitiveHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveHostingController.swift; sourceTree = "<group>"; };
 		964FA97428A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintEligibilityUtility.swift; sourceTree = "<group>"; };
 		964FA97628A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintPrefsKeysProvider.swift; sourceTree = "<group>"; };
+		9658143B29FAB610007339BD /* CreditCardInputFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputFieldHelper.swift; sourceTree = "<group>"; };
 		965C3C8E29313A1B006499ED /* AppSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSessionManager.swift; sourceTree = "<group>"; };
 		965C3C932933A860006499ED /* LaunchSessionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchSessionProvider.swift; sourceTree = "<group>"; };
 		965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchSessionProvider.swift; sourceTree = "<group>"; };
@@ -4528,6 +4531,7 @@
 		96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchEngineProvider.swift; sourceTree = "<group>"; };
 		96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchEngineProvider.swift; sourceTree = "<group>"; };
 		96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralizedImageFetcher.swift; sourceTree = "<group>"; };
+		96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputFieldHelperTests.swift; sourceTree = "<group>"; };
 		96B14F71BAAD012EA8852135 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		96C11E9A2864C2DD00840E7C /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		96CB5D6229B22EF50034AE0A /* SensitiveHostingControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensitiveHostingControllerTests.swift; sourceTree = "<group>"; };
@@ -7186,6 +7190,7 @@
 				43B658D829CE251C00C9EF08 /* CreditCardInputViewModelTests.swift */,
 				967EDABC29D705300089208D /* CreditCardValidatorTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
+				96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */,
 			);
 			path = CreditCard;
 			sourceTree = "<group>";
@@ -7238,6 +7243,7 @@
 			isa = PBXGroup;
 			children = (
 				439C489B29760575007C3DCD /* CreditCardValidator.swift */,
+				9658143B29FAB610007339BD /* CreditCardInputFieldHelper.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -7955,7 +7961,6 @@
 		96441BD229DF7DA500FE041F /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				96441BD529DF823D00FE041F /* MockAppAuthenticator.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -11696,6 +11701,7 @@
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
+				9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */,
 				5AB0973529F7593B00FBDAFB /* TabStorageFlagManager.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
@@ -12258,6 +12264,7 @@
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
+				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,

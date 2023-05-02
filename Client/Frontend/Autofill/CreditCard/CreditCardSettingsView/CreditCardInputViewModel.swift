@@ -278,4 +278,15 @@ class CreditCardInputViewModel: ObservableObject {
 
         return plainCreditCard
     }
+
+    func getCopyValueFor(_ inputType: CreditCardInputType) -> String {
+        switch inputType {
+        case .name:
+            return nameOnCard
+        case .number:
+            return cardNumber
+        case .expiration:
+            return expirationDate.removingOccurrences(of: " / ")
+        }
+    }
 }

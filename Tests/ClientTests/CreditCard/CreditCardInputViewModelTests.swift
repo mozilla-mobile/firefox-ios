@@ -136,6 +136,63 @@ class CreditCardInputViewModelTests: XCTestCase {
         rightBarButtonDisabled_Empty_CardName_Expiration_Number(state: .edit)
     }
 
+    func testGetCopyValueForNumber() {
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "12 / 39"
+        viewModel.cardNumber = "4717219604213696"
+
+        let result = viewModel.getCopyValueFor(.number)
+        XCTAssertEqual(result, "4717219604213696")
+    }
+
+    func testGetCopyValueForName() {
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "12 / 39"
+        viewModel.cardNumber = "4717219604213696"
+
+        let result = viewModel.getCopyValueFor(.name)
+        XCTAssertEqual(result, "Jakyla Labarge")
+    }
+
+    func testGetCopyValueForExpiration() {
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "12 / 39"
+        viewModel.cardNumber = "4717219604213696"
+
+        let result = viewModel.getCopyValueFor(.expiration)
+        XCTAssertEqual(result, "1239")
+    }
+
+    func testClearValues() {
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "12 / 39"
+        viewModel.cardNumber = "4717219604213696"
+        viewModel.nameIsValid = false
+        viewModel.expirationIsValid = false
+        viewModel.numberIsValid = false
+        viewModel.creditCard = CreditCard(guid: "1",
+                                          ccName: "Allen Burges",
+                                          ccNumberEnc: "1234567891234567",
+                                          ccNumberLast4: "4567",
+                                          ccExpMonth: 1234567,
+                                          ccExpYear: 2023,
+                                          ccType: "VISA",
+                                          timeCreated: 1234678,
+                                          timeLastUsed: nil,
+                                          timeLastModified: 123123,
+                                          timesUsed: 123123)
+
+        viewModel.clearValues()
+
+        XCTAssert(viewModel.nameOnCard.isEmpty)
+        XCTAssert(viewModel.cardNumber.isEmpty)
+        XCTAssert(viewModel.expirationDate.isEmpty)
+        XCTAssert(viewModel.nameIsValid)
+        XCTAssert(viewModel.expirationIsValid)
+        XCTAssert(viewModel.numberIsValid)
+        XCTAssertNil(viewModel.creditCard)
+    }
+
     // MARK: Helpers
 
     func rightBarButtonDisabled_Empty_CardName(
