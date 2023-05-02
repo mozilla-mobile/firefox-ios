@@ -96,32 +96,40 @@ class TabManagerTests: XCTestCase {
 
     func testSaveScreenshotWithNoImage() async throws {
         addTabs(count: 5)
-        if let tab = subject.tabs.first {
-            subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-            try await Task.sleep(nanoseconds: sleepTime)
-            XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
         }
+
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
     }
 
     func testSaveScreenshotWithImage() async throws {
         addTabs(count: 5)
-        if let tab = subject.tabs.first {
-            tab.setScreenshot(UIImage())
-            subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-            try await Task.sleep(nanoseconds: sleepTime)
-            XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
         }
+        tab.setScreenshot(UIImage())
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
     }
 
     func testRemoveScreenshotWithImage() async throws {
         addTabs(count: 5)
-        if let tab = subject.tabs.first {
-            tab.setScreenshot(UIImage())
-            subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-            try await Task.sleep(nanoseconds: sleepTime)
-            subject.removeScreenshot(tab: tab)
-            XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
         }
+
+        tab.setScreenshot(UIImage())
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        subject.removeScreenshot(tab: tab)
+        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
     // MARK: - Helper methods
