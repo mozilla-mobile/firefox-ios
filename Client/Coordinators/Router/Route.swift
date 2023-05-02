@@ -88,7 +88,6 @@ enum Route: Equatable {
     /// An enumeration representing different actions that can be performed within the application.
     enum AppAction: String, CaseIterable, Equatable {
         case closePrivateTabs = "close-private-tabs"
-        case presentDefaultBrowserOnboarding
         case showQRCode
     }
 
