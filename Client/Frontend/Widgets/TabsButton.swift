@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import Shared
+import Common
 
 class TabsButton: UIButton {
     struct UX {
@@ -204,13 +205,9 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: NotificationThemeable {
-    func applyTheme() {
-        borderView.tintColor = UIColor.legacyTheme.browser.tint
-        if inTopTabs {
-            textColor = UIColor.legacyTheme.topTabs.buttonTint
-        } else {
-            textColor = UIColor.legacyTheme.browser.tint
-        }
+extension TabsButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        borderView.tintColor = theme.colors.textPrimary
+        textColor = theme.colors.textPrimary
     }
 }

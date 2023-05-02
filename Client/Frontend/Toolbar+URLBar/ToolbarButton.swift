@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class ToolbarButton: UIButton {
     // MARK: - Variables
@@ -55,12 +56,20 @@ class ToolbarButton: UIButton {
 
 // MARK: - Theme protocols
 
-extension ToolbarButton: NotificationThemeable {
-    func applyTheme() {
-        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
-        disabledTintColor = UIColor.legacyTheme.toolbarButton.disabledTint
-        unselectedTintColor = UIColor.legacyTheme.browser.tint
+extension ToolbarButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        selectedTintColor = theme.colors.actionPrimary
+        disabledTintColor = theme.colors.actionSecondary
+        unselectedTintColor = theme.colors.iconPrimary
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
+
+//    func applyTheme() {
+//        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
+//        disabledTintColor = UIColor.legacyTheme.toolbarButton.disabledTint
+//        unselectedTintColor = UIColor.legacyTheme.browser.tint
+//        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+//        imageView?.tintColor = tintColor
+//    }
 }
