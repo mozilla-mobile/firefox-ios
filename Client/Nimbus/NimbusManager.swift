@@ -4,14 +4,6 @@
 
 import Foundation
 
-protocol HasNimbusFeatureFlags { }
-
-extension HasNimbusFeatureFlags {
-    var nimbusFlags: NimbusFeatureFlagLayer {
-        return NimbusManager.shared.featureFlagLayer
-    }
-}
-
 protocol HasNimbusSearchBar { }
 
 extension HasNimbusSearchBar {
@@ -36,15 +28,12 @@ class NimbusManager {
     static let shared = NimbusManager()
 
     // MARK: - Properties
-    var featureFlagLayer: NimbusFeatureFlagLayer
     var sponsoredTileLayer: NimbusSponsoredTileLayer
     var bottomSearchBarLayer: NimbusSearchBarLayer
 
-    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
+    init(sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
          bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
     ) {
-        self.featureFlagLayer = featureFlagLayer
         self.sponsoredTileLayer = sponsoredTileLayer
         self.bottomSearchBarLayer = bottomSearchBarLayer
     }

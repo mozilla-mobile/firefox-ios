@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Common
 
 // MARK: - Protocol
 protocol FeatureFlaggable { }
@@ -26,7 +27,13 @@ enum FlaggableFeatureCheckOptions {
     case userOnly
 }
 
-class FeatureFlagsManager: HasNimbusFeatureFlags {
+protocol FeatureFlagsManagementProtocol {
+    func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
+                                 checking channelsToCheck: FlaggableFeatureCheckOptions) -> Bool
+    func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T?
+}
+
+class FeatureFlagsManager: FeatureFlagsManagementProtocol {
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
@@ -34,8 +41,17 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     static let shared = FeatureFlagsManager()
 
     // MARK: - Variables
-    private var profile: Profile!
+    private var profile: Profile
+    private var nimbusLayer: NimbusFeatureFlagLayer
     private var coreFeatures: [CoreFeatureFlagID: CoreFlaggableFeature] = [:]
+
+    init(with profile: Profile = AppContainer.shared.resolve(),
+         and nimbusLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()
+    ) {
+        self.profile = profile
+        self.nimbusLayer = nimbusLayer
+        initializeDeveloperFeatures(with: profile)
+    }
 
     // MARK: - Public methods
     /// Used to find out whether a core feature is active or not.
@@ -52,8 +68,8 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     ) -> Bool {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
 
-        let nimbusSetting = feature.isNimbusEnabled(using: nimbusFlags)
-        let userSetting = feature.isUserEnabled(using: nimbusFlags)
+        let nimbusSetting = feature.isNimbusEnabled(using: nimbusLayer)
+        let userSetting = feature.isUserEnabled(using: nimbusLayer)
 
         switch channelsToCheck {
         case .buildOnly:
@@ -71,7 +87,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
-        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
+        guard let userSetting = feature.getUserPreference(using: nimbusLayer) else { return nil }
 
         switch featureID {
         case .onboardingNotificationCard: return OnboardingNotificationCardPosition(rawValue: userSetting) as? T
@@ -131,10 +147,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     /// This should ONLY be called when instantiating the feature flag system,
     /// and never again.
     public func initializeDeveloperFeatures(with profile: Profile) {
-        self.profile = profile
-
-        coreFeatures.removeAll()
-
         let adjustEnvironmentProd = CoreFlaggableFeature(withID: .adjustEnvironmentProd,
                                                          enabledFor: [.release, .beta])
         coreFeatures[.adjustEnvironmentProd] = adjustEnvironmentProd
