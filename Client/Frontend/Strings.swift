@@ -858,7 +858,7 @@ extension String {
             value: "Get Started",
             comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
         public static let IntroSecondaryAction = MZLocalizedString(
-            "Onboarding.IntroSecondaryAction.v102",
+            key: "Onboarding.IntroSecondaryAction.v102",
             tableName: nil,
             value: "Skip",
             comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip the onboarding.")
@@ -902,7 +902,7 @@ extension String {
             tableName: nil,
             value: "Firefox puts people over profits and defends your privacy as you browse. ",
             comment: "String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens.")
-        public static let IntroLinkButtonTitle = MZLocalizedString("Onboarding.Welcome.Link.Action.v106", tableName: nil, value: "Learn more in our privacy notice", comment: "String used to describe the title of link button is on the welcome onboarding page for 106 version in our Onboarding screens.")
+        public static let IntroLinkButtonTitle = MZLocalizedString(key: "Onboarding.Welcome.Link.Action.v106", tableName: nil, value: "Learn more in our privacy notice", comment: "String used to describe the title of link button is on the welcome onboarding page for 106 version in our Onboarding screens.")
         public static let IntroSyncTitle = MZLocalizedString(
             key: "Onboarding.Sync.Title.v106",
             tableName: nil,
