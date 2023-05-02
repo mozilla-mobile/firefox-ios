@@ -65,7 +65,7 @@ class CreditCardInputFieldHelperTests: XCTestCase {
     func testFormatExpiration() {
         let helper = CreditCardInputFieldHelper(inputType: .expiration)
 
-        let result = helper.separate(.expiration, using: " / ", for: "1223", with: 7)
+        let result = helper.formatExpiration(for: "1223")
         XCTAssertEqual(result, "12 / 23")
     }
 

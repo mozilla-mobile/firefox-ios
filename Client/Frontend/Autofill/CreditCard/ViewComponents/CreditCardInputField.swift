@@ -237,11 +237,7 @@ struct CreditCardInputField: View {
 
             viewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
 
-            guard let formattedText = inputFieldHelper.separate(inputType,
-                                                                using: delimiterCharacter,
-                                                                for: newSanitizedValue.removingOccurrences(of: " / "),
-                                                                with: formattedTextLimit)
-            else { return }
+            let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
 
             text = formattedText
         }

@@ -34,21 +34,12 @@ class CreditCardInputFieldHelper {
         return numbersCount
     }
 
-    func separate(_ inputType: CreditCardInputType,
-                  using delimiter: String?,
-                  for textInput: String,
-                  with formattedTextLimit: Int) -> String? {
-        guard let delimiterCharacter = delimiter, textInput.count <= formattedTextLimit else { return nil }
-
-        var formattedText = ""
-        switch inputType {
-        case .expiration:
-            formattedText = textInput.enumerated().map {
-                $0.isMultiple(of: 2) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1)
-            }.joined()
-
-        default: break
-        }
+    func formatExpiration(using delimiter: String = " / ",
+                          for textInput: String,
+                          with formattedTextLimit: Int = 7) -> String {
+        let formattedText = textInput.enumerated().map {
+            $0.isMultiple(of: 2) && ($0 != 0) ? "\(delimiter)\($1)" : String($1)
+        }.joined()
 
         return formattedText
     }
