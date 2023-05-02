@@ -98,7 +98,7 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
         finally:
             log.info("Retrieving bitrise log...")
             await download_log(client, build_slug, artifacts_directory)
-            await print_bitrise_perfherder_data(os.path.join(artifacts_directory, "bitrise.log"))
+            await log_bitrise_perfherder_data(os.path.join(artifacts_directory, "bitrise.log"))
 
 
 async def schedule_build(client, branch, commit, workflow, locales=None, derived_data_path=None):
@@ -227,11 +227,11 @@ async def do_http_request_json(client, url, method="get", **kwargs):
     return response
 
 
-async def print_bitrise_perfherder_data(file_destination):
+async def log_bitrise_perfherder_data(file_destination):
     with open(file_destination, 'r') as f:
         for line in f:
             if line.startswith('PERFHERDER_DATA'):
-                print(line, end='')
+                log.info(line)
 
 
 __name__ == "__main__" and sync_main()
