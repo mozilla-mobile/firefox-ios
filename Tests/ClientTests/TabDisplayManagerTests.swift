@@ -18,6 +18,7 @@ class TabDisplayManagerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: TabManager!
     var cfrDelegate: MockInactiveTabsCFRDelegate!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
@@ -28,7 +29,7 @@ class TabDisplayManagerTests: XCTestCase {
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cfrDelegate = MockInactiveTabsCFRDelegate()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         UserDefaults().setValue(true, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)
     }
 
@@ -42,6 +43,7 @@ class TabDisplayManagerTests: XCTestCase {
         manager = nil
         collectionView = nil
         cfrDelegate = nil
+        featureFlags = nil
 
         dataStore.removeAll()
         mockDataStore.removeAll()
@@ -446,7 +448,8 @@ extension TabDisplayManagerTests {
                                                   tabDisplayType: .TopTabTray,
                                                   profile: profile,
                                                   cfrDelegate: cfrDelegate,
-                                                  theme: LightTheme())
+                                                  theme: LightTheme(),
+                                                  featureFlags: featureFlags)
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
         return tabDisplayManager

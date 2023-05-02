@@ -8,10 +8,11 @@ import Shared
 import Storage
 import XCTest
 
-class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
+class TopSitesDataAdaptorTests: XCTestCase {
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: SpyNotificationCenter!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
@@ -19,8 +20,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         notificationCenter = SpyNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
-
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
 
         profile.prefs.clearAll()
     }
@@ -33,6 +33,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
+        featureFlags = nil
     }
 
     func testData_whenNotLoaded() {

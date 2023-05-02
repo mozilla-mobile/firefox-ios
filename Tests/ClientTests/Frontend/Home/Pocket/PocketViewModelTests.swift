@@ -8,16 +8,16 @@ import XCTest
 
 @testable import Client
 
-final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
+final class PocketViewModelTests: XCTestCase {
     private var adaptor: MockPocketDataAdaptor!
     private var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         adaptor = MockPocketDataAdaptor()
         profile = MockProfile()
-
-        featureFlags.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         Glean.shared.resetGlean(clearStores: true)
     }
 
@@ -25,6 +25,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         super.tearDown()
         adaptor = nil
         profile = nil
+        featureFlags = nil
     }
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {

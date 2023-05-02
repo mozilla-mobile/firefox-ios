@@ -8,16 +8,19 @@ import XCTest
 
 @testable import Client
 
-class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
+class FeatureFlagManagerTests: XCTestCase {
+    private var featureFlags: FeatureFlagsManagementProtocol!
+
     // MARK: - Test Lifecycle
     override func setUp() {
         super.setUp()
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        self.featureFlags = FeatureFlagsManager(with: mockProfile)
     }
 
     override func tearDown() {
+        featureFlags = nil
         super.tearDown()
     }
 
@@ -80,7 +83,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testManagerRespectsProfileChangesForBoolSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        featureFlags = FeatureFlagsManager(with: mockProfile)
 
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
@@ -96,7 +99,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testManagerRespectsProfileChangesForCustomSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        featureFlags = FeatureFlagsManager(with: mockProfile)
 
         // Search Bar position
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)

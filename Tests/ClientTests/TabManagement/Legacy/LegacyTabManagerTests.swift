@@ -105,6 +105,7 @@ class LegacyTabManagerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: LegacyTabManager!
     var delegate: MockTabManagerDelegate!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
@@ -112,7 +113,7 @@ class LegacyTabManagerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
@@ -122,6 +123,7 @@ class LegacyTabManagerTests: XCTestCase {
         manager.removeDelegate(delegate) {
             self.manager.testRemoveAll()
         }
+        featureFlags = nil
 
         super.tearDown()
     }

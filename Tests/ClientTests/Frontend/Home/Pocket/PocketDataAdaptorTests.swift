@@ -8,10 +8,11 @@ import XCTest
 class PocketDataAdaptorTests: XCTestCase {
     var mockNotificationCenter: MockNotificationCenter!
     var mockPocketAPI: MockPocketAPI!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        featureFlags = FeatureFlagsManager(with: MockProfile())
         mockNotificationCenter = MockNotificationCenter()
     }
 
@@ -19,6 +20,7 @@ class PocketDataAdaptorTests: XCTestCase {
         super.tearDown()
         mockNotificationCenter = nil
         mockPocketAPI = nil
+        featureFlags = nil
     }
 
     func testEmptyData() {

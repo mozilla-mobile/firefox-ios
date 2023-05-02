@@ -9,17 +9,19 @@ import Common
 
 final class SceneCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        featureFlags = FeatureFlagsManager(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
         super.tearDown()
         mockRouter = nil
+        featureFlags = nil
         AppContainer.shared.reset()
     }
 

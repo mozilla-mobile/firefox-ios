@@ -10,6 +10,7 @@ class StartAtHomeHelperTests: XCTestCase {
     var helper: StartAtHomeHelper!
     private var profile: MockProfile!
     private var tabManager: TabManager!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
@@ -17,8 +18,7 @@ class StartAtHomeHelperTests: XCTestCase {
         profile = MockProfile(databasePrefix: "startAtHomeHelper_tests")
         profile.reopen()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
@@ -28,6 +28,7 @@ class StartAtHomeHelperTests: XCTestCase {
         profile = nil
         tabManager = nil
         helper = nil
+        featureFlags = nil
     }
 
     func testShouldNotSkipStartAtHome() throws {
@@ -123,7 +124,8 @@ class StartAtHomeHelperTests: XCTestCase {
         helper = StartAtHomeHelper(
             appSessionManager: appSessionManager,
             isRestoringTabs: isRestoringTabs,
-            isRunningUITest: false
+            isRunningUITest: false,
+            featureFlags: featureFlags
         )
 
         helper.startAtHomeSetting = .afterFourHours

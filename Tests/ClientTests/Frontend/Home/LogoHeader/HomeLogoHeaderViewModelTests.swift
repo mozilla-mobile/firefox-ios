@@ -6,13 +6,14 @@ import XCTest
 import Shared
 @testable import Client
 
-class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
+class HomeLogoHeaderViewModelTests: XCTestCase {
     private var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         profile = MockProfile()
-        featureFlags.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
@@ -31,7 +32,9 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
 
 extension HomeLogoHeaderViewModelTests {
     func createSubject(file: StaticString = #file, line: UInt = #line) -> HomeLogoHeaderViewModel {
-        let subject = HomeLogoHeaderViewModel(profile: profile, theme: LightTheme())
+        let subject = HomeLogoHeaderViewModel(profile: profile,
+                                              theme: LightTheme(),
+                                              featureFlags: featureFlags)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

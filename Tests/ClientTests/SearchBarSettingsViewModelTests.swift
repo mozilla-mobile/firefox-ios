@@ -10,11 +10,12 @@ import Shared
 
 class SearchBarSettingsViewModelTests: XCTestCase {
     var prefs: Prefs!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         let profile = MockProfile(databasePrefix: "SearchBarSettingsTests")
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         prefs = profile.prefs
         prefs.clearAll()
     }
@@ -23,6 +24,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         super.tearDown()
         prefs.clearAll()
         prefs = nil
+        featureFlags = nil
     }
 
     // MARK: Default

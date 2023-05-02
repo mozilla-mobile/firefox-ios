@@ -11,15 +11,16 @@ import Common
 class HistoryPanelViewModelTests: XCTestCase {
     var subject: HistoryPanelViewModel!
     var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         profile.reopen()
-        subject = HistoryPanelViewModel(profile: profile)
+        subject = HistoryPanelViewModel(profile: profile, featureFlags: featureFlags)
     }
 
     override func tearDown() {
@@ -30,6 +31,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         profile.shutdown()
         profile = nil
         subject = nil
+        featureFlags = nil
     }
 
     func testHistorySectionTitle() {

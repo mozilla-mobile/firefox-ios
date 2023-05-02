@@ -11,13 +11,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var profile: MockProfile!
     private var delegate: MockLaunchFinishedLoadingDelegate!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         delegate = MockLaunchFinishedLoadingDelegate()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
@@ -29,6 +30,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         profile = nil
         messageManager = nil
         delegate = nil
+        featureFlags = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }

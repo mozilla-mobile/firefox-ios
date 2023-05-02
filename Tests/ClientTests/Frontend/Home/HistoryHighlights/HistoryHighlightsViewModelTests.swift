@@ -13,12 +13,13 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
     private var delegate: MockHomepageDataModelDelegate!
     private var telemetry: MockTelemetryWrapper!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         dataAdaptor = MockHistoryHighlightsDataAdaptor()
         delegate = MockHomepageDataModelDelegate()
         telemetry = MockTelemetryWrapper()
@@ -29,6 +30,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
         profile = nil
         dataAdaptor = nil
+        featureFlags = nil
         subject = nil
         delegate = nil
         telemetry = nil
@@ -233,7 +235,8 @@ class HistoryHighlightsViewModelTests: XCTestCase {
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),
             telemetry: telemetry,
-            wallpaperManager: WallpaperManager())
+            wallpaperManager: WallpaperManager(),
+            featureFlags: featureFlags)
         subject.delegate = delegate
     }
 

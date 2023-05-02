@@ -13,6 +13,7 @@ import Common
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     var stubBrowserViewController: BrowserViewController!
     var adaptor: JumpBackInDataAdaptorMock!
@@ -30,8 +31,7 @@ class JumpBackInViewModelTests: XCTestCase {
             profile: mockProfile,
             tabManager: LegacyTabManager(profile: mockProfile, imageStore: nil)
         )
-
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        featureFlags = FeatureFlagsManager(with: mockProfile)
     }
 
     override func tearDown() {
@@ -41,6 +41,7 @@ class JumpBackInViewModelTests: XCTestCase {
         stubBrowserViewController = nil
         mockTabManager = nil
         mockProfile = nil
+        featureFlags = nil
     }
 
     // MARK: - Switch to group
@@ -659,7 +660,8 @@ extension JumpBackInViewModelTests {
             theme: LightTheme(),
             tabManager: mockTabManager,
             adaptor: adaptor,
-            wallpaperManager: WallpaperManager()
+            wallpaperManager: WallpaperManager(),
+            featureFlags: featureFlags
         )
 
         trackForMemoryLeaks(subject)

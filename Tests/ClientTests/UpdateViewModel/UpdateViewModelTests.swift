@@ -10,19 +10,21 @@ import Shared
 class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
     var viewModel: UpdateViewModel!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
-        viewModel = UpdateViewModel(profile: profile)
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
+        viewModel = UpdateViewModel(profile: profile, featureFlags: featureFlags)
     }
 
     override func tearDown() {
         super.tearDown()
         profile.shutdown()
         profile = nil
+        featureFlags = nil
         viewModel = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)

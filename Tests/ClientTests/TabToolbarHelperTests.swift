@@ -78,6 +78,7 @@ class MockToolbarButton: ToolbarButton {
 class MockTabToolbar: TabToolbarProtocol {
     var profile: MockProfile!
     var tabManager: TabManager!
+    var featureFlags: FeatureFlagsManagementProtocol!
 
     var _tabToolBarDelegate: TabToolbarDelegate?
     var tabToolbarDelegate: TabToolbarDelegate? {
@@ -118,7 +119,7 @@ class MockTabToolbar: TabToolbarProtocol {
     init() {
         profile = MockProfile()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
     }
 

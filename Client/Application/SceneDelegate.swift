@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// This is a temporary work around until we have the architecture to properly replace the use cases where this code is used
     /// Do not use in new code under any circumstances
     var coordinatorBrowserViewController: BrowserViewController {
-        if CoordinatorFlagManager.isCoordinatorEnabled,
+        if flagManager.isCoordinatorEnabled,
            let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
             return browserCoordinator.browserViewController
         } else {
@@ -36,11 +36,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
+    private var flagManager: CoordinatorFlagManager
+
     var sceneCoordinator: SceneCoordinator?
 
     var routeBuilder = RouteBuilder(isPrivate: {
         UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
     })
+
+    override init() {
+        self.flagManager = CoordinatorFlagManager(featureFlags: FeatureFlagsManager(with: profile))
+        super.init()
+    }
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -55,7 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled {
+        if flagManager.isCoordinatorEnabled {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
@@ -121,7 +128,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
+        if flagManager.isCoordinatorEnabled {
             guard let url = URLContexts.first?.url,
                   let route = routeBuilder.makeRoute(url: url) else { return }
             sceneCoordinator?.find(route: route)
@@ -152,7 +159,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
+        if flagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
             sceneCoordinator?.find(route: route)
         } else {
@@ -190,7 +197,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
+        if flagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
             sceneCoordinator?.find(route: route)
         } else {

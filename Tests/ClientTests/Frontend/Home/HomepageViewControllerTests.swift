@@ -9,18 +9,20 @@ import Common
 
 class HomepageViewControllerTests: XCTestCase {
     var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
         profile = nil
+        featureFlags = nil
     }
 
     func testHomepageViewController_creationFromBVC_nilByDefault() {
@@ -53,11 +55,12 @@ class HomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        let featureFlags = FeatureFlagsManager(with: profile)
 
         let firefoxHomeViewController = HomepageViewController(profile: profile,
                                                                tabManager: tabManager,
-                                                               overlayManager: overlayManager)
+                                                               overlayManager: overlayManager,
+                                                               featureFlags: featureFlags)
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }

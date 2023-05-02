@@ -21,7 +21,6 @@ final class TabScrollControllerTests: XCTestCase {
         self.mockProfile = MockProfile()
         self.subject = TabScrollingController()
         self.tab = Tab(profile: mockProfile, configuration: WKWebViewConfiguration())
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         mockGesture = UIPanGestureRecognizerMock()
     }
 

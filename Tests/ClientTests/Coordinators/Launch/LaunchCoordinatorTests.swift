@@ -10,12 +10,13 @@ final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
     private var delegate: MockLaunchCoordinatorDelegate!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         delegate = MockLaunchCoordinatorDelegate()
     }
@@ -25,6 +26,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         profile = nil
         mockRouter = nil
         delegate = nil
+        featureFlags = nil
         AppContainer.shared.reset()
     }
 

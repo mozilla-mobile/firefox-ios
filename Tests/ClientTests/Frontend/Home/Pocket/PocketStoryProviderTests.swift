@@ -6,17 +6,19 @@ import XCTest
 import Shared
 @testable import Client
 
-class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
+class PocketStoryProviderTests: XCTestCase {
     var subject: StoryProvider!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        featureFlags = FeatureFlagsManager(with: MockProfile())
     }
 
     override func tearDown() {
         super.tearDown()
         subject = nil
+        featureFlags = nil
     }
 
     func testIfSponsoredAreDisabled_FetchingStories_ReturnsTheNonSponsoredList() async {
@@ -228,7 +230,8 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
             pocketAPI: MockPocketAPI(result: .success(stories)),
             pocketSponsoredAPI: MockSponsoredPocketAPI(result: .failure(TestError.default)),
             numberOfPocketStories: 3,
-            sponsoredIndices: [0, 1]
+            sponsoredIndices: [0, 1],
+            featureFlags: featureFlags
         )
 
         let expected: [PocketStory] = [

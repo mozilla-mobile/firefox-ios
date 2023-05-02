@@ -9,20 +9,22 @@ import XCTest
 
 final class ContentContainerTests: XCTestCase {
     private var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
     private var overlayModeManager: MockOverlayModeManager!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
+        self.featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
         super.tearDown()
         self.profile = nil
         self.overlayModeManager = nil
+        self.featureFlags = nil
         AppContainer.shared.reset()
     }
 

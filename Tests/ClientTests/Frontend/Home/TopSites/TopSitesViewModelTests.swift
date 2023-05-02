@@ -11,12 +11,12 @@ import SyncTelemetry
 
 class TopSitesViewModelTests: XCTestCase {
     var profile: MockProfile!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
-
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {

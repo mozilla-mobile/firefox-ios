@@ -10,6 +10,7 @@ class LibraryViewModelTests: XCTestCase {
     private var subject: LibraryViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
@@ -18,7 +19,7 @@ class LibraryViewModelTests: XCTestCase {
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile.reopen()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags = FeatureFlagsManager(with: profile)
     }
 
     override func tearDown() {
@@ -27,6 +28,7 @@ class LibraryViewModelTests: XCTestCase {
         profile.shutdown()
         profile = nil
         tabManager = nil
+        featureFlags = nil
     }
 
     func testInitialState_Init() {

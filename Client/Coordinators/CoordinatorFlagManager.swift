@@ -8,8 +8,9 @@ import Shared
 /// This is a temporary struct made to manage the feature flag for conveniance
 /// This will be removed with FXIOS-6036
 struct CoordinatorFlagManager {
-    static var isCoordinatorEnabled: Bool {
-        return FeatureFlagsManager().isFeatureEnabled(.coordinatorsRefactor,
-                                                      checking: .buildOnly)
+    let featureFlags: FeatureFlagsManagementProtocol
+
+    var isCoordinatorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.coordinatorsRefactor, checking: .buildOnly)
     }
 }

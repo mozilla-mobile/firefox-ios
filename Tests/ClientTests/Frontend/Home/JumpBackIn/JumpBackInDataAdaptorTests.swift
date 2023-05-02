@@ -16,23 +16,24 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
     let webViewConfig = WKWebViewConfiguration()
+    private var featureFlags: FeatureFlagsManagementProtocol!
 
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
-
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        featureFlags = FeatureFlagsManager(with: mockProfile)
     }
 
     override func tearDown() {
         super.tearDown()
         mockProfile = nil
         mockTabManager = nil
+        featureFlags = nil
     }
 
     func testEmptyData_tabTrayGroupsDisabled() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -43,7 +44,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabs() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -58,7 +59,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabsAndSyncedData() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
@@ -77,7 +78,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_whenNoSyncTabsData_notReturned() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -86,11 +87,11 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_whenNoSyncAccount_notReturned() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -99,7 +100,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_noDesktopClients_notReturned() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
         let subject = createSubject()
@@ -110,7 +111,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_oneDesktopClient_returned() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let remoteClient = remoteDesktopClient()
         let remoteTabs = remoteTabs(idRange: 1...3)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
@@ -125,7 +126,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_multipleDesktopClients_returnsLast() async {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
+        featureFlags.set(feature: .tabTrayGroups, to: false)
         let remoteClient = remoteDesktopClient(name: "Fake Client 2")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
@@ -150,7 +151,8 @@ extension JumpBackInDataAdaptorTests {
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
                                                           tabManager: mockTabManager,
                                                           mainQueue: dispatchQueue,
-                                                          notificationCenter: notificationCenter)
+                                                          notificationCenter: notificationCenter,
+                                                          featureFlags: featureFlags)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         trackForMemoryLeaks(dispatchQueue, file: file, line: line)

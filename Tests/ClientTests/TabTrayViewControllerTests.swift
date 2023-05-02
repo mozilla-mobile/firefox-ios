@@ -33,7 +33,6 @@ class TabTrayViewControllerTests: XCTestCase {
                                         tabManager: manager,
                                         overlayManager: overlayManager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
