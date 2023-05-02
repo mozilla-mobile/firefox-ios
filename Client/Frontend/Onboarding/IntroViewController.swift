@@ -22,7 +22,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         static let closeHorizontalMargin: CGFloat = 24
         static let closeVerticalMargin: CGFloat = 20
         static let pageControlHeight: CGFloat = 40
-        static let pageControlBottomPadding: CGFloat = 8
     }
 
     // MARK: - Var related to onboarding
@@ -99,8 +98,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                constant: -UX.pageControlBottomPadding),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,

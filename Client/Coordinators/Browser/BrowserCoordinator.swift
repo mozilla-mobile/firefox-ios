@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Glean
 import Shared
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
@@ -18,25 +17,28 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
+    private let glean: GleanWrapper
 
     init(router: Router,
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         glean: GleanWrapper = DefaultGleanWrapper.shared) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
+        self.glean = glean
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
 
     func start(with launchType: LaunchType?) {
-        router.setRootViewController(browserViewController, hideBar: true)
+        router.push(browserViewController, animated: false)
 
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)
@@ -60,7 +62,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6030: Handle open in new tab route
+        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
     }
 
     // MARK: - BrowserDelegate
@@ -110,6 +112,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         screenshotService.screenshotableView = webviewController
     }
 
+    // MARK: - Route handling
+
     override func handle(route: Route) -> Bool {
         switch route {
         case let .searchQuery(query):
@@ -124,9 +128,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             handle(searchURL: url, tabId: tabId)
             return true
 
-        case .glean:
-            // FXIOS-6018 #13662 - Enable Glean path in BrowserCoordinator
-            return false
+        case let .glean(url):
+            glean.handleDeeplinkUrl(url: url)
+            return true
 
         case let .homepanel(section):
             handle(homepanelSection: section)
@@ -150,29 +154,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
-    private func handle(query: String) {
-        browserViewController.handle(query: query)
-    }
-
-    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        if let url = url {
-            if options?.contains(.switchToNormalMode) == true {
-                browserViewController.switchToPrivacyMode(isPrivate: false)
-            }
-            browserViewController.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
-        }
-    }
-
-    private func handle(searchURL: URL?, tabId: String) {
-        if let url = searchURL {
-            browserViewController.switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: false)
-        } else {
-            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: false)
-        }
-    }
-
     private func handle(homepanelSection section: Route.HomepanelSection) {
         switch section {
         case .bookmarks:
@@ -192,6 +173,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
+    private func handle(query: String) {
+        browserViewController.handle(query: query)
+    }
+
+    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
+    }
+
+    private func handle(searchURL: URL?, tabId: String) {
+        browserViewController.handle(url: searchURL, tabId: tabId)
+    }
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
     }

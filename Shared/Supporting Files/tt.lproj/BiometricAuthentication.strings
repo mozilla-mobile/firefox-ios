@@ -1,0 +1,3 @@
+/* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen. */
+"Biometry.Screen.UniversalAuthenticationReason.v113" = "Җиһазыгызның серсүзен кертегез";
+

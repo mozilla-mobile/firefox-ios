@@ -331,13 +331,6 @@ class BookmarksPanel: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
-    @objc
-    private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        navigationController?.popToRootViewController(animated: true)
-    }
-
     private func backButtonView() -> UIView? {
         let navigationBarContentView = navigationController?.navigationBar.subviews.find {
             $0.description.starts(with: "<_UINavigationBarContentView:")

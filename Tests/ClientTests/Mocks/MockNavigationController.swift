@@ -16,7 +16,6 @@ class MockNavigationController: UIViewController, NavigationController {
     var dismissCalled = 0
     var pushCalled = 0
     var popViewCalled = 0
-    var popToRootCalled = 0
 
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         presentCalled += 1
@@ -35,15 +34,6 @@ class MockNavigationController: UIViewController, NavigationController {
     func popViewController(animated: Bool) -> UIViewController? {
         popViewCalled += 1
         return topViewController
-    }
-
-    func popToRootViewController(animated: Bool) -> [UIViewController]? {
-        popToRootCalled += 1
-        if let topViewController = topViewController {
-            return [topViewController]
-        } else {
-            return []
-        }
     }
 
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {

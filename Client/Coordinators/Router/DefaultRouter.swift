@@ -54,12 +54,6 @@ class DefaultRouter: NSObject, Router {
         navigationController.isNavigationBarHidden = hideBar
     }
 
-    func popToRootViewController(animated: Bool = true) {
-        if let controllers = navigationController.popToRootViewController(animated: animated) {
-            controllers.forEach { runCompletion(for: $0) }
-        }
-    }
-
     private func runCompletion(for controller: UIViewController) {
         guard let completion = completions[controller] else { return }
         completion()

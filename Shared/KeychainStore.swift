@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import SwiftyJSON
 import MozillaAppServices
 
 public class KeychainStore {
@@ -11,19 +10,12 @@ public class KeychainStore {
 
     private let keychainWrapper: MZKeychainWrapper
 
-    private init() {
-        self.keychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    public init(keychainWrapper: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain) {
+        self.keychainWrapper = keychainWrapper
     }
 
     public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {
-        guard let value = value else {
-            setString(nil, forKey: key, withAccessibility: accessibility)
-            return
-        }
-
-        let stringValue = JSON(value).stringify()
-
-        setString(stringValue, forKey: key, withAccessibility: accessibility)
+        setString(value?.asString, forKey: key, withAccessibility: accessibility)
     }
 
     public func setString(_ value: String?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {
@@ -36,12 +28,12 @@ public class KeychainStore {
     }
 
     public func dictionary(forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) -> [String: Any]? {
-        guard let stringValue = string(forKey: key, withAccessibility: accessibility) else { return nil }
+        guard let stringValue = string(forKey: key, withAccessibility: accessibility),
+              let data = stringValue.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
+        else { return nil }
 
-        let json = JSON(parseJSON: stringValue)
-        let dictionary = json.dictionaryObject
-
-        return dictionary
+        return json
     }
 
     public func string(forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) -> String? {
