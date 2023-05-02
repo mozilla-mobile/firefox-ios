@@ -4,14 +4,19 @@
 
 import UIKit
 
-class MockTraitCollection: UITraitCollection {
-    var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
-    override var horizontalSizeClass: UIUserInterfaceSizeClass {
-        return overridenHorizontalSizeClass
+class MockTraitCollection {
+    private var horizontalSizeClass: UIUserInterfaceSizeClass = .regular
+    private var verticalSizeClass: UIUserInterfaceSizeClass = .regular
+
+    init(horizontalSizeClass: UIUserInterfaceSizeClass = .regular,
+         verticalSizeClass: UIUserInterfaceSizeClass = .regular) {
+        self.horizontalSizeClass = horizontalSizeClass
+        self.verticalSizeClass = verticalSizeClass
     }
 
-    var overridenVerticalSizeClass: UIUserInterfaceSizeClass = .regular
-    override var verticalSizeClass: UIUserInterfaceSizeClass {
-        return overridenVerticalSizeClass
+    func getTraitCollection() -> UITraitCollection {
+        let compact = UITraitCollection(horizontalSizeClass: horizontalSizeClass)
+        let regular = UITraitCollection(verticalSizeClass: verticalSizeClass)
+        return UITraitCollection(traitsFrom: [compact, regular])
     }
 }
