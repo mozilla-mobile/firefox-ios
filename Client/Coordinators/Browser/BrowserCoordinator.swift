@@ -18,6 +18,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private var logger: Logger
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
+    private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
 
     init(router: Router,
@@ -27,6 +28,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.screenshotService = screenshotService
         self.profile = profile
@@ -34,6 +36,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
+        self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager
         super.init(router: router)
@@ -144,18 +147,37 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             handle(settingsSection: section)
             return true
 
-        case .action:
-            // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
-            return false
+        case let .action(routeAction):
+            switch routeAction {
+            case .closePrivateTabs:
+                handleClosePrivateTabs()
+                return true
+            case .showQRCode:
+                handleQRCode()
+                return true
+            }
 
         case .fxaSignIn:
             // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
             return false
 
-        case .defaultBrowser:
-            // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
-            return false
+        case let .defaultBrowser(section):
+            switch section {
+            case .systemSettings:
+                applicationHelper.openSettings()
+            case .tutorial:
+                startLaunch(with: .defaultBrowser)
+            }
+            return true
         }
+    }
+
+    private func handleQRCode() {
+        browserViewController.handleQRCode()
+    }
+
+    private func handleClosePrivateTabs() {
+        browserViewController.handleClosePrivateTabs()
     }
 
     private func handle(homepanelSection section: Route.HomepanelSection) {
