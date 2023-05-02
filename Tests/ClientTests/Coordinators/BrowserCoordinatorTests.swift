@@ -15,6 +15,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var screenshotService: ScreenshotService!
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
+    private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
 
     override func setUp() {
@@ -28,6 +29,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.logger = MockLogger()
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
+        self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
     }
 
@@ -40,6 +42,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.logger = nil
         self.screenshotService = nil
         self.tabManager = nil
+        self.applicationHelper = nil
         self.glean = nil
         AppContainer.shared.reset()
     }
@@ -333,6 +336,31 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.openBlankNewTabIsPrivate, false)
     }
 
+    // MARK: - Default browser route
+
+    func testDefaultBrowser_systemSettings_handlesRoute() {
+        let route = Route.defaultBrowser(section: .systemSettings)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(applicationHelper.openSettingsCalled, 1)
+    }
+
+    func testDefaultBrowser_tutorial_handlesRoute() {
+        let route = Route.defaultBrowser(section: .tutorial)
+        let subject = createSubject()
+
+        let result = subject.handle(route: route)
+
+        XCTAssertTrue(result)
+        XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
+    }
+
     // MARK: - Glean route
 
     func testGleanRoute_handlesRoute() {
@@ -387,6 +415,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          screenshotService: screenshotService,
                                          profile: profile,
                                          logger: logger,
+                                         applicationHelper: applicationHelper,
                                          glean: glean)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

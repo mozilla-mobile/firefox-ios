@@ -265,7 +265,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
 
         if CoordinatorFlagManager.isCoordinatorEnabled {
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            DefaultApplicationHelper().openSettings()
         }
     }
 

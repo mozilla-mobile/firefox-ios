@@ -17,6 +17,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
+    private let applicationHelper: ApplicationHelper
     private let glean: GleanWrapper
 
     init(router: Router,
@@ -25,6 +26,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          glean: GleanWrapper = DefaultGleanWrapper.shared) {
         self.screenshotService = screenshotService
         self.profile = profile
@@ -32,6 +34,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.logger = logger
+        self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
         self.browserViewController.browserDelegate = self
@@ -154,9 +157,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
             return false
 
-        case .defaultBrowser:
-            // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
-            return false
+        case let .defaultBrowser(section):
+            switch section {
+            case .systemSettings:
+                applicationHelper.openSettings()
+            case .tutorial:
+                startLaunch(with: .defaultBrowser)
+            }
+            return true
         }
     }
 
