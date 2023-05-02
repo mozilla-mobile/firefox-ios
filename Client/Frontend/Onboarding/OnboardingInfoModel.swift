@@ -8,17 +8,19 @@ protocol OnboardingModelProtocol {
     var image: UIImage? { get set }
     var title: String { get set }
     var description: String? { get set }
+    var linkButtonTitle: String? { get set }
     var primaryAction: String { get set }
     var secondaryAction: String? { get set }
     var a11yIdRoot: String { get set }
 
-    init(image: UIImage?, title: String, description: String?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
+    init(image: UIImage?, title: String, description: String?, linkButtonTitle: String?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
 }
 
 struct OnboardingInfoModel: OnboardingModelProtocol {
     var image: UIImage?
     var title: String
     var description: String?
+    var linkButtonTitle: String?
     var primaryAction: String
     var secondaryAction: String?
     var a11yIdRoot: String
@@ -26,6 +28,7 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
     init(image: UIImage?,
          title: String,
          description: String?,
+         linkButtonTitle: String?,
          primaryAction: String,
          secondaryAction: String?,
          a11yIdRoot: String
@@ -33,6 +36,7 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
         self.image = image
         self.title = title
         self.description = description
+        self.linkButtonTitle = linkButtonTitle
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
         self.a11yIdRoot = a11yIdRoot

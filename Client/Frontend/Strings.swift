@@ -857,6 +857,11 @@ extension String {
             tableName: nil,
             value: "Get Started",
             comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
+        public static let IntroSecondaryAction = MZLocalizedString(
+            key: "Onboarding.IntroSecondaryAction.v102",
+            tableName: nil,
+            value: "Skip",
+            comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip the onboarding.")
         public static let WallpaperTitle = MZLocalizedString(
             key: "Onboarding.WallpaperTitle.v102",
             tableName: nil,
@@ -890,13 +895,14 @@ extension String {
         public static let IntroWelcomeTitle = MZLocalizedString(
             key: "Onboarding.Welcome.Title.v106",
             tableName: nil,
-            value: "Welcome to an independent internet",
+            value: "Make Firefox your go-to browser",
             comment: "String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens.")
         public static let IntroWelcomeDescription = MZLocalizedString(
             key: "Onboarding.Welcome.Description.v106",
             tableName: nil,
-            value: "Firefox puts people over profits and defends your privacy by default.",
+            value: "Firefox puts people over profits and defends your privacy as you browse. ",
             comment: "String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens.")
+        public static let IntroLinkButtonTitle = MZLocalizedString(key: "Onboarding.Welcome.Link.Action.v106", tableName: nil, value: "Learn more in our privacy notice", comment: "String used to describe the title of link button is on the welcome onboarding page for 106 version in our Onboarding screens.")
         public static let IntroSyncTitle = MZLocalizedString(
             key: "Onboarding.Sync.Title.v106",
             tableName: nil,
@@ -971,7 +977,7 @@ extension String {
         public static let WelcomeAction = MZLocalizedString(
             key: "Upgrade.Welcome.Action.v106",
             tableName: nil,
-            value: "Get Started",
+            value: "Set as Default Browser",
             comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.")
         public static let SyncSignTitle = MZLocalizedString(
             key: "Upgrade.SyncSign.Title.v106",

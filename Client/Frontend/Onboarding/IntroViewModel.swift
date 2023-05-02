@@ -70,13 +70,15 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
                                        title: .Onboarding.IntroWelcomeTitle,
                                        description: .Onboarding.IntroWelcomeDescription,
+                                       linkButtonTitle: .Onboarding.IntroLinkButtonTitle,
                                        primaryAction: .Onboarding.IntroAction,
-                                       secondaryAction: nil,
+                                       secondaryAction: .Onboarding.IntroSecondaryAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .signSync:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Onboarding.IntroSyncTitle,
                                        description: .Onboarding.IntroSyncDescription,
+                                       linkButtonTitle: nil,
                                        primaryAction: .IntroSignInButtonTitle,
                                        secondaryAction: .Onboarding.IntroSyncSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
@@ -85,6 +87,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
                                        title: String(format: .Onboarding.IntroNotificationTitle, shortName),
                                        description: String(format: .Onboarding.IntroNotificationDescription, shortName),
+                                       linkButtonTitle: nil,
                                        primaryAction: .Onboarding.IntroNotificationContinueAction,
                                        secondaryAction: .Onboarding.IntroNotificationSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
