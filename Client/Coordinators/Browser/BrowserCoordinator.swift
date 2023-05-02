@@ -66,7 +66,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
         let route = Route.search(url: url, isPrivate: isPrivate)
-        find(route: route)
+        findAndHandle(route: route)
     }
 
     // MARK: - BrowserDelegate

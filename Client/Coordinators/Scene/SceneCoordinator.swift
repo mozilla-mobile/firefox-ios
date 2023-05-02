@@ -85,6 +85,6 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
         let route = Route.search(url: url, isPrivate: isPrivate)
-        find(route: route)
+        findAndHandle(route: route)
     }
 }

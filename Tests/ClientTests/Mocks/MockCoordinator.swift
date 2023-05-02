@@ -34,7 +34,7 @@ class MockCoordinator: Coordinator {
     }
 
     @discardableResult
-    func find(route: Route) -> Coordinator? {
+    func findAndHandle(route: Route) -> Coordinator? {
         findRouteCalled += 1
         savedFindRoute = route
         return nil
