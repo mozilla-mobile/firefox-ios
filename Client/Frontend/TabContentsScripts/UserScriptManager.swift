@@ -4,7 +4,7 @@
 
 import WebKit
 
-class UserScriptManager: FeatureFlaggable {
+class UserScriptManager {
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.
     public static let appIdToken = UUID().uuidString
 
@@ -77,8 +77,9 @@ class UserScriptManager: FeatureFlaggable {
         tab.webView?.configuration.userContentController.removeAllUserScripts()
 
         // Feature flag for CC scripts until we fully enable this feature
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
+        let autofillCreditCardStatus = FeatureFlagsManager().isFeatureEnabled(
+            .creditCardAutofillStatus,
+            checking: .buildOnly)
 
         // Inject all pre-compiled user scripts.
         [(WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: false),

@@ -23,7 +23,7 @@ extension ContileProviderInterface {
 }
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
-class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
+class ContileProvider: ContileProviderInterface, URLCaching {
     static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
     static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
 
@@ -35,9 +35,13 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     }()
 
     private var logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.logger = logger
+        self.featureFlags = featureFlags
     }
 
     enum Error: Swift.Error {
@@ -108,7 +112,9 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) { return URL(string: ContileProvider.contileStagingResourceEndpoint) }
+        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
+            return URL(string: ContileProvider.contileStagingResourceEndpoint)
+        }
 
         return URL(string: ContileProvider.contileProdResourceEndpoint)
     }

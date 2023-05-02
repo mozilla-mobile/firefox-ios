@@ -5,14 +5,13 @@
 import Shared
 import Common
 
-// MARK: - Protocol
-protocol FeatureFlaggable { }
-
-extension FeatureFlaggable {
-    var featureFlags: FeatureFlagsManager {
-        return FeatureFlagsManager.shared
-    }
-}
+//protocol FeatureFlaggable { }
+//
+//extension FeatureFlaggable {
+//    var featureFlags: FeatureFlagsManager {
+//        return FeatureFlagsManager()
+//    }
+//}
 
 /// An enum representing the different types of checks we need to use for features.
 /// All Nimbus default values are stored in the `nimbus.fml.yaml`
@@ -27,10 +26,17 @@ enum FlaggableFeatureCheckOptions {
     case userOnly
 }
 
+// MARK: - Protocol
 protocol FeatureFlagsManagementProtocol {
+    func isCoreFeatureEnabled(_ featureID: CoreFeatureFlagID) -> Bool
     func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
-                                 checking channelsToCheck: FlaggableFeatureCheckOptions) -> Bool
+                          checking channelsToCheck: FlaggableFeatureCheckOptions) -> Bool
     func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T?
+
+    func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool)
+    func set<T: FlaggableFeatureOptions>(
+        feature featureID: NimbusFeatureFlagWithCustomOptionsID,
+        to desiredState: T)
 }
 
 class FeatureFlagsManager: FeatureFlagsManagementProtocol {

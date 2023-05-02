@@ -43,7 +43,6 @@ enum MenuButtonToastAction {
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
 class MainMenuActionHelper: PhotonActionSheetProtocol,
-                            FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol {
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
@@ -58,6 +57,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let tabUrl: URL?
     private let isFileURL: Bool
     private let showFXASyncAction: (FXASyncClosure) -> Void
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -78,7 +78,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
          tabManager: TabManager,
          buttonView: UIButton,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager

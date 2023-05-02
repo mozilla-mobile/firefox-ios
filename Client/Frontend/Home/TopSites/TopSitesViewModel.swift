@@ -29,11 +29,14 @@ class TopSitesViewModel {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private var wallpaperManager: WallpaperManager
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
@@ -113,7 +116,7 @@ class TopSitesViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension TopSitesViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .topSites
     }

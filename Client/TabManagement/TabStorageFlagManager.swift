@@ -8,7 +8,7 @@ import Shared
 /// This is a temporary struct made to manage the feature flag for conveniance
 struct TabStorageFlagManager {
     static var isNewTabDataStoreEnabled: Bool {
-        return FeatureFlagsManager.shared.isFeatureEnabled(.tabStorageRefactor,
-                                                           checking: .buildOnly)
+        return FeatureFlagsManager().isFeatureEnabled(.tabStorageRefactor,
+                                                      checking: .buildOnly)
     }
 }

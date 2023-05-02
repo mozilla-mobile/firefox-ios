@@ -5,9 +5,13 @@
 import Foundation
 import Shared
 
-class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class TopSitesSettingsViewController: SettingsTableViewController {
+    private let featureFlags: FeatureFlagsManagementProtocol
+
     // MARK: - Initializers
-    init() {
+    init(with featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()) {
+        self.featureFlags = featureFlags
+
         super.init(style: .grouped)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle

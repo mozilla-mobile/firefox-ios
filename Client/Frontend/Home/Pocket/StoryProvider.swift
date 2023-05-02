@@ -4,20 +4,23 @@
 
 import Foundation
 
-class StoryProvider: FeatureFlaggable {
+class StoryProvider {
     private let numberOfPocketStories: Int
     private let sponsoredIndices: [Int]
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     init(
         pocketAPI: PocketStoriesProviding,
         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
         numberOfPocketStories: Int = 11,
-        sponsoredIndices: [Int] = [1, 9]
+        sponsoredIndices: [Int] = [1, 9],
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.pocketAPI = pocketAPI
         self.pocketSponsoredAPI = pocketSponsoredAPI
         self.numberOfPocketStories = numberOfPocketStories
         self.sponsoredIndices = sponsoredIndices
+        self.featureFlags = featureFlags
     }
 
     private let pocketAPI: PocketStoriesProviding

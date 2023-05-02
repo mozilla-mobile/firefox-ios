@@ -8,15 +8,19 @@ import Adjust
 import Shared
 import Glean
 
-final class AdjustHelper: NSObject, FeatureFlaggable {
+final class AdjustHelper: NSObject {
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
     private let telemetryHelper: AdjustTelemetryProtocol
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     init(profile: Profile,
-         telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()) {
+         telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper(),
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.telemetryHelper = telemetryHelper
+        self.featureFlags = featureFlags
         let sendUsageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
 
         // This is required for adjust to work properly with ASA and we avoid directly disabling

@@ -576,21 +576,22 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
+class TogglePullToRefresh: HiddenSetting {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
+        let toNewStatus = FeatureFlagsManager().isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        let featureFlags = FeatureFlagsManager()
         let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
         featureFlags.set(feature: .pullToRefresh, to: newStatus)
         updateCell(navigationController)
     }
 }
 
-class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
+class ResetWallpaperOnboardingPage: HiddenSetting {
     override var title: NSAttributedString? {
         let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "SEEN" : "UNSEEN"
         return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
@@ -603,14 +604,15 @@ class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
+class ToggleInactiveTabs: HiddenSetting {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
+        let toNewStatus = FeatureFlagsManager().isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        let featureFlags = FeatureFlagsManager()
         let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
@@ -618,15 +620,16 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     }
 }
 
-class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
+class ToggleHistoryGroups: HiddenSetting {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
+        let toNewStatus = FeatureFlagManager().isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        let featureFlags = FeatureFlagsManager()
         let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
         featureFlags.set(feature: .historyGroups, to: newStatus)
         updateCell(navigationController)
@@ -1061,14 +1064,16 @@ class ClearPrivateDataSetting: Setting {
     }
 }
 
-class AutofillCreditCardSettings: Setting, FeatureFlaggable {
+class AutofillCreditCardSettings: Setting {
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
 
     override var accessibilityIdentifier: String? { return "AutofillCreditCard" }
 
     init(settings: SettingsTableViewController) {
         let title: String = .SettingsAutofillCreditCard
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(title: NSAttributedString(
+            string: title,
+            attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1082,7 +1087,9 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(
+            string: .AppSettingsPrivacyPolicy,
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override var url: URL? {

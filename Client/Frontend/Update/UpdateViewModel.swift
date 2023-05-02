@@ -6,11 +6,10 @@ import Common
 import Foundation
 import Shared
 
-class UpdateViewModel: OnboardingViewModelProtocol,
-                       FeatureFlaggable,
-                       AppVersionUpdateCheckerProtocol {
+class UpdateViewModel: OnboardingViewModelProtocol, AppVersionUpdateCheckerProtocol {
     let profile: Profile
     var hasSyncableAccount: Bool?
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     var shouldShowSingleCard: Bool {
         return enabledCards.count == 1
@@ -37,8 +36,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil
     }
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
+        self.featureFlags = featureFlags
     }
 
     func shouldShowUpdateSheet(force: Bool = false,

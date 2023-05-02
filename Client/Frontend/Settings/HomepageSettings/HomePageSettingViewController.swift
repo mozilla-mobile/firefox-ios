@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Common
 
-class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
+class HomePageSettingViewController: SettingsTableViewController {
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -14,6 +14,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     var isJumpBackInSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
@@ -42,7 +43,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
     // MARK: - Initializers
     init(prefs: Prefs,
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager(),
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager()
+    ) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
         super.init(style: .grouped)
@@ -235,8 +238,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, FeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile
+        private let featureFlags: FeatureFlagsManagementProtocol
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage }
@@ -248,8 +252,11 @@ extension HomePageSettingViewController {
             return NSAttributedString(string: String(format: status))
         }
 
-        init(settings: SettingsTableViewController) {
+        init(settings: SettingsTableViewController,
+             featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+        ) {
             self.profile = settings.profile
+            self.featureFlags = featureFlags
             super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsPageTitle))
         }
 
@@ -267,6 +274,7 @@ extension HomePageSettingViewController {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface
+        private let featureFlags: FeatureFlagsManagementProtocol
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
@@ -274,7 +282,8 @@ extension HomePageSettingViewController {
 
         init(settings: SettingsTableViewController,
              and tabManager: TabManager = AppContainer.shared.resolve(),
-             wallpaperManager: WallpaperManagerInterface = WallpaperManager()
+             wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+             featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
         ) {
             self.settings = settings
             self.tabManager = tabManager

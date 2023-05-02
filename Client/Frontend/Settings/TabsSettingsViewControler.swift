@@ -6,7 +6,11 @@ import Foundation
 import Shared
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    init() {
+    private let featureFlags: FeatureFlagsManagementProtocol
+
+    init(featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()) {
+        self.featureFlags = featureFlags
+
         super.init(style: .grouped)
 
         self.title = .Settings.SectionTitles.TabsTitle

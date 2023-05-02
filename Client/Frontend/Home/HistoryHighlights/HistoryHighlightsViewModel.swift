@@ -71,6 +71,7 @@ class HistoryHighlightsViewModel {
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
@@ -112,7 +113,9 @@ class HistoryHighlightsViewModel {
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.theme = theme
@@ -156,7 +159,7 @@ class HistoryHighlightsViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension HistoryHighlightsViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .historyHighlights
     }

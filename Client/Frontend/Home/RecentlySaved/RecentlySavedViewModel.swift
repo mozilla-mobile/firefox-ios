@@ -29,6 +29,7 @@ class RecentlySavedViewModel {
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
     private var wallpaperManager: WallpaperManager
+    private let featureFlags: FeatureFlagsManagementProtocol
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -36,7 +37,9 @@ class RecentlySavedViewModel {
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
@@ -44,13 +47,14 @@ class RecentlySavedViewModel {
                                                              bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
+        self.featureFlags = featureFlags
 
         adaptor.delegate = self
     }
 }
 
 // MARK: HomeViewModelProtocol
-extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension RecentlySavedViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .recentlySaved
     }
