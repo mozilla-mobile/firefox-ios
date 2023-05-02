@@ -347,6 +347,39 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
     }
 
+    func testHandleHandleQRCode_returnsTrue() {
+        // Given
+        let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
+
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let result = subject.handle(route: route!)
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.qrCodeCount, 1)
+    }
+
+    func testHandleClosePrivateTabs_returnsTrue() {
+        // Given
+        let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
+        let route = routeBuilder.makeRoute(url: url)
+        let result = subject.handle(route: route!)
+
+        // Then
+        XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {

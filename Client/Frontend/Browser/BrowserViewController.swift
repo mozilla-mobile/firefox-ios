@@ -1531,6 +1531,22 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func handleQRCode() {
+        let qrCodeViewController = QRCodeViewController()
+        qrCodeViewController.qrCodeDelegate = self
+        presentedViewController?.dismiss(animated: true)
+        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+    }
+
+    func handleClosePrivateTabs() {
+        tabManager.removeTabs(tabManager.privateTabs)
+        guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
+            tabManager.selectTab(tabManager.addTab())
+            return
+        }
+        tabManager.selectTab(tab)
+    }
+
     func switchToPrivacyMode(isPrivate: Bool) {
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)
