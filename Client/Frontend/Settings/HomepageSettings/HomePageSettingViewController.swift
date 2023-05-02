@@ -48,6 +48,7 @@ class HomePageSettingViewController: SettingsTableViewController {
     ) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.featureFlags = featureFlags
         super.init(style: .grouped)
 
         title = .SettingsHomePageSectionName
@@ -288,6 +289,7 @@ extension HomePageSettingViewController {
             self.settings = settings
             self.tabManager = tabManager
             self.wallpaperManager = wallpaperManager
+            self.featureFlags = featureFlags
             super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 

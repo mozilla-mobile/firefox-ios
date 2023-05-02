@@ -67,7 +67,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, HasNimbusSponsored
         self.contileProvider = contileProvider
         self.notificationCenter = notificationCenter
         self.dispatchGroup = dispatchGroup
-        self.featureFlags
+        self.featureFlags = featureFlags
         topSiteHistoryManager.delegate = self
 
         setupNotifications(forObserver: self,

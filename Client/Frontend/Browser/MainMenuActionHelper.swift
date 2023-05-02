@@ -92,6 +92,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.isFileURL = tabUrl?.isFileURL ?? false
         self.isHomePage = selectedTab?.isFxHomeTab ?? false
         self.themeManager = themeManager
+        self.featureFlags = featureFlags
     }
 
     func getToolbarActions(navigationController: UINavigationController?,

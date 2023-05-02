@@ -49,6 +49,7 @@ class TopSitesViewModel {
                                                         googleTopSiteManager: googleTopSiteManager)
         topSitesDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
+        self.featureFlags = featureFlags
         adaptor.delegate = self
     }
 

@@ -90,6 +90,7 @@ class BrowserViewController: UIViewController {
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     // Header stack view can contain the top url bar or top reader mode
     var header: BaseAlphaStackView = .build { _ in }
@@ -182,7 +183,8 @@ class BrowserViewController: UIViewController {
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -191,6 +193,7 @@ class BrowserViewController: UIViewController {
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
+        self.featureFlags = featureFlags
 
         self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
@@ -1204,7 +1207,11 @@ class BrowserViewController: UIViewController {
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
-        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, model: profile.searchEngines, tabManager: tabManager)
+        let searchController = SearchViewController(
+            profile: profile,
+            viewModel: searchViewModel,
+            model: profile.searchEngines,
+            tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -2887,7 +2894,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
 // MARK: - Reopen last closed tab
 
-extension BrowserViewController: FeatureFlaggable {
+extension BrowserViewController {
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
             homePanelDidRequestToRestoreClosedTab(motion)
@@ -2904,7 +2911,7 @@ extension BrowserViewController: FeatureFlaggable {
 
         let alertTitleText: String = .ReopenLastTabAlertTitle
         let reopenButtonText: String = .ReopenLastTabButtonText
-        let cancelButtonText: String = .ReopenLaetTabCancelText
+        let cancelButtonText: String = .ReopenLastTabCancelText
 
         func reopenLastTab(_ action: UIAlertAction) {
             let request = URLRequest(url: lastClosedURL)

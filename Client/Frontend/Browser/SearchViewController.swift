@@ -58,7 +58,6 @@ struct SearchViewModel {
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             LoaderListener,
-                            FeatureFlaggable,
                             Notifiable {
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
@@ -71,6 +70,7 @@ class SearchViewController: SiteTableViewController,
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
     private var highlightManager: HistoryHighlightsManagerProtocol
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -104,12 +104,15 @@ class SearchViewController: SiteTableViewController,
          model: SearchEngines,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.viewModel = viewModel
         self.model = model
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.featureFlags = featureFlags
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {

@@ -16,7 +16,7 @@ class HomeLogoHeaderViewModel {
     private let featureFlags: FeatureFlagsManagementProtocol
 
     init(profile: Profile,
-         theme: Theme
+         theme: Theme,
          featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.profile = profile

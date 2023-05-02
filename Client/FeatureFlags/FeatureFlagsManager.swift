@@ -5,14 +5,6 @@
 import Shared
 import Common
 
-//protocol FeatureFlaggable { }
-//
-//extension FeatureFlaggable {
-//    var featureFlags: FeatureFlagsManager {
-//        return FeatureFlagsManager()
-//    }
-//}
-
 /// An enum representing the different types of checks we need to use for features.
 /// All Nimbus default values are stored in the `nimbus.fml.yaml`
 enum FlaggableFeatureCheckOptions {
@@ -40,12 +32,6 @@ protocol FeatureFlagsManagementProtocol {
 }
 
 class FeatureFlagsManager: FeatureFlagsManagementProtocol {
-    /// This Singleton should only be accessed directly in places where the
-    /// `FeatureFlaggable` is not available. Otherwise, access to the feature
-    /// flags system should be done through the protocol, giving access to the
-    /// `featureFlags` variable.
-    static let shared = FeatureFlagsManager()
-
     // MARK: - Variables
     private var profile: Profile
     private var nimbusLayer: NimbusFeatureFlagLayer

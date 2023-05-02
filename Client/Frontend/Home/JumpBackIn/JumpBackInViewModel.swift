@@ -7,7 +7,7 @@ import Storage
 import UIKit
 import Shared
 
-class JumpBackInViewModel: FeatureFlaggable {
+class JumpBackInViewModel {
     struct UX {
         static let jumpBackInCellHeight: CGFloat = 112
         static let syncedTabCellPortraitCompactHeight: CGFloat = 182
@@ -44,6 +44,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var hasSentSyncedTabTileEvent = false
     private let tabManager: TabManager
     private var wallpaperManager: WallpaperManager
+    let featureFlags: FeatureFlagsManagementProtocol
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
     init(
@@ -53,7 +54,8 @@ class JumpBackInViewModel: FeatureFlaggable {
         theme: Theme,
         tabManager: TabManager,
         adaptor: JumpBackInDataAdaptor,
-        wallpaperManager: WallpaperManager
+        wallpaperManager: WallpaperManager,
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
@@ -62,6 +64,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
+        self.featureFlags = featureFlags
     }
 
     func switchTo(group: ASGroup<Tab>) {

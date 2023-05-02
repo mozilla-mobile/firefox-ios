@@ -141,10 +141,11 @@ class TabLocationView: UIView {
     }()
 
     override init(frame: CGRect) {
+        self.featureFlags = FeatureFlagsManager()
         super.init(frame: frame)
 
-        self.featureFlags = FeatureFlagsManager()
-        register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
+        register(self,
+                 forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self

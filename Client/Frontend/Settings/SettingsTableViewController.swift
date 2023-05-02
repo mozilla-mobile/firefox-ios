@@ -265,6 +265,7 @@ class BoolSetting: Setting {
         self.defaultValue = defaultValue
         self.featureFlagName = featureFlagName
         self.settingDidChange = settingDidChange
+        self.featureFlags = featureFlags
         super.init(title: NSAttributedString(string: title), enabled: enabled)
     }
 

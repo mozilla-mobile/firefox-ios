@@ -123,6 +123,7 @@ class HistoryHighlightsViewModel {
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
+        self.featureFlags = featureFlags
         self.historyHighlightsDataAdaptor.delegate = self
     }
 

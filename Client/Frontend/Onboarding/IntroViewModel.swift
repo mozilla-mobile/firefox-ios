@@ -48,7 +48,8 @@ struct IntroViewModel: OnboardingViewModelProtocol {
     var introScreenManager: IntroScreenManager?
 
     var isFeatureEnabled: Bool {
-        return FeatureFlagsManager().isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
+        return FeatureFlagsManager().isFeatureEnabled(.onboardingFreshInstall,
+                                                      checking: .buildOnly)
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
