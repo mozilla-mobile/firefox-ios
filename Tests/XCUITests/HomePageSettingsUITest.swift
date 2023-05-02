@@ -9,7 +9,7 @@ let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
 let exampleUrl = "test-example.html"
 let urlExampleLabel = "Example Domain"
-let urlMozillaLabel = "Internet for people, not profit — Mozilla"
+let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: BaseTestCase {
     private func enterWebPageAsHomepage(text: String) {
