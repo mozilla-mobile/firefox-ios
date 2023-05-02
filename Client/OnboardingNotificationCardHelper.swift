@@ -4,9 +4,9 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper: FeatureFlaggable {
+class OnboardingNotificationCardHelper {
     var cardPosition: OnboardingNotificationCardPosition {
-        return featureFlags.getCustomState(for: .onboardingNotificationCard) ?? .noCard
+        return FeatureFlagsManager().getCustomState(for: .onboardingNotificationCard) ?? .noCard
     }
 
     func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {

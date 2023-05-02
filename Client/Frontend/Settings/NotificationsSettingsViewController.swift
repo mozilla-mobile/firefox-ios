@@ -7,7 +7,7 @@ import Shared
 import Common
 import MozillaAppServices
 
-class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class NotificationsSettingsViewController: SettingsTableViewController {
     private lazy var syncNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,

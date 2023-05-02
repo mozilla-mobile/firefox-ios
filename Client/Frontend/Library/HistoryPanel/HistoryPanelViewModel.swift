@@ -46,7 +46,7 @@ class HistoryPanelViewModel {
 
     private let profile: Profile
     private var logger: Logger
-    private let featureFlags: FeatureFlagsManagementProtocol
+    let featureFlags: FeatureFlagsManagementProtocol
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test

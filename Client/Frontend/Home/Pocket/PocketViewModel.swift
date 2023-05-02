@@ -27,15 +27,19 @@ class PocketViewModel {
     private var dataAdaptor: PocketDataAdaptor
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.wallpaperManager = wallpaperManager
+        self.featureFlags = featureFlags
     }
 
     // The dimension of a cell
@@ -117,7 +121,7 @@ class PocketViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension PocketViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .pocket
     }

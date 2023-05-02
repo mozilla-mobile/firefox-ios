@@ -5,20 +5,23 @@
 import Shared
 import Common
 
-class StartAtHomeHelper: FeatureFlaggable {
+class StartAtHomeHelper {
     private var isRestoringTabs: Bool
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
     lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
     var launchSessionProvider: LaunchSessionProviderProtocol
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve(),
          isRestoringTabs: Bool,
-         isRunningUITest: Bool = AppConstants.isRunningUITests
+         isRunningUITest: Bool = AppConstants.isRunningUITests,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.launchSessionProvider = appSessionManager.launchSessionProvider
         self.isRestoringTabs = isRestoringTabs
         self.isRunningUITest = isRunningUITest
+        self.featureFlags = featureFlags
     }
 
     var shouldSkipStartHome: Bool {

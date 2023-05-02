@@ -23,7 +23,7 @@ extension PocketStoriesProviding {
     }
 }
 
-class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
+class PocketProvider: PocketStoriesProviding, URLCaching {
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
     }
@@ -32,6 +32,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
     private let pocketGlobalFeed: String
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
     static let MoreStoriesURL = {
@@ -44,8 +45,11 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }()
 
     // Allow endPoint to be overriden for testing
-    init(endPoint: String = PocketProvider.GlobalFeed) {
+    init(endPoint: String = PocketProvider.GlobalFeed,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.pocketGlobalFeed = endPoint
+        self.featureFlags = featureFlags
     }
 
     var urlCache: URLCache {

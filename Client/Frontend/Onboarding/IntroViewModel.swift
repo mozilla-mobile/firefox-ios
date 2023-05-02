@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+struct IntroViewModel: OnboardingViewModelProtocol {
     enum InformationCards: Int, CaseIterable {
         case welcome
         case signSync
@@ -48,7 +48,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var introScreenManager: IntroScreenManager?
 
     var isFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
+        return FeatureFlagsManager().isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {

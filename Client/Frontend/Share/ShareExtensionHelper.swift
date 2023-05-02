@@ -7,7 +7,7 @@ import Shared
 import MobileCoreServices
 import WebKit
 
-class ShareExtensionHelper: NSObject, FeatureFlaggable {
+class ShareExtensionHelper: NSObject {
     private weak var selectedTab: Tab?
 
     private let url: URL
@@ -15,6 +15,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
     private let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
     private let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     var areShareSheetChangesEnabled: Bool {
         return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
@@ -32,9 +33,13 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     }
 
     // Can be a file:// or http(s):// url
-    init(url: URL, tab: Tab?) {
+    init(url: URL,
+         tab: Tab?,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.url = url
         self.selectedTab = tab
+        self.featureFlags = featureFlags
     }
 
     func createActivityViewController(

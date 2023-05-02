@@ -26,7 +26,7 @@ protocol WallpaperManagerInterface {
 }
 
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
+class WallpaperManager: WallpaperManagerInterface {
     enum ThumbnailFilter {
         case none
         case thumbnailsAvailable
@@ -36,16 +36,19 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     private var networkingModule: WallpaperNetworking
     private var userDefaults: UserDefaultsInterface
     private var logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
         self.logger = logger
+        self.featureFlags = featureFlags
     }
 
     // MARK: Public Interface

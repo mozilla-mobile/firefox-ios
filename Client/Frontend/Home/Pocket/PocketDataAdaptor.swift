@@ -13,7 +13,7 @@ protocol PocketDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
+class PocketDataAdaptorImplementation: PocketDataAdaptor {
     var notificationCenter: NotificationProtocol
 
     private let pocketAPI: PocketStoriesProviding

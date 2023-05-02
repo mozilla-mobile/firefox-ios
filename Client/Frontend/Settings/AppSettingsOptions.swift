@@ -622,7 +622,7 @@ class ToggleInactiveTabs: HiddenSetting {
 
 class ToggleHistoryGroups: HiddenSetting {
     override var title: NSAttributedString? {
-        let toNewStatus = FeatureFlagManager().isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
+        let toNewStatus = FeatureFlagsManager().isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])

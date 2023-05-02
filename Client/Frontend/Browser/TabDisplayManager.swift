@@ -63,7 +63,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlaggable {
+class TabDisplayManager: NSObject {
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?

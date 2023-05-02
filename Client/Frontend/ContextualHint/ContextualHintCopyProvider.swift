@@ -10,7 +10,7 @@ enum ContextualHintCopyType {
 
 /// `ContextualHintCopyProvider` exists to provide the requested description or action strings back
 /// for the specified `ContextualHintType`.
-struct ContextualHintCopyProvider: FeatureFlaggable {
+struct ContextualHintCopyProvider {
     typealias CFRStrings = String.ContextualHints
 
     /// Arrow direction infuences toolbar copy, so it exists here.

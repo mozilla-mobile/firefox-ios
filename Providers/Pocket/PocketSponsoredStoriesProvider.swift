@@ -5,11 +5,15 @@
 import Common
 import Shared
 
-class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFlaggable, URLCaching {
+class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, URLCaching {
     private var logger: Logger
+    private let featureFlags: FeatureFlagsManagementProtocol
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.logger = logger
+        self.featureFlags = featureFlags
     }
 
     var endpoint: URL {

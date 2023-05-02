@@ -13,15 +13,20 @@ class HomeLogoHeaderViewModel {
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
     var theme: Theme
+    private let featureFlags: FeatureFlagsManagementProtocol
 
-    init(profile: Profile, theme: Theme) {
+    init(profile: Profile,
+         theme: Theme
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
+    ) {
         self.profile = profile
         self.theme = theme
+        self.featureFlags = featureFlags
     }
 }
 
 // MARK: HomeViewModelProtocol
-extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension HomeLogoHeaderViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .logoHeader
     }

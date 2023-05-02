@@ -31,7 +31,7 @@ protocol TopSitesDataAdaptor {
     func recalculateTopSiteData(for numberOfTilesPerRow: Int)
 }
 
-class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
+class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, HasNimbusSponsoredTiles {
     private let profile: Profile
     private var topSites: [TopSite] = []
     private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue", qos: .userInteractive)
@@ -46,6 +46,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
     private let dispatchGroup: DispatchGroupInterface
+    private let featureFlags: FeatureFlagsManagementProtocol
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
     // If this isn't done, then no data will be found from the view model and section won't show
@@ -57,7 +58,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         dispatchGroup: DispatchGroupInterface = DispatchGroup()
+         dispatchGroup: DispatchGroupInterface = DispatchGroup(),
+         featureFlags: FeatureFlagsManagementProtocol = FeatureFlagsManager()
     ) {
         self.profile = profile
         self.topSiteHistoryManager = topSiteHistoryManager
@@ -65,6 +67,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         self.contileProvider = contileProvider
         self.notificationCenter = notificationCenter
         self.dispatchGroup = dispatchGroup
+        self.featureFlags
         topSiteHistoryManager.delegate = self
 
         setupNotifications(forObserver: self,
