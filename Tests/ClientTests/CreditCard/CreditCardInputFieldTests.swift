@@ -10,7 +10,6 @@ import SwiftUI
 @testable import Client
 
 class CreditCardInputFieldTests: XCTestCase {
-    @State var testableString: String = ""
     var profile: MockProfile!
     var viewModel: CreditCardInputViewModel!
 
@@ -26,7 +25,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
         profile = nil
         viewModel = nil
-        testableString = ""
     }
 
     func testInputFieldPropertiesOnName() {

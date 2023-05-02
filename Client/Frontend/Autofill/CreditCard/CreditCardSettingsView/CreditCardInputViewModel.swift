@@ -289,5 +289,4 @@ class CreditCardInputViewModel: ObservableObject {
             return expirationDate.removingOccurrences(of: " / ")
         }
     }
-
 }
