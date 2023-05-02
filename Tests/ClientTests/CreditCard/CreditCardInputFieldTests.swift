@@ -4,15 +4,12 @@
 
 // Disabled: It will be updated in FXIOS-6128
 
-/*
 import Foundation
 import XCTest
 import SwiftUI
 @testable import Client
 
-
 class CreditCardInputFieldTests: XCTestCase {
-    @State var testableString: String = ""
     var profile: MockProfile!
     var viewModel: CreditCardInputViewModel!
 
@@ -28,12 +25,10 @@ class CreditCardInputFieldTests: XCTestCase {
 
         profile = nil
         viewModel = nil
-        testableString = ""
     }
 
     func testInputFieldPropertiesOnName() {
         let inputField = CreditCardInputField(inputType: .name,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -47,7 +42,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testInputFieldPropertiesOnCard() {
         let inputField = CreditCardInputField(inputType: .number,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -61,7 +55,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testInputFieldPropertiesOnExpiration() {
         let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -73,46 +66,8 @@ class CreditCardInputFieldTests: XCTestCase {
         XCTAssertEqual(inputField.keyboardType, .numberPad)
     }
 
-    func testCountNumbersOnNumericInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
-                                              showError: false,
-                                              inputViewModel: viewModel)
-
-        XCTAssertEqual(inputField.countNumbersIn(text: "12345"), 5)
-    }
-
-    func testCountNumbersOnAlphanumericAndSpecialCharcatersInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
-                                              showError: false,
-                                              inputViewModel: viewModel)
-
-        XCTAssertEqual(inputField.countNumbersIn(text: "//123)*gsgki45}{}{:"), 5)
-    }
-
-    func testUserInputFormattingForExpiry() {
-        let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
-                                              showError: false,
-                                              inputViewModel: viewModel)
-
-        guard let testableString = inputField.separate(inputType: .expiration, for: "1236") else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(testableString, "12 / 36")
-
-        guard let testableString = inputField.separate(inputType: .expiration, for: "8888") else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(testableString, "88 / 88")
-    }
-
     func testValidNameInput() {
         let inputField = CreditCardInputField(inputType: .name,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -123,7 +78,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testBlankNameInput() {
         let inputField = CreditCardInputField(inputType: .name,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -133,7 +87,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testValidCardInput() {
         let inputField = CreditCardInputField(inputType: .number,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -144,7 +97,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testInvalidShorterCardInput() {
         let inputField = CreditCardInputField(inputType: .number,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -154,7 +106,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testValidExpirationInput() {
         let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -165,7 +116,6 @@ class CreditCardInputFieldTests: XCTestCase {
 
     func testInvalidShortenedExpirationInput() {
         let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -173,44 +123,50 @@ class CreditCardInputFieldTests: XCTestCase {
         XCTAssertFalse(viewModel.expirationIsValid)
     }
 
-    func testSanitizeGoodCardNumber() {
+    func testConcealCardNum() {
         let inputField = CreditCardInputField(inputType: .number,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
-        let result = inputField.sanitizeInputOn("4100100010001000")
-        XCTAssertEqual(result, "4100100010001000")
+        // 16 digit card number
+        viewModel.cardNumber = "1234123412341234"
+
+        let result = inputField.concealedCardNum()
+        XCTAssertEqual(result, "••••••••••••1234")
     }
 
-    func testSanitizeGarbledCardNumber() {
+    func testConcealCardNumOnEmpty() {
         let inputField = CreditCardInputField(inputType: .number,
-                                              text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
-        let result = inputField.sanitizeInputOn("4100^&*(*&^%10    00100:><>?><> 0  *&*(100))----!!!!!0")
-        XCTAssertEqual(result, "4100100010001000")
+        viewModel.cardNumber = ""
+
+        let result = inputField.concealedCardNum()
+        XCTAssertEqual(result, "")
     }
 
-    func testSanitizeGoodExpiryInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
+    func testRevealCardNumber() {
+        let inputField = CreditCardInputField(inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
-        let result = inputField.sanitizeInputOn("1029")
-        XCTAssertEqual(result, "1029")
+        // 16 digit unformatted card number
+        viewModel.cardNumber = "4444444444444444"
+
+        let result = inputField.revealCardNum()
+        XCTAssertEqual(result, "4444-4444-4444-4444")
     }
 
-    func testSanitizeGarbledExpiryInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
-                                              text: $testableString,
+    func testRevealCardNumberOnEmpty() {
+        let inputField = CreditCardInputField(inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
-        let result = inputField.sanitizeInputOn(" 1  )(*&^0 ><>::?:  2!!!&**&*~~@@@9")
-        XCTAssertEqual(result, "1029")
+        // Empty card num
+        viewModel.cardNumber = ""
+
+        let result = inputField.revealCardNum()
+        XCTAssertEqual(result, "")
     }
 }
-*/

@@ -23,6 +23,7 @@ struct CreditCardInputField: View {
         return viewModel.state == .view
     }
     @ObservedObject var viewModel: CreditCardInputViewModel
+    let inputFieldHelper: CreditCardInputFieldHelper
     @State var text: String = ""
     @State var shouldReveal = true {
         willSet(val) {
@@ -48,6 +49,8 @@ struct CreditCardInputField: View {
         self.inputType = inputType
         self.showError = showError
         self.viewModel = inputViewModel
+        self.inputFieldHelper = CreditCardInputFieldHelper(inputType: inputType)
+
         self._shouldReveal = viewModel.state == .view ? State(initialValue: false) : State(initialValue: true)
 
         switch self.inputType {
@@ -127,7 +130,7 @@ struct CreditCardInputField: View {
         if viewModel.state == .view {
             Menu {
                 Button(String.CreditCard.EditCard.CopyLabel) {
-                    UIPasteboard.general.string = getCopyValue()
+                    UIPasteboard.general.string = viewModel.getCopyValueFor(inputType)
                 }
 
                 // We conceal and reveal credit card number for only view state
@@ -181,7 +184,7 @@ struct CreditCardInputField: View {
 
     // MARK: Helper
 
-    func updateFields(inputType: CreditCardInputType) {
+    private func updateFields(inputType: CreditCardInputType) {
         switch self.inputType {
         case .name:
             text = viewModel.nameOnCard
@@ -190,17 +193,6 @@ struct CreditCardInputField: View {
             shouldReveal = state == .edit || state == .add
         case .expiration:
             text = viewModel.expirationDate
-        }
-    }
-
-    func getCopyValue() -> String {
-        switch inputType {
-        case .name:
-            return viewModel.nameOnCard
-        case .number:
-            return viewModel.cardNumber
-        case .expiration:
-            return viewModel.expirationDate.removingOccurrences(of: " / ")
         }
     }
 
@@ -218,19 +210,19 @@ struct CreditCardInputField: View {
             guard shouldReveal else { return }
             // Credit card text with `-` delimiter
             let maxAllowedNumbers = 19
-            let val = sanitizeInputOn(newValue)
+            let val = inputFieldHelper.sanitizeInputOn(newValue)
             guard val.count <= maxAllowedNumbers else {
                 text = oldValue
                 return
             }
-            let formattedText = addCreditCardDelimiter(sanitizedCCNum: val)
+            let formattedText = inputFieldHelper.addCreditCardDelimiter(sanitizedCCNum: val)
             text = formattedText
             viewModel.cardNumber = "\(val)"
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
 
-            let newSanitizedValue = sanitizeInputOn(newValue)
-            let numbersCount = countNumbersIn(text: newSanitizedValue)
+            let newSanitizedValue = inputFieldHelper.sanitizeInputOn(newValue)
+            let numbersCount = inputFieldHelper.countNumbersIn(text: newSanitizedValue)
 
             guard !(newValue.count > formattedTextLimit) || !(numbersCount > 4) else {
                 text = oldValue
@@ -245,89 +237,14 @@ struct CreditCardInputField: View {
 
             viewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
 
-            guard let formattedText = separate(
-                inputType: inputType,
-                for: newSanitizedValue.removingOccurrences(of: " / "))
-            else { return }
+            let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
 
             text = formattedText
         }
     }
 
-    func sanitizeInputOn(_ newValue: String) -> String {
-        switch inputType {
-        case .number, .expiration:
-            let sanitized = newValue.filter { "0123456789".contains($0) }
-            if sanitized != newValue {
-                return sanitized
-            }
-
-        default: break
-        }
-
-        return newValue
-    }
-
-    func countNumbersIn(text: String) -> Int {
-        var numbersCount = 0
-        text.forEach { character in
-            character.isNumber ? numbersCount += 1 : nil
-        }
-
-        return numbersCount
-    }
-
-    /// This function takes a credit card input string and returns it in a user readable format.
-    /// - Parameters:
-    ///   - inputType: The `CreditCardInputType`.
-    ///   - textInput: The user inputted string.
-    /// - Returns: The string in the expected and readable format for that `inputType`.
-    func separate(inputType: CreditCardInputType, for textInput: String) -> String? {
-        guard let delimiterCharacter = delimiterCharacter, textInput.count <= formattedTextLimit else { return nil }
-
-        var formattedText = ""
-        switch inputType {
-        case .number:
-            formattedText = textInput.enumerated().map {
-                $0.isMultiple(of: 4) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1)
-            }.joined()
-        case .expiration:
-            formattedText = textInput.enumerated().map {
-                $0.isMultiple(of: 2) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1)
-            }.joined()
-
-        default: break
-        }
-
-        return formattedText
-    }
-
-    func updateStringWithInserting(valToUpdate: String,
-                                   separator: String,
-                                   every n: Int) -> String {
-        var result: String = ""
-        let characters = Array(valToUpdate)
-        stride(from: 0, to: characters.count, by: n).forEach {
-            result += String(characters[$0..<min($0+n, characters.count)])
-            if $0+n < characters.count {
-                result += separator
-            }
-        }
-        return result
-    }
-
-    func addCreditCardDelimiter(sanitizedCCNum: String) -> String {
-        let delimiter = "-"
-        let delimiterAfterXChars: Int = 4
-        let formattedText = updateStringWithInserting(
-            valToUpdate: sanitizedCCNum,
-            separator: delimiter,
-            every: delimiterAfterXChars)
-        return formattedText
-    }
-
     func concealedCardNum() -> String {
-        let sanitizedCardNum =  sanitizeInputOn(viewModel.cardNumber)
+        let sanitizedCardNum =  inputFieldHelper.sanitizeInputOn(viewModel.cardNumber)
         guard !sanitizedCardNum.isEmpty else { return "" }
         let concealedString = String(repeating: "•", count: sanitizedCardNum.count - 4)
         let lastFour = sanitizedCardNum.suffix(4)
@@ -335,8 +252,8 @@ struct CreditCardInputField: View {
     }
 
     func revealCardNum() -> String {
-        let sanitizedCardNum =  sanitizeInputOn(viewModel.cardNumber)
+        let sanitizedCardNum =  inputFieldHelper.sanitizeInputOn(viewModel.cardNumber)
         guard !sanitizedCardNum.isEmpty else { return "" }
-        return addCreditCardDelimiter(sanitizedCCNum: sanitizedCardNum)
+        return inputFieldHelper.addCreditCardDelimiter(sanitizedCCNum: sanitizedCardNum)
     }
 }
