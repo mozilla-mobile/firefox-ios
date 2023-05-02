@@ -35,9 +35,7 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedLayout: WallpaperSettingsViewModel.WallpaperSettingsLayout = .regular
 
-        let landscapeTrait = MockTraitCollection()
-        landscapeTrait.overridenHorizontalSizeClass = .regular
-        landscapeTrait.overridenVerticalSizeClass = .compact
+        let landscapeTrait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.updateSectionLayout(for: landscapeTrait)
 
