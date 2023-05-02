@@ -140,9 +140,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
             return false
 
-        case .action:
-            // FXIOS-6030 #13678 - Enable AppAction route path in BrowserCoordinator
-            return false
+        case let .action(routeAction):
+            switch routeAction {
+            case .closePrivateTabs:
+                handleClosePrivateTabs()
+                return true
+            case .showQRCode:
+                handleQRCode()
+                return true
+            }
 
         case .fxaSignIn:
             // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
@@ -152,6 +158,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // FXIOS-6032 #13681 - Enable defaultBrowser route path in BrowserCoordinator
             return false
         }
+    }
+
+    private func handleQRCode() {
+        browserViewController.handleQRCode()
+    }
+
+    private func handleClosePrivateTabs() {
+        browserViewController.handleClosePrivateTabs()
     }
 
     private func handle(homepanelSection section: Route.HomepanelSection) {
