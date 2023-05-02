@@ -389,7 +389,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(result)
         let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? ThemedNavigationController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertNotNil(presentedVC.topViewController as? AppSettingsTableViewController)
+        XCTAssertTrue(presentedVC.topViewController is AppSettingsTableViewController)
     }
 
     func testNewTabSettingsRoute_returnsNewTabSettingsPage() throws {
@@ -398,7 +398,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? NewTabContentSettingsViewController)
+        XCTAssertTrue(result is NewTabContentSettingsViewController)
     }
 
     func testHomepageSettingsRoute_returnsHomepageSettingsPage() throws {
@@ -407,7 +407,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? HomePageSettingViewController)
+        XCTAssertTrue(result is HomePageSettingViewController)
     }
 
     func testMailtoSettingsRoute_returnsMailtoSettingsPage() throws {
@@ -416,7 +416,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? OpenWithSettingsViewController)
+        XCTAssertTrue(result is OpenWithSettingsViewController)
     }
 
     func testSearchSettingsRoute_returnsSearchSettingsPage() throws {
@@ -425,7 +425,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? SearchSettingsTableViewController)
+        XCTAssertTrue(result is SearchSettingsTableViewController)
     }
 
     func testClearPrivateDataSettingsRoute_returnsClearPrivateDataSettingsPage() throws {
@@ -434,7 +434,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? ClearPrivateDataTableViewController)
+        XCTAssertTrue(result is ClearPrivateDataTableViewController)
     }
 
     func testFxaSettingsRoute_returnsFxaSettingsPage() throws {
@@ -443,7 +443,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? SyncContentSettingsViewController)
+        XCTAssertTrue(result is SyncContentSettingsViewController)
     }
 
     func testThemeSettingsRoute_returnsThemeSettingsPage() throws {
@@ -452,7 +452,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? ThemeSettingsController)
+        XCTAssertTrue(result is ThemeSettingsController)
     }
 
     func testWallpaperSettingsRoute_canShow_returnsWallpaperSettingsPage() throws {
@@ -462,7 +462,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         let result = subject.getSettingsViewController(settingsSection: route)
 
-        XCTAssertNotNil(result as? WallpaperSettingsViewController)
+        XCTAssertTrue(result is WallpaperSettingsViewController)
     }
 
     func testWallpaperSettingsRoute_cannotShow_returnsWallpaperSettingsPage() throws {
