@@ -1,0 +1,45 @@
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v113" = "ᱠᱨᱮᱰᱤᱴ ᱠᱟᱰ ᱥᱮᱞᱮᱫᱽ ᱢᱮ";
+
+/* Button label for cancelling editing of the credit card details shown in the form */
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "MM / YY ᱪᱟᱦᱟ ᱮᱱᱟ";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "ᱠᱟᱰ ᱮᱞ";
+
+/* Button label for closing the view where user can view their credit card info */
+"CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "ᱱᱚᱠᱚᱞ";
+
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "ᱥᱟᱯᱲᱟᱣ";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "%@ ᱨᱮ ᱪᱟᱵᱟᱜᱼᱟ";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "ᱠᱟᱰ ᱨᱮ ᱧᱩᱛᱩᱢ";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "ᱥᱟᱺᱪᱟᱣ ᱢᱮ";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "ᱠᱟᱰ ᱚᱪᱚᱜᱽ ᱢᱮ";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱠᱟᱰ";
+
+/* Button label for saving the credit card details user entered in the form */
+"CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "ᱥᱟᱺᱪᱟᱣ ᱢᱮ";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "ᱥᱟᱺᱪᱟᱣ ᱟᱨ ᱠᱟᱰ ᱠᱚ ᱟᱡ ᱛᱮ ᱯᱮᱨᱮᱡᱽ ᱢᱮ";
+
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v113" = "ᱠᱨᱮᱰᱤᱴ ᱠᱟᱰ ᱧᱮᱞ ᱢᱮ";
+

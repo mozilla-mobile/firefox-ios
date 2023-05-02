@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "동기화";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "모든 %1$@개의 알림을 껐습니다. 장치 설정 > 알림 > %2$@으로 이동하여 켤 수 있습니다.";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "유용한 기능과 %@를 최대한 활용하는 방법에 대해 알아보세요.";
 

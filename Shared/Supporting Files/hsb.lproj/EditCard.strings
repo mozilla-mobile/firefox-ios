@@ -1,0 +1,45 @@
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v113" = "Kreditnu kartu přidać";
+
+/* Button label for cancelling editing of the credit card details shown in the form */
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Přetorhnyć";
+
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "Płaćiwosć MM / LL";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "Kartowe čisło";
+
+/* Button label for closing the view where user can view their credit card info */
+"CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "Začinić";
+
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "Kopěrować";
+
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Wobdźěłać";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Płaćiwa do %@";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Mjeno na karće";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "Składować";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "Kartu wotstronić";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "SKŁADOWANE KARTY";
+
+/* Button label for saving the credit card details user entered in the form */
+"CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Składować";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Karty składować a awtomatisce wupjelnić";
+
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v113" = "Kreditnu kartu pokazać";
+

@@ -10,6 +10,18 @@
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Firefox'та ачу.";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Тизлекне, иминлекны һәм хосусыйлыкны автоматлаштыру өчен стандарт браузер итеп Firefox-ны сайлагыз.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Көндәлек гизүегезне яхшыртыгыз";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox уртача алганда ай саен бер кулланучыга 3000+ трекерны блоклый. Хосусыйлык тынычлыгы өчен безне төп браузерыгыз итегез.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox хосусыйлыгыгызны саклый";
+
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Башка браузерны төп браузер итү";
 

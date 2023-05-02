@@ -592,6 +592,21 @@
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Traçadors de malhums socials";
 
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Minaires de criptomonedas";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Aquestes cookies vos seguisson de site en site per collectar de donadas sus vos faches e gèstes en linha. Son depausats per de tèrces, coma los anonciadors o las entrepresas d’analisi de donadas.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Los minaires de criptomoneda a l'amagat utilizan la poténcia de calcul de vòstre ordenador per minar de moneda numerica. Los scripts de minaires sollicitan la batariá, alentisson l’ordenador e aumentan vòstra factura d’electricitat.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Los paramètres de vòstre navegador e de vòstre ordenador son unics. Los detectors de emprenta numerica recampan una varietat d'aquestes paramètres unics per elaborar un perfil de vos, que pòt enseguida èsser utilizat per vos pistar pendent vòstra navegacion.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Los rets socials plaçan des traçaires sus d’autres sites web per crear un perfil mai complet e ciblat de vos. Lo blocatge d'aquestes traçaires redusís çò que las entrepresas de rets socials pòdon veire de vos en linha.";
+
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Emprentas numericas";
 
@@ -634,6 +649,9 @@
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Firefox a plantat";
 
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Obrir d'articles en mòde lectura en tocant l’icòna del libre quand apareis dins la barra de títol.";
+
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Dobrir los paramètres";
 
@@ -648,6 +666,12 @@
 
 /* Password textbox in Authentication prompt */
 "Password" = "Senhal";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aquò vos permet d’enregistrar l’imatge dins Pellicula.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vòl accedir a vòstras fòtos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Tampar";
@@ -751,6 +775,9 @@
 /* Navigation title for search settings. */
 "SearchSettings.Title.Search.v106" = "Recercar";
 
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Enviar un rapòrt de plantatge que Mozilla pòsca corregir lo problèma ?";
+
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Enviar un comentari";
 
@@ -778,11 +805,26 @@
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Enviar l’onglet";
 
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Avètz pas cap d'autre aparelh prèst a èsser sincronizat e connectat a aqueste compte Firefox.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Obrissètz Firefox, anatz als paramètres e connectatz per aviar.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Sètz pas connectat a vòstre compte Firefox.";
+
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Enviar";
 
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Onglet novèl recebut d’un autre aparelh.";
+
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_title" = "Onglet recebut";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Onglet novèl recebut dins %@";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tocatz per començar";
@@ -937,6 +979,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "En dobrir Firefox";
 
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Aplicacion de corrièr electronic";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Enregistrar los identificants";
+
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Acabat";
 
@@ -946,14 +994,50 @@
 /* title for a link that explains how mozilla collects telemetry */
 "Settings.SendUsage.Link" = "Ne saber mai.";
 
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla s’esfòrça de reculhir pas que las donadas necessàrias per vos ofrir e melhorar Firefox.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Mandar de donadas d’utilizacion";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Afichar dins lo menú de l’aplication";
+
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Dobrir un onglet novèl";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Utilizar las acorcha Siri per obrir rapidament Firefox via Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Acorcha Siri";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Nivèl de proteccion";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Proteccion contra lo seguiment";
 
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Estandard (defaut)";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Estricte";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Proteccion renfortida contra lo seguiment";
+
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Resolucion de problèmas";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Ne veire mai";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Aquò escafarà totas las donadas de vòstre site web. Aquò pòt pas èsser anullat.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Donadas del site web";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Apondre a la lista de lectura";
@@ -994,14 +1078,23 @@
 /* Support section title */
 "Support" = "Assisténcia";
 
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Ripar tres dets cap a drecha o esquèrra per tampar l’onglet.";
+
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Sincronizacion…";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sync es fòra linha";
 
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Onglet %1$@ de %2$@";
+
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Afichar totes los onglets";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Onglets %1$@ a %2$@ de %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
 "Tabs Tray" = "Lista d’onglets";
@@ -1018,8 +1111,23 @@
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Dobrir un onglet novèl";
 
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "La pagina se podiá pas afichar en mòde lectura.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "I a agut un problèma a l'accès dels onglets de vòstres autres aparelhs. Tornatz ensajar mai tard.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "I a agut una error al moment de convertir la pagina";
+
 /* Relative date for date in past week. */
 "this week" = "aquesta setmana";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Pas ara";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Obrir l’App Store";
 
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Uèi";
@@ -1033,8 +1141,26 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Tampar totes los onglets";
 
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Suprimir la pagina — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Non";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Òc";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Aquesta pagina sembla èsser en %1$@. La traduire en %2$@ amb %3$@ ?";
+
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Pegar e i anar";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Cercar amb Firefox";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "pas legit";
@@ -1045,6 +1171,12 @@
 /* Accessibility label for the main web content view */
 "Web content" = "Contengut web";
 
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Benvenguda dins vòstra lista de lectura";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Bon, es embestiant.";
+
 /* Tile title for Wikipedia */
 "Wikipedia" = "Wikipèdia";
 
@@ -1053,6 +1185,9 @@
 
 /* This label is meant to signify the section containing a group of items from the past 24 hours. */
 "Yesterday" = "Ièr";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Avètz pas cap d'onglet obèrt dins Firefox sus vòstres autres aparelhs.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Vòstres dreits";
