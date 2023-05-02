@@ -347,12 +347,22 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
     }
 
-
     func testHandleFxaSignIn_returnsTrue() {
+        // Given
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!)
         let result = subject.handle(route: route!)
+
+        // Then
         XCTAssertTrue(result)
+        XCTAssertEqual(mbvc.presentSignInCount, 1)
+        XCTAssertEqual(mbvc.presentSignInFlowType, .emailLoginFlow)
+        XCTAssertEqual(mbvc.presentSignInFxaOptions, FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["signin": "coolcodes", "user": "foo", "email": "bar"]))
+        XCTAssertEqual(mbvc.presentSignInReferringPage, ReferringPage.none)
     }
 
     // MARK: - Helpers

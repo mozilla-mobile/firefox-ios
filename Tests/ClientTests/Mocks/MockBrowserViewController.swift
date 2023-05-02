@@ -34,6 +34,11 @@ class MockBrowserViewController: BrowserViewController {
     var showLibraryCount = 0
     var openURLInNewTabCount = 0
 
+    var presentSignInFxaOptions: FxALaunchParams?
+    var presentSignInFlowType: FxAPageType?
+    var presentSignInReferringPage: ReferringPage?
+    var presentSignInCount: Int = 0
+
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
         switchToPrivacyModeIsPrivate = isPrivate
@@ -73,5 +78,12 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
+    }
+
+    override func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        presentSignInFxaOptions = fxaOptions
+        presentSignInFlowType = flowType
+        presentSignInReferringPage = referringPage
+        presentSignInCount += 1
     }
 }
