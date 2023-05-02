@@ -364,8 +364,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.qrCodeCount, 1)
     }
 
-    
-
     func testHandleClosePrivateTabs_returnsTrue() {
         // Given
         let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs")!
