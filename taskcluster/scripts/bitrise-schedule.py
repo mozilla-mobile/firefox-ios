@@ -228,10 +228,16 @@ async def do_http_request_json(client, url, method="get", **kwargs):
 
 
 async def log_bitrise_perfherder_data(file_destination):
-    with open(file_destination, 'r') as f:
-        for line in f:
-            if line.startswith('PERFHERDER_DATA'):
-                log.info(line)
+    if not os.path.isfile(file_destination):
+        raise Exception(f"Bitrise.log not found at {file_destination}")
+    
+    try:
+        with open(file_destination, 'r') as f:
+            for line in f:
+                if line.startswith('PERFHERDER_DATA'):
+                    log.info(line)
+    except Exception as e:
+        log.error(f"Error reading Bitrise.log: {e}")
 
 
 __name__ == "__main__" and sync_main()
