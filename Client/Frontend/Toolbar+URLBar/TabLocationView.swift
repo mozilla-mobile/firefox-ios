@@ -340,13 +340,15 @@ extension TabLocationView: AccessibilityActionsSource {
     }
 }
 
-extension TabLocationView: NotificationThemeable {
-    func applyTheme() {
-        urlTextField.textColor = UIColor.legacyTheme.textField.textAndTint
-        readerModeButton.applyTheme()
-        trackingProtectionButton.applyTheme()
+// MARK: ThemeApplicable
+extension TabLocationView: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        urlTextField.textColor = theme.colors.textPrimary
+        readerModeButton.applyTheme(theme: theme)
+        trackingProtectionButton.applyTheme(theme: theme)
+        shareButton.applyTheme(theme: theme)
 
-        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.legacyTheme.textField.background
+        let color = theme.type == .dark ? UIColor(white: 0.3, alpha: 0.6): theme.colors.layer3
         menuBadge.badge.tintBackground(color: color)
     }
 }
