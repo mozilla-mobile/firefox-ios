@@ -39,6 +39,9 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInReferringPage: ReferringPage?
     var presentSignInCount: Int = 0
 
+    var qrCodeCount = 0
+    var closePrivateTabsCount = 0
+
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
         switchToPrivacyModeIsPrivate = isPrivate
@@ -78,6 +81,14 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
+    }
+
+    override func handleQRCode() {
+        qrCodeCount += 1
+    }
+
+    override func handleClosePrivateTabs() {
+        closePrivateTabsCount += 1
     }
 
     override func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
