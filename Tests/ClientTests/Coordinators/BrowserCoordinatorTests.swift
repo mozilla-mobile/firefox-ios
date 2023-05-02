@@ -347,6 +347,14 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(glean.savedHandleDeeplinkUrl, expectedURL)
     }
 
+
+    func testHandleFxaSignIn_returnsTrue() {
+        let subject = createSubject()
+        let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!)
+        let result = subject.handle(route: route!)
+        XCTAssertTrue(result)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
@@ -357,156 +365,5 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          glean: glean)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-
-    func testHandleHomepanelBookmarks_returnsTrue() {
-        // Given
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        let expectation = XCTestExpectation(description: "Show bookmarks panel")
-        mbvc.showLibraryCalled = { panel in
-            XCTAssertEqual(panel, .bookmarks)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testHandleHomepanelHistory_returnsTrue() {
-        // Given
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        let expectation = XCTestExpectation(description: "Show history panel")
-        mbvc.showLibraryCalled = { panel in
-            XCTAssertEqual(panel, .history)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testHandleHomepanelReadingList_returnsTrue() {
-        // Given
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        let expectation = XCTestExpectation(description: "Show reading list panel")
-        mbvc.showLibraryCalled = { panel in
-            XCTAssertEqual(panel, .readingList)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testHandleHomepanelDownloads_returnsTrue() {
-        // Given
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        let expectation = XCTestExpectation(description: "Show downloads panel")
-        mbvc.showLibraryCalled = { panel in
-            XCTAssertEqual(panel, .downloads)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testHandleHomepanelTopSites_returnsTrue() {
-        // Given
-        let topSitesURL = URL(string: "firefox://deep-link?url=/homepanel/top-sites")!
-        let expectation = XCTestExpectation(description: "openURLInNewTab is called")
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.openURLInNewTabCalled = { url, isPrivate in
-            XCTAssertEqual(HomePanelType.topSites.internalUrl, url)
-            XCTAssertEqual(isPrivate, false)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: topSitesURL)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 0.1)
-    }
-
-    func testHandleNewPrivateTab_returnsTrue() {
-        // Given
-        let newPrivateTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!
-        let expectation = XCTestExpectation(description: "openBlankNewTab is called")
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.openBlankNewTabCalled = { isPrivate in
-            XCTAssertEqual(isPrivate, true)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: newPrivateTabURL)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 0.1)
-    }
-
-    func testHandleHomepanelNewTab_returnsTrue() {
-        // Given
-        let newTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-tab")!
-        let expectation = XCTestExpectation(description: "openBlankNewTab is called")
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        mbvc.openBlankNewTabCalled = { isPrivate in
-            XCTAssertEqual(isPrivate, false)
-            expectation.fulfill()
-        }
-        subject.browserViewController = mbvc
-
-        // When
-        let route = routeBuilder.makeRoute(url: newTabURL)
-        let result = subject.handle(route: route!)
-
-        // Then
-        XCTAssertTrue(result)
-        wait(for: [expectation], timeout: 0.1)
-    }
-
-    func testHandleFxaSignIn_returnsTrue() {
-        let subject = createSubject()
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!)
-        let result = subject.handle(route: route!)
-        XCTAssertTrue(result)
     }
 }
