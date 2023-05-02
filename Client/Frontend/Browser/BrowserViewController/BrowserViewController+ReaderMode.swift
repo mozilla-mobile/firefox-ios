@@ -55,7 +55,7 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
 extension BrowserViewController {
     func updateReaderModeBar() {
         guard let readerModeBar = readerModeBar else { return }
-        readerModeBar.applyTheme()
+        readerModeBar.applyTheme(theme: self.themeManager.currentTheme)
 
         if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
             readerModeBar.unread = record.unread
