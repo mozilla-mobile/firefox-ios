@@ -330,8 +330,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     @objc
     func linkButtonAction() {
-        viewModel.sendTelemetryButton(isPrimaryAction: false)
-        delegate?.showNextPage(viewModel.cardType)
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5850
     }
 
     // MARK: - Themeable
