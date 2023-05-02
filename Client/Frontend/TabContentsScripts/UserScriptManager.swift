@@ -4,7 +4,7 @@
 
 import WebKit
 
-class UserScriptManager {
+class UserScriptManager: FeatureFlaggable {
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.
     public static let appIdToken = UUID().uuidString
 
@@ -43,6 +43,22 @@ class UserScriptManager {
                 let userScript = WKUserScript.createInDefaultContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
                 compiledUserScripts[name] = userScript
             }
+
+            // Autofill scripts
+            let autofillName = "Autofill\(name)"
+            if let autofillScriptCompatPath = Bundle.main.path(
+                forResource: autofillName, ofType: "js"),
+                let source = try? NSString(
+                    contentsOfFile: autofillScriptCompatPath,
+                    encoding: String.Encoding.utf8.rawValue) as String {
+                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+                let userScript = WKUserScript.createInDefaultContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly)
+                compiledUserScripts[autofillName] = userScript
+            }
+
             let webcompatName = "Webcompat\(name)"
             if let webCompatPath = Bundle.main.path(forResource: webcompatName, ofType: "js"),
                 let source = try? NSString(contentsOfFile: webCompatPath, encoding: String.Encoding.utf8.rawValue) as String {
@@ -60,6 +76,10 @@ class UserScriptManager {
         // removed to prevent the same script from being injected twice.
         tab.webView?.configuration.userContentController.removeAllUserScripts()
 
+        // Feature flag for CC scripts until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+
         // Inject all pre-compiled user scripts.
         [(WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: false),
          (WKUserScriptInjectionTime.atDocumentEnd, mainFrameOnly: false),
@@ -70,6 +90,12 @@ class UserScriptManager {
             if let userScript = compiledUserScripts[name] {
                 tab.webView?.configuration.userContentController.addUserScript(userScript)
             }
+
+            let autofillName = "Autofill\(name)"
+            if autofillCreditCardStatus, let autofillScript = compiledUserScripts[autofillName] {
+                tab.webView?.configuration.userContentController.addUserScript(autofillScript)
+            }
+
             let webcompatName = "Webcompat\(name)"
             if let webcompatUserScript = compiledUserScripts[webcompatName] {
                 tab.webView?.configuration.userContentController.addUserScript(webcompatUserScript)
