@@ -234,5 +234,4 @@ async def print_bitrise_perfherder_data(file_destination):
                 print(line, end='')
 
 
-
 __name__ == "__main__" and sync_main()
