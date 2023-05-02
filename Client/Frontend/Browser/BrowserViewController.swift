@@ -396,7 +396,6 @@ class BrowserViewController: UIViewController {
             contentContainer.alpha = 0
         }
         urlBar.locationContainer.alpha = 0
-        topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -420,10 +419,6 @@ class BrowserViewController: UIViewController {
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
-                // This has to be at the end of the animation, because `switchForegroundStatus` gets the tab cells by
-                // using `collectionView.visibleCells` and before the animation is complete, the cells are not going to
-                // be visible, so it will always return an empty array.
-                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
