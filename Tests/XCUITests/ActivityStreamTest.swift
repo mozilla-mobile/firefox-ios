@@ -5,7 +5,7 @@
 import XCTest
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
-let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "Mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "Mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
