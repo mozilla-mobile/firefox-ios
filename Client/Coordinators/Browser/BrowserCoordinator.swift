@@ -184,6 +184,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private func handle(searchURL: URL?, tabId: String) {
         browserViewController.handle(url: searchURL, tabId: tabId)
     }
+
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
     }
