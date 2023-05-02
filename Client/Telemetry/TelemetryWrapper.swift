@@ -450,7 +450,6 @@ extension TelemetryWrapper {
         // MARK: - App menu
         case homePageMenu = "homepage-menu"
         case siteMenu = "site-menu"
-        case library = "library"
         case home = "home-page"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
@@ -1103,8 +1102,6 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.signIntoSync.add()
         case (.action, .tap, .home, _, _):
             GleanMetrics.AppMenu.home.add()
-        case (.action, .tap, .library, _, _):
-            GleanMetrics.AppMenu.library.add()
         case (.action, .tap, .blockImagesEnabled, _, _):
             GleanMetrics.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):

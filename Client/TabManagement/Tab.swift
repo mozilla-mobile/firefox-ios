@@ -439,7 +439,7 @@ class Tab: NSObject {
         }
     }
 
-    func createWebview() {
+    func createWebview(with restoreSessionData: Data? = nil) {
         if webView == nil {
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
@@ -458,7 +458,7 @@ class Tab: NSObject {
             webView.scrollView.layer.masksToBounds = false
             webView.navigationDelegate = navigationDelegate
 
-            restore(webView)
+            restore(webView, sessionData: restoreSessionData)
 
             self.webView = webView
 
@@ -482,7 +482,15 @@ class Tab: NSObject {
         }
     }
 
-    func restore(_ webView: WKWebView) {
+    func restore(_ webView: WKWebView, sessionData: Data? = nil) {
+        // If the session data field is populated it means the new session store is in use and the session data
+        // now comes from a different source than save tab and parsing is managed by the web view itself
+        if #available(iOS 15, *),
+           let sessionData = sessionData {
+            webView.interactionState = sessionData
+            return
+        }
+
         // Pulls restored session data from a previous LegacySavedTab to load into the Tab. If it's nil, a session restore
         // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL

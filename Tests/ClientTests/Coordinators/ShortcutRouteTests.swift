@@ -27,7 +27,7 @@ final class ShortcutRouteTests: XCTestCase {
     func testNewPrivateTabShortcut() {
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.NewPrivateTab", localizedTitle: "New Private Tab")
         let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
-        XCTAssertEqual(route, .search(url: nil, isPrivate: true))
+        XCTAssertEqual(route, .search(url: nil, isPrivate: true, options: [.focusLocationField]))
     }
 
     func testOpenLastBookmarkShortcutWithValidUrl() {

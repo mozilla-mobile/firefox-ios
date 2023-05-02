@@ -1,7 +1,9 @@
 ---
 trust-domain: mobile
 treeherder:
-    group-names: {}
+    group-names:
+        I: Docker Image Builds
+        B: Builds
 
 task-priority: highest
 

@@ -12,19 +12,23 @@ import Shared
 class TabManagerTests: XCTestCase {
     var subject: TabManagerImplementation!
     var mockTabStore: MockTabDataStore!
+    var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
     let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1_000_000_000
+
     override func setUp() {
         super.setUp()
-        AppConstants.useNewTabDataStore = true
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
+        mockSessionStore = MockTabSessionStore()
         subject = TabManagerImplementation(profile: mockProfile,
                                            imageStore: mockDiskImageStore,
-                                           tabDataStore: mockTabStore)
+                                           tabDataStore: mockTabStore,
+                                           tabSessionStore: mockSessionStore)
+        subject.isNewTabStoreEnabled = true
     }
 
     override func tearDown() {

@@ -14,11 +14,22 @@ import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var logger: Logger = DefaultLogger.shared
 
-    /// This is temporary. We don't want to continue treating App / Scene delegates as containers for certain session specific properties.
-    /// TODO: When we begin to support multiple scenes, this is risky to keep. If we foregroundBVC, we should have a more specific
-    /// way to foreground the BVC FOR the scene being actively interacted with.
+    /// Do not use, this will be removed as part of FXIOS-6036
     var browserViewController: BrowserViewController!
+
+    /// This is a temporary work around until we have the architecture to properly replace the use cases where this code is used
+    /// Do not use in new code under any circumstances
+    var coordinatorBrowserViewController: BrowserViewController {
+        if CoordinatorFlagManager.isCoordinatorEnabled,
+           let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
+            return browserCoordinator.browserViewController
+        } else {
+            logger.log("BrowserViewController couldn't be retrieved", level: .fatal, category: .lifecycle)
+            return BrowserViewController(profile: profile, tabManager: tabManager)
+        }
+    }
 
     let profile: Profile = AppContainer.shared.resolve()
     let tabManager: TabManager = AppContainer.shared.resolve()
@@ -50,17 +61,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             if let context = connectionOptions.urlContexts.first,
                let route = routeBuilder.makeRoute(url: context.url) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
 
             if let activity = connectionOptions.userActivities.first,
                let route = routeBuilder.makeRoute(userActivity: activity) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
 
             if let shortcut = connectionOptions.shortcutItem,
                let route = routeBuilder.makeRoute(shortcutItem: shortcut) {
-                sceneCoordinator?.handle(route: route)
+                sceneCoordinator?.find(route: route)
             }
         } else {
             let window = configureWindowFor(scene)
@@ -113,7 +124,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let url = URLContexts.first?.url,
                   let route = routeBuilder.makeRoute(url: url) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             guard let url = URLContexts.first?.url,
                   let routerPath = NavigationPath(url: url) else { return }
@@ -143,7 +154,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
                 browserViewController.openBlankNewTab(focusLocationField: false)
@@ -181,7 +192,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
-            sceneCoordinator?.handle(route: route)
+            sceneCoordinator?.find(route: route)
         } else {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,

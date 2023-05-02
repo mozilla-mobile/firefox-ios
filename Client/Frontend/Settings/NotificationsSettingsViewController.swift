@@ -148,7 +148,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             title: .OpenSettingsString,
             style: .default
         ) { _ in
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            DefaultApplicationHelper().openSettings()
         }
         accessDenied.addAction(settingsAction)
         return accessDenied

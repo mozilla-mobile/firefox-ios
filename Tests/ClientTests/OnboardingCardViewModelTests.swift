@@ -118,6 +118,7 @@ class OnboardingCardViewModelTests: XCTestCase {
         return OnboardingInfoModel(image: nil,
                                    title: "Title",
                                    description: "Description",
+                                   linkButtonTitle: "Link",
                                    primaryAction: "Button1",
                                    secondaryAction: "Button2",
                                    a11yIdRoot: "A11yId")

@@ -42,13 +42,13 @@ struct RouteBuilder {
                 }
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
-                return .fxaSignIn(FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: url.getQuery()))
+                return .fxaSignIn(params: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: url.getQuery()))
 
             case .openUrl:
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
-                return .search(query: urlScanner.value(query: "text") ?? "")
+                return .searchQuery(query: urlScanner.value(query: "text") ?? "")
 
             case .glean:
                     return .glean(url: url)
@@ -69,7 +69,7 @@ struct RouteBuilder {
                 // Widget Quick links - medium - open copied url
                 if !UIPasteboard.general.hasURLs {
                     let searchText = UIPasteboard.general.string ?? ""
-                    return .search(query: searchText)
+                    return .searchQuery(query: searchText)
                 } else {
                     let url = UIPasteboard.general.url
                     return .search(url: url, isPrivate: isPrivate)
@@ -82,9 +82,8 @@ struct RouteBuilder {
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
                 let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
-                    let tab = tabs[uuid]
-                    return .search(url: tab?.url, tabId: uuid)
+                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
+                    return .searchURL(url: tab.url, tabId: uuid)
                 } else {
                     return .search(url: nil, isPrivate: false)
                 }
@@ -94,7 +93,7 @@ struct RouteBuilder {
                 let tabs = SimpleTab.getSimpleTabs()
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
                     let tab = tabs[uuid]
-                    return .search(url: tab?.url, tabId: uuid)
+                    return .searchURL(url: tab?.url, tabId: uuid)
                 } else {
                     return .search(url: nil, isPrivate: false)
                 }
@@ -106,7 +105,7 @@ struct RouteBuilder {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
-            return .search(url: url, isPrivate: isPrivate())
+            return .search(url: url, isPrivate: isPrivate(), options: [.focusLocationField])
         } else {
             return nil
         }
@@ -175,7 +174,7 @@ struct RouteBuilder {
         case .newTab:
             return .search(url: nil, isPrivate: false, options: [.focusLocationField])
         case .newPrivateTab:
-            return .search(url: nil, isPrivate: true)
+            return .search(url: nil, isPrivate: true, options: [.focusLocationField])
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {
                 return .search(url: urlToOpen, isPrivate: false, options: [.switchToNormalMode])

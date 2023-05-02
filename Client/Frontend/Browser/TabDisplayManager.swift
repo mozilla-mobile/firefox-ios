@@ -484,11 +484,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         _ = profile.recentlyClosedTabs.popFirstTab()
 
         refreshStore {
-            // Reload collectionView doesn't refresh correctly the restore tab, forcing the reload this way
-            self.collectionView.performBatchUpdates({ [weak self] in
-                let visibleItems = self?.collectionView.indexPathsForVisibleItems ?? []
-                self?.collectionView.reloadItems(at: visibleItems)
-            })
+            self.updateCellFor(tab: tab, selectedTabChanged: true)
         }
     }
 
@@ -889,16 +885,19 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
             saveRegularOrderedTabs(from: filteredTabs)
         }
 
-        dataStore.removeAll()
-
-        filteredTabs.forEach {
-            dataStore.insert($0)
-        }
-
-        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-        let start = IndexPath(row: sourceIndex, section: section)
-        let end = IndexPath(row: destinationIndexPath.item, section: section)
+        /// According to Apple's documentation the best place to make the changes to the collectionView and dataStore is
+        /// during the completion call of performBatchUpdates
         updateWith(animationType: .moveTab) { [weak self] in
+            self?.dataStore.removeAll()
+
+            self?.filteredTabs.forEach {
+                self?.dataStore.insert($0)
+            }
+
+            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+            let start = IndexPath(row: sourceIndex, section: section)
+            let end = IndexPath(row: destinationIndexPath.item, section: section)
+
             self?.collectionView.moveItem(at: start, to: end)
         }
     }
@@ -929,11 +928,20 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 
 extension TabDisplayManager: TabEventHandler {
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
-        updateCellFor(tab: tab, selectedTabChanged: false)
+        guard let indexPath = getIndexPath(tab: tab) else { return }
+        refreshCell(atIndexPath: indexPath)
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
-        updateCellFor(tab: tab, selectedTabChanged: false)
+        guard let indexPath = getIndexPath(tab: tab) else { return }
+        refreshCell(atIndexPath: indexPath)
+    }
+
+    private func getIndexPath(tab: Tab) -> IndexPath? {
+        guard let index = dataStore.index(of: tab) else { return nil }
+        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+
+        return IndexPath(row: index, section: section)
     }
 
     private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
@@ -968,7 +976,8 @@ extension TabDisplayManager: TabEventHandler {
     }
 
     private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell,
+              let tab = dataStore.at(indexPath.row) else { return }
 
         // Only update from nextTabIndex if needed
         guard forceUpdate || cell.isSelectedTab else { return }
@@ -1078,9 +1087,7 @@ extension TabDisplayManager: TabManagerDelegate {
         /// collectionView is not visible the dataSource section/items differs from the actions to be perform
         /// which causes the crash
         collectionView.numberOfItems(inSection: 0)
-        collectionView.performBatchUpdates({ [weak self] in
-            // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
-            self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
+        collectionView.performBatchUpdates({
             operation()
         }, completion: { [weak self] (done) in
             self?.performingChainedOperations = false

@@ -396,7 +396,6 @@ class BrowserViewController: UIViewController {
             contentContainer.alpha = 0
         }
         urlBar.locationContainer.alpha = 0
-        topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -420,10 +419,6 @@ class BrowserViewController: UIViewController {
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
-                // This has to be at the end of the animation, because `switchForegroundStatus` gets the tab cells by
-                // using `collectionView.visibleCells` and before the animation is complete, the cells are not going to
-                // be visible, so it will always return an empty array.
-                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
@@ -1507,6 +1502,46 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func handle(query: String) {
+       openBlankNewTab(focusLocationField: false)
+       urlBar(urlBar, didSubmitText: query)
+    }
+
+    func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        if let url = url {
+            if options?.contains(.switchToNormalMode) == true {
+                switchToPrivacyMode(isPrivate: false)
+            }
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+        } else {
+            openBlankNewTab(focusLocationField: options?.contains(.focusLocationField) == true, isPrivate: isPrivate)
+        }
+    }
+
+    func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
+        if let url = url {
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
+        } else {
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        }
+    }
+
+    func handleQRCode() {
+        let qrCodeViewController = QRCodeViewController()
+        qrCodeViewController.qrCodeDelegate = self
+        presentedViewController?.dismiss(animated: true)
+        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+    }
+
+    func handleClosePrivateTabs() {
+        tabManager.removeTabs(tabManager.privateTabs)
+        guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
+            tabManager.selectTab(tabManager.addTab())
+            return
+        }
+        tabManager.selectTab(tab)
+    }
+
     func switchToPrivacyMode(isPrivate: Bool) {
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)
@@ -1562,6 +1597,11 @@ class BrowserViewController: UIViewController {
                 self.urlBar.setLocation(text, search: true)
             }
         }
+    }
+
+    func openNewTabFromMenu(focusLocationField: Bool) {
+        overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        openBlankNewTab(focusLocationField: focusLocationField)
     }
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
@@ -1622,7 +1662,9 @@ class BrowserViewController: UIViewController {
 
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
-        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
+        let selectedTabWebview = tabManager.selectedTab?.webView
+        let controller = helper.createActivityViewController(selectedTabWebview) {
+            [unowned self] completed, activityType in
             switch activityType {
             case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
@@ -1641,7 +1683,7 @@ class BrowserViewController: UIViewController {
             // invoked on iOS 10. See Bug 1297768 for additional details.
             self.displayedPopoverController = nil
             self.updateDisplayedPopoverProperties = nil
-        })
+        }
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
@@ -2387,7 +2429,7 @@ extension BrowserViewController {
         }
         dBOnboardingViewController.viewModel.goToSettings = {
             dBOnboardingViewController.dismiss(animated: true) {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                DefaultApplicationHelper().openSettings()
             }
         }
 
@@ -2684,11 +2726,21 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
+
+        finishEditionMode()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+    }
+
+    private func finishEditionMode() {
+        // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
+        let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+        if newTabChoice != .topSites {
+            overlayManager.finishEditing(shouldCancelLoading: false)
+        }
     }
 }
 
@@ -2871,6 +2923,8 @@ extension BrowserViewController {
     /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
     ///
     /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
+    ///
+    /// NOTE: Do not use foregroundBVC in new code under any circumstances
     public static func foregroundBVC() -> BrowserViewController? {
         guard let scene = UIApplication.shared.connectedScenes.first else {
             DefaultLogger.shared.log("No connected scenes exist.",
@@ -2886,7 +2940,11 @@ extension BrowserViewController {
             return nil
         }
 
-        return sceneDelegate.browserViewController
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            return sceneDelegate.coordinatorBrowserViewController
+        } else {
+            return sceneDelegate.browserViewController
+        }
     }
 }
 

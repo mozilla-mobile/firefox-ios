@@ -6,9 +6,6 @@ import Foundation
 import Common
 
 public protocol TabSessionStore {
-    /// The directory the session data should be stored at
-    var filesDirectory: String { get }
-
     /// Saves the session data associated with a tab
     /// - Parameters:
     ///   - tabID: an ID that uniquely identifies the tab
@@ -18,24 +15,24 @@ public protocol TabSessionStore {
     /// Fetches the session data associated with a tab
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
-    func fetchTabSession(tabID: UUID) async -> Data
+    func fetchTabSession(tabID: UUID) async -> Data?
 
     /// Erases all session data files stored on disk
     func clearAllData() async
 }
 
-actor DefaultTabSessionStore {
+public actor DefaultTabSessionStore: TabSessionStore {
     let fileManager: TabFileManager
     let logger: Logger
 
-    init(fileManager: TabFileManager = DefaultTabFileManager(),
-         logger: Logger = DefaultLogger.shared) {
+    public init(fileManager: TabFileManager = DefaultTabFileManager(),
+                logger: Logger = DefaultLogger.shared) {
         self.fileManager = fileManager
         self.logger = logger
     }
 
-    func saveTabSession(tabID: UUID, sessionData: Data) async {
-        guard let path = fileManager.tabDataDirectory()?.appendingPathComponent(tabID.uuidString) else { return }
+    public func saveTabSession(tabID: UUID, sessionData: Data) async {
+        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(tabID.uuidString) else { return }
         do {
             try sessionData.write(to: path, options: .atomicWrite)
         } catch {
@@ -45,12 +42,21 @@ actor DefaultTabSessionStore {
         }
     }
 
-    func fetchTabSession(tabID: UUID) async -> Data {
-        // TODO: FXIOS-5882
-        return Data()
+    public func fetchTabSession(tabID: UUID) async -> Data? {
+        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(tabID.uuidString)
+        else { return nil }
+
+        do {
+            return try Data(contentsOf: path)
+        } catch {
+            logger.log("Failed to decode session data with error: \(error.localizedDescription)",
+                       level: .debug,
+                       category: .tabs)
+            return nil
+        }
     }
 
-    func clearAllData() async {
+    public func clearAllData() async {
         // TODO: FXIOS-6075
     }
 }
