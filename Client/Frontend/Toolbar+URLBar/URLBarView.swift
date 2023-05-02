@@ -190,7 +190,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         return backButton
     }()
 
-    lazy var actionButtons: [NotificationThemeable & UIButton] = [
+    lazy var actionButtons: [ThemeApplicable & UIButton] = [
         self.tabsButton,
         self.homeButton,
         self.bookmarksButton,
@@ -222,8 +222,11 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
                                                          imageMask: ImageIdentifiers.menuWarningMask)
+    var themeManager: ThemeManager
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.themeManager = themeManager
         self.profile = profile
         self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
@@ -443,7 +446,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             locationTextField.textDragInteraction?.isEnabled = false
         }
 
-        locationTextField.applyTheme()
+        locationTextField.applyTheme(theme: self.themeManager.currentTheme)
         locationTextField.backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
     }
 
@@ -527,7 +530,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         delegate?.urlBarDidEnterOverlayMode(self)
 
-        applyTheme()
+        applyTheme(theme: self.themeManager.currentTheme)
 
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
@@ -558,7 +561,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
-        applyTheme()
+        applyTheme(theme: self.themeManager.currentTheme)
     }
 
     func prepareOverlayAnimation() {
@@ -842,28 +845,28 @@ extension URLBarView {
     }
 }
 
-// MARK: - NotificationThemeable
-extension URLBarView: NotificationThemeable {
-    func applyTheme() {
-        locationView.applyTheme()
-        locationTextField?.applyTheme()
+// MARK: ThemeApplicable
+extension URLBarView: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        locationView.applyTheme(theme: theme)
+        locationTextField?.applyTheme(theme: theme)
 
-        actionButtons.forEach { $0.applyTheme() }
-        tabsButton.applyTheme()
-        addNewTabButton.applyTheme()
+        actionButtons.forEach { $0.applyTheme(theme: theme) }
+        tabsButton.applyTheme(theme: theme)
+        addNewTabButton.applyTheme(theme: theme)
 
-        cancelTintColor = UIColor.legacyTheme.browser.tint
-        showQRButtonTintColor = UIColor.legacyTheme.browser.tint
-        backgroundColor = UIColor.legacyTheme.browser.background
-        line.backgroundColor = UIColor.legacyTheme.browser.urlBarDivider
+        cancelTintColor = theme.colors.textPrimary
+        showQRButtonTintColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer1
+        line.backgroundColor = theme.colors.borderPrimary
 
-        locationBorderColor = UIColor.legacyTheme.urlbar.border
-        locationView.backgroundColor = inOverlayMode ? UIColor.legacyTheme.textField.backgroundInOverlay : UIColor.legacyTheme.textField.background
-        locationContainer.backgroundColor = UIColor.legacyTheme.textField.background
+        locationBorderColor = theme.colors.borderPrimary
+        locationView.backgroundColor = theme.colors.layer3
+        locationContainer.backgroundColor = theme.colors.layer3
 
-        privateModeBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
-        appMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
-        warningMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
+        appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
+        warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 }
 
@@ -880,7 +883,7 @@ extension URLBarView: PrivateModeUI {
                                       endColor: UIColor.legacyTheme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
-        applyTheme()
+        applyTheme(theme: self.themeManager.currentTheme)
     }
 }
 
