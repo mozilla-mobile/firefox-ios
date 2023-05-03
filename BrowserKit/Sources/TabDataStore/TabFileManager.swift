@@ -61,9 +61,11 @@ public struct DefaultTabFileManager: TabFileManager {
     }
 
     public func tabSessionDataDirectory() -> URL? {
-        let path: String = BrowserKitInformation.shared.sharedContainerIdentifier
-        let container = fileManager.containerURL(forSecurityApplicationGroupIdentifier: path)
-        return container?.appendingPathComponent(PathInfo.tabSessionData)
+        guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
+        var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
+        print("HERE: \(containerURL!)")
+        return containerURL?.appendingPathComponent(PathInfo.tabSessionData)
     }
 
     public func windowDataDirectory(isBackup: Bool) -> URL? {

@@ -168,6 +168,8 @@ class TabManagerImplementation: LegacyTabManager {
             return
         }
 
+        guard tab.tabUUID != selectedTab?.tabUUID else { return }
+
         Task {
             let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
             await selectTabWithSession(tab: tab,
