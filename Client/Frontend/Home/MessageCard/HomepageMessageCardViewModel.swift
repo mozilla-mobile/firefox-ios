@@ -17,7 +17,6 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
     private var messagingManager: GleanPlumbMessageManagerProtocol
 
     weak var delegate: HomepageDataModelDelegate?
-    weak var homepanelDelegate: HomePanelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
     var theme: Theme

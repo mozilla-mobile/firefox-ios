@@ -27,8 +27,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     private var viewController: SurveySurfaceViewController?
 
     var dismissClosure: (() -> Void)?
-    // FXIOS-6036: Remove HomepanelDelegate since surface survey isn't shown from BVC anymore
-    weak var homepanelDelegate: HomePanelDelegate?
     weak var openURLDelegate: OpenURLDelegate?
 
     var shouldShowSurveySurface: Bool {
