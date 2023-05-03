@@ -65,31 +65,32 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
+        let shortName = AppName.shortName.rawValue
+
         switch cardType {
         case .welcome:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
-                                       title: .Onboarding.IntroWelcomeTitle,
-                                       description: .Onboarding.IntroWelcomeDescription,
-                                       linkButtonTitle: .Onboarding.IntroLinkButtonTitle,
-                                       primaryAction: .Onboarding.IntroAction,
-                                       secondaryAction: .Onboarding.IntroSecondaryAction,
+                                       title: String(format: .Onboarding.Welcome.Title, shortName),
+                                       description: String(format: .Onboarding.Welcome.Description, shortName),
+                                       linkButtonTitle: .Onboarding.PrivacyPolicyLinkButtonTitle,
+                                       primaryAction: .Onboarding.Intro.Action,
+                                       secondaryAction: .Onboarding.Intro.SecondaryAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .signSync:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
-                                       title: .Onboarding.IntroSyncTitle,
-                                       description: .Onboarding.IntroSyncDescription,
+                                       title: .Onboarding.Sync.Title,
+                                       description: .Onboarding.Sync.Description,
                                        linkButtonTitle: nil,
                                        primaryAction: .IntroSignInButtonTitle,
-                                       secondaryAction: .Onboarding.IntroSyncSkipAction,
+                                       secondaryAction: .Onboarding.Sync.SkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case .notification:
-            let shortName = AppName.shortName.rawValue
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
-                                       title: String(format: .Onboarding.IntroNotificationTitle, shortName),
-                                       description: String(format: .Onboarding.IntroNotificationDescription, shortName),
+                                       title: String(format: .Onboarding.Notification.Title, shortName),
+                                       description: String(format: .Onboarding.Notification.Description, shortName),
                                        linkButtonTitle: nil,
-                                       primaryAction: .Onboarding.IntroNotificationContinueAction,
-                                       secondaryAction: .Onboarding.IntroNotificationSkipAction,
+                                       primaryAction: .Onboarding.Notification.ContinueAction,
+                                       secondaryAction: .Onboarding.Notification.SkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
         default:
             return nil
