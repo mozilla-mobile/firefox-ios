@@ -126,9 +126,8 @@ class TabManagerTests: XCTestCase {
         }
 
         tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-        try await Task.sleep(nanoseconds: sleepTime)
         subject.removeScreenshot(tab: tab)
+        try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
