@@ -156,7 +156,7 @@ class MockSyncServer {
         let clientBody: [String: Any] = [
             "id": guid,
             "name": "Foobar",
-            "commands": [],
+            "commands": [String](),
             "type": "mobile",
         ]
         let clientBodyString = JSON(clientBody).stringify()!

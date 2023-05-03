@@ -20,7 +20,7 @@ final class TabSessionStoreTests: XCTestCase {
         let uuid = UUID()
         let dataFile = Data(count: 100)
         await subject.saveTabSession(tabID: uuid, sessionData: dataFile)
-        let path = mockFileManager.tabSessionDataDirectory()!.appendingPathComponent(uuid.uuidString)
+        let path = mockFileManager.tabSessionDataDirectory()!.appendingPathComponent("tab-" + uuid.uuidString)
 
         let data = try? Data(contentsOf: path)
         XCTAssertEqual(data?.count, 100)

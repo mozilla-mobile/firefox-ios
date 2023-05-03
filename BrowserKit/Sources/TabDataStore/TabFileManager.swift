@@ -11,6 +11,8 @@ public protocol TabFileManager {
     func tabSessionDataDirectory() -> URL?
 
     /// Determines the directory where window data should be stored
+    /// - Parameter isBackup: This determines which of the window data folders will be returned,
+    /// the backup folder is used to store a slightly older copy of the data for use if the main copy becomes corrupted
     /// - Returns: the URL that should be used for storing window data, can be nil
     func windowDataDirectory(isBackup: Bool) -> URL?
 
@@ -45,10 +47,10 @@ public protocol TabFileManager {
 
 public struct DefaultTabFileManager: TabFileManager {
     enum PathInfo {
-        static let store = "codableWindowsState.archive"
-        static let profile = "profile.profile"
-        static let backup = "profile.backup"
+        static let rootDirectory = "profile.profile"
         static let tabSessionData = "tab-session-data"
+        static let primary = "window-data"
+        static let backup = "window-data-backup"
     }
 
     let fileManager: FileManager
@@ -61,15 +63,17 @@ public struct DefaultTabFileManager: TabFileManager {
     }
 
     public func tabSessionDataDirectory() -> URL? {
-        let path: String = BrowserKitInformation.shared.sharedContainerIdentifier
-        let container = fileManager.containerURL(forSecurityApplicationGroupIdentifier: path)
-        return container?.appendingPathComponent(PathInfo.tabSessionData)
+        guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
+        var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
+        return containerURL?.appendingPathComponent(PathInfo.tabSessionData)
     }
 
     public func windowDataDirectory(isBackup: Bool) -> URL? {
         guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
-        let pathInfo = isBackup ? PathInfo.backup : PathInfo.profile
-        let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        let pathInfo = isBackup ? PathInfo.backup : PathInfo.primary
+        var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
         return containerURL?.appendingPathComponent(pathInfo)
     }
 
