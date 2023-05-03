@@ -16,7 +16,7 @@ with open('test.json') as json_file:
                 subtest = {}
                 subtest["name"] = key
                 subtest["replicates"] = [value]
-                subtest["value"] = value
+                subtest["value"] = float(value)
                 suite["subtests"].append(subtest)
         PERFHERDER_DATA["suites"].append(suite)
 
