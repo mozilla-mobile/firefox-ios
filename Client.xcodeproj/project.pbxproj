@@ -9781,6 +9781,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				459F39E52A031D16008C3411 /* PBXTargetDependency */,
 			);
 			name = RustMozillaAppServices;
 			packageProductDependencies = (
@@ -12134,6 +12135,10 @@
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
 			targetProxy = 435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */;
+		};
+		459F39E52A031D16008C3411 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 459F39E42A031D16008C3411 /* Glean */;
 		};
 		5FA2233727F73E28005B3D87 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -17391,7 +17396,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 97.5.1;
+				version = 114.0.20230504050432;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -17496,6 +17501,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
 			productName = MappaMundi;
+		};
+		459F39E42A031D16008C3411 /* Glean */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
+			productName = Glean;
 		};
 		5A06135929D6052E008F3D38 /* TabDataStore */ = {
 			isa = XCSwiftPackageProductDependency;
