@@ -1,7 +1,7 @@
 import json
 
-PERFHERDER_DATA = {"framework": {"name":'mozperftest'},
-                   "application": {"name": 'fennec'},
+PERFHERDER_DATA = {"framework": {"name":"mozperftest"},
+                   "application": {"name": "fennec"},
                    "suites": []
                    }
 
