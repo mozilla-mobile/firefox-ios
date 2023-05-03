@@ -366,7 +366,7 @@ class TabDisplayManagerTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
-    // MARK: - Undo tab clos
+    // MARK: - Undo tab close
     func testShouldPresentUndoToastOnHomepage_ForLastTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
@@ -389,17 +389,17 @@ class TabDisplayManagerTests: XCTestCase {
                        "Expected to present toast on TabTray")
     }
 
-    func testShouldPresentUndoToastOnHomepage_ForLastPrivateTab() {
+    func testShouldNotPresentUndoToastOnHomepage_ForLastPrivateTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
 
         _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
 
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
-                       "Expected to present toast on homepage")
+                       "Expected to present toast on TabTray")
     }
 
-    func testShouldPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
+    func testShouldNotPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
 
@@ -409,7 +409,7 @@ class TabDisplayManagerTests: XCTestCase {
         manager.selectTab(activeTab1)
 
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
-                       "Expected to present toast on homepage")
+                       "Expected to present toast on TabTray")
     }
 
     func testInitWithExistingRegularTabs() {
@@ -536,6 +536,10 @@ class MockInactiveTabsCFRDelegate: InactiveTabsCFRProtocol {
     func presentCFR() { }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
+        completion(confirmClose)
+    }
+
+    func presentUndoSingleToast(completion: @escaping (Bool) -> Void) {
         completion(confirmClose)
     }
 }
