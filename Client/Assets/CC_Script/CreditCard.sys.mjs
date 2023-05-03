@@ -236,6 +236,10 @@ export class CreditCard {
    * @returns {string|null}
    */
   static getType(ccNumber) {
+    if (!ccNumber) {
+      return null;
+    }
+
     for (let i = 0; i < CREDIT_CARD_IIN.length; i++) {
       const range = CREDIT_CARD_IIN[i];
       if (typeof range.len == "number") {
@@ -270,7 +274,10 @@ export class CreditCard {
     if (!name) {
       return null;
     }
-    let lcName = name.trim().toLowerCase().normalize("NFKC");
+    let lcName = name
+      .trim()
+      .toLowerCase()
+      .normalize("NFKC");
     if (SUPPORTED_NETWORKS.includes(lcName)) {
       return lcName;
     }
