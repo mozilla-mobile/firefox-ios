@@ -969,31 +969,31 @@ extension String {
                 tableName: "Onboarding",
                 value: "Switch Your Default Browser",
                 comment: "The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let FirstLabelPart1 = MZLocalizedString(
-                key: "DefaultBrowserPopup.FirstLabelPart1.v114",
+            public static let FirstLabel = MZLocalizedString(
+                key: "DefaultBrowserPopup.FirstLabel.v114",
                 tableName: "Onboarding",
-                value: "1. Go to",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This will read '1. Go to Settings', but is split due to required text formatting. This is the first part of that label")
-            public static let FirstLabelPart2 = MZLocalizedString(
-                key: "DefaultBrowserPopup.FirstLabelPart2.v114",
+                value: "1. Go to Settings",
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+            public static let FirstLabelBoldTranslation= MZLocalizedString(
+                key: "DefaultBrowserPopup.FirstLabelBoldTranslation.v114",
                 tableName: "Onboarding",
                 value: "Settings",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This will read '1. Go to Settings', but is split due to required text formatting. This is the second part of that label.")
-            public static let SecondLabelPart1 = MZLocalizedString(
-                key: "DefaultBrowserPopup.SecondLabelPart1.v114",
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+            public static let SecondLabel = MZLocalizedString(
+                key: "DefaultBrowserPopup.SecondLabel.v114",
                 tableName: "Onboarding",
-                value: "2. Tap",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This will read '2. Tap Default Brawser App', but is split due to required text formatting. This is the first part of that label")
-            public static let SecondLabelPart2 = MZLocalizedString(
-                key: "DefaultBrowserPopup.SecondLabelPart2.v114",
+                value: "2. Tap Default Browser App",
+                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+            public static let SecondLabelBoldTranslation = MZLocalizedString(
+                key: "DefaultBrowserPopup.SecondLabelBoldTranslation.v114",
                 tableName: "Onboarding",
                 value: "Default Browser App",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This will read '2. Tap Default Brawser App', but is split due to required text formatting. This is the second part of that label")
+                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
             public static let ThirdLabel = MZLocalizedString(
-                key: "DefaultBrowserPopup.ThirdLabelPart1.v114",
+                key: "DefaultBrowserPopup.ThirdLabel.v114",
                 tableName: "Onboarding",
-                value: "3. Select",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This will read '3. Select Firefox', but is split due to required text formatting. This is the first part of that label")
+                value: "3. Select Firefox",
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
             public static let ButtonTitle = MZLocalizedString(
                 key: "DefaultBrowserPopup.ButtonTitle.v114",
                 tableName: "Onboarding",
