@@ -878,17 +878,17 @@ extension String {
 
         public struct Wallpaper {
             public static let Title = MZLocalizedString(
-                key: "Onboarding.WallpaperTitle.v114",
+                key: "Onboarding.Wallpaper.Title.v114",
                 tableName: "Onboarding",
                 value: "Choose a %@ Wallpaper",
                 comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name.")
             public static let Action = MZLocalizedString(
-                key: "Onboarding.WallpaperAction.v114",
+                key: "Onboarding.Wallpaper.Action.v114",
                 tableName: "Onboarding",
                 value: "Set Wallpaper",
                 comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
             public static let SelectorTitle = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Title.v114",
+                key: "Onboarding.Wallpaper.SelectorTitle.v114",
                 tableName: "Onboarding",
                 value: "Try a splash of color",
                 comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
