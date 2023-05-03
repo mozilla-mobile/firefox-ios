@@ -674,7 +674,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
         removeInactiveTabAndReloadView(tabs: [tab])
 
-        cfrDelegate?.presentUndoToast { undoButtonPressed in
+        cfrDelegate?.presentUndoSingleToast { undoButtonPressed in
             guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,

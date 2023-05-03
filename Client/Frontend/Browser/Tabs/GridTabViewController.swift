@@ -747,7 +747,7 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
                          completion: completion)
     }
 
-    func presentUndoToast(completion: @escaping (Bool) -> Void) {
+    func presentUndoSingleToast(completion: @escaping (Bool) -> Void) {
         presentUndoToast(toastType: .singleTab, completion: completion)
     }
 
