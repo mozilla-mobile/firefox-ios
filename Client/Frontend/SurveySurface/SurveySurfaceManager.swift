@@ -12,10 +12,6 @@ protocol SurveySurfaceDelegate: AnyObject {
     func didTapDismissSurvey()
 }
 
-protocol OpenURLDelegate: AnyObject {
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool)
-}
-
 class SurveySurfaceManager: SurveySurfaceDelegate {
     // MARK: - Properties
     private let surveySurfaceID: MessageSurfaceId = .survey
@@ -27,7 +23,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     private var viewController: SurveySurfaceViewController?
 
     var dismissClosure: (() -> Void)?
-    weak var openURLDelegate: OpenURLDelegate?
 
     var shouldShowSurveySurface: Bool {
         // TODO: Remove hack (temporary fix to avoid showing SurveySurface in UITest for release branch)
