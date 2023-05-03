@@ -2790,6 +2790,25 @@
 		435A21C6293E0B8E00E39498 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/TabsTray.strings; sourceTree = "<group>"; };
 		435A21D129E425D400251E18 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Edit Card.strings"; sourceTree = "<group>"; };
 		435A759129E4285900778D0C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Edit Card.strings"; sourceTree = "<group>"; };
+		435AADA12A02B523009A3397 /* Constants.ios.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = Constants.ios.mjs; sourceTree = "<group>"; };
+		435AADA22A02B524009A3397 /* CreditCardRuleset.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardRuleset.sys.mjs; sourceTree = "<group>"; };
+		435AADA32A02B58F009A3397 /* FormAutofillChild.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillChild.ios.sys.mjs; sourceTree = "<group>"; };
+		435AADA42A02B58F009A3397 /* FormAutofill.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofill.sys.mjs; sourceTree = "<group>"; };
+		435AADA52A02B58F009A3397 /* HeuristicsRegExp.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeuristicsRegExp.sys.mjs; sourceTree = "<group>"; };
+		435AADA62A02B590009A3397 /* FormAutofillNameUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillNameUtils.sys.mjs; sourceTree = "<group>"; };
+		435AADA72A02B590009A3397 /* FormAutofillSection.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillSection.ios.sys.mjs; sourceTree = "<group>"; };
+		435AADA82A02B590009A3397 /* FormAutofill.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofill.ios.sys.mjs; sourceTree = "<group>"; };
+		435AADA92A02B590009A3397 /* FormLikeFactory.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormLikeFactory.sys.mjs; sourceTree = "<group>"; };
+		435AADAA2A02B590009A3397 /* FormAutofillUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillUtils.sys.mjs; sourceTree = "<group>"; };
+		435AADAB2A02B590009A3397 /* FieldScanner.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FieldScanner.sys.mjs; sourceTree = "<group>"; };
+		435AADAC2A02B591009A3397 /* FormAutofillSection.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillSection.sys.mjs; sourceTree = "<group>"; };
+		435AADAD2A02B591009A3397 /* LoginManager.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LoginManager.shared.mjs; sourceTree = "<group>"; };
+		435AADAE2A02B591009A3397 /* Helpers.ios.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = Helpers.ios.mjs; sourceTree = "<group>"; };
+		435AADAF2A02B591009A3397 /* FormAutofillHeuristics.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHeuristics.sys.mjs; sourceTree = "<group>"; };
+		435AADB02A02B591009A3397 /* Overrides.ios.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Overrides.ios.js; sourceTree = "<group>"; };
+		435AADB12A02B591009A3397 /* FormAutofillHandler.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHandler.sys.mjs; sourceTree = "<group>"; };
+		435AADB22A02B592009A3397 /* LabelUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LabelUtils.sys.mjs; sourceTree = "<group>"; };
+		435AADB32A02B592009A3397 /* FormStateManager.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormStateManager.sys.mjs; sourceTree = "<group>"; };
 		435B625129D1B3D2005FBA5D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Alert.strings; sourceTree = "<group>"; };
 		435B625229D1B3D2005FBA5D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/BiometricAuthentication.strings; sourceTree = "<group>"; };
 		435B625329D1B3D2005FBA5D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/EditCard.strings; sourceTree = "<group>"; };
@@ -3413,15 +3432,8 @@
 		43F1B78628B39D2C00E883CB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43F1B78728B39D2C00E883CB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43F2284229EE053A0037E085 /* fathom.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = fathom.mjs; sourceTree = "<group>"; };
-		43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardRuleset.mjs; sourceTree = "<group>"; };
 		43F2284429EE053A0037E085 /* CC_Python_Update.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = CC_Python_Update.py; sourceTree = "<group>"; };
-		43F2284529EE053A0037E085 /* LabelUtils.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LabelUtils.mjs; sourceTree = "<group>"; };
-		43F2284629EE053A0037E085 /* CreditCardAutofill.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CreditCardAutofill.js; sourceTree = "<group>"; };
-		43F2284729EE053A0037E085 /* FieldScanner.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FieldScanner.mjs; sourceTree = "<group>"; };
-		43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHeuristics.shared.mjs; sourceTree = "<group>"; };
-		43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillUtils.shared.mjs; sourceTree = "<group>"; };
 		43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCard.sys.mjs; sourceTree = "<group>"; };
-		43F2284B29EE053A0037E085 /* shims.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = shims.js; sourceTree = "<group>"; };
 		43F28137294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Alerts.strings; sourceTree = "<group>"; };
 		43F28138294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/TabsTray.strings; sourceTree = "<group>"; };
 		43F2DD1A29BA6C8E00F69D7A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
@@ -7027,16 +7039,28 @@
 		43879AFB287BDFB100B15D10 /* CC_Script */ = {
 			isa = PBXGroup;
 			children = (
+				435AADA12A02B523009A3397 /* Constants.ios.mjs */,
+				435AADA22A02B524009A3397 /* CreditCardRuleset.sys.mjs */,
 				43F2284429EE053A0037E085 /* CC_Python_Update.py */,
 				43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */,
-				43F2284629EE053A0037E085 /* CreditCardAutofill.js */,
-				43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */,
 				43F2284229EE053A0037E085 /* fathom.mjs */,
-				43F2284729EE053A0037E085 /* FieldScanner.mjs */,
-				43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */,
-				43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */,
-				43F2284529EE053A0037E085 /* LabelUtils.mjs */,
-				43F2284B29EE053A0037E085 /* shims.js */,
+				435AADAB2A02B590009A3397 /* FieldScanner.sys.mjs */,
+				435AADA82A02B590009A3397 /* FormAutofill.ios.sys.mjs */,
+				435AADA42A02B58F009A3397 /* FormAutofill.sys.mjs */,
+				435AADA32A02B58F009A3397 /* FormAutofillChild.ios.sys.mjs */,
+				435AADB12A02B591009A3397 /* FormAutofillHandler.sys.mjs */,
+				435AADAF2A02B591009A3397 /* FormAutofillHeuristics.sys.mjs */,
+				435AADA62A02B590009A3397 /* FormAutofillNameUtils.sys.mjs */,
+				435AADA72A02B590009A3397 /* FormAutofillSection.ios.sys.mjs */,
+				435AADAC2A02B591009A3397 /* FormAutofillSection.sys.mjs */,
+				435AADAA2A02B590009A3397 /* FormAutofillUtils.sys.mjs */,
+				435AADA92A02B590009A3397 /* FormLikeFactory.sys.mjs */,
+				435AADB32A02B592009A3397 /* FormStateManager.sys.mjs */,
+				435AADAE2A02B591009A3397 /* Helpers.ios.mjs */,
+				435AADA52A02B58F009A3397 /* HeuristicsRegExp.sys.mjs */,
+				435AADB22A02B592009A3397 /* LabelUtils.sys.mjs */,
+				435AADAD2A02B591009A3397 /* LoginManager.shared.mjs */,
+				435AADB02A02B591009A3397 /* Overrides.ios.js */,
 			);
 			path = CC_Script;
 			sourceTree = "<group>";

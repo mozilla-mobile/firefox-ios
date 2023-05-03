@@ -18,6 +18,9 @@ const MainFrameAtDocumentEnd = glob.sync(
 const WebcompatAllFramesAtDocumentStart = glob.sync(
   "./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
 );
+const AutofillAllFramesAtDocumentStart = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
+);
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -67,18 +70,18 @@ module.exports = {
   // optimization: { minimize: false }, // use for debugging
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "Client/Assets")
+    path: path.resolve(__dirname, "Client/Assets"),
   },
   module: {
-    rules: []
+    rules: [],
   },
   plugins: [CustomResourceURIWebpackPlugin],
   resolve: {
     fallback: {
-      url: require.resolve("page-metadata-parser")
+      url: require.resolve("page-metadata-parser"),
     },
     alias: {
-      Assets: path.resolve(__dirname, "Client/Assets")
-    }
-  }
+      Assets: path.resolve(__dirname, "Client/Assets"),
+    },
+  },
 };
