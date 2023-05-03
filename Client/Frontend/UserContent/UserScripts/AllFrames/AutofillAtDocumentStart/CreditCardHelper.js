@@ -1,61 +1,51 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
+// /* This Source Code Form is subject to the terms of the Mozilla Public
+//  * License, v. 2.0. If a copy of the MPL was not distributed with this
+//  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-"use strict";
+// /* eslint-disable mozilla/balanced-listeners, no-undef */
+import CreditCardHelper from "resource://gre/modules/shared/EntryFile.sys.mjs";
 
-import { CreditCardAutofill } from "Assets/CC_Script/CreditCardAutofill.js";
+// Define supported message types.
+const messageTypes = {
+  FILL_CREDIT_CARD_FORM: "fill-credit-card-form",
+  CAPTURE_CREDIT_CARD_FORM: "capture-credit-card-form",
+};
 
-class CreditCardHelper {
-  constructor() {
-    this.onLoad = this.onLoad.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.creditCardAutofill = new CreditCardAutofill();
-    window.addEventListener("load", this.onLoad);
-  }
+const transformers = {
+  forward: (payload) => payload,
+};
 
-  onLoad() {
-    const observer = new MutationObserver((mutations) => {
-      for (var idx = 0; idx < mutations.length; ++idx) {
-        this.findForms(mutations[idx].addedNodes);
-      }
-    });
-    observer.observe(document.body, {
-      attributes: false,
-      childList: true,
-      characterData: false,
-      subtree: true,
+// Helper function to send a message back to swift.
+const sendMessage =
+  (type, transformer = transformers.forward) =>
+  (payload) =>
+    window.webkit.messageHandlers.creditCardMessageHandler?.postMessage({
+      type,
+      payload: transformer(payload),
     });
 
-    [...document.forms].forEach((form) => {
-      const allFields = this.creditCardAutofill.findCreditCardForms(form);
-      allFields.forEach((field) =>
-        field.addEventListener("focus", this.onFocus)
-      );
-    });
-  }
+const sendCaptureCreditCardFormMessage = sendMessage(
+  messageTypes.CAPTURE_CREDIT_CARD_FORM
+);
 
-  onFocus(ev) {
-    this.sendMessage({
-      msg: "cc-form",
-      id: this.creditCardAutofill.getSectionId(ev.target),
-    });
-  }
+const sendFillCreditCardFormMessage = sendMessage(
+  messageTypes.FILL_CREDIT_CARD_FORM
+);
 
-  sendMessage(payload) {
-    window.webkit.messageHandlers.creditCardMessageHandler?.postMessage(
-      payload
-    );
-  }
-
-  fillCreditCardInfo(payload) {
-    this.creditCardAutofill.fillCreditCardInfo(payload);
-  }
-}
-
+// Create a CreditCardHelper object and expose it to the window object.
+// The CreditCardHelper should:
+// - expose a method .fillFormFields(payload) that can be called from swift to fill in data.
+// - call sendCaptureCreditCardFormMessage(payload) when a credit card form submission is detected.
+// - call sendFillCreditCardFormMessage(payload) when a credit card form is detected.
+// The implementation file can be changed in Client/Assets/CC_Script/Overrides.ios.js
 Object.defineProperty(window.__firefox__, "CreditCardHelper", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: Object.freeze(new CreditCardHelper()),
+  value: Object.freeze(
+    new CreditCardHelper(
+      sendCaptureCreditCardFormMessage,
+      sendFillCreditCardFormMessage
+    )
+  ),
 });

@@ -1,18 +1,21 @@
-import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
-import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
-import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
-import { FieldScanner } from "resource://gre/modules/FieldScanner.mjs";
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// TODO(HACK): Update this
-const creditCardRulesets = {
-  types: ["cc-number", "cc-name"],
-};
+import { creditCardRulesets } from "resource://gre/modules/shared/CreditCardRuleset.sys.mjs";
+import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
+import { LabelUtils } from "resource://gre/modules/shared/LabelUtils.sys.mjs";
+import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
+import { FieldScanner } from "resource://gre/modules/shared/FieldScanner.sys.mjs";
+import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
+import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
+import { HeuristicsRegExp } from "resource://gre/modules/shared/HeuristicsRegExp.sys.mjs";
 
 /**
  * Returns the autocomplete information of fields according to heuristics.
  */
-export const FormAutofillHeuristicsShared = {
-  RULES: null,
+export const FormAutofillHeuristics = {
+  RULES: HeuristicsRegExp.getRules(),
 
   CREDIT_CARD_FIELDNAMES: [],
   ADDRESS_FIELDNAMES: [],
@@ -57,11 +60,11 @@ export const FormAutofillHeuristicsShared = {
 
     return (
       this._matchContiguousSubArray(
-        options.map((e) => +e.value),
+        options.map(e => +e.value),
         desiredValues
       ) ||
       this._matchContiguousSubArray(
-        options.map((e) => +e.label),
+        options.map(e => +e.label),
         desiredValues
       )
     );
@@ -90,11 +93,11 @@ export const FormAutofillHeuristicsShared = {
 
     return (
       this._matchContiguousSubArray(
-        options.map((e) => +e.value),
+        options.map(e => +e.value),
         desiredValues
       ) ||
       this._matchContiguousSubArray(
-        options.map((e) => +e.label),
+        options.map(e => +e.label),
         desiredValues
       )
     );
@@ -129,7 +132,7 @@ export const FormAutofillHeuristicsShared = {
         if (
           !detail ||
           GRAMMARS[i][0] != detail.fieldName ||
-          (detail._reason && detail._reason == "autocomplete")
+          detail?.reason == "autocomplete"
         ) {
           break;
         }
@@ -185,7 +188,7 @@ export const FormAutofillHeuristicsShared = {
     );
     if (
       nextField &&
-      nextField._reason != "autocomplete" &&
+      nextField.reason != "autocomplete" &&
       fieldScanner.parsingIndex > 0
     ) {
       const regExpTelExtension = new RegExp(
@@ -195,10 +198,9 @@ export const FormAutofillHeuristicsShared = {
       const previousField = fieldScanner.getFieldDetailByIndex(
         fieldScanner.parsingIndex - 1
       );
-      const previousFieldType =
-        FormAutofillUtilsShared.getCategoryFromFieldName(
-          previousField.fieldName
-        );
+      const previousFieldType = FormAutofillUtils.getCategoryFromFieldName(
+        previousField.fieldName
+      );
       if (
         previousField &&
         previousFieldType == "tel" &&
@@ -236,28 +238,28 @@ export const FormAutofillHeuristicsShared = {
     const addressLineRegexps = {
       "address-line1": new RegExp(
         "address[_-]?line(1|one)|address1|addr1" +
-          "|addrline1|address_1" + // Extra rules by Firefox
-          "|indirizzo1" + // it-IT
-          "|住所1" + // ja-JP
-          "|地址1" + // zh-CN
+        "|addrline1|address_1" + // Extra rules by Firefox
+        "|indirizzo1" + // it-IT
+        "|住所1" + // ja-JP
+        "|地址1" + // zh-CN
           "|주소.?1", // ko-KR
         "iu"
       ),
       "address-line2": new RegExp(
         "address[_-]?line(2|two)|address2|addr2" +
-          "|addrline2|address_2" + // Extra rules by Firefox
-          "|indirizzo2" + // it-IT
-          "|住所2" + // ja-JP
-          "|地址2" + // zh-CN
+        "|addrline2|address_2" + // Extra rules by Firefox
+        "|indirizzo2" + // it-IT
+        "|住所2" + // ja-JP
+        "|地址2" + // zh-CN
           "|주소.?2", // ko-KR
         "iu"
       ),
       "address-line3": new RegExp(
         "address[_-]?line(3|three)|address3|addr3" +
-          "|addrline3|address_3" + // Extra rules by Firefox
-          "|indirizzo3" + // it-IT
-          "|住所3" + // ja-JP
-          "|地址3" + // zh-CN
+        "|addrline3|address_3" + // Extra rules by Firefox
+        "|indirizzo3" + // it-IT
+        "|住所3" + // ja-JP
+        "|地址3" + // zh-CN
           "|주소.?3", // ko-KR
         "iu"
       ),
@@ -269,7 +271,7 @@ export const FormAutofillHeuristicsShared = {
       if (
         !detail ||
         !addressLines.includes(detail.fieldName) ||
-        detail._reason == "autocomplete"
+        detail.reason == "autocomplete"
       ) {
         // When the field is not related to any address-line[1-3] fields or
         // determined by autocomplete attr, it means the parsing process can be
@@ -312,7 +314,7 @@ export const FormAutofillHeuristicsShared = {
     );
 
     // Respect to autocomplete attr
-    if (!detail || (detail._reason && detail._reason == "autocomplete")) {
+    if (!detail || detail?.reason == "autocomplete") {
       return false;
     }
 
@@ -329,7 +331,7 @@ export const FormAutofillHeuristicsShared = {
     // The heuristic below should be covered by fathom rules, so we can skip doing
     // it.
     if (
-      FormAutofillUtilsShared.isFathomCreditCardsEnabled() &&
+      FormAutofillUtils.isFathomCreditCardsEnabled() &&
       creditCardRulesets.types.includes(detail.fieldName)
     ) {
       fieldScanner.parsingIndex++;
@@ -476,36 +478,27 @@ export const FormAutofillHeuristicsShared = {
    * in the belonging section. The details contain the autocomplete info
    * (e.g. fieldName, section, etc).
    *
-   * `allowDuplicates` is used for the xpcshell-test purpose currently because
-   * the heuristics should be verified that some duplicated elements still can
-   * be predicted correctly.
-   *
    * @param {HTMLFormElement} form
    *        the elements in this form to be predicted the field info.
-   * @param {boolean} allowDuplicates
-   *        true to remain any duplicated field details otherwise to remove the
-   *        duplicated ones.
    * @returns {Array<Array<object>>}
    *        all sections within its field details in the form.
    */
-  getFormInfo(form, allowDuplicates = false) {
-    const eligibleFields = Array.from(form.elements).filter((elem) =>
-      FormAutofillUtilsShared.isCreditCardOrAddressFieldType(elem)
+  getFormInfo(form) {
+    const eligibleFields = Array.from(form.elements).filter(elem =>
+      FormAutofillUtils.isCreditCardOrAddressFieldType(elem)
     );
 
     if (eligibleFields.length <= 0) {
       return [];
     }
 
-    let fieldScanner = new FieldScanner(eligibleFields, {
-      allowDuplicates,
-      sectionEnabled: this._sectionEnabled,
-    });
+    let fieldScanner = new FieldScanner(eligibleFields);
     while (!fieldScanner.parsingFinished) {
       let parsedPhoneFields = this._parsePhoneFields(fieldScanner);
       let parsedAddressFields = this._parseAddressFields(fieldScanner);
-      let parsedExpirationDateFields =
-        this._parseCreditCardFields(fieldScanner);
+      let parsedExpirationDateFields = this._parseCreditCardFields(
+        fieldScanner
+      );
 
       // If there is no field parsed, the parsing cursor can be moved
       // forward to the next one.
@@ -525,22 +518,18 @@ export const FormAutofillHeuristicsShared = {
 
   _getPossibleFieldNames(element) {
     let fieldNames = [];
-    let isAutoCompleteOff =
+    const isAutoCompleteOff =
       element.autocomplete == "off" || element.form?.autocomplete == "off";
-    //TODO(HACK): Update this
-    // if (
-    //   FormAutofill.isAutofillCreditCardsAvailable &&
-    //   (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
-    // )
-    if (!isAutoCompleteOff) {
+    if (
+      FormAutofill.isAutofillCreditCardsAvailable &&
+      (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
+    ) {
       fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
     }
-    //TODO(HACK): Update this
-    // if (
-    //     FormAutofill.isAutofillAddressesAvailable &&
-    //     (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
-    //   )
-    if (!isAutoCompleteOff) {
+    if (
+      FormAutofill.isAutofillAddressesAvailable &&
+      (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
+    ) {
       fieldNames.push(...this.ADDRESS_FIELDNAMES);
     }
 
@@ -554,7 +543,7 @@ export const FormAutofillHeuristicsShared = {
         "cc-exp",
         "cc-type",
       ];
-      fieldNames = fieldNames.filter((name) =>
+      fieldNames = fieldNames.filter(name =>
         FIELDNAMES_FOR_SELECT_ELEMENT.includes(name)
       );
     }
@@ -562,56 +551,50 @@ export const FormAutofillHeuristicsShared = {
     return fieldNames;
   },
 
-  getInfo(element, scanner) {
-    function infoRecordWithFieldName(fieldName, confidence = null) {
-      return {
-        fieldName,
-        section: "",
-        addressType: "",
-        contactType: "",
-        confidence,
-      };
-    }
+  /**
+   * Get inferred information about an input element using autocomplete info, fathom and regex-based heuristics.
+   *
+   * @param {HTMLElement} element - The input element to infer information about.
+   * @param {object} scanner - Scanner object used to analyze elements with fathom.
+   * @returns {Array} - An array containing:
+   *                    [0]the inferred field name
+   *                    [1]autocomplete information if the element has autocompelte attribute, null otherwise.
+   *                    [2]fathom confidence if fathom considers it a cc field, null otherwise.
+   */
+  getInferredInfo(element, scanner) {
+    const autocompleteInfo = element.getAutocompleteInfo();
 
-    let info = element.getAutocompleteInfo();
     // An input[autocomplete="on"] will not be early return here since it stll
     // needs to find the field name.
     if (
-      info &&
-      info.fieldName &&
-      info.fieldName != "on" &&
-      info.fieldName != "off"
+      autocompleteInfo?.fieldName &&
+      !["on", "off"].includes(autocompleteInfo.fieldName)
     ) {
-      info._reason = "autocomplete";
-      return info;
+      return [autocompleteInfo.fieldName, autocompleteInfo, null];
     }
 
-    if (!this._prefEnabled) {
-      return null;
-    }
-
-    let fields = this._getPossibleFieldNames(element);
+    const fields = this._getPossibleFieldNames(element);
 
     // "email" type of input is accurate for heuristics to determine its Email
     // field or not. However, "tel" type is used for ZIP code for some web site
     // (e.g. HomeDepot, BestBuy), so "tel" type should be not used for "tel"
     // prediction.
     if (element.type == "email" && fields.includes("email")) {
-      return infoRecordWithFieldName("email");
+      return ["email", null, null];
     }
 
-    if (FormAutofillUtilsShared.isFathomCreditCardsEnabled()) {
+    if (FormAutofillUtils.isFathomCreditCardsEnabled()) {
       // We don't care fields that are not supported by fathom
-      let fathomFields = fields.filter((r) =>
+      const fathomFields = fields.filter(r =>
         creditCardRulesets.types.includes(r)
       );
-      let [matchedFieldName, confidence] = scanner.getFathomField(
+      const [matchedFieldName, confidence] = scanner.getFathomField(
         element,
         fathomFields
       );
       // At this point, use fathom's recommendation if it has one
       if (matchedFieldName) {
-        return infoRecordWithFieldName(matchedFieldName, confidence);
+        return [matchedFieldName, null, confidence];
       }
 
       // Continue to run regex-based heuristics even when fathom doesn't recognize
@@ -624,13 +607,14 @@ export const FormAutofillHeuristicsShared = {
     }
 
     if (fields.length) {
-      let matchedFieldName = this._findMatchedFieldName(element, fields);
+      // Find a matched field name using regex-based heuristics
+      const matchedFieldName = this._findMatchedFieldName(element, fields);
       if (matchedFieldName) {
-        return infoRecordWithFieldName(matchedFieldName);
+        return [matchedFieldName, null, null];
       }
     }
 
-    return null;
+    return [null, null, null];
   },
 
   /**
@@ -662,6 +646,28 @@ export const FormAutofillHeuristicsShared = {
     };
   },
 
+  // In order to support webkit we need to avoid usage of negative lookbehind due to low support
+  // First safari version with support is 16.4 (Release Date: 27th March 2023)
+  // https://caniuse.com/js-regexp-lookbehind
+  // We can mimic the behaviour of negative lookbehinds by using a named capture group
+  // (?<!not)word -> (?<neg>notword)|word
+  // TODO: Bug 1829583
+  testRegex(regex, string) {
+    const matches = string?.matchAll(regex);
+    if (!matches) {
+      return false;
+    }
+
+    const excludeNegativeCaptureGroups = [];
+
+    for (const match of matches) {
+      excludeNegativeCaptureGroups.push(
+        ...match.filter(m => m !== match?.groups?.neg).filter(Boolean)
+      );
+    }
+    return excludeNegativeCaptureGroups?.length > 0;
+  },
+
   /**
    * Find the first matched field name of the element wih given regex list.
    *
@@ -675,7 +681,7 @@ export const FormAutofillHeuristicsShared = {
     const getElementStrings = this._getElementStrings(element);
     for (let regexp of regexps) {
       for (let string of getElementStrings) {
-        if (this.RULES[regexp].test(string?.toLowerCase())) {
+        if (this.testRegex(this.RULES[regexp], string?.toLowerCase())) {
           return regexp;
         }
       }
@@ -820,3 +826,20 @@ export const FormAutofillHeuristicsShared = {
     // {REGEX_SEPARATOR, FIELD_NONE, 0},
   ],
 };
+
+XPCOMUtils.defineLazyGetter(
+  FormAutofillHeuristics,
+  "CREDIT_CARD_FIELDNAMES",
+  () =>
+    Object.keys(FormAutofillHeuristics.RULES).filter(name =>
+      FormAutofillUtils.isCreditCardField(name)
+    )
+);
+
+XPCOMUtils.defineLazyGetter(FormAutofillHeuristics, "ADDRESS_FIELDNAMES", () =>
+  Object.keys(FormAutofillHeuristics.RULES).filter(name =>
+    FormAutofillUtils.isAddressField(name)
+  )
+);
+
+export default FormAutofillHeuristics;
