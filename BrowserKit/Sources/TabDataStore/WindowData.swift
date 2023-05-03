@@ -14,7 +14,7 @@ public struct WindowData: Codable {
     /// This will change when multi-window support is added
     /// - Parameters:
     ///   - id: a unique ID used to identify the window
-    ///   - isPrimary: determines if the winow is the primary window
+    ///   - isPrimary: determines if the window is the primary window
     ///   - activeTabId: the ID of the currently selected tab
     ///   - tabData: a list of all tabs associated with the window
     public init(id: UUID = UUID(),

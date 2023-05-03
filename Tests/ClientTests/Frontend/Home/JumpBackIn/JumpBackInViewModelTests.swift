@@ -124,9 +124,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -144,9 +142,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -167,9 +163,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setRecentTabs(recentTabs: [tab1])
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -189,9 +183,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setMockHasSyncedTabFeatureEnabled(enabled: false)
 
         // iPhone layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -211,9 +203,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPhone layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -233,9 +223,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setMockHasSyncedTabFeatureEnabled(enabled: false)
 
         // iPad layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection().getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -255,9 +243,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPad layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection().getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -277,9 +263,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setMockHasSyncedTabFeatureEnabled(enabled: false)
 
         // iPad layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection().getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -300,10 +284,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setMockHasSyncedTabFeatureEnabled(enabled: false)
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
-
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
         subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
@@ -322,9 +303,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPad layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection().getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -345,9 +324,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -366,9 +343,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setRecentTabs(recentTabs: [tab1])
 
         // iPhone layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -387,9 +362,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setRecentTabs(recentTabs: [tab1])
 
         // iPad layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection().getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -412,17 +385,13 @@ class JumpBackInViewModelTests: XCTestCase {
         try? await Task.sleep(nanoseconds: sleepTime)
 
         // Start in portrait
-        let portraitTrait = MockTraitCollection()
-        portraitTrait.overridenHorizontalSizeClass = .compact
-        portraitTrait.overridenVerticalSizeClass = .regular
+        let portraitTrait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.refreshData(for: portraitTrait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
 
         // Mock rotation to landscape
-        let landscapeTrait = MockTraitCollection()
-        landscapeTrait.overridenHorizontalSizeClass = .regular
-        landscapeTrait.overridenVerticalSizeClass = .compact
+        let landscapeTrait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
         subject.refreshData(for: landscapeTrait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .medium)
 
@@ -457,7 +426,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
+        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -469,7 +438,7 @@ class JumpBackInViewModelTests: XCTestCase {
         await adaptor.setRecentTabs(recentTabs: [tab1])
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
+        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 1)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -481,7 +450,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
+        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNotNil(subject.mostRecentSyncedTab)
@@ -497,9 +466,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -519,9 +486,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -542,9 +507,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout portrait
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
-        trait.overridenVerticalSizeClass = .regular
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -569,9 +532,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
@@ -597,9 +558,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
 
         // iPhone layout landscape
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .regular
-        trait.overridenVerticalSizeClass = .compact
+        let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)

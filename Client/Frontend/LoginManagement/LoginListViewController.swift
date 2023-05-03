@@ -427,6 +427,11 @@ extension LoginListViewController: UITableViewDelegate {
         return .none
     }
 
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // Prevent row selection for logins settings section
+        indexPath.section == LoginListViewController.loginsSettingsSection ? nil : indexPath
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
             loginSelectionController.selectIndexPath(indexPath)

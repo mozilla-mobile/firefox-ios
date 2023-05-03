@@ -20,7 +20,7 @@ struct UrlToOpenModel {
 }
 
 /// Enum used to track flow for telemetry events
-enum ReferringPage {
+enum ReferringPage: Equatable {
     case onboarding
     case appMenu
     case settings
@@ -1502,6 +1502,11 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    }
+
     func handle(query: String) {
        openBlankNewTab(focusLocationField: false)
        urlBar(urlBar, didSubmitText: query)
@@ -2498,11 +2503,6 @@ extension BrowserViewController {
            let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
             tab.loadRequest(URLRequest(url: homePageURL))
         }
-    }
-
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     @objc

@@ -17,8 +17,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let themeManager: ThemeManager
     private var logger: Logger
     private let screenshotService: ScreenshotService
-    private let applicationHelper: ApplicationHelper
     private let glean: GleanWrapper
+    private let applicationHelper: ApplicationHelper
+    private let wallpaperManager: WallpaperManagerInterface
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -26,8 +27,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          tabManager: TabManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         glean: GleanWrapper = DefaultGleanWrapper.shared) {
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -36,6 +38,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.logger = logger
         self.applicationHelper = applicationHelper
         self.glean = glean
+        self.wallpaperManager = wallpaperManager
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -64,8 +67,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
+    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
+        didFinishLaunch(from: coordinator)
+
+        let route = Route.search(url: url, isPrivate: isPrivate)
+        findAndHandle(route: route)
     }
 
     // MARK: - BrowserDelegate
@@ -139,9 +145,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             handle(homepanelSection: section)
             return true
 
-        case .settings:
-            // FXIOS-6028 #13677 - Enable settings route path in BrowserCoordinator
-            return false
+        case let .settings(section):
+            // Note: This will be handled in the settings coordinator when FXIOS-6274 is done
+            handle(settingsSection: section)
+            return true
 
         case let .action(routeAction):
             switch routeAction {
@@ -153,9 +160,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 return true
             }
 
-        case .fxaSignIn:
-            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
-            return false
+        case let .fxaSignIn(params):
+            handle(fxaParams: params)
+            return true
 
         case let .defaultBrowser(section):
             switch section {
@@ -205,5 +212,83 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     private func handle(searchURL: URL?, tabId: String) {
         browserViewController.handle(url: searchURL, tabId: tabId)
+    }
+
+    private func handle(settingsSection: Route.SettingsSection) {
+        let baseSettingsVC = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: browserViewController
+        )
+
+        let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
+        controller.presentingModalViewControllerDelegate = browserViewController
+        controller.modalPresentationStyle = .formSheet
+        router.present(controller)
+
+        guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
+        controller.pushViewController(viewController, animated: true)
+    }
+
+    func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
+        switch section {
+        case .newTab:
+            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            return viewController
+
+        case .homePage:
+            let viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            return viewController
+
+        case .mailto:
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            return viewController
+
+        case .search:
+            let viewController = SearchSettingsTableViewController(profile: profile)
+            return viewController
+
+        case .clearPrivateData:
+            let viewController = ClearPrivateDataTableViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            return viewController
+
+        case .fxa:
+            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+                fxaParams,
+                flowType: .emailLoginFlow,
+                referringPage: .settings,
+                profile: browserViewController.profile
+            )
+            return viewController
+
+        case .theme:
+            return ThemeSettingsController()
+
+        case .wallpaper:
+            if wallpaperManager.canSettingsBeShown {
+                let viewModel = WallpaperSettingsViewModel(
+                    wallpaperManager: wallpaperManager,
+                    tabManager: tabManager,
+                    theme: themeManager.currentTheme
+                )
+                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                return wallpaperVC
+            } else {
+                return nil
+            }
+
+        default:
+            // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
+            return nil
+        }
+    }
+
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
     }
 }
