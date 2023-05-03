@@ -14,26 +14,31 @@ protocol OnboardingCardDelegate: AnyObject {
 
 class OnboardingCardViewController: UIViewController, Themeable {
     struct UX {
-        static let stackViewSpacing: CGFloat = 16
-        static let stackViewSpacingButtons: CGFloat = 40
+        static let stackViewSpacing: CGFloat = 24
+        static let stackViewSpacingButtons: CGFloat = 16
         static let buttonHeight: CGFloat = 45
         static let buttonCornerRadius: CGFloat = 13
-        static let stackViewPadding: CGFloat = 20
+        static let topStackViewSpacing: CGFloat = 16
+        static let stackViewPadding: CGFloat = 16
+        static let buttomStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 24
+        static let topStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 70 : 90
+        static let horizontalTopStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 24
         static let scrollViewVerticalPadding: CGFloat = 62
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
-        static let titleFontSize: CGFloat = 34
+        static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
         static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
-        static let smallTitleFontSize: CGFloat = 28
+        static let smallTitleFontSize: CGFloat = 20
         static let smallStackViewSpacing: CGFloat = 8
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
         static let smallImageViewSize = CGSize(width: 240, height: 300)
+        static let smallTopStackViewPadding: CGFloat = 40
 
         // tiny device (SE 1st gen)
         static let tinyImageViewSize = CGSize(width: 144, height: 180)
@@ -68,10 +73,18 @@ class OnboardingCardViewController: UIViewController, Themeable {
         stack.backgroundColor = .clear
     }
 
-    lazy var contentStackView: UIStackView = .build { stack in
+    lazy var topStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.alignment = .center
         stack.distribution = .fill
+        stack.spacing = UX.topStackViewSpacing
+        stack.axis = .vertical
+    }
+
+    lazy var contentStackView: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
         stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
     }
@@ -113,7 +126,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     lazy var buttonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
-        stack.distribution = .fill
+        stack.distribution = .equalSpacing
         stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
     }
@@ -141,6 +154,19 @@ class OnboardingCardViewController: UIViewController, Themeable {
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
         button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)SecondaryButton"
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: UX.buttonHorizontalInset,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: UX.buttonHorizontalInset)
+    }
+
+    private lazy var linkButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.buttonFontSize)
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(self.linkButtonAction), for: .touchUpInside)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.backgroundColor = .clear
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
@@ -193,23 +219,25 @@ class OnboardingCardViewController: UIViewController, Themeable {
     func setupView() {
         view.backgroundColor = .clear
 
-        contentStackView.addArrangedSubview(imageView)
-        contentStackView.addArrangedSubview(titleLabel)
-        contentStackView.addArrangedSubview(descriptionBoldLabel)
-        contentStackView.addArrangedSubview(descriptionLabel)
-        contentContainerView.addSubviews(contentStackView)
+        topStackView.addArrangedSubview(imageView)
+        topStackView.addArrangedSubview(titleLabel)
+        topStackView.addArrangedSubview(descriptionBoldLabel)
+        topStackView.addArrangedSubview(descriptionLabel)
+        contentStackView.addArrangedSubview(topStackView)
+        contentStackView.addArrangedSubview(linkButton)
 
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(secondaryButton)
+        contentStackView.addArrangedSubview(buttonStackView)
 
+        contentContainerView.addSubview(contentStackView)
         containerView.addSubviews(contentContainerView)
-        containerView.addSubviews(buttonStackView)
         scrollView.addSubviews(containerView)
         view.addSubview(scrollView)
 
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
-        let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
+        let topPadding = UIDevice.current.userInterfaceIdiom == .pad ? UX.topStackViewPadding : (shouldUseSmallDeviceLayout ? UX.smallTopStackViewPadding : UX.topStackViewPadding)
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -231,25 +259,28 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
             // Content view wrapper around text
             contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
-            contentContainerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -stackViewSpacingButtons),
-            contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
+            contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            contentContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.buttomStackViewPadding),
+            contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: UX.stackViewPadding),
+            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: topPadding),
             contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.stackViewPadding).priority(.defaultLow),
-            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.buttomStackViewPadding).priority(.defaultLow),
+            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: UX.stackViewPadding),
             contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
 
-            buttonStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
-            buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
-            buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
+            topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor, constant: UX.horizontalTopStackViewPadding),
+            topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor, constant: -UX.horizontalTopStackViewPadding),
+
+            buttonStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: UX.horizontalTopStackViewPadding),
+            buttonStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -UX.horizontalTopStackViewPadding),
 
             imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
         ])
 
-        contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
-        buttonStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
+        topStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
+        buttonStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacingButtons
     }
 
     private func updateLayout() {
@@ -276,6 +307,15 @@ class OnboardingCardViewController: UIViewController, Themeable {
         secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
+    private func handleLinkButton() {
+        guard let buttonTitle = viewModel.infoModel.linkButtonTitle else {
+            linkButton.isUserInteractionEnabled = false
+            linkButton.isHidden = true
+            return
+        }
+        linkButton.setTitle(buttonTitle, for: .normal)
+    }
+
     @objc
     func primaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: true)
@@ -286,6 +326,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     func secondaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: false)
         delegate?.showNextPage(viewModel.cardType)
+    }
+
+    @objc
+    func linkButtonAction() {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5850
     }
 
     // MARK: - Themeable
@@ -301,5 +346,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         secondaryButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
         secondaryButton.backgroundColor = theme.colors.actionSecondary
         handleSecondaryButton()
+        handleLinkButton()
     }
 }

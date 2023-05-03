@@ -8,11 +8,9 @@ import UIKit
 class MockOpenURLDelegate: OpenURLDelegate {
     var savedURL: URL?
     var savedIsPrivate: Bool?
-    var savedSelectedNewTab: Bool?
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
         savedURL = url
         savedIsPrivate = isPrivate
-        savedSelectedNewTab = selectNewTab
     }
 }
