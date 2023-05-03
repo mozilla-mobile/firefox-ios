@@ -53,7 +53,7 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    public func fetchWindowData(withID id: UUID) async -> WindowData? {
+    private func fetchWindowData(withID id: UUID) async -> WindowData? {
         guard let directoryURL = windowURLPath(for: id, isBackup: false) else {
             return nil
         }
@@ -79,7 +79,7 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    public func fetchAllWindowsData() async -> [WindowData] {
+    private func fetchAllWindowsData() async -> [WindowData] {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
             return [WindowData]()
         }
@@ -206,7 +206,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: - Deleting Window Data
 
-    public func clearWindowData(for id: UUID) async {
+    private func clearWindowData(for id: UUID) async {
         guard let directoryURL = windowURLPath(for: id, isBackup: false) else {
             return
         }
