@@ -63,6 +63,7 @@ class BrowserViewController: UIViewController {
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
+    var reloadAccessoryForCreditCardTimer = 0.2
     var currentMiddleButtonState: MiddleButtonState?
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
@@ -1947,12 +1948,14 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-
-            creditCardHelper.foundFieldValues = { fieldValues in
-                guard let tabWebView = tab.webView as? TabWebView else { return }
+            
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues in
+                guard let self = self,
+                      let tabWebView = tab.webView as? TabWebView
+                else { return }
 
                 // Delay so that this executes AFTER KeyboardHelperDelegate methods
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.reloadAccessoryForCreditCardTimer) {
                     tabWebView.accessoryView?.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
                 }
