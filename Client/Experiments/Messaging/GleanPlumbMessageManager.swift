@@ -152,12 +152,15 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return
         }
 
-        // With our well-formed URL, we can handle the action here.
-        if url.isWebPage() {
-            pressedDelegate?.openURLInNewTab(url: url)
-        } else {
-            UIApplication.shared.open(url, options: [:])
+        var urlToOpen = url
+
+        // We open webpages using our internal URL scheme
+        if url.isWebPage(), let url = URL(string: "\(URL.mozInternalScheme)://open-url?url=\(url)") {
+            urlToOpen = url
         }
+
+        // With our well-formed URL, we can handle the action here.
+        UIApplication.shared.open(urlToOpen, options: [:])
 
         var extras = baseTelemetryExtras(using: message)
         extras[MessagingKey.actionUUID.rawValue] = uuid ?? "nil"
