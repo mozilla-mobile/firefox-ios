@@ -16,7 +16,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_portraitIphone_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .phone,
                                             trait: trait,
@@ -29,7 +29,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
                                             interfaceIdiom: .phone,
                                             trait: trait,
@@ -42,7 +42,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -55,7 +55,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -68,8 +68,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -82,8 +81,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .compact
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -96,8 +94,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .unspecified
+        let trait = MockTraitCollection(horizontalSizeClass: .unspecified).getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -110,8 +107,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
-        trait.overridenHorizontalSizeClass = .unspecified
+        let trait = MockTraitCollection(horizontalSizeClass: .unspecified).getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
                                             interfaceIdiom: .pad,
                                             trait: trait,
@@ -126,7 +122,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_oneEmptyRow_shouldBeRemoved() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .phone,
                                             trait: trait,
@@ -139,7 +135,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .phone,
                                             trait: trait,
@@ -152,7 +148,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .phone,
                                             trait: trait,
@@ -165,7 +161,7 @@ class TopSitesDimensionTests: XCTestCase {
 
     func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
         let subject = createSubject()
-        let trait = MockTraitCollection()
+        let trait = MockTraitCollection().getTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
                                             interfaceIdiom: .phone,
                                             trait: trait,

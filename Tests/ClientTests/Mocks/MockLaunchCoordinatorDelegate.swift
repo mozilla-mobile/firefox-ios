@@ -8,16 +8,14 @@ import Foundation
 class MockLaunchCoordinatorDelegate: LaunchCoordinatorDelegate {
     var savedURL: URL?
     var savedIsPrivate: Bool?
-    var savedSelectedNewTab: Bool?
     var savedDidFinishCoordinator: LaunchCoordinator?
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         savedDidFinishCoordinator = coordinator
     }
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
         savedURL = url
         savedIsPrivate = isPrivate
-        savedSelectedNewTab = selectNewTab
     }
 }

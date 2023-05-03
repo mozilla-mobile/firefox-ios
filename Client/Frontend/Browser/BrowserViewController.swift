@@ -20,7 +20,7 @@ struct UrlToOpenModel {
 }
 
 /// Enum used to track flow for telemetry events
-enum ReferringPage {
+enum ReferringPage: Equatable {
     case onboarding
     case appMenu
     case settings
@@ -396,7 +396,6 @@ class BrowserViewController: UIViewController {
             contentContainer.alpha = 0
         }
         urlBar.locationContainer.alpha = 0
-        topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -420,10 +419,6 @@ class BrowserViewController: UIViewController {
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
-                // This has to be at the end of the animation, because `switchForegroundStatus` gets the tab cells by
-                // using `collectionView.visibleCells` and before the animation is complete, the cells are not going to
-                // be visible, so it will always return an empty array.
-                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
@@ -1507,6 +1502,11 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    }
+
     func handle(query: String) {
        openBlankNewTab(focusLocationField: false)
        urlBar(urlBar, didSubmitText: query)
@@ -2503,11 +2503,6 @@ extension BrowserViewController {
            let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
             tab.loadRequest(URLRequest(url: homePageURL))
         }
-    }
-
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     @objc

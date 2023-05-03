@@ -48,7 +48,8 @@ final class CoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let matchingCoordinator = parentCoordinator.find(route: .search(url: URL(string: "https://www.google.com"), isPrivate: false))
+        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let matchingCoordinator = parentCoordinator.findAndHandle(route: route)
 
         // Then
         XCTAssertNotNil(matchingCoordinator)
@@ -65,7 +66,8 @@ final class CoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let matchingCoordinator = parentCoordinator.find(route: .search(url: URL(string: "https://www.google.com"), isPrivate: false))
+        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let matchingCoordinator = parentCoordinator.findAndHandle(route: route)
 
         // Then
         XCTAssertNil(matchingCoordinator)

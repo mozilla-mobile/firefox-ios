@@ -7,7 +7,7 @@ import Foundation
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishLaunch(from coordinator: LaunchCoordinator)
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
+    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool)
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
@@ -124,7 +124,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
     // MARK: OpenURLDelegate
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        parentCoordinator?.didRequestToOpenInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
+        parentCoordinator?.didRequestToOpenInNewTab(from: self, url: url, isPrivate: isPrivate)
     }
 }

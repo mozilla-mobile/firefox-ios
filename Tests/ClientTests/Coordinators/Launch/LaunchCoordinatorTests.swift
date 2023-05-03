@@ -141,12 +141,10 @@ final class LaunchCoordinatorTests: XCTestCase {
         subject.parentCoordinator = delegate
         let mockURL = URL(string: "www.firefox.com")!
         subject.didRequestToOpenInNewTab(url: mockURL,
-                                         isPrivate: false,
-                                         selectNewTab: false)
+                                         isPrivate: false)
 
         XCTAssertEqual(delegate.savedURL, mockURL)
         XCTAssertEqual(delegate.savedIsPrivate, false)
-        XCTAssertEqual(delegate.savedSelectedNewTab, false)
     }
 
     // MARK: - Helpers

@@ -67,8 +67,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
 
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6033 #13682 - Enable didRequestToOpenInNewTab in BrowserCoordinator & SceneCoordinator
+    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
+        didFinishLaunch(from: coordinator)
+
+        let route = Route.search(url: url, isPrivate: isPrivate)
+        findAndHandle(route: route)
     }
 
     // MARK: - BrowserDelegate
@@ -157,9 +160,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 return true
             }
 
-        case .fxaSignIn:
-            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
-            return false
+        case let .fxaSignIn(params):
+            handle(fxaParams: params)
+            return true
 
         case let .defaultBrowser(section):
             switch section {
@@ -283,5 +286,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
             return nil
         }
+    }
+
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
     }
 }

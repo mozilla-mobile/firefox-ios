@@ -13,7 +13,7 @@ protocol SurveySurfaceDelegate: AnyObject {
 }
 
 protocol OpenURLDelegate: AnyObject {
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool)
 }
 
 class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
@@ -100,7 +100,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
         homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url,
                                                              isPrivate: false,
                                                              selectNewTab: true)
-        openURLDelegate?.didRequestToOpenInNewTab(url: url, isPrivate: false, selectNewTab: true)
+        openURLDelegate?.didRequestToOpenInNewTab(url: url, isPrivate: false)
         dismissClosure?()
     }
 }

@@ -84,6 +84,26 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
+    func testDidRequestToOpenInNewTab_findsRoute() {
+        let expectedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        let browserCoordinator = MockCoordinator(router: mockRouter)
+        subject.didFinishLaunchCompletion = {
+            // override the child browser coordinator so we don't trigger the real cycle
+            subject.remove(child: subject.childCoordinators[0])
+            subject.add(child: browserCoordinator)
+        }
+
+        subject.didRequestToOpenInNewTab(from: LaunchCoordinator(router: mockRouter), url: expectedURL, isPrivate: false)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators[0] is MockCoordinator)
+        XCTAssertEqual(browserCoordinator.findRouteCalled, 1)
+        XCTAssertEqual(browserCoordinator.savedFindRoute, .search(url: expectedURL, isPrivate: false))
+
+        subject.didFinishLaunchCompletion = nil
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> SceneCoordinator {
