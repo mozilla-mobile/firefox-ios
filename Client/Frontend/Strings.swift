@@ -978,7 +978,7 @@ extension String {
                 key: "DefaultBrowserPopup.FirstLabelBoldTranslation.v114",
                 tableName: "Onboarding",
                 value: "Settings",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This text is used to find the 'Settings' translated string in the 'Go to Settings' label, in order to bold just that text.")
             public static let SecondLabel = MZLocalizedString(
                 key: "DefaultBrowserPopup.SecondLabel.v114",
                 tableName: "Onboarding",
@@ -988,12 +988,12 @@ extension String {
                 key: "DefaultBrowserPopup.SecondLabelBoldTranslation.v114",
                 tableName: "Onboarding",
                 value: "Default Browser App",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This text is used to find 'Default Browser App' in the 'Tap Default Browser App' string for bolding the text in the second label.")
             public static let ThirdLabel = MZLocalizedString(
                 key: "DefaultBrowserPopup.ThirdLabel.v114",
                 tableName: "Onboarding",
-                value: "3. Select Firefox",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+                value: "3. Select %@",
+                comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name.")
             public static let ButtonTitle = MZLocalizedString(
                 key: "DefaultBrowserPopup.ButtonTitle.v114",
                 tableName: "Onboarding",
