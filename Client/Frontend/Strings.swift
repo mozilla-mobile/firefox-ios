@@ -2748,6 +2748,28 @@ extension String {
             tableName: "EngagementNotification",
             value: "Find something nearby. Or discover something fun.",
             comment: "Body of notification send to user after inactivity to encourage them to use the search feature.")
+
+        public static let TitleTreatmentA = MZLocalizedString(
+            key: "Engagement.Notification.Treatment.A.Title.v114",
+            tableName: "EngagementNotification",
+            value: "Browse without a trace",
+            comment: "Title of notification send to user after inactivity to encourage them to use the private browsing feature.")
+        public static let BodyTreatmentA = MZLocalizedString(
+            key: "Engagement.Notification.Treatment.A.Body.v114",
+            tableName: "EngagementNotification",
+            value: "Private browsing in Firefox doesn’t save your info and blocks hidden trackers.",
+            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature.")
+
+        public static let TitleTreatmentB = MZLocalizedString(
+            key: "Engagement.Notification.Treatment.B.Title.v114",
+            tableName: "EngagementNotification",
+            value: "Try private browsing",
+            comment: "Title of notification send to user after inactivity to encourage them to use the private browsing feature.")
+        public static let BodyTreatmentB = MZLocalizedString(
+            key: "Engagement.Notification.Treatment.B.Body.v114",
+            tableName: "EngagementNotification",
+            value: "Browse with no saved cookies or history in Firefox.",
+            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature.")
     }
 }
 
