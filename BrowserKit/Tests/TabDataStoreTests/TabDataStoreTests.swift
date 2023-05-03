@@ -25,6 +25,7 @@ final class TabDataStoreTests: XCTestCase {
     // MARK: - Saving Data
 
     func testSaveTabData() async throws {
+        await tabDataStore.clearAllWindowsData()
         let windowData = self.createMockWindow()
         await tabDataStore.saveWindowData(window: windowData)
         try await Task.sleep(nanoseconds: sleepTime)
