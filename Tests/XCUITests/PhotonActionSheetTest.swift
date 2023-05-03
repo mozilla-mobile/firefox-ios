@@ -48,7 +48,6 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Wait to see the Share options sheet
         if iPad() {
-            print(app.debugDescription)
             waitForExistence(app.cells["Copy"], timeout: 15)
         } else {
             waitForExistence(app.buttons["Close"], timeout: 15)
