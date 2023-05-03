@@ -974,7 +974,7 @@ extension String {
                 tableName: "Onboarding",
                 value: "1. Go to Settings",
                 comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let FirstLabelBoldTranslation= MZLocalizedString(
+            public static let FirstLabelBoldTranslation = MZLocalizedString(
                 key: "DefaultBrowserPopup.FirstLabelBoldTranslation.v114",
                 tableName: "Onboarding",
                 value: "Settings",
