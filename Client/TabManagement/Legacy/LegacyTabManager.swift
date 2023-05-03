@@ -49,7 +49,7 @@ struct BackupCloseTab {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
+class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     private let store: LegacyTabManagerStore
@@ -762,6 +762,27 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
 
+    // MARK: - TabEventHandler
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard tab.screenshot != nil else {
+            // Remove screenshot from image store so we can use favicon
+            // when a screenshot isn't available for the associated tab url
+            removeScreenshot(tab: tab)
+            return
+        }
+        storeScreenshot(tab: tab)
+    }
+
+    func storeScreenshot(tab: Tab) {
+        store.preserveScreenshot(forTab: tab)
+        storeChanges()
+    }
+
+    func removeScreenshot(tab: Tab) {
+        store.removeScreenshot(forTab: tab)
+        storeChanges()
+    }
+
     // MARK: - Private
     @objc
     private func prefsDidChange() {
@@ -972,29 +993,6 @@ extension LegacyTabManager: WKNavigationDelegate {
                 tab.consecutiveCrashes = 0
             }
         }
-    }
-}
-
-// MARK: - TabEventHandler
-extension LegacyTabManager: TabEventHandler {
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
-        guard tab.screenshot != nil else {
-            // Remove screenshot from image store so we can use favicon
-            // when a screenshot isn't available for the associated tab url
-            removeScreenshot(tab: tab)
-            return
-        }
-        storeScreenshot(tab: tab)
-    }
-
-    private func storeScreenshot(tab: Tab) {
-        store.preserveScreenshot(forTab: tab)
-        storeChanges()
-    }
-
-    private func removeScreenshot(tab: Tab) {
-        store.removeScreenshot(forTab: tab)
-        storeChanges()
     }
 }
 

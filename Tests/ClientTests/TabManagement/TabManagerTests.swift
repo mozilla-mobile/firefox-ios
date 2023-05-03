@@ -92,6 +92,45 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
+    // MARK: - Save preview screenshot
+
+    func testSaveScreenshotWithNoImage() async throws {
+        addTabs(count: 5)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+    }
+
+    func testSaveScreenshotWithImage() async throws {
+        addTabs(count: 5)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+        tab.setScreenshot(UIImage())
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
+    }
+
+    func testRemoveScreenshotWithImage() async throws {
+        addTabs(count: 5)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+
+        tab.setScreenshot(UIImage())
+        subject.removeScreenshot(tab: tab)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
+    }
+
     // MARK: - Helper methods
 
     private func addTabs(count: Int) {
