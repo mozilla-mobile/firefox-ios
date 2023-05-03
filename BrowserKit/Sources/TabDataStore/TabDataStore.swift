@@ -6,23 +6,12 @@ import Foundation
 import Common
 
 public protocol TabDataStore {
-    func fetchWindowData() async -> WindowData
+    func fetchWindowData() async -> WindowData?
     func saveWindowData(window: WindowData) async
     func clearAllWindowsData() async
-    func fetchWindowData(withID id: UUID) async -> WindowData?
-    func fetchAllWindowsData() async -> [WindowData]
-    func clearWindowData(for id: UUID) async
 }
 
 public actor DefaultTabDataStore: TabDataStore {
-    enum PathInfo {
-        static let store = "codableWindowsState.archive"
-        static let profile = "profile.profile"
-        static let backup = "profile.backup"
-    }
-
-    let browserKitInfo = BrowserKitInformation.shared
-
     private let logger: Logger
     private let fileManager: TabFileManager
     private let throttleTime: UInt64
@@ -41,14 +30,15 @@ public actor DefaultTabDataStore: TabDataStore {
 
     private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
-        let baseFilePath = isBackup ? PathInfo.backup + "_\(windowID.uuidString)" : PathInfo.store + "_\(windowID.uuidString)"
+        let baseFilePath = "window-" + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
     }
 
     // MARK: Fetching Window Data
 
-    public func fetchWindowData() async -> WindowData {
-        return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
+    public func fetchWindowData() async -> WindowData? {
+        let allWindows = await fetchAllWindowsData()
+        return allWindows.first
     }
 
     private func fetchWindowData(withID id: UUID, isBackup: Bool) async -> WindowData? {

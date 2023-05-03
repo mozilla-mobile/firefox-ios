@@ -9,7 +9,7 @@ import Common
 final class TabDataStoreTests: XCTestCase {
     private var tabDataStore: DefaultTabDataStore!
     private var mockFileManger: TabFileManagerMock!
-    private let sleepTime: UInt64 = 1_000_000
+    private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
 
     override func setUp() {
         super.setUp()
