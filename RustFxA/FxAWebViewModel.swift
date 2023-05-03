@@ -9,7 +9,7 @@ import MozillaAppServices
 import Shared
 import Common
 
-enum FxAPageType {
+enum FxAPageType: Equatable {
     case emailLoginFlow
     case qrCode(url: String)
     case settingsPage

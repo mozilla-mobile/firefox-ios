@@ -156,9 +156,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 return true
             }
 
-        case .fxaSignIn:
-            // FXIOS-6031 #13680 - Enable FxaSignin route path in BrowserCoordinator
-            return false
+        case let .fxaSignIn(params):
+            handle(fxaParams: params)
+            return true
 
         case let .defaultBrowser(section):
             switch section {
@@ -208,5 +208,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     private func handle(searchURL: URL?, tabId: String) {
         browserViewController.handle(url: searchURL, tabId: tabId)
+    }
+
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
     }
 }
