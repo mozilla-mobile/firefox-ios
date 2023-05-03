@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 "use strict";
-
+ 
 import { CreditCardAutofill } from "Assets/CC_Script/CreditCardAutofill.js";
 
 const messageTypes = {
