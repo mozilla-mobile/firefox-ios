@@ -68,10 +68,10 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRestoreScreenshotsForTabs() async throws {
-        mockTabStore.allWindowsData = [WindowData(id: UUID(),
-                                                  isPrimary: true,
-                                                  activeTabId: UUID(),
-                                                  tabData: getMockTabData(count: 4))]
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     isPrimary: true,
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 4))
 
         subject.restoreTabs()
         try await Task.sleep(nanoseconds: sleepTime * 5)
