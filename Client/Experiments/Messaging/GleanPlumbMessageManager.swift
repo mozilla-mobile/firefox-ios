@@ -8,9 +8,6 @@ import MozillaAppServices
 import Shared
 
 protocol GleanPlumbMessageManagerProtocol {
-    /// Delegate protocol to open Glean message when pressed
-    var pressedDelegate: GleanPlumbMessagePressedDelegate? { get set }
-
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
     /// We can build our collection of eligible messages for a surface in here.
     func onStartup()
@@ -40,10 +37,6 @@ protocol GleanPlumbMessageManagerProtocol {
     func messageForId(_ id: String) -> GleanPlumbMessage?
 }
 
-protocol GleanPlumbMessagePressedDelegate: AnyObject {
-    func openURLInNewTab(url: URL)
-}
-
 /// To the surface that requests messages, it provides valid and triggered messages in priority order.
 ///
 /// Note: The term "valid" in `GleanPlumbMessage` context means a well-formed, non-expired, priority ordered message.
@@ -64,8 +57,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingUtility: GleanPlumbMessageUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature = FxNimbus.shared.features.messaging
-
-    weak var pressedDelegate: GleanPlumbMessagePressedDelegate?
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 

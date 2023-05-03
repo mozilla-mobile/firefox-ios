@@ -16,7 +16,7 @@ protocol OpenURLDelegate: AnyObject {
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool)
 }
 
-class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
+class SurveySurfaceManager: SurveySurfaceDelegate {
     // MARK: - Properties
     private let surveySurfaceID: MessageSurfaceId = .survey
     private var message: GleanPlumbMessage?
@@ -46,7 +46,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.messagingManager = messagingManager
-        self.messagingManager.pressedDelegate = self
     }
 
     // MARK: - Functionality
@@ -92,15 +91,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
 
     func didTapDismissSurvey() {
         message.map(messagingManager.onMessageDismissed)
-        dismissClosure?()
-    }
-
-    // MARK: Pressed Delegate
-    func openURLInNewTab(url: URL) {
-        homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url,
-                                                             isPrivate: false,
-                                                             selectNewTab: true)
-        openURLDelegate?.didRequestToOpenInNewTab(url: url, isPrivate: false)
         dismissClosure?()
     }
 }

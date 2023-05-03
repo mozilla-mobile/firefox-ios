@@ -29,7 +29,6 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
         self.dataAdaptor = dataAdaptor
         self.theme = theme
         self.messagingManager = messagingManager
-        self.messagingManager.pressedDelegate = self
     }
 
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
@@ -125,12 +124,5 @@ extension HomepageMessageCardViewModel: MessageCardDelegate {
             self.delegate?.reloadView()
             self.handleMessageDisplayed()
         }
-    }
-}
-
-// MARK: - GleanPlumbMessagePressedDelegate
-extension HomepageMessageCardViewModel: GleanPlumbMessagePressedDelegate {
-    func openURLInNewTab(url: URL) {
-        homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
     }
 }
