@@ -1948,7 +1948,7 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            
+
             creditCardHelper.foundFieldValues = { [weak self] fieldValues in
                 guard let self = self,
                       let tabWebView = tab.webView as? TabWebView
