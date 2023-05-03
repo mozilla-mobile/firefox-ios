@@ -1990,7 +1990,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [unowned self] in
-            tab.cancelQueuedAlerts()
             KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
             webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
             webView.uiDelegate = nil

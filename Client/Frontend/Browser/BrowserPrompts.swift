@@ -35,13 +35,6 @@ class JSPromptAlertController: UIAlertController {
  */
 protocol JSAlertInfo {
     func alertController() -> JSPromptAlertController
-    func cancel()
-}
-
-extension JSAlertInfo {
-    func cancel() {
-        alertController().dismiss(animated: true)
-    }
 }
 
 struct MessageAlert: JSAlertInfo {
