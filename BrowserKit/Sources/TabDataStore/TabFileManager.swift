@@ -64,7 +64,6 @@ public struct DefaultTabFileManager: TabFileManager {
         guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
         var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
         containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
-        print("HERE: \(containerURL!)")
         return containerURL?.appendingPathComponent(PathInfo.tabSessionData)
     }
 
