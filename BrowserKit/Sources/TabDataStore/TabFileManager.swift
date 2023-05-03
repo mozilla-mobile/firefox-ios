@@ -11,6 +11,8 @@ public protocol TabFileManager {
     func tabSessionDataDirectory() -> URL?
 
     /// Determines the directory where window data should be stored
+    /// - Parameter isBackup: This determines which of the window data folders will be returned,
+    /// the backup folder is used to store a slightly older copy of the data for use if the main copy becomes corrupted
     /// - Returns: the URL that should be used for storing window data, can be nil
     func windowDataDirectory(isBackup: Bool) -> URL?
 
