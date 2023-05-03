@@ -122,7 +122,7 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-class SyncContentSettingsViewController: SettingsTableViewController {
+class SyncContentSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
     init() {
@@ -191,10 +191,26 @@ class SyncContentSettingsViewController: SettingsTableViewController {
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged("passwords"))
 
+        let creditCards = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.creditcards.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncCreditCardsEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged("creditcards"))
+
+        var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords]
+
+        if featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus,
+            checking: .buildOnly) {
+            engineSectionChildren.append(creditCards)
+        }
+
         let enginesSection = SettingSection(
             title: NSAttributedString(string: .FxASettingsSyncSettings),
             footerTitle: nil,
-            children: [bookmarks, history, tabs, passwords])
+            children: engineSectionChildren)
 
         let deviceName = DeviceNameSetting(settings: self)
         let deviceNameSection = SettingSection(
