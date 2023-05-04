@@ -21,6 +21,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         viewModel.delegate = self
     }
 
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
     required init?(coder: NSCoder) {
         fatalError()
     }
