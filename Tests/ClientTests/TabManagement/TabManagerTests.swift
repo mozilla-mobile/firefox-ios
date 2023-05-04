@@ -16,7 +16,7 @@ class TabManagerTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
     let webViewConfig = WKWebViewConfiguration()
-    let sleepTime: UInt64 = 1_000_000_000
+    let sleepTime: UInt64 = 1 * NSEC_PER_SEC
 
     override func setUp() {
         super.setUp()
@@ -42,29 +42,29 @@ class TabManagerTests: XCTestCase {
     // MARK: - Restore tabs
 
     func testRestoreTabs() async throws {
-        mockTabStore.allWindowsData = [WindowData(id: UUID(),
-                                                  isPrimary: true,
-                                                  activeTabId: UUID(),
-                                                  tabData: getMockTabData(count: 4))]
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     isPrimary: true,
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 4))
 
         subject.restoreTabs()
         try await Task.sleep(nanoseconds: sleepTime * 5)
         XCTAssertEqual(subject.tabs.count, 4)
-        XCTAssertEqual(mockTabStore.fetchAllWindowsDataCount, 1)
+        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
     }
 
     func testRestoreTabsForced() async throws {
         addTabs(count: 5)
         XCTAssertEqual(subject.tabs.count, 5)
 
-        mockTabStore.allWindowsData = [WindowData(id: UUID(),
-                                                  isPrimary: true,
-                                                  activeTabId: UUID(),
-                                                  tabData: getMockTabData(count: 3))]
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     isPrimary: true,
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 3))
         subject.restoreTabs(true)
         try await Task.sleep(nanoseconds: sleepTime * 3)
         XCTAssertEqual(subject.tabs.count, 3)
-        XCTAssertEqual(mockTabStore.fetchAllWindowsDataCount, 1)
+        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
     }
 
     // MARK: - Save tabs
@@ -72,7 +72,7 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithNoTabs() async throws {
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
@@ -80,7 +80,7 @@ class TabManagerTests: XCTestCase {
         addTabs(count: 1)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 1)
     }
 
@@ -88,7 +88,7 @@ class TabManagerTests: XCTestCase {
         addTabs(count: 5)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)
     }
 

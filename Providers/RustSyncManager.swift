@@ -188,7 +188,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         if canSendUsageData() {
-            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) {_ in }
+            let gleanHelper = GleanSyncOperationHelper()
+            gleanHelper.reportTelemetry(result)
         } else {
             logger.log("Profile isn't sending usage data. Not sending sync status event.",
                        level: .debug,

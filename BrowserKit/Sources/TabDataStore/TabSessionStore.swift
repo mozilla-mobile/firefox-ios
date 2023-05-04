@@ -32,7 +32,13 @@ public actor DefaultTabSessionStore: TabSessionStore {
     }
 
     public func saveTabSession(tabID: UUID, sessionData: Data) async {
-        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(tabID.uuidString) else { return }
+        guard let directory = fileManager.tabSessionDataDirectory() else { return }
+
+        if !fileManager.fileExists(atPath: directory) {
+            fileManager.createDirectoryAtPath(path: directory)
+        }
+
+        let path = directory.appendingPathComponent("tab-" + tabID.uuidString)
         do {
             try sessionData.write(to: path, options: .atomicWrite)
         } catch {

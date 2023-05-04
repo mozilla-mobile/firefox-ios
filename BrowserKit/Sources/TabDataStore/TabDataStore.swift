@@ -6,23 +6,12 @@ import Foundation
 import Common
 
 public protocol TabDataStore {
-    func fetchWindowData() async -> WindowData
+    func fetchWindowData() async -> WindowData?
     func saveWindowData(window: WindowData) async
     func clearAllWindowsData() async
-    func fetchWindowData(withID id: UUID) async -> WindowData?
-    func fetchAllWindowsData() async -> [WindowData]
-    func clearWindowData(for id: UUID) async
 }
 
 public actor DefaultTabDataStore: TabDataStore {
-    enum PathInfo {
-        static let store = "codableWindowsState.archive"
-        static let profile = "profile.profile"
-        static let backup = "profile.backup"
-    }
-
-    let browserKitInfo = BrowserKitInformation.shared
-
     private let logger: Logger
     private let fileManager: TabFileManager
     private let throttleTime: UInt64
@@ -41,34 +30,35 @@ public actor DefaultTabDataStore: TabDataStore {
 
     private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
-        let baseFilePath = isBackup ? PathInfo.backup + "_\(windowID.uuidString)" : PathInfo.store + "_\(windowID.uuidString)"
+        let baseFilePath = "window-" + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
     }
 
     // MARK: Fetching Window Data
 
-    public func fetchWindowData() async -> WindowData {
-        return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
+    public func fetchWindowData() async -> WindowData? {
+        let allWindows = await fetchAllWindowsData()
+        return allWindows.first
     }
 
     private func fetchWindowData(withID id: UUID, isBackup: Bool) async -> WindowData? {
-        guard let profileURL = windowURLPath(for: id, isBackup: isBackup) else {
+        guard let directoryURL = windowURLPath(for: id, isBackup: isBackup) else {
             return nil
         }
         do {
-            let windowData = try await decodeWindowData(from: profileURL)
+            let windowData = try await decodeWindowData(from: directoryURL)
             return windowData
         } catch {
             return nil
         }
     }
 
-    public func fetchWindowData(withID id: UUID) async -> WindowData? {
-        guard let profileURL = windowURLPath(for: id, isBackup: false) else {
+    private func fetchWindowData(withID id: UUID) async -> WindowData? {
+        guard let directoryURL = windowURLPath(for: id, isBackup: false) else {
             return nil
         }
         do {
-            let windowData = try await decodeWindowData(from: profileURL)
+            let windowData = try await decodeWindowData(from: directoryURL)
             return windowData
         } catch {
             logger.log("Error fetching window data: \(error)",
@@ -89,13 +79,13 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    public func fetchAllWindowsData() async -> [WindowData] {
-        guard let profileURL = fileManager.windowDataDirectory(isBackup: false) else {
+    private func fetchAllWindowsData() async -> [WindowData] {
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
             return [WindowData]()
         }
 
         do {
-            let fileURLs = fileManager.contentsOfDirectory(at: profileURL)
+            let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
             let windowsData = try await parseWindowDataFiles(fromURLs: fileURLs)
             return windowsData
         } catch {
@@ -216,23 +206,23 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: - Deleting Window Data
 
-    public func clearWindowData(for id: UUID) async {
-        guard let profileURL = windowURLPath(for: id, isBackup: false) else {
+    private func clearWindowData(for id: UUID) async {
+        guard let directoryURL = windowURLPath(for: id, isBackup: false) else {
             return
         }
         guard let backupURL = windowURLPath(for: id, isBackup: true) else {
             return
         }
-        fileManager.removeFileAt(path: profileURL)
+        fileManager.removeFileAt(path: directoryURL)
         fileManager.removeFileAt(path: backupURL)
     }
 
     public func clearAllWindowsData() async {
-        guard let profileURL = fileManager.windowDataDirectory(isBackup: false),
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false),
               let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
             return
         }
-        fileManager.removeAllFilesAt(directory: profileURL)
+        fileManager.removeAllFilesAt(directory: directoryURL)
         fileManager.removeAllFilesAt(directory: backupURL)
     }
 }
