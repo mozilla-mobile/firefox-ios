@@ -64,7 +64,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> LegacyOnboardingModelProtocol? {
         let shortName = AppName.shortName.rawValue
 
         switch cardType {
