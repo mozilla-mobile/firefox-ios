@@ -864,16 +864,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "Committed to the promise of a better Internet for everyone.",
                 comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens.")
-            public static let Action = MZLocalizedString(
-                key: "Onboarding.IntroAction.v114",
-                tableName: "Onboarding",
-                value: "Get Started",
-                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
-            public static let SecondaryAction = MZLocalizedString(
-                key: "Onboarding.IntroSecondaryAction.v114",
-                tableName: "Onboarding",
-                value: "Skip",
-                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip the onboarding.")
         }
 
         public struct Wallpaper {
@@ -913,13 +903,38 @@ extension String {
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.v114",
                 tableName: "Onboarding",
-                value: "Make %@ your go-to browser",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                value: "Welcome to an independent internet",
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
             public static let Description = MZLocalizedString(
                 key: "Onboarding.Welcome.Description.v114",
                 tableName: "Onboarding",
                 value: "%@ puts people over profits and defends your privacy as you browse.",
                 comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+            public static let TitleTreatmentA = MZLocalizedString(
+                key: "Onboarding.Welcome.Title.TreatementA.v114",
+                tableName: "Onboarding",
+                value: "Make %@ your go-to browser",
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+            public static let DescriptionTreatementA = MZLocalizedString(
+                key: "Onboarding.Welcome.Description.TreatementA.v114",
+                tableName: "Onboarding",
+                value: "%@ puts people over profits and defends your privacy as you browse.",
+                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+            public static let GetStartedAction = MZLocalizedString(
+                key: "Onboarding.Welcome.Action.v114",
+                tableName: "Onboarding",
+                value: "Get Started",
+                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
+            public static let ActionTreatementA = MZLocalizedString(
+                key: "Onboarding.Welcome.ActionTreatementA.v114",
+                tableName: "Onboarding",
+                value: "Set as Default Browser",
+                comment: "Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox.")
+            public static let Skip = MZLocalizedString(
+                key: "Onboarding.Welcome.Skip.v114",
+                tableName: "Onboarding",
+                value: "Skip",
+                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card.")
         }
 
         public struct Sync {
@@ -933,6 +948,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "Grab tabs and passwords from your other devices to pick up where you left off.",
                 comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+            public static let SignInAction = MZLocalizedString(
+                key: "Onboarding.Sync.SignIn.Action.v114",
+                tableName: "Onboarding",
+                value: "Sign In",
+                comment: "String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Sync.Skip.Action.v114",
                 tableName: "Onboarding",
@@ -955,6 +975,11 @@ extension String {
                 key: "Onboarding.Notification.Continue.Action.v114",
                 tableName: "Onboarding",
                 value: "Continue",
+                comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
+            public static let TurnOnNotificationsAction = MZLocalizedString(
+                key: "Onboarding.Notification.TurnOnNotifications.Action.v114",
+                tableName: "Onboarding",
+                value: "Turn On Notifications",
                 comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Notification.Skip.Action.v114",
@@ -3420,25 +3445,6 @@ extension String {
         tableName: nil,
         value: "Firefox may install and run studies from time to time.",
         comment: "A short description that explains that Mozilla is running studies")
-}
-
-// MARK: - Intro Onboarding slides
-extension String {
-    public static let CardTitleWelcome = MZLocalizedString(
-        key: "Intro.Slides.Welcome.Title.v2",
-        tableName: "Intro",
-        value: "Welcome to Firefox",
-        comment: "Title for the first panel 'Welcome' in the First Run tour.")
-    public static let StartBrowsingButtonTitle = MZLocalizedString(
-        key: "Start Browsing",
-        tableName: "Intro",
-        value: nil,
-        comment: "See http://mzl.la/1T8gxwo")
-    public static let IntroSignInButtonTitle = MZLocalizedString(
-        key: "Intro.Slides.Button.SignIn",
-        tableName: "Intro",
-        value: "Sign In",
-        comment: "Sign in to Firefox account button on second intro screen.")
 }
 
 // MARK: - Share extension
