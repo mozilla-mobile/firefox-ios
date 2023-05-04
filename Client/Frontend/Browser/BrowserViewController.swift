@@ -314,7 +314,7 @@ class BrowserViewController: UIViewController {
             toolbar.isHidden = false
             toolbar.tabToolbarDelegate = self
             toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-            toolbar.applyTheme(theme: self.themeManager.currentTheme)
+            toolbar.applyTheme(theme: themeManager.currentTheme)
             toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         } else {
@@ -2843,7 +2843,7 @@ extension BrowserViewController: NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
         // TODO: Clean up after FXIOS-5109
-        let currentTheme = self.themeManager.currentTheme
+        let currentTheme = themeManager.currentTheme
         let ui: [ThemeApplicable?] = [urlBar,
                                       toolbar,
                                       readerModeBar]

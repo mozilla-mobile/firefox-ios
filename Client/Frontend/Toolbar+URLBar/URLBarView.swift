@@ -446,7 +446,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             locationTextField.textDragInteraction?.isEnabled = false
         }
 
-        locationTextField.applyTheme(theme: self.themeManager.currentTheme)
+        locationTextField.applyTheme(theme: themeManager.currentTheme)
         locationTextField.backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
     }
 
@@ -530,7 +530,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         delegate?.urlBarDidEnterOverlayMode(self)
 
-        applyTheme(theme: self.themeManager.currentTheme)
+        applyTheme(theme: themeManager.currentTheme)
 
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
@@ -561,7 +561,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
-        applyTheme(theme: self.themeManager.currentTheme)
+        applyTheme(theme: themeManager.currentTheme)
     }
 
     func prepareOverlayAnimation() {
@@ -876,14 +876,16 @@ extension URLBarView: PrivateModeUI {
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(isPrivate)
         }
-
-        locationActiveBorderColor = UIColor.legacyTheme.urlbar.activeBorder(isPrivate)
-        progressBar.setGradientColors(startColor: UIColor.legacyTheme.loadingBar.start(isPrivate),
-                                      middleColor: UIColor.legacyTheme.loadingBar.middle(isPrivate),
-                                      endColor: UIColor.legacyTheme.loadingBar.end(isPrivate))
-        ToolbarTextField.applyUIMode(isPrivate: isPrivate)
-
-        applyTheme(theme: self.themeManager.currentTheme)
+        let currentTheme = themeManager.currentTheme
+        let gradientStartColor = isPrivate ? currentTheme.colors.borderAccentPrivate : currentTheme.colors.borderAccent
+        let gradientMiddleColor = isPrivate ? nil : currentTheme.colors.iconAccentPink
+        let gradientEndColor = isPrivate ? currentTheme.colors.borderAccentPrivate : currentTheme.colors.iconAccentYellow
+        locationActiveBorderColor = isPrivate ? currentTheme.colors.layerAccentPrivateNonOpaque : currentTheme.colors.layerAccentNonOpaque
+        progressBar.setGradientColors(startColor: gradientStartColor,
+                                      middleColor: gradientMiddleColor,
+                                      endColor: gradientEndColor)
+        locationTextField?.applyTheme(theme: currentTheme)
+        applyTheme(theme: currentTheme)
     }
 }
 

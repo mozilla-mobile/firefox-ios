@@ -88,7 +88,7 @@ open class TabToolbarHelper: NSObject {
     var middleButtonState: MiddleButtonState = .home
 
     func setTheme(forButtons buttons: [ThemeApplicable]) {
-        buttons.forEach { $0.applyTheme(theme: self.themeManager.currentTheme) }
+        buttons.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
     }
 
     init(toolbar: TabToolbarProtocol,

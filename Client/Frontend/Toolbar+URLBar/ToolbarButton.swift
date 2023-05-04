@@ -64,12 +64,4 @@ extension ToolbarButton: ThemeApplicable {
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
-
-//    func applyTheme() {
-//        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
-//        disabledTintColor = UIColor.legacyTheme.toolbarButton.disabledTint
-//        unselectedTintColor = UIColor.legacyTheme.browser.tint
-//        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
-//        imageView?.tintColor = tintColor
-//    }
 }

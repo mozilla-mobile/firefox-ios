@@ -347,9 +347,7 @@ extension TabLocationView: ThemeApplicable {
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
-
-        let color = theme.type == .dark ? UIColor(white: 0.3, alpha: 0.6): theme.colors.layer3
-        menuBadge.badge.tintBackground(color: color)
+        menuBadge.badge.tintBackground(color: theme.colors.layer3)
     }
 }
 

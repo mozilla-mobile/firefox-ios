@@ -151,7 +151,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
 
-        tabsButton.applyTheme(theme: self.themeManager.currentTheme)
+        tabsButton.applyTheme(theme: themeManager.currentTheme)
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
