@@ -26,7 +26,7 @@ def loader(kind, path, config, params, loaded_tasks):
     # Taskcluster sorts task names alphabetically, we need numbers to be zero-padded.
     max_number_of_digits = _get_number_of_digits(chunks)
 
-    jobs = {
+    tasks = {
         str(this_chunk).zfill(max_number_of_digits): {
             "attributes": {
                 "chunk_locales": chunkify(filtered_locales, this_chunk, chunks),
@@ -37,7 +37,7 @@ def loader(kind, path, config, params, loaded_tasks):
         for this_chunk in range(1, chunks + 1)
     }
 
-    config["jobs"] = jobs
+    config["tasks"] = tasks
 
     return base_loader(kind, path, config, params, loaded_tasks)
 
