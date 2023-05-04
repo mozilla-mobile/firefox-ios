@@ -36,7 +36,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // Wait to see the Share options sheet
-        waitForExistence(app.buttons["Copy"], timeout: 10)
+        waitForExistence(app.cells["Copy"], timeout: 10)
     }
 
     // Smoketest
@@ -48,7 +48,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Wait to see the Share options sheet
         if iPad() {
-            waitForExistence(app.buttons["Copy"], timeout: 15)
+            waitForExistence(app.cells["Copy"], timeout: 15)
         } else {
             waitForExistence(app.buttons["Close"], timeout: 15)
         }
@@ -60,8 +60,8 @@ class PhotonActionSheetTest: BaseTestCase {
         waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        waitForExistence(app.buttons["Send Link to Device"], timeout: 10)
-        app.buttons["Send Link to Device"].tap()
+        waitForExistence(app.cells["Send Link to Device"], timeout: 10)
+        app.cells["Send Link to Device"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
@@ -99,7 +99,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-        waitForExistence(app.collectionViews.buttons["Copy"], timeout: TIMEOUT)
+        waitForExistence(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
         waitForExistence(app.collectionViews.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch, timeout: TIMEOUT)
         var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         if iPad() {
