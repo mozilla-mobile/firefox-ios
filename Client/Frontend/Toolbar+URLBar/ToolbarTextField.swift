@@ -15,6 +15,12 @@ class ToolbarTextField: AutocompleteTextField {
         }
     }
 
+    override var textColor: UIColor? {
+        didSet {
+            clearButtonTintColor = textColor
+        }
+    }
+
     private var tintedClearImage: UIImage?
 
     // MARK: - Initializers
@@ -57,22 +63,6 @@ class ToolbarTextField: AutocompleteTextField {
                            width: rect.width + grow,
                            height: rect.height + grow)
         return rect2
-    }
-}
-
-// MARK: - Theme protocols
-extension ToolbarTextField: ThemeApplicable {
-    func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer3
-        textColor = theme.colors.textSecondary
-        clearButtonTintColor = textColor
-        tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
-        self.refreshAutocompleteLabelTheme()
-    }
-
-    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
-    static func applyUIMode(isPrivate: Bool) {
-        textSelectionColor = UIColor.legacyTheme.urlbar.textSelectionHighlight(isPrivate)
     }
 }
 

@@ -40,8 +40,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    static var textSelectionColor = URLBarColor.TextSelectionHighlight(labelMode: UIColor(), textFieldMode: nil)
-
     override var text: String? {
         didSet {
             super.text = text
@@ -221,7 +219,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
-        let color = AutocompleteTextField.textSelectionColor.labelMode
+        let color = tintColor ?? .clear
         autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
 
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
@@ -258,14 +256,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         frame.size.height = self.frame.size.height
         label.frame = frame
         return label
-    }
-
-    public func refreshAutocompleteLabelTheme() {
-        // Only refresh if an autocomplete label is presented to the user
-        if self.autocompleteTextLabel?.attributedText != nil {
-            self.autocompleteTextLabel?.backgroundColor = self.backgroundColor
-            self.autocompleteTextLabel?.textColor = self.textColor
-        }
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -345,5 +335,17 @@ extension AutocompleteTextField: MenuHelperInterface {
 
     func menuHelperPasteAndGo() {
         autocompleteDelegate?.autocompletePasteAndGo(self)
+    }
+}
+
+extension AutocompleteTextField: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer3
+        textColor = theme.colors.textPrimary
+        tintColor = theme.colors.layerAccentNonOpaque
+        if self.autocompleteTextLabel?.attributedText != nil {
+            self.autocompleteTextLabel?.backgroundColor = backgroundColor
+            self.autocompleteTextLabel?.textColor = textColor
+        }
     }
 }
