@@ -670,7 +670,7 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
-    func shouldCloseInactiveTab(_ tab: Tab, index: Int) {
+    func closeInactiveTab(_ tab: Tab, index: Int) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
         removeInactiveTabAndReloadView(tabs: [tab])
 
