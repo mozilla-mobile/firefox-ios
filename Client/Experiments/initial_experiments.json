@@ -62,7 +62,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('112.!') >= 0)))",
       "startDate": "2023-03-28",
-      "enrollmentEndDate": "2023-04-11",
+      "enrollmentEndDate": "2023-05-03",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
