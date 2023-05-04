@@ -957,7 +957,7 @@ extension String {
                 key: "Onboarding.Sync.Skip.Action.v114",
                 tableName: "Onboarding",
                 value: "Skip",
-                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
+                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. Placeholder is the app name.")
         }
 
         public struct Notification {
