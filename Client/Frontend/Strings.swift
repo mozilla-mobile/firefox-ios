@@ -2014,6 +2014,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Toggle logins syncing setting")
+    public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
+        key: "FirefoxSync.CreditCardsEngine.v115",
+        tableName: "FirefoxSync",
+        value: "Credit Cards",
+        comment: "Toggle for credit cards syncing setting")
 }
 
 // MARK: - Firefox Logins
