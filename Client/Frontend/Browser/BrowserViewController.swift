@@ -1949,19 +1949,15 @@ extension BrowserViewController: LegacyTabDelegate {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues in
-                guard let self = self,
-                      let tabWebView = tab.webView as? TabWebView
-                else { return }
+            creditCardHelper.foundFieldValues = { fieldValues in
+                guard let tabWebView = tab.webView as? TabWebView else { return }
 
                 // Delay so that this executes AFTER KeyboardHelperDelegate methods
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.reloadAccessoryForCreditCardTimer) {
-                    tabWebView.accessoryView?.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
-                }
+                tabWebView.accessoryView.reloadViewFor(.creditCard)
+                tabWebView.reloadInputViews()
 
                 // stub. Action will be to present a half sheet, https://mozilla-hub.atlassian.net/browse/FXIOS-6111
-                tabWebView.accessoryView?.savedCardsClosure = { }
+                tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
 
@@ -2736,16 +2732,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
 
-        guard let accessoryView = tabWebView.accessoryView else {
-            tabWebView.accessoryView = AccessoryViewProvider()
-            tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
-            tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
-            tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
-
-            return
-        }
-
-        accessoryView.reloadViewFor(.standard)
+        tabWebView.accessoryView.reloadViewFor(.standard)
         tabWebView.reloadInputViews()
     }
 
