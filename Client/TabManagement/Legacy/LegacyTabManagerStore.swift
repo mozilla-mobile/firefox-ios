@@ -10,6 +10,7 @@ import Shared
 protocol LegacyTabManagerStore {
     var isRestoringTabs: Bool { get }
     var hasTabsToRestoreAtStartup: Bool { get }
+    var getSavedTabs: [LegacySavedTab] { get }
 
     func preserveScreenshot(forTab tab: Tab?)
     func removeScreenshot(forTab tab: Tab?)
@@ -120,6 +121,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
                             addTabClosure: (Bool) -> Tab) -> Tab? {
+        print("YRD restoreStartupTabs")
         return restoreTabs(savedTabs: tabs,
                            clearPrivateTabs: clearPrivateTabs,
                            addTabClosure: addTabClosure)
@@ -128,6 +130,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     func restoreTabs(savedTabs: [LegacySavedTab],
                      clearPrivateTabs: Bool,
                      addTabClosure: (Bool) -> Tab) -> Tab? {
+        print("YRD restoreTabs")
         // We are told "Restoration is a main-only operation"
         guard !lockedForReading,
                 Thread.current.isMainThread,
@@ -186,6 +189,10 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         return archiver.encodedData
     }
 
+    lazy var getSavedTabs: [LegacySavedTab] = {
+        return tabs
+    }()
+
     private var tabs: [LegacySavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
             return []
@@ -224,6 +231,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     }
 
     private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [LegacySavedTab]? {
+        print("YRD prepareSavedTabs")
         var savedTabs = [LegacySavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {

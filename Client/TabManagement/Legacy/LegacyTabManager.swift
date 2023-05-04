@@ -347,6 +347,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         isRestoringTabs = true
 
+        print("YRD tabManager:restoreTabs")
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
                                                    addTabClosure: addTabForRestoration(isPrivate:))
 
@@ -370,6 +371,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     private func addTabForRestoration(isPrivate: Bool) -> Tab {
+        print("YRD addTabForRestoration")
         return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
     }
 

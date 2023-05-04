@@ -10,10 +10,10 @@ import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
-class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
+    var tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
@@ -21,11 +21,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
-         tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
+         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility()) {
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabDataStore = tabDataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
+        self.tabMigration = tabMigration
         self.notificationCenter = notificationCenter
         super.init(profile: profile, imageStore: imageStore)
 
@@ -33,9 +34,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            observing: [UIApplication.willResignActiveNotification])
     }
 
+    // MARK: - Tab migration
+    private func runTabMigration(store: LegacyTabManagerStore) {
+        print("YRD runTabMigration")
+        guard tabMigration.shouldRunMigration(profile: profile) else { return }
+
+        tabMigration.startMigration(store: store)
+    }
+
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
+        print("YRD restoreTabs")
         guard shouldUseNewTabStore()
         else {
             super.restoreTabs(forced)
@@ -116,6 +126,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     override func preserveTabs() {
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
+        // TODO: Remove check to store tab information in both systems
         guard shouldUseNewTabStore() else { return }
 
         Task {
