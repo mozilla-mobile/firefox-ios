@@ -957,7 +957,7 @@ extension String {
                 key: "Onboarding.Sync.Skip.Action.v114",
                 tableName: "Onboarding",
                 value: "Skip",
-                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. Placeholder is the app name.")
+                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
         }
 
         public struct Notification {
@@ -2799,7 +2799,7 @@ extension String {
             key: "Engagement.Notification.Treatment.B.Body.v114",
             tableName: "EngagementNotification",
             value: "Browse with no saved cookies or history in %@.",
-            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature.")
+            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name.")
     }
 }
 
