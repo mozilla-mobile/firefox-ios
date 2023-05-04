@@ -5,8 +5,4 @@
 import UIKit
 
 // The root view controller of the application
-class SceneContainer: UIViewController {
-//    override var prefersStatusBarHidden: Bool {
-//        return true
-//    }
-}
+class SceneContainer: UIViewController {}
