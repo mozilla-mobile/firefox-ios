@@ -47,13 +47,11 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
-        let messageAlert = MessageAlert(message: message,
-                                        frame: frame,
-                                        completionHandler: completionHandler,
-                                        shouldCallCompletion: shouldShowAlert)
-        if shouldShowAlert {
-            present(messageAlert.alertController(), animated: true, completion: nil)
+        let messageAlert = MessageAlert(message: message, frame: frame)
+        if shouldDisplayJSAlertForWebView(webView) {
+            present(messageAlert.alertController(), animated: true) {
+                completionHandler()
+            }
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
             completionHandler()
@@ -66,13 +64,11 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
-        let confirmAlert = ConfirmPanelAlert(message: message,
-                                             frame: frame,
-                                             completionHandler: completionHandler,
-                                             shouldCallCompletion: shouldShowAlert)
+        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame)
         if shouldDisplayJSAlertForWebView(webView) {
-            present(confirmAlert.alertController(), animated: true, completion: nil)
+            present(confirmAlert.alertController(), animated: true) {
+                completionHandler(true)
+            }
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
             completionHandler(false)
@@ -86,14 +82,13 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (String?) -> Void
     ) {
-        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
         let textInputAlert = TextInputAlert(message: prompt,
                                             frame: frame,
-                                            completionHandler: completionHandler,
-                                            defaultText: defaultText,
-                                            shouldCallCompletion: shouldShowAlert)
+                                            defaultText: defaultText)
         if shouldDisplayJSAlertForWebView(webView) {
-            present(textInputAlert.alertController(), animated: true, completion: nil)
+            present(textInputAlert.alertController(), animated: true) {
+                completionHandler(defaultText)
+            }
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
             completionHandler(nil)

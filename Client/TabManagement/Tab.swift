@@ -786,12 +786,6 @@ class Tab: NSObject {
         return alertQueue.removeFirst()
     }
 
-    func cancelQueuedAlerts() {
-        alertQueue.forEach { alert in
-            alert.cancel()
-        }
-    }
-
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView,
               webView == self.webView,
