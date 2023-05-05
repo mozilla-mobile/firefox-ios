@@ -7,49 +7,64 @@ import Foundation
 import Common
 
 class TabFileManagerMock: TabFileManager {
+    var primaryDirectoryURL: URL?
+    var backupDirectoryURL: URL?
+    var tabSessionDataDirectoryCalledCount = 0
+    var windowDataDirectoryCalledCount = 0
+    var pathContents: [URL]?
+    var contentsOfDirectoryCalledCount = 0
+    var windowData: WindowData?
+    var getWindowDataFromPathCalledCount = 0
+    var writeWindowDataCalledCount = 0
+    var fileExistsCalledCount = 0
+    var createDirectoryAtPathCalledCount = 0
+    var copyItemCalledCount = 0
+    var fileExists = false
+    var removeFileAtCalledCount = 0
+    var removeAllFilesAtCalledCount = 0
+
     func tabSessionDataDirectory() -> URL? {
-        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+        tabSessionDataDirectoryCalledCount += 1
+        return primaryDirectoryURL
     }
 
     func windowDataDirectory(isBackup: Bool) -> URL? {
+        windowDataDirectoryCalledCount += 1
         if isBackup {
-            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-        } else {
-            return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            return backupDirectoryURL
         }
+        return primaryDirectoryURL
     }
 
     func contentsOfDirectory(at path: URL) -> [URL] {
-        do {
-            return try FileManager.default.contentsOfDirectory(
-                    at: path,
-                    includingPropertiesForKeys: nil,
-                    options: .skipsHiddenFiles)
-        } catch {
-            return []
-        }
+        contentsOfDirectoryCalledCount += 1
+        return pathContents ?? []
     }
 
     func copyItem(at sourceURL: URL, to destinationURL: URL) throws {
-        try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
-    }
-
-    func removeFileAt(path: URL) {
-        try? FileManager.default.removeItem(at: path)
+        copyItemCalledCount += 1
     }
 
     func removeAllFilesAt(directory: URL) {
-        let fileURLs = contentsOfDirectory(at: directory)
-        for fileURL in fileURLs {
-            removeFileAt(path: fileURL)
-        }
+        removeAllFilesAtCalledCount += 1
     }
 
     func fileExists(atPath pathURL: URL) -> Bool {
-        return FileManager.default.fileExists(atPath: pathURL.path)
+        fileExistsCalledCount += 1
+        return fileExists
     }
 
     func createDirectoryAtPath(path: URL) {
-        try? FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
+        createDirectoryAtPathCalledCount += 1
+    }
+
+    func getWindowDataFromPath(path: URL) throws -> WindowData? {
+        getWindowDataFromPathCalledCount += 1
+        return windowData
+    }
+
+    func writeWindowData(windowData: WindowData, to url: URL) throws {
+        self.windowData = windowData
+        writeWindowDataCalledCount += 1
     }
 }
