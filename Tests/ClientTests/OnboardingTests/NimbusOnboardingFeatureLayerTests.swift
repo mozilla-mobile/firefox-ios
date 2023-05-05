@@ -9,6 +9,7 @@ import Shared
 import XCTest
 @testable import Client
 
+// TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6329
 class NimbusOnboardingFeatureLayerTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -34,7 +35,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     ) {
         guard let dismissable = dismissable else { return }
 
-        let f = HardcodedNimbusFeatures(with: ["":""])
 //        let features = HardcodedNimbusFeatures(with: [
 //            "onboarding-framework-feature": """
 //              {

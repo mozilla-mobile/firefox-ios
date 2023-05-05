@@ -70,20 +70,20 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         switch cardType {
         case .welcome:
             return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
-                                       title: String(format: .Onboarding.Welcome.Title, shortName),
-                                       description: String(format: .Onboarding.Welcome.Description, shortName),
-                                       linkButtonTitle: .Onboarding.PrivacyPolicyLinkButtonTitle,
-                                       primaryAction: .Onboarding.Welcome.GetStartedAction,
-                                       secondaryAction: nil,
-                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
+                                             title: String(format: .Onboarding.Welcome.Title, shortName),
+                                             description: String(format: .Onboarding.Welcome.Description, shortName),
+                                             linkButtonTitle: .Onboarding.PrivacyPolicyLinkButtonTitle,
+                                             primaryAction: .Onboarding.Welcome.GetStartedAction,
+                                             secondaryAction: nil,
+                                             a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .signSync:
             return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
-                                       title: .Onboarding.Sync.Title,
-                                       description: .Onboarding.Sync.Description,
-                                       linkButtonTitle: nil,
-                                       primaryAction: .Onboarding.Sync.SignInAction,
-                                       secondaryAction: .Onboarding.Sync.SkipAction,
-                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+                                             title: .Onboarding.Sync.Title,
+                                             description: .Onboarding.Sync.Description,
+                                             linkButtonTitle: nil,
+                                             primaryAction: .Onboarding.Sync.SignInAction,
+                                             secondaryAction: .Onboarding.Sync.SkipAction,
+                                             a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case .notification:
             return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
                                              title: String(format: .Onboarding.Notification.Title, shortName),

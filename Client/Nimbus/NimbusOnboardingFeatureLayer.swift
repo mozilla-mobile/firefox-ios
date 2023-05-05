@@ -5,8 +5,10 @@
 import Foundation
 import Shared
 
-// I'm building everything in one big file for now because of existing legacy stuff.
-// I'll split everything up for the PR. :)
+protocol NimbusOnboardingFeatureLayerProtocol {
+    func getOnboardingModel(from nimbus: FxNimbus) -> OnboardingViewModel
+}
+
 class NimbusOnboardingFeatureLayer {
     func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
@@ -39,33 +41,32 @@ class NimbusOnboardingFeatureLayer {
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfo] {
         var cards = [OnboardingCardInfo]()
 
-//        cardData.forEach { card in
-//            let buttons = getOnboardingCardButtons(from: card.buttons)
-//            cards.append(OnboardingCardInfo(
-//                name: card.name,
-//                title: card.title,
-//                body: card.body,
-//                image: getOnboardingImageID(from: card.image),
-//                link: getOnboardingLink(from: card.link),
-//                buttons: getOnboardingCardButtons(from: card.buttons),
-//                type: card.type))
-//        }
+        cardData.forEach { card in
+            cards.append(
+                OnboardingCardInfoModel(name: card.name,
+                                        title: card.title,
+                                        body: card.body,
+                                        image: getOnboardingImageID(from: card.image),
+                                        link: getOnboardingLink(from: card.link),
+                                        buttons: getOnboardingCardButtons(from: card.buttons),
+                                        type: card.type))
+        }
 
         return cards
     }
 
-    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfo] {
+    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel] {
         var buttons = [OnboardingButtonInfo]()
 
-//        cardButtons.forEach { button in
-//            buttons.append(OnboardingButtonInfo(title: button.title,
-//                                                action: button.action))
-//        }
+        cardButtons.forEach { button in
+            buttons.append(OnboardingButtonInfo(title: button.title,
+                                                action: button.action))
+        }
 
         return buttons
     }
 
-    private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfo? {
+    private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
         else { return nil }
@@ -81,29 +82,4 @@ class NimbusOnboardingFeatureLayer {
         case .notifications: return ImageIdentifiers.onboardingNotification
         }
     }
-}
-
-struct OnboardingButtonInfo {
-    let title: String
-    let action: OnboardingActions
-}
-
-struct OnboardingLinkInfo {
-    let title: String
-    let url: URL
-}
-
-struct OnboardingCardInfo {
-    let name: String
-    let title: String
-    let body: String
-    let image: String
-    let link: OnboardingLinkInfo?
-    let buttons: [OnboardingButtonInfo]
-    let type: OnboardingType
-}
-
-struct OnboardingViewModel {
-    let cards: [OnboardingCardInfo]?
-    let dismissable: Bool
 }
