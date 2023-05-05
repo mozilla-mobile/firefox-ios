@@ -343,9 +343,9 @@ extension AutocompleteTextField: ThemeApplicable {
         backgroundColor = theme.colors.layer3
         textColor = theme.colors.textPrimary
         tintColor = theme.colors.layerAccentNonOpaque
-        if self.autocompleteTextLabel?.attributedText != nil {
-            self.autocompleteTextLabel?.backgroundColor = backgroundColor
-            self.autocompleteTextLabel?.textColor = textColor
+        if autocompleteTextLabel?.attributedText != nil {
+            autocompleteTextLabel?.backgroundColor = backgroundColor
+            autocompleteTextLabel?.textColor = textColor
         }
     }
 }
