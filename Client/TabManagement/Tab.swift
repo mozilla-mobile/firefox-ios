@@ -487,8 +487,8 @@ class Tab: NSObject {
         // now comes from a different source than save tab and parsing is managed by the web view itself
         if #available(iOS 15, *),
            let sessionData = sessionData,
-           let request = lastRequest {
-            webView.load(request)
+           let url = url {
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
             webView.interactionState = sessionData
             return
         }
