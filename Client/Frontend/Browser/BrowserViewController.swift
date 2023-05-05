@@ -1952,7 +1952,6 @@ extension BrowserViewController: LegacyTabDelegate {
             creditCardHelper.foundFieldValues = { fieldValues in
                 guard let tabWebView = tab.webView as? TabWebView else { return }
 
-                // Delay so that this executes AFTER KeyboardHelperDelegate methods
                 tabWebView.accessoryView.reloadViewFor(.creditCard)
                 tabWebView.reloadInputViews()
 
