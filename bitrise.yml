@@ -80,7 +80,7 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
+        # - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
     - script@1.1:
         title: Run Danger 2
         inputs:
