@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct OnboardingLinkInfoModel: Equatable {
+struct OnboardingLinkInfoModel {
     let title: String
     let url: URL
 }

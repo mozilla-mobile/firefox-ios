@@ -79,7 +79,17 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ],
             type: .freshInstall)
 
-        XCTAssertEqual(subject, expectedCard)
+        XCTAssertEqual(subject.name, expectedCard.name)
+        XCTAssertEqual(subject.title, expectedCard.title)
+        XCTAssertEqual(subject.body, expectedCard.body)
+        XCTAssertEqual(subject.image, expectedCard.image)
+        XCTAssertEqual(subject.type, expectedCard.type)
+        XCTAssertEqual(subject.link?.title, expectedCard.link?.title)
+        XCTAssertEqual(subject.link?.url, expectedCard.link?.url)
+        XCTAssertEqual(subject.buttons[0].title, expectedCard.buttons[0].title)
+        XCTAssertEqual(subject.buttons[0].action, expectedCard.buttons[0].action)
+        XCTAssertEqual(subject.buttons[1].title, expectedCard.buttons[1].title)
+        XCTAssertEqual(subject.buttons[1].action, expectedCard.buttons[1].action)
     }
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {
@@ -120,6 +130,29 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual("\(CardElementNames.name) 3", subject[0].name)
         XCTAssertEqual("\(CardElementNames.name) 1", subject[1].name)
         XCTAssertEqual("\(CardElementNames.name) 2", subject[2].name)
+    }
+
+    func testLayer_cardsAreReturned_InExpectedOrder_WithoutMisspelledCards() {
+        let expectedNumberOfCards = 3
+        setupNimbusWith(
+            cards: expectedNumberOfCards + 1,
+            cardOrdering: [
+                "\(CardElementNames.name) 1",
+                "\(CardElementNames.name) mispelling",
+                "\(CardElementNames.name) 3",
+                "\(CardElementNames.name) 4",
+            ])
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel().cards else {
+            XCTFail("Expected cards, and got none.")
+            return
+        }
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+        XCTAssertEqual("\(CardElementNames.name) 1", subject[0].name)
+        XCTAssertEqual("\(CardElementNames.name) 3", subject[1].name)
+        XCTAssertEqual("\(CardElementNames.name) 4", subject[2].name)
     }
 
     // MARK: - Test image IDs
@@ -171,7 +204,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(subject.image, ImageIdentifiers.onboardingSyncv106)
     }
 
-    func testLayer_cardIsReturned_WithBadImageID() {
+    func testLayer_cardIsReturnedWithDefaultIMageID_IfBadImageID() {
         setupNimbusWith(
           cards: 1,
           cardOrdering: ["\(CardElementNames.name) 1"],
@@ -179,7 +212,12 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        XCTAssertNil(layer.getOnboardingModel().cards?.first)
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.image, ImageIdentifiers.onboardingWelcomev106)
     }
 
     // MARK: - Test install types

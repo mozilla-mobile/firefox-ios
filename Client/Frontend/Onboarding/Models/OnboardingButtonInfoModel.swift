@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct OnboardingButtonInfoModel: Equatable {
+struct OnboardingButtonInfoModel {
     let title: String
     let action: OnboardingActions
 }
