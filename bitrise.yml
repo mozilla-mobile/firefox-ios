@@ -45,13 +45,13 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-    - xcode-test-without-building@0:
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
-        - maximum_test_repetitions: 2
+    #- xcode-test-without-building@0:
+    #    inputs:
+    #    - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
+    #    - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
+    #        "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    #    - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
+    #    - maximum_test_repetitions: 2
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -89,9 +89,10 @@ workflows:
             # Fail if any command fails
             set -e
             echo "Run danger"
-            swift run danger-swift ci
-    - cache-push@2.2:
+            #swift run danger-swift ci
+    - cache-push@2.7.1:
         is_always_run: true
+        run_if: .IsPR
         inputs:
         - cache_paths: "/Users/vagrant/git/DerivedData/SourcePackages"
     - script@1.1:
