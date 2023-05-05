@@ -385,7 +385,7 @@ public class RustAutofill {
         let rustKeys = RustAutofillEncryptionKeys()
         let key = rustKeys.keychain.string(forKey: rustKeys.ccKeychainKey)
         let encryptedCanaryPhrase = rustKeys.keychain.string(
-            forKey: rustKeys.canaryPhrase)
+            forKey: rustKeys.ccCanaryPhraseKey)
 
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
