@@ -101,7 +101,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
         topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
                                                  tabManager: self.tabManager,
                                                  tabDisplayer: self,
