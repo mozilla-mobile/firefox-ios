@@ -5,10 +5,6 @@
 import Foundation
 import Shared
 
-protocol NimbusOnboardingFeatureLayerProtocol {
-    func getOnboardingModel(from nimbus: FxNimbus) -> OnboardingViewModel
-}
-
 class NimbusOnboardingFeatureLayer {
     func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
@@ -22,9 +18,9 @@ class NimbusOnboardingFeatureLayer {
     private func getOrderedOnboardingCards(
         from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
-    ) -> [OnboardingCardInfo] {
+    ) -> [OnboardingCardInfoModel] {
         let cards = getOnboardingCards(from: cardData)
-        var orderedCards = [OnboardingCardInfo]()
+        var orderedCards = [OnboardingCardInfoModel]()
 
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the ordering. If a card name is misspelled, it will be ignored
@@ -38,8 +34,8 @@ class NimbusOnboardingFeatureLayer {
         return orderedCards
     }
 
-    private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfo] {
-        var cards = [OnboardingCardInfo]()
+    private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
+        var cards = [OnboardingCardInfoModel]()
 
         cardData.forEach { card in
             cards.append(
@@ -56,11 +52,11 @@ class NimbusOnboardingFeatureLayer {
     }
 
     private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel] {
-        var buttons = [OnboardingButtonInfo]()
+        var buttons = [OnboardingButtonInfoModel]()
 
         cardButtons.forEach { button in
-            buttons.append(OnboardingButtonInfo(title: button.title,
-                                                action: button.action))
+            buttons.append(OnboardingButtonInfoModel(title: button.title,
+                                                     action: button.action))
         }
 
         return buttons
@@ -71,8 +67,8 @@ class NimbusOnboardingFeatureLayer {
               let url = URL(string: cardLink.url)
         else { return nil }
 
-        return OnboardingLinkInfo(title: cardLink.title,
-                                  url: url)
+        return OnboardingLinkInfoModel(title: cardLink.title,
+                                       url: url)
     }
 
     private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {

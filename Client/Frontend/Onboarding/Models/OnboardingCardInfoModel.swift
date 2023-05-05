@@ -9,7 +9,7 @@ struct OnboardingCardInfoModel {
     let title: String
     let body: String
     let image: String
-    let link: OnboardingLinkInfo?
-    let buttons: [OnboardingButtonInfo]
+    let link: OnboardingLinkInfoModel?
+    let buttons: [OnboardingButtonInfoModel]
     let type: OnboardingType
 }

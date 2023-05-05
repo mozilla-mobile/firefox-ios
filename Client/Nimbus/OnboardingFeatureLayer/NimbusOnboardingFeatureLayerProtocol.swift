@@ -4,7 +4,6 @@
 
 import Foundation
 
-struct OnboardingViewModel {
-    let cards: [OnboardingCardInfoModel]?
-    let dismissable: Bool
+protocol NimbusOnboardingFeatureLayerProtocol {
+    func getOnboardingModel(from nimbus: FxNimbus) -> OnboardingViewModel
 }
