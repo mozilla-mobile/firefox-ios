@@ -96,10 +96,10 @@ workflows:
             set -e
             echo "Run danger"
             #swift run danger-swift ci
-    - cache-push@2.7.1:
-        is_always_run: true
-        inputs:
-        - cache_paths: "/Users/vagrant/git/DerivedData/SourcePackages"
+    #- cache-push@2.7.1:
+    #    is_always_run: true
+    #    inputs:
+    #    - cache_paths: "/Users/vagrant/git/DerivedData/SourcePackages"
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
