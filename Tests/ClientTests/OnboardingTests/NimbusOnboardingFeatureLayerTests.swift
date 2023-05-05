@@ -17,9 +17,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         static let linkTitle = "MacRumors"
         static let linkURL = "https://macrumors.com"
         static let primaryButtonTitle = "Primary Button"
-        static let primaryButtonAction = "next-card"
         static let secondaryButtonTitle = "Secondary Button"
-        static let secondaryButtonAction = "request-notifications"
     }
 
     override func setUp() {
@@ -72,7 +70,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 OnboardingButtonInfoModel(title: CardElementNames.primaryButtonTitle + " 1",
                                           action: .nextCard),
                 OnboardingButtonInfoModel(title: CardElementNames.secondaryButtonTitle + " 1",
-                                          action: .requestNotifications)
+                                          action: .nextCard)
             ],
             type: .freshInstall)
 
@@ -297,6 +295,75 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertNil(layer.getOnboardingModel().cards?.first)
     }
 
+    // MARK: - Test button actions
+    func testLayer_cardIsReturned_WithNextCardButton() {
+        setupNimbusWith(
+          cards: 1,
+          cardOrdering: ["\(CardElementNames.name) 1"],
+          numberOfButtons: 1,
+          buttonActions: .nextCard
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.buttons[0].action, .nextCard)
+    }
+
+    func testLayer_cardIsReturned_WithDefaultBrowserButton() {
+        setupNimbusWith(
+          cards: 1,
+          cardOrdering: ["\(CardElementNames.name) 1"],
+          numberOfButtons: 1,
+          buttonActions: .setDefaultBrowser
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.buttons[0].action, .setDefaultBrowser)
+    }
+
+    func testLayer_cardIsReturned_WithSyncSignInButton() {
+        setupNimbusWith(
+          cards: 1,
+          cardOrdering: ["\(CardElementNames.name) 1"],
+          numberOfButtons: 1,
+          buttonActions: .syncSignIn
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.buttons[0].action, .syncSignIn)
+    }
+
+    func testLayer_cardIsReturned_WithRequestNotificationsButton() {
+        setupNimbusWith(
+          cards: 1,
+          cardOrdering: ["\(CardElementNames.name) 1"],
+          numberOfButtons: 1,
+          buttonActions: .requestNotifications
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.buttons[0].action, .requestNotifications)
+    }
+
     // MARK: - Helpers
     private func setupNimbusWith(
         cards numberOfCards: Int? = nil,
@@ -305,7 +372,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         type: String = OnboardingType.freshInstall.rawValue,
         dismissable: Bool? = nil,
         shouldAddLink: Bool = true,
-        numberOfButtons: Int = 2
+        numberOfButtons: Int = 2,
+        buttonActions: OnboardingActions = .nextCard
     ) {
         var string = ""
 
@@ -315,7 +383,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 image: image,
                 type: type,
                 shouldAddLink: shouldAddLink,
-                numberOfButtons: numberOfButtons))
+                numberOfButtons: numberOfButtons,
+                buttonActions: buttonActions))
             string.append(contentsOf: "\"card-ordering\": \(cardOrdering),")
         }
 
@@ -340,10 +409,11 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     private func createCards(
         numbering numberOfCards: Int,
-        image: String = NimbusOnboardingImages.welcomeGlobe.rawValue,
-        type: String = OnboardingType.freshInstall.rawValue,
+        image: String,
+        type: String,
         shouldAddLink: Bool,
-        numberOfButtons: Int
+        numberOfButtons: Int,
+        buttonActions: OnboardingActions
     ) -> String {
         var string = "\"cards\": ["
         for x in 1...numberOfCards {
@@ -352,7 +422,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 image: image,
                 type: type,
                 shouldAddLink: shouldAddLink,
-                numberOfButtons: numberOfButtons)
+                numberOfButtons: numberOfButtons,
+                buttonActions: buttonActions)
             string.append(contentsOf: "\(cardString),")
         }
         string.append(contentsOf: "],")
@@ -365,12 +436,18 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         image: String,
         type: String,
         shouldAddLink: Bool,
-        numberOfButtons: Int
+        numberOfButtons: Int,
+        buttonActions: OnboardingActions
     ) -> String {
         var string = "{"
-        string.append(contentsOf: addBasicElements(number: number, image: image, type: type))
-        string.append(contentsOf: addLink(number: number, shouldAddLink: shouldAddLink))
-        string.append(contentsOf: addButtons(number: number, numberOfButtons: numberOfButtons))
+        string.append(contentsOf: addBasicElements(number: number,
+                                                   image: image,
+                                                   type: type))
+        string.append(contentsOf: addLink(number: number,
+                                          shouldAddLink: shouldAddLink))
+        string.append(contentsOf: addButtons(number: number,
+                                             numberOfButtons: numberOfButtons,
+                                             buttonActions: buttonActions))
         string.append(contentsOf: "}")
 
         return string
@@ -406,19 +483,17 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     private func addButtons(
         number: Int,
-        numberOfButtons: Int
+        numberOfButtons: Int,
+        buttonActions: OnboardingActions
     ) -> String {
-        let buttonInfo = [
-            (CardElementNames.primaryButtonTitle, CardElementNames.primaryButtonAction),
-            (CardElementNames.secondaryButtonTitle, CardElementNames.secondaryButtonAction)
-        ]
+        let buttonInfo = [CardElementNames.primaryButtonTitle, CardElementNames.secondaryButtonTitle]
         var string = "\"buttons\": ["
 
         for x in 0..<numberOfButtons {
             string.append(contentsOf: """
     {
-      "title": "\(buttonInfo[x].0) \(number)",
-      "action": "\(buttonInfo[x].1)",
+      "title": "\(buttonInfo[x]) \(number)",
+      "action": "\(buttonActions.rawValue)",
     },
 """)
         }

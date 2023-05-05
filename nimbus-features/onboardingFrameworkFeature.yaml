@@ -153,6 +153,9 @@ enums:
       request-notifications:
         description: >
           Will request to allow notifications from the user
+      set-default-browser:
+        description: >
+          Will send the user to settings to set Firefox as their default browser
   NimbusOnboardingImages:
     description: >
       The identifiers for the different images available for cards in onboarding

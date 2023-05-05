@@ -8,7 +8,7 @@ import Shared
 class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// Fetches an ``OnboardingViewModel`` from ``FxNimbus`` configuration.
     ///
-    /// - Parameter nimbus: The ``FxNimbus/shared`` instance, or a mock thereof.
+    /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
     /// - Returns: An ``OnboardingViewModel`` to be used in the onboarding.
     func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
