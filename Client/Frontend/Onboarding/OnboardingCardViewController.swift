@@ -21,7 +21,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let topStackViewSpacing: CGFloat = 16
         static let stackViewPadding: CGFloat = 16
         static let buttomStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 24
-        static let topStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 70 : 90
+        static let topStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 60 : 70
         static let horizontalTopStackViewPadding: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 24
         static let scrollViewVerticalPadding: CGFloat = 62
         static let buttonVerticalInset: CGFloat = 12
@@ -264,17 +264,20 @@ class OnboardingCardViewController: UIViewController, Themeable {
             contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
             contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.buttomStackViewPadding).priority(.defaultLow),
-            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: UX.stackViewPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: UX.horizontalTopStackViewPadding),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -UX.horizontalTopStackViewPadding),
             contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
 
-            topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor, constant: UX.horizontalTopStackViewPadding),
-            topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor, constant: -UX.horizontalTopStackViewPadding),
+            topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-            buttonStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: UX.horizontalTopStackViewPadding),
-            buttonStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
-            buttonStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -UX.horizontalTopStackViewPadding),
+            linkButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            linkButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+
+            buttonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            buttonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
             imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
         ])
