@@ -15,7 +15,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private var profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
-    private var logger: Logger
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -25,7 +24,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
@@ -35,7 +33,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
-        self.logger = logger
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager
@@ -74,9 +71,39 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager) {
-        var homepage: HomepageViewController
+        let homepageController = getHomepage(inline: inline,
+                                             homepanelDelegate: homepanelDelegate,
+                                             libraryPanelDelegate: libraryPanelDelegate,
+                                             sendToDeviceDelegate: sendToDeviceDelegate,
+                                             overlayManager: overlayManager)
+
+        browserViewController.embedContent(homepageController)
+        self.homepageViewController = homepageController
+        // We currently don't support full page screenshot of the homepage
+        screenshotService.screenshotableView = nil
+    }
+
+    func show(webView: WKWebView) {
+        // Keep the webviewController in memory, update to newest webview when needed
+        if let webviewController = webviewController {
+            webviewController.update(webView: webView)
+            browserViewController.frontEmbeddedContent(webviewController)
+        } else {
+            let webviewViewController = WebviewViewController(webView: webView)
+            webviewController = webviewViewController
+            browserViewController.embedContent(webviewViewController)
+        }
+
+        screenshotService.screenshotableView = webviewController
+    }
+
+    private func getHomepage(inline: Bool,
+                             homepanelDelegate: HomePanelDelegate,
+                             libraryPanelDelegate: LibraryPanelDelegate,
+                             sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                             overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
-            homepage = homepageViewController
+            return homepageViewController
         } else {
             let homepageViewController = HomepageViewController(
                 profile: profile,
@@ -86,32 +113,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
-            homepage = homepageViewController
-            self.homepageViewController = homepageViewController
+            return homepageViewController
         }
-
-        browserViewController.embedContent(homepage)
-
-        // We currently don't support full page screenshot of the homepage
-        screenshotService.screenshotableView = nil
-    }
-
-    func show(webView: WKWebView?) {
-        // Navigate with a new webview, or to the existing one
-        if let webView = webView {
-            let webviewViewController = WebviewViewController(webView: webView)
-            webviewController = webviewViewController
-            // Make sure we show the latest webview if we are provided with one
-            browserViewController.embedContent(webviewViewController, forceEmbed: true)
-        } else if let webviewController = webviewController {
-            browserViewController.embedContent(webviewController)
-        } else {
-            logger.log("Webview controller couldn't be shown, this shouldn't happen.",
-                       level: .fatal,
-                       category: .lifecycle)
-        }
-
-        screenshotService.screenshotableView = webviewController
     }
 
     // MARK: - Route handling
