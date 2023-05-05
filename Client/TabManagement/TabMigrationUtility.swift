@@ -7,26 +7,28 @@ import Shared
 import TabDataStore
 
 protocol TabMigrationUtility {
-    func shouldRunMigration(profile: Profile) -> Bool
-    func startMigration(savedTabs: [LegacySavedTab]) async
+    var shouldRunMigration: Bool { get }
+    func runMigration(savedTabs: [LegacySavedTab]) async
 }
 
 class DefaultTabMigrationUtility: TabMigrationUtility {
     private let migrationKey = PrefsKeys.TabMigrationKey
+    private var profile: Profile
     private var tabDataStore: TabDataStore
-    // TODO: Use file manager to write tabData create a windowObject
 
-    init(tabDataStore: TabDataStore = DefaultTabDataStore()) {
+    init(profile: Profile = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore = DefaultTabDataStore()) {
+        self.profile = profile
         self.tabDataStore = tabDataStore
     }
 
-    func shouldRunMigration(profile: Profile) -> Bool {
-        guard let migrationPerformed = profile.prefs.boolForKey(migrationKey) else { return true }
+    var shouldRunMigration: Bool {
+        guard let shouldRunMigration = profile.prefs.boolForKey(migrationKey) else { return true }
 
-        return migrationPerformed
+        return shouldRunMigration
     }
 
-    func startMigration(savedTabs: [LegacySavedTab]) async {
+    func runMigration(savedTabs: [LegacySavedTab]) async {
         // Create TabData array from savedTabs
         var tabsToMigrate = [TabData]()
 
@@ -38,8 +40,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
                 searchTerm: savedTab.tabGroupData?.tabAssociatedSearchTerm,
                 searchUrl: savedTab.tabGroupData?.tabAssociatedSearchUrl,
                 nextUrl: savedTab.tabGroupData?.tabAssociatedNextUrl,
-                tabHistoryCurrentState: TabGroupTimerState(rawValue: savedTab.tabGroupData?.tabHistoryCurrentState ?? "")
-            )
+                tabHistoryCurrentState: TabGroupTimerState(rawValue: savedTab.tabGroupData?.tabHistoryCurrentState ?? ""))
 
             let tabData = TabData(id: savedTabUUID,
                                   title: savedTab.title,
@@ -63,5 +64,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
 
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData)
+        profile.prefs.setBool(false, forKey: migrationKey)
     }
 }

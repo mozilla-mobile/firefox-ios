@@ -43,7 +43,7 @@ import Shared
             return
         }
 
-        guard tabMigration.shouldRunMigration(profile: profile) else {
+        guard tabMigration.shouldRunMigration else {
             restoreOnly(forced)
             return
         }
@@ -53,7 +53,7 @@ import Shared
 
     private func migrateAndRestore(_ forced: Bool = false) {
         Task {
-            await tabMigration.startMigration(savedTabs: store.tabs)
+            await tabMigration.runMigration(savedTabs: store.tabs)
             restoreOnly(forced)
         }
     }
@@ -133,8 +133,6 @@ import Shared
     override func preserveTabs() {
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
-        // TODO: Remove check to store tab information in both systems
-        guard shouldUseNewTabStore() else { return }
 
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
