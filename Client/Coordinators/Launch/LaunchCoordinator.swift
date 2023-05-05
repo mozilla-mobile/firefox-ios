@@ -7,7 +7,6 @@ import Foundation
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishLaunch(from coordinator: LaunchCoordinator)
-    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool)
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
