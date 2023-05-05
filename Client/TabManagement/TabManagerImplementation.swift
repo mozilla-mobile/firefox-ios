@@ -30,7 +30,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         super.init(profile: profile, imageStore: imageStore)
 
         setupNotifications(forObserver: self,
-                           observing: [UIApplication.didEnterBackgroundNotification])
+                           observing: [UIApplication.willResignActiveNotification])
     }
 
     // MARK: - Restore tabs
@@ -249,7 +249,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case UIApplication.didEnterBackgroundNotification:
+        case UIApplication.willResignActiveNotification:
             saveCurrentTabSessionData()
         default:
             break
