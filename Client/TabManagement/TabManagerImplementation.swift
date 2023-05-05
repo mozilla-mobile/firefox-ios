@@ -82,6 +82,9 @@ class TabManagerImplementation: LegacyTabManager {
                                                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
             newTab.metadataManager?.tabGroupData = groupData
 
+            // Restore screenshot
+            restoreScreenshot(tab: newTab)
+
             if windowData.activeTabId == tabData.id {
                 selectTab(newTab)
             }
@@ -93,6 +96,13 @@ class TabManagerImplementation: LegacyTabManager {
     private func generateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
+    }
+
+    private func restoreScreenshot(tab: Tab) {
+        Task {
+            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
+            tab.setScreenshot(screenshot)
+        }
     }
 
     // MARK: - Save tabs
