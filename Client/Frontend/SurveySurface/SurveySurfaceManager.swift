@@ -12,11 +12,7 @@ protocol SurveySurfaceDelegate: AnyObject {
     func didTapDismissSurvey()
 }
 
-protocol OpenURLDelegate: AnyObject {
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool)
-}
-
-class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
+class SurveySurfaceManager: SurveySurfaceDelegate {
     // MARK: - Properties
     private let surveySurfaceID: MessageSurfaceId = .survey
     private var message: GleanPlumbMessage?
@@ -27,9 +23,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     private var viewController: SurveySurfaceViewController?
 
     var dismissClosure: (() -> Void)?
-    // FXIOS-6036: Remove HomepanelDelegate since surface survey isn't shown from BVC anymore
-    weak var homepanelDelegate: HomePanelDelegate?
-    weak var openURLDelegate: OpenURLDelegate?
 
     var shouldShowSurveySurface: Bool {
         // TODO: Remove hack (temporary fix to avoid showing SurveySurface in UITest for release branch)
@@ -46,7 +39,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.messagingManager = messagingManager
-        self.messagingManager.pressedDelegate = self
     }
 
     // MARK: - Functionality
@@ -92,15 +84,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
 
     func didTapDismissSurvey() {
         message.map(messagingManager.onMessageDismissed)
-        dismissClosure?()
-    }
-
-    // MARK: Pressed Delegate
-    func openURLInNewTab(url: URL) {
-        homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url,
-                                                             isPrivate: false,
-                                                             selectNewTab: true)
-        openURLDelegate?.didRequestToOpenInNewTab(url: url, isPrivate: false)
         dismissClosure?()
     }
 }

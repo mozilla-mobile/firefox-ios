@@ -67,13 +67,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
 
-    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
-        didFinishLaunch(from: coordinator)
-
-        let route = Route.search(url: url, isPrivate: isPrivate)
-        findAndHandle(route: route)
-    }
-
     // MARK: - BrowserDelegate
 
     func showHomepage(inline: Bool,

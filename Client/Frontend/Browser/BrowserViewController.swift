@@ -2157,8 +2157,6 @@ extension BrowserViewController {
         defer { self.view.alpha = 1.0 }
 
         surveySurfaceManager = SurveySurfaceManager()
-        surveySurfaceManager?.homepanelDelegate = self
-
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil
         }
