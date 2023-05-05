@@ -17,7 +17,7 @@ public struct WindowData: Codable {
     ///   - isPrimary: determines if the window is the primary window
     ///   - activeTabId: the ID of the currently selected tab
     ///   - tabData: a list of all tabs associated with the window
-    public init(id: UUID = UUID(),
+    public init(id: UUID,
                 isPrimary: Bool = true,
                 activeTabId: UUID,
                 tabData: [TabData]) {

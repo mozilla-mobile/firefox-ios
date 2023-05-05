@@ -180,9 +180,9 @@ private extension WallpaperSelectorViewModel {
 
         switch collectionType {
         case .classic:
-            a11yLabel = "\(String.Onboarding.ClassicWallpaper) \(number + 1)"
+            a11yLabel = "\(String.Onboarding.Wallpaper.ClassicWallpaper) \(number + 1)"
         case .limitedEdition:
-            a11yLabel = "\(String.Onboarding.LimitedEditionWallpaper) \(number + 1)"
+            a11yLabel = "\(String.Onboarding.Wallpaper.LimitedEditionWallpaper) \(number + 1)"
         }
 
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,

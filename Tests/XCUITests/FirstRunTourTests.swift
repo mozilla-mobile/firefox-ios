@@ -19,10 +19,11 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     // Smoketest
+    // Temporary disabled as changes in PR #14231  modifies its behaviour
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.staticTexts["Make Firefox your go-to browser"], timeout: 15)
+        waitForExistence(app.staticTexts["Welcome to an independent internet"], timeout: 15)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
