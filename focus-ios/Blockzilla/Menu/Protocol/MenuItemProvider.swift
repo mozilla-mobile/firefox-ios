@@ -16,7 +16,6 @@ protocol MenuItemProvider {
     var requestMobileItem: MenuAction { get }
     var settingsItem: MenuAction { get }
     var helpItem: MenuAction { get }
-    var whatsNewItem: MenuAction { get }
 
     func getShortcutsItem(for url: URL) -> MenuAction?
     func addToShortcutsItem(for url: URL) -> MenuAction
@@ -72,12 +71,6 @@ extension MenuItemProvider where Self: MenuActionable {
     var helpItem: MenuAction {
         MenuAction(title: UIConstants.strings.aboutRowHelp, image: "icon_help") { [unowned self] in
             self.showHelp()
-        }
-    }
-
-    var whatsNewItem: MenuAction {
-        MenuAction(title: UIConstants.strings.whatsNewTitle, image: "highlight") { [unowned self] in
-            self.showWhatsNew()
         }
     }
 

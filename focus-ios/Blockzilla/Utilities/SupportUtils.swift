@@ -5,7 +5,6 @@
 import Foundation
 
 public enum SupportTopic: CaseIterable {
-    case whatsNew
     case searchSuggestions
     case usageData
     case studies
@@ -15,8 +14,6 @@ public enum SupportTopic: CaseIterable {
 
     public var slug: String {
         switch self {
-        case .whatsNew:
-            return "whats-new-\(AppInfo.config.productName.lowercased())-ios"
         case .searchSuggestions:
             return "search-suggestions-focus-ios"
         case .usageData:

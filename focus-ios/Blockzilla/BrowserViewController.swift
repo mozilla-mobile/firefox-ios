@@ -1142,10 +1142,10 @@ class BrowserViewController: UIViewController {
 
             let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
             actions.append(shareMenu)
-            actions.append(UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(settingsItem)]))
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
 
         } else {
-            let actionMenu = UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(helpItem), UIAction(settingsItem)])
+            let actionMenu = UIMenu(options: .displayInline, children: [UIAction(helpItem), UIAction(settingsItem)])
             actions.append(actionMenu)
         }
         return actions
@@ -2053,10 +2053,6 @@ extension BrowserViewController: MenuActionable {
 
     func showHelp() {
         submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios", source: .action)
-    }
-
-    func showWhatsNew() {
-        submit(url: URL(forSupportTopic: .whatsNew), source: .action)
     }
 
     func showCopy(url: URL) {

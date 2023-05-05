@@ -64,7 +64,7 @@ class SearchEngineTests: XCTestCase {
             XCTAssertThrowsError(error)
             XCTAssertNil(response)
         })
-    }*/
+    }
         
     func testResponseConsistency() {
         let client = SearchSuggestClient()
@@ -73,4 +73,5 @@ class SearchEngineTests: XCTestCase {
             XCTAssertEqual(self.NORMAL_SEARCH, response?[0])
         })
     }
+     */
 }

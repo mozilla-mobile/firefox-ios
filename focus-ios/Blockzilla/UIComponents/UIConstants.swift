@@ -168,7 +168,6 @@ struct UIConstants {
         static let aboutTitle = NSLocalizedString("About.title", value: "About %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page.")
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block web fonts to reduce page size", comment: "Label on About screen")
-        static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let addPassErrorAlertTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert.")
         static let addPassErrorAlertMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Wallet. Please try again later.", comment: "Message of the 'Add Pass Failed' alert.")

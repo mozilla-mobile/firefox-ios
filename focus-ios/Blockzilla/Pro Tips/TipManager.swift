@@ -82,7 +82,6 @@ class TipManager {
     static let shared = TipManager()
     private var tips: [Tip] {
         var tips = [
-            releaseTip,
             shortcutsTip,
             sitesNotWorkingTip,
             requestDesktopTip,
@@ -104,14 +103,6 @@ class TipManager {
     private let laContext = LAContext()
 
     private init() { }
-
-    private lazy var releaseTip = Tip(
-        title: String(format: .releaseTipTitle, AppInfo.config.productName),
-        description: String(format: .releaseTipDescription, AppInfo.config.productName),
-        identifier: TipKey.releaseTip,
-        action: .visit(topic: .whatsNew),
-        canShow: { TipManager.releaseTip }
-    )
 
     private lazy var shortcutsTip = Tip(
         title: .shortcutsTipTitle,
@@ -207,8 +198,6 @@ class TipManager {
 
 fileprivate extension String {
 
-    static let releaseTipTitle = NSLocalizedString("Tip.Release.Title", value: "Why yes, we do have a fresh new look!", comment: "Text for a label that indicates the title for release tip.")
-    static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")
     static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let sitesNotWorkingTipTitle = NSLocalizedString("Tip.SitesNotWorking.Title", value: "Site missing content or acting strange?", comment: "Text for a label that indicates the title for sites not working tip.")
