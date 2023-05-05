@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct OnboardingCardInfoModel {
+struct OnboardingCardInfoModel: Equatable {
     let name: String
     let title: String
     let body: String

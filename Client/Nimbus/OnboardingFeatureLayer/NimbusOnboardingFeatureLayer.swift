@@ -6,6 +6,9 @@ import Foundation
 import Shared
 
 class NimbusOnboardingFeatureLayer {
+    /// Fetches an ``OnboardingViewModel`` from ``FxNimbus`` information.
+    /// - Parameter nimbus: The ``FxNimbus.shared`` instance, or a mock thereof.
+    /// - Returns: An ``OnboardingViewModel`` to be used in the onboarding.
     func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
@@ -15,51 +18,47 @@ class NimbusOnboardingFeatureLayer {
             dismissable: framework.dismissable)
     }
 
+    /// <#Description#>
+    /// - Parameters:
+    ///   - cardData: <#cardData description#>
+    ///   - cardOrder: <#cardOrder description#>
+    /// - Returns: <#description#>
     private func getOrderedOnboardingCards(
         from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
     ) -> [OnboardingCardInfoModel] {
         let cards = getOnboardingCards(from: cardData)
-        var orderedCards = [OnboardingCardInfoModel]()
 
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the ordering. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        cardOrder.forEach { cardName in
-            if let card = cards.first(where: { $0.name == cardName }) {
-                orderedCards.append(card)
-            }
+        return cardOrder.compactMap { cardName in
+            guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
+            return card
         }
-
-        return orderedCards
     }
 
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
-        var cards = [OnboardingCardInfoModel]()
+        return cardData.compactMap { card in
+            let image = getOnboardingImageID(from: card.image)
+            guard let buttons = getOnboardingCardButtons(from: card.buttons),
+                  !buttons.isEmpty
+            else { return nil }
 
-        cardData.forEach { card in
-            cards.append(
-                OnboardingCardInfoModel(name: card.name,
-                                        title: card.title,
-                                        body: card.body,
-                                        image: getOnboardingImageID(from: card.image),
-                                        link: getOnboardingLink(from: card.link),
-                                        buttons: getOnboardingCardButtons(from: card.buttons),
-                                        type: card.type))
+            return OnboardingCardInfoModel(name: card.name,
+                                           title: card.title,
+                                           body: card.body,
+                                           image: image,
+                                           link: getOnboardingLink(from: card.link),
+                                           buttons: buttons,
+                                           type: card.type)
         }
-
-        return cards
     }
 
-    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel] {
-        var buttons = [OnboardingButtonInfoModel]()
+    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel]? {
+        if cardButtons.isEmpty { return nil }
 
-        cardButtons.forEach { button in
-            buttons.append(OnboardingButtonInfoModel(title: button.title,
-                                                     action: button.action))
-        }
-
-        return buttons
+        return cardButtons.map { OnboardingButtonInfoModel(title: $0.title, action: $0.action) }
     }
 
     private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
@@ -71,6 +70,11 @@ class NimbusOnboardingFeatureLayer {
                                        url: url)
     }
 
+    /// Translates a nimbus image ID for onboarding to a an ``ImageIdentifiers`` based id
+    /// that corresponds to an app resource.
+    ///
+    /// - Parameter identifier: <#identifier description#>
+    /// - Returns: <#description#>
     private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {
         switch identifier {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
