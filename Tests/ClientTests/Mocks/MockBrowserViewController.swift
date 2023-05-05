@@ -45,7 +45,7 @@ class MockBrowserViewController: BrowserViewController {
     var embedContentCalled = 0
     var frontEmbeddedContentCalled = 0
     var saveEmbeddedContent: ContentContainable?
-    
+
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
         switchToPrivacyModeIsPrivate = isPrivate
