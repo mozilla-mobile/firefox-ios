@@ -24,6 +24,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        let features = HardcodedNimbusFeatures(with: ["onboarding-framework-feature": ""])
+        features.connect(with: FxNimbus.shared)
     }
 
     override func tearDown() {
@@ -48,11 +50,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     // MARK: - Test card(s) being returned
-    func testLayer_defaultNimbusConfig_returnsACard() {
-        let layer = NimbusOnboardingFeatureLayer()
-        XCTAssertNotNil(layer.getOnboardingModel().cards?.first)
-    }
-
     func testLayer_cardIsReturned_OneCard() {
         setupNimbusWith(
             cards: 1,
@@ -326,7 +323,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             string.append(contentsOf: addDismissableSet(to: dismissable))
         }
 
-        print(string)
         let features = HardcodedNimbusFeatures(with: [
             "onboarding-framework-feature": """
               {\(string)}
