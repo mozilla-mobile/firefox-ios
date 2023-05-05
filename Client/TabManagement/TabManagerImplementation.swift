@@ -34,24 +34,31 @@ import Shared
                            observing: [UIApplication.willResignActiveNotification])
     }
 
-    // MARK: - Tab migration
-    private func runTabMigration(store: LegacyTabManagerStore) {
-        print("YRD runTabMigration")
-        guard tabMigration.shouldRunMigration(profile: profile) else { return }
-
-        tabMigration.startMigration(store: store)
-    }
-
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
-        print("YRD restoreTabs")
         guard shouldUseNewTabStore()
         else {
             super.restoreTabs(forced)
             return
         }
 
+        guard tabMigration.shouldRunMigration(profile: profile) else {
+            restoreOnly(forced)
+            return
+        }
+
+        migrateAndRestore(forced)
+    }
+
+    private func migrateAndRestore(_ forced: Bool = false) {
+        Task {
+            await tabMigration.startMigration(savedTabs: store.tabs)
+            restoreOnly(forced)
+        }
+    }
+
+    private func restoreOnly(_ forced: Bool = false) {
         guard !isRestoringTabs else { return }
 
         // TODO: FXIOS-6112 Handle debug settings and UITests

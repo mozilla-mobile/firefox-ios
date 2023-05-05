@@ -8,7 +8,7 @@ import TabDataStore
 
 protocol TabMigrationUtility {
     func shouldRunMigration(profile: Profile) -> Bool
-    func startMigration(store: LegacyTabManagerStore)
+    func startMigration(savedTabs: [LegacySavedTab]) async
 }
 
 class DefaultTabMigrationUtility: TabMigrationUtility {
@@ -26,22 +26,40 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         return migrationPerformed
     }
 
-    func startMigration(store: LegacyTabManagerStore) {
-        Task {
-            await runMigration(savedTabs: store.getSavedTabs)
-        }
-    }
-
-    private func runMigration(savedTabs: [LegacySavedTab]) async {
+    func startMigration(savedTabs: [LegacySavedTab]) async {
         // Create TabData array from savedTabs
-        var tabData = [TabData]()
-        // TODO: Create tabData array from Save tabs
-        // TODO: Investigate what UUID use for the migration
-        // create WindowData
-        let windowData = WindowData(id: UUID(),
+        var tabsToMigrate = [TabData]()
+
+        var selectTabUUID: UUID?
+        for savedTab in savedTabs {
+            let savedTabUUID = savedTab.screenshotUUID ?? UUID()
+
+            let tabGroupData = TabGroupData(
+                searchTerm: savedTab.tabGroupData?.tabAssociatedSearchTerm,
+                searchUrl: savedTab.tabGroupData?.tabAssociatedSearchUrl,
+                nextUrl: savedTab.tabGroupData?.tabAssociatedNextUrl,
+                tabHistoryCurrentState: TabGroupTimerState(rawValue: savedTab.tabGroupData?.tabHistoryCurrentState ?? "")
+            )
+
+            let tabData = TabData(id: savedTabUUID,
+                                  title: savedTab.title,
+                                  siteUrl: savedTab.url?.absoluteString ?? "",
+                                  faviconURL: savedTab.faviconURL,
+                                  isPrivate: savedTab.isPrivate,
+                                  lastUsedTime: Date.fromTimestamp(savedTab.sessionData?.lastUsedTime ?? Date().toTimestamp()),
+                                  createdAtTime: Date.fromTimestamp(savedTab.createdAt ?? Date().toTimestamp()),
+                                  tabGroupData: tabGroupData)
+
+            if savedTab.isSelected {
+                selectTabUUID = savedTab.screenshotUUID
+            }
+            tabsToMigrate.append(tabData)
+        }
+
+        let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
                                     isPrimary: true,
-                                    activeTabId: tabData.first?.id ?? UUID(),
-                                    tabData: tabData)
+                                    activeTabId: selectTabUUID ?? UUID(),
+                                    tabData: tabsToMigrate)
 
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData)
