@@ -48,7 +48,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.cornerRadius
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: 19)
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
