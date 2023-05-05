@@ -952,12 +952,12 @@ extension String {
                 key: "Onboarding.Sync.SignIn.Action.v114",
                 tableName: "Onboarding",
                 value: "Sign In",
-                comment: "String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens.")
+                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Sync.Skip.Action.v114",
                 tableName: "Onboarding",
                 value: "Skip",
-                comment: "String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens.")
+                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
         }
 
         public struct Notification {
@@ -2787,8 +2787,8 @@ extension String {
         public static let BodyTreatmentA = MZLocalizedString(
             key: "Engagement.Notification.Treatment.A.Body.v114",
             tableName: "EngagementNotification",
-            value: "Private browsing in Firefox doesn’t save your info and blocks hidden trackers.",
-            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature.")
+            value: "Private browsing in %@ doesn’t save your info and blocks hidden trackers.",
+            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name.")
 
         public static let TitleTreatmentB = MZLocalizedString(
             key: "Engagement.Notification.Treatment.B.Title.v114",
@@ -2798,8 +2798,8 @@ extension String {
         public static let BodyTreatmentB = MZLocalizedString(
             key: "Engagement.Notification.Treatment.B.Body.v114",
             tableName: "EngagementNotification",
-            value: "Browse with no saved cookies or history in Firefox.",
-            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature.")
+            value: "Browse with no saved cookies or history in %@.",
+            comment: "Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name.")
     }
 }
 
