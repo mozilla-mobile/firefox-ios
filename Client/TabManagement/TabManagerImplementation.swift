@@ -46,15 +46,14 @@ class TabManagerImplementation: LegacyTabManager {
 
         isRestoringTabs = true
         Task {
-            let windowData = await self.tabDataStore.fetchAllWindowsData()
-            guard !windowData.isEmpty, let firstWindow = windowData.first
+            guard let windowData = await self.tabDataStore.fetchWindowData()
             else {
                 // Always make sure there is a single normal tab
                 await self.generateEmptyTab()
                 return
             }
 
-            await self.generateTabs(from: firstWindow)
+            await self.generateTabs(from: windowData)
 
             for delegate in self.delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
@@ -83,6 +82,9 @@ class TabManagerImplementation: LegacyTabManager {
                                                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
             newTab.metadataManager?.tabGroupData = groupData
 
+            // Restore screenshot
+            restoreScreenshot(tab: newTab)
+
             if windowData.activeTabId == tabData.id {
                 selectTab(newTab)
             }
@@ -96,6 +98,13 @@ class TabManagerImplementation: LegacyTabManager {
         selectTab(newTab)
     }
 
+    private func restoreScreenshot(tab: Tab) {
+        Task {
+            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
+            tab.setScreenshot(screenshot)
+        }
+    }
+
     // MARK: - Save tabs
 
     override func preserveTabs() {
@@ -106,7 +115,9 @@ class TabManagerImplementation: LegacyTabManager {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            let windowData = WindowData(activeTabId: activeTabID,
+            // Hard coding the window ID until we later add multi-window support
+            let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
+                                        activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData)
         }
@@ -166,6 +177,8 @@ class TabManagerImplementation: LegacyTabManager {
             super.selectTab(tab, previous: previous)
             return
         }
+
+        guard tab.tabUUID != selectedTab?.tabUUID else { return }
 
         Task {
             let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)

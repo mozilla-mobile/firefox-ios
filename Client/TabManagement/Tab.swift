@@ -486,7 +486,9 @@ class Tab: NSObject {
         // If the session data field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
         if #available(iOS 15, *),
-           let sessionData = sessionData {
+           let sessionData = sessionData,
+           let url = url {
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
             webView.interactionState = sessionData
             return
         }
@@ -782,12 +784,6 @@ class Tab: NSObject {
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
-    }
-
-    func cancelQueuedAlerts() {
-        alertQueue.forEach { alert in
-            alert.cancel()
-        }
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

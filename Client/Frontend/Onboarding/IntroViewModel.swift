@@ -73,15 +73,15 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        title: String(format: .Onboarding.Welcome.Title, shortName),
                                        description: String(format: .Onboarding.Welcome.Description, shortName),
                                        linkButtonTitle: .Onboarding.PrivacyPolicyLinkButtonTitle,
-                                       primaryAction: .Onboarding.Intro.Action,
-                                       secondaryAction: .Onboarding.Intro.SecondaryAction,
+                                       primaryAction: .Onboarding.Welcome.GetStartedAction,
+                                       secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .signSync:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Onboarding.Sync.Title,
                                        description: .Onboarding.Sync.Description,
                                        linkButtonTitle: nil,
-                                       primaryAction: .IntroSignInButtonTitle,
+                                       primaryAction: .Onboarding.Sync.SignInAction,
                                        secondaryAction: .Onboarding.Sync.SkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case .notification:
