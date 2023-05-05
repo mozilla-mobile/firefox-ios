@@ -10,6 +10,7 @@ import Glean
 class GleanPlumbMessageManagerTests: XCTestCase {
     var subject: GleanPlumbMessageManager!
     var messagingStore: MockGleanPlumbMessageStore!
+    var applicationHelper: MockApplicationHelper!
     let messageId = "testId"
 
     override func setUp() {
@@ -18,7 +19,8 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
-        subject = GleanPlumbMessageManager(messagingStore: messagingStore)
+        applicationHelper = MockApplicationHelper()
+        subject = GleanPlumbMessageManager(messagingStore: messagingStore, applicationHelper: applicationHelper)
     }
 
     override func tearDown() {
@@ -57,7 +59,29 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         subject.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_withWebpage() {
+        let message = createMessage(messageId: messageId, action: "https://mozilla.com")
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        XCTAssertNotNil(applicationHelper.lastOpenURL)
+        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.hasPrefix(URL.mozInternalScheme))
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_withMalformedURL() {
+        let message = createMessage(messageId: messageId, action: "http://www.google.com?q=א")
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 0)
+        XCTAssertNil(applicationHelper.lastOpenURL)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.malformed)
     }
 
     func testManagerOnMessageDismissed() {
@@ -71,7 +95,8 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     // MARK: - Helper function
 
-    private func createMessage(messageId: String) -> GleanPlumbMessage {
+    private func createMessage(messageId: String,
+                               action: String = "MAKE_DEFAULT_BROWSER") -> GleanPlumbMessage {
         let styleData = MockStyleData(priority: 50, maxDisplayCount: 3)
 
         let messageMetadata = GleanPlumbMessageMetaData(id: messageId,
@@ -80,7 +105,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                                                         isExpired: false)
         return GleanPlumbMessage(id: messageId,
                                  data: MockMessageData(),
-                                 action: "MAKE_DEFAULT_BROWSER",
+                                 action: action,
                                  triggers: ["ALWAYS"],
                                  style: styleData,
                                  metadata: messageMetadata)

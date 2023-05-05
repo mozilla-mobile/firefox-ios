@@ -57,6 +57,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingUtility: GleanPlumbMessageUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature = FxNimbus.shared.features.messaging
+    private let applicationHelper: ApplicationHelper
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
@@ -68,9 +69,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Inits
 
     init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
-         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore()) {
+         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.messagingUtility = messagingUtility
         self.messagingStore = messagingStore
+        self.applicationHelper = applicationHelper
 
         onStartup()
     }
@@ -152,7 +155,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
 
         // With our well-formed URL, we can handle the action here.
-        UIApplication.shared.open(urlToOpen, options: [:])
+        applicationHelper.open(urlToOpen)
 
         var extras = baseTelemetryExtras(using: message)
         extras[MessagingKey.actionUUID.rawValue] = uuid ?? "nil"
