@@ -132,7 +132,7 @@ class TabManagerImplementation: LegacyTabManager {
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
             return TabData(id: UUID(uuidString: tab.tabUUID) ?? UUID(),
-                           title: tab.title ?? tab.lastTitle,
+                           title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
