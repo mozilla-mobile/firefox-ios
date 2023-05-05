@@ -146,8 +146,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         var urlToOpen = url
 
         // We open webpages using our internal URL scheme
-        if url.isWebPage(), let url = URL(string: "\(URL.mozInternalScheme)://open-url?url=\(url)") {
-            urlToOpen = url
+        if url.isWebPage(), var components = URLComponents(string: "\(URL.mozInternalScheme)://open-url") {
+            components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
+            urlToOpen = components.url ?? url
         }
 
         // With our well-formed URL, we can handle the action here.
