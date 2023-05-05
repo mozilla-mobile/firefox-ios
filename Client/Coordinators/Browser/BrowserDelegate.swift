@@ -21,5 +21,5 @@ protocol BrowserDelegate: AnyObject {
 
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
-    func show(webView: WKWebView?)
+    func show(webView: WKWebView)
 }
