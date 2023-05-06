@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 class MarkupAttributionUtilityTests: XCTestCase {
-    let baseFont = Font.systemFont(ofSize: 16)
+    let baseFont = UIFont.systemFont(ofSize: 16)
     var subject: MarkupAttributeUtility!
 
     override func setUp() {
@@ -15,10 +15,15 @@ class MarkupAttributionUtilityTests: XCTestCase {
         subject = MarkupAttributeUtility(baseFont: baseFont)
     }
 
+    override func tearDown() {
+        subject = nil
+        super.tearDown()
+    }
+
     func testPlainText_render_rendersPlainText() {
-        let input = "hello there"
+        let input = "Hello there!"
         let expected = NSAttributedString(
-            string: "hello there",
+            string: "Hello there!",
             attributes: [NSAttributedString.Key.font: baseFont])
 
         let result = subject.addAttributesTo(text: input)
@@ -27,12 +32,12 @@ class MarkupAttributionUtilityTests: XCTestCase {
     }
 
     func testStrongText_render_rendersBoldText() {
-        let input = "hello *there*"
+        let input = "General kenobi. *You are a bold one!*"
         let boldFont = baseFont.boldFont()!
         let expected = [
-            NSAttributedString(string: "hello ",
+            NSAttributedString(string: "General kenoby. ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
-            NSAttributedString(string: "there",
+            NSAttributedString(string: "You are a bold one!",
                                attributes: [NSAttributedString.Key.font: boldFont])
         ].joined()
 
@@ -42,13 +47,15 @@ class MarkupAttributionUtilityTests: XCTestCase {
     }
 
     func testEmphasizedText_render_rendersItalicText() {
-        let input = "hello _there_"
+        let input = "Back away. I will deal with this _jedi slime_ myself."
         let italicFont = baseFont.italicFont()!
         let expected = [
-            NSAttributedString(string: "hello ",
+            NSAttributedString(string: "Back away. I will deal with this ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
-            NSAttributedString(string: "there",
-                               attributes: [NSAttributedString.Key.font: italicFont])
+            NSAttributedString(string: "jedi slime ",
+                               attributes: [NSAttributedString.Key.font: italicFont]),
+            NSAttributedString(string: "myself.",
+                               attributes: [NSAttributedString.Key.font: baseFont]),
         ].joined()
 
         let result = subject.addAttributesTo(text: input)
@@ -57,16 +64,16 @@ class MarkupAttributionUtilityTests: XCTestCase {
     }
 
     func testStrongEmphasizedText_render_rendersBoldItalicText() {
-        let input = "hello *_there_* _*there*_"
+        let input = "You *_fool._* I've been trained in your Jedi arts by _*Count Dooku._*"
         let boldItalicFont = baseFont.boldFont()!.italicFont()!
         let expected = [
-            NSAttributedString(string: "hello ",
+            NSAttributedString(string: "You ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
-            NSAttributedString(string: "there",
+            NSAttributedString(string: "fool.",
                                attributes: [NSAttributedString.Key.font: boldItalicFont]),
-            NSAttributedString(string: " ",
+            NSAttributedString(string: " I've been trained in your Jedi arts by ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
-            NSAttributedString(string: "there",
+            NSAttributedString(string: "Count Dooku.",
                                attributes: [NSAttributedString.Key.font: boldItalicFont])
         ].joined()
 

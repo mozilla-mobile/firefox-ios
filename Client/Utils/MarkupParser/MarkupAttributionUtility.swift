@@ -43,12 +43,3 @@ final class MarkupAttributeUtility {
         }
     }
 }
-
-private extension Array where Element: NSAttributedString {
-    func joined() -> NSAttributedString {
-        return self.reduce(NSMutableAttributedString()) { result, element in
-            result.append(element)
-            return result
-        }
-    }
-}
