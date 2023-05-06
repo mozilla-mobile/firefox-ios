@@ -30,6 +30,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertNotNil(browser.secureTextFields.firstMatch.value)
         waitForExistence(app.buttons["submit"], timeout: 10)
         app.buttons["submit"].tap()
+        sleep(2)
         waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
