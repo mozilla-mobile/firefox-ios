@@ -6,10 +6,12 @@ import Foundation
 import Storage
 
 class MockDiskImageStore: DiskImageStore {
+    var getImageForKeyCallCount = 0
     var saveImageForKeyCallCount = 0
     var deleteImageForKeyCallCount = 0
 
     func getImageForKey(_ key: String) async throws -> UIImage {
+        getImageForKeyCallCount += 1
         return UIImage()
     }
 

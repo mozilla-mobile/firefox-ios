@@ -126,25 +126,12 @@ final class LaunchCoordinatorTests: XCTestCase {
         let message = createMessage(isExpired: false)
         messageManager.message = message
         let manager = SurveySurfaceManager(and: messageManager)
-        XCTAssertNil(manager.openURLDelegate)
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = createSubject(isIphone: false)
         subject.start(with: .survey(manager: manager))
 
-        XCTAssertNotNil(manager.openURLDelegate)
         XCTAssertNotNil(manager.dismissClosure)
-    }
-
-    func testOpenURLDelegate() {
-        let subject = createSubject(isIphone: false)
-        subject.parentCoordinator = delegate
-        let mockURL = URL(string: "www.firefox.com")!
-        subject.didRequestToOpenInNewTab(url: mockURL,
-                                         isPrivate: false)
-
-        XCTAssertEqual(delegate.savedURL, mockURL)
-        XCTAssertEqual(delegate.savedIsPrivate, false)
     }
 
     // MARK: - Helpers

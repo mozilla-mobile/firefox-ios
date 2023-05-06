@@ -487,8 +487,8 @@ class Tab: NSObject {
         // now comes from a different source than save tab and parsing is managed by the web view itself
         if #available(iOS 15, *),
            let sessionData = sessionData,
-           let request = lastRequest {
-            webView.load(request)
+           let url = url {
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
             webView.interactionState = sessionData
             return
         }
@@ -784,12 +784,6 @@ class Tab: NSObject {
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
-    }
-
-    func cancelQueuedAlerts() {
-        alertQueue.forEach { alert in
-            alert.cancel()
-        }
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

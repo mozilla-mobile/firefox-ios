@@ -67,6 +67,18 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
     }
 
+    func testRestoreScreenshotsForTabs() async throws {
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     isPrimary: true,
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 4))
+
+        subject.restoreTabs()
+        try await Task.sleep(nanoseconds: sleepTime * 5)
+        XCTAssertEqual(subject.tabs.count, 4)
+        XCTAssertEqual(mockDiskImageStore.getImageForKeyCallCount, 4)
+    }
+
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {

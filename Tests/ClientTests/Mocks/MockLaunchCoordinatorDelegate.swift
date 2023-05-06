@@ -13,9 +13,4 @@ class MockLaunchCoordinatorDelegate: LaunchCoordinatorDelegate {
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         savedDidFinishCoordinator = coordinator
     }
-
-    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
-        savedURL = url
-        savedIsPrivate = isPrivate
-    }
 }

@@ -7,7 +7,7 @@ import Shared
 import WebKit
 
 class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
-    private let webView: WKWebView
+    private var webView: WKWebView
     var contentType: ContentType = .webview
 
     init(webView: WKWebView) {
@@ -33,6 +33,11 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
             view.bottomAnchor.constraint(equalTo: webView.bottomAnchor),
             view.trailingAnchor.constraint(equalTo: webView.trailingAnchor)
         ])
+    }
+
+    func update(webView: WKWebView) {
+        self.webView = webView
+        setupLayout()
     }
 
     // MARK: - ScreenshotableView
