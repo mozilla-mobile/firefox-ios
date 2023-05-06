@@ -70,7 +70,6 @@ struct MarkupTokenizingUtility {
 
         let index = input.index(before: currentIndex)
         return input[index]
-//        return input[input.index(before: currentIndex)]
     }
 
     private func nextCharacter() -> UnicodeScalar? {
@@ -90,14 +89,8 @@ struct MarkupTokenizingUtility {
     private mutating func scanLeft(delimiter: UnicodeScalar) -> MarkupToken? {
         let previous = previousCharacter() ?? .space
 
-        guard let next = nextCharacter() else { return nil }
-
-        // Left delimiters must:
-        // - be predeced by whitespace or punctuation
-        // - NOT followed by whitespaces or newlines
-        guard CharacterSet.whitespaceAndPunctuation.contains(previous) &&
-            !CharacterSet.whitespacesAndNewlines.contains(next) &&
-            !existingLeftDelimiters.contains(delimiter)
+        guard let next = nextCharacter(),
+              isValidLeftDelimiter(previous: previous, next: next, delimiter: delimiter)
         else { return nil }
 
         existingLeftDelimiters.append(delimiter)
@@ -106,16 +99,24 @@ struct MarkupTokenizingUtility {
         return .leftDelimiter(delimiter)
     }
 
-    private mutating func scanRight(delimiter: UnicodeScalar) -> MarkupToken? {
-        guard let previous = previousCharacter() else { return nil }
-        let next = nextCharacter() ?? .space
+    /// Left delimiters must:
+    /// - be predeced by whitespace or punctuation (or nothing, ie. start of
+    ///   the string in which case, we treat that as whitespace)
+    /// - NOT followed by whitespaces or newlines
+    private func isValidLeftDelimiter(
+        previous: UnicodeScalar,
+        next: UnicodeScalar,
+        delimiter: UnicodeScalar
+    ) -> Bool {
+        return CharacterSet.whitespaceAndPunctuation.contains(previous) &&
+            !CharacterSet.whitespacesAndNewlines.contains(next) &&
+            !existingLeftDelimiters.contains(delimiter)
+    }
 
-        // Right delimiters must:
-        // - NOT be preceded by whitespace
-        // - followed by whitespace or punctuation
-        guard !CharacterSet.whitespacesAndNewlines.contains(previous) &&
-            CharacterSet.whitespaceAndPunctuation.contains(next) &&
-            existingLeftDelimiters.contains(delimiter)
+    private mutating func scanRight(delimiter: UnicodeScalar) -> MarkupToken? {
+        let next = nextCharacter() ?? .space
+        guard let previous = previousCharacter(),
+              isValidRightDelimiter(previous: previous, next: next, delimiter: delimiter)
         else { return nil }
 
         // Check if there's a matching left delimiter, and if there is, remove it
@@ -125,6 +126,20 @@ struct MarkupTokenizingUtility {
         advanceCurrentIndex()
 
         return .rightDelimiter(delimiter)
+    }
+
+    /// Right delimiters must:
+    /// - NOT be preceded by whitespace
+    /// - followed by whitespace or punctuation (or nothing, ie. end
+    ///   of the string in which case, we treat that as whitespace)
+    private func isValidRightDelimiter(
+        previous: UnicodeScalar,
+        next: UnicodeScalar,
+        delimiter: UnicodeScalar
+    ) -> Bool {
+        return !CharacterSet.whitespacesAndNewlines.contains(previous) &&
+            CharacterSet.whitespaceAndPunctuation.contains(next) &&
+            existingLeftDelimiters.contains(delimiter)
     }
 
     private mutating func scanText() -> MarkupToken? {

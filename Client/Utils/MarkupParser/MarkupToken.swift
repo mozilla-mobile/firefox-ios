@@ -16,12 +16,4 @@ enum MarkupToken: CustomStringConvertible, Equatable {
         case .rightDelimiter(let value): return String(value)
         }
     }
-
-    var debugDescription: String {
-        switch self {
-        case .text(let value): return "text(\(value))"
-        case .leftDelimiter(let value): return "leftDelimiter(\(value))"
-        case .rightDelimiter(let value): return "rightDelimiter(\(value))"
-        }
-    }
 }

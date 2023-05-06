@@ -7,6 +7,15 @@ import XCTest
 @testable import Client
 
 class MarkupParseUtilityTests: XCTestCase {
+    func testEmptyText_returnsPlainText() {
+        let input = ""
+        let expected: [MarkupNode] = []
+
+        let result = MarkupParsingUtility().parse(text: input)
+
+        XCTAssertEqual(result, expected)
+    }
+
     func testPlainText_returnsPlainText() {
         let input = "I just wanna $.tell;' ya"
         let expected: [MarkupNode] = [.text("I just wanna $.tell;' ya")]
