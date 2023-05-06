@@ -18,17 +18,6 @@ private extension UnicodeScalar {
 
 /// Allows a string to be broken into different markup tokens in order to allow
 /// for a string's text to be attributed in different ways.
-///
-/// ```
-/// var tokenizer = MarkupTokenizer(for: "Turnip _says *hello*_")
-/// while let token = tokenizer.nextToken() {
-///     switch token {
-///     case let .text(value): print("text: \(value)"
-///     case let .leftDelimiter(value): print("left delimiter: \(value)"
-///     case let .rightDelimiter(value): print("right delimiter: \(value)"
-///     }
-/// }
-/// ```
 struct MarkupTokenizingUtility {
     // MARK: - Properties
     /// The input string provided
@@ -76,22 +65,18 @@ struct MarkupTokenizingUtility {
         return input[currentIndex]
     }
 
-    /// If this is the first character in the string, this will return a `.space`
-    /// so that tokenization may funciton correctly.
     private func previousCharacter() -> UnicodeScalar? {
         guard currentIndex > input.startIndex else { return nil }
 
-        if currentIndex == input.startIndex { return .space }
-        return input[input.index(before: currentIndex)]
+        let index = input.index(before: currentIndex)
+        return input[index]
+//        return input[input.index(before: currentIndex)]
     }
 
-    /// If this is the last character in the string, this will return a `.space`
-    /// so that tokenization may function correctly.
     private func nextCharacter() -> UnicodeScalar? {
         guard currentIndex < input.endIndex else { return nil }
 
         let index = input.index(after: currentIndex)
-        if index == input.endIndex { return .space }
 
         guard index < input.endIndex else { return nil }
 
@@ -103,10 +88,9 @@ struct MarkupTokenizingUtility {
     }
 
     private mutating func scanLeft(delimiter: UnicodeScalar) -> MarkupToken? {
+        let previous = previousCharacter() ?? .space
 
-        guard let previous = previousCharacter(),
-              let next = nextCharacter()
-        else { return nil }
+        guard let next = nextCharacter() else { return nil }
 
         // Left delimiters must:
         // - be predeced by whitespace or punctuation
@@ -123,9 +107,8 @@ struct MarkupTokenizingUtility {
     }
 
     private mutating func scanRight(delimiter: UnicodeScalar) -> MarkupToken? {
-        guard let previous = previousCharacter(),
-              let next = nextCharacter()
-        else { return nil }
+        guard let previous = previousCharacter() else { return nil }
+        let next = nextCharacter() ?? .space
 
         // Right delimiters must:
         // - NOT be preceded by whitespace

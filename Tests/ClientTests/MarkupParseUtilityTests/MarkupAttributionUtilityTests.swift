@@ -20,7 +20,7 @@ class MarkupAttributionUtilityTests: XCTestCase {
         super.tearDown()
     }
 
-    func testPlainText_render_rendersPlainText() {
+    func testPlainText_rendersPlainText() {
         let input = "Hello there!"
         let expected = NSAttributedString(
             string: "Hello there!",
@@ -31,11 +31,11 @@ class MarkupAttributionUtilityTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testStrongText_render_rendersBoldText() {
-        let input = "General kenobi. *You are a bold one!*"
-        let boldFont = baseFont.boldFont()!
+    func testBoldMarkup_rendersBoldText() {
+        let input = "General Kenobi. *You are a bold one!*"
+        let boldFont = baseFont.bolded()!
         let expected = [
-            NSAttributedString(string: "General kenoby. ",
+            NSAttributedString(string: "General Kenobi. ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
             NSAttributedString(string: "You are a bold one!",
                                attributes: [NSAttributedString.Key.font: boldFont])
@@ -46,15 +46,15 @@ class MarkupAttributionUtilityTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testEmphasizedText_render_rendersItalicText() {
-        let input = "Back away. I will deal with this _jedi slime_ myself."
-        let italicFont = baseFont.italicFont()!
+    func testItalicizedMarkup_rendersItalicText() {
+        let input = "Back away. I will deal with this _Jedi slime_ myself."
+        let italicFont = baseFont.italicized()!
         let expected = [
             NSAttributedString(string: "Back away. I will deal with this ",
                                attributes: [NSAttributedString.Key.font: baseFont]),
-            NSAttributedString(string: "jedi slime ",
+            NSAttributedString(string: "Jedi slime",
                                attributes: [NSAttributedString.Key.font: italicFont]),
-            NSAttributedString(string: "myself.",
+            NSAttributedString(string: " myself.",
                                attributes: [NSAttributedString.Key.font: baseFont]),
         ].joined()
 
@@ -63,9 +63,9 @@ class MarkupAttributionUtilityTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testStrongEmphasizedText_render_rendersBoldItalicText() {
-        let input = "You *_fool._* I've been trained in your Jedi arts by _*Count Dooku._*"
-        let boldItalicFont = baseFont.boldFont()!.italicFont()!
+    func testBoldedItalicizedMarkup_rendersBoldItalicText() {
+        let input = "You *_fool._* I've been trained in your Jedi arts by _*Count Dooku.*_"
+        let boldItalicFont = baseFont.bolded()!.italicized()!
         let expected = [
             NSAttributedString(string: "You ",
                                attributes: [NSAttributedString.Key.font: baseFont]),

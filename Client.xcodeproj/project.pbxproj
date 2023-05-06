@@ -884,6 +884,7 @@
 		C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90D12A067C6D0008832B /* MarkupAttributionUtilityTests.swift */; };
 		C8DC90D42A067E000008832B /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90D32A067E000008832B /* UIFont+Extension.swift */; };
 		C8DC90D62A0683EF0008832B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90D52A0683EF0008832B /* Array+Extension.swift */; };
+		C8DC90D82A06854D0008832B /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90D32A067E000008832B /* UIFont+Extension.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
@@ -11937,6 +11938,7 @@
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				5A31275828906422001F30FA /* RecentlySavedDelegateMock.swift in Sources */,
+				C8DC90D82A06854D0008832B /* UIFont+Extension.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */,
 				8ADAFAC628AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift in Sources */,

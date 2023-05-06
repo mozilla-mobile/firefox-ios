@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import UIKit
+import UIKit.UIFont
 
 extension UIFont {
     /// Returns the font, with the added bold attribute
