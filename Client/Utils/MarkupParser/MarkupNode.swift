@@ -6,13 +6,13 @@ import Foundation
 
 public enum MarkupNode: Equatable {
     case text(String)
-    case strong([MarkupNode])
-    case emphasis([MarkupNode])
+    case bold([MarkupNode])
+    case italics([MarkupNode])
 
     init?(delimiter: UnicodeScalar, children: [MarkupNode]) {
         switch delimiter {
-        case "*": self = .strong(children)
-        case "_": self = .emphasis(children)
+        case "*": self = .bold(children)
+        case "_": self = .italics(children)
         default: return nil
         }
     }

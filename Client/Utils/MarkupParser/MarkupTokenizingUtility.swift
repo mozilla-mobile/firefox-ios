@@ -29,7 +29,7 @@ private extension UnicodeScalar {
 ///     }
 /// }
 /// ```
-struct MarkupTokenizer {
+struct MarkupTokenizingUtility {
     // MARK: - Properties
     /// The input string provided
     private let input: String.UnicodeScalarView
@@ -51,7 +51,7 @@ struct MarkupTokenizer {
     }
 
     mutating func nextToken() -> MarkupToken? {
-        guard let character = currentCharacter else { return nil }
+        guard let character = currentCharacter() else { return nil }
 
         var token: MarkupToken?
 
@@ -135,7 +135,7 @@ struct MarkupTokenizer {
             leftDelimiters.contains(delimiter)
         else { return nil }
 
-        // Check if there's a matching left delimiter
+        // Check if there's a matching left delimiter, and if there is, remove it
         while !existingLeftDelimiters.isEmpty {
             if existingLeftDelimiters.popLast() == delimiter { break }
         }
