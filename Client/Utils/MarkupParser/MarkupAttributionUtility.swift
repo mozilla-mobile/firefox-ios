@@ -11,6 +11,12 @@ final class MarkupAttributeUtility {
         self.baseFont = baseFont
     }
 
+    /// Will take a chunk of given text and then
+    /// - parse the text into ``MarkupNodes`` that can be interpreted for attribution
+    /// - render the text inside each node with the appropriate attribute
+    ///
+    /// - Parameter text: The text to be attributed
+    /// - Returns: A ``NSAttributedString`` with the original text rendered correctly
     func addAttributesTo(text: String) -> NSAttributedString {
         let elements = MarkupParsingUtility().parse(text: text)
         let attributes = [NSAttributedString.Key.font: baseFont]
@@ -18,7 +24,7 @@ final class MarkupAttributeUtility {
         return elements.map { render(node: $0, withAttributes: attributes) }.joined()
     }
 
-    /// Will
+    /// Will apply the correct font attributes for each ``MarkupNode``
     private func render(
         node: MarkupNode,
         withAttributes attributes: [NSAttributedString.Key: Any]

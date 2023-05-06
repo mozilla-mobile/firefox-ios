@@ -35,9 +35,6 @@ public class MarkupParsingUtility {
                     fatalError("There is no MarkupNode for \(delimiter)")
                 }
                 return [containerNode]
-
-            default:
-                elements.append(.text(token.description))
             }
         }
 
