@@ -113,7 +113,7 @@ struct MarkupTokenizingUtility {
         // - NOT followed by whitespaces or newlines
         guard CharacterSet.whitespaceAndPunctuation.contains(previous) &&
             !CharacterSet.whitespacesAndNewlines.contains(next) &&
-            !leftDelimiters.contains(delimiter)
+            !existingLeftDelimiters.contains(delimiter)
         else { return nil }
 
         existingLeftDelimiters.append(delimiter)
@@ -132,7 +132,7 @@ struct MarkupTokenizingUtility {
         // - followed by whitespace or punctuation
         guard !CharacterSet.whitespacesAndNewlines.contains(previous) &&
             CharacterSet.whitespaceAndPunctuation.contains(next) &&
-            leftDelimiters.contains(delimiter)
+            existingLeftDelimiters.contains(delimiter)
         else { return nil }
 
         // Check if there's a matching left delimiter, and if there is, remove it

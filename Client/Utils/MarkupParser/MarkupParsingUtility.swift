@@ -4,20 +4,20 @@
 
 import Foundation
 
-public struct MarkupParsingUtility {
-    public func parse(text: String) -> [MarkupNode] {
-        var parser = MarkupParser(text: text)
-        return parser.parse()
-    }
-
-    private var tokenizer: MarkupTokenizer
+public class MarkupParsingUtility {
+    private var tokenizer: MarkupTokenizingUtility
     private var openingDelimiters: [UnicodeScalar] = []
 
-    private init(text: String) {
-        tokenizer = MarkupTokenizer(string: text)
+    init() {
+        tokenizer = MarkupTokenizingUtility(for: "")
     }
 
-    private mutating func parse() -> [MarkupNode] {
+    public func parse(text: String) -> [MarkupNode] {
+        tokenizer = MarkupTokenizingUtility(for: text)
+        return parse()
+    }
+
+    private func parse() -> [MarkupNode] {
         var elements: [MarkupNode] = []
 
         while let token = tokenizer.nextToken() {
@@ -49,11 +49,14 @@ public struct MarkupParsingUtility {
         return elements
     }
 
-    private mutating func close(delimiter: UnicodeScalar, elements: [MarkupNode]) -> MarkupNode? {
+    private func close(
+        delimiter: UnicodeScalar,
+        elements: [MarkupNode]
+    ) -> MarkupNode? {
         var newElements = elements
 
         // Convert orphaned opening delimiters to plain text
-        while openingDelimiters.count > 0 {
+        while !openingDelimiters.isEmpty {
             let openingDelimiter = openingDelimiters.popLast()!
 
             if openingDelimiter == delimiter {

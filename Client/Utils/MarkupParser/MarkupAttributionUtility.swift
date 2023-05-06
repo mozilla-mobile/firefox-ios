@@ -11,13 +11,14 @@ final class MarkupAttributeUtility {
         self.baseFont = baseFont
     }
 
-    func render(text: String) -> NSAttributedString {
+    func addAttributesTo(text: String) -> NSAttributedString {
         let elements = MarkupParsingUtility().parse(text: text)
         let attributes = [NSAttributedString.Key.font: baseFont]
 
-        return elements.map { render(withAttributes: attributes) }.joined()
+        return elements.map { render(node: $0, withAttributes: attributes) }.joined()
     }
 
+    /// Will
     private func render(
         node: MarkupNode,
         withAttributes attributes: [NSAttributedString.Key: Any]
@@ -33,12 +34,12 @@ final class MarkupAttributeUtility {
         case .bold(let elements):
             var newAttributes = attributes
             newAttributes[NSAttributedString.Key.font] = currentFont.bolded()
-            return elements.map { $0.render(withAttributes: newAttributes) }.joined()
+            return elements.map { render(node: $0, withAttributes: newAttributes) }.joined()
 
         case .italics(let elements):
             var newAttributes = attributes
             newAttributes[NSAttributedString.Key.font] = currentFont.italicized()
-            return elements.map { $0.render(withAttributes: newAttributes) }.joined()
+            return elements.map { render(node: $0, withAttributes: newAttributes) }.joined()
         }
     }
 }
@@ -49,23 +50,5 @@ private extension Array where Element: NSAttributedString {
             result.append(element)
             return result
         }
-    }
-}
-
-private extension UIFont {
-    func bolded() -> UIFont? {
-        return add(trait: .traitBold)
-    }
-
-    func italicized() -> UIFont? {
-        return add(trait: .traitItalic)
-    }
-
-    func add(trait: UIFontDescriptor.SymbolicTraits) -> UIFont? {
-        guard let descriptor = fontDescriptor
-            .withSymbolicTraits(fontDescriptor.symbolicTraits.union(traits))
-        else { return nil }
-
-        return UIFont(descriptor: descriptor, size: 0)
     }
 }
