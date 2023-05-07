@@ -1,13 +1,26 @@
 const glob = require("glob");
 const path = require("path");
 const webpack = require("webpack");
+const Overrides = require("./Client/Assets/CC_Script/Overrides.ios.js");
 
-const AllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.js");
-const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.js");
-const MainFrameAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.js");
-const MainFrameAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.js");
-const WebcompatAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.js");
-const AutofillAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.js");
+const AllFramesAtDocumentStart = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.{js,mjs}"
+);
+const AllFramesAtDocumentEnd = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.{js,mjs}"
+);
+const MainFrameAtDocumentStart = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.{js,mjs}"
+);
+const MainFrameAtDocumentEnd = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.{js,mjs}"
+);
+const WebcompatAllFramesAtDocumentStart = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
+);
+const AutofillAllFramesAtDocumentStart = glob.sync(
+  "./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
+);
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -28,19 +41,21 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
 }
 
 // Custom plugin used to replace imports used in Desktop code that use uris:
-// resource://gre/modules/... with Assets/...
+// resource://... with Assets/...
 // This is needed because aliases are not supported for URI imports.
 // See: https://github.com/webpack/webpack/issues/12792
 const CustomResourceURIWebpackPlugin =
-  new webpack.NormalModuleReplacementPlugin(
-    /resource:\/\/gre\/modules\/(.*)/,
-    function (resource) {
-      resource.request = resource.request.replace(
-        /resource:\/\/gre\/modules/,
-        "Assets/CC_Script"
-      );
+  new webpack.NormalModuleReplacementPlugin(/resource:(.*)/, function (
+    resource
+  ) {
+    const issuer = path.basename(resource.contextInfo.issuer);
+    const moduleName = path.basename(resource.request);
+    const override = Overrides.ModuleOverrides[moduleName];
+    if (override && issuer !== override) {
+      resource.request = resource.request.replace(moduleName, override);
     }
-  );
+    resource.request = resource.request.replace(/.*\//, "Assets/CC_Script/");
+  });
 
 module.exports = {
   mode: "production",
@@ -55,18 +70,18 @@ module.exports = {
   // optimization: { minimize: false }, // use for debugging
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "Client/Assets")
+    path: path.resolve(__dirname, "Client/Assets"),
   },
   module: {
-    rules: []
+    rules: [],
   },
   plugins: [CustomResourceURIWebpackPlugin],
   resolve: {
     fallback: {
-      url: require.resolve("page-metadata-parser")
+      url: require.resolve("page-metadata-parser"),
     },
     alias: {
-      Assets: path.resolve(__dirname, 'Client/Assets'),
+      Assets: path.resolve(__dirname, "Client/Assets"),
     },
-  }
+  },
 };
