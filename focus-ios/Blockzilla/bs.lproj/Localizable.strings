@@ -235,9 +235,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID može otključati %@ ako je URL već otvoren u aplikaciji";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Šta je novo";
-
 /* Text for a share button */
 "share" = "Dijeli";
 

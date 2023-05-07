@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "სისტემის ნათელი/მუქი რეჟიმი";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "რა სიახლეებია";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI-ს მალსახმობები";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "ჩაირთოს Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "იხილეთ, %@-ის ამ და სხვა სიახლეებზე ვრცლად.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "რასაკვირველია, ახალი იერსახითაა!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "გვერდზე ზემოქმედება > სრული საიტი";

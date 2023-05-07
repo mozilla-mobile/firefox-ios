@@ -286,9 +286,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "ID Sentuh boleh membuka %@ jika URL sudah dibuka dalam aplikasi";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Yang Terbaru";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 

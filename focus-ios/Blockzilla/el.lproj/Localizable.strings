@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Χρήση λειτουργίας συστήματος";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Τι νέο υπάρχει";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ΣΥΝΤΟΜΕΥΣΕΙΣ SIRI";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Ενεργοποίηση Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Διαβάστε περισσότερα σχετικά με αυτό και άλλες ενημερώσεις στο %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Πράγματι, δημιουργήσαμε μια νέα εμφάνιση!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Ενέργειες σελίδας > Έκδοση για υπολογιστές";

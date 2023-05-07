@@ -376,9 +376,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Kasutatakse süsteemset hele/tume režiimi";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Mis on uut?";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI OTSETEED";
 
@@ -462,12 +459,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Lülita Touch ID sisse";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Loe pikemalt sellest ja muudest %@e uuendustest.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Meil on uus värske välimus!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Lehe tegevused -> Töölaua versioon";

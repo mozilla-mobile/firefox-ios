@@ -133,9 +133,6 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "નવું શું છે";
-
 /* Text for a share button */
 "share" = "વહેંચો";
 

@@ -349,9 +349,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "प्रणालीको उज्यालो/अँध्यारो मोड प्रयोग गर्नुहोस्";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "नयाँ के छ";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI सर्टकटहरू";
 
@@ -435,12 +432,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "टच आईडी खुल्ला गर्नुहोस्";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "यसको बारेमा थप पढ्नुहोस् र %@ मा अन्य अपडेटहरू।";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "किन हो, हामीसँग बिल्कुलै नयाँ लुक छ!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "पृष्ठ कार्यहरू > डेस्कटप साइट अनुरोध गर्नुहोस्";

@@ -307,9 +307,6 @@
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "چالو";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "نیا کیا ہے";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 

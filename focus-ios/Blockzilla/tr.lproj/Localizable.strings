@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Sistemin açık/koyu modunu kullan";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Yeni neler var?";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI KESTİRMELERİ";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID’yi açın";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Bu güncelleme ve diğer %@ güncellemeleri hakkında bilgi alın.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Tasarımımız yenilendi!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Sayfa eylemleri > Masaüstü sitesini iste";

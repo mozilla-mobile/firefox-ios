@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Impiegà u modu chjaru o scuru di u sistema";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Ciò chì hè novu";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ACCURTATOGHJI SIRI";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Attivà Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Sapene di più nant’à stu rinnovu è ancu d’altri per %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Hè vera, avemu un aspettu tuttu novu !";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Azzioni di a pagina > Fighjà a versione urdinatore";

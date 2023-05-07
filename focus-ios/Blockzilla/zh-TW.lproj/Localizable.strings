@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "使用系統亮/暗模式";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "有什麼新鮮事";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "Siri 捷徑";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "開啟 Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "了解 %@ 此版本與其他版本更新的更多資訊。";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "當然，我們有全新設計！";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "頁面操作 > 開啟桌面版網站";

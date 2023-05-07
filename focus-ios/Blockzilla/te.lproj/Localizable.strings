@@ -199,9 +199,6 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "వినియోగించిన డేటాను పంపు";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "కొత్త విశేషాలు ఏమిటి";
-
 /* Text for a share button */
 "share" = "పంచుకోండి";
 

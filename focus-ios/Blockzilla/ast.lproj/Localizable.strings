@@ -265,9 +265,6 @@
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Estudios";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Qué hai nuevo";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ATAYOS DE SIRI";
 

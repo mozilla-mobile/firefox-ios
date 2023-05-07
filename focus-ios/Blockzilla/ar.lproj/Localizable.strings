@@ -337,9 +337,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "استعمل وضع النظام الفاتح/الداكن";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "ما الجديد";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "اختصارات سيري";
 

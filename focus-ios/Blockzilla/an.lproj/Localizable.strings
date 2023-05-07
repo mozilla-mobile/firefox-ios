@@ -202,9 +202,6 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Ninviar datos d'uso";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Las novedatz";
-
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Apegar-lo y ir-ie";
 

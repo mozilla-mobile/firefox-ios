@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Swětły/śamny systemowy modus wužywaś";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Nowe funkcije a změny";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "TASTOWE SKROTCONKI SIRI";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID zmóžniś";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Cytajśo wěcej wó tom a drugich aktualizacijach za %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Zawěsće mamy moderny nowy naglěd!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Akcije boka > Desktopowe sedło pominaś";

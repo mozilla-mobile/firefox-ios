@@ -202,9 +202,6 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Ուղարկել օգտագործման տվյալները";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Ինչն է նոր";
-
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Տեղադրել և Առաջ";
 

@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "시스템 밝음/어두움 모드 사용";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "새로운 기능";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI 단축키";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID 켜기";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "이에 대한 자세한 내용과 %@에 대한 기타 업데이트를 읽어보세요.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "예, 새롭게 디자인 되었습니다!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "페이지 작업 > 데스크톱 사이트 요청";

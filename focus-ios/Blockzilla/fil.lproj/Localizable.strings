@@ -292,9 +292,6 @@
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "On";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Ano ang Bago";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 

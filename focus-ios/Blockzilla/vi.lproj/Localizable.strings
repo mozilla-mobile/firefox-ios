@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Sử dụng chế độ sáng/tối của hệ thống";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Có gì mới";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Bật Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Đọc thêm về điều này và các cập nhật khác cho %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Chúng tôi có một giao diện mới!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Hành động trang> Yêu cầu trang web trên máy tính";

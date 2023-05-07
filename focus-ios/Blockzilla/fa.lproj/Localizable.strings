@@ -319,9 +319,6 @@
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "روشن";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "چه چیزهایی جدید است";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 

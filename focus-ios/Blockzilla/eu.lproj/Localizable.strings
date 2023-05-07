@@ -412,9 +412,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Erabili sistemaren argi/ilun modua";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Nobedadeak";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI LASTERBIDEAK";
 
@@ -522,12 +519,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Gaitu Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Irakurri gehiago %@(e)n eguneraketa honi eta besteei buruz.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Itxura eraberritua dugu bai!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Orri-ekintzak > Mahaigaineko gunea";

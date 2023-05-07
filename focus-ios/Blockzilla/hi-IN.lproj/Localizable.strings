@@ -346,9 +346,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "सिस्टम लाइट/डार्क मोड का उपयोग करें";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "क्या नया है";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI शॉर्टकट";
 
