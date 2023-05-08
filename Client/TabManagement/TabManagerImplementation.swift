@@ -10,10 +10,11 @@ import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
+class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
-    var tabMigration: TabMigrationUtility
+    private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
@@ -21,18 +22,19 @@ import Shared
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
-         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility()) {
+         tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
+         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabDataStore = tabDataStore
-        self.tabSessionStore = tabSessionStore
-        self.imageStore = imageStore
-        self.tabMigration = tabMigration
-        self.notificationCenter = notificationCenter
-        super.init(profile: profile, imageStore: imageStore)
+            self.tabDataStore = tabDataStore
+            self.tabSessionStore = tabSessionStore
+            self.imageStore = imageStore
+            self.tabMigration = tabMigration
+            self.notificationCenter = notificationCenter
+            super.init(profile: profile, imageStore: imageStore)
 
-        setupNotifications(forObserver: self,
-                           observing: [UIApplication.willResignActiveNotification])
-    }
+            setupNotifications(forObserver: self,
+                               observing: [UIApplication.willResignActiveNotification])
+        }
 
     // MARK: - Restore tabs
 
