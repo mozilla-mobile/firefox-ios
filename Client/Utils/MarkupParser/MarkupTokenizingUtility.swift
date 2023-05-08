@@ -30,7 +30,7 @@ struct MarkupTokenizingUtility {
     ///
     /// Instead of scanning forwards, we can improve perfomance by keeping track
     /// of existing left delimiters and then lookback when we meet right
-    /// delimiters to determin if there's a match.
+    /// delimiters to determine if there's a match.
     private var existingLeftDelimiters: [UnicodeScalar] = []
 
     // MARK: - Public interface
