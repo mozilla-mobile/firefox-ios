@@ -126,6 +126,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appearance.shadowColor = .clear
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            let backItemAppearance = UIBarButtonItemAppearance()
+            backItemAppearance.normal.titleTextAttributes = [.foregroundColor : UIColor.accent]
+            let image = UIImage(systemName: "chevron.backward")?.withTintColor(.accent, renderingMode: .alwaysOriginal) // fix indicator color
+            appearance.setBackIndicatorImage(image, transitionMaskImage: image)
+            appearance.backButtonAppearance = backItemAppearance
         }
 
         // Count number of app launches for requesting a review

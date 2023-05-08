@@ -78,6 +78,7 @@
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
 		BD4B1EB629250AA500065AAD /* KeyboardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B1EB529250AA500065AAD /* KeyboardType.swift */; };
 		BDEEF249297AC0D500D43345 /* RequestHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEEF248297AC0D500D43345 /* RequestHandlerTests.swift */; };
+		C809130E2A08F245000889B0 /* Licenses in Frameworks */ = {isa = PBXBuildFile; productRef = C809130D2A08F245000889B0 /* Licenses */; };
 		C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */; };
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
@@ -189,7 +190,6 @@
 		D440BC18276B3535003FD9B1 /* ShortcutsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */; };
 		D47396DC270F634800A03A69 /* BaseTestCaseL10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47396DB270F634800A03A69 /* BaseTestCaseL10n.swift */; };
 		D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
-		D50939A91FBF807A005D4316 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D50939A81FBF807A005D4316 /* Settings.bundle */; };
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
@@ -772,7 +772,6 @@
 		D43A61BD26B4627100814232 /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsTest.swift; sourceTree = "<group>"; };
 		D47396DB270F634800A03A69 /* BaseTestCaseL10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCaseL10n.swift; sourceTree = "<group>"; };
-		D50939A81FBF807A005D4316 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
@@ -1242,6 +1241,7 @@
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
+				C809130E2A08F245000889B0 /* Licenses in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1849,7 +1849,6 @@
 				C8CE050A2743FE93002057C6 /* Menu */,
 				F8324CDE264EA223007E4BFA /* LocalWebServer */,
 				D5D2F029252FA6AE00761DC8 /* Generated */,
-				D50939A81FBF807A005D4316 /* Settings.bundle */,
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
@@ -2062,6 +2061,7 @@
 				C871585F27FB29AC006224BB /* Onboarding */,
 				45E8FFE62828DE4A0027A8F5 /* FocusAppServices */,
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
+				C809130D2A08F245000889B0 /* Licenses */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -2345,7 +2345,6 @@
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
 				398E40882906BFC00077F5BD /* initial_experiments.json in Resources */,
-				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
@@ -6513,6 +6512,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = FocusAppServices;
+		};
+		C809130D2A08F245000889B0 /* Licenses */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Licenses;
 		};
 		C82F45F628193EE8000D7D84 /* AppShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -211,6 +211,7 @@ struct UIConstants {
         static let themePicker = NSLocalizedString("Settings.themePicker", value: "Theme Picker", comment: "Header for manual theme section in settings menu")
         static let light = NSLocalizedString("Settings.lightTheme", value: "Light", comment: "Light theme option in settings menu")
         static let dark = NSLocalizedString("Settings.darkTheme", value: "Dark", comment: "Dark theme option in settings menu")
+        static let licenses = NSLocalizedString("Settings.licenses", value: "Licenses", comment: "Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app.")
         static let safariInstructionsContentBlockers = NSLocalizedString("Safari.instructionsContentBlockers", value: "Tap Safari, then select Content Blockers", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsExtensions = NSLocalizedString("Safari.instructionsExtentions", value: "Select Safari, then select Extensions", comment: "Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsEnable = NSLocalizedString("Safari.instructionsEnable", value: "Enable %@", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
