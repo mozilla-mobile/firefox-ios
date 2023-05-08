@@ -78,9 +78,12 @@ class PhotonActionSheet: UIViewController, Themeable {
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
 
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
-              let screenshot = sceneDelegate.window?.screenshot() {
-            windowScreenshot = screenshot
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            if CoordinatorFlagManager.isCoordinatorEnabled, let screenshot = sceneDelegate.sceneCoordinator?.window?.screenshot() {
+                windowScreenshot = screenshot
+            } else if let screenshot = sceneDelegate.window?.screenshot() {
+                windowScreenshot = screenshot
+            }
         }
     }
 
