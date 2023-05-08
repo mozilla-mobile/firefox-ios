@@ -635,6 +635,9 @@ workflows:
                     echo "Not Running UI Tests"
                 fi
             fi
+    - share-pipeline-variable@1:
+        inputs:
+        - variables: RUN_UI_TESTS
   NewXcodeVersions:
     steps:
     - script@1:
