@@ -2861,6 +2861,11 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
+        updateZoomPageBarVisibility(visible: false)
+    }
+
+    func topTabsDidPressPrivateMode() {
+        updateZoomPageBarVisibility(visible: false)
     }
 }
 
