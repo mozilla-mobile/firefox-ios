@@ -133,6 +133,7 @@ import Shared
     override func preserveTabs() {
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
+        guard shouldUseNewTabStore() else { return }
 
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed

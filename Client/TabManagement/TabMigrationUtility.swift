@@ -13,17 +13,17 @@ protocol TabMigrationUtility {
 
 class DefaultTabMigrationUtility: TabMigrationUtility {
     private let migrationKey = PrefsKeys.TabMigrationKey
-    private var profile: Profile
+    private var prefs: Prefs
     private var tabDataStore: TabDataStore
 
     init(profile: Profile = AppContainer.shared.resolve(),
          tabDataStore: TabDataStore = DefaultTabDataStore()) {
-        self.profile = profile
+        self.prefs = profile.prefs
         self.tabDataStore = tabDataStore
     }
 
     var shouldRunMigration: Bool {
-        guard let shouldRunMigration = profile.prefs.boolForKey(migrationKey) else { return true }
+        guard let shouldRunMigration = prefs.boolForKey(migrationKey) else { return true }
 
         return shouldRunMigration
     }
@@ -64,6 +64,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
 
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData)
-        profile.prefs.setBool(false, forKey: migrationKey)
+        prefs.setBool(false, forKey: migrationKey)
     }
 }
