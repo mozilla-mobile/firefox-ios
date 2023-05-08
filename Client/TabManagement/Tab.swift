@@ -482,10 +482,8 @@ class Tab: NSObject {
         // If the session data field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
         if #available(iOS 15, *),
-           let sessionData = sessionData,
            let url = url {
             webView.load(PrivilegedRequest(url: url) as URLRequest)
-            webView.interactionState = sessionData
             return
         }
 

@@ -29,47 +29,29 @@ class TabMigrationUtilityTests: XCTestCase {
 
     func testShouldRunMigration_OnlyOnce() async {
         XCTAssertTrue(subject.shouldRunMigration)
-        await subject.runMigration(savedTabs: [LegacySavedTab]())
+        _ = await subject.runMigration(savedTabs: [LegacySavedTab]())
         XCTAssertFalse(subject.shouldRunMigration)
     }
 
     func testRunMigration_SaveDataCalled() async {
-        await subject.runMigration(savedTabs: [LegacySavedTab]())
+        _ = await subject.runMigration(savedTabs: [LegacySavedTab]())
         XCTAssertEqual(tabDataStore.saveWindowDataCalledCount, 1)
     }
 
     func testRunMigration_SameAmountOfTabs() async {
         let savedTabs = buildSavedTab(amountOfTabs: 3)
-        await subject.runMigration(savedTabs: savedTabs)
-
-        guard let windowData = tabDataStore.saveWindowData else {
-            XCTFail("Expected to found windowData")
-            return
-        }
-
+        let windowData = await subject.runMigration(savedTabs: savedTabs)
         XCTAssertEqual(windowData.tabData.count, savedTabs.count)
     }
 
     func testRunMigration_EmptyTabs() async {
-        await subject.runMigration(savedTabs: [LegacySavedTab]())
-
-        guard let windowData = tabDataStore.saveWindowData else {
-            XCTFail("Expected to found windowData")
-            return
-        }
-
+        let windowData = await subject.runMigration(savedTabs: [LegacySavedTab]())
         XCTAssertEqual(windowData.tabData.count, 0)
     }
 
     func testRunMigration_FirstTabAsSelected() async {
         let savedTabs = buildSavedTab(amountOfTabs: 3)
-        await subject.runMigration(savedTabs: savedTabs)
-
-        guard let windowData = tabDataStore.saveWindowData else {
-            XCTFail("Expected to found windowData")
-            return
-        }
-
+        let windowData = await subject.runMigration(savedTabs: savedTabs)
         XCTAssertEqual(windowData.activeTabId, selectedTabUUID)
     }
 

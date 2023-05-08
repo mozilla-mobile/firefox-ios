@@ -55,8 +55,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func migrateAndRestore(_ forced: Bool = false) {
         Task {
-            await tabMigration.runMigration(savedTabs: store.tabs)
-            restoreOnly(forced)
+            await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
         }
     }
 
@@ -71,21 +70,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         isRestoringTabs = true
         Task {
-            guard let windowData = await self.tabDataStore.fetchWindowData()
-            else {
-                // Always make sure there is a single normal tab
-                await self.generateEmptyTab()
-                return
-            }
-
-            await self.generateTabs(from: windowData)
-
-            for delegate in self.delegates {
-                delegate.get()?.tabManagerDidRestoreTabs(self)
-            }
-
-            self.isRestoringTabs = false
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
         }
+    }
+
+    private func buildTabRestore(window: WindowData?) async {
+        guard let windowData = window
+        else {
+            // Always make sure there is a single normal tab
+            await generateEmptyTab()
+            return
+        }
+        await generateTabs(from: windowData)
+
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+
+        isRestoringTabs = false
     }
 
     /// Creates the webview so needs to live on the main thread

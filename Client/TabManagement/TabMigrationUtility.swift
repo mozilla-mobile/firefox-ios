@@ -8,7 +8,7 @@ import TabDataStore
 
 protocol TabMigrationUtility {
     var shouldRunMigration: Bool { get }
-    func runMigration(savedTabs: [LegacySavedTab]) async
+    func runMigration(savedTabs: [LegacySavedTab]) async -> WindowData
 }
 
 class DefaultTabMigrationUtility: TabMigrationUtility {
@@ -28,7 +28,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         return shouldRunMigration
     }
 
-    func runMigration(savedTabs: [LegacySavedTab]) async {
+    func runMigration(savedTabs: [LegacySavedTab]) async -> WindowData {
         // Create TabData array from savedTabs
         var tabsToMigrate = [TabData]()
 
@@ -65,5 +65,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData)
         prefs.setBool(false, forKey: migrationKey)
+        return windowData
     }
 }
