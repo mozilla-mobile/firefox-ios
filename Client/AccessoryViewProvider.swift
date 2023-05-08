@@ -100,6 +100,8 @@ class AccessoryViewProvider: UIView, Themeable {
         stackView.addGestureRecognizer(stackViewTapped)
     }
 
+    // MARK: Lifecycle
+
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.themeManager = themeManager
@@ -116,6 +118,17 @@ class AccessoryViewProvider: UIView, Themeable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        // Reset showing of credit card when dismissing the view
+        // This is required otherwise it will always show credit card view
+        // even if the input isn't of type credit card
+        showCreditCard = false
+        setupLayout()
+    }
+
+    // MARK: Layout and Theme
 
     func reloadViewFor(_ accessoryType: AccessoryType) {
         switch accessoryType {

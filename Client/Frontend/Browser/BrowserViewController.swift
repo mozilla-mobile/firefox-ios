@@ -2739,13 +2739,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
-
-        guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
-
-        tabWebView.accessoryView = AccessoryViewProvider()
-        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
-        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
-        tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
