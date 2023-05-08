@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol OnboardingModelProtocol {
+protocol LegacyOnboardingModelProtocol {
     var image: UIImage? { get set }
     var title: String { get set }
     var description: String? { get set }
@@ -16,7 +16,7 @@ protocol OnboardingModelProtocol {
     init(image: UIImage?, title: String, description: String?, linkButtonTitle: String?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
 }
 
-struct OnboardingInfoModel: OnboardingModelProtocol {
+struct LegacyOnboardingInfoModel: LegacyOnboardingModelProtocol {
     var image: UIImage?
     var title: String
     var description: String?
