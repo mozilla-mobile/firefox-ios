@@ -58,4 +58,36 @@ class ArrayExtensionTests: XCTestCase {
         XCTAssertFalse(l.sameElements(m))
         XCTAssertTrue((n?.sameElements(k))!)
     }
+
+    // MARK: - Testing the `.joined` extension
+    func testJoiningNSAttributedStringArray_returnExpectedResult() {
+        let blueFont = [NSAttributedString.Key.foregroundColor: UIColor.blue]
+        let backgroundColour = [NSAttributedString.Key.backgroundColor: UIColor.yellow]
+        let boldFont = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 13)]
+        let italicizedFont = [NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 13)]
+
+        let i = NSAttributedString(string: "Just ", attributes: blueFont)
+        let j = NSAttributedString(string: "a small ", attributes: backgroundColour)
+        let k = NSAttributedString(string: "town ", attributes: boldFont)
+        let l = NSAttributedString(string: "girl!", attributes: italicizedFont)
+        let array = [i, j, k, l]
+
+        let expectedResult = NSMutableAttributedString()
+        expectedResult.append(i)
+        expectedResult.append(j)
+        expectedResult.append(k)
+        expectedResult.append(l)
+
+        let result = array.joined()
+
+        XCTAssertEqual(result, expectedResult)
+        XCTAssertEqual(result.attributes(at: 0, effectiveRange: nil) as? [NSAttributedString.Key: UIColor],
+                       blueFont)
+        XCTAssertEqual(result.attributes(at: 5, effectiveRange: nil) as? [NSAttributedString.Key: UIColor],
+                       backgroundColour)
+        XCTAssertEqual(result.attributes(at: 13, effectiveRange: nil) as? [NSAttributedString.Key: UIFont],
+                       boldFont)
+        XCTAssertEqual(result.attributes(at: 18, effectiveRange: nil) as? [NSAttributedString.Key: UIFont],
+                       italicizedFont)
+    }
 }
