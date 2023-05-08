@@ -4,7 +4,7 @@
 
 import Foundation
 
-public class MarkupParsingUtility {
+final class MarkupParsingUtility {
     private var tokenizer: MarkupTokenizingUtility
     private var openingDelimiters: [UnicodeScalar] = []
 

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum MarkupNode: Equatable {
+enum MarkupNode: Equatable {
     case text(String)
     case bold([MarkupNode])
     case italics([MarkupNode])
