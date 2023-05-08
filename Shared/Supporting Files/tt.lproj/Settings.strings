@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Синхронлау";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Сез барлык %1$@ искәртүләрен сүндердегез. Җиһаз көйләүләре > Искәртүләр > %2$@ бүлегенә кереп, аларны кабызыгыз";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "%@ программасының файдалы үзенчәлекләре һәм аның барлык мөмкинлекләреннән дә файдалану турында мәгълүмат алыгыз";
 
@@ -42,4 +45,10 @@
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Искәртүләр";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "%@ искәртүләрен кабызу өчен җиһаз көйләүләренә керегез";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Искәртүләрне кабызу";
 

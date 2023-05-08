@@ -1,6 +1,9 @@
 /* Setting for closing private tabs */
 "Close Private Tabs" = "Pechar lapelas privadas";
 
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir nun novo separador privado";
+
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox non lembrará nada do seu historial ou cookies, pero si que se gardarán os novos marcadores.";
 

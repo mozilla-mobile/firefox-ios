@@ -408,7 +408,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        zoomPageDidPressClose()
 
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,

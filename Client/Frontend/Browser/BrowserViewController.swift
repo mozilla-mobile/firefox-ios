@@ -1937,8 +1937,6 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         if !CoordinatorFlagManager.isCoordinatorEnabled {
             webView.frame = webViewContainer.frame
-        } else {
-            browserDelegate?.show(webView: webView)
         }
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
@@ -2861,6 +2859,11 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
+        updateZoomPageBarVisibility(visible: false)
+    }
+
+    func topTabsDidPressPrivateMode() {
+        updateZoomPageBarVisibility(visible: false)
     }
 }
 

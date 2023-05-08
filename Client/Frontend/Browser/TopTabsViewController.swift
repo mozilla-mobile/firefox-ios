@@ -25,6 +25,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
     func topTabsDidChangeTab()
+    func topTabsDidPressPrivateMode()
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable {
@@ -179,6 +180,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
 
     @objc
     func togglePrivateModeTapped() {
+        delegate?.topTabsDidPressPrivateMode()
         topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
                                                createTabOnEmptyPrivateMode: true,
                                                shouldSelectMostRecentTab: true)
