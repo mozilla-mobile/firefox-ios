@@ -61,6 +61,7 @@
         "SaveLoginTest\/testDeleteLogin()",
         "SaveLoginTest\/testDoNotSaveLogin()",
         "SaveLoginTest\/testLoginsListFromBrowserTabMenu()",
+        "SaveLoginTest\/testSaveLogin()",
         "SaveLoginTest\/testSavedLoginSelectUnselect()",
         "SaveLoginTest\/testSearchLogin()",
         "ScreenGraphTest",

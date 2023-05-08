@@ -78,6 +78,7 @@ class SaveLoginTest: BaseTestCase {
     }
 
     // Smoketest
+    // Failing on Bitrise stack osx-xcode-14.3.x-ventura (Intel)
     func testSaveLogin() {
         closeURLBar()
         // Initially the login list should be empty

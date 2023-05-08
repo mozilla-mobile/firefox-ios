@@ -12,9 +12,9 @@ stages:
     - configure_build_fennec: {}
   stage_2:
     workflows:
-    # - build_and_test_1_SmokeTest2: {}
-    # - build_and_test_2_SmokeTest: {}
-    # - build_and_test_3_SmokeTest3: {}
+    - build_and_test_1_SmokeTest2: {}
+    - build_and_test_2_SmokeTest: {}
+    - build_and_test_3_SmokeTest3: {}
     - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec:
@@ -80,16 +80,16 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        # - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
-    # - script@1.1:
-    #    title: Run Danger 2
-    #    inputs:
-    #    - content: |
-    #        #!/usr/bin/env bash
-    #        # Fail if any command fails
-    #        set -e
-    #        echo "Run danger"
-    #        swift run danger-swift ci
+        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
+    - script@1.1:
+        title: Run Danger 2
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            echo "Run danger"
+            swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -142,7 +142,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.4core
   build_and_test_1_SmokeTest2:
     before_run:
     - 1_git_clone_and_post_clone
@@ -319,7 +319,6 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"
-            "-only-testing:XCUITests/SaveLoginTest/testSaveLogin"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -1451,10 +1450,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '115.0'
+    BITRISE_RELEASE_VERSION: '114.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '115.0'
+    BITRISE_BETA_VERSION: '114.0'
 
 meta:
   bitrise.io:
@@ -1466,7 +1465,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v115
+- push_branch: release/v114
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
