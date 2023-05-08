@@ -67,7 +67,8 @@
       "proposedDuration": 28,
       "proposedEnrollment": 14,
       "referenceBranch": "control",
-      "featureValidationOptOut": false
+      "featureValidationOptOut": false,
+      "localizations": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -120,7 +121,8 @@
       "proposedDuration": 28,
       "proposedEnrollment": 7,
       "referenceBranch": "treatment-a",
-      "featureValidationOptOut": false
+      "featureValidationOptOut": false,
+      "localizations": null
     }
   ]
 }
