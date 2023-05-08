@@ -13,6 +13,9 @@
 /* Button label for closing the view where user can view their credit card info */
 "CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "Schließen";
 
+/* Label for concealing contents of the credit card number */
+"CreditCard.EditCard.ConcealLabel.v114" = "Verbergen";
+
 /* Label for copying contents of the form */
 "CreditCard.EditCard.CopyLabel.v113" = "Kopieren";
 
@@ -30,6 +33,9 @@
 
 /* Title label for button that allows user to remove their saved credit card. */
 "CreditCard.EditCard.RemoveCardButtonTitle.v112" = "Karte entfernen";
+
+/* Label for revealing the contents of the credit card number */
+"CreditCard.EditCard.RevealLabel.v114" = "Anzeigen";
 
 /* Title label for user to pick a credit card from the list below to be updated. */
 "CreditCard.EditCard.SavedCardListTitle.v112" = "GESPEICHERTE KARTEN";

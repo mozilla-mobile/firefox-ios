@@ -10,19 +10,16 @@ import UIKit
 @testable import Client
 
 class SurveySurfaceManagerTests: XCTestCase {
-    private var homepanelDelegate: MockHomePanelDelegate!
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        homepanelDelegate = MockHomePanelDelegate()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
     override func tearDown() {
         super.tearDown()
-        homepanelDelegate = nil
         messageManager = nil
     }
 
@@ -121,7 +118,6 @@ extension SurveySurfaceManagerTests {
                        line: UInt = #line
     ) -> SurveySurfaceManager {
         let subject = SurveySurfaceManager(and: messageManager)
-        subject.homepanelDelegate = homepanelDelegate
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -162,23 +158,5 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
 
     init(surface: MessageSurfaceId = .survey) {
         self.surface = surface
-    }
-}
-
-// MARK: - MockHomePanelDelegate
-class MockHomePanelDelegate: HomePanelDelegate {
-    func homePanel(didSelectURL url: URL, visitType: Storage.VisitType, isGoogleTopSite: Bool) {
-    }
-
-    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
-    }
-
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-    }
-
-    func homePanelDidPresentContextualHintOf(type: ContextualHintType) {
-    }
-
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
     }
 }

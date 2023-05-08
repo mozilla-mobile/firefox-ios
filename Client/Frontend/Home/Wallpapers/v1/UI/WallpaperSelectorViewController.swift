@@ -27,7 +27,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
                                                                    size: 17)
         label.adjustsFontForContentSizeCategory = true
-        label.text = .Onboarding.WallpaperSelectorTitle
+        label.text = .Onboarding.Wallpaper.SelectorTitle
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.title
@@ -37,7 +37,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: 12)
         label.adjustsFontForContentSizeCategory = true
-        label.text = .Onboarding.WallpaperSelectorDescription
+        label.text = .Onboarding.Wallpaper.SelectorDescription
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.description

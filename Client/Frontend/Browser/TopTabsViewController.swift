@@ -11,7 +11,7 @@ import Common
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
-    static let MinTabWidth: CGFloat = 76
+    static let MinTabWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 130 : 76
     static let MaxTabWidth: CGFloat = 220
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
@@ -162,30 +162,19 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
                                   forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
-    func switchForegroundStatus(isInForeground reveal: Bool) {
-        // Called when the app leaves the foreground to make sure no information is inadvertently revealed
-        if let cells = self.collectionView.visibleCells as? [TopTabCell] {
-            let alpha: CGFloat = reveal ? 1 : 0
-            for cell in cells {
-                cell.titleText.alpha = alpha
-                cell.favicon.alpha = alpha
-            }
-        }
-    }
-
     func updateTabCount(_ count: Int, animated: Bool = true) {
-        self.tabsButton.updateTabCount(count, animated: animated)
+        tabsButton.updateTabCount(count, animated: animated)
     }
 
     @objc
     func tabsTrayTapped() {
-        self.topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
     @objc
     func newTabTapped() {
-        self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
+        delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
     @objc

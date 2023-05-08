@@ -175,8 +175,6 @@ class MockStyleDataProtocol: StyleDataProtocol {
 
 // MARK: - MockGleanPlumbMessageManagerProtocol
 class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
-    weak var pressedDelegate: GleanPlumbMessagePressedDelegate?
-
     func onStartup() {}
 
     var message: GleanPlumbMessage?

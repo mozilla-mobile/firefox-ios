@@ -21,7 +21,7 @@ class RouteTests: XCTestCase {
     func testSearchRouteWithUrl() {
         let url = URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!
         let route = routeBuilder.makeRoute(url: url)
-        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!, isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!, isPrivate: false, options: [.focusLocationField]))
     }
 
     func testSearchRouteWithEncodedUrl() {
@@ -123,7 +123,7 @@ class RouteTests: XCTestCase {
     func testFxaSignInrouteBuilderRoute() {
         let url = URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!
         let route = routeBuilder.makeRoute(url: url)
-        XCTAssertEqual(route, .fxaSignIn(FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["signin": "coolcodes", "user": "foo", "email": "bar"])))
+        XCTAssertEqual(route, .fxaSignIn(params: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["signin": "coolcodes", "user": "foo", "email": "bar"])))
     }
 
     func testInvalidScheme() {
@@ -160,7 +160,7 @@ class RouteTests: XCTestCase {
         UIPasteboard.general.string = "test search text"
         let url = URL(string: "firefox://widget-small-quicklink-open-copied")!
         let route = routeBuilder.makeRoute(url: url)
-        XCTAssertEqual(route, .search(query: "test search text"))
+        XCTAssertEqual(route, .searchQuery(query: "test search text"))
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -215,6 +215,6 @@ class RouteTests: XCTestCase {
     func testOpenText() {
         let url = URL(string: "firefox://open-text?text=google")!
         let route = routeBuilder.makeRoute(url: url)
-        XCTAssertEqual(route, .search(query: "google"))
+        XCTAssertEqual(route, .searchQuery(query: "google"))
     }
 }

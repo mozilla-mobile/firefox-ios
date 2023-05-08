@@ -25,3 +25,8 @@ tasks:
                 - type: file
                   name: public/build/target.zip
                   path: /builds/worker/artifacts/l10n-screenshots-dd.zip
+        treeherder:
+            symbol: B(screenshots)
+            kind: build
+            tier: 1
+            platform: ios/opt

@@ -4,8 +4,6 @@
 
 import UIKit
 
-private let imageLock = NSLock()
-
 extension CGRect {
     public init(width: CGFloat, height: CGFloat) {
         self.init(x: 0, y: 0, width: width, height: height)
@@ -23,16 +21,6 @@ extension Data {
 }
 
 extension UIImage {
-    /// Despite docs that say otherwise, UIImage(data: NSData) isn't thread-safe (see bug 1223132).
-    /// As a workaround, synchronize access to this initializer.
-    /// This fix requires that you *always* use this over UIImage(data: NSData)!
-    public static func imageFromDataThreadSafe(_ data: Data) -> UIImage? {
-        imageLock.lock()
-        let image = UIImage(data: data)
-        imageLock.unlock()
-        return image
-    }
-
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsImageRenderer(size: size).image { (ctx) in
             color.setFill()

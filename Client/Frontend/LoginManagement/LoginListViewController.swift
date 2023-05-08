@@ -171,7 +171,11 @@ class LoginListViewController: SensitiveViewController, Themeable {
         super.viewDidAppear(animated)
 
         guard settingsDelegate != nil else {
-            settingsDelegate = sceneForVC?.browserViewController
+            if CoordinatorFlagManager.isCoordinatorEnabled {
+                settingsDelegate = sceneForVC?.coordinatorBrowserViewController
+            } else {
+                settingsDelegate = sceneForVC?.browserViewController
+            }
 
             return
         }
@@ -421,6 +425,11 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
+    }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // Prevent row selection for logins settings section
+        indexPath.section == LoginListViewController.loginsSettingsSection ? nil : indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

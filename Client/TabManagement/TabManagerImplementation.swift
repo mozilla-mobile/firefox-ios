@@ -13,6 +13,7 @@ import Shared
 class TabManagerImplementation: LegacyTabManager {
     let tabDataStore: TabDataStore
     let tabSessionStore: TabSessionStore
+    let imageStore: DiskImageStore?
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
@@ -22,6 +23,7 @@ class TabManagerImplementation: LegacyTabManager {
          tabSessionStore: TabSessionStore = DefaultTabSessionStore()) {
         self.tabDataStore = tabDataStore
         self.tabSessionStore = tabSessionStore
+        self.imageStore = imageStore
         super.init(profile: profile, imageStore: imageStore)
     }
 
@@ -44,15 +46,14 @@ class TabManagerImplementation: LegacyTabManager {
 
         isRestoringTabs = true
         Task {
-            let windowData = await self.tabDataStore.fetchAllWindowsData()
-            guard !windowData.isEmpty, let firstWindow = windowData.first
+            guard let windowData = await self.tabDataStore.fetchWindowData()
             else {
                 // Always make sure there is a single normal tab
-                self.generateEmptyTab()
+                await self.generateEmptyTab()
                 return
             }
 
-            await self.generateTabs(from: firstWindow)
+            await self.generateTabs(from: windowData)
 
             for delegate in self.delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
@@ -81,15 +82,27 @@ class TabManagerImplementation: LegacyTabManager {
                                                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
             newTab.metadataManager?.tabGroupData = groupData
 
+            // Restore screenshot
+            restoreScreenshot(tab: newTab)
+
             if windowData.activeTabId == tabData.id {
                 selectTab(newTab)
             }
         }
     }
 
+    /// Creates the webview so needs to live on the main thread
+    @MainActor
     private func generateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
+    }
+
+    private func restoreScreenshot(tab: Tab) {
+        Task {
+            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
+            tab.setScreenshot(screenshot)
+        }
     }
 
     // MARK: - Save tabs
@@ -102,7 +115,9 @@ class TabManagerImplementation: LegacyTabManager {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            let windowData = WindowData(activeTabId: activeTabID,
+            // Hard coding the window ID until we later add multi-window support
+            let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
+                                        activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData)
         }
@@ -153,10 +168,71 @@ class TabManagerImplementation: LegacyTabManager {
         }
     }
 
+    // MARK: - Select Tab
+    override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        guard shouldUseNewTabStore(),
+              let tab = tab,
+              let tabUUID = UUID(uuidString: tab.tabUUID)
+        else {
+            super.selectTab(tab, previous: previous)
+            return
+        }
+
+        guard tab.tabUUID != selectedTab?.tabUUID else { return }
+
+        Task {
+            let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+            await selectTabWithSession(tab: tab,
+                                       previous: previous,
+                                       sessionData: sessionData)
+        }
+    }
+
+    @MainActor
+    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+        super.selectTab(tab, previous: previous, sessionData: sessionData)
+    }
+
     private func shouldUseNewTabStore() -> Bool {
         if #available(iOS 15, *), isNewTabStoreEnabled {
             return true
         }
         return false
+    }
+
+    // MARK: - Save screenshot
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard shouldUseNewTabStore()
+        else {
+            super.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
+            return
+        }
+
+        storeScreenshot(tab: tab)
+    }
+
+    override func storeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore(),
+              let screenshot = tab.screenshot
+        else {
+            super.storeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+        }
+    }
+
+    override func removeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore()
+        else {
+            super.removeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            await imageStore?.deleteImageForKey(tab.tabUUID)
+        }
     }
 }

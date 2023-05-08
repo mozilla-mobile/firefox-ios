@@ -68,7 +68,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     // Backdrop used for displaying greyed background for private tabs
     var backgroundPrivacyOverlay = UIView()
     var collectionView: UICollectionView!
-    var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     var notificationCenter: NotificationProtocol
     var contextualHintViewController: ContextualHintViewController
     var themeManager: ThemeManager

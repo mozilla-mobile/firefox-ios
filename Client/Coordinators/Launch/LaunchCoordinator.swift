@@ -7,11 +7,10 @@ import Foundation
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishLaunch(from coordinator: LaunchCoordinator)
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
+class LaunchCoordinator: BaseCoordinator {
     private let profile: Profile
     private let logger: Logger
     private let isIphone: Bool
@@ -54,7 +53,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
-            router.setRootViewController(introViewController, hideBar: true)
+            router.present(introViewController, animated: false)
         } else {
             introViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
@@ -75,7 +74,7 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
         if isFullScreen {
             updateViewController.modalPresentationStyle = .fullScreen
-            router.setRootViewController(updateViewController, hideBar: true)
+            router.present(updateViewController, animated: false)
         } else {
             updateViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
@@ -113,18 +112,11 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
             return
         }
         surveySurface.modalPresentationStyle = .fullScreen
-        manager.openURLDelegate = self
         manager.dismissClosure = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
-        router.setRootViewController(surveySurface, hideBar: true)
-    }
-
-    // MARK: OpenURLDelegate
-
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        parentCoordinator?.didRequestToOpenInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        router.present(surveySurface, animated: false)
     }
 }

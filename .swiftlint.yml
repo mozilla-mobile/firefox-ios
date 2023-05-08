@@ -119,5 +119,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - BrowserKit/Package.swift
   - content-blocker-lib-ios/ContentBlockerGenerator/Package.swift
 
+included:
+  - /Users/vagrant/git
+  - .
+
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

@@ -1,7 +1,7 @@
 import json
 
-PERFHERDER_DATA = {"framework": 'mozperftest',
-                   "application": {"name": 'fennec'},
+PERFHERDER_DATA = {"framework": {"name":"mozperftest"},
+                   "application": {"name": "fennec"},
                    "suites": []
                    }
 
@@ -16,6 +16,7 @@ with open('test.json') as json_file:
                 subtest = {}
                 subtest["name"] = key
                 subtest["replicates"] = [value]
+                subtest["value"] = float(value)
                 suite["subtests"].append(subtest)
         PERFHERDER_DATA["suites"].append(suite)
 
