@@ -29,7 +29,6 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(browser.staticTexts["Password:"])
         XCTAssertNotNil(browser.secureTextFields.firstMatch.value)
         waitForExistence(app.buttons["submit"], timeout: 10)
-        XCTAssertEqual(1,2)
         app.buttons["submit"].tap()
         waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
