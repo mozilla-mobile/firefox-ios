@@ -57,7 +57,6 @@ class CreditCardHelper: TabContentScript {
         guard let payload = parseFieldType(messageBody: data)?.payload else { return }
         foundFieldValues?(getFieldTypeValues(payload: payload))
     }
-    
 
     func parseFieldType(messageBody: [String: Any]) -> FillCreditCardForm? {
         let decoder = JSONDecoder()
@@ -76,7 +75,6 @@ class CreditCardHelper: TabContentScript {
 
         return nil
     }
-    
 
     func getFieldTypeValues(payload: Payload) -> UnencryptedCreditCardFields {
         var ccPlainText = UnencryptedCreditCardFields()
