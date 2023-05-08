@@ -117,7 +117,7 @@ class RecordTests: XCTestCase {
         let noPayloadGUIDRecordString = JSON(noPayloadGUIDRecord).stringify()!
 
         // And this is a valid record.
-        let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
+        let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [String](), "type": "mobile"]
         let clientBodyString = JSON(clientBody).stringify()!
         let clientRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(clientRecord).stringify()!

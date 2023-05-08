@@ -9,7 +9,7 @@ class DictionaryExtensionsTests: XCTestCase {
     // MARK: - asString
 
     func test_asString_emptyDictionary_returnsEmptyString() {
-        let dictionaryResult = [:].asString
+        let dictionaryResult = [String: String]().asString
         XCTAssertNotNil(dictionaryResult)
         XCTAssertEqual(dictionaryResult, "{\n\n}")
     }

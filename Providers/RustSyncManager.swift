@@ -188,7 +188,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         if canSendUsageData() {
-            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) {_ in }
+            let gleanHelper = GleanSyncOperationHelper()
+            gleanHelper.reportTelemetry(result)
         } else {
             logger.log("Profile isn't sending usage data. Not sending sync status event.",
                        level: .debug,
@@ -391,8 +392,7 @@ public class RustSyncManager: NSObject, SyncManager {
                             deviceSettings: DeviceSettings(
                                 fxaDeviceId: device.id,
                                 name: device.displayName,
-                                kind: self.toSyncManagerDeviceType(
-                                    deviceType: device.deviceType)))
+                                kind: device.deviceType))
 
                         self.beginSyncing()
                         self.syncManagerAPI.sync(params: params) { syncResult in
@@ -452,23 +452,6 @@ public class RustSyncManager: NSObject, SyncManager {
             }
         }
         return deferred
-    }
-
-    private func toSyncManagerDeviceType(deviceType: DeviceType) -> SyncManagerDeviceType {
-        switch deviceType {
-        case .desktop:
-            return SyncManagerDeviceType.desktop
-        case .mobile:
-            return SyncManagerDeviceType.mobile
-        case .tablet:
-            return SyncManagerDeviceType.tablet
-        case .vr:
-            return SyncManagerDeviceType.vr
-        case .tv:
-            return SyncManagerDeviceType.tv
-        case .unknown:
-            return SyncManagerDeviceType.unknown
-        }
     }
 
     @discardableResult

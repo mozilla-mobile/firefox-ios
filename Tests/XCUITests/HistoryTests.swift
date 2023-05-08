@@ -138,9 +138,7 @@ class HistoryTests: BaseTestCase {
         // On private mode, the closed tab on regular mode is listed in "Recently Closed Tabs List" as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
-            closeKeyboard()
-        }
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -158,9 +156,7 @@ class HistoryTests: BaseTestCase {
         // "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            closeKeyboard()
-        }
+        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -304,9 +300,7 @@ class HistoryTests: BaseTestCase {
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
-        if !iPad() {
-            closeKeyboard()
-        }
+        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -317,9 +311,7 @@ class HistoryTests: BaseTestCase {
         // On regular mode, the "Recently Closed Tabs List" is empty, too
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.goto(NewTabScreen)
-        if !iPad() {
-            closeKeyboard()
-        }
+        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])

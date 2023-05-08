@@ -1955,7 +1955,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 tabWebView.accessoryView.reloadViewFor(.creditCard)
                 tabWebView.reloadInputViews()
 
-                // stub. Action will be to present a half sheet, https://mozilla-hub.atlassian.net/browse/FXIOS-6111
+                // stub. Action will be to present a half sheet, ref: FXIOS-6111
                 tabWebView.accessoryView.savedCardsClosure = { }
             }
         }

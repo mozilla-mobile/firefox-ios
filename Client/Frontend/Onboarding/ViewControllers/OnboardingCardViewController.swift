@@ -286,7 +286,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private func updateLayout() {
         titleLabel.text = viewModel.infoModel.title
         descriptionBoldLabel.isHidden = !viewModel.shouldShowDescriptionBold
-        descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
+        descriptionBoldLabel.text = .Onboarding.Intro.DescriptionPart1
         descriptionLabel.isHidden = viewModel.infoModel.description?.isEmpty ?? true
         descriptionLabel.text = viewModel.infoModel.description
 

@@ -48,7 +48,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.cornerRadius
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: 19)
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
@@ -78,9 +78,12 @@ class PhotonActionSheet: UIViewController, Themeable {
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
 
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
-              let screenshot = sceneDelegate.window?.screenshot() {
-            windowScreenshot = screenshot
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            if CoordinatorFlagManager.isCoordinatorEnabled, let screenshot = sceneDelegate.sceneCoordinator?.window?.screenshot() {
+                windowScreenshot = screenshot
+            } else if let screenshot = sceneDelegate.window?.screenshot() {
+                windowScreenshot = screenshot
+            }
         }
     }
 

@@ -7,11 +7,10 @@ import Foundation
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishLaunch(from coordinator: LaunchCoordinator)
-    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool)
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
+class LaunchCoordinator: BaseCoordinator {
     private let profile: Profile
     private let logger: Logger
     private let isIphone: Bool
@@ -113,18 +112,11 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
             return
         }
         surveySurface.modalPresentationStyle = .fullScreen
-        manager.openURLDelegate = self
         manager.dismissClosure = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
         router.present(surveySurface, animated: false)
-    }
-
-    // MARK: OpenURLDelegate
-
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool) {
-        parentCoordinator?.didRequestToOpenInNewTab(from: self, url: url, isPrivate: isPrivate)
     }
 }

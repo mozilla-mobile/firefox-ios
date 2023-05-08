@@ -81,3 +81,14 @@ public extension Collection {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
+public extension Array where Element: NSAttributedString {
+    /// If the array is made up of `NSAttributedStrings`, this allows the reduction
+    /// of the array into a single `NSAttributedString`.
+    func joined() -> NSAttributedString {
+        return self.reduce(NSMutableAttributedString()) { result, element in
+            result.append(element)
+            return result
+        }
+    }
+}

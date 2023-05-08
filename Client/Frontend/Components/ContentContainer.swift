@@ -52,16 +52,26 @@ class ContentContainer: UIView {
     }
 
     /// Add content view controller to the container, we remove the previous content if present before adding new one
-    /// - Parameter viewController: The view controller to add
+    /// - Parameter content: The view controller to add
     func add(content: ContentContainable) {
         removePreviousContent()
         saveContentType(content: content)
         addToView(content: content)
     }
 
+    /// Update content in the container. This is used in the case of the webview since it's not removed, we don't need to add it back again.
+    /// - Parameter content: The content to update
+    func update(content: ContentContainable) {
+        removePreviousContent()
+        saveContentType(content: content)
+    }
+
     // MARK: - Private
 
     private func removePreviousContent() {
+        // Only remove previous content when it's the homepage. We're not remving the webview controller for now
+        // since if it's not loaded, the webview doesn't layout it's WKCompositingView which result in black screen
+        guard type == .homepage else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()
