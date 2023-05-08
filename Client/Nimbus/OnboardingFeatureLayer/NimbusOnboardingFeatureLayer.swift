@@ -16,7 +16,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingViewModel(
             cards: getOrderedOnboardingCards(from: framework.cards,
                                              using: framework.cardOrdering),
-            dismissable: framework.dismissable)
+            isDismissable: framework.dismissable)
     }
 
     /// Will sort onboarding cards according to specified order in the
