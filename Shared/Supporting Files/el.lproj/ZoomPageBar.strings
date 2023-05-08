@@ -1,3 +1,9 @@
+/* Accessibility label for closing the zoom panel in Zoom Page Bar */
+"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Κλείσιμο πίνακα ζουμ";
+
+/* Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level */
+"Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Τρέχον επίπεδο ζουμ: %@";
+
 /* Accessibility label for decreasing the zoom level in Zoom Page Bar */
 "Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113" = "Μείωση επιπέδου ζουμ";
 
