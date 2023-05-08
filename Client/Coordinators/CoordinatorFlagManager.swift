@@ -9,7 +9,6 @@ import Shared
 /// This will be removed with FXIOS-6036
 struct CoordinatorFlagManager {
     static var isCoordinatorEnabled: Bool {
-        return true
         return FeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
                                                            checking: .buildOnly)
     }
