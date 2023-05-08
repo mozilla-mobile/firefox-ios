@@ -823,10 +823,15 @@ class BrowserViewController: UIViewController {
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
-        remake.left.equalTo(view.safeArea.left)
-        remake.right.equalTo(view.safeArea.right)
-        remake.centerX.equalTo(view)
-        remake.width.equalTo(view.safeArea.width)
+        if let zoomPageBar = zoomPageBar,
+           bottomContentStackView.subviews.contains(zoomPageBar) {
+            remake.leading.trailing.equalToSuperview()
+        } else {
+            remake.left.equalTo(view.safeArea.left)
+            remake.right.equalTo(view.safeArea.right)
+            remake.centerX.equalTo(view)
+            remake.width.equalTo(view.safeArea.width)
+        }
 
         // Height is set by content - this removes run time error
         remake.height.greaterThanOrEqualTo(0)
