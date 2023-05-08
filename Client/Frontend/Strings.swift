@@ -994,31 +994,21 @@ extension String {
                 tableName: "Onboarding",
                 value: "Switch Your Default Browser",
                 comment: "The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let FirstLabel = MZLocalizedString(
+            public static let FirstInstruction = MZLocalizedString(
                 key: "DefaultBrowserPopup.FirstLabel.v114",
                 tableName: "Onboarding",
-                value: "1. Go to Settings",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let FirstLabelBoldTranslation = MZLocalizedString(
-                key: "DefaultBrowserPopup.FirstLabelBoldTranslation.v114",
-                tableName: "Onboarding",
-                value: "Settings",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This text is used to find the 'Settings' translated string in the 'Go to Settings' label, in order to bold just that text.")
-            public static let SecondLabel = MZLocalizedString(
+                value: "1. Go to *Settings*",
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let SecondInstruction = MZLocalizedString(
                 key: "DefaultBrowserPopup.SecondLabel.v114",
                 tableName: "Onboarding",
-                value: "2. Tap Default Browser App",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let SecondLabelBoldTranslation = MZLocalizedString(
-                key: "DefaultBrowserPopup.SecondLabelBoldTranslation.v114",
-                tableName: "Onboarding",
-                value: "Default Browser App",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. This text is used to find 'Default Browser App' in the 'Tap Default Browser App' string for bolding the text in the second label.")
-            public static let ThirdLabel = MZLocalizedString(
+                value: "2. Tap *Default Browser App*",
+                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let ThirdInstruction = MZLocalizedString(
                 key: "DefaultBrowserPopup.ThirdLabel.v114",
                 tableName: "Onboarding",
-                value: "3. Select %@",
-                comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name.")
+                value: "3. Select *%@*",
+                comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
             public static let ButtonTitle = MZLocalizedString(
                 key: "DefaultBrowserPopup.ButtonTitle.v114",
                 tableName: "Onboarding",
