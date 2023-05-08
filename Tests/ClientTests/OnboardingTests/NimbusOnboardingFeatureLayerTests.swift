@@ -36,7 +36,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         let layer = NimbusOnboardingFeatureLayer()
         let subject = layer.getOnboardingModel()
 
-        XCTAssertTrue(subject.dismissable)
+        XCTAssertTrue(subject.isDismissable)
     }
 
     func testLayer_dismissable_isFalse() {
@@ -44,7 +44,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         let layer = NimbusOnboardingFeatureLayer()
         let subject = layer.getOnboardingModel()
 
-        XCTAssertFalse(subject.dismissable)
+        XCTAssertFalse(subject.isDismissable)
     }
 
     // MARK: - Test card(s) being returned
