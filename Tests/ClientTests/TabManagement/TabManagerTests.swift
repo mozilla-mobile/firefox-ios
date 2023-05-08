@@ -20,6 +20,7 @@ class TabManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
