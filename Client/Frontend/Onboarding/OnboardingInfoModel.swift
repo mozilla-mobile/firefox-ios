@@ -9,11 +9,12 @@ protocol OnboardingModelProtocol {
     var title: String { get set }
     var description: String? { get set }
     var linkButtonTitle: String? { get set }
+    var stepsArray: [OnboardingBoldableString]? { get set }
     var primaryAction: String { get set }
     var secondaryAction: String? { get set }
     var a11yIdRoot: String { get set }
 
-    init(image: UIImage?, title: String, description: String?, linkButtonTitle: String?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
+    init(image: UIImage?, title: String, description: String?, linkButtonTitle: String?, stepsArray: [OnboardingBoldableString]?, primaryAction: String, secondaryAction: String?, a11yIdRoot: String)
 }
 
 struct OnboardingInfoModel: OnboardingModelProtocol {
@@ -21,6 +22,7 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
     var title: String
     var description: String?
     var linkButtonTitle: String?
+    var stepsArray: [OnboardingBoldableString]?
     var primaryAction: String
     var secondaryAction: String?
     var a11yIdRoot: String
@@ -29,6 +31,7 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
          title: String,
          description: String?,
          linkButtonTitle: String?,
+         stepsArray: [OnboardingBoldableString]?,
          primaryAction: String,
          secondaryAction: String?,
          a11yIdRoot: String
@@ -37,8 +40,22 @@ struct OnboardingInfoModel: OnboardingModelProtocol {
         self.title = title
         self.description = description
         self.linkButtonTitle = linkButtonTitle
+        self.stepsArray = stepsArray
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
         self.a11yIdRoot = a11yIdRoot
+    }
+}
+
+struct OnboardingBoldableString {
+    var textToBold: String
+    var fullString: String
+
+    func bold(_ textToBold: String, in fullString: String, withFontSize size: CGFloat) -> NSAttributedString {
+        let attributedText = NSMutableAttributedString(string: fullString)
+        let range = (fullString as NSString).range(of: textToBold)
+        let boldFontAttribute = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: size)]
+        attributedText.addAttributes(boldFontAttribute, range: range)
+        return attributedText
     }
 }

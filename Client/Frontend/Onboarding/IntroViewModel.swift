@@ -71,6 +71,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        title: .Onboarding.IntroWelcomeTitle,
                                        description: .Onboarding.IntroWelcomeDescription,
                                        linkButtonTitle: .Onboarding.IntroLinkButtonTitle,
+                                       stepsArray: [OnboardingBoldableString(textToBold: "Settings", fullString: "1. Go to Settings"), OnboardingBoldableString(textToBold: "Default Browser App", fullString: "2. Tap Default Browser App"), OnboardingBoldableString(textToBold: "Firefox", fullString: "3. Select Firefox")],
                                        primaryAction: .Onboarding.IntroAction,
                                        secondaryAction: .Onboarding.IntroSecondaryAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
@@ -79,6 +80,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        title: .Onboarding.IntroSyncTitle,
                                        description: .Onboarding.IntroSyncDescription,
                                        linkButtonTitle: nil,
+                                       stepsArray: nil,
                                        primaryAction: .IntroSignInButtonTitle,
                                        secondaryAction: .Onboarding.IntroSyncSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
@@ -88,6 +90,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        title: String(format: .Onboarding.IntroNotificationTitle, shortName),
                                        description: String(format: .Onboarding.IntroNotificationDescription, shortName),
                                        linkButtonTitle: nil,
+                                       stepsArray: nil,
                                        primaryAction: .Onboarding.IntroNotificationContinueAction,
                                        secondaryAction: .Onboarding.IntroNotificationSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
