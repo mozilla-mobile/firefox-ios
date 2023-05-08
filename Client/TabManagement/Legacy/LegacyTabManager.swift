@@ -975,6 +975,10 @@ extension LegacyTabManager: WKNavigationDelegate {
                 return
             }
 
+            if let title = webView.title {
+                selectedTab?.lastTitle = title
+            }
+
             storeChanges()
         }
     }

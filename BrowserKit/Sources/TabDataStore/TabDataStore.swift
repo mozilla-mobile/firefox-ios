@@ -6,8 +6,15 @@ import Foundation
 import Common
 
 public protocol TabDataStore {
+    /// Fetches the previously saved window data (this contains the list of tabs) from disk, if it exists
+    /// - Returns: The window data object if one was previously saved
     func fetchWindowData() async -> WindowData?
+
+    /// Saves the window data (contains the list of tabs) to disk
+    /// - Parameter window: the window data object to be saved
     func saveWindowData(window: WindowData) async
+
+    /// Erases all window data on disk
     func clearAllWindowsData() async
 }
 

@@ -10,21 +10,27 @@ import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
-class TabManagerImplementation: LegacyTabManager {
-    let tabDataStore: TabDataStore
-    let tabSessionStore: TabSessionStore
-    let imageStore: DiskImageStore?
+class TabManagerImplementation: LegacyTabManager, Notifiable {
+    private let tabDataStore: TabDataStore
+    private let tabSessionStore: TabSessionStore
+    private let imageStore: DiskImageStore?
+    var notificationCenter: NotificationProtocol
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
-         tabSessionStore: TabSessionStore = DefaultTabSessionStore()) {
+         tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabDataStore = tabDataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
+        self.notificationCenter = notificationCenter
         super.init(profile: profile, imageStore: imageStore)
+
+        setupNotifications(forObserver: self,
+                           observing: [UIApplication.willResignActiveNotification])
     }
 
     // MARK: - Restore tabs
@@ -132,7 +138,7 @@ class TabManagerImplementation: LegacyTabManager {
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
             return TabData(id: UUID(uuidString: tab.tabUUID) ?? UUID(),
-                           title: tab.title ?? tab.lastTitle,
+                           title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
@@ -153,10 +159,10 @@ class TabManagerImplementation: LegacyTabManager {
 
         saveTabs(toProfile: profile, normalTabs)
         preserveTabs()
-        saveIndividualTabSessionData()
+        saveCurrentTabSessionData()
     }
 
-    private func saveIndividualTabSessionData() {
+    private func saveCurrentTabSessionData() {
         guard #available(iOS 15.0, *),
               let selectedTab = self.selectedTab,
               let tabSession = selectedTab.webView?.interactionState as? Data,
@@ -179,6 +185,9 @@ class TabManagerImplementation: LegacyTabManager {
         }
 
         guard tab.tabUUID != selectedTab?.tabUUID else { return }
+
+        // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
+        saveCurrentTabSessionData()
 
         Task {
             let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
@@ -233,6 +242,17 @@ class TabManagerImplementation: LegacyTabManager {
 
         Task {
             await imageStore?.deleteImageForKey(tab.tabUUID)
+        }
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willResignActiveNotification:
+            saveCurrentTabSessionData()
+        default:
+            break
         }
     }
 }
