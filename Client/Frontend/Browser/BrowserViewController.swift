@@ -63,7 +63,6 @@ class BrowserViewController: UIViewController {
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
-    var reloadAccessoryForCreditCardTimer = 0.2
     var currentMiddleButtonState: MiddleButtonState?
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
@@ -1006,21 +1005,31 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
-    func embedContent(_ viewController: ContentContainable, forceEmbed: Bool = false) {
-        guard contentContainer.canAdd(content: viewController) || forceEmbed else { return }
+    // MARK: - Manage embedded content
+
+    func frontEmbeddedContent(_ viewController: ContentContainable) {
+        contentContainer.update(content: viewController)
+        manageStatusBarEmbedded()
+    }
+
+    func embedContent(_ viewController: ContentContainable) {
+        guard contentContainer.canAdd(content: viewController) else { return }
 
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+        manageStatusBarEmbedded()
 
-        // Status bar overlay at the back for some content type that need extended content
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+    }
+
+    /// Status bar overlay needs to be at the back for some content type that need extended content
+    private func manageStatusBarEmbedded() {
         if let type = contentContainer.type, type.needTopContentExtended {
             view.sendSubviewToBack(statusBarOverlay)
         } else {
             view.bringSubviewToFront(statusBarOverlay)
         }
-
-        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
 
     /// Show the home page embedded in the contentContainer
@@ -1044,7 +1053,12 @@ class BrowserViewController: UIViewController {
         // Make sure reload button is working when showing webview
         urlBar.locationView.reloadButton.reloadButtonState = .reload
 
-        browserDelegate?.show(webView: nil)
+        guard let webview = tabManager.selectedTab?.webView else {
+            logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
+            return
+        }
+
+        browserDelegate?.show(webView: webview)
     }
 
     // FXIOS-6036 - Remove this function as part of cleanup
@@ -1136,6 +1150,8 @@ class BrowserViewController: UIViewController {
         // Make sure reload button is working after leaving homepage
         urlBar.locationView.reloadButton.reloadButtonState = .reload
     }
+
+    // MARK: - Update content
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
@@ -1922,8 +1938,6 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         if !CoordinatorFlagManager.isCoordinatorEnabled {
             webView.frame = webViewContainer.frame
-        } else {
-            browserDelegate?.show(webView: webView)
         }
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
@@ -2005,7 +2019,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [unowned self] in
-            tab.cancelQueuedAlerts()
             KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
             webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
             webView.uiDelegate = nil
@@ -2173,8 +2186,6 @@ extension BrowserViewController {
         defer { self.view.alpha = 1.0 }
 
         surveySurfaceManager = SurveySurfaceManager()
-        surveySurfaceManager?.homepanelDelegate = self
-
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil
         }
@@ -2731,8 +2742,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
 
-        tabWebView.accessoryView.reloadViewFor(.standard)
-        tabWebView.reloadInputViews()
+        tabWebView.accessoryView = AccessoryViewProvider()
+        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
+        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
+        tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -2867,6 +2880,11 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
+        updateZoomPageBarVisibility(visible: false)
+    }
+
+    func topTabsDidPressPrivateMode() {
+        updateZoomPageBarVisibility(visible: false)
     }
 }
 
