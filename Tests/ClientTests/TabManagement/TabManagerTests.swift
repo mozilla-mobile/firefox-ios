@@ -75,7 +75,8 @@ class TabManagerTests: XCTestCase {
                                                      tabData: getMockTabData(count: 4))
 
         subject.restoreTabs()
-        try await Task.sleep(nanoseconds: sleepTime * 5)
+        try await Task.sleep(nanoseconds: sleepTime * 10)
+        XCTAssertEqual(subject.tabs.count, 4)
         XCTAssertEqual(mockDiskImageStore.getImageForKeyCallCount, 4)
     }
 
