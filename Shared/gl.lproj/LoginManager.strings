@@ -10,6 +10,9 @@
 /* Copy password text selection menu item */
 "Copy" = "Copiar";
 
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Creada o %@";
+
 /* Label for the button used to delete the current login. */
 "Delete" = "Eliminar";
 
@@ -27,6 +30,9 @@
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "As identificacións retiraranse de todos os dispositivos conectados.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modificada o %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Non se atoparon identificacións";
@@ -51,4 +57,7 @@
 
 /* Label displayed above the username row in Login Detail View. */
 "Username" = "Nome de usuario";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Sitio web";
 
