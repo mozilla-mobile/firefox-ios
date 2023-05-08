@@ -26,7 +26,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Parameters:
     ///   - cardData: Card data from ``FxNimbus/shared``
     ///   - cardOrder: Card order from ``FxNimbus/shared``
-    /// - Returns: Card data coverted to ``OnboardingCardInfoModel`` and ordered.
+    /// - Returns: Card data converted to ``OnboardingCardInfoModel`` and ordered.
     private func getOrderedOnboardingCards(
         from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
@@ -85,10 +85,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    /// Translates a nimbus image ID for onboarding to a an ``ImageIdentifiers`` based id
+    /// Translates a nimbus image ID for onboarding to an ``ImageIdentifiers`` based id
     /// that corresponds to an app resource.
     ///
-    /// In the case that a unknown image identifier in entered into experimenter, the
+    /// In the case that an unknown image identifier is entered into experimenter, the
     /// Nimbus will return the default image identifier, in this case,
     /// ``NimbusOnboardingImages/welcomeGlobe``
     ///
