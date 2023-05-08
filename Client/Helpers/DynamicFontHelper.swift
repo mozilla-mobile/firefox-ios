@@ -63,9 +63,6 @@ class DynamicFontHelper: NSObject {
     var DeviceFontLargeBold: UIFont {
         return UIFont.boldSystemFont(ofSize: deviceFontSize + 2)
     }
-    var DeviceFontExtraLargeBold: UIFont {
-        return UIFont.boldSystemFont(ofSize: deviceFontSize + 4)
-    }
 
     /*
      Activity Stream supports dynamic fonts up to a certain point. Small fonts dont work.
