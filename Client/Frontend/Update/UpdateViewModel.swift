@@ -98,28 +98,49 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                                      extras: extra)
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> LegacyOnboardingModelProtocol? {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
         switch cardType {
         case .updateWelcome:
-            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
-                                             title: .Upgrade.WelcomeTitle,
-                                             description: .Upgrade.WelcomeDescription,
-                                             linkButtonTitle: nil,
-                                             primaryAction: .Upgrade.WelcomeAction,
-                                             secondaryAction: nil,
-                                             a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
+            return OnboardingCardInfoModel(
+                name: "upgrade1",
+                title: .Upgrade.Welcome.Title,
+                body: .Upgrade.Welcome.Description,
+                link: nil,
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
+                        title: .Upgrade.Welcome.Action,
+                        action: .nextCard)),
+                type: .update,
+                a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard,
+                imageID: ImageIdentifiers.onboardingWelcomev106)
         case .updateSignSync:
-            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
-                                             title: .Upgrade.SyncSignTitle,
-                                             description: .Upgrade.SyncSignDescription,
-                                             linkButtonTitle: nil,
-                                             primaryAction: .Upgrade.SyncAction,
-                                             secondaryAction: .Onboarding.LaterAction,
-                                             a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
+            return OnboardingCardInfoModel(
+                name: "upgrade2",
+                title: .Upgrade.Sync.Title,
+                body: .Upgrade.Sync.Description,
+                link: nil,
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
+                        title: .Upgrade.Sync.Action,
+                        action: .syncSignIn),
+                    secondary: OnboardingButtonInfoModel(
+                        title: .Onboarding.LaterAction,
+                        action: .nextCard)),
+                type: .update,
+                a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard,
+                imageID: ImageIdentifiers.onboardingSyncv106)
         case .welcome, .signSync, .notification:
             // Cases not supported by the upgrade screen
             return nil
         }
+    }
+
+    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
+        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
+
+        return LegacyOnboardingCardViewModel(cardType: cardType,
+                                             infoModel: infoModel,
+                                             isFeatureEnabled: isFeatureEnabled)
     }
 
     private func saveAppVersion(for appVersion: String) {
