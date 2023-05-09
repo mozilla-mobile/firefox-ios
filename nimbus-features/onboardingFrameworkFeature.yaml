@@ -36,10 +36,12 @@ features:
               title: "First title"
               body: "Some body text that's rather longer than a title 1"
               buttons:
-                - title: "Primary Button 1"
-                  action: sync-sign-in
-                - title: "Secondary Button 1"
+                primary:
+                  title: "Primary Button 2"
                   action: request-notifications
+                secondary:
+                  title: "Secondary Button 2"
+                  action: next-card
               type: fresh-install
             - name: "Test 2"
               title: "Second title"
@@ -48,9 +50,11 @@ features:
                 title: "Hello, senator"
                 url: "https://macrumors.com"
               buttons:
-                - title: "Primary Button 2"
+                primary:
+                  title: "Primary Button 2"
                   action: sync-sign-in
-                - title: "Secondary Button 2"
+                secondary:
+                  title: "Secondary Button 2"
                   action: next-card
               type: update
           card-ordering:
@@ -94,12 +98,14 @@ objects:
           If left empty, the card will have no link.
         default: null
       buttons:
-        type: List<NimbusOnboardingButton>
+        type: NimbusOnboardingButtons
         description: >
-          A list of buttons associated with the card.
-          Based on the number of buttons in this list, the card will
-          display only one or, at maximum, two buttons.
-        default: []
+          The set of buttons associated with the card.
+        default:
+          primary:
+            title: "Primary Button"
+            action: next-card
+          secondary: null
       type:
         type: OnboardingType
         description: >
@@ -122,6 +128,23 @@ objects:
         description: >
           The url that the link will lead to.
         default: "https://macrumors.com"
+  NimbusOnboardingButtons:
+    description: >
+      A set of buttons for the card. There can be up to two, but
+      there must be at least one.
+    fields:
+      primary:
+        type: NimbusOnboardingButton
+        description: >
+          The primary button for the card. This must exist.
+        default:
+          title: "Primary Button"
+          action: next-card
+      secondary:
+        type: Option<NimbusOnboardingButton>
+        description: >
+          A secondary, optional, button for the card.
+        default: null
   NimbusOnboardingButton:
     description: >
       A group of properties describing the attributes of a card.

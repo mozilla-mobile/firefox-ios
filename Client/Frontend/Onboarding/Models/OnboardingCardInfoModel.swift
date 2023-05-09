@@ -33,7 +33,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var title: String
     var body: String
     var link: OnboardingLinkInfoModel?
-    var buttons: OnboardingButtons,
+    var buttons: OnboardingButtons
     var type: OnboardingType
     var a11yIdRoot: String
 
