@@ -100,6 +100,7 @@
         "ReaderViewTest\/testLoadReaderContent()",
         "SaveLoginTest\/testCreateLoginManually()",
         "SaveLoginTest\/testEditOneLoginEntry()",
+        "SaveLoginTest\/testSaveLogin()",
         "SaveLoginTest\/testSavedLoginAutofilled()",
         "ScreenGraphTest\/testUserStateChanges()",
         "SearchTests\/testDismissPromptPresence()",
