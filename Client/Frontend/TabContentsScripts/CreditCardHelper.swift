@@ -8,7 +8,7 @@ import WebKit
 import Common
 import Storage
 
-struct Payload: Codable {
+struct CreditCardPayload: Codable {
     let ccNumber: String
     let ccExpMonth: String
     let ccExpYear: String
@@ -23,8 +23,13 @@ struct Payload: Codable {
 }
 
 struct FillCreditCardForm: Codable {
-    let payload: Payload
+    let creditCardPayload: CreditCardPayload
     let type: String
+
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case creditCardPayload = "Payload"
+        case type = "type"
+    }
 }
 
 enum CreditCardHelperError: Error {
@@ -61,14 +66,8 @@ class CreditCardHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = getValidPayloadData(from: message) else { return }
-        guard let payload = parseFieldType(messageBody: data)?.payload else { return }
+        guard let payload = parseFieldType(messageBody: data)?.creditCardPayload else { return }
         foundFieldValues?(getFieldTypeValues(payload: payload))
-//        let plainCreditCard = UnencryptedCreditCardFields(ccName: "Allen Mocktail",
-//                                                          ccNumber: "1234 4567 4567 6788",
-//                                                          ccNumberLast4: "6788",
-//                                                          ccExpMonth: 01,
-//                                                          ccExpYear: 2999, ccType: "Visa")
-//        injectCardInfo(card: plainCreditCard, tab: tab!, completion: {_ in })
     }
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
@@ -76,8 +75,6 @@ class CreditCardHelper: TabContentScript {
     }
 
     func parseFieldType(messageBody: [String: Any]) -> FillCreditCardForm? {
-        print(String(data: try! JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted), encoding: .utf8)!)
-
         let decoder = JSONDecoder()
 
         do {
@@ -95,7 +92,7 @@ class CreditCardHelper: TabContentScript {
         return nil
     }
 
-    func getFieldTypeValues(payload: Payload) -> UnencryptedCreditCardFields {
+    func getFieldTypeValues(payload: CreditCardPayload) -> UnencryptedCreditCardFields {
         var ccPlainText = UnencryptedCreditCardFields()
 
         ccPlainText.ccName = payload.ccName
@@ -109,10 +106,11 @@ class CreditCardHelper: TabContentScript {
 
     func injectCardInfo(card: UnencryptedCreditCardFields,
                         tab: Tab,
-                        completion: @escaping (Error?) -> Void)  {
+                        completion: @escaping (Error?) -> Void) {
         guard !card.ccNumber.isEmpty,
               card.ccExpYear > 0,
-              !card.ccName.isEmpty else {
+              !card.ccName.isEmpty
+        else {
             completion(CreditCardHelperError.injectionInvalidFields)
             return
         }

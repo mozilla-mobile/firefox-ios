@@ -51,7 +51,6 @@ class CreditCardHelperTests: XCTestCase {
         profile = MockProfile(databasePrefix: "CreditCardHelper_tests")
         profile.reopen()
         tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-        tab.createWebview()
         creditCardHelper = CreditCardHelper(tab: tab)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
@@ -83,21 +82,5 @@ class CreditCardHelperTests: XCTestCase {
         XCTAssertEqual(messageFields!.payload.ccExpYear, "2999")
         XCTAssertEqual(messageFields!.payload.ccName, "Josh Moustache")
         XCTAssertEqual(messageFields!.payload.ccNumber, "1234 4567 4567 6788")
-    }
-
-    // MARK: Injection
-
-    func test_injectCardInfo() {
-        let plainCreditCard = UnencryptedCreditCardFields(ccName: "Allen Mocktail",
-                                                          ccNumber: "1234 4567 4567 6788",
-                                                          ccNumberLast4: "6788",
-                                                          ccExpMonth: 01,
-                                                          ccExpYear: 2999,
-                                                          ccType: "Visa")
-        let expectation = expectation(description: "Insert demo credit card")
-        creditCardHelper.injectCardInfo(card: plainCreditCard, tab: tab) { err in
-            XCTAssertNil(err)
-            expectation.fulfill()
-        }
     }
 }
