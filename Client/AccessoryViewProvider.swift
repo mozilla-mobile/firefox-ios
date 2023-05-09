@@ -6,6 +6,10 @@ import UIKit
 import Common
 import Shared
 
+enum AccessoryType {
+    case standard, creditCard
+}
+
 class AccessoryViewProvider: UIView, Themeable {
     private struct AccessoryViewUX {
         static let toolbarHeight: CGFloat = 50
@@ -14,7 +18,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var showCreditCard = false
+    private(set) var showCreditCard = false
 
     // stubs - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -96,6 +100,8 @@ class AccessoryViewProvider: UIView, Themeable {
         stackView.addGestureRecognizer(stackViewTapped)
     }
 
+    // MARK: Lifecycle
+
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.themeManager = themeManager
@@ -113,8 +119,24 @@ class AccessoryViewProvider: UIView, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func reloadViewForCardAccessory() {
-        showCreditCard = true
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        // Reset showing of credit card when dismissing the view
+        // This is required otherwise it will always show credit card view
+        // even if the input isn't of type credit card
+        showCreditCard = false
+        setupLayout()
+    }
+
+    // MARK: Layout and Theme
+
+    func reloadViewFor(_ accessoryType: AccessoryType) {
+        switch accessoryType {
+        case .standard:
+            showCreditCard = false
+        case .creditCard:
+            showCreditCard = true
+        }
 
         setNeedsLayout()
         setupLayout()
