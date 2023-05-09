@@ -6,7 +6,7 @@ import Foundation
 
 protocol OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards { get set }
-    var infoModel: LegacyOnboardingModelProtocol { get }
+    var infoModel: OnboardingCardInfoModelProtocol { get }
     var shouldShowDescriptionBold: Bool { get }
 
     func sendCardViewTelemetry()
@@ -15,12 +15,14 @@ protocol OnboardingCardProtocol {
 
 struct LegacyOnboardingCardViewModel: OnboardingCardProtocol {
     var cardType: IntroViewModel.InformationCards
-    var infoModel: LegacyOnboardingModelProtocol
+    var infoModel: OnboardingCardInfoModelProtocol
     var shouldShowDescriptionBold: Bool
 
-    init(cardType: IntroViewModel.InformationCards,
-         infoModel: LegacyOnboardingModelProtocol,
-         isFeatureEnabled: Bool) {
+    init(
+        cardType: IntroViewModel.InformationCards,
+        infoModel: OnboardingCardInfoModelProtocol,
+        isFeatureEnabled: Bool
+    ) {
         self.cardType = cardType
         self.infoModel = infoModel
         self.shouldShowDescriptionBold = cardType == .welcome && !isFeatureEnabled

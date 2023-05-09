@@ -64,34 +64,60 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> LegacyOnboardingModelProtocol? {
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
         let shortName = AppName.shortName.rawValue
 
         switch cardType {
         case .welcome:
-            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
-                                             title: String(format: .Onboarding.Welcome.Title, shortName),
-                                             description: String(format: .Onboarding.Welcome.Description, shortName),
-                                             linkButtonTitle: .Onboarding.PrivacyPolicyLinkButtonTitle,
-                                             primaryAction: .Onboarding.Welcome.GetStartedAction,
-                                             secondaryAction: nil,
-                                             a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
+            return OnboardingCardInfoModel(
+                name: "welcome",
+                title: String(format: .Onboarding.Welcome.Title),
+                body: String(format: .Onboarding.Welcome.Description, shortName),
+                image: ImageIdentifiers.onboardingWelcomev106,
+                link: OnboardingLinkInfoModel(
+                    title: .Onboarding.PrivacyPolicyLinkButtonTitle,
+                    url: "https://macrumors.com"),
+                buttons: [
+                    OnboardingButtonInfoModel(
+                        title: .Onboarding.Welcome.GetStartedAction,
+                        action: .nextCard)
+                ],
+                type: .freshInstall,
+                a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .signSync:
-            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
-                                             title: .Onboarding.Sync.Title,
-                                             description: .Onboarding.Sync.Description,
-                                             linkButtonTitle: nil,
-                                             primaryAction: .Onboarding.Sync.SignInAction,
-                                             secondaryAction: .Onboarding.Sync.SkipAction,
-                                             a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+            return OnboardingCardInfoModel(
+                name: "signSync",
+                title: String(format: .Onboarding.Sync.Title),
+                body: String(format: .Onboarding.Sync.Description),
+                image: ImageIdentifiers.onboardingSyncv106,
+                link: nil,,
+                buttons: [
+                    OnboardingButtonInfoModel(
+                        title: .Onboarding.Sync.SignInAction,
+                        action: .syncSignIn),
+                    OnboardingButtonInfoModel(
+                        title: .Onboarding.Sync.SkipAction,
+                        action: .nextCard)
+                ],
+                type: .freshInstall,
+                a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case .notification:
-            return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
-                                             title: String(format: .Onboarding.Notification.Title, shortName),
-                                             description: String(format: .Onboarding.Notification.Description, shortName),
-                                             linkButtonTitle: nil,
-                                             primaryAction: .Onboarding.Notification.ContinueAction,
-                                             secondaryAction: .Onboarding.Notification.SkipAction,
-                                             a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
+            return OnboardingCardInfoModel(
+                name: "notification",
+                title: String(format: .Onboarding.Notification.Title, shortName),
+                body: String(format: .Onboarding.Notification.Description, shortName),
+                image: ImageIdentifiers.onboardingSyncv106,
+                link: nil,,
+                buttons: [
+                    OnboardingButtonInfoModel(
+                        title: .Onboarding.Notification.ContinueAction,
+                        action: .requestNotifications),
+                    OnboardingButtonInfoModel(
+                        title: .Onboarding.Notification.SkipAction,
+                        action: .nextCard)
+                ],
+                type: .freshInstall,
+                a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
         default:
             return nil
         }

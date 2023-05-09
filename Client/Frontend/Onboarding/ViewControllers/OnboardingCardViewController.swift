@@ -320,8 +320,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         titleLabel.text = viewModel.infoModel.title
         descriptionBoldLabel.isHidden = !viewModel.shouldShowDescriptionBold
         descriptionBoldLabel.text = .Onboarding.Intro.DescriptionPart1
-        descriptionLabel.isHidden = viewModel.infoModel.description?.isEmpty ?? true
-        descriptionLabel.text = viewModel.infoModel.description
+        descriptionLabel.text = viewModel.infoModel.body
 
         imageView.image = viewModel.infoModel.image
         primaryButton.setTitle(viewModel.infoModel.primaryAction, for: .normal)

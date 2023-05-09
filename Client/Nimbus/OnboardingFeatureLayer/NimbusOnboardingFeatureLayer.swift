@@ -69,10 +69,20 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel]? {
-        if cardButtons.isEmpty { return nil }
+    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> OnboardingButtons {
+        if cardButtons.isEmpty {
+            return OnboardingButtons(
+                primary: OnboardingButtonInfoModel(
+                    title: .Onboarding.Welcome.Skip,
+                    action: .nextCard))
+        }
 
-        return cardButtons.map { OnboardingButtonInfoModel(title: $0.title, action: $0.action) }
+        let buttons = cardButtons.map { OnboardingButtonInfoModel(title: $0.title, action: $0.action) }
+
+        if cardButtons.count == 1 {
+            return OnboardingButtons(
+                primary: OnboardingButtonInfoModel(title: buttons[0].title,
+                                                   action: buttons[0].))
     }
 
     /// Returns an optional ``OnboardingLinkInfoModel``, if one is provided. This will be
