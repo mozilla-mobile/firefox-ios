@@ -36,6 +36,8 @@ workflows:
         - debug_mode: 'true'
         - test_path: ''
         - file_type: ".swift"
+    - restore-spm-cache@1:
+        is_always_run: true
     - script@1.1:
         title: Build for Testing
         inputs:
@@ -52,6 +54,8 @@ workflows:
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
         - maximum_test_repetitions: 2
+    - save-spm-cache@1:
+        is_always_run: true
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -90,6 +94,8 @@ workflows:
             set -e
             echo "Run danger"
             swift run danger-swift ci
+    - cache-push@2.7.1:
+        is_always_run: true
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -426,7 +432,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2.2: {}
     - script@1:
         inputs:
         - content: |-
@@ -474,7 +480,7 @@ workflows:
         - simulator_device: iPhone 8
   5_deploy_and_slack:
     steps:
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2.2: {}
     - cache-push@2.2:
         is_always_run: true
     - slack@3.1:
@@ -741,7 +747,7 @@ workflows:
         inputs:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2.2: {}
     - cache-push@2.4: {}
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
