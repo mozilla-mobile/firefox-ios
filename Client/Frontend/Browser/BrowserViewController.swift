@@ -1970,10 +1970,11 @@ extension BrowserViewController: LegacyTabDelegate {
             creditCardHelper.foundFieldValues = { fieldValues in
                 guard let tabWebView = tab.webView as? TabWebView else { return }
 
-                tabWebView.accessoryView?.reloadViewForCardAccessory()
+                tabWebView.accessoryView.reloadViewFor(.creditCard)
+                tabWebView.reloadInputViews()
 
-                // stub. Action will be to present a half sheet, https://mozilla-hub.atlassian.net/browse/FXIOS-6111
-                tabWebView.accessoryView?.savedCardsClosure = { }
+                // stub. Action will be to present a half sheet, ref: FXIOS-6111
+                tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
 
@@ -2746,13 +2747,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
-
-        guard let tabWebView = tabManager.selectedTab?.webView as? TabWebView else { return }
-
-        tabWebView.accessoryView = AccessoryViewProvider()
-        tabWebView.accessoryView?.previousClosure = { CreditCardHelper.previousInput() }
-        tabWebView.accessoryView?.nextClosure = { CreditCardHelper.nextInput() }
-        tabWebView.accessoryView?.doneClosure = { tabWebView.endEditing(true) }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
