@@ -133,6 +133,7 @@ public struct PrefsKeys {
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
+    public static let TabMigrationKey = "TabMigrationKey"
 
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
