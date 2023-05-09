@@ -77,8 +77,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                                              sendToDeviceDelegate: sendToDeviceDelegate,
                                              overlayManager: overlayManager)
 
-        browserViewController.embedContent(homepageController)
+        guard browserViewController.embedContent(homepageController) else { return }
         self.homepageViewController = homepageController
+        homepageController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -91,7 +92,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         } else {
             let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
-            browserViewController.embedContent(webviewViewController)
+            _ = browserViewController.embedContent(webviewViewController)
         }
 
         screenshotService.screenshotableView = webviewController
