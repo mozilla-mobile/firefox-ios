@@ -52,27 +52,32 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
         return cardData.compactMap { card in
-            let image = getOnboardingImageID(from: card.image)
-            guard let buttons = getOnboardingCardButtons(from: card.buttons),
-                  !buttons.isEmpty
-            else { return nil }
-
-            return OnboardingCardInfoModel(name: card.name,
-                                           title: card.title,
-                                           body: card.body,
-                                           image: image,
-                                           link: getOnboardingLink(from: card.link),
-                                           buttons: buttons,
-                                           type: card.type)
+            return OnboardingCardInfoModel(
+                name: card.name,
+                title: card.title,
+                body: card.body,
+                link: getOnboardingLink(from: card.link),
+                buttons: getOnboardingCardButtons(from: card.buttons),
+                type: card.type,
+                a11yIdRoot: "test",
+                imageID: getOnboardingImageID(from: card.image))
         }
     }
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel]? {
-        if cardButtons.isEmpty { return nil }
+    private func getOnboardingCardButtons(from cardButtons: NimbusOnboardingButtons) -> OnboardingButtons {
+        var secondButton: OnboardingButtonInfoModel?
+        if let secondary = cardButtons.secondary {
+            secondButton = OnboardingButtonInfoModel(title: secondary.title,
+                                                     action: secondary.action)
+        }
 
-        return cardButtons.map { OnboardingButtonInfoModel(title: $0.title, action: $0.action) }
+        return OnboardingButtons(
+            primary: OnboardingButtonInfoModel(
+                title: cardButtons.primary.title,
+                action: cardButtons.primary.action),
+            secondary: secondButton)
     }
 
     /// Returns an optional ``OnboardingLinkInfoModel``, if one is provided. This will be
