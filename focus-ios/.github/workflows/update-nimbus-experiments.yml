@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 name: "Update Nimbus Experiments"
 
 on:
@@ -11,24 +15,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Main Branch"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: focus-ios
           ref: main
           fetch-depth: 0
       - name: "Update Experiments JSON"
         id: update-experiments-json
-        uses: mozilla-mobile/update-experiments@v2
+        uses: mozilla-mobile/update-experiments@v3
         with:
           repo-path: focus-ios
           output-path: Blockzilla/Nimbus/initial_experiments.json
-          experimenter-url:
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
           app-name: focus_ios
           branch: automation/update-nimbus-experiments
       - name: Create Pull Request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@v3
-        if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch == 1
+        uses: peter-evans/create-pull-request@v4
+        if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch >= 1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: focus-ios
