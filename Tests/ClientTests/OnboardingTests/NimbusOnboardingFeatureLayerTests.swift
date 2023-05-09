@@ -14,6 +14,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"
+        static let a11yID = "A11yId"
         static let linkTitle = "MacRumors"
         static let linkURL = "https://macrumors.com"
         static let primaryButtonTitle = "Primary Button"
@@ -63,28 +64,32 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             name: CardElementNames.name + " 1",
             title: CardElementNames.title + " 1",
             body: CardElementNames.body + " 1",
-            image: ImageIdentifiers.onboardingWelcomev106,
             link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle + " 1",
                                           url: URL(string: CardElementNames.linkURL)!),
-            buttons: [
-                OnboardingButtonInfoModel(title: CardElementNames.primaryButtonTitle + " 1",
-                                          action: .nextCard),
-                OnboardingButtonInfoModel(title: CardElementNames.secondaryButtonTitle + " 1",
-                                          action: .nextCard)
-            ],
-            type: .freshInstall)
+            buttons: OnboardingButtons(
+                primary: OnboardingButtonInfoModel(
+                    title: CardElementNames.primaryButtonTitle,
+                    action: .nextCard),
+                secondary: OnboardingButtonInfoModel(
+                    title: CardElementNames.secondaryButtonTitle,
+                    action: .nextCard)),
+            type: .freshInstall,
+            a11yIdRoot: CardElementNames.a11yID,
+            imageID: ImageIdentifiers.onboardingWelcomev106)
 
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)
         XCTAssertEqual(subject.body, expectedCard.body)
-        XCTAssertEqual(subject.image, expectedCard.image)
         XCTAssertEqual(subject.type, expectedCard.type)
+        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingWelcomev106))
         XCTAssertEqual(subject.link?.title, expectedCard.link?.title)
         XCTAssertEqual(subject.link?.url, expectedCard.link?.url)
-        XCTAssertEqual(subject.buttons[0].title, expectedCard.buttons[0].title)
-        XCTAssertEqual(subject.buttons[0].action, expectedCard.buttons[0].action)
-        XCTAssertEqual(subject.buttons[1].title, expectedCard.buttons[1].title)
-        XCTAssertEqual(subject.buttons[1].action, expectedCard.buttons[1].action)
+        XCTAssertEqual(subject.buttons.primary.title, expectedCard.buttons.primary.title)
+        XCTAssertEqual(subject.buttons.primary.action, expectedCard.buttons.primary.action)
+        // Make sure a second button exists
+        XCTAssertNotNil(subject.buttons.secondary)
+        XCTAssertEqual(subject.buttons.secondary!.title, expectedCard.buttons.secondary!.title)
+        XCTAssertEqual(subject.buttons.secondary!.action, expectedCard.buttons.secondary!.action)
     }
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {
@@ -164,7 +169,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, ImageIdentifiers.onboardingWelcomev106)
+        XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingWelcomev106)
     }
 
     func testLayer_cardIsReturned_WithNotificationImageIdenfier() {
@@ -180,7 +185,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, ImageIdentifiers.onboardingNotification)
+        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingNotification))
     }
 
     func testLayer_cardIsReturned_WithSyncImageIdenfier() {
@@ -196,7 +201,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, ImageIdentifiers.onboardingSyncv106)
+        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingSyncv106))
     }
 
     func testLayer_cardIsReturnedWithDefaultIMageID_IfBadImageID() {
@@ -212,7 +217,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, ImageIdentifiers.onboardingWelcomev106)
+        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingWelcomev106))
     }
 
     // MARK: - Test install types
@@ -280,11 +285,12 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons.count, expectedNumberOfButtons)
+        XCTAssertNotNil(subject.buttons.primary)
+        XCTAssertNil(subject.buttons.secondary)
     }
 
-    func testLayer_cardIsNotReturned_IfNoButtons() {
-        let expectedNumberOfButtons = 0
+    func testLayer_cardIsReturned_WithTwoButtons() {
+        let expectedNumberOfButtons = 2
         setupNimbusWith(
           cards: 1,
           cardOrdering: ["\(CardElementNames.name) 1"],
@@ -292,7 +298,24 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        XCTAssertNil(layer.getOnboardingModel().cards?.first)
+        guard let subject = layer.getOnboardingModel().cards?.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertNotNil(subject.buttons.primary)
+        XCTAssertNotNil(subject.buttons.secondary)
+    }
+
+    func testLayer_cardIsReturnedWithDefaultPrimaryButton_IfNoButtonsSpecified() {
+        setupNimbusWith(
+          cards: 1,
+          cardOrdering: ["\(CardElementNames.name) 1"],
+          numberOfButtons: 0
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        XCTAssertNotNil(layer.getOnboardingModel().cards?.first)
     }
 
     // MARK: - Test button actions
@@ -310,7 +333,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons[0].action, .nextCard)
+        XCTAssertEqual(subject.buttons.primary.action, .nextCard)
     }
 
     func testLayer_cardIsReturned_WithDefaultBrowserButton() {
@@ -327,7 +350,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons[0].action, .setDefaultBrowser)
+        XCTAssertEqual(subject.buttons.primary.action, .setDefaultBrowser)
     }
 
     func testLayer_cardIsReturned_WithSyncSignInButton() {
@@ -344,7 +367,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons[0].action, .syncSignIn)
+        XCTAssertEqual(subject.buttons.primary.action, .syncSignIn)
     }
 
     func testLayer_cardIsReturned_WithRequestNotificationsButton() {
@@ -361,7 +384,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons[0].action, .requestNotifications)
+        XCTAssertEqual(subject.buttons.primary.action, .requestNotifications)
     }
 
     // MARK: - Helpers
@@ -445,8 +468,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                                                    type: type))
         string.append(contentsOf: addLink(number: number,
                                           shouldAddLink: shouldAddLink))
-        string.append(contentsOf: addButtons(number: number,
-                                             numberOfButtons: numberOfButtons,
+        string.append(contentsOf: addButtons(numberOfButtons: numberOfButtons,
                                              buttonActions: buttonActions))
         string.append(contentsOf: "}")
 
@@ -482,23 +504,30 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     private func addButtons(
-        number: Int,
         numberOfButtons: Int,
         buttonActions: OnboardingActions
     ) -> String {
-        let buttonInfo = [CardElementNames.primaryButtonTitle, CardElementNames.secondaryButtonTitle]
-        var string = "\"buttons\": ["
+        var string = "\"buttons\": {"
 
-        for x in 0..<numberOfButtons {
+        if numberOfButtons > 0 {
             string.append(contentsOf: """
-    {
-      "title": "\(buttonInfo[x]) \(number)",
+    "primary": {
+      "title": "\(CardElementNames.primaryButtonTitle)",
       "action": "\(buttonActions.rawValue)",
     },
 """)
         }
 
-        string.append(contentsOf: "],")
+        if numberOfButtons > 1 {
+            string.append(contentsOf: """
+    "secondary": {
+      "title": "\(CardElementNames.secondaryButtonTitle)",
+      "action": "\(buttonActions.rawValue)",
+    },
+""")
+        }
+
+        string.append(contentsOf: "},")
         return string
     }
 }

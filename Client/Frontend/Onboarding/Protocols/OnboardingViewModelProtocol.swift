@@ -8,8 +8,8 @@ protocol OnboardingViewModelProtocol {
     var enabledCards: [IntroViewModel.InformationCards] { get }
     var isFeatureEnabled: Bool { get }
 
+    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol?
     func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol?
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> LegacyOnboardingModelProtocol?
 }
 
 extension OnboardingViewModelProtocol {
