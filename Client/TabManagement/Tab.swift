@@ -941,15 +941,9 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
-    var accessoryNextAction: (() -> Void)?
-    var accessoryPreviousAction: (() -> Void)?
-    var accessoryDoneAction: (() -> Void)?
-    var accessoryCreditCardAction: (() -> Void)?
-    var accessoryView: AccessoryViewProvider? = AccessoryViewProvider()
+    var accessoryView: AccessoryViewProvider
 
     override var inputAccessoryView: UIView? {
-        guard let accessoryView = accessoryView else { return nil }
-
         translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
@@ -958,6 +952,20 @@ class TabWebView: WKWebView, MenuHelperInterface {
         ])
 
         return accessoryView
+    }
+
+    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+        self.accessoryView = AccessoryViewProvider()
+
+        super.init(frame: frame, configuration: configuration)
+
+        accessoryView.previousClosure = { CreditCardHelper.previousInput() }
+        accessoryView.nextClosure = { CreditCardHelper.nextInput() }
+        accessoryView.doneClosure = { self.endEditing(true) }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     fileprivate weak var delegate: TabWebViewDelegate?
