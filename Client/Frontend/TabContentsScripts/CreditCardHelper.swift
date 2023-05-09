@@ -108,7 +108,7 @@ class CreditCardHelper: TabContentScript {
                 return false
             }
             let fxWindowVal = "window.__firefox__.CreditCardHelper"
-            let fillCreditCardInfoCallback = "\(fxWindowVal).fillCreditCardInfo('\(jsonDataVal)')"
+            let fillCreditCardInfoCallback = "\(fxWindowVal).fillFormFields('\(jsonDataVal)')"
             guard let webView = tab.webView else {
                 return false
             }
