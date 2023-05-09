@@ -27,6 +27,12 @@ struct FillCreditCardForm: Codable {
     let type: String
 }
 
+enum CreditCardHelperError: Error {
+    case injectionIssue
+    case injectionInvalidFields
+    case injectionInvalidJSON
+}
+
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
@@ -57,6 +63,12 @@ class CreditCardHelper: TabContentScript {
         guard let data = getValidPayloadData(from: message) else { return }
         guard let payload = parseFieldType(messageBody: data)?.payload else { return }
         foundFieldValues?(getFieldTypeValues(payload: payload))
+//        let plainCreditCard = UnencryptedCreditCardFields(ccName: "Allen Mocktail",
+//                                                          ccNumber: "1234 4567 4567 6788",
+//                                                          ccNumberLast4: "6788",
+//                                                          ccExpMonth: 01,
+//                                                          ccExpYear: 2999, ccType: "Visa")
+//        injectCardInfo(card: plainCreditCard, tab: tab!, completion: {_ in })
     }
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
@@ -96,26 +108,34 @@ class CreditCardHelper: TabContentScript {
     // MARK: Injection
 
     func injectCardInfo(card: UnencryptedCreditCardFields,
-                        tab: Tab) -> Bool {
-        guard !card.ccNumber.isEmpty, card.ccExpYear > 0, !card.ccName.isEmpty else {
-            return false
+                        tab: Tab,
+                        completion: @escaping (Error?) -> Void)  {
+        guard !card.ccNumber.isEmpty,
+              card.ccExpYear > 0,
+              !card.ccName.isEmpty else {
+            completion(CreditCardHelperError.injectionInvalidFields)
+            return
         }
 
         do {
             let jsonData = try JSONSerialization.data(
                 withJSONObject: injectionJSONBuilder(card: card))
             guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else {
-                return false
+                completion(CreditCardHelperError.injectionInvalidJSON)
+                return
             }
             let fxWindowVal = "window.__firefox__.CreditCardHelper"
             let fillCreditCardInfoCallback = "\(fxWindowVal).fillFormFields('\(jsonDataVal)')"
             guard let webView = tab.webView else {
-                return false
+                completion(CreditCardHelperError.injectionIssue)
+                return
             }
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
                 guard let err = err else {
+                    completion(nil)
                     return
                 }
+                completion(err)
                 self.logger.log("Credit card script error \(err)",
                                 level: .debug,
                                 category: .webview)
@@ -125,8 +145,6 @@ class CreditCardHelper: TabContentScript {
                        level: .debug,
                        category: .webview)
         }
-
-        return true
     }
 
     private func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
