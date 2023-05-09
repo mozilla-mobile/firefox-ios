@@ -1011,8 +1011,11 @@ class BrowserViewController: UIViewController {
         manageStatusBarEmbedded()
     }
 
-    func embedContent(_ viewController: ContentContainable) {
-        guard contentContainer.canAdd(content: viewController) else { return }
+    /// Embed a ContentContainable inside the content container
+    /// - Parameter viewController: the view controller to embed inside the content container
+    /// - Returns: True when the content was successfully embedded
+    func embedContent(_ viewController: ContentContainable) -> Bool {
+        guard contentContainer.canAdd(content: viewController) else { return false }
 
         addChild(viewController)
         contentContainer.add(content: viewController)
@@ -1020,6 +1023,7 @@ class BrowserViewController: UIViewController {
         manageStatusBarEmbedded()
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+        return true
     }
 
     /// Status bar overlay needs to be at the back for some content type that need extended content
@@ -2237,7 +2241,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
-            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
+            // FXIOS-6203 Can be removed with coordinator usage, it will be scrolled at the top from BrowserCoordinator
             activityStreamPanel.scrollToTop()
         }
 
