@@ -135,6 +135,15 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertNotNil(presentedVC.delegate)
     }
 
+    func testDidFinish_fromSurveySurfaceViewControllerDelegate() {
+        let subject = createSubject(isIphone: false)
+        subject.parentCoordinator = delegate
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishCalledCount, 1)
+        XCTAssertEqual(delegate.savedDidFinishCoordinator?.id, subject.id)
+    }
+
     // MARK: - Helpers
     private func createSubject(isIphone: Bool,
                                file: StaticString = #file,
