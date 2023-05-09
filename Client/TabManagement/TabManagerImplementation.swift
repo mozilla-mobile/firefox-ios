@@ -45,16 +45,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        Task {
-            await restoreTabs(forced)
-        }
-    }
-
-    func restoreTabs(_ forced: Bool = false) async {
         guard tabMigration.shouldRunMigration else {
-            Task {
-                await restoreOnly(forced)
-            }
+            restoreOnly(forced)
             return
         }
 
@@ -63,12 +55,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func migrateAndRestore(_ forced: Bool = false) {
         Task {
-            let windowData = await tabMigration.runMigration(savedTabs: store.tabs)
-            await buildTabRestore(window: windowData)
+            await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
         }
     }
 
-    private func restoreOnly(_ forced: Bool = false) async {
+    private func restoreOnly(_ forced: Bool = false) {
         guard !isRestoringTabs else { return }
 
         // TODO: FXIOS-6112 Handle debug settings and UITests
@@ -78,8 +69,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         isRestoringTabs = true
-        let windowData = await tabDataStore.fetchWindowData()
-        await buildTabRestore(window: windowData)
+        Task {
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
+        }
     }
 
     private func buildTabRestore(window: WindowData?) async {
