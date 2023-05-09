@@ -24,6 +24,7 @@ public protocol TabSessionStore {
 public actor DefaultTabSessionStore: TabSessionStore {
     let fileManager: TabFileManager
     let logger: Logger
+    let filePrefix = "tab-"
 
     public init(fileManager: TabFileManager = DefaultTabFileManager(),
                 logger: Logger = DefaultLogger.shared) {
@@ -38,7 +39,7 @@ public actor DefaultTabSessionStore: TabSessionStore {
             fileManager.createDirectoryAtPath(path: directory)
         }
 
-        let path = directory.appendingPathComponent("tab-" + tabID.uuidString)
+        let path = directory.appendingPathComponent(filePrefix + tabID.uuidString)
         do {
             try sessionData.write(to: path, options: .atomicWrite)
         } catch {
@@ -49,7 +50,7 @@ public actor DefaultTabSessionStore: TabSessionStore {
     }
 
     public func fetchTabSession(tabID: UUID) async -> Data? {
-        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(tabID.uuidString)
+        guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(filePrefix + tabID.uuidString)
         else { return nil }
 
         do {

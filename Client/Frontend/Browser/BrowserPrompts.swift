@@ -34,68 +34,42 @@ class JSPromptAlertController: UIAlertController {
  *  of the provided completionHandler to let us generate the UIAlertController when needed.
  */
 protocol JSAlertInfo {
-    var shouldCallCompletion: Bool { get }
     func alertController() -> JSPromptAlertController
-    func cancel()
 }
 
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: () -> Void
-    var shouldCallCompletion: Bool
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            guard shouldCallCompletion else { return }
-
-            self.completionHandler()
-        })
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
         alertController.alertInfo = self
         return alertController
     }
-    // This alert doesn't have a cancel action
-    func cancel() { }
 }
 
 struct ConfirmPanelAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (Bool) -> Void
-    var shouldCallCompletion: Bool
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            guard shouldCallCompletion else { return }
-
-            self.completionHandler(true)
-        })
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            self.cancel()
-        })
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         alertController.alertInfo = self
         return alertController
-    }
-
-    func cancel() {
-        guard shouldCallCompletion else { return }
-
-        completionHandler(false)
     }
 }
 
 struct TextInputAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (String?) -> Void
     let defaultText: String?
-    let shouldCallCompletion: Bool
 
     var input: UITextField!
 
@@ -108,22 +82,10 @@ struct TextInputAlert: JSAlertInfo {
             input = textField
             input.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            guard shouldCallCompletion else { return }
-
-            self.completionHandler(input.text)
-        })
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            self.cancel()
-        })
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         alertController.alertInfo = self
         return alertController
-    }
-
-    func cancel() {
-        guard shouldCallCompletion else { return }
-
-        completionHandler(nil)
     }
 }
 

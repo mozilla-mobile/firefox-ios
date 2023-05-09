@@ -115,7 +115,7 @@ onboarding-feature:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
 onboarding-framework-feature:
-  description: "Feature description\n"
+  description: "The new onboarding framework feature that will allow onboarding to be experimentable through initial experiments.\n"
   hasExposure: true
   exposureDescription: ""
   variables:

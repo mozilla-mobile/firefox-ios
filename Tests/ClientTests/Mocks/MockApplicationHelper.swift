@@ -11,4 +11,11 @@ class MockApplicationHelper: ApplicationHelper {
     func openSettings() {
         openSettingsCalled += 1
     }
+
+    var openURLCalled = 0
+    var lastOpenURL: URL?
+    func open(_ url: URL) {
+        openURLCalled += 1
+        lastOpenURL = url
+    }
 }

@@ -93,7 +93,7 @@ if [ -z "$number_string" ]; then
     fi
 fi
 
-AS_VERSION="v$number_string"
+AS_VERSION=$(echo "v$number_string" | sed 's/\.0\./\./g') # rust-component-swift tags have a middle `.0.` to force it to align with spm. We remove it
 FRESHEN_FML=
 NIMBUS_DIR="$SOURCE_ROOT/build/nimbus"
 

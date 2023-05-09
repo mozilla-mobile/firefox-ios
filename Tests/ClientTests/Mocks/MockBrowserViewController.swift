@@ -42,6 +42,10 @@ class MockBrowserViewController: BrowserViewController {
     var qrCodeCount = 0
     var closePrivateTabsCount = 0
 
+    var embedContentCalled = 0
+    var frontEmbeddedContentCalled = 0
+    var saveEmbeddedContent: ContentContainable?
+
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
         switchToPrivacyModeIsPrivate = isPrivate
@@ -96,5 +100,15 @@ class MockBrowserViewController: BrowserViewController {
         presentSignInFlowType = flowType
         presentSignInReferringPage = referringPage
         presentSignInCount += 1
+    }
+
+    override func embedContent(_ viewController: ContentContainable) {
+        embedContentCalled += 1
+        saveEmbeddedContent = viewController
+    }
+
+    override func frontEmbeddedContent(_ viewController: ContentContainable) {
+        frontEmbeddedContentCalled += 1
+        saveEmbeddedContent = viewController
     }
 }

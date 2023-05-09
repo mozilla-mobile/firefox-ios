@@ -2,12 +2,13 @@
 features:
   onboarding-framework-feature:
     description: >
-      Feature description
+      The new onboarding framework feature that will allow onboarding
+      to be experimentable through initial experiments.
     variables:
       cards:
         description: >
           The list of available cards for onboarding.
-        type: List<OnboardingCardData>
+        type: List<NimbusOnboardingCardData>
         default: []
       card-ordering:
         description: >
@@ -43,6 +44,9 @@ features:
             - name: "Test 2"
               title: "Second title"
               body: "Some body text that's rather longer than a title 2"
+              link:
+                title: "Hello, senator"
+                url: "https://macrumors.com"
               buttons:
                 - title: "Primary Button 2"
                   action: sync-sign-in
@@ -52,10 +56,10 @@ features:
           card-ordering:
             - "Test 1"
             - "Test 2"
-          dismissable: true
+          dismissable: false
 
 objects:
-  OnboardingCardData:
+  NimbusOnboardingCardData:
     description: >
       A group of properties describing the attributes of a card.
     fields:
@@ -78,8 +82,19 @@ objects:
           The body text dispalyed on the card, in less prominent text.
           This should never be defaulted.
         default: ""
+      image:
+        type: NimbusOnboardingImages
+        description: >
+          The image that should be dispalyed on the card.
+        default: welcome-globe
+      link:
+        type: Option<NimbusOnboardingLink>
+        description: >
+          The object describing the link button for a card.
+          If left empty, the card will have no link.
+        default: null
       buttons:
-        type: List<OnboardingButton>
+        type: List<NimbusOnboardingButton>
         description: >
           A list of buttons associated with the card.
           Based on the number of buttons in this list, the card will
@@ -92,7 +107,22 @@ objects:
           whether it a fresh install or an update.
           The default is fresh-install.
         default: fresh-install
-  OnboardingButton:
+  NimbusOnboardingLink:
+    description: >
+      A group of properties describing the attributes for the active
+      link on a card
+    fields:
+      title:
+        type: String
+        description: >
+          The text of the link title.
+        default: "Learn more about our privacy policy"
+      url:
+        type: String
+        description: >
+          The url that the link will lead to.
+        default: "https://macrumors.com"
+  NimbusOnboardingButton:
     description: >
       A group of properties describing the attributes of a card.
     fields:
@@ -123,7 +153,10 @@ enums:
       request-notifications:
         description: >
           Will request to allow notifications from the user
-  OnboardingImages:
+      set-default-browser:
+        description: >
+          Will send the user to settings to set Firefox as their default browser
+  NimbusOnboardingImages:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:

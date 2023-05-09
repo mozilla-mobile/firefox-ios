@@ -41,10 +41,6 @@ protocol URLChangeDelegate {
     func tab(_ tab: Tab, urlDidChangeTo url: URL)
 }
 
-protocol URLHostDelegate: AnyObject {
-    func hostDidSet()
-}
-
 struct TabState {
     var isPrivate = false
     var url: URL?
@@ -241,7 +237,6 @@ class Tab: NSObject {
     var webView: WKWebView?
     var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
-    weak var urlHostDelegate: URLHostDelegate?
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
@@ -260,7 +255,7 @@ class Tab: NSObject {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
-            } else { setZoomLevelforDomain() }
+            }
         }
     }
     var lastKnownUrl: URL? {
@@ -284,6 +279,7 @@ class Tab: NSObject {
             return true
         }
 
+        setZoomLevelforDomain()
         return false
     }
 
@@ -487,8 +483,8 @@ class Tab: NSObject {
         // now comes from a different source than save tab and parsing is managed by the web view itself
         if #available(iOS 15, *),
            let sessionData = sessionData,
-           let request = lastRequest {
-            webView.load(request)
+           let url = url {
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
             webView.interactionState = sessionData
             return
         }
@@ -695,7 +691,6 @@ class Tab: NSObject {
         if let host = url?.host,
            let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
             pageZoom = domainZoomLevel.zoomLevel
-            urlHostDelegate?.hostDidSet()
         } else { resetZoom() }
     }
 
@@ -784,12 +779,6 @@ class Tab: NSObject {
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
-    }
-
-    func cancelQueuedAlerts() {
-        alertQueue.forEach { alert in
-            alert.cancel()
-        }
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

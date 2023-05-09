@@ -6,11 +6,16 @@ import Foundation
 
 protocol ApplicationHelper {
     func openSettings()
+    func open(_ url: URL)
 }
 
 /// UIApplication.shared wrapper
 struct DefaultApplicationHelper: ApplicationHelper {
     func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+    }
+
+    func open(_ url: URL) {
+        UIApplication.shared.open(url)
     }
 }

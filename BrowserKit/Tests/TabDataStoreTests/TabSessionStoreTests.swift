@@ -19,10 +19,20 @@ final class TabSessionStoreTests: XCTestCase {
     func testSaveTabSession() async {
         let uuid = UUID()
         let dataFile = Data(count: 100)
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
+        mockFileManager.fileExists = false
         await subject.saveTabSession(tabID: uuid, sessionData: dataFile)
-        let path = mockFileManager.tabSessionDataDirectory()!.appendingPathComponent("tab-" + uuid.uuidString)
 
-        let data = try? Data(contentsOf: path)
-        XCTAssertEqual(data?.count, 100)
+        XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
+        XCTAssertEqual(mockFileManager.fileExistsCalledCount, 1)
+        XCTAssertEqual(mockFileManager.createDirectoryAtPathCalledCount, 1)
+    }
+
+    func testFetchTabSession() async {
+        let uuid = UUID()
+
+        _ = await subject.fetchTabSession(tabID: uuid)
+
+        XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
     }
 }

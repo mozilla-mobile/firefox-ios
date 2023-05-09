@@ -146,7 +146,7 @@ class Setting: NSObject {
 
 // A setting in the sections panel. Contains a sublist of Settings
 class SettingSection: Setting {
-    fileprivate let children: [Setting]
+    let children: [Setting]
 
     init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
         self.children = children

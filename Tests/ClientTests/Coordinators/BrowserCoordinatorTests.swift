@@ -11,7 +11,6 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
-    private var logger: MockLogger!
     private var screenshotService: ScreenshotService!
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
@@ -27,7 +26,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
-        self.logger = MockLogger()
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
@@ -41,7 +39,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
-        self.logger = nil
         self.screenshotService = nil
         self.tabManager = nil
         self.applicationHelper = nil
@@ -125,35 +122,35 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     // MARK: - Show webview
 
-    func testShowWebview_withoutPreviousSendsFatal() {
-        let subject = createSubject()
-        subject.show(webView: nil)
-        XCTAssertEqual(logger.savedMessage, "Webview controller couldn't be shown, this shouldn't happen.")
-        XCTAssertEqual(logger.savedLevel, .fatal)
-
-        XCTAssertNil(subject.homepageViewController)
-        XCTAssertNil(subject.webviewController)
-    }
-
     func testShowWebview_embedNewWebview() {
         let webview = WKWebView()
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
         subject.show(webView: webview)
 
         XCTAssertNil(subject.homepageViewController)
         XCTAssertNotNil(subject.webviewController)
+        XCTAssertEqual(mbvc.embedContentCalled, 1)
+        XCTAssertEqual(mbvc.saveEmbeddedContent?.contentType, .webview)
     }
 
     func testShowWebview_reuseExistingWebview() {
         let webview = WKWebView()
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
         subject.show(webView: webview)
         let firstWebview = subject.webviewController
         XCTAssertNotNil(firstWebview)
 
-        subject.show(webView: nil)
+        subject.show(webView: webview)
         let secondWebview = subject.webviewController
+
         XCTAssertEqual(firstWebview, secondWebview)
+        XCTAssertEqual(mbvc.embedContentCalled, 1)
+        XCTAssertEqual(mbvc.frontEmbeddedContentCalled, 1)
+        XCTAssertEqual(mbvc.saveEmbeddedContent?.contentType, .webview)
     }
 
     func testShowWebview_setsScreenshotService() {
@@ -530,27 +527,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
     }
 
-    // MARK: - DidRequestToOpenInNewTab
-
-    func testDidRequestToOpenInNewTab_findsRoute() {
-        let expectedURL = URL(string: "www.example.com")!
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        subject.browserViewController = mbvc
-
-        subject.didRequestToOpenInNewTab(from: LaunchCoordinator(router: mockRouter), url: expectedURL, isPrivate: false)
-
-        XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)
-        XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, expectedURL)
-    }
-
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
-                                         logger: logger,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
                                          wallpaperManager: wallpaperManager)
