@@ -121,7 +121,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Delegates
-    func testStart_surveySetsDelegate() {
+    func testStart_surveySetsDelegate() throws {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
         messageManager.message = message
@@ -131,7 +131,17 @@ final class LaunchCoordinatorTests: XCTestCase {
         let subject = createSubject(isIphone: false)
         subject.start(with: .survey(manager: manager))
 
-        XCTAssertNotNil(manager.dismissClosure)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? SurveySurfaceViewController)
+        XCTAssertNotNil(presentedVC.delegate)
+    }
+
+    func testDidFinish_fromSurveySurfaceViewControllerDelegate() {
+        let subject = createSubject(isIphone: false)
+        subject.parentCoordinator = delegate
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishCalledCount, 1)
+        XCTAssertEqual(delegate.savedDidFinishCoordinator?.id, subject.id)
     }
 
     // MARK: - Helpers

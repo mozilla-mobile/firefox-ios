@@ -84,6 +84,9 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
     func didTapDismissSurvey() {
         message.map(messagingManager.onMessageDismissed)
-        dismissClosure?()
+        // FXIOS-6036 - Remove the dismissClosure, we dismiss using delegate instead of closure
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            dismissClosure?()
+        }
     }
 }
