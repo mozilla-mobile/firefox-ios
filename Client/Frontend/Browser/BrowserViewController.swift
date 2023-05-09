@@ -2498,7 +2498,7 @@ extension BrowserViewController {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
-        
+
         self.introVCPresentHelper(introViewController: introViewController)
     }
 
