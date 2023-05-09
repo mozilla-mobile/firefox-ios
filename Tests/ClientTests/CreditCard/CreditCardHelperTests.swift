@@ -78,9 +78,9 @@ class CreditCardHelperTests: XCTestCase {
         let messageBodyDict = creditCardHelper.getValidPayloadData(from: validMockWKMessage)
         let messageFields = creditCardHelper.parseFieldType(messageBody: messageBodyDict!)
         XCTAssertNotNil(messageFields)
-        XCTAssertEqual(messageFields!.payload.ccExpMonth, "03")
-        XCTAssertEqual(messageFields!.payload.ccExpYear, "2999")
-        XCTAssertEqual(messageFields!.payload.ccName, "Josh Moustache")
-        XCTAssertEqual(messageFields!.payload.ccNumber, "1234 4567 4567 6788")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "1234 4567 4567 6788")
     }
 }

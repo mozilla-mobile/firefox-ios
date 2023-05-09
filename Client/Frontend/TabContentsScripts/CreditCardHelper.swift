@@ -27,7 +27,7 @@ struct FillCreditCardForm: Codable {
     let type: String
 
     enum CodingKeys: String, CodingKey, CaseIterable {
-        case creditCardPayload = "Payload"
+        case creditCardPayload = "payload"
         case type = "type"
     }
 }
