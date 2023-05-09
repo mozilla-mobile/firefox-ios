@@ -117,7 +117,6 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     }
 
     // MARK: - SurveySurfaceViewControllerDelegate
-
     func didFinish() {
         parentCoordinator?.didFinishLaunch(from: self)
     }
