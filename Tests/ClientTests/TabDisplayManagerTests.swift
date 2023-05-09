@@ -321,7 +321,7 @@ class TabDisplayManagerTests: XCTestCase {
 
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
-        cfrDelegate.confirmClose = true
+        cfrDelegate.isUndoButtonPressed = false
         // Force collectionView reload to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
@@ -331,6 +331,54 @@ class TabDisplayManagerTests: XCTestCase {
             XCTAssertTrue(tabDisplayManager.inactiveViewModel?.inactiveTabs.isEmpty ?? false, "Inactive tabs should be empty after closing")
             expectation.fulfill()
         }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testInactiveTabs_grid_undoSingleTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
+
+        // Add four tabs (2 inactive, 1 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
+                                                             inactiveTab2]
+        cfrDelegate.isUndoButtonPressed = true
+        tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 2, "Expected 2 inactive tabs after undo")
+        expectation.fulfill()
+        waitForExpectations(timeout: 5)
+    }
+
+    func testInactiveTabs_grid_closeSingleTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
+
+        // Add four tabs (2 inactive, 1 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
+                                                             inactiveTab2]
+        cfrDelegate.isUndoButtonPressed = false
+        tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 1, "Expected 1 inactive tab after deletion")
+        expectation.fulfill()
         waitForExpectations(timeout: 5)
     }
 
@@ -353,7 +401,7 @@ class TabDisplayManagerTests: XCTestCase {
 
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
-        cfrDelegate.confirmClose = false
+        cfrDelegate.isUndoButtonPressed = true
         // Force collectionView reload to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
@@ -366,7 +414,7 @@ class TabDisplayManagerTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
-    // MARK: - Undo tab clos
+    // MARK: - Undo tab close
     func testShouldPresentUndoToastOnHomepage_ForLastTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
@@ -389,17 +437,17 @@ class TabDisplayManagerTests: XCTestCase {
                        "Expected to present toast on TabTray")
     }
 
-    func testShouldPresentUndoToastOnHomepage_ForLastPrivateTab() {
+    func testShouldNotPresentUndoToastOnHomepage_ForLastPrivateTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
 
         _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
 
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
-                       "Expected to present toast on homepage")
+                       "Expected to present toast on TabTray")
     }
 
-    func testShouldPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
+    func testShouldNotPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
 
@@ -409,7 +457,7 @@ class TabDisplayManagerTests: XCTestCase {
         manager.selectTab(activeTab1)
 
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
-                       "Expected to present toast on homepage")
+                       "Expected to present toast on TabTray")
     }
 
     func testInitWithExistingRegularTabs() {
@@ -530,12 +578,16 @@ class MockCollectionView: UICollectionView {
 }
 
 class MockInactiveTabsCFRDelegate: InactiveTabsCFRProtocol {
-    var confirmClose = true
+    var isUndoButtonPressed = true
 
     func setupCFR(with view: UILabel) { }
     func presentCFR() { }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        completion(confirmClose)
+        completion(isUndoButtonPressed)
+    }
+
+    func presentUndoSingleToast(completion: @escaping (Bool) -> Void) {
+        completion(isUndoButtonPressed)
     }
 }
