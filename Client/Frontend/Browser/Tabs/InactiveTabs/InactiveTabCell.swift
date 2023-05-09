@@ -16,7 +16,7 @@ protocol InactiveTabsDelegate: AnyObject {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
     func didTapCloseInactiveTabs(tabsCount: Int)
-    func shouldCloseInactiveTab(tab: Tab)
+    func closeInactiveTab(_ tab: Tab, index: Int)
     func setupCFR(with view: UILabel)
     func presentCFR()
 }
@@ -235,10 +235,16 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
             if let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
-                delegate?.shouldCloseInactiveTab(tab: tab)
+                removeInactiveTab(at: indexPath)
+                delegate?.closeInactiveTab(tab, index: indexPath.item)
             }
         case .closeAllTabsButton, .none: return
         }
+    }
+
+    private func removeInactiveTab(at indexPath: IndexPath) {
+        inactiveTabsViewModel?.inactiveTabs.remove(at: indexPath.item)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
 
     @objc

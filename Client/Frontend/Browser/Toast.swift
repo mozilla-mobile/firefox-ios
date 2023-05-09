@@ -21,7 +21,7 @@ class Toast: UIView, ThemeApplicable {
 
     weak var viewController: UIViewController?
 
-    var dismissed = false
+    private static var currentToast: Toast?
 
     lazy var gestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -45,6 +45,10 @@ class Toast: UIView, ThemeApplicable {
         translatesAutoresizingMaskIntoConstraints = false
 
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            if let currentToast = Toast.currentToast {
+                currentToast.dismiss(false)
+            }
+
             viewController?.view.addSubview(self)
             guard viewController != nil else { return }
 
@@ -63,13 +67,11 @@ class Toast: UIView, ThemeApplicable {
                         }
                     }
                 }
+            Toast.currentToast = self
         }
     }
 
     func dismiss(_ buttonPressed: Bool) {
-        guard !dismissed else { return }
-
-        dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
         UIView.animate(
