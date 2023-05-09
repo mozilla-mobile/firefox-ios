@@ -31,6 +31,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_creationFromBVC_hideDoesntNil() {
+        guard !CoordinatorFlagManager.isCoordinatorEnabled else { return }
         let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
 
@@ -75,6 +76,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testUpdateInContentHomePanel_homeURL_showHomepage() {
+        guard !CoordinatorFlagManager.isCoordinatorEnabled else { return }
         let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
