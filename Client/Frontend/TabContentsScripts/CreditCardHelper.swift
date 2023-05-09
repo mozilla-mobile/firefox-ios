@@ -51,14 +51,21 @@ class CreditCardHelper: TabContentScript {
     }
 
     // MARK: Retrieval
+
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
-        guard let data = message.body as? [String: Any] else { return }
+        guard let data = getValidPayloadData(from: message) else { return }
         guard let payload = parseFieldType(messageBody: data)?.payload else { return }
         foundFieldValues?(getFieldTypeValues(payload: payload))
     }
 
+    func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
+        return message.body as? [String: Any]
+    }
+
     func parseFieldType(messageBody: [String: Any]) -> FillCreditCardForm? {
+        print(String(data: try! JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted), encoding: .utf8)!)
+
         let decoder = JSONDecoder()
 
         do {
@@ -87,6 +94,7 @@ class CreditCardHelper: TabContentScript {
     }
 
     // MARK: Injection
+
     func injectCardInfo(card: UnencryptedCreditCardFields,
                         tab: Tab) -> Bool {
         guard !card.ccNumber.isEmpty, card.ccExpYear > 0, !card.ccName.isEmpty else {
