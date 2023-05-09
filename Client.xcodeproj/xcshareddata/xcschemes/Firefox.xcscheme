@@ -142,6 +142,17 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8AC5E8EC2A0ACEEC0059E29E"
+               BuildableName = "CredentialProviderTests.xctest"
+               BlueprintName = "CredentialProviderTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
