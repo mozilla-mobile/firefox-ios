@@ -22,7 +22,11 @@ func changedFiles() {
 
 func checkCodeCoverage() {
     guard let xcresult = ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"]?.escapeString() else {
+<<<<<<< HEAD
         fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage.")
+=======
+        fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage")
+>>>>>>> parent of cd51edc56 (test swift file change)
         return
     }
 
