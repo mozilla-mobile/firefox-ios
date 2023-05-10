@@ -570,7 +570,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -ex
+            set -x
 
             # Manual triggers leave empty commits. 
             # Check for empty commit and exit blacklist check if found to avoid erroring out.
@@ -579,7 +579,7 @@ workflows:
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
 
             # Check for files changed in commit
-            FILES_CHANGED="$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)"
+            FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)
             echo "Files changed in commit: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit. Skipping Blacklist check..."
@@ -606,6 +606,7 @@ workflows:
             
             # Blacklist check
             BLACKLISTED_FILES=$(echo "$FILES_CHANGED" | grep -E ".*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|fastlane/.*|taskcluster/.*|Sync.*|L10nSnapshotTests/.*|test-fixtures/.*\.py$")
+            echo $?
             echo "Blacklisted files: $BLACKLISTED_FILES"
             if [[ -z "$BLACKLISTED_FILES" ]]; then
                 echo "No blacklisted files found. Continuing..."
@@ -615,6 +616,7 @@ workflows:
             
             # Whitelist check
             WHITELISTED_FILES=$(echo "$FILES_CHANGED" | grep -E ".*\.swift$|.*\.m$|.*\.mm$|.*\.cpp$|.*\.h$|.*\.c$|.*\.hpp$|.*\.py$")
+            echo $?
             echo "Whitelisted files: $WHITELISTED_FILES"
             if [[ -z "$WHITELISTED_FILES" ]]; then
                 echo "No whitelisted files found. Exiting..."
@@ -625,6 +627,7 @@ workflows:
             # Check for blacklisted files in commit
             BLACKLISTED_FILES_IN_COMMIT=$(echo "$BLACKLISTED_FILES" | grep -E "$FILES_CHANGED")
             echo "Blacklisted files in commit: $BLACKLISTED_FILES_IN_COMMIT"
+            echo $?
             if [[ -z "$BLACKLISTED_FILES_IN_COMMIT" ]]; then
                 echo "No blacklisted files found in commit. Continuing..."
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
@@ -633,12 +636,14 @@ workflows:
 
             # Check for whitelisted files in commit
             WHITELISTED_FILES_IN_COMMIT=$(echo "$WHITELISTED_FILES" | grep -E "$FILES_CHANGED")
+            echo $?
             echo "Whitelisted files in commit: $WHITELISTED_FILES_IN_COMMIT"
             if [[ -z "$WHITELISTED_FILES_IN_COMMIT" ]]; then
                 echo "No whitelisted files found in commit. Exiting..."
                 envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
                 # exit 0
             fi
+            echo $RUN_UI_TESTS
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
