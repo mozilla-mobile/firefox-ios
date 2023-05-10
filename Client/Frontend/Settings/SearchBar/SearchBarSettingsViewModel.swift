@@ -104,7 +104,7 @@ private extension SearchBarSettingsViewModel {
         recordPreferenceChange(searchBarPosition)
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
-        notificationCenter.post(name: .SearchBarPositionDidChange, anObject: notificationObject)
+        notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
