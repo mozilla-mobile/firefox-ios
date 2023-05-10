@@ -579,7 +579,7 @@ workflows:
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
 
             # Check for files changed in commit
-            FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)
+            FILES_CHANGED="$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)"
             echo "Files changed in commit: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit. Skipping Blacklist check..."
@@ -630,7 +630,7 @@ workflows:
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
                 # exit 0
             fi
-            
+
             # Check for whitelisted files in commit
             WHITELISTED_FILES_IN_COMMIT=$(echo "$WHITELISTED_FILES" | grep -E "$FILES_CHANGED")
             echo "Whitelisted files in commit: $WHITELISTED_FILES_IN_COMMIT"
