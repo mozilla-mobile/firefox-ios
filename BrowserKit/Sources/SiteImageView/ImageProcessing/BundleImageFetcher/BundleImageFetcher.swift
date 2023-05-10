@@ -28,28 +28,32 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     }
 
     private let bundleDataProvider: BundleDataProvider
-    private var bundledImages = [String: FormattedBundledImage]()
+    private static var staticBundledImages = [String: FormattedBundledImage]()
+    private var bundledImages: [String: FormattedBundledImage] {
+        DefaultBundleImageFetcher.staticBundledImages
+    }
     private var logger: Logger
 
     init(bundleDataProvider: BundleDataProvider = DefaultBundleDataProvider(),
          logger: Logger = DefaultLogger.shared) {
         self.bundleDataProvider = bundleDataProvider
         self.logger = logger
-        bundledImages = retrieveBundledImages()
+        // This is a heavy lift so we only want to fetch once, so we store in a static var
+        if bundledImages.isEmpty {
+            DefaultBundleImageFetcher.staticBundledImages = retrieveBundledImages()
+        }
     }
 
     func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
         guard let domain = domain,
               let bundleDomain = getBundleDomain(domain: domain)
         else {
-            logger.log("There should be at least one domain to get the bundle image from",
-                       level: .warning,
-                       category: .images)
             throw SiteImageError.noImageInBundle
         }
 
         guard let bundledImage = bundledImages[bundleDomain],
-              let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) else {
+              let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath)
+        else {
             throw SiteImageError.noImageInBundle
         }
 
