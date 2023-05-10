@@ -36,6 +36,6 @@ public struct UIConstants {
     static let PasscodeEntryFont = UIFont.systemFont(ofSize: PasscodeEntryFontSize, weight: UIFont.Weight.bold)
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
-    static let ScreenshotQuality: Float = 0.3
+    static let ScreenshotQuality: Float = 1
     static let ActiveScreenshotQuality: CGFloat = 0.5
 }
