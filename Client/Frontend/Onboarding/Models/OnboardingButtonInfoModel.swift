@@ -4,19 +4,6 @@
 
 import Foundation
 
-struct OnboardingButtons {
-    let primary: OnboardingButtonInfoModel
-    let secondary: OnboardingButtonInfoModel?
-
-    init(
-        primary: OnboardingButtonInfoModel,
-        secondary: OnboardingButtonInfoModel? = nil
-    ) {
-        self.primary = primary
-        self.secondary = secondary
-    }
-}
-
 struct OnboardingButtonInfoModel {
     let title: String
     let action: OnboardingActions

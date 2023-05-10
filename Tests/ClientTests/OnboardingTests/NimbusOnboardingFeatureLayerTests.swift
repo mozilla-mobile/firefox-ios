@@ -19,6 +19,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         static let linkURL = "https://macrumors.com"
         static let primaryButtonTitle = "Primary Button"
         static let secondaryButtonTitle = "Secondary Button"
+        static let placeholderString = "A string inside %@ with a placeholder"
+        static let noPlaceholderString = "On Wednesday's, we wear pink"
     }
 
     override func setUp() {
@@ -29,6 +31,26 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+    }
+
+    // MARK: - Test placeholder methods
+    func testLayer_placeholderNamingMethod_returnsExpectedStrigs() {
+        setupNimbusForStringTesting()
+        let expectedPlaceholderString = String(
+            format: CardElementNames.placeholderString,
+            AppName.shortName.rawValue)
+        let expectedNoPlaceholderString = String(
+            format: CardElementNames.noPlaceholderString,
+            AppName.shortName.rawValue)
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.title, expectedPlaceholderString)
+        XCTAssertEqual(subject.body, expectedNoPlaceholderString)
     }
 
     // MARK: - Test Dismissable
@@ -55,7 +77,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cardOrdering: ["\(CardElementNames.name) 1"])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -103,10 +125,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
-            XCTFail("Expected cards, and got none.")
-            return
-        }
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
         XCTAssertEqual(expectedNumberOfCards, subject.count)
     }
@@ -122,37 +141,11 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
-            XCTFail("Expected cards, and got none.")
-            return
-        }
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
         XCTAssertEqual("\(CardElementNames.name) 3", subject[0].name)
         XCTAssertEqual("\(CardElementNames.name) 1", subject[1].name)
         XCTAssertEqual("\(CardElementNames.name) 2", subject[2].name)
-    }
-
-    func testLayer_cardsAreReturned_InExpectedOrder_WithoutMisspelledCards() {
-        let expectedNumberOfCards = 3
-        setupNimbusWith(
-            cards: expectedNumberOfCards + 1,
-            cardOrdering: [
-                "\(CardElementNames.name) 1",
-                "\(CardElementNames.name) mispelling",
-                "\(CardElementNames.name) 3",
-                "\(CardElementNames.name) 4",
-            ])
-        let layer = NimbusOnboardingFeatureLayer()
-
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
-            XCTFail("Expected cards, and got none.")
-            return
-        }
-
-        XCTAssertEqual(expectedNumberOfCards, subject.count)
-        XCTAssertEqual("\(CardElementNames.name) 1", subject[0].name)
-        XCTAssertEqual("\(CardElementNames.name) 3", subject[1].name)
-        XCTAssertEqual("\(CardElementNames.name) 4", subject[2].name)
     }
 
     // MARK: - Test image IDs
@@ -164,7 +157,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -180,7 +173,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -196,7 +189,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -212,7 +205,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -229,7 +222,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -245,7 +238,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .upgrade).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -262,7 +255,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -280,7 +273,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -298,7 +291,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -315,7 +308,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        XCTAssertNotNil(layer.getOnboardingModel(for: .freshInstall).cards?.first)
+        XCTAssertNotNil(layer.getOnboardingModel(for: .freshInstall).cards.first)
     }
 
     // MARK: - Test button actions
@@ -328,7 +321,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -345,7 +338,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -362,7 +355,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -379,7 +372,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -388,6 +381,37 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    private func setupNimbusForStringTesting() {
+        let features = HardcodedNimbusFeatures(with: [
+            "onboarding-framework-feature": """
+{
+"cards": [
+    {
+        "name": "test",
+        "title": "\(CardElementNames.placeholderString)",
+        "body": "\(CardElementNames.noPlaceholderString)",
+        "image": "\(NimbusOnboardingImages.welcomeGlobe.rawValue)",
+        "link": {
+            "title": "Hello, senator",
+            "url": "https://macrumors.com"
+        },
+        "buttons": {
+            "primary": {
+                "title": "Primary Button 2",
+                "action": "sync-sign-in"
+            },
+        },
+        "type": "\(OnboardingType.freshInstall.rawValue)"
+    }
+],
+"card-ordering": ["test"],
+"dismissable": false
+}
+"""
+        ])
+
+        features.connect(with: FxNimbus.shared)
+    }
     private func setupNimbusWith(
         cards numberOfCards: Int? = nil,
         cardOrdering: [String]? = nil,
