@@ -141,8 +141,7 @@ class DownloadFilesTests: BaseTestCase {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app.
             app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
-            waitForExistence(app.alerts["Unable to Import Clinical Documents"], timeout: TIMEOUT)
-            app.buttons["OK"].tap()
+            app.navigationBars["Add Tag"].buttons["Done"].tap()
         }
      }
 
