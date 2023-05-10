@@ -10,12 +10,17 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ///
     /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
     /// - Returns: An ``OnboardingViewModel`` to be used in the onboarding.
-    func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
+    func getOnboardingModel(
+        for onboardingType: OnboardingType,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         return OnboardingViewModel(
-            cards: getOrderedOnboardingCards(from: framework.cards,
-                                             using: framework.cardOrdering),
+            cards: getOrderedOnboardingCards(
+                for: onboardingType,
+                from: framework.cards,
+                using: framework.cardOrdering),
             isDismissable: framework.dismissable)
     }
 
@@ -28,6 +33,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ///   - cardOrder: Card order from ``FxNimbus/shared``
     /// - Returns: Card data converted to ``OnboardingCardInfoModel`` and ordered.
     private func getOrderedOnboardingCards(
+        for onboardingType: OnboardingType,
         from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
     ) -> [OnboardingCardInfoModel] {
@@ -36,10 +42,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        return cardOrder.compactMap { cardName in
-            guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
-            return card
-        }
+        return cardOrder
+            .compactMap { cardName in
+                guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
+                return card
+            }.filter { $0.type == onboardingType }
     }
 
     /// Converts ``NimbusOnboardingCardData`` to ``OnboardingCardInfoModel``
