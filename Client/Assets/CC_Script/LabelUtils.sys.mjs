@@ -1,3 +1,11 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+ * This is a utility object to work with HTML labels in web pages,
+ * including finding label elements and label text extraction.
+ */
 export const LabelUtils = {
   // The tag name list is from Chromium except for "STYLE":
   // eslint-disable-next-line max-len
@@ -16,7 +24,7 @@ export const LabelUtils = {
 
   // A weak map consisting of label element and extracted strings pairs.
   // @type {WeakMap<HTMLLabelElement, array>}
-  _labelStrings: new WeakMap(),
+  _labelStrings: null,
 
   /**
    * Extract all strings of an element's children to an array.
@@ -33,7 +41,7 @@ export const LabelUtils = {
       return this._labelStrings.get(element);
     }
     let strings = [];
-    let _extractLabelStrings = (el) => {
+    let _extractLabelStrings = el => {
       if (this.EXCLUDED_TAGS.includes(el.tagName)) {
         return;
       }
@@ -102,9 +110,11 @@ export const LabelUtils = {
     let id = element.id;
     if (!id) {
       return this._unmappedLabelControls
-        .filter((lc) => lc.control == element)
-        .map((lc) => lc.label);
+        .filter(lc => lc.control == element)
+        .map(lc => lc.label);
     }
     return this._mappedLabels.get(id) || [];
   },
 };
+
+export default LabelUtils;
