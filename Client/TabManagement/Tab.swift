@@ -454,7 +454,7 @@ class Tab: NSObject {
             webView.scrollView.layer.masksToBounds = false
             webView.navigationDelegate = navigationDelegate
 
-            restore(webView, sessionData: restoreSessionData)
+            restore(webView, interactionState: restoreSessionData)
 
             self.webView = webView
 
@@ -478,12 +478,17 @@ class Tab: NSObject {
         }
     }
 
-    func restore(_ webView: WKWebView, sessionData: Data? = nil) {
-        // If the session data field is populated it means the new session store is in use and the session data
+    func restore(_ webView: WKWebView, interactionState: Data? = nil) {
+        // If the interactionState field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
-        if #available(iOS 15, *),
-           let url = url {
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
+        if TabStorageFlagManager.isNewTabDataStoreEnabled {
+            if let url = url {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            }
+            if #available(iOS 15, *),
+               let interactionState = interactionState {
+                webView.interactionState = interactionState
+            }
             return
         }
 
