@@ -16,6 +16,7 @@ extension BrowserViewController: TabScrollingControllerDelegate {
         let zoomPageBar = ZoomPageBar(tab: tab)
         self.zoomPageBar = zoomPageBar
         zoomPageBar.delegate = self
+        scrollController.delegate = self
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             header.addArrangedViewToBottom(zoomPageBar, completion: {

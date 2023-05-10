@@ -197,7 +197,6 @@ class BrowserViewController: UIViewController {
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
         super.init(nibName: nil, bundle: nil)
-        scrollController.delegate = self
         didInit()
     }
 
@@ -677,6 +676,7 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
+
         showQueuedAlertIfAvailable()
     }
 
