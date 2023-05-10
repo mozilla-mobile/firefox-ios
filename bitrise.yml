@@ -150,7 +150,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
         machine_type_id: g2.8core
-  build_and_test_2_SmokeTest2:
+  build_and_test_1_SmokeTest2:
     before_run:
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
@@ -190,7 +190,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
         machine_type_id: g2.4core
-  build_and_test_1_SmokeTest1:
+  build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
