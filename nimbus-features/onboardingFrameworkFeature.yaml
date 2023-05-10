@@ -29,38 +29,71 @@ features:
       #   type: Boolean
       #   default: false
     defaults:
-      - channel: developer
+      - channel: developer, beta, release
         value:
           cards:
-            - name: "Test 1"
-              title: "First title"
-              body: "Some body text that's rather longer than a title 1"
+            - name: "welcome"
+              title: Onboarding/Onboarding.Welcome.Title.v114
+              body: Onboarding/Onboarding.Welcome.Description.v114
+              link:
+                title: Onboarding/Onboarding.Welcome.Link.Action.v114
+                url: "https://www.mozilla.org/en-US/privacy/firefox/"
               buttons:
                 primary:
-                  title: "Primary Button 2"
-                  action: request-notifications
-                secondary:
-                  title: "Secondary Button 2"
+                  title: Onboarding/Onboarding.Welcome.Action.v114
                   action: next-card
               type: fresh-install
-            - name: "Test 2"
-              title: "Second title"
-              body: "Some body text that's rather longer than a title 2"
-              link:
-                title: "Hello, senator"
-                url: "https://macrumors.com"
+            - name: "notificationPermissions"
+              title: Onboarding/Onboarding.Notification.Title.v114
+              body: Onboarding/Onboarding.Notification.Description.v114
               buttons:
                 primary:
-                  title: "Primary Button 2"
+                  title: Onboarding/Onboarding.Notification.Continue.Action.v114
+                  action: request-notifications
+                secondary:
+                  title: Onboarding/Onboarding.Notification.Skip.Action.v114
+                  action: next-card
+              type: fresh-install
+            - name: "signToSync"
+              title: Onboarding/Onboarding.Sync.Title.v114
+              body: Onboarding/Onboarding.Sync.Description.v114
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Sync.SignIn.Action.v114
                   action: sync-sign-in
                 secondary:
-                  title: "Secondary Button 2"
+                  title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: next-card
-              type: update
+              type: fresh-install
+            - name: "update.welcome"
+              title: Upgrade/Upgrade.Welcome.Title.v114
+              body: Upgrade/Upgrade.Welcome.Description.v114
+              link:
+                title: Onboarding/Onboarding.Welcome.Link.Action.v114
+                url: "https://www.mozilla.org/en-US/privacy/firefox/"
+              buttons:
+                primary:
+                  title: Upgrade/Upgrade.Welcome.Action.v114
+                  action: next-card
+              type: upgrade
+            - name: "update.signToSync"
+              title: Upgrade/Upgrade.SyncSign.Title.v114
+              body: Upgrade/Upgrade.SyncSign.Description.v114
+              buttons:
+                primary:
+                  title: Upgrade/Upgrade.SyncSign.Action.v114
+                  action: sync-sign-in
+                secondary:
+                  title: Onboarding/Onboarding.LaterAction.v114
+                  action: next-card
+              type: upgrade
           card-ordering:
-            - "Test 1"
-            - "Test 2"
-          dismissable: false
+            - "welcome"
+            - "update.welcome"
+            - "notificationPermissions"
+            - "signToSync"
+            - "update.signToSync"
+          dismissable: true
 
 objects:
   NimbusOnboardingCardData:
@@ -73,15 +106,17 @@ objects:
           The name of the card. It should be unique in the current
           roster of cards.
           This should never be defaulted.
+          This is going to be used as the telemetry value for the
+          card in question.
         default: ""
       title:
-        type: String
+        type: Text
         description: >
           The title displayed on the card, in prominent, bolded text.
           This should never be defaulted.
         default: ""
       body:
-        type: String
+        type: Text
         description: >
           The body text dispalyed on the card, in less prominent text.
           This should never be defaulted.
@@ -119,7 +154,7 @@ objects:
       link on a card
     fields:
       title:
-        type: String
+        type: Text
         description: >
           The text of the link title.
         default: "Learn more about our privacy policy"
@@ -150,7 +185,7 @@ objects:
       A group of properties describing the attributes of a card.
     fields:
       title:
-        type: String
+        type: Text
         description: >
           The text of the button title.
           This should never be defaulted.
@@ -199,7 +234,7 @@ enums:
       fresh-install:
         description: >
           Corresponding to onboarding cards that are for new users
-      update:
+      upgrade:
         description: >
           Corresponding to onboarding cards that are for users
           who have updated

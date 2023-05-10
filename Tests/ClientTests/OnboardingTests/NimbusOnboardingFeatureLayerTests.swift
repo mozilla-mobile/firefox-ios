@@ -35,7 +35,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_dismissable_isTrue() {
         setupNimbusWith(cards: nil, cardOrdering: nil, dismissable: true)
         let layer = NimbusOnboardingFeatureLayer()
-        let subject = layer.getOnboardingModel()
+        let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertTrue(subject.isDismissable)
     }
@@ -43,7 +43,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_dismissable_isFalse() {
         setupNimbusWith(dismissable: false)
         let layer = NimbusOnboardingFeatureLayer()
-        let subject = layer.getOnboardingModel()
+        let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertFalse(subject.isDismissable)
     }
@@ -55,7 +55,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cardOrdering: ["\(CardElementNames.name) 1"])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -103,7 +103,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
             XCTFail("Expected cards, and got none.")
             return
         }
@@ -122,7 +122,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
             XCTFail("Expected cards, and got none.")
             return
         }
@@ -144,7 +144,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards else {
             XCTFail("Expected cards, and got none.")
             return
         }
@@ -164,7 +164,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -180,7 +180,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -196,7 +196,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -212,7 +212,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -229,7 +229,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -241,16 +241,16 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
           cards: 1,
           cardOrdering: ["\(CardElementNames.name) 1"],
-          type: OnboardingType.update.rawValue
+          type: OnboardingType.upgrade.rawValue
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .upgrade).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
 
-        XCTAssertEqual(subject.type, OnboardingType.update)
+        XCTAssertEqual(subject.type, OnboardingType.upgrade)
     }
 
     // MARK: - Test link
@@ -262,7 +262,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -280,7 +280,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -298,7 +298,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -315,7 +315,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        XCTAssertNotNil(layer.getOnboardingModel().cards?.first)
+        XCTAssertNotNil(layer.getOnboardingModel(for: .freshInstall).cards?.first)
     }
 
     // MARK: - Test button actions
@@ -328,7 +328,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -345,7 +345,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -362,7 +362,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
@@ -379,7 +379,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         )
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel().cards?.first else {
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards?.first else {
             XCTFail("Expected a card, and got none.")
             return
         }
