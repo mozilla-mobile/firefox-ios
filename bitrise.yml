@@ -570,27 +570,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -x
+            set -ex
 
             # Manual triggers leave empty commits. 
-            # Check for empty commit and exit blacklist check if found to avoid erroring out.
-            { git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..."; } || \
-                { echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
-
-            # Check for files changed in last commit
-            FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)
-            echo "Files changed in commit: $FILES_CHANGED"
+            # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
+            FILES_CHANGED=$(git diff --name-only origin/main...$BITRISE_GIT_COMMIT)
+            echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
-                echo "No files changed in commit. Skipping Blacklist check..."
+                echo "No files changed in commit/PR. Skipping Blacklist check..."
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
-                echo $RUN_UI_TESTS
-                # exit 0
+                exit 0
             fi
-
-            # Check for files changed in the PR
-            FILES_CHANGED_PR=$(git diff --name-only origin/main...$BITRISE_GIT_COMMIT)
-            echo "Files changed in PR: $FILES_CHANGED_PR"
             
             # Match on file names in all directories and subdirectories
             #
@@ -610,18 +600,15 @@ workflows:
             #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
 
             # Check if files changed are on the blacklist
-            if [[ $FILES_CHANGED_PR =~ .*[^bitrise]\.y[^/]*$ || $FILES_CHANGED_PR =~ .*\.sh$ || $FILES_CHANGED_PR =~ .*\.md$ || $FILES_CHANGED_PR =~ .*\.lproj/.* || $FILES_CHANGED_PR =~ fastlane/* || $FILES_CHANGED_PR =~ taskcluster/* || $FILES_CHANGED_PR =~ Sync*/* || $FILES_CHANGED_PR =~ L10nSnapshotTests/* || $FILES_CHANGED_PR =~ test-fixtures/.py$ ]]; then
-                echo "Files changed in commit are on the blacklist. Skipping UI Tests..."
+            if [[ $FILES_CHANGED =~ .*[^bitrise]\.y[^/]*$ || $FILES_CHANGED =~ .*\.sh$ || $FILES_CHANGED =~ .*\.md$ || $FILES_CHANGED =~ .*\.lproj/.* || $FILES_CHANGED =~ fastlane/* || $FILES_CHANGED =~ taskcluster/* || $FILES_CHANGED =~ Sync*/* || $FILES_CHANGED =~ L10nSnapshotTests/* || $FILES_CHANGED =~ test-fixtures/.py$ ]]; then
+                echo "Files changed in commit/PR are on the blacklist. Skipping UI Tests..."
                 envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
-                echo $RUN_UI_TESTS
-                # exit 0
+                exit 0
             fi
 
             # If files are not on blacklist run UI Tests
             echo "Files changed in commit are not on the blacklist. Running UI Tests..."
             envman add --key RUN_UI_TESTS --value Run_UI_Tests
-            echo $RUN_UI_TESTS
-
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
