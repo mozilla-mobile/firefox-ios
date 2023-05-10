@@ -110,7 +110,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                     primary: OnboardingButtonInfoModel(
                         title: .Upgrade.Welcome.Action,
                         action: .nextCard)),
-                type: .update,
+                type: .upgrade,
                 a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard,
                 imageID: ImageIdentifiers.onboardingWelcomev106)
         case .updateSignSync:
@@ -126,7 +126,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                     secondary: OnboardingButtonInfoModel(
                         title: .Onboarding.LaterAction,
                         action: .nextCard)),
-                type: .update,
+                type: .upgrade,
                 a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard,
                 imageID: ImageIdentifiers.onboardingSyncv106)
         case .welcome, .signSync, .notification:
