@@ -578,15 +578,20 @@ workflows:
                 { echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
 
-            # Check for files changed in commit
+            # Check for files changed in last commit
             FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r $BITRISE_GIT_COMMIT)
             echo "Files changed in commit: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit. Skipping Blacklist check..."
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
+                echo $RUN_UI_TESTS
                 # exit 0
             fi
 
+            # Check for files changed in the PR
+            FILES_CHANGED_PR=$(git diff --name-only origin/main...$BITRISE_GIT_COMMIT)
+            echo "Files changed in PR: $FILES_CHANGED_PR"
+            
             # Match on file names in all directories and subdirectories
             #
             # Project Configs
@@ -603,47 +608,20 @@ workflows:
             #
             # Test Helpers
             #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
-            
-            # Blacklist check
-            BLACKLISTED_FILES=$(echo "$FILES_CHANGED" | grep -v -E ".*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|fastlane/.*|taskcluster/.*|Sync.*|L10nSnapshotTests/.*|test-fixtures/.*\.py$")
-            echo $?
-            echo "Blacklisted files: $BLACKLISTED_FILES"
-            if [[ -z "$BLACKLISTED_FILES" ]]; then
-                echo "No blacklisted files found. Continuing..."
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests
-                # exit 0
-            fi
-            
-            # Whitelist check
-            WHITELISTED_FILES=$(echo "$FILES_CHANGED" | grep -v -E ".*\.swift$|.*\.m$|.*\.mm$|.*\.cpp$|.*\.h$|.*\.c$|.*\.hpp$|.*\.py$")
-            echo $?
-            echo "Whitelisted files: $WHITELISTED_FILES"
-            if [[ -z "$WHITELISTED_FILES" ]]; then
-                echo "No whitelisted files found. Exiting..."
+
+            # Check if files changed are on the blacklist
+            if [[ $FILES_CHANGED_PR =~ .*[^bitrise]\.y[^/]*$ || $FILES_CHANGED_PR =~ .*\.sh$ || $FILES_CHANGED_PR =~ .*\.md$ || $FILES_CHANGED_PR =~ .*\.lproj/.* || $FILES_CHANGED_PR =~ fastlane/* || $FILES_CHANGED_PR =~ taskcluster/* || $FILES_CHANGED_PR =~ Sync*/* || $FILES_CHANGED_PR =~ L10nSnapshotTests/* || $FILES_CHANGED_PR =~ test-fixtures/.py$ ]]; then
+                echo "Files changed in commit are on the blacklist. Skipping UI Tests..."
                 envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
+                echo $RUN_UI_TESTS
                 # exit 0
             fi
 
-            # Check for blacklisted files in commit
-            BLACKLISTED_FILES_IN_COMMIT=$(echo "$BLACKLISTED_FILES" | grep -v -E "$FILES_CHANGED")
-            echo "Blacklisted files in commit: $BLACKLISTED_FILES_IN_COMMIT"
-            echo $?
-            if [[ -z "$BLACKLISTED_FILES_IN_COMMIT" ]]; then
-                echo "No blacklisted files found in commit. Continuing..."
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests
-                # exit 0
-            fi
+            # If files are not on blacklist run UI Tests
+            echo "Files changed in commit are not on the blacklist. Running UI Tests..."
+            envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            echo $RUN_UI_TESTS
 
-            # Check for whitelisted files in commit
-            WHITELISTED_FILES_IN_COMMIT=$(echo "$WHITELISTED_FILES" | grep -v -E "$FILES_CHANGED")
-            echo $?
-            echo "Whitelisted files in commit: $WHITELISTED_FILES_IN_COMMIT"
-            if [[ -z "$WHITELISTED_FILES_IN_COMMIT" ]]; then
-                echo "No whitelisted files found in commit. Exiting..."
-                envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
-                # exit 0
-            fi
-            echo "$RUN_UI_TESTS"
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
