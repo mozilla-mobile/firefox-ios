@@ -5,6 +5,10 @@
 import UIKit
 import SnapKit
 
+protocol TabScrollingControllerDelegate: AnyObject {
+    func didScroll(alpha: Float)
+}
+
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 class TabScrollingController: NSObject, FeatureFlaggable {
     enum ScrollDirection {
@@ -35,6 +39,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     weak var header: BaseAlphaStackView?
     weak var overKeyboardContainer: BaseAlphaStackView?
     weak var bottomContainer: BaseAlphaStackView?
+    weak var delegate: TabScrollingControllerDelegate?
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -374,8 +379,10 @@ extension TabScrollingController: UIScrollViewDelegate {
         if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
                 showToolbars(animated: true)
+                delegate?.didScroll(alpha: 1)
             } else if scrollDirection == .down {
                 hideToolbars(animated: true)
+                delegate?.didScroll(alpha: 0)
             }
         }
     }

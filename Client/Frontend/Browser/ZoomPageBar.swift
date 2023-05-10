@@ -186,9 +186,9 @@ class ZoomPageBar: UIView, ThemeApplicable {
     private func remakeGradientViewHeightConstraint() {
         let viewPortHeight: CGFloat = (UIScreen.main.bounds.height -
                                        UIConstants.TopToolbarHeightMax -
-                                       UIConstants.ZoomPageBarHeight) * 0.2
+                                       UIConstants.ZoomPageBarHeight)
         gradientViewHeightConstraint.isActive = false
-        gradientViewHeightConstraint = gradientView.heightAnchor.constraint(equalToConstant: viewPortHeight)
+        gradientViewHeightConstraint = gradientView.heightAnchor.constraint(equalToConstant: viewPortHeight * 0.2)
         gradientViewHeightConstraint.isActive = true
         gradient.frame = gradientView.bounds
     }
@@ -228,6 +228,10 @@ class ZoomPageBar: UIView, ThemeApplicable {
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .layoutChanged, argument: zoomLevel)
         }
+    }
+
+    func changeGradientOpacity(alpha: Float) {
+        gradient.opacity = alpha
     }
 
     @objc

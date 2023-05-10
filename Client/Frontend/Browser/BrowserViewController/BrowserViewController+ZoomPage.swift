@@ -5,7 +5,7 @@
 import Shared
 import Storage
 
-extension BrowserViewController {
+extension BrowserViewController: TabScrollingControllerDelegate {
     func updateZoomPageBarVisibility(visible: Bool) {
         toggleZoomPageBar(visible)
     }
@@ -22,7 +22,7 @@ extension BrowserViewController {
                 self.view.layoutIfNeeded()
             })
         } else {
-            bottomContentStackView.addArrangedViewToTop(zoomPageBar, completion: {
+            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, completion: {
                 self.view.layoutIfNeeded()
             })
         }
@@ -39,7 +39,7 @@ extension BrowserViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             header.removeArrangedView(zoomPageBar)
         } else {
-            bottomContentStackView.removeArrangedView(zoomPageBar)
+            overKeyboardContainer.removeArrangedView(zoomPageBar)
         }
         self.zoomPageBar = nil
         updateViewConstraints()
@@ -72,6 +72,10 @@ extension BrowserViewController {
     func zoomPageHandleExitReaderMode() {
         guard let tab = tabManager.selectedTab else { return }
         tab.setZoomLevelforDomain()
+    }
+
+    func didScroll(alpha: Float) {
+        zoomPageBar?.changeGradientOpacity(alpha: alpha)
     }
 }
 

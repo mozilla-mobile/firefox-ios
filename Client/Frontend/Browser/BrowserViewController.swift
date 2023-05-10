@@ -197,6 +197,7 @@ class BrowserViewController: UIViewController {
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
         super.init(nibName: nil, bundle: nil)
+        scrollController.delegate = self
         didInit()
     }
 
@@ -666,6 +667,8 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
+        zoomPageBar?.changeGradientOpacity(alpha: 1)
+        zoomPageBar?.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
@@ -674,7 +677,6 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
-
         showQueuedAlertIfAvailable()
     }
 
@@ -795,7 +797,9 @@ class BrowserViewController: UIViewController {
 
         overKeyboardContainer.snp.remakeConstraints { make in
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-            if !isBottomSearchBar { make.height.equalTo(0) }
+            if !isBottomSearchBar, zoomPageBar != nil {
+                make.height.greaterThanOrEqualTo(0)
+            } else if !isBottomSearchBar { make.height.equalTo(0) }
             make.leading.trailing.equalTo(view)
         }
 
@@ -881,6 +885,8 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
         if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else if !showToolBar, zoomPageBar != nil {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
