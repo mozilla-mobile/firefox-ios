@@ -1,3 +1,24 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+ * Fathom ML model for identifying the fields of credit-card forms
+ *
+ * This is developed out-of-tree at https://github.com/mozilla-services/fathom-
+ * form-autofill, where there is also over a GB of training, validation, and
+ * testing data. To make changes, do your edits there (whether adding new
+ * training pages, adding new rules, or both), retrain and evaluate as
+ * documented at https://mozilla.github.io/fathom/training.html, paste the
+ * coefficients emitted by the trainer into the ruleset, and finally copy the
+ * ruleset's "CODE TO COPY INTO PRODUCTION" section to this file's "CODE FROM
+ * TRAINING REPOSITORY" section.
+ */
+
+/**
+ * CODE UNIQUE TO PRODUCTION--NOT IN THE TRAINING REPOSITORY:
+ */
+
 import {
   element as clickedElement,
   out,
@@ -5,12 +26,26 @@ import {
   ruleset,
   score,
   type,
-} from "resource://gre/modules/fathom.mjs";
+} from "resource://gre/modules/third_party/fathom/fathom.mjs";
+import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
+import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
+import {
+  CreditCard,
+  NETWORK_NAMES,
+} from "resource://gre/modules/CreditCard.sys.mjs";
+import { FormLikeFactory } from "resource://gre/modules/FormLikeFactory.sys.mjs";
+import { LabelUtils } from "resource://gre/modules/shared/LabelUtils.sys.mjs";
 
-import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
-import { NETWORK_NAMES } from "resource://gre/modules/CreditCard.sys.mjs";
-import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
-import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
+/**
+ * Callthrough abstraction to allow .getAutocompleteInfo() to be mocked out
+ * during training
+ *
+ * @param {Element} element DOM element to get info about
+ * @returns {object} Page-author-provided autocomplete metadata
+ */
+function getAutocompleteInfo(element) {
+  return element.getAutocompleteInfo();
+}
 
 /**
  * @param {string} selector A CSS selector that prunes away ineligible elements
@@ -48,6 +83,8 @@ var FathomHeuristicsRegExp = {
         // fr-FR
         "|nom.*(titulaire|détenteur)" +
         "|(titulaire|détenteur).*(carte)" +
+        // it-IT
+        "|titolare.*carta" +
         // Rules from Bitwarden
         "|cc-?name" +
         "|card-?name" +
@@ -70,6 +107,8 @@ var FathomHeuristicsRegExp = {
         // de-DE
         "(cc|kk)nr" +
         "|(kredit)?(karten)(nummer|nr)" +
+        // it-IT
+        "|numero.*carta" +
         // fr-FR
         "|(numero|número|numéro).*(carte)" +
         // Rules from Bitwarden
@@ -92,8 +131,8 @@ var FathomHeuristicsRegExp = {
 
       "cc-exp":
         // Firefox-specific rules
-        "mm\\s*(/|\\|-)\\s*(yy|jj|aa)" +
-        "|(month|mois)\\s*(/|\\|-|et)\\s*(year|année)" +
+        "mm\\s*(\/|\\|-)\\s*(yy|jj|aa)" +
+        "|(month|mois)\\s*(\/|\\|-|et)\\s*(year|année)" +
         // de-DE
         // fr-FR
         // Rules from Bitwarden
@@ -247,13 +286,13 @@ var FathomHeuristicsRegExp = {
         "|(^card-?brand$)" +
         "|(^cc-?brand$)" +
         "|(^cb-?type$)",
-      // Rules are from Chromium source codes
+        // Rules are from Chromium source codes
     },
   ],
 
   _getRule(name) {
     let rules = [];
-    this.RULE_SETS.forEach((set) => {
+    this.RULE_SETS.forEach(set => {
       if (set[name]) {
         rules.push(`(${set[name]})`.normalize("NFKC"));
       }
@@ -266,7 +305,7 @@ var FathomHeuristicsRegExp = {
   },
 
   init() {
-    Object.keys(this.RULES).forEach((field) =>
+    Object.keys(this.RULES).forEach(field =>
       Object.defineProperty(this.RULES, field, {
         get() {
           return FathomHeuristicsRegExp._getRule(field);
@@ -289,11 +328,9 @@ const CREDIT_CARD_NETWORK_REGEXP = new RegExp(
     .concat(Object.keys(NETWORK_NAMES))
     .join("|"),
   "gui"
-);
-const TwoDigitYearRegExp =
-  /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yy(?:[^y]|$)/i;
-const FourDigitYearRegExp =
-  /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yyyy(?:[^y]|$)/i;
+  );
+const TwoDigitYearRegExp = /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yy(?:[^y]|$)/i;
+const FourDigitYearRegExp = /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yyyy(?:[^y]|$)/i;
 const dwfrmRegExp = /^dwfrm/i;
 const bmlRegExp = /bml/i;
 const templatedValue = /^\{\{.*\}\}$/;
@@ -308,11 +345,9 @@ function autocompleteStringMatches(element, ccString) {
 }
 
 function getFillableFormElements(element) {
-  //TODO(HACK): FXIOS-6124
-  // const formLike = lazy.FormLikeFactory.createFromField(element);
-  const formLike = { elements: [element] };
-  return Array.from(formLike.elements).filter((el) =>
-    FormAutofillUtilsShared.isCreditCardOrAddressFieldType(el)
+  const formLike = FormLikeFactory.createFromField(element);
+  return Array.from(formLike.elements).filter(el =>
+    FormAutofillUtils.isCreditCardOrAddressFieldType(el)
   );
 }
 
@@ -339,13 +374,13 @@ function previousFieldPredicateIsTrue(element, predicate) {
 }
 
 function nextFieldMatchesExpYearAutocomplete(fnode) {
-  return nextFieldPredicateIsTrue(fnode.element, (nextField) =>
+  return nextFieldPredicateIsTrue(fnode.element, nextField =>
     autocompleteStringMatches(nextField, "cc-exp-year")
   );
 }
 
 function previousFieldMatchesExpMonthAutocomplete(fnode) {
-  return previousFieldPredicateIsTrue(fnode.element, (previousField) =>
+  return previousFieldPredicateIsTrue(fnode.element, previousField =>
     autocompleteStringMatches(previousField, "cc-exp-month")
   );
 }
@@ -430,49 +465,49 @@ function placeholderMatchesRegExp(element, regExp) {
 }
 
 function nextFieldIdOrNameMatchRegExp(element, regExp) {
-  return nextFieldPredicateIsTrue(element, (nextField) =>
+  return nextFieldPredicateIsTrue(element, nextField =>
     idOrNameMatchRegExp(nextField, regExp)
   );
 }
 
 function nextFieldLabelsMatchRegExp(element, regExp) {
-  return nextFieldPredicateIsTrue(element, (nextField) =>
+  return nextFieldPredicateIsTrue(element, nextField =>
     labelsMatchRegExp(nextField, regExp)
   );
 }
 
 function nextFieldPlaceholderMatchesRegExp(element, regExp) {
-  return nextFieldPredicateIsTrue(element, (nextField) =>
+  return nextFieldPredicateIsTrue(element, nextField =>
     placeholderMatchesRegExp(nextField, regExp)
   );
 }
 
 function nextFieldAriaLabelMatchesRegExp(element, regExp) {
-  return nextFieldPredicateIsTrue(element, (nextField) =>
+  return nextFieldPredicateIsTrue(element, nextField =>
     ariaLabelMatchesRegExp(nextField, regExp)
   );
 }
 
 function previousFieldIdOrNameMatchRegExp(element, regExp) {
-  return previousFieldPredicateIsTrue(element, (previousField) =>
+  return previousFieldPredicateIsTrue(element, previousField =>
     idOrNameMatchRegExp(previousField, regExp)
   );
 }
 
 function previousFieldLabelsMatchRegExp(element, regExp) {
-  return previousFieldPredicateIsTrue(element, (previousField) =>
+  return previousFieldPredicateIsTrue(element, previousField =>
     labelsMatchRegExp(previousField, regExp)
   );
 }
 
 function previousFieldPlaceholderMatchesRegExp(element, regExp) {
-  return previousFieldPredicateIsTrue(element, (previousField) =>
+  return previousFieldPredicateIsTrue(element, previousField =>
     placeholderMatchesRegExp(previousField, regExp)
   );
 }
 
 function previousFieldAriaLabelMatchesRegExp(element, regExp) {
-  return previousFieldPredicateIsTrue(element, (previousField) =>
+  return previousFieldPredicateIsTrue(element, previousField =>
     ariaLabelMatchesRegExp(previousField, regExp)
   );
 }
@@ -561,11 +596,11 @@ function isExpirationMonthLikely(element) {
 
   return (
     matchContiguousSubArray(
-      options.map((e) => +e.value),
+      options.map(e => +e.value),
       desiredValues
     ) ||
     matchContiguousSubArray(
-      options.map((e) => +e.label),
+      options.map(e => +e.label),
       desiredValues
     )
   );
@@ -586,11 +621,11 @@ function isExpirationYearLikely(element) {
 
   return (
     matchContiguousSubArray(
-      options.map((e) => +e.value),
+      options.map(e => +e.value),
       desiredValues
     ) ||
     matchContiguousSubArray(
-      options.map((e) => +e.label),
+      options.map(e => +e.label),
       desiredValues
     )
   );
@@ -683,40 +718,33 @@ function makeRuleset(coeffs, biases) {
        */
       rule(type("typicalCandidates"), type("cc-number")),
       ...simpleScoringRules("cc-number", {
-        idOrNameMatchNumberRegExp: (fnode) =>
+        idOrNameMatchNumberRegExp: fnode =>
           idOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-number"]
           ),
-        labelsMatchNumberRegExp: (fnode) =>
-          labelsMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-number"]
-          ),
-        closestLabelMatchesNumberRegExp: (fnode) =>
-          closestLabelMatchesRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-number"]
-          ),
-        placeholderMatchesNumberRegExp: (fnode) =>
+        labelsMatchNumberRegExp: fnode =>
+          labelsMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-number"]),
+        closestLabelMatchesNumberRegExp: fnode =>
+          closestLabelMatchesRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-number"]),
+        placeholderMatchesNumberRegExp: fnode =>
           placeholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-number"]
           ),
-        ariaLabelMatchesNumberRegExp: (fnode) =>
+        ariaLabelMatchesNumberRegExp: fnode =>
           ariaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-number"]
           ),
-        idOrNameMatchGift: (fnode) =>
+        idOrNameMatchGift: fnode =>
           idOrNameMatchRegExp(fnode.element, giftRegExp),
-        labelsMatchGift: (fnode) =>
-          labelsMatchRegExp(fnode.element, giftRegExp),
-        placeholderMatchesGift: (fnode) =>
+        labelsMatchGift: fnode => labelsMatchRegExp(fnode.element, giftRegExp),
+        placeholderMatchesGift: fnode =>
           placeholderMatchesRegExp(fnode.element, giftRegExp),
-        ariaLabelMatchesGift: (fnode) =>
+        ariaLabelMatchesGift: fnode =>
           ariaLabelMatchesRegExp(fnode.element, giftRegExp),
-        idOrNameMatchSubscription: (fnode) =>
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchDwfrmAndBml,
         hasTemplatedValue,
@@ -729,48 +757,38 @@ function makeRuleset(coeffs, biases) {
        */
       rule(type("typicalCandidates"), type("cc-name")),
       ...simpleScoringRules("cc-name", {
-        idOrNameMatchNameRegExp: (fnode) =>
-          idOrNameMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-name"]
-          ),
-        labelsMatchNameRegExp: (fnode) =>
-          labelsMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-name"]
-          ),
-        closestLabelMatchesNameRegExp: (fnode) =>
-          closestLabelMatchesRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-name"]
-          ),
-        placeholderMatchesNameRegExp: (fnode) =>
+        idOrNameMatchNameRegExp: fnode =>
+          idOrNameMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-name"]),
+        labelsMatchNameRegExp: fnode =>
+          labelsMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-name"]),
+        closestLabelMatchesNameRegExp: fnode =>
+          closestLabelMatchesRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-name"]),
+        placeholderMatchesNameRegExp: fnode =>
           placeholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-name"]
           ),
-        ariaLabelMatchesNameRegExp: (fnode) =>
+        ariaLabelMatchesNameRegExp: fnode =>
           ariaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-name"]
           ),
-        idOrNameMatchFirst: (fnode) =>
+        idOrNameMatchFirst: fnode =>
           idOrNameMatchRegExp(fnode.element, firstRegExp),
-        labelsMatchFirst: (fnode) =>
+        labelsMatchFirst: fnode =>
           labelsMatchRegExp(fnode.element, firstRegExp),
-        placeholderMatchesFirst: (fnode) =>
+        placeholderMatchesFirst: fnode =>
           placeholderMatchesRegExp(fnode.element, firstRegExp),
-        ariaLabelMatchesFirst: (fnode) =>
+        ariaLabelMatchesFirst: fnode =>
           ariaLabelMatchesRegExp(fnode.element, firstRegExp),
-        idOrNameMatchLast: (fnode) =>
+        idOrNameMatchLast: fnode =>
           idOrNameMatchRegExp(fnode.element, lastRegExp),
-        labelsMatchLast: (fnode) =>
-          labelsMatchRegExp(fnode.element, lastRegExp),
-        placeholderMatchesLast: (fnode) =>
+        labelsMatchLast: fnode => labelsMatchRegExp(fnode.element, lastRegExp),
+        placeholderMatchesLast: fnode =>
           placeholderMatchesRegExp(fnode.element, lastRegExp),
-        ariaLabelMatchesLast: (fnode) =>
+        ariaLabelMatchesLast: fnode =>
           ariaLabelMatchesRegExp(fnode.element, lastRegExp),
-        idOrNameMatchSubscription: (fnode) =>
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchFirstAndLast,
         idOrNameMatchDwfrmAndBml,
@@ -788,28 +806,19 @@ function makeRuleset(coeffs, biases) {
         type("cc-type")
       ),
       ...simpleScoringRules("cc-type", {
-        idOrNameMatchTypeRegExp: (fnode) =>
-          idOrNameMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-type"]
-          ),
-        labelsMatchTypeRegExp: (fnode) =>
-          labelsMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-type"]
-          ),
-        closestLabelMatchesTypeRegExp: (fnode) =>
-          closestLabelMatchesRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-type"]
-          ),
-        idOrNameMatchVisaCheckout: (fnode) =>
+        idOrNameMatchTypeRegExp: fnode =>
+          idOrNameMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-type"]),
+        labelsMatchTypeRegExp: fnode =>
+          labelsMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-type"]),
+        closestLabelMatchesTypeRegExp: fnode =>
+          closestLabelMatchesRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-type"]),
+        idOrNameMatchVisaCheckout: fnode =>
           idOrNameMatchRegExp(fnode.element, VisaCheckoutRegExp),
-        ariaLabelMatchesVisaCheckout: (fnode) =>
+        ariaLabelMatchesVisaCheckout: fnode =>
           ariaLabelMatchesRegExp(fnode.element, VisaCheckoutRegExp),
         isSelectWithCreditCardOptions,
         isRadioWithCreditCardText,
-        idOrNameMatchSubscription: (fnode) =>
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchDwfrmAndBml,
         hasTemplatedValue,
@@ -821,53 +830,45 @@ function makeRuleset(coeffs, biases) {
        */
       rule(type("typicalCandidates"), type("cc-exp")),
       ...simpleScoringRules("cc-exp", {
-        labelsMatchExpRegExp: (fnode) =>
-          labelsMatchRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-exp"]
-          ),
-        closestLabelMatchesExpRegExp: (fnode) =>
-          closestLabelMatchesRegExp(
-            fnode.element,
-            FathomHeuristicsRegExp.RULES["cc-exp"]
-          ),
-        placeholderMatchesExpRegExp: (fnode) =>
+        labelsMatchExpRegExp: fnode =>
+          labelsMatchRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-exp"]),
+        closestLabelMatchesExpRegExp: fnode =>
+          closestLabelMatchesRegExp(fnode.element, FathomHeuristicsRegExp.RULES["cc-exp"]),
+        placeholderMatchesExpRegExp: fnode =>
           placeholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp"]
           ),
-        labelsMatchExpWith2Or4DigitYear: (fnode) =>
+        labelsMatchExpWith2Or4DigitYear: fnode =>
           attrsMatchExpWith2Or4DigitYear(fnode, labelsMatchRegExp),
-        placeholderMatchesExpWith2Or4DigitYear: (fnode) =>
+        placeholderMatchesExpWith2Or4DigitYear: fnode =>
           attrsMatchExpWith2Or4DigitYear(fnode, placeholderMatchesRegExp),
-        labelsMatchMMYY: (fnode) =>
-          labelsMatchRegExp(fnode.element, MMYYRegExp),
-        placeholderMatchesMMYY: (fnode) =>
+        labelsMatchMMYY: fnode => labelsMatchRegExp(fnode.element, MMYYRegExp),
+        placeholderMatchesMMYY: fnode =>
           placeholderMatchesRegExp(fnode.element, MMYYRegExp),
-        maxLengthIs7: (fnode) => maxLengthIs(fnode, 7),
-        idOrNameMatchSubscription: (fnode) =>
+        maxLengthIs7: fnode => maxLengthIs(fnode, 7),
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchDwfrmAndBml,
         hasTemplatedValue,
-        isExpirationMonthLikely: (fnode) =>
+        isExpirationMonthLikely: fnode =>
           isExpirationMonthLikely(fnode.element),
-        isExpirationYearLikely: (fnode) =>
-          isExpirationYearLikely(fnode.element),
-        idOrNameMatchMonth: (fnode) =>
+        isExpirationYearLikely: fnode => isExpirationYearLikely(fnode.element),
+        idOrNameMatchMonth: fnode =>
           idOrNameMatchRegExp(fnode.element, monthRegExp),
-        idOrNameMatchYear: (fnode) =>
+        idOrNameMatchYear: fnode =>
           idOrNameMatchRegExp(fnode.element, yearRegExp),
-        idOrNameMatchExpMonthRegExp: (fnode) =>
+        idOrNameMatchExpMonthRegExp: fnode =>
           idOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        idOrNameMatchExpYearRegExp: (fnode) =>
+        idOrNameMatchExpYearRegExp: fnode =>
           idOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        idOrNameMatchValidation: (fnode) =>
+        idOrNameMatchValidation: fnode =>
           idOrNameMatchRegExp(fnode.element, /validate|validation/i),
       }),
       rule(type("cc-exp"), out("cc-exp")),
@@ -877,76 +878,76 @@ function makeRuleset(coeffs, biases) {
        */
       rule(type("typicalCandidates"), type("cc-exp-month")),
       ...simpleScoringRules("cc-exp-month", {
-        idOrNameMatchExpMonthRegExp: (fnode) =>
+        idOrNameMatchExpMonthRegExp: fnode =>
           idOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        labelsMatchExpMonthRegExp: (fnode) =>
+        labelsMatchExpMonthRegExp: fnode =>
           labelsMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        closestLabelMatchesExpMonthRegExp: (fnode) =>
+        closestLabelMatchesExpMonthRegExp: fnode =>
           closestLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        placeholderMatchesExpMonthRegExp: (fnode) =>
+        placeholderMatchesExpMonthRegExp: fnode =>
           placeholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        ariaLabelMatchesExpMonthRegExp: (fnode) =>
+        ariaLabelMatchesExpMonthRegExp: fnode =>
           ariaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        idOrNameMatchMonth: (fnode) =>
+        idOrNameMatchMonth: fnode =>
           idOrNameMatchRegExp(fnode.element, monthRegExp),
-        labelsMatchMonth: (fnode) =>
+        labelsMatchMonth: fnode =>
           labelsMatchRegExp(fnode.element, monthRegExp),
-        placeholderMatchesMonth: (fnode) =>
+        placeholderMatchesMonth: fnode =>
           placeholderMatchesRegExp(fnode.element, monthRegExp),
-        ariaLabelMatchesMonth: (fnode) =>
+        ariaLabelMatchesMonth: fnode =>
           ariaLabelMatchesRegExp(fnode.element, monthRegExp),
-        nextFieldIdOrNameMatchExpYearRegExp: (fnode) =>
+        nextFieldIdOrNameMatchExpYearRegExp: fnode =>
           nextFieldIdOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        nextFieldLabelsMatchExpYearRegExp: (fnode) =>
+        nextFieldLabelsMatchExpYearRegExp: fnode =>
           nextFieldLabelsMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        nextFieldPlaceholderMatchExpYearRegExp: (fnode) =>
+        nextFieldPlaceholderMatchExpYearRegExp: fnode =>
           nextFieldPlaceholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        nextFieldAriaLabelMatchExpYearRegExp: (fnode) =>
+        nextFieldAriaLabelMatchExpYearRegExp: fnode =>
           nextFieldAriaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        nextFieldIdOrNameMatchYear: (fnode) =>
+        nextFieldIdOrNameMatchYear: fnode =>
           nextFieldIdOrNameMatchRegExp(fnode.element, yearRegExp),
-        nextFieldLabelsMatchYear: (fnode) =>
+        nextFieldLabelsMatchYear: fnode =>
           nextFieldLabelsMatchRegExp(fnode.element, yearRegExp),
-        nextFieldPlaceholderMatchesYear: (fnode) =>
+        nextFieldPlaceholderMatchesYear: fnode =>
           nextFieldPlaceholderMatchesRegExp(fnode.element, yearRegExp),
-        nextFieldAriaLabelMatchesYear: (fnode) =>
+        nextFieldAriaLabelMatchesYear: fnode =>
           nextFieldAriaLabelMatchesRegExp(fnode.element, yearRegExp),
         nextFieldMatchesExpYearAutocomplete,
-        isExpirationMonthLikely: (fnode) =>
+        isExpirationMonthLikely: fnode =>
           isExpirationMonthLikely(fnode.element),
         nextFieldIsExpirationYearLikely,
-        maxLengthIs2: (fnode) => maxLengthIs(fnode, 2),
-        placeholderMatchesMM: (fnode) =>
+        maxLengthIs2: fnode => maxLengthIs(fnode, 2),
+        placeholderMatchesMM: fnode =>
           placeholderMatchesRegExp(fnode.element, MMRegExp),
         roleIsMenu,
-        idOrNameMatchSubscription: (fnode) =>
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchDwfrmAndBml,
         hasTemplatedValue,
@@ -958,75 +959,73 @@ function makeRuleset(coeffs, biases) {
        */
       rule(type("typicalCandidates"), type("cc-exp-year")),
       ...simpleScoringRules("cc-exp-year", {
-        idOrNameMatchExpYearRegExp: (fnode) =>
+        idOrNameMatchExpYearRegExp: fnode =>
           idOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        labelsMatchExpYearRegExp: (fnode) =>
+        labelsMatchExpYearRegExp: fnode =>
           labelsMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        closestLabelMatchesExpYearRegExp: (fnode) =>
+        closestLabelMatchesExpYearRegExp: fnode =>
           closestLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        placeholderMatchesExpYearRegExp: (fnode) =>
+        placeholderMatchesExpYearRegExp: fnode =>
           placeholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        ariaLabelMatchesExpYearRegExp: (fnode) =>
+        ariaLabelMatchesExpYearRegExp: fnode =>
           ariaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-year"]
           ),
-        idOrNameMatchYear: (fnode) =>
+        idOrNameMatchYear: fnode =>
           idOrNameMatchRegExp(fnode.element, yearRegExp),
-        labelsMatchYear: (fnode) =>
-          labelsMatchRegExp(fnode.element, yearRegExp),
-        placeholderMatchesYear: (fnode) =>
+        labelsMatchYear: fnode => labelsMatchRegExp(fnode.element, yearRegExp),
+        placeholderMatchesYear: fnode =>
           placeholderMatchesRegExp(fnode.element, yearRegExp),
-        ariaLabelMatchesYear: (fnode) =>
+        ariaLabelMatchesYear: fnode =>
           ariaLabelMatchesRegExp(fnode.element, yearRegExp),
-        previousFieldIdOrNameMatchExpMonthRegExp: (fnode) =>
+        previousFieldIdOrNameMatchExpMonthRegExp: fnode =>
           previousFieldIdOrNameMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        previousFieldLabelsMatchExpMonthRegExp: (fnode) =>
+        previousFieldLabelsMatchExpMonthRegExp: fnode =>
           previousFieldLabelsMatchRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        previousFieldPlaceholderMatchExpMonthRegExp: (fnode) =>
+        previousFieldPlaceholderMatchExpMonthRegExp: fnode =>
           previousFieldPlaceholderMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        previousFieldAriaLabelMatchExpMonthRegExp: (fnode) =>
+        previousFieldAriaLabelMatchExpMonthRegExp: fnode =>
           previousFieldAriaLabelMatchesRegExp(
             fnode.element,
             FathomHeuristicsRegExp.RULES["cc-exp-month"]
           ),
-        previousFieldIdOrNameMatchMonth: (fnode) =>
+        previousFieldIdOrNameMatchMonth: fnode =>
           previousFieldIdOrNameMatchRegExp(fnode.element, monthRegExp),
-        previousFieldLabelsMatchMonth: (fnode) =>
+        previousFieldLabelsMatchMonth: fnode =>
           previousFieldLabelsMatchRegExp(fnode.element, monthRegExp),
-        previousFieldPlaceholderMatchesMonth: (fnode) =>
+        previousFieldPlaceholderMatchesMonth: fnode =>
           previousFieldPlaceholderMatchesRegExp(fnode.element, monthRegExp),
-        previousFieldAriaLabelMatchesMonth: (fnode) =>
+        previousFieldAriaLabelMatchesMonth: fnode =>
           previousFieldAriaLabelMatchesRegExp(fnode.element, monthRegExp),
         previousFieldMatchesExpMonthAutocomplete,
-        isExpirationYearLikely: (fnode) =>
-          isExpirationYearLikely(fnode.element),
+        isExpirationYearLikely: fnode => isExpirationYearLikely(fnode.element),
         previousFieldIsExpirationMonthLikely,
-        placeholderMatchesYYOrYYYY: (fnode) =>
+        placeholderMatchesYYOrYYYY: fnode =>
           placeholderMatchesRegExp(fnode.element, YYorYYYYRegExp),
         roleIsMenu,
-        idOrNameMatchSubscription: (fnode) =>
+        idOrNameMatchSubscription: fnode =>
           idOrNameMatchRegExp(fnode.element, subscriptionRegExp),
         idOrNameMatchDwfrmAndBml,
         hasTemplatedValue,
@@ -1052,7 +1051,7 @@ const coefficients = {
     ["idOrNameMatchSubscription", 0.11255314946174622],
     ["idOrNameMatchDwfrmAndBml", -0.0006645023822784424],
     ["hasTemplatedValue", -0.11370040476322174],
-    ["inputTypeNotNumbery", -3.750155210494995],
+    ["inputTypeNotNumbery", -3.750155210494995]
   ],
   "cc-name": [
     ["idOrNameMatchNameRegExp", 7.496212959289551],
@@ -1071,7 +1070,7 @@ const coefficients = {
     ["idOrNameMatchFirstAndLast", 24.123435974121094],
     ["idOrNameMatchSubscription", 0.08349418640136719],
     ["idOrNameMatchDwfrmAndBml", 0.01882520318031311],
-    ["hasTemplatedValue", 0.182317852973938],
+    ["hasTemplatedValue", 0.182317852973938]
   ],
   "cc-type": [
     ["idOrNameMatchTypeRegExp", 2.0581533908843994],
@@ -1083,7 +1082,7 @@ const coefficients = {
     ["isRadioWithCreditCardText", 4.530318737030029],
     ["idOrNameMatchSubscription", -3.7206356525421143],
     ["idOrNameMatchDwfrmAndBml", -0.08782318234443665],
-    ["hasTemplatedValue", 0.1772511601448059],
+    ["hasTemplatedValue", 0.1772511601448059]
   ],
   "cc-exp": [
     ["labelsMatchExpRegExp", 7.588159561157227],
@@ -1103,7 +1102,7 @@ const coefficients = {
     ["idOrNameMatchYear", -3.108184337615967],
     ["idOrNameMatchExpMonthRegExp", -2.264357089996338],
     ["idOrNameMatchExpYearRegExp", -2.7957723140716553],
-    ["idOrNameMatchValidation", -2.29402756690979],
+    ["idOrNameMatchValidation", -2.29402756690979]
   ],
   "cc-exp-month": [
     ["idOrNameMatchExpMonthRegExp", 0.2787344455718994],
@@ -1131,7 +1130,7 @@ const coefficients = {
     ["roleIsMenu", 5.770959854125977],
     ["idOrNameMatchSubscription", -0.043085768818855286],
     ["idOrNameMatchDwfrmAndBml", 0.02823038399219513],
-    ["hasTemplatedValue", 0.07234494388103485],
+    ["hasTemplatedValue", 0.07234494388103485]
   ],
   "cc-exp-year": [
     ["idOrNameMatchExpYearRegExp", 5.426016807556152],
@@ -1158,7 +1157,7 @@ const coefficients = {
     ["roleIsMenu", 1.1051956415176392],
     ["idOrNameMatchSubscription", 0.000688597559928894],
     ["idOrNameMatchDwfrmAndBml", 0.15687309205532074],
-    ["hasTemplatedValue", -0.19141331315040588],
+    ["hasTemplatedValue", -0.19141331315040588]
   ],
 };
 
@@ -1170,13 +1169,40 @@ const biases = [
   ["cc-exp-month", -8.844199180603027],
   ["cc-exp-year", -6.499860763549805],
 ];
+
 /**
  * END OF CODE PASTED FROM TRAINING REPOSITORY
  */
 
-export const creditCardRulesets = {
-  "cc-number": makeRuleset([...coefficients["cc-number"]], biases),
-  "cc-name": makeRuleset([...coefficients["cc-name"]], biases),
-  supportedTypes: ["cc-number", "cc-name"],
-  types: ["cc-number", "cc-name"],
+/**
+ * MORE CODE UNIQUE TO PRODUCTION--NOT IN THE TRAINING REPOSITORY:
+ */
+// Currently there is a bug when a ruleset has multple types (ex, cc-name, cc-number)
+// and those types also has the same rules (ex. rule `hasTemplatedValue` is used in
+// all the tyoes). When the above case exists, the coefficient of the rule will be
+// overwritten, which means, we can't have different coefficient for the same rule on
+// different types. To workaround this issue, we create a new ruleset for each type.
+export var creditCardRulesets = {
+  init() {
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      "supportedTypes",
+      "extensions.formautofill.creditCards.heuristics.fathom.types",
+      null,
+      null,
+      val => val.split(",")
+    );
+
+    for (const type of this.types) {
+      this[type] = makeRuleset([...coefficients[type]], biases);
+    }
+  },
+
+  get types() {
+    return this.supportedTypes;
+  },
 };
+
+creditCardRulesets.init();
+
+export default creditCardRulesets;

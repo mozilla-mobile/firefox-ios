@@ -8,26 +8,34 @@ import WebKit
 import Common
 import Storage
 
-enum ValidFieldType: String, CaseIterable {
-    case ccNumber = "cc-number"
-    case ccExpMonth = "cc-exp-month"
-    case ccExpYear = "cc-exp-year"
-    case ccName = "cc-name"
-}
+struct CreditCardPayload: Codable {
+    let ccNumber: String
+    let ccExpMonth: String
+    let ccExpYear: String
+    let ccName: String
 
-struct Payload: Codable {
-    let id: Int
-    let fieldTypes: [FieldType]
-}
-
-struct FieldType: Codable {
-    let type: String
-    let value: String
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case ccNumber = "cc-number"
+        case ccExpMonth = "cc-exp-month"
+        case ccExpYear = "cc-exp-year"
+        case ccName = "cc-name"
+    }
 }
 
 struct FillCreditCardForm: Codable {
-    let payload: Payload
+    let creditCardPayload: CreditCardPayload
     let type: String
+
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case creditCardPayload = "payload"
+        case type = "type"
+    }
+}
+
+enum CreditCardHelperError: Error {
+    case injectionIssue
+    case injectionInvalidFields
+    case injectionInvalidJSON
 }
 
 class CreditCardHelper: TabContentScript {
@@ -53,18 +61,17 @@ class CreditCardHelper: TabContentScript {
         return "creditCardMessageHandler"
     }
 
-    private var requestID: Int = -1
-
     // MARK: Retrieval
+
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
-        guard let data = message.body as? [String: Any] else { return }
-        guard let payload = parseFieldType(messageBody: data)?.payload else { return }
-        guard !payload.fieldTypes.isEmpty else { return }
-        requestID = payload.id
-        var fieldTypes = payload.fieldTypes
-        let fieldTypeValues = getFieldTypeValues(fieldTypes: fieldTypes)
-        foundFieldValues?(fieldTypeValues)
+        guard let data = getValidPayloadData(from: message) else { return }
+        guard let payload = parseFieldType(messageBody: data)?.creditCardPayload else { return }
+        foundFieldValues?(getFieldTypeValues(payload: payload))
+    }
+
+    func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
+        return message.body as? [String: Any]
     }
 
     func parseFieldType(messageBody: [String: Any]) -> FillCreditCardForm? {
@@ -85,50 +92,48 @@ class CreditCardHelper: TabContentScript {
         return nil
     }
 
-    func getFieldTypeValues(fieldTypes: [FieldType]) -> UnencryptedCreditCardFields {
+    func getFieldTypeValues(payload: CreditCardPayload) -> UnencryptedCreditCardFields {
         var ccPlainText = UnencryptedCreditCardFields()
-        fieldTypes.forEach { field in
-            if let fieldType = ValidFieldType(rawValue: field.type) {
-                switch fieldType {
-                case .ccName:
-                    ccPlainText.ccName = field.value
-                case .ccExpMonth:
-                    let val = field.value.filter { $0.isNumber }
-                    ccPlainText.ccExpMonth = Int64(val) ?? 0
-                case .ccExpYear:
-                    let val = field.value.filter { $0.isNumber }
-                    ccPlainText.ccExpYear = Int64(val) ?? 0
-                case .ccNumber:
-                    let val = field.value.filter { $0.isNumber }
-                    ccPlainText.ccNumber = "\(val)"
-                }
-            }
-        }
+
+        ccPlainText.ccName = payload.ccName
+        ccPlainText.ccExpMonth = Int64(payload.ccExpMonth.filter { $0.isNumber }) ?? 0
+        ccPlainText.ccExpYear = Int64(payload.ccExpYear.filter { $0.isNumber }) ?? 0
+        ccPlainText.ccNumber = "\(payload.ccNumber.filter { $0.isNumber })"
         return ccPlainText
     }
 
     // MARK: Injection
+
     func injectCardInfo(card: UnencryptedCreditCardFields,
-                        tab: Tab) -> Bool {
-        guard !card.ccNumber.isEmpty, card.ccExpYear > 0, !card.ccName.isEmpty else {
-            return false
+                        tab: Tab,
+                        completion: @escaping (Error?) -> Void) {
+        guard !card.ccNumber.isEmpty,
+              card.ccExpYear > 0,
+              !card.ccName.isEmpty
+        else {
+            completion(CreditCardHelperError.injectionInvalidFields)
+            return
         }
 
         do {
             let jsonData = try JSONSerialization.data(
-                withJSONObject: injectionJSONBuilder(card: card, reqID: requestID))
+                withJSONObject: injectionJSONBuilder(card: card))
             guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else {
-                return false
+                completion(CreditCardHelperError.injectionInvalidJSON)
+                return
             }
             let fxWindowVal = "window.__firefox__.CreditCardHelper"
-            let fillCreditCardInfoCallback = "\(fxWindowVal).fillCreditCardInfo('\(jsonDataVal)')"
+            let fillCreditCardInfoCallback = "\(fxWindowVal).fillFormFields('\(jsonDataVal)')"
             guard let webView = tab.webView else {
-                return false
+                completion(CreditCardHelperError.injectionIssue)
+                return
             }
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
                 guard let err = err else {
+                    completion(nil)
                     return
                 }
+                completion(err)
                 self.logger.log("Credit card script error \(err)",
                                 level: .debug,
                                 category: .webview)
@@ -138,21 +143,15 @@ class CreditCardHelper: TabContentScript {
                        level: .debug,
                        category: .webview)
         }
-
-        return true
     }
 
-    private func injectionJSONBuilder(card: UnencryptedCreditCardFields,
-                                      reqID: Int) -> [String: Any] {
+    private func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
         let injectionJSON: [String: Any] = [
-             "data": [
                 "cc-name": card.ccName,
                 "cc-number": card.ccNumber,
                 "cc-exp-month": "\(card.ccExpMonth)",
                 "cc-exp-year": "\(card.ccExpYear)",
                 "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
-               ],
-             "id": reqID,
         ]
 
         return injectionJSON

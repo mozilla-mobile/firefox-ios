@@ -335,6 +335,7 @@
 		439A220F29F69A0C00F120EE /* Notification.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A220D29F69A0C00F120EE /* Notification.strings */; };
 		439A221229F69A0C00F120EE /* ZoomPageBar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A221029F69A0C00F120EE /* ZoomPageBar.strings */; };
 		439B008B26E6CE2300DFAF14 /* GroupedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */; };
+		439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */; };
 		439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439C489B29760575007C3DCD /* CreditCardValidator.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
 		43A5643923CD1E1C00B6857D /* Update.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A5643623CD1E1B00B6857D /* Update.xcassets */; };
@@ -3129,6 +3130,7 @@
 		439A626329C8776D005428EB /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Settings.strings; sourceTree = "<group>"; };
 		439A626429C8776D005428EB /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/SnackBar.strings; sourceTree = "<group>"; };
 		439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedTabCell.swift; sourceTree = "<group>"; };
+		439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardHelperTests.swift; sourceTree = "<group>"; };
 		439C489B29760575007C3DCD /* CreditCardValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardValidator.swift; sourceTree = "<group>"; };
 		439D965F29D1B0BE00F0A156 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Alert.strings; sourceTree = "<group>"; };
 		439D966029D1B0BE00F0A156 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/BiometricAuthentication.strings; sourceTree = "<group>"; };
@@ -3229,6 +3231,25 @@
 		43B7BFCA28B905E700AAA92F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43B7E64828B39D1E0003A141 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43B7E64928B39D1E0003A141 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
+		43B9F49A2A09DE380028B9E1 /* CreditCardRuleset.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardRuleset.sys.mjs; sourceTree = "<group>"; };
+		43B9F49B2A09DE380028B9E1 /* Constants.ios.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = Constants.ios.mjs; sourceTree = "<group>"; };
+		43B9F49C2A09DE380028B9E1 /* FormLikeFactory.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormLikeFactory.sys.mjs; sourceTree = "<group>"; };
+		43B9F49D2A09DE380028B9E1 /* FormAutofillNameUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillNameUtils.sys.mjs; sourceTree = "<group>"; };
+		43B9F49E2A09DE390028B9E1 /* FormStateManager.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormStateManager.sys.mjs; sourceTree = "<group>"; };
+		43B9F49F2A09DE390028B9E1 /* LoginManager.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LoginManager.shared.mjs; sourceTree = "<group>"; };
+		43B9F4A02A09DE390028B9E1 /* LabelUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LabelUtils.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A12A09DE390028B9E1 /* FormAutofillSection.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillSection.ios.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A22A09DE3A0028B9E1 /* FieldScanner.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FieldScanner.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A32A09DE3A0028B9E1 /* FormAutofill.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofill.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A42A09DE3A0028B9E1 /* Overrides.ios.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Overrides.ios.js; sourceTree = "<group>"; };
+		43B9F4A52A09DE3A0028B9E1 /* FormAutofillHeuristics.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHeuristics.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A62A09DE3B0028B9E1 /* FormAutofillSection.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillSection.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A72A09DE3B0028B9E1 /* FormAutofill.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofill.ios.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A82A09DE3B0028B9E1 /* FormAutofillHandler.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHandler.sys.mjs; sourceTree = "<group>"; };
+		43B9F4A92A09DE3B0028B9E1 /* HeuristicsRegExp.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeuristicsRegExp.sys.mjs; sourceTree = "<group>"; };
+		43B9F4AA2A09DE3C0028B9E1 /* FormAutofillUtils.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillUtils.sys.mjs; sourceTree = "<group>"; };
+		43B9F4AB2A09DE3C0028B9E1 /* Helpers.ios.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = Helpers.ios.mjs; sourceTree = "<group>"; };
+		43B9F4AC2A09DE3C0028B9E1 /* FormAutofillChild.ios.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillChild.ios.sys.mjs; sourceTree = "<group>"; };
 		43BAFE1B29E428BE000C5C8E /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = "sl.lproj/Edit Card.strings"; sourceTree = "<group>"; };
 		43BB76D829C87A5A00087F41 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Alert.strings"; sourceTree = "<group>"; };
 		43BB76D929C87A5A00087F41 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/BiometricAuthentication.strings"; sourceTree = "<group>"; };
@@ -3521,15 +3542,8 @@
 		43F22E072A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
 		43F22E082A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		43F2284229EE053A0037E085 /* fathom.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = fathom.mjs; sourceTree = "<group>"; };
-		43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardRuleset.mjs; sourceTree = "<group>"; };
 		43F2284429EE053A0037E085 /* CC_Python_Update.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = CC_Python_Update.py; sourceTree = "<group>"; };
-		43F2284529EE053A0037E085 /* LabelUtils.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LabelUtils.mjs; sourceTree = "<group>"; };
-		43F2284629EE053A0037E085 /* CreditCardAutofill.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CreditCardAutofill.js; sourceTree = "<group>"; };
-		43F2284729EE053A0037E085 /* FieldScanner.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FieldScanner.mjs; sourceTree = "<group>"; };
-		43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHeuristics.shared.mjs; sourceTree = "<group>"; };
-		43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillUtils.shared.mjs; sourceTree = "<group>"; };
 		43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCard.sys.mjs; sourceTree = "<group>"; };
-		43F2284B29EE053A0037E085 /* shims.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = shims.js; sourceTree = "<group>"; };
 		43F28137294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Alerts.strings; sourceTree = "<group>"; };
 		43F28138294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/TabsTray.strings; sourceTree = "<group>"; };
 		43F2DD1A29BA6C8E00F69D7A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
@@ -7154,14 +7168,26 @@
 			children = (
 				43F2284429EE053A0037E085 /* CC_Python_Update.py */,
 				43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */,
-				43F2284629EE053A0037E085 /* CreditCardAutofill.js */,
-				43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */,
 				43F2284229EE053A0037E085 /* fathom.mjs */,
-				43F2284729EE053A0037E085 /* FieldScanner.mjs */,
-				43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */,
-				43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */,
-				43F2284529EE053A0037E085 /* LabelUtils.mjs */,
-				43F2284B29EE053A0037E085 /* shims.js */,
+				43B9F49B2A09DE380028B9E1 /* Constants.ios.mjs */,
+				43B9F49A2A09DE380028B9E1 /* CreditCardRuleset.sys.mjs */,
+				43B9F4A22A09DE3A0028B9E1 /* FieldScanner.sys.mjs */,
+				43B9F4A72A09DE3B0028B9E1 /* FormAutofill.ios.sys.mjs */,
+				43B9F4A32A09DE3A0028B9E1 /* FormAutofill.sys.mjs */,
+				43B9F4AC2A09DE3C0028B9E1 /* FormAutofillChild.ios.sys.mjs */,
+				43B9F4A82A09DE3B0028B9E1 /* FormAutofillHandler.sys.mjs */,
+				43B9F4A52A09DE3A0028B9E1 /* FormAutofillHeuristics.sys.mjs */,
+				43B9F49D2A09DE380028B9E1 /* FormAutofillNameUtils.sys.mjs */,
+				43B9F4A12A09DE390028B9E1 /* FormAutofillSection.ios.sys.mjs */,
+				43B9F4A62A09DE3B0028B9E1 /* FormAutofillSection.sys.mjs */,
+				43B9F4AA2A09DE3C0028B9E1 /* FormAutofillUtils.sys.mjs */,
+				43B9F49C2A09DE380028B9E1 /* FormLikeFactory.sys.mjs */,
+				43B9F49E2A09DE390028B9E1 /* FormStateManager.sys.mjs */,
+				43B9F4AB2A09DE3C0028B9E1 /* Helpers.ios.mjs */,
+				43B9F4A92A09DE3B0028B9E1 /* HeuristicsRegExp.sys.mjs */,
+				43B9F4A02A09DE390028B9E1 /* LabelUtils.sys.mjs */,
+				43B9F49F2A09DE390028B9E1 /* LoginManager.shared.mjs */,
+				43B9F4A42A09DE3A0028B9E1 /* Overrides.ios.js */,
 			);
 			path = CC_Script;
 			sourceTree = "<group>";
@@ -7191,6 +7217,7 @@
 				967EDABC29D705300089208D /* CreditCardValidatorTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
 				96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */,
+				439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */,
 			);
 			path = CreditCard;
 			sourceTree = "<group>";
@@ -12335,6 +12362,7 @@
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
+				439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */,
