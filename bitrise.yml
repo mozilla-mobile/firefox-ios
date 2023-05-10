@@ -605,7 +605,7 @@ workflows:
             #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
             
             # Blacklist check
-            BLACKLISTED_FILES=$(echo "$FILES_CHANGED" | grep -E ".*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|fastlane/.*|taskcluster/.*|Sync.*|L10nSnapshotTests/.*|test-fixtures/.*\.py$")
+            BLACKLISTED_FILES=$(echo "$FILES_CHANGED" | grep -v -E ".*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|fastlane/.*|taskcluster/.*|Sync.*|L10nSnapshotTests/.*|test-fixtures/.*\.py$")
             echo $?
             echo "Blacklisted files: $BLACKLISTED_FILES"
             if [[ -z "$BLACKLISTED_FILES" ]]; then
@@ -615,7 +615,7 @@ workflows:
             fi
             
             # Whitelist check
-            WHITELISTED_FILES=$(echo "$FILES_CHANGED" | grep -E ".*\.swift$|.*\.m$|.*\.mm$|.*\.cpp$|.*\.h$|.*\.c$|.*\.hpp$|.*\.py$")
+            WHITELISTED_FILES=$(echo "$FILES_CHANGED" | grep -v -E ".*\.swift$|.*\.m$|.*\.mm$|.*\.cpp$|.*\.h$|.*\.c$|.*\.hpp$|.*\.py$")
             echo $?
             echo "Whitelisted files: $WHITELISTED_FILES"
             if [[ -z "$WHITELISTED_FILES" ]]; then
@@ -625,7 +625,7 @@ workflows:
             fi
 
             # Check for blacklisted files in commit
-            BLACKLISTED_FILES_IN_COMMIT=$(echo "$BLACKLISTED_FILES" | grep -E "$FILES_CHANGED")
+            BLACKLISTED_FILES_IN_COMMIT=$(echo "$BLACKLISTED_FILES" | grep -v -E "$FILES_CHANGED")
             echo "Blacklisted files in commit: $BLACKLISTED_FILES_IN_COMMIT"
             echo $?
             if [[ -z "$BLACKLISTED_FILES_IN_COMMIT" ]]; then
@@ -635,7 +635,7 @@ workflows:
             fi
 
             # Check for whitelisted files in commit
-            WHITELISTED_FILES_IN_COMMIT=$(echo "$WHITELISTED_FILES" | grep -E "$FILES_CHANGED")
+            WHITELISTED_FILES_IN_COMMIT=$(echo "$WHITELISTED_FILES" | grep -v -E "$FILES_CHANGED")
             echo $?
             echo "Whitelisted files in commit: $WHITELISTED_FILES_IN_COMMIT"
             if [[ -z "$WHITELISTED_FILES_IN_COMMIT" ]]; then
@@ -643,7 +643,7 @@ workflows:
                 envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
                 # exit 0
             fi
-            echo $RUN_UI_TESTS
+            echo "$RUN_UI_TESTS"
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
