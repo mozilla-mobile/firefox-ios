@@ -28,7 +28,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
         title: Bitrise Test Plan Sharder
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - xcode_project: Client.xcodeproj
         - target: Client
@@ -42,7 +41,6 @@ workflows:
         is_always_run: true
     - script@1.1:
         title: Build for Testing
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - content: |
             set -euxo pipefail
