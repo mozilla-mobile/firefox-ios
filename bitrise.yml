@@ -599,18 +599,17 @@ workflows:
             #   L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
             #
             # Test Helpers
-            #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
+            #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
 
-            # Check if files changed are on the blacklist
-            if [[ $FILES_CHANGED =~ .*[^bitrise]\.y[^/]*$ || $FILES_CHANGED =~ .*\.sh$ || $FILES_CHANGED =~ .*\.md$ || $FILES_CHANGED =~ .*\.lproj/.* || $FILES_CHANGED =~ fastlane/* || $FILES_CHANGED =~ taskcluster/* || $FILES_CHANGED =~ Sync*/* || $FILES_CHANGED =~ L10nSnapshotTests/* || $FILES_CHANGED =~ test-fixtures/.py$ ]]; then
-                echo "Files changed in commit/PR are on the blacklist. Skipping UI Tests..."
-                envman add --key RUN_UI_TESTS --value Do_Not_Run_UI_Tests
-                exit 0
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
+
+            if grep -v -E "${DO_NOT_RUN_TESTS}" <<< "${FILES_CHANGED}" && [ -n "$FILES_CHANGED" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
             fi
-
-            # If files are not on blacklist run UI Tests
-            echo "Files changed in commit are not on the blacklist. Running UI Tests..."
-            envman add --key RUN_UI_TESTS --value Run_UI_Tests
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
