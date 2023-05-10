@@ -36,12 +36,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     // MARK: - Test placeholder methods
     func testLayer_placeholderNamingMethod_returnsExpectedStrigs() {
         setupNimbusForStringTesting()
-        let expectedPlaceholderString = String(
-            format: CardElementNames.placeholderString,
-            AppName.shortName.rawValue)
-        let expectedNoPlaceholderString = String(
-            format: CardElementNames.noPlaceholderString,
-            AppName.shortName.rawValue)
+        let expectedPlaceholderString = "A string inside Firefox with a placeholder"
+        let expectedNoPlaceholderString = "On Wednesday's, we wear pink"
         let layer = NimbusOnboardingFeatureLayer()
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
