@@ -576,7 +576,7 @@ workflows:
 
             # Manual triggers leave empty commits. 
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
-            FILES_CHANGED=$(git diff --name-only origin/main...$BITRISE_GIT_COMMIT)
+            FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
             echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit/PR. Skipping Blacklist check..."
@@ -603,6 +603,8 @@ workflows:
 
             DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
 
+            # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
+            # -v inverts the filtered results, returning any files not filtered by the regex
             if grep -v -E "${DO_NOT_RUN_TESTS}" <<< "${FILES_CHANGED}" && [ -n "$FILES_CHANGED" ];
             then
                 echo "Running UI Tests"
