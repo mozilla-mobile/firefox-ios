@@ -3541,11 +3541,11 @@
 		43F1A168292B94BB006E6E48 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		43F1B78628B39D2C00E883CB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43F1B78728B39D2C00E883CB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
-		43F22E072A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
-		43F22E082A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		43F2284229EE053A0037E085 /* fathom.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = fathom.mjs; sourceTree = "<group>"; };
 		43F2284429EE053A0037E085 /* CC_Python_Update.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = CC_Python_Update.py; sourceTree = "<group>"; };
 		43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCard.sys.mjs; sourceTree = "<group>"; };
+		43F22E072A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
+		43F22E082A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		43F28137294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Alerts.strings; sourceTree = "<group>"; };
 		43F28138294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/TabsTray.strings; sourceTree = "<group>"; };
 		43F2DD1A29BA6C8E00F69D7A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
@@ -8570,7 +8570,6 @@
 			children = (
 				435D7CC4246209AA0043ACB9 /* IntroViewController.swift */,
 				21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */,
-				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -9706,12 +9705,7 @@
 			isa = PBXGroup;
 			children = (
 				8A171A6029F82AD90085770E /* Application */,
-				8A93F86329D37314004159D9 /* Coordinators */,
 				96CB5D5F29B22E860034AE0A /* Autofill */,
-				5A70EF17295E2DF400790249 /* DependencyInjection */,
-				8ACA8F722919870B00D3075D /* Helpers */,
-				8A96C4B728F9DD0600B75884 /* Extensions */,
-				8AED868428CA7B1200351A50 /* TabManagement */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
@@ -9862,6 +9856,7 @@
 				8AED23C327AC1F8700DE7E97 /* Components */,
 				4331A9B927193DEF005E8080 /* ContextualHint */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
+				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
@@ -12332,7 +12327,6 @@
 				8A171A6329F82B0E0085770E /* SceneDelegateTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */,
-				96441BD629DF823D00FE041F /* MockAppAuthenticator.swift in Sources */,
 				21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */,
 				43B658D929CE251C00C9EF08 /* CreditCardInputViewModelTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
