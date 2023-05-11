@@ -69,6 +69,7 @@ class Tab: NSObject {
             }
         }
     }
+
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
@@ -454,7 +455,7 @@ class Tab: NSObject {
             webView.scrollView.layer.masksToBounds = false
             webView.navigationDelegate = navigationDelegate
 
-            restore(webView, sessionData: restoreSessionData)
+            restore(webView, interactionState: restoreSessionData)
 
             self.webView = webView
 
@@ -478,14 +479,17 @@ class Tab: NSObject {
         }
     }
 
-    func restore(_ webView: WKWebView, sessionData: Data? = nil) {
-        // If the session data field is populated it means the new session store is in use and the session data
+    func restore(_ webView: WKWebView, interactionState: Data? = nil) {
+        // If the interactionState field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
-        if #available(iOS 15, *),
-           let sessionData = sessionData,
-           let url = url {
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
-            webView.interactionState = sessionData
+        if TabStorageFlagManager.isNewTabDataStoreEnabled {
+            if let url = url {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            }
+            if #available(iOS 15, *),
+               let interactionState = interactionState {
+                webView.interactionState = interactionState
+            }
             return
         }
 
@@ -937,6 +941,33 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
+    var accessoryView: AccessoryViewProvider
+
+    override var inputAccessoryView: UIView? {
+        translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            accessoryView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        return accessoryView
+    }
+
+    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+        self.accessoryView = AccessoryViewProvider()
+
+        super.init(frame: frame, configuration: configuration)
+
+        accessoryView.previousClosure = { CreditCardHelper.previousInput() }
+        accessoryView.nextClosure = { CreditCardHelper.nextInput() }
+        accessoryView.doneClosure = { self.endEditing(true) }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match

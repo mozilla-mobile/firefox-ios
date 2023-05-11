@@ -11,6 +11,7 @@ protocol InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel)
     func presentCFR()
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
+    func presentUndoSingleToast(completion: @escaping (Bool) -> Void)
 }
 
 enum InactiveTabStatus: String, Codable {

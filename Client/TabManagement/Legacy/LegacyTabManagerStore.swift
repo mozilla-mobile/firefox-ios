@@ -10,6 +10,7 @@ import Shared
 protocol LegacyTabManagerStore {
     var isRestoringTabs: Bool { get }
     var hasTabsToRestoreAtStartup: Bool { get }
+    var tabs: [LegacySavedTab] { get }
 
     func preserveScreenshot(forTab tab: Tab?)
     func removeScreenshot(forTab tab: Tab?)
@@ -186,7 +187,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         return archiver.encodedData
     }
 
-    private var tabs: [LegacySavedTab] {
+    var tabs: [LegacySavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
             return []
         }

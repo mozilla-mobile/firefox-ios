@@ -160,6 +160,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
+
     var themeManager: ThemeManager
     var logger: Logger
 
@@ -1011,8 +1012,11 @@ class BrowserViewController: UIViewController {
         manageStatusBarEmbedded()
     }
 
-    func embedContent(_ viewController: ContentContainable) {
-        guard contentContainer.canAdd(content: viewController) else { return }
+    /// Embed a ContentContainable inside the content container
+    /// - Parameter viewController: the view controller to embed inside the content container
+    /// - Returns: True when the content was successfully embedded
+    func embedContent(_ viewController: ContentContainable) -> Bool {
+        guard contentContainer.canAdd(content: viewController) else { return false }
 
         addChild(viewController)
         contentContainer.add(content: viewController)
@@ -1020,6 +1024,7 @@ class BrowserViewController: UIViewController {
         manageStatusBarEmbedded()
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+        return true
     }
 
     /// Status bar overlay needs to be at the back for some content type that need extended content
@@ -1956,9 +1961,22 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        // TODO: Wrap this in a feature flag FXIOS-5041
-        // let creditCardHelper = CreditCardHelper(tab: tab)
-        // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            let creditCardHelper = CreditCardHelper(tab: tab)
+            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+
+            creditCardHelper.foundFieldValues = { fieldValues in
+                guard let tabWebView = tab.webView as? TabWebView else { return }
+
+                tabWebView.accessoryView.reloadViewFor(.creditCard)
+                tabWebView.reloadInputViews()
+
+                // stub. Action will be to present a half sheet, ref: FXIOS-6111
+                tabWebView.accessoryView.savedCardsClosure = { }
+            }
+        }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
@@ -2237,7 +2255,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
-            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
+            // FXIOS-6203 Can be removed with coordinator usage, it will be scrolled at the top from BrowserCoordinator
             activityStreamPanel.scrollToTop()
         }
 
@@ -2486,11 +2504,15 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
+        let introViewController = IntroViewController(
+            viewModel: introViewModel,
+            profile: profile)
+
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
+
         self.introVCPresentHelper(introViewController: introViewController)
     }
 

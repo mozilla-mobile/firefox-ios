@@ -4,6 +4,7 @@
 
 import XCTest
 import WebKit
+import Common
 
 @testable import Client
 
@@ -23,6 +24,7 @@ final class TabScrollControllerTests: XCTestCase {
         self.tab = Tab(profile: mockProfile, configuration: WKWebViewConfiguration())
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         mockGesture = UIPanGestureRecognizerMock()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {

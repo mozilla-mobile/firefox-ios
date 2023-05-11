@@ -2,7 +2,7 @@
 features:
   tab-storage-refactor-feature:
     description: >
-      This feature is for managing the roll out of the new tab storage machanism as part of the tab refactor project
+      This feature is for managing the roll out of the new tab storage mechanism as part of the tab refactor project
     variables:
       enabled:
         description: >

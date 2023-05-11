@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Nueva Pestaña abierta";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Nueva pestaña abierta";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Copiar imagen";
 
@@ -1548,6 +1551,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce la publicidad personalizada y ayuda a detener a los anunciantes para que no te rastreen al navegar.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sitio no funciona como se esperaba, toca el candado en la barra de direcciones y desactiva la protección mejorada contra el rastreo para esa página.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un sitio no funciona como se esperaba, toca el candado en la barra de direcciones y desactiva la protección mejorada contra el rastreo para esa página.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permitir algo de publicidad para que los sitios web funcionen adecuadamente.";
