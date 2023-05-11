@@ -139,8 +139,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
         return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel,
-                                             isFeatureEnabled: isFeatureEnabled)
+                                             infoModel: infoModel)
     }
 
     private func saveAppVersion(for appVersion: String) {

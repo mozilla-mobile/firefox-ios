@@ -124,8 +124,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
         return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel,
-                                             isFeatureEnabled: isFeatureEnabled)
+                                             infoModel: infoModel)
     }
 
     func sendCloseButtonTelemetry(index: Int) {
