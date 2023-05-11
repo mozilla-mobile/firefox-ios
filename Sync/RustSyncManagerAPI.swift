@@ -12,9 +12,14 @@ open class RustSyncManagerAPI {
     let api: SyncManagerComponent
     public typealias MZSyncResult = MozillaAppServices.SyncResult
 
-    public init(logger: Logger = DefaultLogger.shared) {
+    public init(logger: Logger = DefaultLogger.shared,
+                creditCardAutofillEnabled: Bool = false) {
         self.api = SyncManagerComponent()
         self.logger = logger
+
+        if creditCardAutofillEnabled {
+            RustSyncManagerAPI.rustTogglableEngines.append("creditcards")
+        }
     }
 
     public func disconnect() {
@@ -72,6 +77,14 @@ open class RustSyncManagerAPI {
             completion(engines)
         }
     }
+
+    // Names of collections that can be enabled/disabled locally.
+    public static var rustTogglableEngines: [String] = [
+        "tabs",
+        "passwords",
+        "bookmarks",
+        "history",
+    ]
 }
 
 public func toRustSyncReason(reason: OldSyncReason) -> MozillaAppServices.SyncReason {
@@ -88,11 +101,3 @@ public func toRustSyncReason(reason: OldSyncReason) -> MozillaAppServices.SyncRe
         return MozillaAppServices.SyncReason.enabledChange
     }
 }
-
-// Names of collections that can be enabled/disabled locally.
-public let RustTogglableEngines: [String] = [
-    "tabs",
-    "bookmarks",
-    "history",
-    "passwords",
-]

@@ -20,10 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 .rustSyncManagerComponent
                                                 .value()
                                                 .useRustSyncManager
+    private let creditCardAutofillStatus = FxNimbus.shared
+        .features
+        .creditCardAutofill
+        .value()
+        .creditCardAutofillStatus
+
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         syncDelegate: UIApplication.shared.syncDelegate,
-        rustSyncManagerEnabled: rustSyncManagerStatus
+        rustSyncManagerEnabled: rustSyncManagerStatus,
+        creditCardAutofillEnabled: creditCardAutofillStatus
     )
     lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,

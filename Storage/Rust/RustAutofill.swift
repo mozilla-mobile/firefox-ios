@@ -405,6 +405,12 @@ public class RustAutofill {
         }
     }
 
+    public func registerWithSyncManager() {
+        queue.async { [unowned self] in
+            self.storage?.registerWithSyncManager()
+        }
+    }
+
     @discardableResult
     public func getStoredKey() throws -> String {
         let rustKeys = RustAutofillEncryptionKeys()
