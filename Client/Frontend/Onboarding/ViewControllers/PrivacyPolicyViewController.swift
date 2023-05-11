@@ -29,8 +29,21 @@ class PrivacyPolicyViewController: UIViewController {
 
     func setupView() {
         webView = WKWebView(frame: view.frame)
+        webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
+    }
+}
+
+extension PrivacyPolicyViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let contentSize = webView.scrollView.contentSize
+        let viewSize = self.view.bounds.size
+        let zoom = viewSize.width / contentSize.width
+
+        webView.scrollView.minimumZoomScale = zoom * 0.8
+        webView.scrollView.maximumZoomScale = zoom * 0.8
+        webView.scrollView.zoomScale = zoom * 0.8
     }
 }

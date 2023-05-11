@@ -195,7 +195,8 @@ extension IntroViewController: OnboardingCardDelegate {
 
     func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
         guard let infoModel = viewModel.getInfoModel(cardType: cardType),
-              let url = infoModel.link?.url else { return }
+              let url = infoModel.link?.url
+        else { return }
         presentPrivacyPolicy(url: url)
     }
 
