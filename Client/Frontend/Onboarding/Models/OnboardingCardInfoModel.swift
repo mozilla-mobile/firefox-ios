@@ -4,30 +4,6 @@
 
 import Foundation
 
-protocol OnboardingCardInfoModelProtocol {
-    var name: String { get set }
-    var title: String { get set }
-    var body: String { get set }
-    var link: OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingButtons { get set }
-    var type: OnboardingType { get set }
-    var a11yIdRoot: String { get set }
-    var imageID: String { get set }
-
-    var image: UIImage? { get }
-
-    init(
-        name: String,
-        title: String,
-        body: String,
-        link: OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons,
-        type: OnboardingType,
-        a11yIdRoot: String,
-        imageID: String
-    )
-}
-
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var name: String
     var title: String
