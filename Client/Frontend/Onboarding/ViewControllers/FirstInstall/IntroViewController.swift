@@ -132,8 +132,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         }
     }
 
-    // Due to restrictions with PageViewController we need to get the index of the current view controller
-    // to calculate the next view controller
+    // Due to restrictions with PageViewController we need to get the index of
+    // the current view controller to calculate the next view controller
     func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
         let cardType = viewController.viewModel.cardType
 
