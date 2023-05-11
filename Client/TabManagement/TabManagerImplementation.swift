@@ -45,8 +45,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        guard AppConstants.isRunningUITests,
-              DebugSettingsBundleOptions.skipSessionRestore
+        guard !AppConstants.isRunningUITests,
+              !DebugSettingsBundleOptions.skipSessionRestore
         else { return }
 
         guard tabMigration.shouldRunMigration else {
