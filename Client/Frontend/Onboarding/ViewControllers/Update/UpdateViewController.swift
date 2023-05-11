@@ -190,8 +190,32 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
+    private func presentPrivacyPolicy(url: URL,
+                                      referringPage: ReferringPage = .onboarding) {
+        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissPrivacyPolicyViewController))
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
+        controller.onViewDismissed = {
+            self.closeUpdate()
+        }
+        present(controller, animated: true)
+    }
+
     @objc
     func dismissSignInViewController() {
+        dismiss(animated: true, completion: nil)
+        closeUpdate()
+    }
+
+    @objc
+    func dismissPrivacyPolicyViewController() {
         dismiss(animated: true, completion: nil)
         closeUpdate()
     }
@@ -240,6 +264,13 @@ extension UpdateViewController: OnboardingCardDelegate {
         default:
             break
         }
+    }
+
+    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
+        guard let infoModel = viewModel.getInfoModel(cardType: cardType),
+              let url = infoModel.link?.url
+        else { return }
+        presentPrivacyPolicy(url: url)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
