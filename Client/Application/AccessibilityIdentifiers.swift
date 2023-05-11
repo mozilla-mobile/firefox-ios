@@ -33,7 +33,8 @@ public struct AccessibilityIdentifiers {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
             static let tabsButton = "URLBarView.tabsButton"
-            static let backButton = "URLBarView.backButton"
+            static let backButton = "TabToolbar.backButton"
+            static let forwardButton = "TabToolbar.forwardButton"
             static let searchTextField = "address"
         }
     }

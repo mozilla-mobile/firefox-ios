@@ -320,6 +320,28 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
 
+    // Smoke & Functional
+    func testTabHistory() {
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("example.com")
+        app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton].press(forDuration: 1)
+        XCTAssertTrue(app.otherElements.tables.cells.staticTexts["Example Domain"].exists)
+        app.otherElements.tables.cells.staticTexts["Example Domain"].tap()
+        XCTAssertFalse(app.otherElements.tables.cells.staticTexts["Example Domain"].exists)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openBookOfMozilla()
+        app.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton].press(forDuration: 1)
+        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        app.tables.staticTexts["The Book of Mozilla"].tap()
+        app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton].tap()
+        XCTAssertFalse(app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton].isEnabled)
+        app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.forwardButton].press(forDuration: 1)
+        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        app.tables.staticTexts["The Book of Mozilla"].tap()
+        waitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
+    }
+
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this approach to avoid code duplication
     /*
