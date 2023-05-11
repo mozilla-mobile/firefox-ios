@@ -31,7 +31,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     public init(logger: Logger = DefaultLogger.shared,
                 fileManager: TabFileManager = DefaultTabFileManager(),
-                throttleTime: UInt64 = 5 * NSEC_PER_SEC) {
+                throttleTime: UInt64 = 2 * NSEC_PER_SEC) {
         self.logger = logger
         self.fileManager = fileManager
         self.throttleTime = throttleTime

@@ -114,13 +114,19 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     // MARK: Private
-    private func createInfoModel() -> LegacyOnboardingModelProtocol {
-        return LegacyOnboardingInfoModel(image: nil,
-                                         title: "Title",
-                                         description: "Description",
-                                         linkButtonTitle: "Link",
-                                         primaryAction: "Button1",
-                                         secondaryAction: "Button2",
-                                         a11yIdRoot: "A11yId")
+    private func createInfoModel() -> OnboardingCardInfoModelProtocol {
+        return OnboardingCardInfoModel(
+            name: "name",
+            title: "Title",
+            body: "Description",
+            link: OnboardingLinkInfoModel(
+                title: "Link",
+                url: URL(string: "https://macrumors.com")!),
+            buttons: OnboardingButtons(
+                primary: OnboardingButtonInfoModel(title: "Button1", action: .nextCard),
+                secondary: OnboardingButtonInfoModel(title: "Button2", action: .nextCard)),
+            type: .freshInstall,
+            a11yIdRoot: "A11yId",
+            imageID: "image")
     }
 }

@@ -6,11 +6,11 @@ import Foundation
 @testable import Client
 
 class MockLaunchCoordinatorDelegate: LaunchCoordinatorDelegate {
-    var savedURL: URL?
-    var savedIsPrivate: Bool?
-    var savedDidFinishCoordinator: LaunchCoordinator?
+    var didFinishCalledCount = 0
+    weak var savedDidFinishCoordinator: LaunchCoordinator?
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
+        didFinishCalledCount += 1
         savedDidFinishCoordinator = coordinator
     }
 }

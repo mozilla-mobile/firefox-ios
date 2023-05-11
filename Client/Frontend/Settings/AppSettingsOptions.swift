@@ -916,6 +916,7 @@ class SearchSetting: Setting {
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
+    private let appAuthenticator: AppAuthenticationProtocol
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
 
@@ -923,9 +924,12 @@ class LoginsSetting: Setting {
 
     override var accessibilityIdentifier: String? { return "Logins" }
 
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate?) {
+    init(settings: SettingsTableViewController,
+         delegate: SettingsDelegate?,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.appAuthenticator = appAuthenticator
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
 
@@ -954,7 +958,7 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
 
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             if LoginOnboarding.shouldShow() {
                 let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
 
@@ -1062,11 +1066,12 @@ class ClearPrivateDataSetting: Setting {
 }
 
 class AutofillCreditCardSettings: Setting, FeatureFlaggable {
+    private let profile: Profile
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
-
     override var accessibilityIdentifier: String? { return "AutofillCreditCard" }
 
     init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
         let title: String = .SettingsAutofillCreditCard
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
@@ -1074,8 +1079,9 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         // Telemetry
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
-
-        let viewController = CreditCardSettingsViewController(theme: theme)
+        let viewModel = CreditCardSettingsViewModel(profile: profile)
+        let viewController = CreditCardSettingsViewController(
+            creditCardViewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

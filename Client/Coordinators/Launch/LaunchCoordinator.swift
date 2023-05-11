@@ -10,7 +10,7 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator {
+class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     private let profile: Profile
     private let logger: Logger
     private let isIphone: Bool
@@ -112,11 +112,12 @@ class LaunchCoordinator: BaseCoordinator {
             return
         }
         surveySurface.modalPresentationStyle = .fullScreen
-        manager.dismissClosure = { [weak self] in
-            guard let self = self else { return }
-            self.parentCoordinator?.didFinishLaunch(from: self)
-        }
-
+        surveySurface.delegate = self
         router.present(surveySurface, animated: false)
+    }
+
+    // MARK: - SurveySurfaceViewControllerDelegate
+    func didFinish() {
+        parentCoordinator?.didFinishLaunch(from: self)
     }
 }

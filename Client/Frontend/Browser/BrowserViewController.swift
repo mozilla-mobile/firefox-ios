@@ -160,6 +160,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
+
     var themeManager: ThemeManager
     var logger: Logger
 
@@ -1960,9 +1961,22 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        // TODO: Wrap this in a feature flag FXIOS-5041
-        // let creditCardHelper = CreditCardHelper(tab: tab)
-        // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            let creditCardHelper = CreditCardHelper(tab: tab)
+            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+
+            creditCardHelper.foundFieldValues = { fieldValues in
+                guard let tabWebView = tab.webView as? TabWebView else { return }
+
+                tabWebView.accessoryView.reloadViewFor(.creditCard)
+                tabWebView.reloadInputViews()
+
+                // stub. Action will be to present a half sheet, ref: FXIOS-6111
+                tabWebView.accessoryView.savedCardsClosure = { }
+            }
+        }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
@@ -2490,11 +2504,15 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
+        let introViewController = IntroViewController(
+            viewModel: introViewModel,
+            profile: profile)
+
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
+
         self.introVCPresentHelper(introViewController: introViewController)
     }
 
