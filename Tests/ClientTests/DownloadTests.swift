@@ -10,10 +10,12 @@ class DownloadTests: XCTestCase {
     var download: Download!
     
     override func setUp() {
+        super.setUp()
         download = Download()
     }
     
     override func tearDown() {
+        super.tearDown()
         download = nil
     }
     
