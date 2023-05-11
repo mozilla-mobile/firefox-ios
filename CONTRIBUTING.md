@@ -1,11 +1,5 @@
-## Contributor guidelines
-We'd love for you to contribute to this repository. Before you start, we'd like you to take a look and follow these guidelines:
-  - [Submitting an Issue](#submitting-an-issue)
-  - [Coding Rules](#coding-rules)
-    - [Swift style](#swift-style)
-  - [Pull Requests](#pull-requests)
-    - [Commits](#commits)
-    - [Commenting Etiquette](#commenting-etiquette)
+# Contribution guidelines
+We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the the following guidelines and our [Firefox for iOS contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
 
 ### Submitting an Issue
 If you find a bug in the source code or a mistake in the documentation, you can help us by submitting an issue to our repository. Before you submit your issue, search open and closed issues, as it's possible that your question was already answered, or a ticket for the issue already exists.
@@ -14,7 +8,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 #### Swift style
 * iOS engineers at Mozilla are still in the process of defining Mozilla's Swift guidelines. Currently, we're working through Swiftlint rules that members on the team agree should be enabled. Then we will pursue further rules we'd like to implement.
-* In general, as of 2023, Swift code should follow the conventions listed at https://github.com/raywenderlich/swift-style-guide, with the understanding that this is a loose standard.
+* In general, as of 2023, Swift code should follow the conventions listed at [Swift style guide](https://github.com/raywenderlich/swift-style-guide), with the understanding that this is a loose standard.
   * Exception: we use 4-space indentation instead of 2.
 * We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure comformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
 
@@ -32,3 +26,28 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 #### Commenting Etiquette
 * Please remember that all comments should adhere to the [Mozilla Community Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/)
 * If a comment does not apply to the code review on the PR, please post it on the related issue.
+
+# Building the code
+- Fork and clone the project from the [repository](https://github.com/mozilla-mobile/firefox-ios.git).
+- Use the provided build instructions in the [Readme](https://github.com/mozilla-mobile/firefox-ios/blob/master/README.md) of the repository to build the project. 
+
+## Run on a Device with a Free Developer Account
+> Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.
+
+Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
+
+1. Open Client/Configuration/Fennec.xcconfig
+2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
+3. Open the project editor in Xcode.
+4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
+5. For each target, in the 'General' section, under 'Signing', select your personal development account.
+
+If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
+
+# Looking for issues
+Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
+
+# Reaching out for help and questions
+If more information is required or contributors have any questions then we suggestion reaching out to us via:
+- Chat: See [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion
+- Open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).
