@@ -10,6 +10,7 @@ import Shared
 
 class SearchBarSettingsViewModelTests: XCTestCase {
     var prefs: Prefs!
+    var mockNotificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
@@ -17,12 +18,14 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         prefs = profile.prefs
         prefs.clearAll()
+        mockNotificationCenter = MockNotificationCenter()
     }
 
     override func tearDown() {
         super.tearDown()
         prefs.clearAll()
         prefs = nil
+        mockNotificationCenter = nil
     }
 
     // MARK: Default
@@ -92,64 +95,55 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     // MARK: Notification
 
     func testNoNotificationSent_withoutDefaultPref() {
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let viewModel = createViewModel()
         let searchBarPosition = viewModel.searchBarPosition
 
         XCTAssertEqual(searchBarPosition, .top)
-        XCTAssertNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertEqual(mockNotificationCenter.postCallCount, 0)
     }
 
     func testNotificationSent_onBottomSetting() {
         setDefault(defaultPosition: .top)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let viewModel = createViewModel()
         viewModel.bottomSetting.onChecked()
 
-        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertEqual(mockNotificationCenter.postCallCount, 1)
     }
 
     func testNotificationSent_onTopSetting() {
         setDefault(defaultPosition: .bottom)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let viewModel = createViewModel()
         viewModel.topSetting.onChecked()
 
-        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertEqual(mockNotificationCenter.postCallCount, 1)
     }
 
     func testNotificationSent_topIsReceived() {
         setDefault(defaultPosition: .bottom)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let viewModel = createViewModel()
         viewModel.topSetting.onChecked()
 
-        verifyNotification(name: spyNotificationCenter.notificationNameSent,
-                           object: spyNotificationCenter.notificationObjectSent,
+        verifyNotification(name: mockNotificationCenter.savePostName,
+                           object: mockNotificationCenter.savePostObject,
                            expectedPosition: .top)
     }
 
     func testNotificationSent_bottomIsReceived() {
         setDefault(defaultPosition: .top)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let viewModel = createViewModel()
         viewModel.bottomSetting.onChecked()
 
-        verifyNotification(name: spyNotificationCenter.notificationNameSent,
-                           object: spyNotificationCenter.notificationObjectSent,
+        verifyNotification(name: mockNotificationCenter.savePostName,
+                           object: mockNotificationCenter.savePostObject,
                            expectedPosition: .bottom)
     }
 }
 
 // MARK: - Helper methods
 private extension SearchBarSettingsViewModelTests {
-    func createViewModel(notificationCenter: NotificationCenter = NotificationCenter.default,
-                         file: StaticString = #file,
+    func createViewModel(file: StaticString = #file,
                          line: UInt = #line) -> SearchBarSettingsViewModel {
-        let viewModel = SearchBarSettingsViewModel(prefs: prefs, notificationCenter: notificationCenter)
+        let viewModel = SearchBarSettingsViewModel(prefs: prefs, notificationCenter: mockNotificationCenter)
         trackForMemoryLeaks(viewModel, file: file, line: line)
         return viewModel
     }
