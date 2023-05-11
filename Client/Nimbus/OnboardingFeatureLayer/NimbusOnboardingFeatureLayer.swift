@@ -55,14 +55,19 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// All cards must have valid formats and data. For example, a card with no
     /// buttons, will be omitted from the returned cards.
     ///
+    /// For designer's flexibility, the `title` and `body` property are formatted
+    /// with the app's name, in case we need to use localized strings that include
+    /// the app name. Testing accounts for this, ensuring that the string, when
+    /// there is no placeholder, is as expected.
+    ///
     /// - Parameter cardData: Card data from ``FxNimbus/shared``
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
         return cardData.compactMap { card in
             return OnboardingCardInfoModel(
                 name: card.name,
-                title: card.title,
-                body: card.body,
+                title: String(format: card.title, AppName.shortName.rawValue),
+                body: String(format: card.body, AppName.shortName.rawValue),
                 link: getOnboardingLink(from: card.link),
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,

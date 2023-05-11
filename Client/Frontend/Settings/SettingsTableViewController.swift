@@ -37,6 +37,13 @@ extension UILabel {
             context: nil)
         return boundingRect.height
     }
+
+    func truncateLabelText(to limit: Int) {
+        if let labelText = self.text {
+            let attributedString = labelText.prefix(min(labelText.count, limit))
+            self.attributedText = NSAttributedString(string: String(attributedString))
+        }
+    }
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
@@ -847,6 +854,7 @@ class SettingsTableViewController: ThemedTableViewController {
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
             cell.applyTheme(theme: themeManager.currentTheme)
+            cell.detailTextLabel?.truncateLabelText(to: 28)
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)

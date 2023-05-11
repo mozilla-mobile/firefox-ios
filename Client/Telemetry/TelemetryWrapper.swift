@@ -167,7 +167,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         }
 
         // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.buildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
+        let gleanConfig = Configuration(channel: AppConstants.buildChannel.rawValue, logLevel: .off)
+        glean.initialize(uploadEnabled: sendUsageData,
+                         configuration: gleanConfig,
+                         buildInfo: GleanMetrics.GleanBuild.info)
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile

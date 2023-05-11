@@ -278,12 +278,16 @@ export const FormAutofillHeuristics = {
         // terminated.
         break;
       }
+      parsedFields = false;
       const elem = detail.elementWeakRef.get();
       for (let regexp of Object.keys(addressLineRegexps)) {
         if (this._matchRegexp(elem, addressLineRegexps[regexp])) {
           fieldScanner.updateFieldName(fieldScanner.parsingIndex, regexp);
           parsedFields = true;
         }
+      }
+      if (!parsedFields) {
+        break;
       }
       fieldScanner.parsingIndex++;
     }
