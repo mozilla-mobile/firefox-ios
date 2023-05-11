@@ -169,6 +169,25 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 }
 
 extension IntroViewController: OnboardingCardDelegate {
+    func linkAction() {
+        let privacyPolicyVC = PrivacyPolicyViewController(url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox/")!)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissPrivacyPolicyViewController))
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
+        present(controller, animated: true)
+    }
+
+    @objc
+    func dismissPrivacyPolicyViewController() {
+        dismiss(animated: true, completion: nil)
+    }
+
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
             viewModel.saveHasSeenOnboarding()
