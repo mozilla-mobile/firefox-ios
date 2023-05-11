@@ -68,16 +68,8 @@ public actor DefaultDiskImageStore: DiskImageStore {
     }
 
     public func saveImageForKey(_ key: String, image: UIImage) async throws {
-        let size = CGSize(width: image.size.width / 2, height: image.size.height / 2)
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        let renderer = UIGraphicsImageRenderer(size: size, format: format)
-        let scaledImage = renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: size))
-        }
-
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
-        if let data = scaledImage.jpegData(compressionQuality: quality) {
+        if let data = image.jpegData(compressionQuality: quality) {
             try data.write(to: imageURL, options: .noFileProtection)
             keys.insert(key)
         } else {
