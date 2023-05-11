@@ -16,4 +16,3 @@ struct OnboardingButtons {
         self.secondary = secondary
     }
 }
-

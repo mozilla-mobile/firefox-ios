@@ -27,4 +27,3 @@ protocol OnboardingCardInfoModelProtocol {
         imageID: String
     )
 }
-
