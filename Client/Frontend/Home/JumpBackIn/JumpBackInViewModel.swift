@@ -394,14 +394,14 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: isPortrait,
-                            device: device)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: isSyncTabFeatureEnabled,
             device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: isPortrait,
+                            device: device)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -481,6 +481,7 @@ extension JumpBackInViewModel: JumpBackInDelegate {
             self.recentGroups = await self.jumpBackInDataAdaptor.getGroupsData()
             self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
             self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
+            print("YRD JumpBack in loaded new data and is \(self.isEnabled)")
             guard self.isEnabled else { return }
 
             self.delegate?.reloadView()
