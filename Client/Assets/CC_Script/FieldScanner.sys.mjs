@@ -56,6 +56,9 @@ export class FieldDetail {
    * from the backend.  There cannot be multiple fields which have
    * the same exact combination of these values.
    */
+
+  // Which section the field belongs to. The value comes from autocomplete attribute.
+  // See https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens for more details
   section = "";
   addressType = "";
   contactType = "";
