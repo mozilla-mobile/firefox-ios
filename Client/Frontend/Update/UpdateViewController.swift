@@ -190,9 +190,9 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
-    private func presentPrivacyPolicy(url: String = "https://www.mozilla.org/en-US/privacy/firefox/",
+    private func presentPrivacyPolicy(url: URL,
                                       referringPage: ReferringPage = .onboarding) {
-        let privacyPolicyVC = PrivacyPolicyViewController(url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox/")!)
+        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
                                          style: .plain,
@@ -266,8 +266,10 @@ extension UpdateViewController: OnboardingCardDelegate {
         }
     }
 
-    func linkAction() {
-        presentPrivacyPolicy()
+    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
+        guard let infoModel = viewModel.getInfoModel(cardType: cardType),
+              let url = infoModel.link?.url else { return }
+        presentPrivacyPolicy(url: url)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card

@@ -169,25 +169,6 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 }
 
 extension IntroViewController: OnboardingCardDelegate {
-    func linkAction() {
-        let privacyPolicyVC = PrivacyPolicyViewController(url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox/")!)
-        let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(dismissPrivacyPolicyViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
-        present(controller, animated: true)
-    }
-
-    @objc
-    func dismissPrivacyPolicyViewController() {
-        dismiss(animated: true, completion: nil)
-    }
-
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
             viewModel.saveHasSeenOnboarding()
@@ -210,6 +191,12 @@ extension IntroViewController: OnboardingCardDelegate {
         default:
             break
         }
+    }
+
+    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
+        guard let infoModel = viewModel.getInfoModel(cardType: cardType),
+              let url = infoModel.link?.url else { return }
+        presentPrivacyPolicy(url: url)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
@@ -244,6 +231,24 @@ extension IntroViewController: OnboardingCardDelegate {
         self.present(controller, animated: true)
     }
 
+    private func presentPrivacyPolicy(url: URL,
+                                      referringPage: ReferringPage = .onboarding) {
+        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissPrivacyPolicyViewController))
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
+        controller.onViewDismissed = {
+            self.showNextPage(.welcome)
+        }
+        present(controller, animated: true)
+    }
+
     private func askForNotificationPermission() {
         let notificationManager = NotificationManager()
         notificationManager.requestAuthorization { [weak self] granted, error in
@@ -267,6 +272,11 @@ extension IntroViewController: OnboardingCardDelegate {
 
     @objc
     func dismissSignInViewController() {
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc
+    func dismissPrivacyPolicyViewController() {
         dismiss(animated: true, completion: nil)
     }
 }

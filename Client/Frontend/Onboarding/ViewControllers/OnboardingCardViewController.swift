@@ -10,7 +10,7 @@ protocol OnboardingCardDelegate: AnyObject {
     func showNextPage(_ cardType: IntroViewModel.InformationCards)
     func primaryAction(_ cardType: IntroViewModel.InformationCards)
     func pageChanged(_ cardType: IntroViewModel.InformationCards)
-    func linkAction()
+    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards)
 }
 
 class OnboardingCardViewController: UIViewController, Themeable {
@@ -364,8 +364,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     @objc
     func linkButtonAction() {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5850
-        delegate?.linkAction()
+        delegate?.privacyPolicyLinkAction(viewModel.cardType)
     }
 
     // MARK: - Themeable
