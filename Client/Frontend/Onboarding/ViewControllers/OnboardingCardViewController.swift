@@ -99,17 +99,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
     }
 
-    // Only available for Welcome card and default cases
-    private lazy var descriptionBoldLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.descriptionBoldFontSize)
-        label.isHidden = true
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)DescriptionBoldLabel"
-    }
-
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -320,8 +309,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.infoModel.title
-        descriptionBoldLabel.isHidden = !viewModel.shouldShowDescriptionBold
-        descriptionBoldLabel.text = .Onboarding.Intro.DescriptionPart1
         descriptionLabel.text = viewModel.infoModel.body
 
         imageView.image = viewModel.infoModel.image
@@ -380,7 +367,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
-        descriptionBoldLabel.textColor = theme.colors.textPrimary
 
         primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
         primaryButton.backgroundColor = theme.colors.actionPrimary
