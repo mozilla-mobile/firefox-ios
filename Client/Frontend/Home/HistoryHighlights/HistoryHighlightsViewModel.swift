@@ -71,6 +71,7 @@ class HistoryHighlightsViewModel {
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
+    private var logger: Logger
 
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
@@ -112,13 +113,15 @@ class HistoryHighlightsViewModel {
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
         self.historyHighlightsDataAdaptor.delegate = self
     }
@@ -444,9 +447,10 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHighlights()
-            print("YRD HistoryHighlights loadd new data and is \(self.isEnabled)")
+            self.logger.log("HistoryHighlights didLoadNewData and section shouldShow \(self.shouldShow)",
+                            level: .debug,
+                            category: .homepage)
             guard self.isEnabled else { return }
-            // TODO: Add log here?
             self.delegate?.reloadView()
         }
     }

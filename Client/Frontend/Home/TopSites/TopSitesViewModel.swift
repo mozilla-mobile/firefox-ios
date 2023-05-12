@@ -205,7 +205,6 @@ extension TopSitesViewModel: TopSitesManagerDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.topSites = self.topSitesDataAdaptor.getTopSitesData()
-            print("YRD TopSites loadd new data and is enabled \(self.isEnabled)")
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
