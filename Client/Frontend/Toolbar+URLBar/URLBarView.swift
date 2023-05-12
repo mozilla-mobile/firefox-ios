@@ -445,9 +445,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         if UIDevice.current.userInterfaceIdiom != .pad {
             locationTextField.textDragInteraction?.isEnabled = false
         }
-
+        let isPrivateMode = locationActiveBorderColor == themeManager.currentTheme.colors.layerAccentPrivateNonOpaque
+        locationTextField.applyUIMode(isPrivate: isPrivateMode)
         locationTextField.applyTheme(theme: themeManager.currentTheme)
-        locationTextField.backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -884,6 +884,7 @@ extension URLBarView: PrivateModeUI {
         progressBar.setGradientColors(startColor: gradientStartColor,
                                       middleColor: gradientMiddleColor,
                                       endColor: gradientEndColor)
+        locationTextField?.applyUIMode(isPrivate: isPrivate)
         locationTextField?.applyTheme(theme: currentTheme)
         applyTheme(theme: currentTheme)
     }

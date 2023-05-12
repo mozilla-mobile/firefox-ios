@@ -26,6 +26,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var hideCursor = false
 
     private let copyShortcutKey = "c"
+    private var isPrivateMode = false
 
     var isSelectionActive: Bool {
         return autocompleteTextLabel != nil
@@ -338,11 +339,15 @@ extension AutocompleteTextField: MenuHelperInterface {
     }
 }
 
-extension AutocompleteTextField: ThemeApplicable {
+extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        isPrivateMode = isPrivate
+    }
+
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer3
         textColor = theme.colors.textPrimary
-        tintColor = theme.colors.layerAccentNonOpaque
+        tintColor = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
         if autocompleteTextLabel?.attributedText != nil {
             autocompleteTextLabel?.backgroundColor = backgroundColor
             autocompleteTextLabel?.textColor = textColor

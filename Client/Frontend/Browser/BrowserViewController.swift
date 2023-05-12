@@ -2847,6 +2847,7 @@ extension BrowserViewController: NotificationThemeable {
         let ui: [ThemeApplicable?] = [urlBar,
                                       toolbar,
                                       readerModeBar]
+        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         ui.forEach { $0?.applyTheme(theme: currentTheme) }
         topTabsViewController?.applyTheme()
 

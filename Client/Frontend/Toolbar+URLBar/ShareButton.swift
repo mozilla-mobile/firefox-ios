@@ -52,7 +52,7 @@ extension ShareButton: ThemeApplicable {
         selectedTintColor = theme.colors.iconSecondary
         disabledTintColor = theme.colors.iconDisabled
         unselectedTintColor = theme.colors.iconDisabled
-        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+        tintColor = isEnabled ? selectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
 }

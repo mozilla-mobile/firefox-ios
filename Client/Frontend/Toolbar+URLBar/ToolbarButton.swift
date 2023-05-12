@@ -59,7 +59,7 @@ class ToolbarButton: UIButton {
 extension ToolbarButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
         selectedTintColor = theme.colors.actionPrimary
-        disabledTintColor = theme.colors.actionSecondary
+        disabledTintColor = theme.colors.iconDisabled
         unselectedTintColor = theme.colors.iconPrimary
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
