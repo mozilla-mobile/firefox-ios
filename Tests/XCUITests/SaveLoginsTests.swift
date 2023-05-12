@@ -74,6 +74,12 @@ class SaveLoginTest: BaseTestCase {
     // Smoketest
     func testSaveLogin() {
         closeURLBar()
+        print("===============================")
+        print(ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"])
+        print(ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"] == nil)
+        print(ProcessInfo.processInfo.arguments)
+        print(ProcessInfo.processInfo.environment)
+        print("===============================")
         // Initially the login list should be empty
         openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
@@ -90,15 +96,10 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        if processIsTranslatedStr() == m1Rosetta {
-            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+        if ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"] != nil {
+            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         } else {
-            // Change to 3 entries for iPhone since the hostname is not saved and only one entry appears
-            if iPad() {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
-            } else {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-            }
+            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
         }
     }
 
