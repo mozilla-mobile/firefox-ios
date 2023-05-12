@@ -35,4 +35,3 @@ class MockIntroViewController: OnboardingCardDelegate {
 
     func pageChanged(_ cardType: IntroViewModel.InformationCards) { }
 }
-
