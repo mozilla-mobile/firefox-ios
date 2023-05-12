@@ -398,6 +398,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        updateSectionLayout(for: traitCollection,
+                            isPortrait: isPortrait,
+                            device: device)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: isSyncTabFeatureEnabled,
             device: device
@@ -406,9 +409,6 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         logger.log("JumpBackIn section shouldShow \(shouldShow)",
                    level: .debug,
                    category: .homepage)
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: isPortrait,
-                            device: device)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
