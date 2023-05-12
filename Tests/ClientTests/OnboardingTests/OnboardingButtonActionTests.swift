@@ -44,7 +44,7 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_buttonAction_returnsPrivacyPolicyAction() {
-        setSubjecUpWith(firstAction: .readPrivacyPolicy)
+        setSubjectUpWith(firstAction: .readPrivacyPolicy)
 
         subject.linkButtonAction()
 
