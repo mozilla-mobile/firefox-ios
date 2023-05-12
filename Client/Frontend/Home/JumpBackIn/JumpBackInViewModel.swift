@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Storage
 import UIKit
@@ -44,6 +45,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var hasSentSyncedTabTileEvent = false
     private let tabManager: TabManager
     private var wallpaperManager: WallpaperManager
+    private var logger: Logger
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
     init(
@@ -53,7 +55,8 @@ class JumpBackInViewModel: FeatureFlaggable {
         theme: Theme,
         tabManager: TabManager,
         adaptor: JumpBackInDataAdaptor,
-        wallpaperManager: WallpaperManager
+        wallpaperManager: WallpaperManager,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
@@ -62,6 +65,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
     }
 
     func switchTo(group: ASGroup<Tab>) {
@@ -402,6 +406,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
             device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
+        logger.log("JumpBackIn section shouldShow \(shouldShow)",
+                   level: .debug,
+                   category: .homepage)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -481,6 +488,9 @@ extension JumpBackInViewModel: JumpBackInDelegate {
             self.recentGroups = await self.jumpBackInDataAdaptor.getGroupsData()
             self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
             self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
+            logger.log("JumpBack didLoadNewData and section shouldShow \(self.shouldShow)",
+                       level: .debug,
+                       category: .homepage)
             guard self.isEnabled else { return }
 
             self.delegate?.reloadView()

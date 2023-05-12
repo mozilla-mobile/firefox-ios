@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import MozillaAppServices
 import Shared
 
@@ -82,6 +83,7 @@ class HomepageViewModel: FeatureFlaggable {
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager
+    private var logger: Logger
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
@@ -105,10 +107,12 @@ class HomepageViewModel: FeatureFlaggable {
          nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager = WallpaperManager()) {
+         wallpaperManager: WallpaperManager = WallpaperManager(),
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
+        self.logger = logger
 
         self.headerViewModel = HomeLogoHeaderViewModel(profile: profile, theme: theme)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
@@ -214,6 +218,9 @@ class HomepageViewModel: FeatureFlaggable {
         childViewModels.forEach {
             if $0.shouldShow { shownSections.append($0.sectionType) }
         }
+        logger.log("Homepage amount of sections shown \(shownSections.count)",
+                   level: .debug,
+                   category: .homepage)
     }
 
     func refreshData(for traitCollection: UITraitCollection, size: CGSize) {

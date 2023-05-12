@@ -808,6 +808,9 @@ extension HomepageViewController: HomepageViewModelDelegate {
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
             self.collectionView.reloadData()
+            logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
+                       level: .debug,
+                       category: .homepage)
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
