@@ -74,12 +74,6 @@ class SaveLoginTest: BaseTestCase {
     // Smoketest
     func testSaveLogin() {
         closeURLBar()
-        print("===============================")
-        print(ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"])
-        print(ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"] == nil)
-        print(ProcessInfo.processInfo.arguments)
-        print(ProcessInfo.processInfo.environment)
-        print("===============================")
         // Initially the login list should be empty
         openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
@@ -96,7 +90,8 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        if ProcessInfo.processInfo.environment["BITRISE_NIGHTLY_VERSION"] != nil {
+        // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
+        if (ProcessInfo.processInfo.environment["HOME"]!).contains("vagrant") {
             XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         } else {
             XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
