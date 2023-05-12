@@ -339,7 +339,7 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.tabDisplayType = .TabGrid
         tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
 
-        // Add four tabs (2 inactive, 1 active)
+        // Add three tabs (2 inactive, 1 active)
         let inactiveTab1 = manager.addTab()
         inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
         let inactiveTab2 = manager.addTab()
@@ -349,7 +349,11 @@ class TabDisplayManagerTests: XCTestCase {
 
         tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
                                                              inactiveTab2]
+        // Force collectionView reload section to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.isUndoButtonPressed = true
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -363,7 +367,7 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.tabDisplayType = .TabGrid
         tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
 
-        // Add four tabs (2 inactive, 1 active)
+        // Add three tabs (2 inactive, 1 active)
         let inactiveTab1 = manager.addTab()
         inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
         let inactiveTab2 = manager.addTab()
@@ -373,7 +377,11 @@ class TabDisplayManagerTests: XCTestCase {
 
         tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
                                                              inactiveTab2]
+        // Force collectionView reload section to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.isUndoButtonPressed = false
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
