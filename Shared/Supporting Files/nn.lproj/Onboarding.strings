@@ -71,7 +71,7 @@
 "Onboarding.Welcome.Action.v114" = "Kom i gang";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
-"Onboarding.Welcome.ActionTreatementA.v114" = "Bruk som standard nettleser";
+"Onboarding.Welcome.ActionTreatementA.v114" = "Bruk som standard nettlesar";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "%@ set folk over profitt og forsvarar personvernet ditt medan du surfar.";
