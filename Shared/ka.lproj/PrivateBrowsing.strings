@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "გახსნა ახალ პირად ჩანართში";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox არ დაიმახსოვრებს მონახულებულ გვერდებსა და ფუნთუშებს, თუმცა ბოლოს ჩანიშნული გვერდები შენარჩუნდება.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox არ დაიმახსოვრებს მონახულებულ გვერდებსა და ფუნთუშებს, მაგრამ ბოლოს ჩანიშნული გვერდები შენარჩუნდება.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "ვრცლად";

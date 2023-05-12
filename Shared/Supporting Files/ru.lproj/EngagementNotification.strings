@@ -11,7 +11,7 @@
 "Engagement.Notification.Treatment.A.Title.v114" = "Просматривайте сеть, не оставляя следа";
 
 /* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
-"Engagement.Notification.Treatment.B.Body.v114" = "Просматривайте без сохраненных куки или истории в %@.";
+"Engagement.Notification.Treatment.B.Body.v114" = "Просматривайте без сохранённых кук или истории в %@.";
 
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.B.Title.v114" = "Попробуйте приватный просмотр";

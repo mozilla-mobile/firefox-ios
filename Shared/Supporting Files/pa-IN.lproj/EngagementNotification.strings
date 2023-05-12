@@ -4,3 +4,15 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "ਆਪਣੀ ਪਹਿਲੀ ਖੋਜ ਕਰੋ";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@ ਵਿੱਚ ਨਿੱਜੀ ਬਰਾਊਜ਼ ਕਰਨਾ ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਨੂੰ ਸੰਭਾਲਦਾ ਨਹੀ ਅਤੇ ਲੁਕਵੇਂ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ।";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "ਬਿਨਾਂ ਪੈੜਾਂ ਛੱਡੇ ਬਰਾਊਜ਼ ਕਰੋ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "%@ ਵਿੱਚ ਬਿਨਾਂ ਕਿਸੇ ਸੰਭਾਲੇ ਕੂਕੀ ਜਾਂ ਅਤੀਤ ਦੇ ਬਰਾਊਜ਼ ਕਰੋ";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "ਨਿੱਜੀ ਬਰਾਊਜ਼ ਕਰਨ ਨੂੰ ਅਜ਼ਮਾਓ";
+
