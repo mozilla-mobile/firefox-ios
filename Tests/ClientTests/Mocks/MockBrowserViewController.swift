@@ -102,9 +102,10 @@ class MockBrowserViewController: BrowserViewController {
         presentSignInCount += 1
     }
 
-    override func embedContent(_ viewController: ContentContainable) {
+    override func embedContent(_ viewController: ContentContainable) -> Bool {
         embedContentCalled += 1
         saveEmbeddedContent = viewController
+        return true
     }
 
     override func frontEmbeddedContent(_ viewController: ContentContainable) {

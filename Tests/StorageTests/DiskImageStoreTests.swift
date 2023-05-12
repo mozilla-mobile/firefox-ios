@@ -31,12 +31,12 @@ class DiskImageStoreTests: XCTestCase {
 
         let fetchedImage = try await store.getImageForKey(testKey)
 
-        XCTAssertEqual(testImage.size.width / 2,
+        XCTAssertEqual(testImage.size.width,
                        fetchedImage.size.width,
-                       "Fetched image width should be half the original width")
-        XCTAssertEqual(testImage.size.height / 2,
+                       "Fetched image width should be the same as the original width")
+        XCTAssertEqual(testImage.size.height,
                        fetchedImage.size.height,
-                       "Fetched image height should be half the original height")
+                       "Fetched image height should be the same as the original height")
     }
 
     func testGetImageForKey() async throws {
@@ -51,12 +51,12 @@ class DiskImageStoreTests: XCTestCase {
             let fetchedImage = try await store.getImageForKey(key)
 
             // Then
-            XCTAssertEqual(image.size.width / 2,
+            XCTAssertEqual(image.size.width,
                            fetchedImage.size.width,
-                           "Fetched image width should be half the original width")
-            XCTAssertEqual(image.size.height / 2,
+                           "Fetched image width should be the same as the original width")
+            XCTAssertEqual(image.size.height,
                            fetchedImage.size.height,
-                           "Fetched image height should be half the original height")
+                           "Fetched image height should be the same as the original height")
         }
     }
 

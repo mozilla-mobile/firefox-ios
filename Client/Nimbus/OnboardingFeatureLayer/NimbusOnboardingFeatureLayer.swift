@@ -10,12 +10,17 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ///
     /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
     /// - Returns: An ``OnboardingViewModel`` to be used in the onboarding.
-    func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
+    func getOnboardingModel(
+        for onboardingType: OnboardingType,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         return OnboardingViewModel(
-            cards: getOrderedOnboardingCards(from: framework.cards,
-                                             using: framework.cardOrdering),
+            cards: getOrderedOnboardingCards(
+                for: onboardingType,
+                from: framework.cards,
+                using: framework.cardOrdering),
             isDismissable: framework.dismissable)
     }
 
@@ -28,6 +33,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ///   - cardOrder: Card order from ``FxNimbus/shared``
     /// - Returns: Card data converted to ``OnboardingCardInfoModel`` and ordered.
     private func getOrderedOnboardingCards(
+        for onboardingType: OnboardingType,
         from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
     ) -> [OnboardingCardInfoModel] {
@@ -36,10 +42,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        return cardOrder.compactMap { cardName in
-            guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
-            return card
-        }
+        return cardOrder
+            .compactMap { cardName in
+                guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
+                return card
+            }.filter { $0.type == onboardingType }
     }
 
     /// Converts ``NimbusOnboardingCardData`` to ``OnboardingCardInfoModel``
@@ -48,31 +55,41 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// All cards must have valid formats and data. For example, a card with no
     /// buttons, will be omitted from the returned cards.
     ///
+    /// For designer's flexibility, the `title` and `body` property are formatted
+    /// with the app's name, in case we need to use localized strings that include
+    /// the app name. Testing accounts for this, ensuring that the string, when
+    /// there is no placeholder, is as expected.
+    ///
     /// - Parameter cardData: Card data from ``FxNimbus/shared``
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
         return cardData.compactMap { card in
-            let image = getOnboardingImageID(from: card.image)
-            guard let buttons = getOnboardingCardButtons(from: card.buttons),
-                  !buttons.isEmpty
-            else { return nil }
-
-            return OnboardingCardInfoModel(name: card.name,
-                                           title: card.title,
-                                           body: card.body,
-                                           image: image,
-                                           link: getOnboardingLink(from: card.link),
-                                           buttons: buttons,
-                                           type: card.type)
+            return OnboardingCardInfoModel(
+                name: card.name,
+                title: String(format: card.title, AppName.shortName.rawValue),
+                body: String(format: card.body, AppName.shortName.rawValue),
+                link: getOnboardingLink(from: card.link),
+                buttons: getOnboardingCardButtons(from: card.buttons),
+                type: card.type,
+                a11yIdRoot: "test",
+                imageID: getOnboardingImageID(from: card.image))
         }
     }
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfoModel]? {
-        if cardButtons.isEmpty { return nil }
+    private func getOnboardingCardButtons(from cardButtons: NimbusOnboardingButtons) -> OnboardingButtons {
+        var secondButton: OnboardingButtonInfoModel?
+        if let secondary = cardButtons.secondary {
+            secondButton = OnboardingButtonInfoModel(title: secondary.title,
+                                                     action: secondary.action)
+        }
 
-        return cardButtons.map { OnboardingButtonInfoModel(title: $0.title, action: $0.action) }
+        return OnboardingButtons(
+            primary: OnboardingButtonInfoModel(
+                title: cardButtons.primary.title,
+                action: cardButtons.primary.action),
+            secondary: secondButton)
     }
 
     /// Returns an optional ``OnboardingLinkInfoModel``, if one is provided. This will be

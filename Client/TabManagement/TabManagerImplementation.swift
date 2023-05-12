@@ -14,6 +14,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
+    private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
@@ -22,16 +23,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
+         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabDataStore = tabDataStore
-        self.tabSessionStore = tabSessionStore
-        self.imageStore = imageStore
-        self.notificationCenter = notificationCenter
-        super.init(profile: profile, imageStore: imageStore)
+            self.tabDataStore = tabDataStore
+            self.tabSessionStore = tabSessionStore
+            self.imageStore = imageStore
+            self.tabMigration = tabMigration
+            self.notificationCenter = notificationCenter
+            super.init(profile: profile, imageStore: imageStore)
 
-        setupNotifications(forObserver: self,
-                           observing: [UIApplication.willResignActiveNotification])
-    }
+            setupNotifications(forObserver: self,
+                               observing: [UIApplication.willResignActiveNotification])
+        }
 
     // MARK: - Restore tabs
 
@@ -42,6 +45,21 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
+        guard tabMigration.shouldRunMigration else {
+            restoreOnly(forced)
+            return
+        }
+
+        migrateAndRestore(forced)
+    }
+
+    private func migrateAndRestore(_ forced: Bool = false) {
+        Task {
+            await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
+        }
+    }
+
+    private func restoreOnly(_ forced: Bool = false) {
         guard !isRestoringTabs else { return }
 
         // TODO: FXIOS-6112 Handle debug settings and UITests
@@ -52,21 +70,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         isRestoringTabs = true
         Task {
-            guard let windowData = await self.tabDataStore.fetchWindowData()
-            else {
-                // Always make sure there is a single normal tab
-                await self.generateEmptyTab()
-                return
-            }
-
-            await self.generateTabs(from: windowData)
-
-            for delegate in self.delegates {
-                delegate.get()?.tabManagerDidRestoreTabs(self)
-            }
-
-            self.isRestoringTabs = false
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
         }
+    }
+
+    private func buildTabRestore(window: WindowData?) async {
+        guard let windowData = window
+        else {
+            // Always make sure there is a single normal tab
+            await generateEmptyTab()
+            return
+        }
+        await generateTabs(from: windowData)
+
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+
+        isRestoringTabs = false
     }
 
     /// Creates the webview so needs to live on the main thread

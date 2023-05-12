@@ -170,19 +170,16 @@ enum Experiments {
             Strings.bundle.fallbackTranslationBundle()
         ].compactMap { $0 }
 
-        let builder = NimbusBuilder(dbPath: dbPath)
-        builder.with(url: remoteSettingsURL) // with(url:) returns void.
-
-        builder
+        return NimbusBuilder(dbPath: dbPath)
+            .with(url: remoteSettingsURL)
             .using(previewCollection: usePreviewCollection())
             .with(errorReporter: errorReporter)
             .with(initialExperiments: initialExperiments)
             .isFirstRun(isFirstRun)
             .with(bundles: bundles)
-            .onCreate { nimbus in FxNimbus.shared.initialize { nimbus }}
-            .onApply { _ in FxNimbus.shared.invalidateCachedValues() }
-
-        return builder.build(appInfo: appSettings)
+            .with(featureManifest: FxNimbus.shared)
+            .with(commandLineArgs: CommandLine.arguments)
+            .build(appInfo: appSettings)
     }()
 
     /// A convenience method to initialize the `NimbusApi` object at startup.
@@ -214,7 +211,7 @@ private extension AppBuildChannel {
         switch self {
         case .release: return "release"
         case .beta: return "beta"
-        case .developer: return "nightly"
+        case .developer: return "developer"
         case .other: return "other"
         }
     }

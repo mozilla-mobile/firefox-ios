@@ -311,16 +311,16 @@ class NavigationTest: BaseTestCase {
 
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.buttons["Copy"], timeout: TIMEOUT)
-        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.cells["Copy"], timeout: TIMEOUT)
+        XCTAssertTrue(app.cells["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.buttons["Copy"], timeout: TIMEOUT)
-        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.cells["Copy"], timeout: TIMEOUT)
+        XCTAssertTrue(app.cells["Copy"].exists, "The share menu is not shown")
     }
 
     // Smoketest

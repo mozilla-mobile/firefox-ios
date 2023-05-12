@@ -4,12 +4,38 @@
 
 import Foundation
 
-struct OnboardingCardInfoModel {
-    let name: String
-    let title: String
-    let body: String
-    let image: String
-    let link: OnboardingLinkInfoModel?
-    let buttons: [OnboardingButtonInfoModel]
-    let type: OnboardingType
+struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
+    var name: String
+    var title: String
+    var body: String
+    var link: OnboardingLinkInfoModel?
+    var buttons: OnboardingButtons
+    var type: OnboardingType
+    var a11yIdRoot: String
+
+    var imageID: String
+
+    var image: UIImage? {
+        return UIImage(named: imageID)
+    }
+
+    init(
+        name: String,
+        title: String,
+        body: String,
+        link: OnboardingLinkInfoModel?,
+        buttons: OnboardingButtons,
+        type: OnboardingType,
+        a11yIdRoot: String,
+        imageID: String
+    ) {
+        self.name = name
+        self.title = title
+        self.body = body
+        self.imageID = imageID
+        self.link = link
+        self.buttons = buttons
+        self.type = type
+        self.a11yIdRoot = a11yIdRoot
+    }
 }

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-/// This is a temporary struct made to manage the feature flag for conveniance
+/// This is a temporary struct made to manage the feature flag for convenience
 struct TabStorageFlagManager {
     static var isNewTabDataStoreEnabled: Bool {
         return FeatureFlagsManager.shared.isFeatureEnabled(.tabStorageRefactor,
