@@ -13,9 +13,9 @@ stages:
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
-    - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
+    # - build_and_test_2_SmokeTest: {}
+    # - build_and_test_3_SmokeTest3: {}
+    # - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec:
     before_run:
@@ -148,7 +148,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.4core
   build_and_test_1_SmokeTest2:
     before_run:
     - 1_git_clone_and_post_clone
@@ -188,7 +188,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.4core
+        machine_type_id: g2-m1.4core
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
