@@ -897,6 +897,7 @@
 		C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */; };
 		C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */; };
 		C8B0F5F8283B7D38007AE65D /* pocketsponsoredfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */; };
+		C8B394362A0ED55D00700E49 /* MockOnboardingCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */; };
 		C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */; };
 		C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */; };
 		C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */; };
@@ -5126,6 +5127,7 @@
 		C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStory.swift; sourceTree = "<group>"; };
 		C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeedStory.swift; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOnboardingCardDelegate.swift; sourceTree = "<group>"; };
 		C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayer.swift; sourceTree = "<group>"; };
 		C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerTests.swift; sourceTree = "<group>"; };
 		C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionUpdateCheckerProtocol.swift; sourceTree = "<group>"; };
@@ -8620,6 +8622,7 @@
 				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
 				C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */,
 				C8610DA72A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift */,
+				C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */,
 			);
 			path = OnboardingTests;
 			sourceTree = "<group>";
@@ -12413,6 +12416,7 @@
 				5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */,
 				8A33222227DFE658008F809E /* NimbusMock.swift in Sources */,
 				8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */,
+				C8B394362A0ED55D00700E49 /* MockOnboardingCardDelegate.swift in Sources */,
 				8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* LegacyTabManagerTests.swift in Sources */,
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
