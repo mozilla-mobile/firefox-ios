@@ -69,6 +69,7 @@ class Tab: NSObject {
             }
         }
     }
+
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
@@ -940,6 +941,33 @@ private protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
+    var accessoryView: AccessoryViewProvider
+
+    override var inputAccessoryView: UIView? {
+        translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            accessoryView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        return accessoryView
+    }
+
+    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+        self.accessoryView = AccessoryViewProvider()
+
+        super.init(frame: frame, configuration: configuration)
+
+        accessoryView.previousClosure = { CreditCardHelper.previousInput() }
+        accessoryView.nextClosure = { CreditCardHelper.nextInput() }
+        accessoryView.doneClosure = { self.endEditing(true) }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match
