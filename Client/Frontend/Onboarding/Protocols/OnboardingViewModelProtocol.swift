@@ -6,6 +6,7 @@ import Foundation
 
 protocol OnboardingViewModelProtocol {
     var enabledCards: [IntroViewModel.InformationCards] { get }
+    var availableCards: [OnboardingCardInfoModelProtocol] { get }
     var isFeatureEnabled: Bool { get }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol?

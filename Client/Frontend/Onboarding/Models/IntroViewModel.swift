@@ -6,6 +6,7 @@ import Foundation
 import Shared
 
 struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+    // MARK: - Properties
     enum InformationCards: Int, CaseIterable {
         case welcome
         case signSync
@@ -51,6 +52,8 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
+    var availableCards: [OnboardingCardInfoModelProtocol]
+
     var enabledCards: [IntroViewModel.InformationCards] {
         let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
 
@@ -63,6 +66,14 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             return [.welcome, .signSync, .notification]
         }
     }
+    // MARK: - Initializer
+    init(introScreenManager: IntroScreenManager? = nil) {
+        self.introScreenManager = introScreenManager
+        let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        self.availableCards = model.cards
+    }
+
+    // MARK: - Methods
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
         let shortName = AppName.shortName.rawValue
