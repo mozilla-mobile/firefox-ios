@@ -6,16 +6,6 @@ import UIKit
 import Common
 import Shared
 
-protocol OnboardingCardDelegate: AnyObject {
-    func handlePrimaryButtonPress(
-        for action: OnboardingActions,
-        from cardType: IntroViewModel.InformationCards)
-    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards)
-
-    func showNextPage(_ cardType: IntroViewModel.InformationCards)
-    func pageChanged(_ cardType: IntroViewModel.InformationCards)
-}
-
 class OnboardingCardViewController: UIViewController, Themeable {
     struct UX {
         static let stackViewSpacing: CGFloat = 24
@@ -365,7 +355,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     @objc
     func primaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: true)
-        delegate?.handlePrimaryButtonPress(
+        delegate?.handleButtonPress(
             for: viewModel.infoModel.buttons.primary.action,
             from: viewModel.cardType)
     }
@@ -373,15 +363,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
     @objc
     func secondaryAction() {
         guard let buttonAction = viewModel.infoModel.buttons.secondary?.action else { return }
+
         viewModel.sendTelemetryButton(isPrimaryAction: false)
-        delegate?.handlePrimaryButtonPress(
+        delegate?.handleButtonPress(
             for: buttonAction,
             from: viewModel.cardType)
     }
 
     @objc
     func linkButtonAction() {
-        delegate?.privacyPolicyLinkAction(viewModel.cardType)
+        delegate?.handleButtonPress(for: .readPrivacyPolicy, from: viewModel.cardType)
     }
 
     // MARK: - Themeable

@@ -169,7 +169,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 }
 
 extension IntroViewController: OnboardingCardDelegate {
-    func handlePrimaryButtonPress(
+    func handleButtonPress(
         for action: OnboardingActions,
         from cardType: IntroViewModel.InformationCards
     ) {
@@ -183,6 +183,8 @@ extension IntroViewController: OnboardingCardDelegate {
             presentSignToSync(fxaPrams)
         case .setDefaultBrowser:
             DefaultApplicationHelper().openSettings()
+        case .readPrivacyPolicy:
+            showPrivacyPolicy(cardType)
         }
     }
 
@@ -196,7 +198,7 @@ extension IntroViewController: OnboardingCardDelegate {
         moveToNextPage(cardType: cardType)
     }
 
-    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
+    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards) {
         guard let infoModel = viewModel.getInfoModel(cardType: cardType),
               let url = infoModel.link?.url
         else { return }

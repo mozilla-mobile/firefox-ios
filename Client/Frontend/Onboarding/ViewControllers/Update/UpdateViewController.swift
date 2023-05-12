@@ -245,7 +245,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 }
 
 extension UpdateViewController: OnboardingCardDelegate {
-    func handlePrimaryButtonPress(
+    func handleButtonPress(
         for action: OnboardingActions,
         from cardType: IntroViewModel.InformationCards
     ) {
@@ -255,6 +255,8 @@ extension UpdateViewController: OnboardingCardDelegate {
         case .syncSignIn:
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
             presentSignToSync(fxaParams)
+        case .readPrivacyPolicy:
+            showPrivacyPolicy(cardType)
         default:
             break
         }
@@ -269,7 +271,7 @@ extension UpdateViewController: OnboardingCardDelegate {
         moveToNextPage(cardType: cardType)
     }
 
-    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards) {
+    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards) {
         guard let infoModel = viewModel.getInfoModel(cardType: cardType),
               let url = infoModel.link?.url
         else { return }
