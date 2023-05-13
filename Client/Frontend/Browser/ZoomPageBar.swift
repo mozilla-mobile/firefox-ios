@@ -93,6 +93,14 @@ class ZoomPageBar: UIView, ThemeApplicable {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
+    private lazy var animation: CABasicAnimation = {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.duration = 0.2
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        return animation
+    }()
+
     init(tab: Tab) {
         self.tab = tab
 
@@ -230,8 +238,19 @@ class ZoomPageBar: UIView, ThemeApplicable {
         }
     }
 
-    func changeGradientOpacity(alpha: Float) {
-        gradient.opacity = alpha
+    private func animateGradientOpacity(alpha: Float) {
+        animation.fromValue = alpha == 1 ? 0 : 1
+        animation.toValue = alpha
+        gradient.add(animation, forKey: "opacity")
+    }
+
+    func changeGradientOpacity(alpha: Float, withAnimation: Bool = false) {
+        if withAnimation {
+            animateGradientOpacity(alpha: alpha)
+        } else {
+            gradient.removeAnimation(forKey: "opacity")
+            gradient.opacity = alpha
+        }
     }
 
     @objc

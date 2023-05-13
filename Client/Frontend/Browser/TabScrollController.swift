@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 
 protocol TabScrollingControllerDelegate: AnyObject {
-    func didScroll(alpha: Float)
+    func didSetAlpha(_ alpha: Float)
 }
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
@@ -161,6 +161,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
+        delegate?.didSetAlpha(1)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -208,6 +209,7 @@ private extension TabScrollingController {
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
+        delegate?.didSetAlpha(0)
     }
 
     func configureRefreshControl() {
@@ -379,10 +381,8 @@ extension TabScrollingController: UIScrollViewDelegate {
         if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
                 showToolbars(animated: true)
-                delegate?.didScroll(alpha: 1)
             } else if scrollDirection == .down {
                 hideToolbars(animated: true)
-                delegate?.didScroll(alpha: 0)
             }
         }
     }
