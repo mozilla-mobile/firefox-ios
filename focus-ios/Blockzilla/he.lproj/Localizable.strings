@@ -289,6 +289,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "מידע נוסף.";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "רישיונות";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "בהיר";
 
