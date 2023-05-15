@@ -5,11 +5,10 @@
 import Foundation
 
 protocol OnboardingViewModelProtocol {
-    var enabledCards: [IntroViewModel.InformationCards] { get }
     var availableCards: [OnboardingCardViewController] { get }
     var isFeatureEnabled: Bool { get }
 
-    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol)
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate)
 }
 
 extension OnboardingViewModelProtocol {

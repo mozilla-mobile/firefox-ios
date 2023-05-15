@@ -16,13 +16,12 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         static let pageControlHeight: CGFloat = 40
     }
 
-    // Public constants 
+    // MARK: - Properties
     var viewModel: UpdateViewModel
     var didFinishFlow: (() -> Void)?
     private var informationCards = [OnboardingCardViewController]()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    // MARK: - Private vars
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeUpdate), for: .touchUpInside)
@@ -37,14 +36,15 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }()
 
     private lazy var pageControl: UIPageControl = .build { pageControl in
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = self.viewModel.enabledCards.count
-        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
-        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
-        pageControl.isUserInteractionEnabled = false
-        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
+//        pageControl.currentPage = 0
+//        pageControl.numberOfPages = self.viewModel.enabledCards.count
+//        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
+//        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+//        pageControl.isUserInteractionEnabled = false
+//        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
     }
 
+    // MARK: - Initializers
     init(viewModel: UpdateViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -58,9 +58,11 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         notificationCenter.removeObserver(self)
     }
 
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel.setupViewControllerDelegates(with: self)
         setupView()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
@@ -79,60 +81,60 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     private func setupSingleInfoCard() {
-        guard let viewModel = viewModel.getCardViewModel(cardType: viewModel.enabledCards[0]) else { return }
-
-        let cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                              delegate: self)
-        view.addSubview(closeButton)
-        addChild(cardViewController)
-        view.addSubview(cardViewController.view)
-        cardViewController.didMove(toParent: self)
-        view.bringSubviewToFront(closeButton)
-
-        NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
-        ])
+//        guard let viewModel = viewModel.getCardViewModel(cardType: viewModel.enabledCards[0]) else { return }
+//
+//        let cardViewController = OnboardingCardViewController(viewModel: viewModel,
+//                                                              delegate: self)
+//        view.addSubview(closeButton)
+//        addChild(cardViewController)
+//        view.addSubview(cardViewController.view)
+//        cardViewController.didMove(toParent: self)
+//        view.bringSubviewToFront(closeButton)
+//
+//        NSLayoutConstraint.activate([
+//            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
+//            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+//            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
+//        ])
     }
 
     private func setupMultipleCards() {
-        // Create onboarding card views
-        var cardViewController: OnboardingCardViewController
-
-        for cardType in viewModel.enabledCards {
-            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                  delegate: self)
-                informationCards.append(cardViewController)
-            }
-        }
-
-        if let firstViewController = informationCards.first {
-            pageController.setViewControllers([firstViewController],
-                                              direction: .forward,
-                                              animated: true,
-                                              completion: nil)
-        }
+//        // Create onboarding card views
+//        var cardViewController: OnboardingCardViewController
+//
+//        for cardType in viewModel.enabledCards {
+//            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
+//                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+//                                                                  delegate: self)
+//                informationCards.append(cardViewController)
+//            }
+//        }
+//
+//        if let firstViewController = informationCards.first {
+//            pageController.setViewControllers([firstViewController],
+//                                              direction: .forward,
+//                                              animated: true,
+//                                              completion: nil)
+//        }
     }
 
     private func setupMultipleCardsConstraints() {
-        addChild(pageController)
-        view.addSubview(pageController.view)
-        pageController.didMove(toParent: self)
-        view.addSubviews(pageControl, closeButton)
-
-        NSLayoutConstraint.activate([
-            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-        ])
+//        addChild(pageController)
+//        view.addSubview(pageController.view)
+//        pageController.didMove(toParent: self)
+//        view.addSubviews(pageControl, closeButton)
+//
+//        NSLayoutConstraint.activate([
+//            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+//            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//
+//            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
+//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
+//            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+//            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+//        ])
     }
 
     // Button Actions
@@ -149,26 +151,35 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Used to programmatically set the pageViewController to show next card
-    func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        if let nextViewController = getNextOnboardingCard(index: cardType.position, goForward: true) {
-            pageControl.currentPage = cardType.position + 1
-            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
+    func moveToNextPage(from cardName: String) {
+        if let index = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
+           let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
+            pageControl.currentPage = index + 1
+            pageController.setViewControllers(
+                [nextViewController],
+                direction: .forward,
+                animated: false)
         }
     }
 
     // Due to restrictions with PageViewController we need to get the index of the current view controller
     // to calculate the next view controller
     func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardType = viewController.viewModel.cardType
+        let cardName = viewController.viewModel.infoModel.name
 
-        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
+        guard let index = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName })
+        else { return nil }
 
         return index
     }
 
-    private func presentSignToSync(_ fxaOptions: FxALaunchParams,
-                                   flowType: FxAPageType = .emailLoginFlow,
-                                   referringPage: ReferringPage = .onboarding) {
+    private func presentSignToSync(
+        _ fxaOptions: FxALaunchParams,
+        flowType: FxAPageType = .emailLoginFlow,
+        referringPage: ReferringPage = .onboarding
+    ) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
@@ -190,8 +201,10 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
-    private func presentPrivacyPolicy(url: URL,
-                                      referringPage: ReferringPage = .onboarding) {
+    private func presentPrivacyPolicy(
+        url: URL,
+        referringPage: ReferringPage = .onboarding
+    ) {
         let privacyPolicyVC = PrivacyPolicyViewController(url: url)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
@@ -247,41 +260,45 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from cardType: IntroViewModel.InformationCards
+        from cardNamed: String
     ) {
         switch action {
         case .nextCard:
-            showNextPage(cardType)
+            showNextPage(from: cardNamed)
         case .syncSignIn:
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
             presentSignToSync(fxaParams)
         case .readPrivacyPolicy:
-            showPrivacyPolicy(cardType)
+            showPrivacyPolicy(from: cardNamed)
         default:
             break
         }
     }
 
-    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
-        guard cardType != viewModel.enabledCards.last else {
+    func showNextPage(from cardName: String) {
+        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
             self.didFinishFlow?()
             return
         }
 
-        moveToNextPage(cardType: cardType)
+        moveToNextPage(from: cardName)
     }
 
-    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards) {
-        guard let infoModel = viewModel.getInfoModel(cardType: cardType),
+    func showPrivacyPolicy(from cardNamed: String) {
+        guard let infoModel = viewModel.availableCards
+            .first(where: { $0.viewModel.infoModel.name == cardNamed})?
+            .viewModel.infoModel,
               let url = infoModel.link?.url
         else { return }
+
         presentPrivacyPolicy(url: url)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
-    func pageChanged(_ cardType: IntroViewModel.InformationCards) {
-        if let cardIndex = viewModel.positionForCard(cardType: cardType),
+    func pageChanged(from cardName: String) {
+        if let cardIndex = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
            cardIndex != pageControl.currentPage {
             pageControl.currentPage = cardIndex
         }

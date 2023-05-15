@@ -9,25 +9,18 @@ import Shared
 class UpdateViewModel: OnboardingViewModelProtocol,
                        FeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
-
     let profile: Profile
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
+    var isDismissable: Bool
+    private var cardModels: [OnboardingCardInfoModelProtocol]
 
     var shouldShowSingleCard: Bool {
-        return enabledCards.count == 1
+        return availableCards.count == 1
     }
 
     var isFeatureEnabled: Bool {
         return true
-    }
-
-    var enabledCards: [IntroViewModel.InformationCards] {
-        if hasSyncableAccount ?? false {
-            return [.updateWelcome]
-        }
-
-        return [.updateWelcome, .updateSignSync]
     }
 
     // If the feature is enabled and is not clean install
@@ -41,6 +34,10 @@ class UpdateViewModel: OnboardingViewModelProtocol,
 
     init(profile: Profile) {
         self.profile = profile
+        let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        self.cardModels = model.cards
+        self.isDismissable = model.isDismissable
+        self.availableCards = []
     }
 
     func shouldShowUpdateSheet(force: Bool = false,
@@ -87,64 +84,29 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
-    func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
-        return enabledCards.firstIndex(of: cardType)
-    }
-
     func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingClose,
-                                     extras: extra)
+//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
+//
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .onboardingClose,
+//                                     extras: extra)
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
-        switch cardType {
-        case .updateWelcome:
-            return OnboardingCardInfoModel(
-                name: "upgrade1",
-                title: .Upgrade.Welcome.Title,
-                body: .Upgrade.Welcome.Description,
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Upgrade.Welcome.Action,
-                        action: .nextCard)),
-                type: .upgrade,
-                a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard,
-                imageID: ImageIdentifiers.onboardingWelcomev106)
-        case .updateSignSync:
-            return OnboardingCardInfoModel(
-                name: "upgrade2",
-                title: .Upgrade.Sync.Title,
-                body: .Upgrade.Sync.Description,
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Upgrade.Sync.Action,
-                        action: .syncSignIn),
-                    secondary: OnboardingButtonInfoModel(
-                        title: .Onboarding.LaterAction,
-                        action: .nextCard)),
-                type: .upgrade,
-                a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard,
-                imageID: ImageIdentifiers.onboardingSyncv106)
-        case .welcome, .signSync, .notification:
-            // Cases not supported by the upgrade screen
-            return nil
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
+        availableCards.removeAll()
+        for card in cardModels {
+            // If it's a sync sign in card and we're already signed in, don't add
+            // the card to the available cards.
+            if (card.buttons.primary.action == .syncSignIn || card.buttons.secondary?.action == .syncSignIn)
+                && hasSyncableAccount ?? false {
+                break
+            }
+
+            availableCards.append(OnboardingCardViewController(
+                viewModel: OnboardingCardViewModel(infoModel: card),
+                delegate: delegate))
         }
-    }
-
-    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
-        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
-
-        return OnboardingCardViewModel(infoModel: infoModel)
-    }
-
-    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol) {
-
     }
 
     private func saveAppVersion(for appVersion: String) {

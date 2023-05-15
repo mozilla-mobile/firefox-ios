@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     // MARK: - Properties
     enum InformationCards: Int, CaseIterable {
         case welcome
@@ -79,7 +79,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     // MARK: - Methods
-    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol) {
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
         cardModels.forEach { card in
             availableCards.append(OnboardingCardViewController(

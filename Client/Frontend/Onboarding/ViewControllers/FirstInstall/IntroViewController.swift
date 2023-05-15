@@ -146,9 +146,10 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     // Due to restrictions with PageViewController we need to get the index of
     // the current view controller to calculate the next view controller
     func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardType = viewController.viewModel.cardType
-
-        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else { return nil }
+        let cardName = viewController.viewModel.infoModel.name
+        guard let index = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName })
+        else { return nil }
 
         return index
     }
@@ -167,12 +168,13 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         return getNextOnboardingCard(index: index, goForward: false)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController,
-                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerAfter viewController: UIViewController
+    ) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
-              let index = getCardIndex(viewController: onboardingVC) else {
-              return nil
-        }
+              let index = getCardIndex(viewController: onboardingVC)
+        else { return nil }
 
         pageControl.currentPage = index
         return getNextOnboardingCard(index: index, goForward: true)
@@ -191,11 +193,11 @@ extension IntroViewController: OnboardingCardDelegate {
             showNextPage(from: cardName)
         case .syncSignIn:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-            presentSignToSync(fxaPrams)
+            presentSignToSync(with: fxaPrams, from: cardName)
         case .setDefaultBrowser:
             DefaultApplicationHelper().openSettings()
         case .readPrivacyPolicy:
-            showPrivacyPolicy(cardType)
+            showPrivacyPolicy(from: cardName)
         }
     }
 
@@ -216,7 +218,7 @@ extension IntroViewController: OnboardingCardDelegate {
               let url = infoModel.link?.url
         else { return }
 
-        presentPrivacyPolicy(url: url)
+        presentPrivacyPolicy(url: url, from: cardNamed)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
@@ -230,7 +232,8 @@ extension IntroViewController: OnboardingCardDelegate {
     }
 
     private func presentSignToSync(
-        _ fxaOptions: FxALaunchParams,
+        with fxaOptions: FxALaunchParams,
+        from cardName: String,
         flowType: FxAPageType = .emailLoginFlow,
         referringPage: ReferringPage = .onboarding
     ) {
@@ -247,13 +250,15 @@ extension IntroViewController: OnboardingCardDelegate {
         signInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: signInSyncVC)
         controller.onViewDismissed = {
-            self.showNextPage(.signSync)
+            self.showNextPage(from: cardName)
         }
+
         self.present(controller, animated: true)
     }
 
     private func presentPrivacyPolicy(
         url: URL,
+        from cardName: String,
         referringPage: ReferringPage = .onboarding
     ) {
         let privacyPolicyVC = PrivacyPolicyViewController(url: url)
@@ -268,7 +273,7 @@ extension IntroViewController: OnboardingCardDelegate {
         controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
 
         controller.onViewDismissed = {
-            self.showNextPage(.welcome)
+            self.showNextPage(from: cardName)
         }
 
         present(controller, animated: true)
@@ -276,7 +281,7 @@ extension IntroViewController: OnboardingCardDelegate {
 
     private func askForNotificationPermission() {
         let notificationManager = NotificationManager()
-        notificationManager.requestAuthorization { [weak self] granted, error in
+        notificationManager.requestAuthorization { [weak, self] granted, error in
             guard error == nil, let self = self else { return }
 
             DispatchQueue.main.async {
