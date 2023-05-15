@@ -6,16 +6,15 @@ import Foundation
 
 protocol OnboardingViewModelProtocol {
     var enabledCards: [IntroViewModel.InformationCards] { get }
-    var availableCards: [OnboardingCardInfoModelProtocol] { get }
+    var availableCards: [OnboardingCardViewController] { get }
     var isFeatureEnabled: Bool { get }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol?
-    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol?
+    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol)
 }
 
 extension OnboardingViewModelProtocol {
     func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
-        if goForward && currentIndex + 1 < enabledCards.count {
+        if goForward && currentIndex + 1 < availableCards.count {
             return currentIndex + 1
         }
 
@@ -24,12 +23,5 @@ extension OnboardingViewModelProtocol {
         }
 
         return nil
-    }
-
-    func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
-        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
-
-        return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel)
     }
 }

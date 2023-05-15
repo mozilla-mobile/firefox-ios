@@ -5,11 +5,9 @@
 import Foundation
 
 protocol OnboardingCardDelegate: AnyObject {
-    func handleButtonPress(
-        for action: OnboardingActions,
-        from cardType: IntroViewModel.InformationCards)
+    func handleButtonPress(for action: OnboardingActions,from cardNamed: String)
 
-    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards)
+    func showPrivacyPolicy(from cardNamed: String)
     func showNextPage(_ cardType: IntroViewModel.InformationCards)
     func pageChanged(_ cardType: IntroViewModel.InformationCards)
 }

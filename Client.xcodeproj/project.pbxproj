@@ -105,7 +105,7 @@
 		21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
-		21B2844A28464FF0003EA521 /* LegacyOnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */; };
+		21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
 		21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */; };
@@ -2052,7 +2052,7 @@
 		21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontTypeButton.swift; sourceTree = "<group>"; };
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
-		21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyOnboardingCardViewModel.swift; sourceTree = "<group>"; };
+		21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModel.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
 		21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtility.swift; sourceTree = "<group>"; };
@@ -8577,7 +8577,7 @@
 			isa = PBXGroup;
 			children = (
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
-				21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */,
+				21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */,
 				435D660223D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift */,
 				C88E7A562A0553360072E638 /* OnboardingButtonInfoModel.swift */,
 				C8BD875F2A0C248000CD803A /* OnboardingButtonsModel.swift */,
@@ -12048,7 +12048,7 @@
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
-				21B2844A28464FF0003EA521 /* LegacyOnboardingCardViewModel.swift in Sources */,
+				21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				DFD64DB727A1A909003D4534 /* LegacyWallpaper.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,

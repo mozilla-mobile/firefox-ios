@@ -198,7 +198,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        delegate?.pageChanged(viewModel.cardType)
+        delegate?.pageChanged(viewModel.infoModel.name)
         viewModel.sendCardViewTelemetry()
     }
 
@@ -292,7 +292,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private func addViewsToView() {
         topStackView.addArrangedSubview(imageView)
         topStackView.addArrangedSubview(titleLabel)
-        topStackView.addArrangedSubview(descriptionBoldLabel)
         topStackView.addArrangedSubview(descriptionLabel)
         contentStackView.addArrangedSubview(topStackView)
         contentStackView.addArrangedSubview(linkButton)

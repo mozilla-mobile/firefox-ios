@@ -8,7 +8,7 @@ import Glean
 @testable import Client
 
 class OnboardingCardViewModelTests: XCTestCase {
-    var subject: LegacyOnboardingCardViewModel!
+    var subject: OnboardingCardViewModel!
 
     override func setUp() {
         super.setUp()
@@ -22,7 +22,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendOnboardingCardView_WelcomeCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .welcome,
+        subject = OnboardingCardViewModel(cardType: .welcome,
                                                 infoModel: createInfoModel())
         subject.sendCardViewTelemetry()
 
@@ -30,7 +30,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendOnboardingCardView_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .signSync,
+        subject = OnboardingCardViewModel(cardType: .signSync,
                                                 infoModel: createInfoModel())
         subject.sendCardViewTelemetry()
 
@@ -38,7 +38,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendUpgradeCardView_WelcomeCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .updateWelcome,
+        subject = OnboardingCardViewModel(cardType: .updateWelcome,
                                                 infoModel: createInfoModel())
         subject.sendCardViewTelemetry()
 
@@ -46,7 +46,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendUpgradeCardView_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .updateSignSync,
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
                                                 infoModel: createInfoModel())
         subject.sendCardViewTelemetry()
 
@@ -55,7 +55,7 @@ class OnboardingCardViewModelTests: XCTestCase {
 
     // MARK: - Primary tap
     func testSendOnboardingPrimaryTap_WelcomeCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .welcome,
+        subject = OnboardingCardViewModel(cardType: .welcome,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: true)
 
@@ -63,7 +63,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendOnboardingPrimaryTap_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .signSync,
+        subject = OnboardingCardViewModel(cardType: .signSync,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: true)
 
@@ -71,7 +71,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendUpgradePrimaryTap_WallpaperCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .updateWelcome,
+        subject = OnboardingCardViewModel(cardType: .updateWelcome,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: true)
 
@@ -79,7 +79,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendUpgradePrimaryTap_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .updateSignSync,
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: true)
 
@@ -88,7 +88,7 @@ class OnboardingCardViewModelTests: XCTestCase {
 
     // MARK: - Secondary tap
     func testSendOnboardingSecondaryTap_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .signSync,
+        subject = OnboardingCardViewModel(cardType: .signSync,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: false)
 
@@ -96,7 +96,7 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     func testSendUpgradeSecondaryTap_SyncCard() {
-        subject = LegacyOnboardingCardViewModel(cardType: .updateSignSync,
+        subject = OnboardingCardViewModel(cardType: .updateSignSync,
                                                 infoModel: createInfoModel())
         subject.sendTelemetryButton(isPrimaryAction: false)
 

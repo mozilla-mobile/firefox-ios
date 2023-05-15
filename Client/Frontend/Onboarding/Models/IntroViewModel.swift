@@ -52,94 +52,44 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
-    var availableCards: [OnboardingCardInfoModelProtocol]
+    var availableCards: [OnboardingCardViewController]
+    var isDismissable: Bool
+    private var cardModels: [OnboardingCardInfoModelProtocol]
 
-    var enabledCards: [IntroViewModel.InformationCards] {
-        let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
+//    var enabledCards: [IntroViewModel.InformationCards] {
+//        let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
+//
+//        switch notificationCardPosition {
+//        case .noCard:
+//            return [.welcome, .signSync]
+//        case .beforeSync:
+//            return [.welcome, .notification, .signSync]
+//        case .afterSync:
+//            return [.welcome, .signSync, .notification]
+//        }
+//    }
 
-        switch notificationCardPosition {
-        case .noCard:
-            return [.welcome, .signSync]
-        case .beforeSync:
-            return [.welcome, .notification, .signSync]
-        case .afterSync:
-            return [.welcome, .signSync, .notification]
-        }
-    }
     // MARK: - Initializer
     init(introScreenManager: IntroScreenManager? = nil) {
         self.introScreenManager = introScreenManager
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        self.availableCards = model.cards
+        self.cardModels = model.cards
+        self.isDismissable = model.isDismissable
+        self.availableCards = []
     }
 
     // MARK: - Methods
-
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
-        let shortName = AppName.shortName.rawValue
-
-        switch cardType {
-        case .welcome:
-            return OnboardingCardInfoModel(
-                name: "welcome",
-                title: String(format: .Onboarding.Welcome.Title),
-                body: String(format: .Onboarding.Welcome.Description, shortName),
-                link: OnboardingLinkInfoModel(
-                    title: .Onboarding.PrivacyPolicyLinkButtonTitle,
-                    url: URL(string: "https://macrumors.com")!),
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Welcome.GetStartedAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard,
-                imageID: ImageIdentifiers.onboardingWelcomev106)
-        case .signSync:
-            return OnboardingCardInfoModel(
-                name: "signSync",
-                title: String(format: .Onboarding.Sync.Title),
-                body: String(format: .Onboarding.Sync.Description),
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Sync.SignInAction,
-                        action: .syncSignIn),
-                    secondary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Sync.SkipAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
-                imageID: ImageIdentifiers.onboardingSyncv106)
-        case .notification:
-            return OnboardingCardInfoModel(
-                name: "notification",
-                title: String(format: .Onboarding.Notification.Title, shortName),
-                body: String(format: .Onboarding.Notification.Description, shortName),
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Notification.ContinueAction,
-                        action: .requestNotifications),
-                    secondary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Notification.SkipAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard,
-                imageID: ImageIdentifiers.onboardingNotification)
-        default:
-            return nil
+    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol) {
+        availableCards.removeAll()
+        cardModels.forEach { card in
+            availableCards.append(OnboardingCardViewController(
+                viewModel: OnboardingCardViewModel(infoModel: card),
+                delegate: delegate))
         }
     }
 
-    func getCardViewModel(cardType: InformationCards) -> OnboardingCardProtocol? {
-        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
-
-        return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel)
-    }
-
     func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: availableCards[index].viewModel.infoModel.name]
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,

@@ -104,7 +104,7 @@ class OnboardingButtonActionTests: XCTestCase {
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
             imageID: ImageIdentifiers.onboardingSyncv106)
-        let mockCardViewModel = LegacyOnboardingCardViewModel(
+        let mockCardViewModel = OnboardingCardViewModel(
             cardType: .welcome,
             infoModel: mockInfoModel,
             isFeatureEnabled: true)

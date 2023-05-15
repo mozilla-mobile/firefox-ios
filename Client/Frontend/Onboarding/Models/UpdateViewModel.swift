@@ -9,8 +9,10 @@ import Shared
 class UpdateViewModel: OnboardingViewModelProtocol,
                        FeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
+
     let profile: Profile
     var hasSyncableAccount: Bool?
+    var availableCards: [OnboardingCardViewController]
 
     var shouldShowSingleCard: Bool {
         return enabledCards.count == 1
@@ -138,8 +140,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     func getCardViewModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardProtocol? {
         guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
-        return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel)
+        return OnboardingCardViewModel(infoModel: infoModel)
+    }
+
+    func setupViewControllerDelegates(with delegate: OnboardingViewControllerProtocol) {
+
     }
 
     private func saveAppVersion(for appVersion: String) {

@@ -9,7 +9,7 @@ protocol OnboardingViewControllerProtocol {
     var didFinishFlow: (() -> Void)? { get }
 
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
-    func moveToNextPage(cardType: IntroViewModel.InformationCards)
+    func moveToNextPage(from cardNamed: String)
     func getCardIndex(viewController: OnboardingCardViewController) -> Int?
-    func showNextPage(_ cardType: IntroViewModel.InformationCards)
+    func showNextPage(from cardNamed: String)
 }

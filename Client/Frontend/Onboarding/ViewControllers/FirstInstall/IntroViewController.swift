@@ -8,15 +8,6 @@ import Shared
 import Common
 
 class IntroViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
-    private var viewModel: IntroViewModel
-    private let profile: Profile
-    private var onboardingCards = [OnboardingCardViewController]()
-    var didFinishFlow: (() -> Void)?
-    var notificationCenter: NotificationProtocol
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var userDefaults: UserDefaultsInterface = UserDefaults.standard
-
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -24,7 +15,15 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         static let pageControlHeight: CGFloat = 40
     }
 
-    // MARK: - Var related to onboarding
+    // MARK: - Properties
+    private var viewModel: IntroViewModel
+    private let profile: Profile
+    var didFinishFlow: (() -> Void)?
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var userDefaults: UserDefaultsInterface = UserDefaults.standard
+
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
@@ -32,7 +31,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     }
 
     private lazy var pageController: UIPageViewController = {
-        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        let pageVC = UIPageViewController(transitionStyle: .scroll,
+                                          navigationOrientation: .horizontal)
         pageVC.dataSource = self
         pageVC.delegate = self
         return pageVC
@@ -40,16 +40,18 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     private lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
-        pageControl.numberOfPages = self.viewModel.enabledCards.count
+        pageControl.numberOfPages = self.viewModel.availableCards.count
         pageControl.isUserInteractionEnabled = false
         pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
     }
 
-    // MARK: Initializer
-    init(viewModel: IntroViewModel,
-         profile: Profile,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    // MARK: Initializers
+    init(
+        viewModel: IntroViewModel,
+        profile: Profile,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.viewModel = viewModel
         self.profile = profile
         self.themeManager = themeManager
@@ -64,25 +66,18 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
-        setupPageController()
+        populatePageController()
     }
 
     // MARK: View setup
-    private func setupPageController() {
-        // Create onboarding card views
-        var cardViewController: OnboardingCardViewController
-        for cardType in viewModel.enabledCards {
-            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                  delegate: self)
-                onboardingCards.append(cardViewController)
-            }
-        }
+    private func populatePageController() {
+        viewModel.setupViewControllerDelegates(with: self)
 
-        if let firstViewController = onboardingCards.first {
+        if let firstViewController = viewModel.availableCards.first {
             pageController.setViewControllers([firstViewController],
                                               direction: .forward,
                                               animated: true,
@@ -91,16 +86,28 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     }
 
     private func setupLayout() {
+        setupPageController()
+        setupCloseButton()
+    }
+
+    private func setupPageController() {
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
-        view.addSubviews(pageControl, closeButton)
+        view.addSubview(pageControl)
 
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
 
+    private func setupCloseButton() {
+        guard viewModel.isDismissable else { return }
+        view.addSubview(closeButton)
+
+        NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeVerticalMargin),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
@@ -120,15 +127,19 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
         guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 
-        return onboardingCards[index]
+        return viewModel.availableCards[index]
     }
 
     // Used to programmatically set the pageViewController to show next card
-    func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        let index = viewModel.enabledCards.firstIndex(of: cardType) ?? 0
-        if let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
+    func moveToNextPage(from cardName: String) {
+        if let index = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
+           let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
             pageControl.currentPage = index + 1
-            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
+            pageController.setViewControllers(
+                [nextViewController],
+                direction: .forward,
+                animated: false)
         }
     }
 
@@ -171,13 +182,13 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from cardType: IntroViewModel.InformationCards
+        from cardName: String
     ) {
         switch action {
         case .requestNotifications:
             askForNotificationPermission()
         case .nextCard:
-            showNextPage(cardType)
+            showNextPage(from: cardName)
         case .syncSignIn:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(fxaPrams)
@@ -188,27 +199,31 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
-        guard cardType != viewModel.enabledCards.last else {
+    func showNextPage(from cardName: String) {
+        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
             viewModel.saveHasSeenOnboarding()
             self.didFinishFlow?()
             return
         }
 
-        moveToNextPage(cardType: cardType)
+        moveToNextPage(from: cardName)
     }
 
-    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards) {
-        guard let infoModel = viewModel.getInfoModel(cardType: cardType),
+    func showPrivacyPolicy(from cardNamed: String) {
+        guard let infoModel = viewModel.availableCards
+            .first(where: { $0.viewModel.infoModel.name == cardNamed})?
+            .viewModel.infoModel,
               let url = infoModel.link?.url
         else { return }
+
         presentPrivacyPolicy(url: url)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
-    func pageChanged(_ cardType: IntroViewModel.InformationCards) {
-        if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
+    func pageChanged(from cardName: String) {
+        if let cardIndex = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
            cardIndex != pageControl.currentPage {
             pageControl.currentPage = cardIndex
         }
@@ -314,7 +329,7 @@ extension IntroViewController {
         pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
         view.backgroundColor = theme.colors.layer2
 
-        onboardingCards.forEach { cardViewController in
+        viewModel.availableCards.forEach { cardViewController in
             cardViewController.applyTheme()
         }
     }
