@@ -51,7 +51,8 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" 
+            "-parallel-testing-enabled" "YES""" -parallel-testing-worker-count" "2"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.4-x86_64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
@@ -179,7 +180,8 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" 
+            "-parallel-testing-enabled" "YES""" -parallel-testing-worker-count" "2"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-x86_64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -228,7 +230,7 @@ workflows:
             mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun" -parallel-testing-enabled "YES" -parallel-testing-worker-count "2"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -279,7 +281,7 @@ workflows:
             mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun" -parallel-testing-enabled "YES" -parallel-testing-worker-count "2"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -324,7 +326,8 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" 
+            "-parallel-testing-enabled" "YES""" -parallel-testing-worker-count" "2"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
