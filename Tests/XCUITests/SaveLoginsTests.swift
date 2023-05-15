@@ -91,7 +91,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
         // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
-        if (ProcessInfo.processInfo.environment["HOME"]!).contains("vagrant") {
+        if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
             XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         } else {
             XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
