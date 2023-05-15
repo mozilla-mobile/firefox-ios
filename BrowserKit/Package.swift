@@ -30,7 +30,7 @@ let package = Package(
             exact: "7.1.1"),
         .package(
             url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
-            exact: "1.9.6"),
+            exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
             exact: "8.6.0"),
