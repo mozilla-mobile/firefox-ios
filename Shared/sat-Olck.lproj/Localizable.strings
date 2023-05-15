@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ᱱᱟᱶᱟ ᱴᱮᱵᱽ ᱠᱷᱩᱞᱟᱹᱭᱱᱟ";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ᱱᱟᱶᱟ ᱴᱮᱵᱽ ᱠᱷᱩᱞᱟᱹᱭᱱᱟ";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱱᱚᱠᱚᱞ ᱢᱮ";
 

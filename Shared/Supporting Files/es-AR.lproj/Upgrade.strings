@@ -2,7 +2,7 @@
 "Upgrade.SyncSign.Action.v114" = "Iniciar sesión";
 
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v114" = "Continuá donde lo dejaste con las pestañas de otros dispositivos ahora en tu página de inicio.";
+"Upgrade.SyncSign.Description.v114" = "Continuá donde dejaste con las pestañas de otros dispositivos ahora en tu página de inicio.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v114" = "Cambiar de pantallas es más fácil que nunca";

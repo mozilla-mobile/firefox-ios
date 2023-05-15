@@ -7,7 +7,7 @@ import WebKit
 import Common
 import Shared
 
-class PrivacyPolicyViewController: UIViewController {
+class PrivacyPolicyViewController: UIViewController, Themeable {
     private enum UX {
         static let leadingPaddingPad: CGFloat = 8
         static let leadingPaddingPhone: CGFloat = 0
@@ -26,8 +26,18 @@ class PrivacyPolicyViewController: UIViewController {
     private var webView: WKWebView!
     private var url: URL
 
-    init(url: URL) {
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+
+    init(
+        url: URL,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
         self.url = url
+        self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,7 +49,9 @@ class PrivacyPolicyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        listenForThemeChange(view)
         setupView()
+        applyTheme()
     }
 
     func setupView() {
@@ -58,6 +70,11 @@ class PrivacyPolicyViewController: UIViewController {
         webView.load(URLRequest(url: url))
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
+    }
+
+    // MARK: - Theming
+    func applyTheme() {
+        navigationItem.rightBarButtonItem?.tintColor = themeManager.currentTheme.colors.actionPrimary
     }
 }
 

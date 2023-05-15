@@ -1,12 +1,93 @@
+/* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.ButtonTitle.v114" = "Fara í stillingar";
+
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. Farðu í *Stillingar*";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Ýttu á *Sjálfgefið vafraforrit*";
+
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.ThirdLabel.v114" = "3. Veldu *%@*";
+
+/* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.Title.v114" = "Skiptu um sjálfgefinn vafra";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v114" = "Óhað. Ekki hagnaðardrifið. Til góðra verka.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v114" = "Stefnum að betra interneti fyrir alla.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v114" = "Ekki núna";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Continue.Action.v112" = "Halda áfram";
+"Onboarding.Notification.Continue.Action.v114" = "Halda áfram";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v112" = "Sendu flipa á milli tækjanna þinna og fáðu ábendingar um hvernig hægt sé að fá sem mest út úr %@.";
+"Onboarding.Notification.Description.v114" = "Sendu flipa á milli tækjanna þinna og fáðu ábendingar um hvernig hægt sé að fá sem mest út úr %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v112" = "Ekki núna";
+"Onboarding.Notification.Skip.Action.v114" = "Ekki núna";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v112" = "Tilkynningar hjálpa þér að gera meira með %@";
+"Onboarding.Notification.Title.v114" = "Tilkynningar hjálpa þér að gera meira með %@";
+
+/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.TurnOnNotifications.Action.v114" = "Kveikja á tilkynningum";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Description.v114" = "Gríptu með þér flipa og lykilorð úr hinum tækjunum þínum til að halda áfram þar sem frá var horfið.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.SignIn.Action.v114" = "Skrá inn";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v114" = "Sleppa";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v114" = "Hoppaðu úr síma yfir í fartölvu og svo aftur til baka";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klassísk bakgrunnsmynd";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Bakgrunnsmynd í takmörkuðu upplagi";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v114" = "Stilla bakgrunn";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v114" = "Veldu bakgrunnsmynd sem talar til þín.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.SelectorTitle.v114" = "Prófaðu skvettu af lit";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "Veldu bakgrunnsmynd %@";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.Welcome.Action.v114" = "Hefjast handa";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Welcome.ActionTreatementA.v114" = "Setja sem sjálfgefinn vafra";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.TreatementA.v114" = "%@ setur fólk fram yfir hagnað og ver sjálfgefið friðhelgi þína á meðan þú vafrar.";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v114" = "%@ setur fólk fram yfir hagnað og ver sjálfgefið friðhelgi þína á meðan þú vafrar.";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "Sjáðu nánar í persónuverndaryfirlýsingu okkar";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Welcome.Skip.v114" = "Sleppa";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Title.TreatementA.v114" = "Gerðu %@ að aðalvafranum þínum";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v114" = "Velkomin á sjálfstætt internet";
 
