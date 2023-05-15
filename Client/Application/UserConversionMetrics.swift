@@ -19,13 +19,33 @@ class UserConversionMetrics {
     }
 
     public static func didStartNewSession() {
-        UserConversionMetrics.appOpenTimestamps.append(Date())
-        UserConversionMetrics.checkProfileActivation()
+        if UserConversionMetrics.shouldRecordMetric() {
+            UserConversionMetrics.appOpenTimestamps.append(Date())
+            UserConversionMetrics.checkProfileActivation()
+        }
     }
 
     public static func didPerformSearch() {
-        UserConversionMetrics.searchesTimestamps.append(Date())
-        UserConversionMetrics.checkProfileActivation()
+        if UserConversionMetrics.shouldRecordMetric() {
+            UserConversionMetrics.searchesTimestamps.append(Date())
+            UserConversionMetrics.checkProfileActivation()
+        }
+    }
+
+    // there shouldn't be more records added to UserDefaults once this event happens and it should not affect existing users
+    private static func shouldRecordMetric() -> Bool {
+        guard let firstAppUse = UserDefaults.standard.object(forKey: PrefsKeys.Session.FirstAppUse) as? UInt64 else {
+            return false
+        }
+        if UserDefaults.standard.bool(forKey: "didUpdateConversionValue") {
+            return false
+        }
+        let firstAppUseDate = Date.fromTimestamp(firstAppUse)
+        let oneWeekSinceFirstUse = Calendar.current.date(byAdding: .day, value: 7, to: firstAppUseDate)!
+        if Date() > oneWeekSinceFirstUse {
+            return false
+        }
+        return true
     }
 
     private static func checkProfileActivation() {

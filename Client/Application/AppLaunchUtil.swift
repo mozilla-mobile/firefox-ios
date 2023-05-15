@@ -131,9 +131,7 @@ class AppLaunchUtil {
         // increase session count value
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.Session.Count)
         UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
-        if !UserDefaults.standard.bool(forKey: "didUpdateConversionValue") {
-            UserConversionMetrics.didPerformSearch()
-        }
+        UserConversionMetrics.didStartNewSession()
     }
 
     // MARK: - Application Services History Migration

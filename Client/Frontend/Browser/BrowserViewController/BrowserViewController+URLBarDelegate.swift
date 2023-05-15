@@ -317,9 +317,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        if !UserDefaults.standard.bool(forKey: "didUpdateConversionValue") {
-            UserConversionMetrics.didPerformSearch()
-        }
+        UserConversionMetrics.didPerformSearch()
         // We couldn't find a matching search keyword, so do a search query.
         Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
