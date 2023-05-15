@@ -27,7 +27,7 @@ class ZoomLevelStoreTests: XCTestCase {
 
     private func cleanUp() {
         let url = URL(fileURLWithPath: "domain-zoom-levels",
-                      relativeTo: FileManager.documentsDirectoryURL).appendingPathExtension("json")
+                      relativeTo: FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
         if FileManager.default.fileExists(atPath: url.path) {
             do {
                 try FileManager.default.removeItem(at: url)

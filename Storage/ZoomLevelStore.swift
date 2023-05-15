@@ -23,7 +23,6 @@ public class ZoomLevelStore {
     private var logger: Logger
 
     private static let fileName = "domain-zoom-levels"
-    private static let pathExtension = "json"
 
     private let url = URL(fileURLWithPath: fileName,
                           relativeTo: FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
