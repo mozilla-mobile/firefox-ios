@@ -114,7 +114,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                         action: .nextCard)),
                 type: .freshInstall,
                 a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard,
-                imageID: ImageIdentifiers.onboardingSyncv106)
+                imageID: ImageIdentifiers.onboardingNotification)
         default:
             return nil
         }
