@@ -71,6 +71,7 @@ class HistoryHighlightsViewModel {
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
+    private var logger: Logger
 
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
@@ -94,7 +95,7 @@ class HistoryHighlightsViewModel {
     /// Group weight used to create collection view compositional layout
     /// Case 1: For compact and a single column use 0.9 to occupy must of the width of the parent
     /// Case 2: For compact and multiple columns 0.8 to show part of the next column
-    /// Case 3: For ipad and iphone landscape we use 1/3 of the available width
+    /// Case 3: For iPad and iPhone landscape we use 1/3 of the available width
     var groupWidthWeight: NSCollectionLayoutDimension {
         guard !UIDevice().isIphoneLandscape,
               UIDevice.current.userInterfaceIdiom != .pad else {
@@ -112,13 +113,15 @@ class HistoryHighlightsViewModel {
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
         self.historyHighlightsDataAdaptor.delegate = self
     }
@@ -444,6 +447,9 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHighlights()
+            self.logger.log("HistoryHighlights didLoadNewData and section shouldShow \(self.shouldShow)",
+                            level: .debug,
+                            category: .homepage)
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

@@ -5,7 +5,7 @@
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Unha mellor Internet de forma predeterminada";
 
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "Coñeza como";
+"DefaultBrowserCard.Button.v2" = "Aprender como";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Estableza ligazóns de sitios web, correos electrónicos e mensaxes para que se abran automaticamente en Firefox.";

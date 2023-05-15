@@ -1196,10 +1196,10 @@
 "Settings.DataManagement.SearchLabel" = "Filtrer nettstadar";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.DataManagement.SectionName" = "Databehandling";
+"Settings.DataManagement.SectionName" = "Datahandsaming";
 
 /* Title displayed in header of the setting panel. */
-"Settings.DataManagement.Title" = "Databehandling";
+"Settings.DataManagement.Title" = "Datahandsaming";
 
 /* Body of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Body" = "Firefox vil slutta å synkronisera med kontoen din, men vil ikkje sletta nokon av nettlesardataa dine på denne eininga.";
@@ -1496,7 +1496,7 @@
 "Settings.Studies.Toggle.Link" = "Les meir.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox kan installere og køyre studiar av og til.";
+"Settings.Studies.Toggle.Message" = "Firefox kan installere og køyre undersøkingar av og til.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Undersøkingar";

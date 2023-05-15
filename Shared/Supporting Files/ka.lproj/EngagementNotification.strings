@@ -4,3 +4,15 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "დაიწყეთ გვერდების მოძიება";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@ პირადი რეჟიმით არ იცავს თქვენს მონაცემებს და არ ზღუდავს ფარულ მეთვალყურეებს.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "ათვალიერეთ კვალის დატოვების გარეშე";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "ინახულეთ გვერდები ფუნთუშებისა და ისტორიის შეუნახავად %@-ში.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "გამოცადეთ პირადი რეჟიმი";
+

@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Accedi con la fotocamera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Apri Firefox sul computer e vai all’indirizzo firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Apri Firefox sul tuo computer e vai all’indirizzo firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Pronto per la scansione";
@@ -1550,7 +1550,7 @@
 "Settings.TrackingProtection.LearnMore" = "Ulteriori informazioni";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "Riduce gli annunci pubblicitari mirati e aiuta a impedire agli inserzionisti di tracciare la tua navigazione.";
+"Settings.TrackingProtection.ProtectionCellFooter" = "Riduce gli annunci pubblicitari mirati e impedisce agli inserzionisti di tracciare la tua navigazione.";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "Se un sito non funziona come previsto, tocca il lucchetto nella barra degli indirizzi e disattiva la protezione antitracciamento avanzata per quella pagina.";

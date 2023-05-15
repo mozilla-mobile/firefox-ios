@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ახალი ჩანართი გაიხსნა";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ახალი ჩანართი გაიხსნა";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "სურათის ასლი";
 
@@ -854,7 +857,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "კრიპტოვალუტის გამომმუშავებლები";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "საიტები, ზოგჯერ გარე ბმულებიდან ტვირთავს რეკლამებს, ვიდეოებსა და სხვა ფარული მეთვალყურეების შემცველ მასალას. მათი შეზღუდვით, საიტი კი უფრო სწრაფად ჩაიტვირთება, თუმცა ღილაკებმა, ანგარიშისა და სხვა შესავსებმა ველებმა შეიძლება, აღარ იმუშაოს.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "საიტები ზოგჯერ გარე ბმულებიდან ტვირთავს რეკლამებს, ვიდეოებსა და სხვა ფარული მეთვალყურეების შემცველ მასალას. მათი შეზღუდვით კი საიტი უფრო სწრაფად ჩაიტვირთება, მაგრამ ღილაკებმა, ანგარიშისა და სხვა შესავსებმა ველებმა შეიძლება აღარ იმუშაოს.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "ეს ფუნთუშები თან დაგყვებათ საიტებზე და აგროვებს მონაცემებს, თუ რას აკეთებთ ინტერნეტში. მათ იყენებს გარეშე მხარეები, სარეკლამო და კვლევითი დაწესებულებები.";
@@ -866,7 +869,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "პარამეტრებით ხდება თქვენი ბრაუზერისა და მოწყობილობის სხვებისგან გამორჩევა. მომხმარებლის ამომცნობები აგროვებს ამ პარამეტრებს თქვენი დახასიათების შესადგენად, რომელსაც იყენებს საიტებზე თვალის სადევნებლად.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე, თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად, ამ ქსელების მფლობელ დაწესებულებებს, ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე, თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად, ამ ქსელების მფლობელ დაწესებულებებს ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "მომხმარებლის ამომცნობები";
@@ -1424,7 +1427,7 @@
 "Settings.NewTab.TopSectionName" = "ჩვენება";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "აირჩიეთ რისი ხილვა გსურთ ახალი ჩანართის გახსნისას";
+"Settings.NewTab.TopSectionNameFooter" = "აირჩიეთ, რისი ხილვა გსურთ ახალი ჩანართის გახსნისას";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "სურათების შეზღუდვა";
@@ -1469,7 +1472,7 @@
 "Settings.SendUsage.Message" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც საჭიროა Firefox-ის გასაუმჯობესებლად.";
 
 /* The title for the setting to send usage data. */
-"Settings.SendUsage.Title" = "მონაცემების აღრიცხვა";
+"Settings.SendUsage.Title" = "მონაცემთა აღრიცხვა";
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "ბმულზე ხანგრძლივი დაჭერისას";
@@ -1556,10 +1559,10 @@
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ საკეტის ნიშანს მისამართების ველში თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე ნებადართულია.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის ზოგიერთი მეთვალყურე ნებადართულია.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, თუმცა შესაძლოა, გაუმართავად იმუშაოს.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, მაგრამ შესაძლოა, გაუმართავად იმუშაოს.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "დაცვის დონე";

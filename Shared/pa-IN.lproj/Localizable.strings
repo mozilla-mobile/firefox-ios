@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "ਚਿੱਤਰ ਕਾਪੀ ਕਰੋ";
 
