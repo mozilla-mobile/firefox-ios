@@ -4,6 +4,9 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "开始您的搜索之旅吧";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "在 %@ 中进行隐私浏览不会保存您的信息并会阻止隐藏的跟踪器。";
+
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "浏览不留痕迹";
 
