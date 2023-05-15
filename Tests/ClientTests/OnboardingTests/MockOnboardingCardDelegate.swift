@@ -4,6 +4,8 @@
 
 import Foundation
 
+@testable import Client
+
 class MockIntroViewController: OnboardingCardDelegate {
     var action: OnboardingActions?
 
