@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class OnboardingButtonActionTests: XCTestCase {
-    var subject: OnboardingCardViewController!
     var mockDelegate: MockIntroViewController!
 
     override func setUp() {
@@ -17,18 +16,17 @@ class OnboardingButtonActionTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        subject = nil
         mockDelegate = nil
     }
 
     func testMockDelegate_whenInitialized_actionIsNil() {
-        setSubjectUpWith(firstAction: .nextCard)
+        _ = setSubjectUpWith(firstAction: .nextCard)
 
         XCTAssertNil(mockDelegate.action)
     }
 
     func testsubject_whenOnlyOneButtonExists_secondaryButtonIsHidden() {
-        setSubjectUpWith(firstAction: .nextCard, twoButtons: false)
+        let subject = setSubjectUpWith(firstAction: .nextCard, twoButtons: false)
 
         subject.secondaryAction()
 
@@ -36,7 +34,7 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_primaryAction_returnsNextCardAction() {
-        setSubjectUpWith(firstAction: .nextCard)
+        let subject = setSubjectUpWith(firstAction: .nextCard)
 
         subject.primaryAction()
 
@@ -44,7 +42,7 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_buttonAction_returnsPrivacyPolicyAction() {
-        setSubjectUpWith(firstAction: .readPrivacyPolicy)
+        let subject = setSubjectUpWith(firstAction: .readPrivacyPolicy)
 
         subject.linkButtonAction()
 
@@ -52,14 +50,14 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_buttonAction_returnsNotifiactionsAction() {
-        setSubjectUpWith(firstAction: .requestNotifications)
+        let subject = setSubjectUpWith(firstAction: .requestNotifications)
 
         subject.primaryAction()
 
         XCTAssertEqual(mockDelegate.action, OnboardingActions.requestNotifications)
     }
     func testsubject_buttonAction_returnsSyncAction() {
-        setSubjectUpWith(firstAction: .syncSignIn)
+        let subject = setSubjectUpWith(firstAction: .syncSignIn)
 
         subject.primaryAction()
 
@@ -67,7 +65,7 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_buttonAction_returnsSetAsDefaultAction() {
-        setSubjectUpWith(firstAction: .setDefaultBrowser)
+        let subject = setSubjectUpWith(firstAction: .setDefaultBrowser)
 
         subject.primaryAction()
 
@@ -77,8 +75,10 @@ class OnboardingButtonActionTests: XCTestCase {
     // MARK: - Helpers
     func setSubjectUpWith(
         firstAction: OnboardingActions,
-        twoButtons: Bool = true
-    ) {
+        twoButtons: Bool = true,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> OnboardingCardViewController {
         var buttons: OnboardingButtons
         if twoButtons {
             buttons = OnboardingButtons(
@@ -110,11 +110,14 @@ class OnboardingButtonActionTests: XCTestCase {
             isFeatureEnabled: true)
 
         mockDelegate = MockIntroViewController()
-        subject = OnboardingCardViewController(
+        let subject = OnboardingCardViewController(
             viewModel: mockCardViewModel,
             delegate: mockDelegate)
-        trackForMemoryLeaks(subject)
+
+        trackForMemoryLeaks(subject, file: file, line: line)
 
         subject.viewDidLoad()
+
+        return subject
     }
 }
