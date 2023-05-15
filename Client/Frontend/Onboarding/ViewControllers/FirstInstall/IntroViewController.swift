@@ -237,21 +237,25 @@ extension IntroViewController: OnboardingCardDelegate {
         self.present(controller, animated: true)
     }
 
-    private func presentPrivacyPolicy(url: URL,
-                                      referringPage: ReferringPage = .onboarding) {
+    private func presentPrivacyPolicy(
+        url: URL,
+        referringPage: ReferringPage = .onboarding
+    ) {
         let privacyPolicyVC = PrivacyPolicyViewController(url: url)
         let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(dismissPrivacyPolicyViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        let buttonItem = UIBarButtonItem(
+            title: .SettingsSearchDoneButton,
+            style: .plain,
+            target: self,
+            action: #selector(dismissPrivacyPolicyViewController))
+
         privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
+
         controller.onViewDismissed = {
             self.showNextPage(.welcome)
         }
+
         present(controller, animated: true)
     }
 
