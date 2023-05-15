@@ -161,7 +161,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
-              return nil
+            return nil
         }
 
         pageControl.currentPage = index
@@ -188,7 +188,7 @@ extension IntroViewController: OnboardingCardDelegate {
     ) {
         switch action {
         case .requestNotifications:
-            askForNotificationPermission()
+            askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName)
         case .syncSignIn:
@@ -279,9 +279,10 @@ extension IntroViewController: OnboardingCardDelegate {
         present(controller, animated: true)
     }
 
-    private func askForNotificationPermission() {
+    private func askForNotificationPermission(from cardName: String) {
         let notificationManager = NotificationManager()
-        notificationManager.requestAuthorization { [weak, self] granted, error in
+
+        notificationManager.requestAuthorization { [weak self] granted, error in
             guard error == nil, let self = self else { return }
 
             DispatchQueue.main.async {
@@ -295,7 +296,7 @@ extension IntroViewController: OnboardingCardDelegate {
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-                self.showNextPage(.notification)
+                self.showNextPage(from: cardName)
             }
         }
     }

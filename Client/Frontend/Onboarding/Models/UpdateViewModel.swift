@@ -9,6 +9,7 @@ import Shared
 class UpdateViewModel: OnboardingViewModelProtocol,
                        FeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
+    // MARK: - Properties
     let profile: Profile
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
@@ -32,6 +33,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil
     }
 
+    // MARK: - Initializer
     init(profile: Profile) {
         self.profile = profile
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
@@ -40,6 +42,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         self.availableCards = []
     }
 
+    // MARK: - Methods
     func shouldShowUpdateSheet(force: Bool = false,
                                appVersion: String = AppInfo.appVersion) -> Bool {
         guard !force else { return true }

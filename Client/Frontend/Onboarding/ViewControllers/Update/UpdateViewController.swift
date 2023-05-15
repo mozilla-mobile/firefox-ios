@@ -36,12 +36,12 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }()
 
     private lazy var pageControl: UIPageControl = .build { pageControl in
-//        pageControl.currentPage = 0
-//        pageControl.numberOfPages = self.viewModel.enabledCards.count
-//        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
-//        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
-//        pageControl.isUserInteractionEnabled = false
-//        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = self.viewModel.availableCards.count
+        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
+        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+        pageControl.isUserInteractionEnabled = false
+        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
     }
 
     // MARK: - Initializers
