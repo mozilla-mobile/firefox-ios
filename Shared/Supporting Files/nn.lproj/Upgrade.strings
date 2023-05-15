@@ -8,7 +8,7 @@
 "Upgrade.SyncSign.Title.v114" = "Det er enklare enn nokon gong g å byte skjerm";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v114" = "Bruk som standard nettleser";
+"Upgrade.Welcome.Action.v114" = "Bruk som standard nettlesar";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Description.v114" = "Nye fargar. Nye fordelar. Same forplikting til menneske over forteneste.";

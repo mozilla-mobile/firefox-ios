@@ -4,6 +4,9 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Bdu anadi-ik·im amezwaru";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Tunigin tusligt deg %@ur tesseklas ara talɣut-ik rnu tessewḥal ineḍfaren yeffren.";
+
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "Inig war ma teǧǧiḍ lǧeṛṛa";
 
