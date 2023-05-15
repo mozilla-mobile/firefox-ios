@@ -26,7 +26,7 @@ public class ZoomLevelStore {
     private static let pathExtension = "json"
 
     private let url = URL(fileURLWithPath: fileName,
-                          relativeTo: FileManager.documentsDirectoryURL).appendingPathExtension(pathExtension)
+                          relativeTo: FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
 
     private init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
