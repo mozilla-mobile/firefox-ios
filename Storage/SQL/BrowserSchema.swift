@@ -38,20 +38,6 @@ let TableFaviconSiteURLs = "favicon_site_urls"
 
 let MatViewAwesomebarBookmarksWithFavicons = "matview_awesomebar_bookmarks_with_favicons"
 
-let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
-let ViewBookmarksBufferWithDeletionsOnMirror = "view_bookmarksBuffer_with_deletions_on_mirror"
-let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
-let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
-let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
-let ViewAllBookmarks = "view_all_bookmarks"
-let ViewAwesomebarBookmarks = "view_awesomebar_bookmarks"
-let ViewAwesomebarBookmarksWithFavicons = "view_awesomebar_bookmarks_with_favicons"
-
-let ViewHistoryVisits = "view_history_visits"
-let ViewWidestFaviconsForSites = "view_favicons_widest"
-let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
-let ViewIconForURL = "view_icon_for_url"
-
 let IndexHistoryShouldUpload = "idx_history_should_upload"
 let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Removed in v6.
 let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added in v6.
@@ -100,21 +86,6 @@ private let AllTables: [String] = [
     MatViewAwesomebarBookmarksWithFavicons,
 ]
 
-private let AllViews: [String] = [
-    ViewHistoryIDsWithWidestFavicons,
-    ViewWidestFaviconsForSites,
-    ViewIconForURL,
-    ViewBookmarksBufferOnMirror,
-    ViewBookmarksBufferWithDeletionsOnMirror,
-    ViewBookmarksBufferStructureOnMirror,
-    ViewBookmarksLocalOnMirror,
-    ViewBookmarksLocalStructureOnMirror,
-    ViewAllBookmarks,
-    ViewAwesomebarBookmarks,
-    ViewAwesomebarBookmarksWithFavicons,
-    ViewHistoryVisits,
-]
-
 private let AllIndices: [String] = [
     IndexHistoryShouldUpload,
     IndexVisitsSiteIDIsLocalDate,
@@ -133,7 +104,7 @@ private let AllTriggers: [String] = [
     TriggerHistoryAfterInsert,
 ]
 
-private let AllTablesIndicesTriggersAndViews: [String] = AllViews + AllTriggers + AllIndices + AllTables
+private let AllTablesIndicesTriggersAndViews: [String] = AllTriggers + AllIndices + AllTables
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.
@@ -481,207 +452,6 @@ open class BrowserSchema: Schema {
         return sql
     }
 
-    fileprivate let bufferBookmarksView = """
-        CREATE VIEW view_bookmarksBuffer_on_mirror AS
-        SELECT
-            -1 AS id,
-            mirror.guid AS guid,
-            mirror.type AS type,
-            mirror.date_added AS date_added,
-            mirror.is_deleted AS is_deleted,
-            mirror.parentid AS parentid,
-            mirror.parentName AS parentName,
-            mirror.feedUri AS feedUri,
-            mirror.siteUri AS siteUri,
-            mirror.pos AS pos,
-            mirror.title AS title,
-            mirror.description AS description,
-            mirror.bmkUri AS bmkUri,
-            mirror.keyword AS keyword,
-            mirror.folderName AS folderName,
-            NULL AS faviconID,
-            0 AS is_overridden
-        -- LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
-        -- We don't have an is_overridden flag to help us here.
-        FROM bookmarksMirror mirror LEFT JOIN bookmarksBuffer buffer ON
-            mirror.guid = buffer.guid
-        WHERE buffer.guid IS NULL
-        UNION ALL
-        SELECT
-            -1 AS id,
-            guid,
-            type,
-            date_added,
-            is_deleted,
-            parentid,
-            parentName,
-            feedUri,
-            siteUri,
-            pos,
-            title,
-            description,
-            bmkUri,
-            keyword,
-            folderName,
-            NULL AS faviconID,
-            1 AS is_overridden
-        FROM bookmarksBuffer
-        WHERE is_deleted IS 0
-        """
-
-    fileprivate let bufferBookmarksWithDeletionsView = """
-        CREATE VIEW view_bookmarksBuffer_with_deletions_on_mirror AS
-        SELECT
-            -1 AS id,
-            mirror.guid AS guid,
-            mirror.type AS type,
-            mirror.date_added AS date_added,
-            mirror.is_deleted AS is_deleted,
-            mirror.parentid AS parentid,
-            mirror.parentName AS parentName,
-            mirror.feedUri AS feedUri,
-            mirror.siteUri AS siteUri,
-            mirror.pos AS pos,
-            mirror.title AS title,
-            mirror.description AS description,
-            mirror.bmkUri AS bmkUri,
-            mirror.keyword AS keyword,
-            mirror.folderName AS folderName,
-            NULL AS faviconID,
-            0 AS is_overridden
-        -- LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
-        -- We don't have an is_overridden flag to help us here.
-        FROM bookmarksMirror mirror LEFT JOIN bookmarksBuffer buffer ON
-            mirror.guid = buffer.guid
-        WHERE buffer.guid IS NULL
-        UNION ALL
-        SELECT
-            -1 AS id,
-            guid,
-            type,
-            date_added,
-            is_deleted,
-            parentid,
-            parentName,
-            feedUri,
-            siteUri,
-            pos,
-            title,
-            description,
-            bmkUri,
-            keyword,
-            folderName,
-            NULL AS faviconID,
-            1 AS is_overridden
-        FROM bookmarksBuffer
-        WHERE
-            is_deleted IS 0 AND
-            NOT EXISTS (SELECT 1 FROM pending_deletions deletions WHERE deletions.id = guid)
-        """
-
-    // TODO: phrase this without the subselect…
-    fileprivate let bufferBookmarksStructureView = """
-        CREATE VIEW view_bookmarksBufferStructure_on_mirror AS
-        -- We don't need to exclude deleted parents, because we drop those from the structure
-        -- table when we see them.
-        SELECT parent, child, idx, 1 AS is_overridden FROM bookmarksBufferStructure
-        UNION ALL
-        -- Exclude anything from the mirror that's present in the buffer (dynamic is_overridden).
-        SELECT parent, child, idx, 0 AS is_overridden
-        FROM bookmarksMirrorStructure LEFT JOIN bookmarksBuffer ON
-            parent = guid
-        WHERE guid IS NULL
-        """
-
-    fileprivate let localBookmarksView = """
-        CREATE VIEW view_bookmarksLocal_on_mirror AS
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
-        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
-        NULL AS local_modified, server_modified, 0 AS is_overridden
-        FROM bookmarksMirror WHERE is_overridden IS NOT 1
-        UNION ALL
-        SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, \
-        feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, \
-        local_modified, NULL AS server_modified, 1 AS is_overridden
-        FROM bookmarksLocal WHERE is_deleted IS NOT 1
-        """
-
-    // TODO: phrase this without the subselect…
-    fileprivate let localBookmarksStructureView = """
-        CREATE VIEW view_bookmarksLocalStructure_on_mirror AS
-        SELECT parent, child, idx, 1 AS is_overridden
-        FROM bookmarksLocalStructure
-        WHERE ((SELECT is_deleted FROM bookmarksLocal WHERE guid = parent) IS NOT 1)
-        UNION ALL
-        SELECT parent, child, idx, 0 AS is_overridden
-        FROM bookmarksMirrorStructure
-        WHERE ((SELECT is_overridden FROM bookmarksMirror WHERE guid = parent) IS NOT 1)
-        """
-
-    // This view exists only to allow for text searching of URLs and titles in the awesomebar.
-    // As such, we cheat a little: we include buffer, non-overridden mirror, and local.
-    // Usually this will be indistinguishable from a more sophisticated approach, and it's way
-    // easier.
-    fileprivate let allBookmarksView = """
-        CREATE VIEW view_all_bookmarks AS
-        SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM bookmarksMirror
-        WHERE
-            type = \(BookmarkNodeType.bookmark.rawValue) AND
-            is_overridden IS 0 AND
-            is_deleted IS 0
-        UNION ALL
-        SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM bookmarksLocal
-        WHERE
-            type = \(BookmarkNodeType.bookmark.rawValue) AND
-            is_deleted IS 0
-        UNION ALL
-        SELECT guid, bmkUri AS url, title, description, -1 AS faviconID
-        FROM bookmarksBuffer bb
-        WHERE
-            bb.type = \(BookmarkNodeType.bookmark.rawValue) AND
-            bb.is_deleted IS 0 AND
-            -- Exclude pending bookmark deletions.
-            NOT EXISTS (SELECT 1 FROM pending_deletions AS pd WHERE pd.id = bb.guid)
-        """
-
-    // This exists only to allow upgrade from old versions. We have view dependencies, so
-    // we can't simply skip creating ViewAllBookmarks. Here's a stub.
-    fileprivate let oldAllBookmarksView = """
-        CREATE VIEW view_all_bookmarks AS
-        SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM bookmarksMirror
-        WHERE
-            type = \(BookmarkNodeType.bookmark.rawValue) AND
-            is_overridden IS 0 AND
-            is_deleted IS 0
-        """
-
-    // This smashes together remote and local visits. So it goes.
-    fileprivate let historyVisitsView = """
-        CREATE VIEW view_history_visits AS
-        SELECT h.url AS url, max(v.date) AS visitDate, h.domain_id AS domain_id
-        FROM history h JOIN visits v ON v.siteID = h.id
-        GROUP BY h.id
-        """
-
-    // Join all bookmarks against history to find the most recent visit.
-    // visits.
-    fileprivate let awesomebarBookmarksView = """
-        CREATE VIEW view_awesomebar_bookmarks AS
-        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.faviconID AS faviconID, h.visitDate AS visitDate
-        FROM view_all_bookmarks b LEFT JOIN view_history_visits h ON b.url = h.url
-        """
-
-    fileprivate let awesomebarBookmarksWithIconsView = """
-        CREATE VIEW view_awesomebar_bookmarks_with_favicons AS
-        SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS \
-        description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, \
-        f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
-        FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
-        """
-
     // These triggers are used to keep the FTS index of the `history` table
     // in-sync after the initial "rebuild". The source for these triggers comes
     // directly from the SQLite documentation on maintaining external content FTS4
@@ -808,34 +578,6 @@ open class BrowserSchema: Schema {
             )
             """
 
-        let widestFavicons = """
-            CREATE VIEW IF NOT EXISTS view_favicons_widest AS
-            SELECT
-                favicon_sites.siteID AS siteID,
-                favicons.id AS iconID,
-                favicons.url AS iconURL,
-                favicons.date AS iconDate,
-                favicons.type AS iconType,
-                max(favicons.width) AS iconWidth
-            FROM favicon_sites, favicons
-            WHERE favicon_sites.faviconID = favicons.id
-            GROUP BY siteID
-            """
-
-        let historyIDsWithIcon = """
-            CREATE VIEW IF NOT EXISTS view_history_id_favicon AS
-            SELECT history.id AS id, iconID, iconURL, iconDate, iconType, iconWidth
-            FROM history LEFT OUTER JOIN view_favicons_widest ON
-                history.id = view_favicons_widest.siteID
-            """
-
-        let iconForURL = """
-            CREATE VIEW IF NOT EXISTS view_icon_for_url AS
-            SELECT history.url AS url, icons.iconID AS iconID
-            FROM history, view_favicons_widest AS icons
-            WHERE history.id = icons.siteID
-            """
-
         // Locally we track faviconID.
         // Local changes end up in the mirror, so we track it there too.
         // The buffer and the mirror additionally track some server metadata.
@@ -877,9 +619,6 @@ open class BrowserSchema: Schema {
             bookmarksMirrorStructure,
             self.pendingBookmarksDeletions,
             faviconSites,
-            widestFavicons,
-            historyIDsWithIcon,
-            iconForURL,
             pageMetadataCreate,
             pinnedTopSitesTableCreate,
             highlightsCreate,
@@ -911,17 +650,6 @@ open class BrowserSchema: Schema {
             historyBeforeDeleteTrigger,
             historyAfterUpdateTrigger,
             historyAfterInsertTrigger,
-
-            // Views.
-            self.localBookmarksView,
-            self.localBookmarksStructureView,
-            self.bufferBookmarksView,
-            self.bufferBookmarksWithDeletionsView,
-            self.bufferBookmarksStructureView,
-            allBookmarksView,
-            historyVisitsView,
-            awesomebarBookmarksView,
-            awesomebarBookmarksWithIconsView,
         ]
 
         if queries.count != AllTablesIndicesTriggersAndViews.count {
@@ -949,7 +677,22 @@ open class BrowserSchema: Schema {
         }
 
         if from <= 42 {
-
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS view_bookmarksBuffer_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksBuffer_with_deletions_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksBufferStructure_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksLocal_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksLocalStructure_on_mirror",
+                "DROP VIEW IF EXISTS view_all_bookmarks",
+                "DROP VIEW IF EXISTS view_awesomebar_bookmarks",
+                "DROP VIEW IF EXISTS view_awesomebar_bookmarks_with_favicons",
+                "DROP VIEW IF EXISTS view_history_visits",
+                "DROP VIEW IF EXISTS view_favicons_widest",
+                "DROP VIEW IF EXISTS view_history_id_favicon",
+                "DROP VIEW IF EXISTS view_icon_for_url",
+            ]) {
+                return false
+            }
         }
 
         return true
@@ -1161,10 +904,9 @@ open class BrowserSchema: Schema {
             "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.
         ]
 
-        let views = AllViews.map { "DROP VIEW IF EXISTS \($0)" }
         let indices = AllIndices.map { "DROP INDEX IF EXISTS \($0)" }
         let tables = AllTables.map { "DROP TABLE IF EXISTS \($0)" }
-        let queries = Array([views, indices, tables, additional].joined())
+        let queries = Array([indices, tables, additional].joined())
         return self.run(db, queries: queries)
     }
 }
