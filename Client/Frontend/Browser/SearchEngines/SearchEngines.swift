@@ -175,8 +175,8 @@ class SearchEngines {
 
     private lazy var customEngines: [OpenSearchEngine] = {
         if let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)),
-           let unarchivedObject = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data),
-           let customEngines = unarchivedObject as? [OpenSearchEngine] {
+           let customEngines = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClasses: [OpenSearchEngine.self],
+                                                                               from: data) as? [OpenSearchEngine] {
             return customEngines
         } else {
             return []
