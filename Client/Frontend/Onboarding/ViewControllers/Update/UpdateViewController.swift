@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import Common
 
-class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
+class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
     // Update view UX constants
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
@@ -17,10 +17,11 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // MARK: - Properties
-    var viewModel: UpdateViewModel
+    var viewModel: OnboardingViewModelProtocol
     var didFinishFlow: (() -> Void)?
-    private var informationCards = [OnboardingCardViewController]()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
@@ -28,14 +29,14 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.closeButton
     }
 
-    private lazy var pageController: UIPageViewController = {
+    lazy var pageController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageVC.dataSource = self
         pageVC.delegate = self
         return pageVC
     }()
 
-    private lazy var pageControl: UIPageControl = .build { pageControl in
+    lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.availableCards.count
         pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
@@ -45,8 +46,14 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // MARK: - Initializers
-    init(viewModel: UpdateViewModel) {
+    init(
+        viewModel: UpdateViewModel,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -64,13 +71,13 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
         viewModel.setupViewControllerDelegates(with: self)
         setupView()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
         applyTheme()
+        listenForThemeChange(view)
     }
 
     // MARK: View setup
     private func setupView() {
+        guard let viewModel = viewModel as? UpdateViewModel else { return }
         view.backgroundColor = UIColor.legacyTheme.browser.background
         if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
@@ -100,17 +107,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     private func setupMultipleCards() {
-//        // Create onboarding card views
-//        var cardViewController: OnboardingCardViewController
-//
-//        for cardType in viewModel.enabledCards {
-//            if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
-//                cardViewController = OnboardingCardViewController(viewModel: viewModel,
-//                                                                  delegate: self)
-//                informationCards.append(cardViewController)
-//            }
-//        }
-//
 //        if let firstViewController = informationCards.first {
 //            pageController.setViewControllers([firstViewController],
 //                                              direction: .forward,
@@ -141,84 +137,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     @objc
     private func closeUpdate() {
         didFinishFlow?()
-        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
-    }
-
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
-        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
-
-        return informationCards[index]
-    }
-
-    // Used to programmatically set the pageViewController to show next card
-    func moveToNextPage(from cardName: String) {
-        if let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
-            pageControl.currentPage = index + 1
-            pageController.setViewControllers(
-                [nextViewController],
-                direction: .forward,
-                animated: false)
-        }
-    }
-
-    // Due to restrictions with PageViewController we need to get the index of the current view controller
-    // to calculate the next view controller
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardName = viewController.viewModel.infoModel.name
-
-        guard let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName })
-        else { return nil }
-
-        return index
-    }
-
-    private func presentSignToSync(
-        _ fxaOptions: FxALaunchParams,
-        flowType: FxAPageType = .emailLoginFlow,
-        referringPage: ReferringPage = .onboarding
-    ) {
-        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
-            fxaOptions,
-            flowType: flowType,
-            referringPage: referringPage,
-            profile: viewModel.profile)
-
-        let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(dismissSignInViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
-        controller.onViewDismissed = {
-            self.closeUpdate()
-        }
-        self.present(controller, animated: true)
-    }
-
-    private func presentPrivacyPolicy(
-        url: URL,
-        referringPage: ReferringPage = .onboarding
-    ) {
-        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
-        let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(dismissPrivacyPolicyViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
-        controller.onViewDismissed = {
-            self.closeUpdate()
-        }
-        present(controller, animated: true)
+//        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
     @objc
@@ -230,7 +149,17 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     @objc
     func dismissPrivacyPolicyViewController() {
         dismiss(animated: true, completion: nil)
-        closeUpdate()
+    }
+
+    // MARK: - Theme
+    func applyTheme() {
+//        guard !viewModel.shouldShowSingleCard else { return }
+
+        let theme = themeManager.currentTheme
+        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
+        view.backgroundColor = theme.colors.layer2
+
+        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }
 
@@ -264,44 +193,53 @@ extension UpdateViewController: OnboardingCardDelegate {
     ) {
         switch action {
         case .nextCard:
-            showNextPage(from: cardNamed)
+            showNextPage(from: cardNamed) {
+                self.didFinishFlow?()
+            }
         case .syncSignIn:
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
             presentSignToSync(fxaParams)
         case .readPrivacyPolicy:
-            showPrivacyPolicy(from: cardNamed)
+            showPrivacyPolicy(
+                from: cardNamed,
+                selector: #selector(dismissPrivacyPolicyViewController)
+            ) {
+                self.closeUpdate()
+            }
         default:
             break
         }
     }
 
-    func showNextPage(from cardName: String) {
-        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
-            self.didFinishFlow?()
-            return
+    private func presentSignToSync(
+        _ fxaOptions: FxALaunchParams,
+        flowType: FxAPageType = .emailLoginFlow,
+        referringPage: ReferringPage = .onboarding
+    ) {
+        guard let viewModel = viewModel as? UpdateViewModel else { return }
+
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+            fxaOptions,
+            flowType: flowType,
+            referringPage: referringPage,
+            profile: viewModel.profile)
+
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(
+            title: .SettingsSearchDoneButton,
+            style: .plain,
+            target: self,
+            action: #selector(dismissSignInViewController))
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+
+        controller.onViewDismissed = {
+            self.closeUpdate()
         }
 
-        moveToNextPage(from: cardName)
-    }
-
-    func showPrivacyPolicy(from cardNamed: String) {
-        guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.infoModel.name == cardNamed})?
-            .viewModel.infoModel,
-              let url = infoModel.link?.url
-        else { return }
-
-        presentPrivacyPolicy(url: url)
-    }
-
-    // Extra step to make sure pageControl.currentPage is the right index card
-    // because UIPageViewControllerDataSource call fails
-    func pageChanged(from cardName: String) {
-        if let cardIndex = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           cardIndex != pageControl.currentPage {
-            pageControl.currentPage = cardIndex
-        }
+        self.present(controller, animated: true)
     }
 }
 
@@ -319,30 +257,5 @@ extension UpdateViewController {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
         return .portrait
-    }
-}
-
-// MARK: - NotificationThemeable and Notifiable
-extension UpdateViewController: NotificationThemeable, Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-
-    func applyTheme() {
-        guard !viewModel.shouldShowSingleCard else { return }
-
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        let indicatorColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        pageControl.currentPageIndicatorTintColor = indicatorColor
-        view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
-
-        informationCards.forEach { cardViewController in
-            cardViewController.applyTheme()
-        }
     }
 }

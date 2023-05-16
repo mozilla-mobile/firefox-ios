@@ -88,14 +88,14 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: availableCards[index].viewModel.infoModel.name]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingClose,
-                                     extras: extra)
-    }
+//    func sendCloseButtonTelemetry(index: Int) {
+//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: availableCards[index].viewModel.infoModel.name]
+//
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .onboardingClose,
+//                                     extras: extra)
+//    }
 
     func saveHasSeenOnboarding() {
         introScreenManager?.didSeeIntroScreen()

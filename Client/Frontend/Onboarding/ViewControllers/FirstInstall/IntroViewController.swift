@@ -16,7 +16,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     }
 
     // MARK: - Properties
-    private var viewModel: IntroViewModel
+    var viewModel: OnboardingViewModelProtocol
     private let profile: Profile
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
@@ -30,7 +30,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
     }
 
-    private lazy var pageController: UIPageViewController = {
+    lazy var pageController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .scroll,
                                           navigationOrientation: .horizontal)
         pageVC.dataSource = self
@@ -38,7 +38,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         return pageVC
     }()
 
-    private lazy var pageControl: UIPageControl = .build { pageControl in
+    lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.availableCards.count
         pageControl.isUserInteractionEnabled = false
@@ -119,39 +119,11 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     @objc
     private func closeOnboarding() {
-        viewModel.saveHasSeenOnboarding()
-        didFinishFlow?()
-        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
-    }
-
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
-        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
-
-        return viewModel.availableCards[index]
-    }
-
-    // Used to programmatically set the pageViewController to show next card
-    func moveToNextPage(from cardName: String) {
-        if let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
-            pageControl.currentPage = index + 1
-            pageController.setViewControllers(
-                [nextViewController],
-                direction: .forward,
-                animated: false)
+        if let viewModel = viewModel as? IntroViewModel {
+            viewModel.saveHasSeenOnboarding()
+            didFinishFlow?()
+//            viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
         }
-    }
-
-    // Due to restrictions with PageViewController we need to get the index of
-    // the current view controller to calculate the next view controller
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardName = viewController.viewModel.infoModel.name
-        guard let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName })
-        else { return nil }
-
-        return index
     }
 }
 
@@ -181,6 +153,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
     }
 }
 
+// MARK: - OnboardingCardDelegate
 extension IntroViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
@@ -190,45 +163,30 @@ extension IntroViewController: OnboardingCardDelegate {
         case .requestNotifications:
             askForNotificationPermission(from: cardName)
         case .nextCard:
-            showNextPage(from: cardName)
+            showNextPage(from: cardName) {
+                showNextPageCompletionForLastCard()
+            }
         case .syncSignIn:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(with: fxaPrams, from: cardName)
         case .setDefaultBrowser:
             DefaultApplicationHelper().openSettings()
         case .readPrivacyPolicy:
-            showPrivacyPolicy(from: cardName)
+            showPrivacyPolicy(
+                from: cardName,
+                selector: #selector(dismissPrivacyPolicyViewController)
+            ) {
+                self.showNextPage(from: cardName) {
+                    self.showNextPageCompletionForLastCard()
+                }
+            }
         }
     }
 
-    func showNextPage(from cardName: String) {
-        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
-            viewModel.saveHasSeenOnboarding()
-            self.didFinishFlow?()
-            return
-        }
-
-        moveToNextPage(from: cardName)
-    }
-
-    func showPrivacyPolicy(from cardNamed: String) {
-        guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.infoModel.name == cardNamed})?
-            .viewModel.infoModel,
-              let url = infoModel.link?.url
-        else { return }
-
-        presentPrivacyPolicy(url: url, from: cardNamed)
-    }
-
-    // Extra step to make sure pageControl.currentPage is the right index card
-    // because UIPageViewControllerDataSource call fails
-    func pageChanged(from cardName: String) {
-        if let cardIndex = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           cardIndex != pageControl.currentPage {
-            pageControl.currentPage = cardIndex
-        }
+    private func showNextPageCompletionForLastCard() {
+        guard let viewModel = viewModel as? IntroViewModel else { return }
+        viewModel.saveHasSeenOnboarding()
+        didFinishFlow?()
     }
 
     private func presentSignToSync(
@@ -237,46 +195,29 @@ extension IntroViewController: OnboardingCardDelegate {
         flowType: FxAPageType = .emailLoginFlow,
         referringPage: ReferringPage = .onboarding
     ) {
-        let signInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
-                                                                                       flowType: flowType,
-                                                                                       referringPage: referringPage,
-                                                                                       profile: profile)
-        let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(dismissSignInViewController))
-        buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
-        signInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: signInSyncVC)
-        controller.onViewDismissed = {
-            self.showNextPage(from: cardName)
-        }
-
-        self.present(controller, animated: true)
-    }
-
-    private func presentPrivacyPolicy(
-        url: URL,
-        from cardName: String,
-        referringPage: ReferringPage = .onboarding
-    ) {
-        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
+        let signInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+            fxaOptions,
+            flowType: flowType,
+            referringPage: referringPage,
+            profile: profile)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
             target: self,
-            action: #selector(dismissPrivacyPolicyViewController))
+            action: #selector(dismissSignInViewController))
 
-        privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
+        buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
+        signInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: signInSyncVC)
 
         controller.onViewDismissed = {
-            self.showNextPage(from: cardName)
+            self.showNextPage(from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
         }
 
-        present(controller, animated: true)
+        self.present(controller, animated: true)
     }
 
     private func askForNotificationPermission(from cardName: String) {
@@ -296,7 +237,9 @@ extension IntroViewController: OnboardingCardDelegate {
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-                self.showNextPage(from: cardName)
+                self.showNextPage(from: cardName) {
+                    self.showNextPageCompletionForLastCard()
+                }
             }
         }
     }
@@ -335,8 +278,6 @@ extension IntroViewController {
         pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
         view.backgroundColor = theme.colors.layer2
 
-        viewModel.availableCards.forEach { cardViewController in
-            cardViewController.applyTheme()
-        }
+        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }

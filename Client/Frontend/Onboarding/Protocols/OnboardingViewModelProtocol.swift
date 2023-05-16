@@ -6,6 +6,7 @@ import Foundation
 
 protocol OnboardingViewModelProtocol {
     var availableCards: [OnboardingCardViewController] { get }
+    var isDismissable: Bool { get }
     var isFeatureEnabled: Bool { get }
 
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate)
