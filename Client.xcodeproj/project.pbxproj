@@ -8793,7 +8793,6 @@
 				435D660223D793DF0046EFA2 /* OnboardingInfoModel.swift */,
 				21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */,
 				2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */,
-				74F80D312A02947F00013C3D /* OnboardingDefaultSettingsViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -9269,6 +9268,7 @@
 				39EF434C260A736D0011E22E /* Experiments */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
 				C82A94E3269CB74500624AA7 /* FeatureFlags */,
+				74F80D312A02947F00013C3D /* OnboardingDefaultSettingsViewController.swift */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
 				C86E4F6F2493BA8E0087BFD9 /* Generated */,
 				39A359BD1BFCCE7B006B9E87 /* Helpers */,
