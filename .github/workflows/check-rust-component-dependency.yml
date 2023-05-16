@@ -2,7 +2,12 @@ name: Create a PR to build the app using newest a-s version available
 on:
   schedule:
     - cron: '0 15 * * *'
-
+  workflow_dispatch:
+    inputs:
+      branchName:
+        description: 'Branch used as target for automation'
+        required: true
+        default: 'main'
 jobs:
   build:
     runs-on: ubuntu-latest
