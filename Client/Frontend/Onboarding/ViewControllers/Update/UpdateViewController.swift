@@ -64,10 +64,6 @@ class UpdateViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
