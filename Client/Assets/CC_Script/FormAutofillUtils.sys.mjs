@@ -4,9 +4,14 @@
 
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
-import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
-import { FormAutofillNameUtils } from "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs";
-import { OSKeyStore } from "resource://gre/modules/OSKeyStore.sys.mjs";
+
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
+  FormAutofillNameUtils:
+    "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs",
+  OSKeyStore: "resource://gre/modules/OSKeyStore.sys.mjs",
+});
 
 export let FormAutofillUtils;
 
@@ -269,11 +274,11 @@ FormAutofillUtils = {
   },
 
   isCCNumber(ccNumber) {
-    return CreditCard.isValidNumber(ccNumber);
+    return lazy.CreditCard.isValidNumber(ccNumber);
   },
 
   ensureLoggedIn(promptMessage) {
-    return OSKeyStore.ensureLoggedIn(
+    return lazy.OSKeyStore.ensureLoggedIn(
       this._reauthEnabledByUser && promptMessage ? promptMessage : false
     );
   },
@@ -284,7 +289,7 @@ FormAutofillUtils = {
    * @returns {Array}
    */
   getCreditCardNetworks() {
-    return CreditCard.getSupportedNetworks();
+    return lazy.CreditCard.getSupportedNetworks();
   },
 
   getCategoryFromFieldName(fieldName) {
@@ -341,7 +346,7 @@ FormAutofillUtils = {
     }
 
     if (!("name" in address)) {
-      address.name = FormAutofillNameUtils.joinNameParts({
+      address.name = lazy.FormAutofillNameUtils.joinNameParts({
         given: address["given-name"],
         middle: address["additional-name"],
         family: address["family-name"],
@@ -1008,7 +1013,7 @@ FormAutofillUtils = {
         for (let option of options) {
           if (
             [option.text, option.label, option.value].some(
-              s => CreditCard.getNetworkFromName(s) == network
+              s => lazy.CreditCard.getNetworkFromName(s) == network
             )
           ) {
             return option;

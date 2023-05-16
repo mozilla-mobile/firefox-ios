@@ -5,12 +5,16 @@
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
-import {
-  FormAutofillAddressSection,
-  FormAutofillCreditCardSection,
-} from "resource://autofill/FormAutofillSection.sys.mjs";
-import { FormAutofillHeuristics } from "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs";
-import { FormLikeFactory } from "resource://gre/modules/FormLikeFactory.sys.mjs";
+
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  FormAutofillHeuristics:
+    "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs",
+  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
+  FormAutofillAddressSection: "resource://autofill/FormAutofillSection.sys.mjs",
+  FormAutofillCreditCardSection:
+    "resource://autofill/FormAutofillSection.sys.mjs",
+});
 
 const { FIELD_STATES } = FormAutofillUtils;
 
@@ -187,7 +191,7 @@ export class FormAutofillHandler {
     let _formLike;
     const getFormLike = () => {
       if (!_formLike) {
-        _formLike = FormLikeFactory.createFromField(element);
+        _formLike = lazy.FormLikeFactory.createFromField(element);
       }
       return _formLike;
     };
@@ -229,18 +233,18 @@ export class FormAutofillHandler {
    * @returns {Array} The valid address and credit card details.
    */
   collectFormFields() {
-    const sections = FormAutofillHeuristics.getFormInfo(this.form);
+    const sections = lazy.FormAutofillHeuristics.getFormInfo(this.form);
     const allValidDetails = [];
     for (const { fieldDetails, type } of sections) {
       let section;
       if (type == FormAutofillUtils.SECTION_TYPES.ADDRESS) {
-        section = new FormAutofillAddressSection(
+        section = new lazy.FormAutofillAddressSection(
           fieldDetails,
           this,
           this.onAutofillCallback
         );
       } else if (type == FormAutofillUtils.SECTION_TYPES.CREDIT_CARD) {
-        section = new FormAutofillCreditCardSection(
+        section = new lazy.FormAutofillCreditCardSection(
           fieldDetails,
           this,
           this.onAutofillCallback
@@ -379,9 +383,9 @@ export class FormAutofillHandler {
       if (!secRecord) {
         continue;
       }
-      if (section instanceof FormAutofillAddressSection) {
+      if (section instanceof lazy.FormAutofillAddressSection) {
         records.address.push(secRecord);
-      } else if (section instanceof FormAutofillCreditCardSection) {
+      } else if (section instanceof lazy.FormAutofillCreditCardSection) {
         records.creditCard.push(secRecord);
       } else {
         throw new Error("Unknown section type");
