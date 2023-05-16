@@ -2,11 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
-import { creditCardRulesets } from "resource://gre/modules/shared/CreditCardRuleset.sys.mjs";
-import { FormAutofillHeuristics } from "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
+import { FormAutofillHeuristics } from "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs";
+
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
+  creditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
+});
 
 const DEFAULT_SECTION_NAME = "-moz-section-default";
 
@@ -442,9 +446,9 @@ export class FieldScanner {
     let creditCardFieldDetails = [];
     for (const fieldDetail of fieldDetails) {
       const fieldName = fieldDetail.fieldName;
-      if (FormAutofillUtils.isAddressField(fieldName)) {
+      if (lazy.FormAutofillUtils.isAddressField(fieldName)) {
         addressFieldDetails.push(fieldDetail);
-      } else if (FormAutofillUtils.isCreditCardField(fieldName)) {
+      } else if (lazy.FormAutofillUtils.isCreditCardField(fieldName)) {
         creditCardFieldDetails.push(fieldDetail);
       } else {
         this.log.debug(
@@ -456,11 +460,11 @@ export class FieldScanner {
     this.#transformCCNumberForMultipleFields(creditCardFieldDetails);
     return [
       {
-        type: FormAutofillUtils.SECTION_TYPES.ADDRESS,
+        type: lazy.FormAutofillUtils.SECTION_TYPES.ADDRESS,
         fieldDetails: addressFieldDetails,
       },
       {
-        type: FormAutofillUtils.SECTION_TYPES.CREDIT_CARD,
+        type: lazy.FormAutofillUtils.SECTION_TYPES.CREDIT_CARD,
         fieldDetails: creditCardFieldDetails,
       },
     ]
@@ -519,7 +523,7 @@ export class FieldScanner {
     }
 
     let highestField = null;
-    let highestConfidence = FormAutofillUtils.ccFathomConfidenceThreshold; // Start with a threshold of 0.5
+    let highestConfidence = lazy.FormAutofillUtils.ccFathomConfidenceThreshold; // Start with a threshold of 0.5
     for (let [key, value] of Object.entries(elementConfidences)) {
       if (!fields.includes(key)) {
         // ignore field that we don't care
@@ -537,8 +541,8 @@ export class FieldScanner {
     }
 
     // Used by test ONLY! This ensure testcases always get the same confidence
-    if (FormAutofillUtils.ccFathomTestConfidence > 0) {
-      highestConfidence = FormAutofillUtils.ccFathomTestConfidence;
+    if (lazy.FormAutofillUtils.ccFathomTestConfidence > 0) {
+      highestConfidence = lazy.FormAutofillUtils.ccFathomTestConfidence;
     }
 
     return [highestField, highestConfidence];
@@ -550,13 +554,14 @@ export class FieldScanner {
    */
   static getFormAutofillConfidences(elements) {
     if (
-      FormAutofillUtils.ccHeuristicsMode == FormAutofillUtils.CC_FATHOM_NATIVE
+      lazy.FormAutofillUtils.ccHeuristicsMode ==
+      lazy.FormAutofillUtils.CC_FATHOM_NATIVE
     ) {
       const confidences = ChromeUtils.getFormAutofillConfidences(elements);
       return confidences.map(c => {
         let result = {};
         for (let [fieldName, confidence] of Object.entries(c)) {
-          let type = FormAutofillUtils.formAutofillConfidencesKeyToCCFieldType(
+          let type = lazy.FormAutofillUtils.formAutofillConfidencesKeyToCCFieldType(
             fieldName
           );
           result[type] = confidence;
@@ -576,7 +581,7 @@ export class FieldScanner {
        * @returns {number} Confidence in range [0, 1]
        */
       function confidence(fieldName) {
-        const ruleset = creditCardRulesets[fieldName];
+        const ruleset = lazy.creditCardRulesets[fieldName];
         const fnodes = ruleset.against(element).get(fieldName);
 
         // fnodes is either 0 or 1 item long, since we ran the ruleset
@@ -586,7 +591,7 @@ export class FieldScanner {
 
       // Bang the element against the ruleset for every type of field:
       const confidences = {};
-      creditCardRulesets.types.map(fieldName => {
+      lazy.creditCardRulesets.types.map(fieldName => {
         confidences[fieldName] = confidence(fieldName);
       });
 

@@ -33,6 +33,7 @@ import {
   CreditCard,
   NETWORK_NAMES,
 } from "resource://gre/modules/CreditCard.sys.mjs";
+
 import { FormLikeFactory } from "resource://gre/modules/FormLikeFactory.sys.mjs";
 import { LabelUtils } from "resource://gre/modules/shared/LabelUtils.sys.mjs";
 
