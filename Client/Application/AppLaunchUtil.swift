@@ -131,7 +131,8 @@ class AppLaunchUtil {
         // increase session count value
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.Session.Count)
         UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
-        UserConversionMetrics.didStartNewSession()
+        let conversionMetrics = UserConversionMetrics()
+        conversionMetrics.didStartNewSession()
     }
 
     // MARK: - Application Services History Migration

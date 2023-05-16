@@ -15,6 +15,7 @@ public protocol UserDefaultsInterface {
     func float(forKey defaultName: String) -> Float
 
     func register(defaults registrationDictionary: [String: Any])
+    func array(forKey defaultName: String) -> [Any]?
 }
 
 extension UserDefaults: UserDefaultsInterface {}

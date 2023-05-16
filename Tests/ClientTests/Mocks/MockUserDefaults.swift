@@ -40,5 +40,9 @@ class MockUserDefaults: UserDefaultsInterface {
         return savedData[defaultName] as? Float ?? 0
     }
 
+    func array(forKey defaultName: String) -> [Any]? {
+        return savedData[defaultName] as? [Any]
+    }
+
     func register(defaults registrationDictionary: [String: Any]) {}
 }
