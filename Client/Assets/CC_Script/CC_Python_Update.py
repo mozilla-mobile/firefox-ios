@@ -39,14 +39,16 @@ def downloadTemporaryFileToCompare(file_info):
     reqHeader = {"Cache-Control": "no-cache", "Pragma": "no-cache"}
     try:
         response = requests.get(file_info["url"], stream=True, headers=reqHeader)
+        if response.status_code != 200:
+            print(f"Failed to download file: {file_info['url']}. Response status code: {response.status_code}")
+            return False
         try:
-            file = open(file_info["tmp_path"], "w")
-            file.close()
+            with open(file_info["tmp_path"], "wb") as f:
+                for chunk in response.iter_content():
+                    f.write(chunk)
+            return True
         except:
             print("Could not write to the file")
-        with open(file_info["tmp_path"], "wb") as f:
-            for chunk in response.iter_content():
-                f.write(chunk)
     except requests.exceptions.HTTPError as err:
         raise SystemExit(err)
 
@@ -97,7 +99,11 @@ def main():
     for file in FILES_TO_DOWNLOAD:
         file_info = getFileInfo(file)
         # download file to compare changes
-        downloadTemporaryFileToCompare(file_info)
+        downloaded = downloadTemporaryFileToCompare(file_info)
+
+        if not downloaded:
+            print(f"Skipping file: {file_info['filename']}")
+            return 
 
         # move file if it does not exist
         if os.path.exists(file_info["path"]) == False:
