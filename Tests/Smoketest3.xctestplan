@@ -47,6 +47,7 @@
         "HistoryTests\/testRecentlyClosedWebsiteClosed()",
         "HistoryTests\/testRecentlyClosedWebsiteOpen()",
         "HistoryTests\/testRemoveAllTabsButtonRecentlyClosedHistory()",
+        "HistoryTests\/testTabHistory()",
         "HomeButtonTests",
         "HomePageSettingsUITests\/testChangeHomeSettingsLabel()",
         "HomePageSettingsUITests\/testCheckHomeSettingsByDefault()",
