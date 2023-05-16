@@ -81,12 +81,13 @@ class UpdateViewController: UIViewController,
     private func setupView() {
         guard let viewModel = viewModel as? UpdateViewModel else { return }
 
-        view.backgroundColor = UIColor.legacyTheme.browser.background
         if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
+            setupCloseButton()
         } else {
             setupMultipleCards()
             setupMultipleCardsConstraints()
+            setupCloseButton()
         }
     }
 
@@ -155,34 +156,40 @@ class UpdateViewController: UIViewController,
 
     // MARK: - Theme
     func applyTheme() {
-//        guard !viewModel.shouldShowSingleCard else { return }
-
         let theme = themeManager.currentTheme
-        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
-        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
         view.backgroundColor = theme.colors.layer2
 
         viewModel.availableCards.forEach { $0.applyTheme() }
+
+        guard let viewModel = viewModel as? UpdateViewModel,
+              !viewModel.shouldShowSingleCard
+        else { return }
+        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
     }
 }
 
 // MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerBefore viewController: UIViewController
+    ) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
-              let index = getCardIndex(viewController: onboardingVC) else {
-              return nil
-        }
+              let index = getCardIndex(viewController: onboardingVC)
+        else { return nil }
 
         pageControl.currentPage = index
         return getNextOnboardingCard(index: index, goForward: false)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerAfter viewController: UIViewController
+    ) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
-              let index = getCardIndex(viewController: onboardingVC) else {
-              return nil
-        }
+              let index = getCardIndex(viewController: onboardingVC)
+        else { return nil }
 
         pageControl.currentPage = index
         return getNextOnboardingCard(index: index, goForward: true)
@@ -201,7 +208,12 @@ extension UpdateViewController: OnboardingCardDelegate {
             }
         case .syncSignIn:
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
-            presentSignToSync(fxaParams)
+            presentSignToSync(
+                with: fxaParams,
+                selector: #selector(dismissSignInViewController)
+            ) {
+                self.closeUpdate()
+            }
         case .readPrivacyPolicy:
             showPrivacyPolicy(
                 from: cardNamed,
@@ -212,37 +224,6 @@ extension UpdateViewController: OnboardingCardDelegate {
         default:
             break
         }
-    }
-
-    private func presentSignToSync(
-        _ fxaOptions: FxALaunchParams,
-        flowType: FxAPageType = .emailLoginFlow,
-        referringPage: ReferringPage = .onboarding
-    ) {
-        guard let viewModel = viewModel as? UpdateViewModel else { return }
-
-        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
-            fxaOptions,
-            flowType: flowType,
-            referringPage: referringPage,
-            profile: viewModel.profile)
-
-        let controller: DismissableNavigationViewController
-        let buttonItem = UIBarButtonItem(
-            title: .SettingsSearchDoneButton,
-            style: .plain,
-            target: self,
-            action: #selector(dismissSignInViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
-
-        controller.onViewDismissed = {
-            self.closeUpdate()
-        }
-
-        self.present(controller, animated: true)
     }
 }
 

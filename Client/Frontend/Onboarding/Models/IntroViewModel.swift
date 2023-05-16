@@ -54,6 +54,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
+    var profile: Profile
     private var cardModels: [OnboardingCardInfoModelProtocol]
 
 //    var enabledCards: [IntroViewModel.InformationCards] {
@@ -70,8 +71,12 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 //    }
 
     // MARK: - Initializer
-    init(introScreenManager: IntroScreenManager? = nil) {
+    init(
+        introScreenManager: IntroScreenManager? = nil,
+        profile: Profile
+    ) {
         self.introScreenManager = introScreenManager
+        self.profile = profile
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable

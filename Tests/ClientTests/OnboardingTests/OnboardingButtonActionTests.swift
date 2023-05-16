@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 class OnboardingButtonActionTests: XCTestCase {
-    var mockDelegate: MockIntroViewController!
+    var mockDelegate: MockOnboardinCardDelegateController!
 
     override func setUp() {
         super.setUp()
@@ -109,7 +109,7 @@ class OnboardingButtonActionTests: XCTestCase {
             infoModel: mockInfoModel,
             isFeatureEnabled: true)
 
-        mockDelegate = MockIntroViewController()
+        mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingCardViewController(
             viewModel: mockCardViewModel,
             delegate: mockDelegate)

@@ -43,9 +43,8 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
-        let introViewModel = IntroViewModel(introScreenManager: manager)
-        let introViewController = IntroViewController(viewModel: introViewModel,
-                                                      profile: profile)
+        let introViewModel = IntroViewModel(introScreenManager: manager, profile: profile)
+        let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

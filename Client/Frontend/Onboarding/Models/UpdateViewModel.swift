@@ -10,7 +10,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                        FeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
     // MARK: - Properties
-    let profile: Profile
+    var profile: Profile
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool

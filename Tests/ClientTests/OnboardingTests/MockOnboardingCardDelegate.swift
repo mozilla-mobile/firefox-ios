@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class MockIntroViewController: OnboardingCardDelegate {
+class MockOnboardinCardDelegateController: OnboardingCardDelegate {
     var action: OnboardingActions?
 
     func handleButtonPress(

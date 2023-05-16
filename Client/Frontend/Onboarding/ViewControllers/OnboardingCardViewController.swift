@@ -169,10 +169,12 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Initializers
-    init(viewModel: OnboardingCardProtocol,
-         delegate: OnboardingCardDelegate?,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(
+        viewModel: OnboardingCardProtocol,
+        delegate: OnboardingCardDelegate?,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.viewModel = viewModel
         self.delegate = delegate
         self.themeManager = themeManager
@@ -189,10 +191,10 @@ class OnboardingCardViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange(view)
         setupView()
         updateLayout()
         applyTheme()
+        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

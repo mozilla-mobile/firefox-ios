@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 protocol OnboardingCardDelegate: AnyObject {
     func handleButtonPress(for action: OnboardingActions, from cardNamed: String)
@@ -14,14 +15,21 @@ protocol OnboardingCardDelegate: AnyObject {
                               selector: Selector,
                               completion: @escaping () -> Void,
                               referringPage: ReferringPage)
+    func presentDefaultBrowserPopup()
 
-    func showNextPage(from cardNamed: String,
-                      completionIfLastCard completion: () -> Void)
-    func pageChanged(from cardNamed: String)
+    func presentSignToSync(
+        with fxaOptions: FxALaunchParams,
+        selector: Selector,
+        completion: @escaping () -> Void,
+        flowType: FxAPageType,
+        referringPage: ReferringPage)
+
+    func pageChanged(from cardName: String)
 }
 
 extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
-                                       Self: UIViewController {
+                                       Self: UIViewController,
+                                       Self: Themeable {
     // MARK: - Privacy Policy
     func showPrivacyPolicy(
         from cardNamed: String,
@@ -59,6 +67,40 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         present(controller, animated: true)
     }
 
+    // MARK: - Default Browser Popup
+    func presentDefaultBrowserPopup() {
+
+    }
+
+    // MARK: - Sync sign in
+    func presentSignToSync(
+        with fxaOptions: FxALaunchParams,
+        selector: Selector,
+        completion: @escaping () -> Void,
+        flowType: FxAPageType = .emailLoginFlow,
+        referringPage: ReferringPage = .onboarding
+    ) {
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+            fxaOptions,
+            flowType: flowType,
+            referringPage: referringPage,
+            profile: viewModel.profile)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(
+            title: .SettingsSearchDoneButton,
+            style: .plain,
+            target: self,
+            action: selector)
+        buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+
+        controller.onViewDismissed = completion
+
+        self.present(controller, animated: true)
+    }
+
+    // MARK: - Page helpers
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
     func pageChanged(from cardName: String) {
@@ -68,4 +110,5 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             pageControl.currentPage = cardIndex
         }
     }
+
 }

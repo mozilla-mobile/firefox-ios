@@ -2513,10 +2513,8 @@ extension BrowserViewController {
     }
 
     private func showProperIntroVC() {
-        let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(
-            viewModel: introViewModel,
-            profile: profile)
+        let introViewModel = IntroViewModel(introScreenManager: nil, profile: profile)
+        let introViewController = IntroViewController(viewModel: introViewModel)
 
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
