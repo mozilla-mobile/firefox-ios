@@ -161,7 +161,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
-        delegate?.didSetAlpha(1, duration: actualDuration)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -209,7 +208,6 @@ private extension TabScrollingController {
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
-//        delegate?.didSetAlpha(0, duration: actualDuration)
     }
 
     func configureRefreshControl() {
@@ -285,6 +283,7 @@ private extension TabScrollingController {
         overKeyboardContainerOffset = clamp(overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
 
         header?.updateAlphaForSubviews(scrollAlpha)
+//        bottomContainer?.updateAlphaForSubviews(scrollAlpha)
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
