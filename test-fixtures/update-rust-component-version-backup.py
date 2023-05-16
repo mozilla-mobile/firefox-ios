@@ -28,7 +28,7 @@ def find_latest_nightly_tag(tags):
     if not tags:
         raise ValueError("No nightly tags found in rust-components-swift")
 
-    most_recent_tag = max(tags, key=lambda t: t.tag.tagged_date)
+    most_recent_tag = max(tags, key=lambda t: t.tagged_date)
     return most_recent_tag
 
 

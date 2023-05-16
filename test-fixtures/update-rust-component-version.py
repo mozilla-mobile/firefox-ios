@@ -11,7 +11,7 @@ def get_latest_tag(repo):
     all_tags = repo.get_tags()
     if not all_tags:
         raise ValueError("No tags found in rust-components-swift")
-    return max(all_tags, key=lambda t: t.tag.tagged_date)
+    return max(all_tags, key=lambda t: t.tagged_date)
 
 
 def get_current_version():
