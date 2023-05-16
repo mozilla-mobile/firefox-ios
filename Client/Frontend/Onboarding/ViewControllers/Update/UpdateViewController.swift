@@ -7,8 +7,9 @@ import UIKit
 import Shared
 import Common
 
-class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
-    // Update view UX constants
+class UpdateViewController: UIViewController,
+                            OnboardingViewControllerProtocol,
+                            Themeable {
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
         static let closeButtonRightPadding: CGFloat = 16
@@ -30,17 +31,17 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, 
     }
 
     lazy var pageController: UIPageViewController = {
-        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        let pageVC = UIPageViewController(transitionStyle: .scroll,
+                                          navigationOrientation: .horizontal)
         pageVC.dataSource = self
         pageVC.delegate = self
+
         return pageVC
     }()
 
     lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.availableCards.count
-        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
-        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
         pageControl.isUserInteractionEnabled = false
         pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Upgrade.pageControl
     }
@@ -55,6 +56,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
+
+        self.viewModel.setupViewControllerDelegates(with: self)
     }
 
     required init?(coder: NSCoder) {
@@ -69,7 +72,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.setupViewControllerDelegates(with: self)
         setupView()
         applyTheme()
         listenForThemeChange(view)
@@ -157,6 +159,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol, 
 
         let theme = themeManager.currentTheme
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
         view.backgroundColor = theme.colors.layer2
 
         viewModel.availableCards.forEach { $0.applyTheme() }

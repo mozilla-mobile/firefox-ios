@@ -7,7 +7,9 @@ import UIKit
 import Shared
 import Common
 
-class IntroViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
+class IntroViewController: UIViewController,
+                           OnboardingViewControllerProtocol,
+                           Themeable {
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -22,7 +24,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var userDefaults: UserDefaultsInterface = UserDefaults.standard
+    var userDefaults: UserDefaultsInterface
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
@@ -35,6 +37,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
                                           navigationOrientation: .horizontal)
         pageVC.dataSource = self
         pageVC.delegate = self
+
         return pageVC
     }()
 
@@ -50,14 +53,17 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         viewModel: IntroViewModel,
         profile: Profile,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         self.viewModel = viewModel
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.userDefaults = userDefaults
         super.init(nibName: nil, bundle: nil)
 
+        self.viewModel.setupViewControllerDelegates(with: self)
         setupLayout()
         applyTheme()
     }
@@ -75,8 +81,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     // MARK: View setup
     private func populatePageController() {
-        viewModel.setupViewControllerDelegates(with: self)
-
         if let firstViewController = viewModel.availableCards.first {
             pageController.setViewControllers([firstViewController],
                                               direction: .forward,
@@ -119,11 +123,20 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     @objc
     private func closeOnboarding() {
-        if let viewModel = viewModel as? IntroViewModel {
-            viewModel.saveHasSeenOnboarding()
-            didFinishFlow?()
-//            viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
-        }
+        guard let viewModel = viewModel as? IntroViewModel else { return }
+        viewModel.saveHasSeenOnboarding()
+        didFinishFlow?()
+//        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
+    }
+
+    // MARK: - Themable
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
+        view.backgroundColor = theme.colors.layer2
+
+        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }
 
@@ -269,15 +282,5 @@ extension IntroViewController {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
         return .portrait
-    }
-
-    // MARK: - Themable
-    func applyTheme() {
-        let theme = themeManager.currentTheme
-        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
-        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
-        view.backgroundColor = theme.colors.layer2
-
-        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }
