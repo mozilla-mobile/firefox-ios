@@ -676,7 +676,7 @@ open class BrowserSchema: Schema {
             return true
         }
 
-        if from <= 42 {
+        if from == 42 {
             if !self.run(db, queries: [
                 "DROP VIEW IF EXISTS view_bookmarksBuffer_on_mirror",
                 "DROP VIEW IF EXISTS view_bookmarksBuffer_with_deletions_on_mirror",
