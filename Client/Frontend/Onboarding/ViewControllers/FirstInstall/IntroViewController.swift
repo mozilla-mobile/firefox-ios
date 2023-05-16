@@ -206,7 +206,7 @@ extension IntroViewController: OnboardingCardDelegate {
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5922
             presentDefaultBrowserPopup()
         case .readPrivacyPolicy:
-            showPrivacyPolicy(
+            presentPrivacyPolicy(
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController)
             ) {

@@ -14,22 +14,9 @@ protocol OnboardingViewControllerProtocol {
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
     func moveToNextPage(from cardNamed: String)
     func getCardIndex(viewController: OnboardingCardViewController) -> Int?
-    func showNextPage(from cardNamed: String, completionIfLastCard completion: () -> Void)
 }
 
 extension OnboardingViewControllerProtocol {
-    func showNextPage(
-        from cardName: String,
-        completionIfLastCard completion: () -> Void
-    ) {
-        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
-            completion()
-            return
-        }
-
-        moveToNextPage(from: cardName)
-    }
-
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
         guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 

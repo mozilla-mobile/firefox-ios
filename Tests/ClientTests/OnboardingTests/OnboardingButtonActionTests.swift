@@ -72,6 +72,14 @@ class OnboardingButtonActionTests: XCTestCase {
         XCTAssertEqual(mockDelegate.action, OnboardingActions.setDefaultBrowser)
     }
 
+    func testsubject_buttonAction_returnsOpenPopupAction() {
+        let subject = setSubjectUpWith(firstAction: .openDefaultBrowserPopup)
+
+        subject.primaryAction()
+
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.openDefaultBrowserPopup)
+    }
+
     // MARK: - Helpers
     func setSubjectUpWith(
         firstAction: OnboardingActions,
@@ -104,10 +112,7 @@ class OnboardingButtonActionTests: XCTestCase {
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
             imageID: ImageIdentifiers.onboardingSyncv106)
-        let mockCardViewModel = OnboardingCardViewModel(
-            cardType: .welcome,
-            infoModel: mockInfoModel,
-            isFeatureEnabled: true)
+        let mockCardViewModel = OnboardingCardViewModel(infoModel: mockInfoModel)
 
         mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingCardViewController(

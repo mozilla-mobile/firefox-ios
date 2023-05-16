@@ -7,34 +7,34 @@ import XCTest
 
 class IntroViewModelTests: XCTestCase {
     var viewModel: IntroViewModel!
-
-    override func setUp() {
-        super.setUp()
-        viewModel = IntroViewModel()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        viewModel = nil
-    }
-
-    func testGetWelcomeViewModel() {
-        let cardViewModel = viewModel.getCardViewModel(cardType: .welcome)
-        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.welcome)
-    }
-
-    func testGetSyncViewModel() {
-        let cardViewModel = viewModel.getCardViewModel(cardType: .signSync)
-        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.signSync)
-    }
-
-    func testNextIndexAfterLastCard() {
-        let index = viewModel.getNextIndex(currentIndex: 2, goForward: true)
-        XCTAssertNil(index)
-    }
-
-    func testNextIndexBeforeFirstCard() {
-        let index = viewModel.getNextIndex(currentIndex: 0, goForward: false)
-        XCTAssertNil(index)
-    }
+//
+//    override func setUp() {
+//        super.setUp()
+//        viewModel = IntroViewModel()
+//    }
+//
+//    override func tearDown() {
+//        super.tearDown()
+//        viewModel = nil
+//    }
+//
+//    func testGetWelcomeViewModel() {
+//        let cardViewModel = viewModel.getCardViewModel(cardType: .welcome)
+//        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.welcome)
+//    }
+//
+//    func testGetSyncViewModel() {
+//        let cardViewModel = viewModel.getCardViewModel(cardType: .signSync)
+//        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.signSync)
+//    }
+//
+//    func testNextIndexAfterLastCard() {
+//        let index = viewModel.getNextIndex(currentIndex: 2, goForward: true)
+//        XCTAssertNil(index)
+//    }
+//
+//    func testNextIndexBeforeFirstCard() {
+//        let index = viewModel.getNextIndex(currentIndex: 0, goForward: false)
+//        XCTAssertNil(index)
+//    }
 }

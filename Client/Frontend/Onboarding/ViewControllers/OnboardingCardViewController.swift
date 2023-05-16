@@ -315,10 +315,10 @@ class OnboardingCardViewController: UIViewController, Themeable {
         imageView.image = viewModel.infoModel.image
         primaryButton.setTitle(viewModel.infoModel.buttons.primary.title,
                                for: .normal)
-        handleSecondaryButton()
+        setupSecondaryButton()
     }
 
-    private func handleSecondaryButton() {
+    private func setupSecondaryButton() {
         // To keep Title, Description aligned between cards we don't hide the button
         // we clear the background and make disabled
         guard let buttonTitle = viewModel.infoModel.buttons.secondary?.title else {
@@ -330,7 +330,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
-    private func handleLinkButton() {
+    private func setupLinkButton() {
         guard let buttonTitle = viewModel.infoModel.link?.title else {
             linkButton.isUserInteractionEnabled = false
             linkButton.isHidden = true
@@ -376,7 +376,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
         secondaryButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
         secondaryButton.backgroundColor = theme.colors.actionSecondary
-        handleSecondaryButton()
-        handleLinkButton()
+        setupSecondaryButton()
+        setupLinkButton()
     }
 }

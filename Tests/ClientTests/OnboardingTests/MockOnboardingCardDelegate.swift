@@ -3,15 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+import Common
 
 @testable import Client
 
-class MockOnboardinCardDelegateController: OnboardingCardDelegate {
+class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDelegate, OnboardingViewControllerProtocol, Themeable {
+    // Protocol conformance
+    var pageController = UIPageViewController()
+    var pageControl = UIPageControl()
+    var viewModel: OnboardingViewModelProtocol = IntroViewModel(profile: MockProfile())
+    var didFinishFlow: (() -> Void)?
+    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    func applyTheme() { }
+
+    // Protocols under test
     var action: OnboardingActions?
 
     func handleButtonPress(
-        for action: OnboardingActions,
-        from cardType: IntroViewModel.InformationCards
+        for action: Client.OnboardingActions,
+        from cardName: String
     ) {
         switch action {
         case .syncSignIn:
@@ -19,21 +32,46 @@ class MockOnboardinCardDelegateController: OnboardingCardDelegate {
         case .requestNotifications:
             self.action = .requestNotifications
         case .nextCard:
-            showNextPage(cardType)
+            showNextPage(from: cardName, completionIfLastCard: {})
         case .setDefaultBrowser:
             self.action = .setDefaultBrowser
+        case .openDefaultBrowserPopup:
+            presentDefaultBrowserPopup()
         case .readPrivacyPolicy:
-            showPrivacyPolicy(.welcome)
+            presentPrivacyPolicy(from: cardName,
+                                 selector: nil,
+                                 completion: {})
         }
     }
 
-    func showPrivacyPolicy(_ cardType: IntroViewModel.InformationCards) {
+    func pageChanged(_ cardType: IntroViewModel.InformationCards) { }
+
+    func presentPrivacyPolicy(
+        from cardName: String,
+        selector: Selector?,
+        completion: @escaping () -> Void,
+        referringPage: ReferringPage = .onboarding
+    ) {
         action = .readPrivacyPolicy
     }
 
-    func showNextPage(_ cardType: IntroViewModel.InformationCards) {
+    func presentDefaultBrowserPopup() {
+        action = .openDefaultBrowserPopup
+    }
+
+    func presentSignToSync(
+        with fxaOptions: Client.FxALaunchParams,
+        selector: Selector?,
+        completion: @escaping () -> Void,
+        flowType: Client.FxAPageType,
+        referringPage: Client.ReferringPage
+    ) {
+        action = .syncSignIn
+    }
+
+    func showNextPage(from cardNamed: String, completionIfLastCard completion: () -> Void) {
         action = .nextCard
     }
 
-    func pageChanged(_ cardType: IntroViewModel.InformationCards) { }
+    func pageChanged(from cardName: String) { }
 }

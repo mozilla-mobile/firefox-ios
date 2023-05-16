@@ -6,24 +6,23 @@ import Foundation
 import Shared
 
 protocol OnboardingCardDelegate: AnyObject {
-    func handleButtonPress(for action: OnboardingActions, from cardNamed: String)
+    func handleButtonPress(for action: OnboardingActions,
+                           from cardName: String)
 
-    func showPrivacyPolicy(from cardNamed: String,
-                           selector: Selector,
-                           withCompletion completion: @escaping () -> Void)
-    func presentPrivacyPolicy(url: URL,
-                              selector: Selector,
+    func presentPrivacyPolicy(from cardName: String,
+                              selector: Selector?,
                               completion: @escaping () -> Void,
                               referringPage: ReferringPage)
     func presentDefaultBrowserPopup()
 
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
-        selector: Selector,
+        selector: Selector?,
         completion: @escaping () -> Void,
         flowType: FxAPageType,
         referringPage: ReferringPage)
 
+    func showNextPage(from cardNamed: String, completionIfLastCard completion: () -> Void)
     func pageChanged(from cardName: String)
 }
 
@@ -31,26 +30,18 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                                        Self: UIViewController,
                                        Self: Themeable {
     // MARK: - Privacy Policy
-    func showPrivacyPolicy(
-        from cardNamed: String,
-        selector: Selector,
-        withCompletion completion: @escaping () -> Void
+    func presentPrivacyPolicy(
+        from cardName: String,
+        selector: Selector?,
+        completion: @escaping () -> Void,
+        referringPage: ReferringPage = .onboarding
     ) {
         guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.infoModel.name == cardNamed})?
+            .first(where: { $0.viewModel.infoModel.name == cardName})?
             .viewModel.infoModel,
               let url = infoModel.link?.url
         else { return }
 
-        presentPrivacyPolicy(url: url, selector: selector, completion: completion)
-    }
-
-    func presentPrivacyPolicy(
-        url: URL,
-        selector: Selector,
-        completion: @escaping () -> Void,
-        referringPage: ReferringPage = .onboarding
-    ) {
         let privacyPolicyVC = PrivacyPolicyViewController(url: url)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(
@@ -69,13 +60,12 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
     // MARK: - Default Browser Popup
     func presentDefaultBrowserPopup() {
-
     }
 
     // MARK: - Sync sign in
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
-        selector: Selector,
+        selector: Selector?,
         completion: @escaping () -> Void,
         flowType: FxAPageType = .emailLoginFlow,
         referringPage: ReferringPage = .onboarding
@@ -101,6 +91,18 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Page helpers
+    func showNextPage(
+        from cardName: String,
+        completionIfLastCard completion: () -> Void
+    ) {
+        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
+            completion()
+            return
+        }
+
+        moveToNextPage(from: cardName)
+    }
+
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
     func pageChanged(from cardName: String) {
@@ -110,5 +112,4 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             pageControl.currentPage = cardIndex
         }
     }
-
 }
