@@ -173,25 +173,25 @@ class MockSwiftyBeaver: SwiftyBeaverWrapper {
     static var savedMessage: String?
 
     static var debugCalled = 0
-    static func debug(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
+    static func debug(_ message: @autoclosure () -> Any, file: String, function: String, line: Int, context: Any?) {
         debugCalled += 1
         savedMessage = "\(message())"
     }
 
     static var infoCalled = 0
-    static func info(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
+    static func info(_ message: @autoclosure () -> Any, file: String, function: String, line: Int, context: Any?) {
         infoCalled += 1
         savedMessage = "\(message())"
     }
 
     static var warningCalled = 0
-    static func warning(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
+    static func warning(_ message: @autoclosure () -> Any, file: String, function: String, line: Int, context: Any?) {
         warningCalled += 1
         savedMessage = "\(message())"
     }
 
     static var errorCalled = 0
-    static func error(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
+    static func error(_ message: @autoclosure () -> Any, file: String, function: String, line: Int, context: Any?) {
         errorCalled += 1
         savedMessage = "\(message())"
     }
