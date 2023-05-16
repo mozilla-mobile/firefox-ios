@@ -10,7 +10,7 @@ let url3 = path(forTestPage: "test-example.html")
 let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
 let url1And3Label = "Example Domain"
-let url2Label = "Internet for people, not profit — Mozilla (US)"
+let url2Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -72,7 +72,8 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
-        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label])
+        waitForExistence(app.otherElements["Tabs Tray"])
+        XCTAssertNotNil(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts.element(boundBy: 1).label.range(of: url2Label))
         waitForNoExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url1And3Label])
         let numRegularTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
@@ -104,7 +105,8 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.cells.staticTexts[url2Label], timeout: TIMEOUT)
+        waitForExistence(app.otherElements["Tabs Tray"])
+        XCTAssertNotNil(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts.element(boundBy: 0).label.range(of: url2Label))
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
