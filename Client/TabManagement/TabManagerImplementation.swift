@@ -45,10 +45,17 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        guard !isRestoringTabs,
-              !AppConstants.isRunningUITests,
+        guard !isRestoringTabs else { return }
+
+        guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
-        else { return }
+        else {
+            Task {
+                // Always make sure there is a single normal tab
+                await generateEmptyTab()
+            }
+            return
+        }
 
         isRestoringTabs = true
 
