@@ -134,10 +134,13 @@ class IntroViewModelTests: XCTestCase {
     }
 
     // MARK: - Private Helpers
-    func createSubject() -> IntroViewModel {
+    func createSubject(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> IntroViewModel {
         let subject = IntroViewModel(profile: MockProfile(databasePrefix: "introViewModelTests_"))
 
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
     }

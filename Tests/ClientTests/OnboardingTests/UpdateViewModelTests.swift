@@ -180,10 +180,13 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: - Private Helpers
-    func createSubject() -> UpdateViewModel {
+    func createSubject(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> UpdateViewModel {
         let subject = UpdateViewModel(profile: profile)
 
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
     }
