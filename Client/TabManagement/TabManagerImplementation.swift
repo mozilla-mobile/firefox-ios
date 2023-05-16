@@ -45,9 +45,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        guard !AppConstants.isRunningUITests,
+        guard !isRestoringTabs,
+              !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else { return }
+
+        isRestoringTabs = true
 
         guard tabMigration.shouldRunMigration else {
             restoreOnly(forced)
@@ -64,10 +67,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func restoreOnly(_ forced: Bool = false) {
-        guard !isRestoringTabs else { return }
-
-        // TODO: FXIOS-6112 Handle debug settings and UITests
-
         if forced {
             tabs = [Tab]()
         }
@@ -79,7 +78,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func buildTabRestore(window: WindowData?) async {
-        guard let windowData = window
+        defer {
+            isRestoringTabs = false
+        }
+
+        guard let windowData = window,
+              !windowData.tabData.isEmpty
         else {
             // Always make sure there is a single normal tab
             await generateEmptyTab()
@@ -90,8 +94,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
-
-        isRestoringTabs = false
     }
 
     /// Creates the webview so needs to live on the main thread
