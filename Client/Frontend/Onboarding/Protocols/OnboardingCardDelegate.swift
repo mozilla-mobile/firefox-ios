@@ -11,7 +11,7 @@ protocol OnboardingCardDelegate: AnyObject {
 
     func presentPrivacyPolicy(from cardName: String,
                               selector: Selector?,
-                              completion: @escaping () -> Void,
+                              completion: (() -> Void)?,
                               referringPage: ReferringPage)
     func presentDefaultBrowserPopup()
 
@@ -33,7 +33,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     func presentPrivacyPolicy(
         from cardName: String,
         selector: Selector?,
-        completion: @escaping () -> Void,
+        completion: (() -> Void)? = nil,
         referringPage: ReferringPage = .onboarding
     ) {
         guard let infoModel = viewModel.availableCards

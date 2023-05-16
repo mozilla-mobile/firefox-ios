@@ -15,15 +15,6 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         case updateWelcome
         case updateSignSync
 
-        var isOnboardingScreen: Bool {
-            switch self {
-            case .welcome, .signSync, .notification:
-                return true
-            case .updateWelcome, .updateSignSync:
-                return false
-            }
-        }
-
         var telemetryValue: String {
             switch self {
             case .welcome: return "welcome"
@@ -33,42 +24,15 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             case .updateSignSync: return "update.signToSync"
             }
         }
-
-        var position: Int {
-            switch self {
-            case .welcome: return 0
-            case .signSync: return 1
-            case .notification: return 2
-            case .updateWelcome: return 0
-            case .updateSignSync: return 1
-            }
-        }
     }
 
     // FXIOS-6036 - Make this non optional when coordinators are used
     var introScreenManager: IntroScreenManager?
 
-    var isFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
-    }
-
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
     var profile: Profile
     private var cardModels: [OnboardingCardInfoModelProtocol]
-
-//    var enabledCards: [IntroViewModel.InformationCards] {
-//        let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
-//
-//        switch notificationCardPosition {
-//        case .noCard:
-//            return [.welcome, .signSync]
-//        case .beforeSync:
-//            return [.welcome, .notification, .signSync]
-//        case .afterSync:
-//            return [.welcome, .signSync, .notification]
-//        }
-//    }
 
     // MARK: - Initializer
     init(

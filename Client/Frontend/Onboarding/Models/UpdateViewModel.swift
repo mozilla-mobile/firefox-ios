@@ -20,10 +20,6 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return availableCards.count == 1
     }
 
-    var isFeatureEnabled: Bool {
-        return true
-    }
-
     // If the feature is enabled and is not clean install
     var shouldShowFeature: Bool {
         return featureFlags.isFeatureEnabled(.onboardingUpgrade, checking: .buildOnly) && !isFreshInstall

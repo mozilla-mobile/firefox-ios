@@ -208,12 +208,7 @@ extension IntroViewController: OnboardingCardDelegate {
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
                 from: cardName,
-                selector: #selector(dismissPrivacyPolicyViewController)
-            ) {
-                self.showNextPage(from: cardName) {
-                    self.showNextPageCompletionForLastCard()
-                }
-            }
+                selector: #selector(dismissPrivacyPolicyViewController))
         }
     }
 

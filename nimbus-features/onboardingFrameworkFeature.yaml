@@ -72,9 +72,6 @@ features:
               title: Upgrade/Upgrade.Welcome.Title.v114
               body: Upgrade/Upgrade.Welcome.Description.v114
               image: welcome-globe
-              link:
-                title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/en-US/privacy/firefox/"
               buttons:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
