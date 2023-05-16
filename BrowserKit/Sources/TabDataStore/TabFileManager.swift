@@ -11,6 +11,8 @@ public protocol TabFileManager {
     func tabSessionDataDirectory() -> URL?
 
     /// Determines the directory where window data should be stored
+    /// - Parameter isBackup: This determines which of the window data folders will be returned,
+    /// the backup folder is used to store a slightly older copy of the data for use if the main copy becomes corrupted
     /// - Returns: the URL that should be used for storing window data, can be nil
     func windowDataDirectory(isBackup: Bool) -> URL?
 
@@ -25,11 +27,7 @@ public protocol TabFileManager {
     ///   - destinationURL: the location of where the file is to be moved to
     func copyItem(at sourceURL: URL, to destinationURL: URL) throws
 
-    /// Removes the file at the given location
-    /// - Parameter pathURL: the location of the file to remove
-    func removeFileAt(path: URL)
-
-    /// Removes all files at a given locatino
+    /// Removes all files at a given location
     /// - Parameter directory: the location of the files to remove
     func removeAllFilesAt(directory: URL)
 
@@ -41,14 +39,25 @@ public protocol TabFileManager {
     /// Creates a directory at the given location
     /// - Parameter path: the location to create the directory
     func createDirectoryAtPath(path: URL)
+
+    /// Returns the decoded window data from the file path given
+    /// - Parameter path: the file path of the data to be decoded
+    /// - Returns: a window data object if it can be decoded
+    func getWindowDataFromPath(path: URL) throws -> WindowData?
+
+    /// Writes the window data to file at the given location
+    /// - Parameters:
+    ///   - windowData: the window data to be saved
+    ///   - url: the directory to save the data to
+    func writeWindowData(windowData: WindowData, to url: URL) throws
 }
 
 public struct DefaultTabFileManager: TabFileManager {
     enum PathInfo {
-        static let store = "codableWindowsState.archive"
-        static let profile = "profile.profile"
-        static let backup = "profile.backup"
+        static let rootDirectory = "profile.profile"
         static let tabSessionData = "tab-session-data"
+        static let primary = "window-data"
+        static let backup = "window-data-backup"
     }
 
     let fileManager: FileManager
@@ -61,15 +70,17 @@ public struct DefaultTabFileManager: TabFileManager {
     }
 
     public func tabSessionDataDirectory() -> URL? {
-        let path: String = BrowserKitInformation.shared.sharedContainerIdentifier
-        let container = fileManager.containerURL(forSecurityApplicationGroupIdentifier: path)
-        return container?.appendingPathComponent(PathInfo.tabSessionData)
+        guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
+        var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
+        return containerURL?.appendingPathComponent(PathInfo.tabSessionData)
     }
 
     public func windowDataDirectory(isBackup: Bool) -> URL? {
         guard let containerID = BrowserKitInformation.shared.sharedContainerIdentifier else { return nil }
-        let pathInfo = isBackup ? PathInfo.backup : PathInfo.profile
-        let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        let pathInfo = isBackup ? PathInfo.backup : PathInfo.primary
+        var containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID)
+        containerURL = containerURL?.appendingPathComponent(PathInfo.rootDirectory)
         return containerURL?.appendingPathComponent(pathInfo)
     }
 
@@ -88,7 +99,7 @@ public struct DefaultTabFileManager: TabFileManager {
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
     }
 
-    public func removeFileAt(path: URL) {
+    private func removeFileAt(path: URL) {
         do {
             try fileManager.removeItem(at: path)
             return
@@ -118,5 +129,23 @@ public struct DefaultTabFileManager: TabFileManager {
                        level: .debug,
                        category: .tabs)
         }
+    }
+
+    public func getWindowDataFromPath(path: URL) throws -> WindowData? {
+        do {
+            let data = try Data(contentsOf: path)
+            let windowData = try JSONDecoder().decode(WindowData.self, from: data)
+            return windowData
+        } catch {
+            logger.log("Error decoding window data: \(error)",
+                       level: .debug,
+                       category: .tabs)
+            throw error
+        }
+    }
+
+    public func writeWindowData(windowData: WindowData, to url: URL) throws {
+        let data = try JSONEncoder().encode(windowData)
+        try data.write(to: url, options: .atomicWrite)
     }
 }

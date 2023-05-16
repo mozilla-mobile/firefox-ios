@@ -4,3 +4,15 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "検索を使ってみよう";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@ のプライベートブラウジングは見えないトラッカーをブロックし、足跡を残さずにブラウジングできます。";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "足跡を残さずにブラウジング";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Cookie や履歴を %@ に保存せずに閲覧します。";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "プライベートブラウジングを試す";
+

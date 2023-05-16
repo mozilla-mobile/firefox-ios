@@ -12,9 +12,6 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
 
-    // Used in unit tests only
-    var didFinishLaunchCompletion: (() -> Void)?
-
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
          screenshotService: ScreenshotService = ScreenshotService(),
@@ -84,14 +81,5 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         router.dismiss(animated: true)
         remove(child: coordinator)
         startBrowser(with: nil)
-
-        didFinishLaunchCompletion?()
-    }
-
-    func didRequestToOpenInNewTab(from coordinator: LaunchCoordinator, url: URL, isPrivate: Bool) {
-        didFinishLaunch(from: coordinator)
-
-        let route = Route.search(url: url, isPrivate: isPrivate)
-        findAndHandle(route: route)
     }
 }

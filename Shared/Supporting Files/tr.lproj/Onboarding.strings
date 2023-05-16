@@ -1,12 +1,51 @@
-/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Continue.Action.v112" = "Devam";
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. *Ayarlar*’a gidin";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. *Saptanmış Tarayıcı Uygulaması*’na dokunun";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v114" = "Bağımsız ve kâr amacı gütmez.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v114" = "Kendimizi herkes için daha iyi bir internet inşa etmeye adadık.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v114" = "Şimdi değil";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v112" = "Cihazlarınız arasında sekme gönderip alın ve %@ tarayıcınızla ilgili ipuçları alın.";
+"Onboarding.Notification.Description.v114" = "Cihazlarınız arasında sekme gönderip alın ve %@ tarayıcınızla ilgili ipuçları alın.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v112" = "Şimdi değil";
+"Onboarding.Notification.Skip.Action.v114" = "Şimdi değil";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v112" = "Bildirimler sayesinde %@ ile daha fazlasını yapın";
+"Onboarding.Notification.Title.v114" = "Bildirimler sayesinde %@ ile daha fazlasını yapın";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Description.v114" = "Diğer cihazlarınızdaki sekmeleri ve parolaları alın, kaldığınız yerden devam edin.";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klasik duvar kâğıdı";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "Kısıtlı sürüm duvar kâğıdı";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v114" = "Duvar kâğıdını ayarla";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v114" = "Size hitap eden bir duvar kâğıdı seçin.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.SelectorTitle.v114" = "Farklı renkleri deneyin";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "%@ duvar kâğıdınızı seçin";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "Gizlilik bildirimimizle ilgili daha fazla bilgi alın";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v114" = "Bağımsız bir internete hoş geldiniz";
 

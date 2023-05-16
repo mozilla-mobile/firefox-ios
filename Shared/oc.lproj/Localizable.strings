@@ -640,12 +640,6 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "OK";
 
-/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v102" = "Pas ara";
-
-/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
-"Onboarding.Sync.Skip.Action.v106" = "Passar";
-
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Firefox a plantat";
 

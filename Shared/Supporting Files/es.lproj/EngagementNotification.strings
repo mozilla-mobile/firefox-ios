@@ -4,3 +4,15 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Inicia tu primera búsqueda";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "La navegación privada en %@ no guarda tu información y bloquea los rastreadores ocultos.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Navega sin dejar rastro";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Navega sin guardar cookies ni historial en %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Prueba la navegación privada";
+

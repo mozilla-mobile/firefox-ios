@@ -141,8 +141,7 @@ class DownloadFilesTests: BaseTestCase {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app.
             app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
-            waitForExistence(app.alerts["Unable to Import Clinical Documents"], timeout: TIMEOUT)
-            app.buttons["OK"].tap()
+            app.navigationBars["Add Tag"].buttons["Done"].tap()
         }
      }
 
@@ -194,10 +193,8 @@ class DownloadFilesTests: BaseTestCase {
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()

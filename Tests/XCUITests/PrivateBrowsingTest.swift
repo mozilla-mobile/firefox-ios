@@ -10,7 +10,7 @@ let url3 = path(forTestPage: "test-example.html")
 let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
 let url1And3Label = "Example Domain"
-let url2Label = "Internet for people, not profit — Mozilla"
+let url2Label = "Internet for people, not profit — Mozilla (US)"
 
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel

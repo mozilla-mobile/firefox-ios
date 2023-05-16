@@ -10,20 +10,31 @@ import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
-class TabManagerImplementation: LegacyTabManager {
-    let tabDataStore: TabDataStore
-    let tabSessionStore: TabSessionStore
+class TabManagerImplementation: LegacyTabManager, Notifiable {
+    private let tabDataStore: TabDataStore
+    private let tabSessionStore: TabSessionStore
+    private let imageStore: DiskImageStore?
+    private let tabMigration: TabMigrationUtility
+    var notificationCenter: NotificationProtocol
     lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
-         tabSessionStore: TabSessionStore = DefaultTabSessionStore()) {
-        self.tabDataStore = tabDataStore
-        self.tabSessionStore = tabSessionStore
-        super.init(profile: profile, imageStore: imageStore)
-    }
+         tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
+         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+            self.tabDataStore = tabDataStore
+            self.tabSessionStore = tabSessionStore
+            self.imageStore = imageStore
+            self.tabMigration = tabMigration
+            self.notificationCenter = notificationCenter
+            super.init(profile: profile, imageStore: imageStore)
+
+            setupNotifications(forObserver: self,
+                               observing: [UIApplication.willResignActiveNotification])
+        }
 
     // MARK: - Restore tabs
 
@@ -34,6 +45,21 @@ class TabManagerImplementation: LegacyTabManager {
             return
         }
 
+        guard tabMigration.shouldRunMigration else {
+            restoreOnly(forced)
+            return
+        }
+
+        migrateAndRestore(forced)
+    }
+
+    private func migrateAndRestore(_ forced: Bool = false) {
+        Task {
+            await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
+        }
+    }
+
+    private func restoreOnly(_ forced: Bool = false) {
         guard !isRestoringTabs else { return }
 
         // TODO: FXIOS-6112 Handle debug settings and UITests
@@ -44,22 +70,24 @@ class TabManagerImplementation: LegacyTabManager {
 
         isRestoringTabs = true
         Task {
-            let windowData = await self.tabDataStore.fetchAllWindowsData()
-            guard !windowData.isEmpty, let firstWindow = windowData.first
-            else {
-                // Always make sure there is a single normal tab
-                await self.generateEmptyTab()
-                return
-            }
-
-            await self.generateTabs(from: firstWindow)
-
-            for delegate in self.delegates {
-                delegate.get()?.tabManagerDidRestoreTabs(self)
-            }
-
-            self.isRestoringTabs = false
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
         }
+    }
+
+    private func buildTabRestore(window: WindowData?) async {
+        guard let windowData = window
+        else {
+            // Always make sure there is a single normal tab
+            await generateEmptyTab()
+            return
+        }
+        await generateTabs(from: windowData)
+
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+
+        isRestoringTabs = false
     }
 
     /// Creates the webview so needs to live on the main thread
@@ -81,6 +109,9 @@ class TabManagerImplementation: LegacyTabManager {
                                                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
             newTab.metadataManager?.tabGroupData = groupData
 
+            // Restore screenshot
+            restoreScreenshot(tab: newTab)
+
             if windowData.activeTabId == tabData.id {
                 selectTab(newTab)
             }
@@ -94,6 +125,13 @@ class TabManagerImplementation: LegacyTabManager {
         selectTab(newTab)
     }
 
+    private func restoreScreenshot(tab: Tab) {
+        Task {
+            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
+            tab.setScreenshot(screenshot)
+        }
+    }
+
     // MARK: - Save tabs
 
     override func preserveTabs() {
@@ -104,7 +142,9 @@ class TabManagerImplementation: LegacyTabManager {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            let windowData = WindowData(activeTabId: activeTabID,
+            // Hard coding the window ID until we later add multi-window support
+            let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
+                                        activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData)
         }
@@ -119,7 +159,7 @@ class TabManagerImplementation: LegacyTabManager {
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
             return TabData(id: UUID(uuidString: tab.tabUUID) ?? UUID(),
-                           title: tab.title ?? tab.lastTitle,
+                           title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
@@ -140,10 +180,10 @@ class TabManagerImplementation: LegacyTabManager {
 
         saveTabs(toProfile: profile, normalTabs)
         preserveTabs()
-        saveIndividualTabSessionData()
+        saveCurrentTabSessionData()
     }
 
-    private func saveIndividualTabSessionData() {
+    private func saveCurrentTabSessionData() {
         guard #available(iOS 15.0, *),
               let selectedTab = self.selectedTab,
               let tabSession = selectedTab.webView?.interactionState as? Data,
@@ -165,6 +205,11 @@ class TabManagerImplementation: LegacyTabManager {
             return
         }
 
+        guard tab.tabUUID != selectedTab?.tabUUID else { return }
+
+        // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
+        saveCurrentTabSessionData()
+
         Task {
             let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
             await selectTabWithSession(tab: tab,
@@ -183,5 +228,52 @@ class TabManagerImplementation: LegacyTabManager {
             return true
         }
         return false
+    }
+
+    // MARK: - Save screenshot
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard shouldUseNewTabStore()
+        else {
+            super.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
+            return
+        }
+
+        storeScreenshot(tab: tab)
+    }
+
+    override func storeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore(),
+              let screenshot = tab.screenshot
+        else {
+            super.storeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+        }
+    }
+
+    override func removeScreenshot(tab: Tab) {
+        guard shouldUseNewTabStore()
+        else {
+            super.removeScreenshot(tab: tab)
+            return
+        }
+
+        Task {
+            await imageStore?.deleteImageForKey(tab.tabUUID)
+        }
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willResignActiveNotification:
+            saveCurrentTabSessionData()
+        default:
+            break
+        }
     }
 }

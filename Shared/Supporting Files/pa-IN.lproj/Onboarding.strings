@@ -1,12 +1,93 @@
+/* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.ButtonTitle.v114" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
+
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. Settings ਉੱਤੇ ਜਾਓ";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Default Browser App ਨੂੰ ਛੂਹੋ";
+
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.ThirdLabel.v114" = "3. *%@* ਨੂੰ ਚੁਣੋ";
+
+/* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.Title.v114" = "ਆਪਣੇ ਮੂਲ ਬਰਾਊਜ਼ਰ ਨੂੰ ਬਦਲੋ";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v114" = "ਆਜ਼ਾਦ। ਗ਼ੈਰ-ਫਾਇਦਾ। ਭਲੇ ਲਈ।";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v114" = "ਹਰ ਕਿਸੇ ਲਈ ਬੇਹਤਰ ਇੰਟਰਨੈੱਟ ਦੇ ਵਾਅਦੇ ਨੂੰ ਸਮਰਪਿਤ।";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v114" = "ਹੁਣੇ ਨਹੀਂ";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Continue.Action.v112" = "ਜਾਰੀ ਰੱਖੋ";
+"Onboarding.Notification.Continue.Action.v114" = "ਜਾਰੀ ਰੱਖੋ";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v112" = "ਟੈਬਾਂ ਨੂੰ ਆਪਣੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚ ਭੇਜੋ ਅਤੇ %@ ਦਾ ਭਰਪੂਰ ਫ਼ਾਇਦਾ ਲੈਣ ਲਈ ਸੁਝਾਅ ਲਵੋ।";
+"Onboarding.Notification.Description.v114" = "ਟੈਬਾਂ ਨੂੰ ਆਪਣੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚ ਭੇਜੋ ਅਤੇ %@ ਦਾ ਭਰਪੂਰ ਫ਼ਾਇਦਾ ਲੈਣ ਲਈ ਸੁਝਾਅ ਲਵੋ।";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v112" = "ਹੁਣੇ ਨਹੀਂ";
+"Onboarding.Notification.Skip.Action.v114" = "ਹੁਣੇ ਨਹੀਂ";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v112" = "ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ ਤੁਹਾਨੂੰ %@ ਨਾਲ ਵੱਧ ਕੰਮ ਕਰਨ ਲਈ ਮਦਦ ਕਰਨਗੇ";
+"Onboarding.Notification.Title.v114" = "ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ ਤੁਹਾਨੂੰ %@ ਨਾਲ ਵੱਧ ਕੰਮ ਕਰਨ ਲਈ ਮਦਦ ਕਰਨਗੇ";
+
+/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.TurnOnNotifications.Action.v114" = "ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਕਰੋ";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Description.v114" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਉੱਤੇ ਜਿੱਥੇ ਤੁਸੀਂ ਟੈਬਾਂ ਤੇ ਪਾਸਵਰਡਾਂ ਨੂੰ ਜਿੱਥੇ ਛੱਡਿਆ ਸੀ, ਓਥੋਂ ਹੀ ਲਵੋ।";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.SignIn.Action.v114" = "ਸਾਇਨ ਇਨ";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v114" = "ਛੱਡੋ";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v114" = "ਫ਼ੋਨ ਤੋਂ ਲੈਪਟਾਪ ਉੱਤੇ ਜਾਓ ਤੇ ਵਾਪਸ ਆਓ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v114" = "ਕਲਾਸਿਕ ਵਾਲਪੇਪਰ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "ਸੀਮਿਤ ਐਡੀਸ਼ਨ ਵਾਲਪੇਪਰ";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v114" = "ਵਾਲਪੇਪਰ ਲਾਓ";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v114" = "ਵਾਲਪੇਪਰ ਚੁਣੋ, ਜੋ ਤੁਹਾਡੇ ਰੰਗ ਵਿੱਚ ਢਲੇ ਹੋਣ।";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.SelectorTitle.v114" = "ਰੰਗ ਪਾ ਕੇ ਵੇਖੋ";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "%@ ਵਾਲਪੇਪਰ ਚੁਣੋ";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.Welcome.Action.v114" = "ਸ਼ੁਰੂ ਕਰੀਏ";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Welcome.ActionTreatementA.v114" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.TreatementA.v114" = "%@ ਫਾਇਦੇ ਨਾਲੋਂ ਲੋਕਾਂ ਨੂੰ ਪਹਿਲ ਦਿੰਦਾ ਹੈ ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰਦੇ ਹੋ ਤਾਂ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਨੂੰ ਰਖਵਾਲੀ ਕਰਦਾ ਹੈ।";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v114" = "%@ ਫਾਇਦੇ ਨਾਲੋਂ ਲੋਕਾਂ ਨੂੰ ਪਹਿਲ ਦਿੰਦਾ ਹੈ ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰਦੇ ਹੋ ਤਾਂ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਨੂੰ ਰਖਵਾਲੀ ਕਰਦਾ ਹੈ।";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "ਸਾਡੀ ਪਰਦੇਦਾਰੀ ਸੂਚਨਾ ਵਿੱਚ ਹੋਰ ਜਾਣਕਾਰੀ ਲਵੋ";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Welcome.Skip.v114" = "ਛੱਡੋ";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Title.TreatementA.v114" = "%@ ਨੂੰ ਆਪਣਾ ਪੱਕਾ ਬਰਾਊਜ਼ਰ ਬਣਾਓ";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v114" = "ਆਜ਼ਾਦ ਇੰਟਰਨੈੱਟ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ";
 

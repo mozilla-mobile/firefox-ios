@@ -15,11 +15,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
-    weak var homePanelDelegate: HomePanelDelegate? {
-        didSet {
-            viewModel.messageCardViewModel.homepanelDelegate = homePanelDelegate
-        }
-    }
+    weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate? {
         didSet {
@@ -812,6 +808,9 @@ extension HomepageViewController: HomepageViewModelDelegate {
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
             self.collectionView.reloadData()
+            self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
+                            level: .debug,
+                            category: .homepage)
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }

@@ -8,9 +8,6 @@ import MozillaAppServices
 import Shared
 
 protocol GleanPlumbMessageManagerProtocol {
-    /// Delegate protocol to open Glean message when pressed
-    var pressedDelegate: GleanPlumbMessagePressedDelegate? { get set }
-
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
     /// We can build our collection of eligible messages for a surface in here.
     func onStartup()
@@ -40,10 +37,6 @@ protocol GleanPlumbMessageManagerProtocol {
     func messageForId(_ id: String) -> GleanPlumbMessage?
 }
 
-protocol GleanPlumbMessagePressedDelegate: AnyObject {
-    func openURLInNewTab(url: URL)
-}
-
 /// To the surface that requests messages, it provides valid and triggered messages in priority order.
 ///
 /// Note: The term "valid" in `GleanPlumbMessage` context means a well-formed, non-expired, priority ordered message.
@@ -64,8 +57,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingUtility: GleanPlumbMessageUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature = FxNimbus.shared.features.messaging
-
-    weak var pressedDelegate: GleanPlumbMessagePressedDelegate?
+    private let applicationHelper: ApplicationHelper
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
@@ -77,9 +69,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Inits
 
     init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
-         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore()) {
+         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.messagingUtility = messagingUtility
         self.messagingStore = messagingStore
+        self.applicationHelper = applicationHelper
 
         onStartup()
     }
@@ -152,12 +146,16 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return
         }
 
-        // With our well-formed URL, we can handle the action here.
-        if url.isWebPage() {
-            pressedDelegate?.openURLInNewTab(url: url)
-        } else {
-            UIApplication.shared.open(url, options: [:])
+        var urlToOpen = url
+
+        // We open webpages using our internal URL scheme
+        if url.isWebPage(), var components = URLComponents(string: "\(URL.mozInternalScheme)://open-url") {
+            components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
+            urlToOpen = components.url ?? url
         }
+
+        // With our well-formed URL, we can handle the action here.
+        applicationHelper.open(urlToOpen)
 
         var extras = baseTelemetryExtras(using: message)
         extras[MessagingKey.actionUUID.rawValue] = uuid ?? "nil"

@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 protocol BrowserDelegate: AnyObject {
-    /// Show the homepBrage to the user
+    /// Show the homepage to the user
     /// - Parameters:
     ///   - inline: See showEmbeddedHomepage function in BVC for description
     ///   - homepanelDelegate: The homepanel delegate for the homepage
@@ -21,5 +21,5 @@ protocol BrowserDelegate: AnyObject {
 
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
-    func show(webView: WKWebView?)
+    func show(webView: WKWebView)
 }

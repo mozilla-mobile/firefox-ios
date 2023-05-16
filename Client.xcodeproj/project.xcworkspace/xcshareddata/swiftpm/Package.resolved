@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "a3fb726ae0c4c10c1a1b7314b21d0a845107bb10",
-        "version" : "52.5.0"
+        "revision" : "dd626f0fb051ffc70179846a0b75a04f997b63b7",
+        "version" : "52.7.0"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "415b1d97fb38bda1e5a6b2dde63354720832110b",
-        "version" : "7.6.1"
+        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
+        "version" : "7.6.2"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "a04e73953be1f81fa0f2358f36b5255414bbca01",
-        "version" : "97.5.1"
+        "revision" : "674bf7ba63f79769f1bfbef011bb4365d6f79e2d",
+        "version" : "114.0.0"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "92a6472efc750a4e18bdee21c204942ab0bc4dcd",
-        "version" : "8.4.0"
+        "revision" : "e6dcfba32f2861438b82c7ad34e058b23c83daf6",
+        "version" : "8.6.0"
       }
     },
     {

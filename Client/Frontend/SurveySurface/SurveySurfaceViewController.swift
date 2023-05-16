@@ -7,6 +7,10 @@ import Foundation
 import Shared
 import UIKit
 
+protocol SurveySurfaceViewControllerDelegate: AnyObject {
+    func didFinish()
+}
+
 class SurveySurfaceViewController: UIViewController, Themeable {
     struct UX {
         static let buttonCornerRadius: CGFloat = 13
@@ -29,6 +33,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     // MARK: - Variables
+    weak var delegate: SurveySurfaceViewControllerDelegate?
     var viewModel: SurveySurfaceViewModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -216,13 +221,21 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     @objc
     func takeSurveyAction() {
         viewModel.didTapTakeSurvey()
-        dismiss(animated: true)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            delegate?.didFinish()
+        } else {
+            dismiss(animated: true)
+        }
     }
 
     @objc
     func dismissAction() {
         viewModel.didTapDismissSurvey()
-        dismiss(animated: true)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            delegate?.didFinish()
+        } else {
+            dismiss(animated: true)
+        }
     }
 
     // MARK: - Themable

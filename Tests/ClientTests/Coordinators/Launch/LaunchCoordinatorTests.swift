@@ -121,30 +121,27 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Delegates
-    func testStart_surveySetsDelegate() {
+    func testStart_surveySetsDelegate() throws {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
         messageManager.message = message
         let manager = SurveySurfaceManager(and: messageManager)
-        XCTAssertNil(manager.openURLDelegate)
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = createSubject(isIphone: false)
         subject.start(with: .survey(manager: manager))
 
-        XCTAssertNotNil(manager.openURLDelegate)
-        XCTAssertNotNil(manager.dismissClosure)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? SurveySurfaceViewController)
+        XCTAssertNotNil(presentedVC.delegate)
     }
 
-    func testOpenURLDelegate() {
+    func testDidFinish_fromSurveySurfaceViewControllerDelegate() {
         let subject = createSubject(isIphone: false)
         subject.parentCoordinator = delegate
-        let mockURL = URL(string: "www.firefox.com")!
-        subject.didRequestToOpenInNewTab(url: mockURL,
-                                         isPrivate: false)
+        subject.didFinish()
 
-        XCTAssertEqual(delegate.savedURL, mockURL)
-        XCTAssertEqual(delegate.savedIsPrivate, false)
+        XCTAssertEqual(delegate.didFinishCalledCount, 1)
+        XCTAssertEqual(delegate.savedDidFinishCoordinator?.id, subject.id)
     }
 
     // MARK: - Helpers

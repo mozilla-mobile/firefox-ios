@@ -19,6 +19,9 @@
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v112" = "დიახ";
 
+/* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
+"CreditCards.Settings.Done.v114" = "მზადაა";
+
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "ბარათების მართვა";
 

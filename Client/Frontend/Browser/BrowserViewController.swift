@@ -20,7 +20,7 @@ struct UrlToOpenModel {
 }
 
 /// Enum used to track flow for telemetry events
-enum ReferringPage {
+enum ReferringPage: Equatable {
     case onboarding
     case appMenu
     case settings
@@ -160,6 +160,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
+
     var themeManager: ThemeManager
     var logger: Logger
 
@@ -1004,21 +1005,35 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
-    func embedContent(_ viewController: ContentContainable, forceEmbed: Bool = false) {
-        guard contentContainer.canAdd(content: viewController) || forceEmbed else { return }
+    // MARK: - Manage embedded content
+
+    func frontEmbeddedContent(_ viewController: ContentContainable) {
+        contentContainer.update(content: viewController)
+        manageStatusBarEmbedded()
+    }
+
+    /// Embed a ContentContainable inside the content container
+    /// - Parameter viewController: the view controller to embed inside the content container
+    /// - Returns: True when the content was successfully embedded
+    func embedContent(_ viewController: ContentContainable) -> Bool {
+        guard contentContainer.canAdd(content: viewController) else { return false }
 
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+        manageStatusBarEmbedded()
 
-        // Status bar overlay at the back for some content type that need extended content
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+        return true
+    }
+
+    /// Status bar overlay needs to be at the back for some content type that need extended content
+    private func manageStatusBarEmbedded() {
         if let type = contentContainer.type, type.needTopContentExtended {
             view.sendSubviewToBack(statusBarOverlay)
         } else {
             view.bringSubviewToFront(statusBarOverlay)
         }
-
-        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
 
     /// Show the home page embedded in the contentContainer
@@ -1042,7 +1057,12 @@ class BrowserViewController: UIViewController {
         // Make sure reload button is working when showing webview
         urlBar.locationView.reloadButton.reloadButtonState = .reload
 
-        browserDelegate?.show(webView: nil)
+        guard let webview = tabManager.selectedTab?.webView else {
+            logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
+            return
+        }
+
+        browserDelegate?.show(webView: webview)
     }
 
     // FXIOS-6036 - Remove this function as part of cleanup
@@ -1134,6 +1154,8 @@ class BrowserViewController: UIViewController {
         // Make sure reload button is working after leaving homepage
         urlBar.locationView.reloadButton.reloadButtonState = .reload
     }
+
+    // MARK: - Update content
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
@@ -1500,6 +1522,11 @@ class BrowserViewController: UIViewController {
             self.tabManager.addTab(URLRequest(url: url))
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
+    }
+
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     func handle(query: String) {
@@ -1915,8 +1942,6 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         if !CoordinatorFlagManager.isCoordinatorEnabled {
             webView.frame = webViewContainer.frame
-        } else {
-            browserDelegate?.show(webView: webView)
         }
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
@@ -1936,9 +1961,22 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        // TODO: Wrap this in a feature flag FXIOS-5041
-        // let creditCardHelper = CreditCardHelper(tab: tab)
-        // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            let creditCardHelper = CreditCardHelper(tab: tab)
+            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+
+            creditCardHelper.foundFieldValues = { fieldValues in
+                guard let tabWebView = tab.webView as? TabWebView else { return }
+
+                tabWebView.accessoryView.reloadViewFor(.creditCard)
+                tabWebView.reloadInputViews()
+
+                // stub. Action will be to present a half sheet, ref: FXIOS-6111
+                tabWebView.accessoryView.savedCardsClosure = { }
+            }
+        }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
@@ -1985,7 +2023,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [unowned self] in
-            tab.cancelQueuedAlerts()
             KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
             webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
             webView.uiDelegate = nil
@@ -2153,8 +2190,6 @@ extension BrowserViewController {
         defer { self.view.alpha = 1.0 }
 
         surveySurfaceManager = SurveySurfaceManager()
-        surveySurfaceManager?.homepanelDelegate = self
-
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil
         }
@@ -2220,7 +2255,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
-            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
+            // FXIOS-6203 Can be removed with coordinator usage, it will be scrolled at the top from BrowserCoordinator
             activityStreamPanel.scrollToTop()
         }
 
@@ -2469,11 +2504,15 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
+        let introViewController = IntroViewController(
+            viewModel: introViewModel,
+            profile: profile)
+
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
+
         self.introVCPresentHelper(introViewController: introViewController)
     }
 
@@ -2498,11 +2537,6 @@ extension BrowserViewController {
            let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
             tab.loadRequest(URLRequest(url: homePageURL))
         }
-    }
-
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     @objc
@@ -2847,6 +2881,11 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
+        updateZoomPageBarVisibility(visible: false)
+    }
+
+    func topTabsDidPressPrivateMode() {
+        updateZoomPageBarVisibility(visible: false)
     }
 }
 

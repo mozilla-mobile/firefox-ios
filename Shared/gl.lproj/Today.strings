@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Pechar lapelas privadas";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Pechar\nlapelas privadas";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Engada atallos de Firefox á súa pantalla de inicio.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Ir á ligazón copiada";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Ir á\nligazón copiada";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d máis…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Nova busca";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Ningunha lapela aberta.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Abrir Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Busca privada";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Engada un atallo de Firefox á súa pantalla de inicio. Despois de engadir o widget, manteña premido para editalo e seleccione un atallo diferente.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Accións rápidas";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Atallos de Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Engada atallos as súas lapelas abertas.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Vista rápida";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Buscar no\nFirefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Buscar nunha\nlapela privada";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Engadir atallos aos sitios visitados con frecuencia e recentemente.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Sitios favoritos";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Atallos de sitios web";
+

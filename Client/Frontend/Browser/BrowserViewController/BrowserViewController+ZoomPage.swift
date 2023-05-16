@@ -10,13 +10,6 @@ extension BrowserViewController {
         toggleZoomPageBar(visible)
     }
 
-    func resetZoomPageBar() {
-        if let zoomPageBar = zoomPageBar {
-            zoomPageBar.resetZoomLevel()
-            removeZoomPageBar(zoomPageBar)
-        }
-    }
-
     private func setupZoomPageBar() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -34,7 +27,9 @@ extension BrowserViewController {
             })
         }
 
-        zoomPageBar.heightAnchor.constraint(greaterThanOrEqualToConstant: UIConstants.ZoomPageBarHeight).isActive = true
+        zoomPageBar.heightAnchor
+            .constraint(greaterThanOrEqualToConstant: UIConstants.ZoomPageBarHeight)
+            .isActive = true
         zoomPageBar.applyTheme(theme: themeManager.currentTheme)
 
         updateViewConstraints()
@@ -60,12 +55,8 @@ extension BrowserViewController {
             removeZoomPageBar(zoomPageBar)
         }
     }
-}
 
-extension BrowserViewController: ZoomPageBarDelegate {
-    func zoomPageDidPressClose() {
-        guard zoomPageBar != nil else { return }
-        updateZoomPageBarVisibility(visible: false)
+    private func saveZoomLevel() {
         guard let tab = tabManager.selectedTab else { return }
         guard let host = tab.url?.host else { return }
         let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: tab.pageZoom)
@@ -74,12 +65,23 @@ extension BrowserViewController: ZoomPageBarDelegate {
 
     func zoomPageHandleEnterReaderMode() {
         guard let tab = tabManager.selectedTab else { return }
-        zoomPageDidPressClose()
+        updateZoomPageBarVisibility(visible: false)
         tab.resetZoom()
     }
 
     func zoomPageHandleExitReaderMode() {
         guard let tab = tabManager.selectedTab else { return }
         tab.setZoomLevelforDomain()
+    }
+}
+
+extension BrowserViewController: ZoomPageBarDelegate {
+    func didChangeZoomLevel() {
+        saveZoomLevel()
+    }
+
+    func zoomPageDidPressClose() {
+        updateZoomPageBarVisibility(visible: false)
+        saveZoomLevel()
     }
 }

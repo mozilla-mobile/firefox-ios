@@ -98,6 +98,7 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
         finally:
             log.info("Retrieving bitrise log...")
             await download_log(client, build_slug, artifacts_directory)
+            await log_bitrise_perfherder_data(os.path.join(artifacts_directory, "bitrise.log"))
 
 
 async def schedule_build(client, branch, commit, workflow, locales=None, derived_data_path=None):
@@ -224,6 +225,19 @@ async def do_http_request_json(client, url, method="get", **kwargs):
     log.debug(f"{method_and_url} returned JSON {response}")
 
     return response
+
+
+async def log_bitrise_perfherder_data(file_destination):
+    if not os.path.isfile(file_destination):
+        raise Exception(f"Bitrise.log not found at {file_destination}")
+    
+    try:
+        with open(file_destination, 'r') as f:
+            for line in f:
+                if line.startswith('PERFHERDER_DATA'):
+                    log.info(line)
+    except Exception as e:
+        log.error(f"Error reading Bitrise.log: {e}")
 
 
 __name__ == "__main__" and sync_main()

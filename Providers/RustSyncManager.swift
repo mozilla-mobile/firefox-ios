@@ -188,7 +188,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         if canSendUsageData() {
-            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) {_ in }
+            let gleanHelper = GleanSyncOperationHelper()
+            gleanHelper.reportTelemetry(result)
         } else {
             logger.log("Profile isn't sending usage data. Not sending sync status event.",
                        level: .debug,
@@ -250,7 +251,7 @@ public class RustSyncManager: NSObject, SyncManager {
         return clearPrefs()
     }
 
-    private func getEngineEnablementChangesForAccount() -> [String: Bool] {
+    func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
         // We just created the account, the user went through the Choose What to Sync
         // screen on FxA.
@@ -304,9 +305,8 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
-    private func getEnginesAndKeys(engines: [String]) -> Deferred<Maybe<([EngineIdentifier],
-                                                                         [String: String])>> {
-        let deferred = Deferred<Maybe<([EngineIdentifier], [String: String])>>()
+    func getEnginesAndKeys(engines: [String],
+                           completion: @escaping (([EngineIdentifier], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
         var registeredPlaces = false
@@ -337,8 +337,67 @@ public class RustSyncManager: NSObject, SyncManager {
             }
         }
 
-        deferred.fill(Maybe(success: (rustEngines, localEncryptionKeys)))
-        return deferred
+        completion((rustEngines, localEncryptionKeys))
+    }
+
+    private func doSync(params: SyncParams, completion: @escaping (MZSyncResult) -> Void) {
+        beginSyncing()
+        syncManagerAPI.sync(params: params) { syncResult in
+            // Save the persisted state
+            if !syncResult.persistedState.isEmpty {
+                self.prefs
+                    .setString(syncResult.persistedState,
+                               forKey: PrefsKeys.RustSyncManagerPersistedState)
+            }
+
+            let declinedEngines = String(describing: syncResult.declined ?? [])
+            let telemetryData = syncResult.telemetryJson ??
+                "(No telemetry data was returned)"
+            let telemetryMessage = "\(String(describing: telemetryData))"
+            let syncDetails = ["status": "\(syncResult.status)",
+                               "declinedEngines": "\(declinedEngines)",
+                               "telemetry": telemetryMessage]
+
+            self.logger.log("Finished syncing",
+                            level: .info,
+                            category: .sync,
+                            extra: syncDetails)
+
+            if let declined = syncResult.declined {
+                self.updateEnginePrefs(declined: declined)
+            }
+
+            self.endSyncing(syncResult)
+            completion(syncResult)
+        }
+    }
+
+    func updateEnginePrefs(declined: [String]) {
+        // Save declined/enabled engines - we assume the engines
+        // not included in the returned `declined` property of the
+        // result of the sync manager `sync` are enabled.
+
+        let updateEnginePref: (String, Bool) -> Void = { engine, enabled in
+            let enabledPref = "engine.\(engine).enabled"
+            self.prefsForSync.setBool(enabled, forKey: enabledPref)
+
+            let stateChangedPref = "engine.\(engine).enabledStateChanged"
+            self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+
+            let enablementDetails = [enabledPref: String(enabled)]
+            self.logger.log("Finished setting \(engine) enablement prefs",
+                            level: .info,
+                            category: .sync,
+                            extra: enablementDetails)
+        }
+
+        RustTogglableEngines.forEach({
+            if declined.contains($0) {
+                updateEnginePref($0, false)
+            } else {
+                updateEnginePref($0, true)
+            }
+        })
     }
 
     private func syncRustEngines(why: MozillaAppServices.SyncReason,
@@ -370,11 +429,7 @@ public class RustSyncManager: NSObject, SyncManager {
                         return
                     }
 
-                    self.getEnginesAndKeys(engines: engines).upon { result in
-                        guard let (rustEngines, localEncryptionKeys) = result.successValue else {
-                            deferred.fill(Maybe(failure: EngineAndKeyRetrievalError()))
-                            return
-                        }
+                    self.getEnginesAndKeys(engines: engines) { (rustEngines, localEncryptionKeys) in
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),
@@ -391,84 +446,16 @@ public class RustSyncManager: NSObject, SyncManager {
                             deviceSettings: DeviceSettings(
                                 fxaDeviceId: device.id,
                                 name: device.displayName,
-                                kind: self.toSyncManagerDeviceType(
-                                    deviceType: device.deviceType)))
+                                kind: device.deviceType))
 
-                        self.beginSyncing()
-                        self.syncManagerAPI.sync(params: params) { syncResult in
-                            // Save the persisted state
-                            if !syncResult.persistedState.isEmpty {
-                                self.prefs
-                                    .setString(syncResult.persistedState,
-                                               forKey: PrefsKeys.RustSyncManagerPersistedState)
-                            }
-
-                            let declinedEngines = String(describing: syncResult.declined ?? [])
-                            let telemetryData = syncResult.telemetryJson ??
-                                "(No telemetry data was returned)"
-                            let telemetryMessage = "\(String(describing: telemetryData))"
-                            let syncDetails = ["status": "\(syncResult.status)",
-                                               "declinedEngines": "\(declinedEngines)",
-                                               "telemetry": telemetryMessage]
-
-                            self.logger.log("Finished syncing",
-                                            level: .info,
-                                            category: .sync,
-                                            extra: syncDetails)
-
-                            // Save declined/enabled engines - we assume the engines
-                            // not included in the returned `declined` property of the
-                            // result of the sync manager `sync` are enabled.
-                            let updateEnginePref:
-                            (String, Bool) -> Void = { engine, enabled in
-                                let enabledPref = "engine.\(engine).enabled"
-                                self.prefsForSync.setBool(enabled, forKey: enabledPref)
-
-                                let stateChangedPref = "engine.\(engine).enabledStateChanged"
-                                self.prefsForSync.setObject(nil, forKey: stateChangedPref)
-
-                                let enablementDetails = [enabledPref: String(enabled)]
-                                self.logger.log("Finished setting \(engine) enablement prefs",
-                                                level: .info,
-                                                category: .sync,
-                                                extra: enablementDetails)
-                            }
-
-                            if let declined = syncResult.declined {
-                                RustTogglableEngines.forEach({
-                                    if declined.contains($0) {
-                                        updateEnginePref($0, false)
-                                    } else {
-                                        updateEnginePref($0, true)
-                                    }
-                                })
-                            }
-
+                        self.doSync(params: params) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
-                            self.endSyncing(syncResult)
                         }
                     }
                 }
             }
         }
         return deferred
-    }
-
-    private func toSyncManagerDeviceType(deviceType: DeviceType) -> SyncManagerDeviceType {
-        switch deviceType {
-        case .desktop:
-            return SyncManagerDeviceType.desktop
-        case .mobile:
-            return SyncManagerDeviceType.mobile
-        case .tablet:
-            return SyncManagerDeviceType.tablet
-        case .vr:
-            return SyncManagerDeviceType.vr
-        case .tv:
-            return SyncManagerDeviceType.tv
-        case .unknown:
-            return SyncManagerDeviceType.unknown
-        }
     }
 
     @discardableResult

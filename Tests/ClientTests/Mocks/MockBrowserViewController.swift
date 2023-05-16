@@ -34,8 +34,17 @@ class MockBrowserViewController: BrowserViewController {
     var showLibraryCount = 0
     var openURLInNewTabCount = 0
 
+    var presentSignInFxaOptions: FxALaunchParams?
+    var presentSignInFlowType: FxAPageType?
+    var presentSignInReferringPage: ReferringPage?
+    var presentSignInCount: Int = 0
+
     var qrCodeCount = 0
     var closePrivateTabsCount = 0
+
+    var embedContentCalled = 0
+    var frontEmbeddedContentCalled = 0
+    var saveEmbeddedContent: ContentContainable?
 
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
@@ -84,5 +93,23 @@ class MockBrowserViewController: BrowserViewController {
 
     override func handleClosePrivateTabs() {
         closePrivateTabsCount += 1
+    }
+
+    override func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        presentSignInFxaOptions = fxaOptions
+        presentSignInFlowType = flowType
+        presentSignInReferringPage = referringPage
+        presentSignInCount += 1
+    }
+
+    override func embedContent(_ viewController: ContentContainable) -> Bool {
+        embedContentCalled += 1
+        saveEmbeddedContent = viewController
+        return true
+    }
+
+    override func frontEmbeddedContent(_ viewController: ContentContainable) {
+        frontEmbeddedContentCalled += 1
+        saveEmbeddedContent = viewController
     }
 }

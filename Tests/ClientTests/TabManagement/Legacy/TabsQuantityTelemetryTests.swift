@@ -6,6 +6,7 @@
 
 import Glean
 import XCTest
+import Common
 
 class TabsQuantityTelemetryTests: XCTestCase {
     override func setUp() {
@@ -13,6 +14,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
 
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {

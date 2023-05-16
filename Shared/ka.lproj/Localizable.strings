@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ახალი ჩანართი გაიხსნა";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ახალი ჩანართი გაიხსნა";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "სურათის ასლი";
 
@@ -854,7 +857,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "კრიპტოვალუტის გამომმუშავებლები";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "საიტები, ზოგჯერ გარე ბმულებიდან ტვირთავს რეკლამებს, ვიდეოებსა და სხვა ფარული მეთვალყურეების შემცველ მასალას. მათი შეზღუდვით, საიტი კი უფრო სწრაფად ჩაიტვირთება, თუმცა ღილაკებმა, ანგარიშისა და სხვა შესავსებმა ველებმა შეიძლება, აღარ იმუშაოს.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "საიტები ზოგჯერ გარე ბმულებიდან ტვირთავს რეკლამებს, ვიდეოებსა და სხვა ფარული მეთვალყურეების შემცველ მასალას. მათი შეზღუდვით კი საიტი უფრო სწრაფად ჩაიტვირთება, მაგრამ ღილაკებმა, ანგარიშისა და სხვა შესავსებმა ველებმა შეიძლება აღარ იმუშაოს.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "ეს ფუნთუშები თან დაგყვებათ საიტებზე და აგროვებს მონაცემებს, თუ რას აკეთებთ ინტერნეტში. მათ იყენებს გარეშე მხარეები, სარეკლამო და კვლევითი დაწესებულებები.";
@@ -866,7 +869,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "პარამეტრებით ხდება თქვენი ბრაუზერისა და მოწყობილობის სხვებისგან გამორჩევა. მომხმარებლის ამომცნობები აგროვებს ამ პარამეტრებს თქვენი დახასიათების შესადგენად, რომელსაც იყენებს საიტებზე თვალის სადევნებლად.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე, თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად, ამ ქსელების მფლობელ დაწესებულებებს, ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე, თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად, ამ ქსელების მფლობელ დაწესებულებებს ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "მომხმარებლის ამომცნობები";
@@ -903,60 +906,6 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "კარგი";
-
-/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
-"Onboarding.IntroAction.v102" = "დაიწყეთ";
-
-/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
-"Onboarding.IntroDescriptionPart1.v102" = "დამოუკიდებელი. არამომგებიანი. მუდამ.";
-
-/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
-"Onboarding.IntroDescriptionPart2.v102" = "ერთგული საკუთარი პირობისა და საყოველთაო ინტერნეტის გაუმჯობესებისა.";
-
-/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v102" = "ახლა არა";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Description.v106" = "გამოიყოლეთ ჩანართები და სანიშნები სხვა მოწყობილობიდან, რომ განაგრძოთ იქიდანვე, სადაც გაჩერდით.";
-
-/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
-"Onboarding.Sync.Skip.Action.v106" = "გამოტოვება";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Title.v106" = "მოქნილად გადაერთეთ ტელეფონიდან ლეპტოპზე და უკან";
-
-/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
-"Onboarding.SyncAction.v102" = "შექმენით ან შედით ანგარიშზე";
-
-/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
-"Onboarding.SyncDescription.v102" = "ჩანართებისა და სანიშნების თვითდასინქრონება მოწყობილობებზე შეუფერხებლად გადასვლისთვის.";
-
-/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
-"Onboarding.SyncTitle.v102" = "დაასინქრონეთ საქმისგან მოუცდენლად";
-
-/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.Classic.v106" = "ჩვეული ფონი";
-
-/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "ფონი „შეზღუდული რაოდენობით“";
-
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v106" = "აირჩიეთ ფონი, რომელიც შთაგაგონებთ.";
-
-/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Title.v106" = "შეაფერადეთ";
-
-/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
-"Onboarding.WallpaperAction.v102" = "ფონის დაყენება";
-
-/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
-"Onboarding.WallpaperTitle.v102" = "აირჩიეთ Firefox-ფონი";
-
-/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Description.v106" = "Firefox ხალხს აყენებს მოგებაზე წინ და გამუდმებით იცავს თქვენს პირადულობას.";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Title.v106" = "კეთილი იყოს თქვენი ფეხი დამოუკიდებელ ინტერნეტსივრცეში";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "დაიწყეთ მოგზაურობა";
@@ -1478,7 +1427,7 @@
 "Settings.NewTab.TopSectionName" = "ჩვენება";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "აირჩიეთ რისი ხილვა გსურთ ახალი ჩანართის გახსნისას";
+"Settings.NewTab.TopSectionNameFooter" = "აირჩიეთ, რისი ხილვა გსურთ ახალი ჩანართის გახსნისას";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "სურათების შეზღუდვა";
@@ -1523,7 +1472,7 @@
 "Settings.SendUsage.Message" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც საჭიროა Firefox-ის გასაუმჯობესებლად.";
 
 /* The title for the setting to send usage data. */
-"Settings.SendUsage.Title" = "მონაცემების აღრიცხვა";
+"Settings.SendUsage.Title" = "მონაცემთა აღრიცხვა";
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "ბმულზე ხანგრძლივი დაჭერისას";
@@ -1610,10 +1559,10 @@
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ საკეტის ნიშანს მისამართების ველში თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე ნებადართულია.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის ზოგიერთი მეთვალყურე ნებადართულია.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, თუმცა შესაძლოა, გაუმართავად იმუშაოს.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, მაგრამ შესაძლოა, გაუმართავად იმუშაოს.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "დაცვის დონე";
@@ -1821,24 +1770,6 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "წასაკითხი";
-
-/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
-"Upgrade.SyncSign.Action.v106" = "შესვლა";
-
-/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v106" = "განაგრძეთ, სადაც გაჩერდით სხვა მოწყობილობიდან ჩანართების წამოღებით ახლა უკვე საწყის გვერდზე.";
-
-/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Title.v106" = "ეკრანებს შორის გადართვა ჯერ არნახული სიმარტივით";
-
-/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v106" = "დაიწყეთ";
-
-/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Description.v106" = "ახალი ფერები. გაუმჯობესებული პირადულობა. ხალხის მოგებაზე წინ დაყენება მუდამ.";
-
-/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Title.v106" = "კეთილი იყოს თქვენი ფეხი მეტად პირად ინტერნეტსივრცეში";
 
 /* Debug option */
 "Use stage servers" = "საცდელი სერვერების გამოყენება";

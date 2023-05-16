@@ -50,7 +50,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
         completion: @escaping ((LoginListViewController?) -> Void)
     ) {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+        AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
             let viewController: LoginListViewController?
             switch result {
             case .success:
@@ -425,6 +425,11 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
+    }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // Prevent row selection for logins settings section
+        indexPath.section == LoginListViewController.loginsSettingsSection ? nil : indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -17,7 +17,7 @@ class RustSyncManagerAPITests: XCTestCase {
         self.rustSyncManagerApi = RustSyncManagerAPI()
         let expectation = expectation(description: "Completed telemetry reporting")
         var actual = ""
-        var expected = "The operation couldn’t be completed. (MozillaAppServices.TelemetryJSONError error 0.)"
+        let expected = "The operation couldn’t be completed. (MozillaAppServices.TelemetryJSONError error 0.)"
         let invalidSyncResult = SyncResult(status: ServiceStatus.ok,
                                            successful: [],
                                            failures: [:],

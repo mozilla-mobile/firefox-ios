@@ -24,7 +24,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.6.1"),
+            exact: "7.6.2"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -33,7 +33,7 @@ let package = Package(
             exact: "1.9.6"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.4.0"),
+            exact: "8.6.0"),
     ],
     targets: [
         .target(

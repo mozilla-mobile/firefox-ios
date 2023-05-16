@@ -8,6 +8,7 @@ import Shared
 
 protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
+    func didChangeZoomLevel()
 }
 
 class ZoomPageBar: UIView, ThemeApplicable {
@@ -96,7 +97,6 @@ class ZoomPageBar: UIView, ThemeApplicable {
         self.tab = tab
 
         super.init(frame: .zero)
-        self.tab.urlHostDelegate = self
 
         setupViews()
         setupLayout()
@@ -158,11 +158,6 @@ class ZoomPageBar: UIView, ThemeApplicable {
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                   constant: -UX.leadingTrailingPadding),
         ])
-    }
-
-    func resetZoomLevel() {
-        tab.resetZoom()
-        checkPageZoomLimits()
     }
 
     private func setupSeparator(_ separator: UIView) {
@@ -239,7 +234,7 @@ class ZoomPageBar: UIView, ThemeApplicable {
     private func didPressZoomIn(_ sender: UIButton) {
         tab.zoomIn()
         updateZoomLabel()
-
+        delegate?.didChangeZoomLevel()
         zoomOutButton.isEnabled = true
         if tab.pageZoom >= UX.upperZoomLimit {
             zoomInButton.isEnabled = false
@@ -250,7 +245,7 @@ class ZoomPageBar: UIView, ThemeApplicable {
     private func didPressZoomOut(_ sender: UIButton) {
         tab.zoomOut()
         updateZoomLabel()
-
+        delegate?.didChangeZoomLevel()
         zoomInButton.isEnabled = true
         if tab.pageZoom <= UX.lowerZoomLimit {
             zoomOutButton.isEnabled = false
@@ -262,6 +257,7 @@ class ZoomPageBar: UIView, ThemeApplicable {
         if recognizer.state == .ended {
             tab.resetZoom()
             updateZoomLabel()
+            delegate?.didChangeZoomLevel()
             enableZoomButtons()
         }
     }
@@ -291,12 +287,5 @@ class ZoomPageBar: UIView, ThemeApplicable {
         gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
         theme.colors.layerGradientOverlay.cgColors.reversed() :
         theme.colors.layerGradientOverlay.cgColors
-    }
-}
-
-extension ZoomPageBar: URLHostDelegate {
-    func hostDidSet() {
-        updateZoomLabel()
-        checkPageZoomLimits()
     }
 }

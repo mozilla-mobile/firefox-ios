@@ -72,6 +72,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     var contextualHintViewController: ContextualHintViewController
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var shownToast: Toast?
 
     var toolbarHeight: CGFloat {
         return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
@@ -432,6 +433,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     private func presentUndoToast(toastType: UndoToastType,
                                   completion: @escaping (Bool) -> Void) {
+        if let currentToast = shownToast {
+            currentToast.dismiss(false)
+        }
+
         let viewModel = ButtonToastViewModel(
             labelText: toastType.title,
             buttonText: toastType.buttonText)
@@ -451,6 +456,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
                                               constant: -self.toolbarHeight)
             ]
         }
+        shownToast = toast
     }
 }
 
@@ -744,6 +750,10 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
         presentUndoToast(toastType: .inactiveTabs(count: tabsCount),
                          completion: completion)
+    }
+
+    func presentUndoSingleToast(completion: @escaping (Bool) -> Void) {
+        presentUndoToast(toastType: .singleTab, completion: completion)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
