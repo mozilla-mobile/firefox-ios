@@ -42,16 +42,16 @@ struct AdaptiveStack<Content: View>: View {
 struct AdaptiveStack_Previews: PreviewProvider {
     static var previews: some View {
         AdaptiveStack(isAccessibilityCategory: true) {
-            Text("Horizontal with normal font size")
-            Text("but")
-            Text("Vertical with large a11y font size")
+            Text(verbatim: "Horizontal with normal font size")
+            Text(verbatim: "but")
+            Text(verbatim: "Vertical with large a11y font size")
         }
         .previewDisplayName("HStack")
 
         AdaptiveStack(isAccessibilityCategory: false) {
-            Text("Horizontal with normal font size")
-            Text("but")
-            Text("Vertical with large a11y font size")
+            Text(verbatim: "Horizontal with normal font size")
+            Text(verbatim: "but")
+            Text(verbatim: "Vertical with large a11y font size")
         }
         .previewDisplayName("VStack")
     }
