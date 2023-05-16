@@ -110,6 +110,7 @@ class IntroViewController: UIViewController,
     private func setupCloseButton() {
         guard viewModel.isDismissable else { return }
         view.addSubview(closeButton)
+        view.bringSubviewToFront(closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,

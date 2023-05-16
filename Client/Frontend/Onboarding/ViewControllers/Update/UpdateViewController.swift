@@ -80,6 +80,7 @@ class UpdateViewController: UIViewController,
     // MARK: View setup
     private func setupView() {
         guard let viewModel = viewModel as? UpdateViewModel else { return }
+
         view.backgroundColor = UIColor.legacyTheme.browser.background
         if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
@@ -90,49 +91,48 @@ class UpdateViewController: UIViewController,
     }
 
     private func setupSingleInfoCard() {
-//        guard let viewModel = viewModel.getCardViewModel(cardType: viewModel.enabledCards[0]) else { return }
-//
-//        let cardViewController = OnboardingCardViewController(viewModel: viewModel,
-//                                                              delegate: self)
-//        view.addSubview(closeButton)
-//        addChild(cardViewController)
-//        view.addSubview(cardViewController.view)
-//        cardViewController.didMove(toParent: self)
-//        view.bringSubviewToFront(closeButton)
-//
-//        NSLayoutConstraint.activate([
-//            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
-//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
-//            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-//            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
-//        ])
+        guard let cardViewController = viewModel.availableCards.first else { return }
+
+        addChild(cardViewController)
+        view.addSubview(cardViewController.view)
+        cardViewController.didMove(toParent: self)
     }
 
     private func setupMultipleCards() {
-//        if let firstViewController = informationCards.first {
-//            pageController.setViewControllers([firstViewController],
-//                                              direction: .forward,
-//                                              animated: true,
-//                                              completion: nil)
-//        }
+        if let firstViewController = viewModel.availableCards.first {
+            pageController.setViewControllers([firstViewController],
+                                              direction: .forward,
+                                              animated: true,
+                                              completion: nil)
+        }
     }
 
     private func setupMultipleCardsConstraints() {
-//        addChild(pageController)
-//        view.addSubview(pageController.view)
-//        pageController.didMove(toParent: self)
-//        view.addSubviews(pageControl, closeButton)
-//
-//        NSLayoutConstraint.activate([
-//            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//
-//            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonTopPadding),
-//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonRightPadding),
-//            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-//            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-//        ])
+        addChild(pageController)
+        view.addSubview(pageController.view)
+        pageController.didMove(toParent: self)
+        view.addSubview(pageControl)
+
+        NSLayoutConstraint.activate([
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+
+    private func setupCloseButton() {
+        guard viewModel.isDismissable else { return }
+        view.addSubview(closeButton)
+        view.bringSubviewToFront(closeButton)
+
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor,
+                                             constant: UX.closeButtonTopPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -UX.closeButtonRightPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
+        ])
     }
 
     // Button Actions
