@@ -4,6 +4,9 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Start det første søket ditt";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Privat surfning i %@ lagrar ikkje innformasjonen din, og blokkerer skjulte sporarar.";
+
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "Surf sporlaust";
 

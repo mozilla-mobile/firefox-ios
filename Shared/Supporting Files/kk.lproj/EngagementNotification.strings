@@ -4,3 +4,15 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Бірінші іздеуді бастаңыз";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@ ішіндегі жекелік шолу сіздің ақпаратыңызды сақтаймайды және жасырын трекерлерді блоктайды.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Із қалдырмай шолу";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "%@ ішінде сақталған cookie файлдарсыз және тарихсыз шолыңыз.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Жекелік шолуды қолданып көріңіз";
+

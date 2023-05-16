@@ -41,5 +41,5 @@
 "DefaultBrowserOnboarding.Screenshot" = "Standard nettlesar-app";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Bruk som standard nettleser";
+"Settings.DefaultBrowserMenuItem" = "Bruk som standard nettlesar";
 

@@ -175,6 +175,9 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "S'ha obert una pestanya nova";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "S'ha obert una pestanya nova";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Copia la imatge";
 
@@ -341,7 +344,7 @@
 "FirefoxHome.Pocket.Minutes.v99" = "%d min";
 
 /* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle" = "Articles suggerents";
+"FirefoxHome.Pocket.SectionTitle" = "Articles suggeridors";
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Elimina";

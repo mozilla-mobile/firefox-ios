@@ -6,13 +6,6 @@ import UIKit
 import Common
 import Shared
 
-protocol OnboardingCardDelegate: AnyObject {
-    func showNextPage(_ cardType: IntroViewModel.InformationCards)
-    func primaryAction(_ cardType: IntroViewModel.InformationCards)
-    func pageChanged(_ cardType: IntroViewModel.InformationCards)
-    func privacyPolicyLinkAction(_ cardType: IntroViewModel.InformationCards)
-}
-
 class OnboardingCardViewController: UIViewController, Themeable {
     struct UX {
         static let stackViewSpacing: CGFloat = 24
@@ -45,6 +38,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let tinyImageViewSize = CGSize(width: 144, height: 180)
     }
 
+    // MARK: - Properties
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
     var notificationCenter: NotificationProtocol
@@ -185,6 +179,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         }
     }
 
+    // MARK: - Initializers
     init(viewModel: OnboardingCardProtocol,
          delegate: OnboardingCardDelegate?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -201,6 +196,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -217,24 +213,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
         viewModel.sendCardViewTelemetry()
     }
 
+    // MARK: - View setup
     func setupView() {
         view.backgroundColor = .clear
 
-        topStackView.addArrangedSubview(imageView)
-        topStackView.addArrangedSubview(titleLabel)
-        topStackView.addArrangedSubview(descriptionBoldLabel)
-        topStackView.addArrangedSubview(descriptionLabel)
-        contentStackView.addArrangedSubview(topStackView)
-        contentStackView.addArrangedSubview(linkButton)
-
-        buttonStackView.addArrangedSubview(primaryButton)
-        buttonStackView.addArrangedSubview(secondaryButton)
-        contentStackView.addArrangedSubview(buttonStackView)
-
-        contentContainerView.addSubview(contentStackView)
-        containerView.addSubviews(contentContainerView)
-        scrollView.addSubviews(containerView)
-        view.addSubview(scrollView)
+        addViewsToView()
 
         // Adapt layout for smaller screens
         var scrollViewVerticalPadding = UX.scrollViewVerticalPadding
@@ -317,6 +300,24 @@ class OnboardingCardViewController: UIViewController, Themeable {
         ])
     }
 
+    private func addViewsToView() {
+        topStackView.addArrangedSubview(imageView)
+        topStackView.addArrangedSubview(titleLabel)
+        topStackView.addArrangedSubview(descriptionBoldLabel)
+        topStackView.addArrangedSubview(descriptionLabel)
+        contentStackView.addArrangedSubview(topStackView)
+        contentStackView.addArrangedSubview(linkButton)
+
+        buttonStackView.addArrangedSubview(primaryButton)
+        buttonStackView.addArrangedSubview(secondaryButton)
+        contentStackView.addArrangedSubview(buttonStackView)
+
+        contentContainerView.addSubview(contentStackView)
+        containerView.addSubviews(contentContainerView)
+        scrollView.addSubviews(containerView)
+        view.addSubview(scrollView)
+    }
+
     private func updateLayout() {
         titleLabel.text = viewModel.infoModel.title
         descriptionBoldLabel.isHidden = !viewModel.shouldShowDescriptionBold
@@ -350,21 +351,28 @@ class OnboardingCardViewController: UIViewController, Themeable {
         linkButton.setTitle(buttonTitle, for: .normal)
     }
 
+    // MARK: - Button Actions
     @objc
     func primaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: true)
-        delegate?.primaryAction(viewModel.cardType)
+        delegate?.handleButtonPress(
+            for: viewModel.infoModel.buttons.primary.action,
+            from: viewModel.cardType)
     }
 
     @objc
     func secondaryAction() {
+        guard let buttonAction = viewModel.infoModel.buttons.secondary?.action else { return }
+
         viewModel.sendTelemetryButton(isPrimaryAction: false)
-        delegate?.showNextPage(viewModel.cardType)
+        delegate?.handleButtonPress(
+            for: buttonAction,
+            from: viewModel.cardType)
     }
 
     @objc
     func linkButtonAction() {
-        delegate?.privacyPolicyLinkAction(viewModel.cardType)
+        delegate?.handleButtonPress(for: .readPrivacyPolicy, from: viewModel.cardType)
     }
 
     // MARK: - Themeable

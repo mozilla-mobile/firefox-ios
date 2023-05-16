@@ -22,6 +22,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - Decision_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -48,6 +49,7 @@ workflows:
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=16.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
@@ -57,6 +59,7 @@ workflows:
     - save-spm-cache@1:
         is_always_run: true
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Compress Derived Data
         is_always_run: true
         inputs:
@@ -82,10 +85,12 @@ workflows:
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
         inputs:
         - content: |
@@ -574,68 +579,46 @@ workflows:
             set -ex
 
             # Manual triggers leave empty commits. 
-            # Check for empty commit and exit blacklist check if found to avoid erroring out.
-            { git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..."; } || \
-                { echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests && exit 0; }
-
-            echo "Commit on origin/main"
-            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"` || true
-            if [[ ! "failed" == *"$COMMIT_ON_MAIN_ORIGIN"* ]]; then
-                echo $COMMIT_ON_MAIN_ORIGIN
-
-                echo "Files changed with origin"
-                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
-
-                echo "Commit on main branch"
-                echo $GIT_CLONE_COMMIT_HASH
-                COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
-                echo $COMMIT_ON_MAIN_PR
-
-                filesChanged=""
-                if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
-                then
-                    echo "First commit, use origin/main"
-                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
-                    echo $filesChanged
-                elif [[ $COMMIT_ON_MAIN_PR == $GIT_CLONE_COMMIT_HASH ]]
-                then
-                    echo "Merge made by the 'ort' strategy"
-                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
-                    echo $filesChanged
-                else
-                    echo "Commits on PR"
-                    echo "Files changed betwee commits"
-                    echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
-                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
-                    echo $filesChanged
-                fi
-                # Match on file names in all directories and subdirectories
-                #
-                # Project Configs
-                #   .*[^bitrise]\.y[^/]*$ -> matches all files not named bitrise whose file extension begins with a 'y'
-                #   .*\.sh$ -> matches all files whose file extension begins with 'sh'
-                #   .*\.md$ -> matches all files whose file extension begins with 'md'
-                #   .*\.lproj/.* -> matches all files whose parent directory begins with 'lproj'
-                #   fastlane/* -> matches all files in the fastlane directory
-                #   taskcluster/* -> matches all files in the taskcluster directory
-                #
-                # Features tested outside bitrise
-                #   Sync*/* -> matches all files in the Sync,SyncIntegrationTests,SyncTelemetry directories
-                #   L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
-                #
-                # Test Helpers
-                #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
-                doNotRunTests='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
-
-                if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
-                then
-                    echo "Running UI Tests"
-                    envman add --key RUN_UI_TESTS --value Run_UI_Tests
-                else
-                    echo "Not Running UI Tests"
-                fi
+            # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
+            FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+            echo "Files changed in commit/PR: $FILES_CHANGED"
+            if [[ -z "$FILES_CHANGED" ]]; then
+                echo "No files changed in commit/PR. Skipping Blacklist check..."
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+                exit 0
             fi
+            
+            # Match on file names in all directories and subdirectories
+            #
+            # Project Configs
+            #   .*[^bitrise]\.y[^/]*$ -> matches all files not named bitrise whose file extension begins with a 'y'
+            #   .*\.sh$ -> matches all files whose file extension begins with 'sh'
+            #   .*\.md$ -> matches all files whose file extension begins with 'md'
+            #   .*\.lproj/.* -> matches all files whose parent directory begins with 'lproj'
+            #   fastlane/* -> matches all files in the fastlane directory
+            #   taskcluster/* -> matches all files in the taskcluster directory
+            #
+            # Features tested outside bitrise
+            #   Sync*/* -> matches all files in the Sync,SyncIntegrationTests,SyncTelemetry directories
+            #   L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
+            #
+            # Test Helpers
+            #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
+
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
+
+            # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
+            # -v inverts the filtered results, returning any files not filtered by the regex
+            if grep -v -E "${DO_NOT_RUN_TESTS}" <<< "${FILES_CHANGED}" && [ -n "$FILES_CHANGED" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
+            fi
+    - share-pipeline-variable@1:
+        inputs:
+        - variables: RUN_UI_TESTS
   NewXcodeVersions:
     steps:
     - script@1:

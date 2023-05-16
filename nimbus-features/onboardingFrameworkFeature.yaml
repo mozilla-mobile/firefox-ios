@@ -214,6 +214,9 @@ enums:
       set-default-browser:
         description: >
           Will send the user to settings to set Firefox as their default browser
+      read-privacy-policy:
+        description: >
+          Will open a webview where the user can read the privacy policy
   NimbusOnboardingImages:
     description: >
       The identifiers for the different images available for cards in onboarding
