@@ -59,6 +59,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Default Browser Popup
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6359
     func presentDefaultBrowserPopup() {
     }
 
