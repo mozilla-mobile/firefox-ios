@@ -9,13 +9,11 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
-    var viewModel: UpdateViewModel!
 
     override func setUp() {
         super.setUp()
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
-        viewModel = UpdateViewModel(profile: profile)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -23,13 +21,12 @@ class UpdateViewModelTests: XCTestCase {
         super.tearDown()
         profile.shutdown()
         profile = nil
-        viewModel = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
     // MARK: Enable cards
-//    func testEnabledCards_ForHasSyncAccount() {
+    func testEnabledCards_ForHasSyncAccount() {
 //        profile.hasSyncableAccountMock = true
 //        let expectation = expectation(description: "The hasAccount var has value")
 //
@@ -41,8 +38,8 @@ class UpdateViewModelTests: XCTestCase {
 //            expectation.fulfill()
 //        }
 //        waitForExpectations(timeout: 2.0)
-//    }
-//
+    }
+
 //    func testEnabledCards_ForSyncAccountDisabled() {
 //        profile.hasSyncableAccountMock = false
 //        let expectation = expectation(description: "The hasAccount var has value")
