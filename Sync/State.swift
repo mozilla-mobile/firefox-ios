@@ -44,7 +44,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     public func toJSON() -> JSON {
         switch self {
         case let .resetAllEngines(except):
-            return JSON(["type": "ResetAllEngines", "except": Array(except).sorted()])
+            return JSON(["type": "ResetAllEngines", "except": Array(except).sorted()] as [String: Any])
 
         case let .resetEngine(engine):
             return JSON(["type": "ResetEngine", "engine": engine])

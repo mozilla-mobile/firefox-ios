@@ -136,7 +136,7 @@ open class Keys: Equatable {
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),
             "collections": mapValues(self.collectionKeys, f: { $0.asPair() })
-            ])
+        ] as [String: Any])
         return KeysPayload(json)
     }
 
