@@ -8450,6 +8450,14 @@
 			path = LegacyThemeManager;
 			sourceTree = "<group>";
 		};
+		C87700472A13E612008BCA86 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		C87D8B7E2818331900A6307D /* Nimbus */ = {
 			isa = PBXGroup;
 			children = (
@@ -8632,13 +8640,13 @@
 		C8B41E0C29F034E400FE218A /* OnboardingTests */ = {
 			isa = PBXGroup;
 			children = (
+				C87700472A13E612008BCA86 /* Mocks */,
 				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
 				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
 				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
 				C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */,
 				C8610DA72A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift */,
-				C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */,
 			);
 			path = OnboardingTests;
 			sourceTree = "<group>";
