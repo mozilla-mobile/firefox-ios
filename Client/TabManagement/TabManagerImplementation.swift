@@ -36,6 +36,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                observing: [UIApplication.willResignActiveNotification])
         }
 
+    private func startUp() {
+        let newTab = addTab()
+        super.selectTab(newTab)
+    }
+
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
@@ -47,37 +52,32 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         guard !isRestoringTabs else { return }
 
+        startUp()
+
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            Task {
-                // Always make sure there is a single normal tab
-                await generateEmptyTab()
-            }
             return
         }
 
         isRestoringTabs = true
 
         guard tabMigration.shouldRunMigration else {
-            restoreOnly(forced)
+            restoreOnly()
             return
         }
 
-        migrateAndRestore(forced)
+        migrateAndRestore()
     }
 
-    private func migrateAndRestore(_ forced: Bool = false) {
+    private func migrateAndRestore() {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
         }
     }
 
-    private func restoreOnly(_ forced: Bool = false) {
-        if forced {
-            tabs = [Tab]()
-        }
-
+    private func restoreOnly() {
+        tabs = [Tab]()
         isRestoringTabs = true
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
@@ -223,11 +223,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
         saveCurrentTabSessionData()
 
-        Task {
-            let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
-            await selectTabWithSession(tab: tab,
-                                       previous: previous,
-                                       sessionData: sessionData)
+        guard !AppConstants.isRunningUITests,
+              !DebugSettingsBundleOptions.skipSessionRestore
+        else {
+            super.selectTab(tab, previous: previous)
+            return
+        }
+
+        Task(priority: .high) {
+            if tab.isFxHomeTab {
+                await selectTabWithSession(tab: tab,
+                                           previous: previous,
+                                           sessionData: nil)
+            } else {
+                let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+                await selectTabWithSession(tab: tab,
+                                           previous: previous,
+                                           sessionData: sessionData)
+            }
         }
     }
 
