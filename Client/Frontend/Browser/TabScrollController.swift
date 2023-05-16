@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 
 protocol TabScrollingControllerDelegate: AnyObject {
-    func didSetAlpha(_ alpha: Float)
+    func didSetAlpha(_ alpha: Float, duration: TimeInterval)
 }
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
@@ -161,7 +161,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
-        delegate?.didSetAlpha(1)
+        delegate?.didSetAlpha(1, duration: actualDuration)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -209,7 +209,7 @@ private extension TabScrollingController {
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
-        delegate?.didSetAlpha(0)
+//        delegate?.didSetAlpha(0, duration: actualDuration)
     }
 
     func configureRefreshControl() {
@@ -324,6 +324,7 @@ private extension TabScrollingController {
             self.overKeyboardContainerOffset = overKeyboardOffset
             self.header?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
+            self.delegate?.didSetAlpha(Float(alpha), duration: duration)
         }
 
         if animated {

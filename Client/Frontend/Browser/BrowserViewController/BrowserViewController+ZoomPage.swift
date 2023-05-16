@@ -75,8 +75,8 @@ extension BrowserViewController: TabScrollingControllerDelegate {
         tab.setZoomLevelforDomain()
     }
 
-    func didSetAlpha(_ alpha: Float) {
-        zoomPageBar?.changeGradientOpacity(alpha: alpha, withAnimation: true)
+    func didSetAlpha(_ alpha: Float, duration: TimeInterval) {
+        zoomPageBar?.changeGradientOpacity(alpha: alpha, duration: duration, withAnimation: true)
     }
 }
 

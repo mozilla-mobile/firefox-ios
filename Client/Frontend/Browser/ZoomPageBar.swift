@@ -95,7 +95,6 @@ class ZoomPageBar: UIView, ThemeApplicable {
 
     private lazy var animation: CABasicAnimation = {
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.duration = 0.2
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
         return animation
@@ -238,15 +237,16 @@ class ZoomPageBar: UIView, ThemeApplicable {
         }
     }
 
-    private func animateGradientOpacity(alpha: Float) {
+    private func animateGradientOpacity(alpha: Float, duration: TimeInterval) {
         animation.fromValue = alpha == 1 ? 0 : 1
         animation.toValue = alpha
+        animation.duration = duration
         gradient.add(animation, forKey: "opacity")
     }
 
-    func changeGradientOpacity(alpha: Float, withAnimation: Bool = false) {
+    func changeGradientOpacity(alpha: Float, duration: TimeInterval = 0, withAnimation: Bool = false) {
         if withAnimation {
-            animateGradientOpacity(alpha: alpha)
+            animateGradientOpacity(alpha: alpha, duration: duration)
         } else {
             gradient.removeAnimation(forKey: "opacity")
             gradient.opacity = alpha
@@ -294,21 +294,18 @@ class ZoomPageBar: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        stepperContainer.backgroundColor = theme.colors.layer5
-        stepperContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
-
-        leftSeparator.backgroundColor = theme.colors.borderPrimary
-        rightSeparator.backgroundColor = theme.colors.borderPrimary
-
-        zoomLevel.tintColor = theme.colors.textPrimary
-
-        zoomInButton.tintColor = theme.colors.iconPrimary
-        zoomOutButton.tintColor = theme.colors.iconPrimary
-        closeButton.tintColor = theme.colors.iconPrimary
-
+        let colors = theme.colors
+        backgroundColor = colors.layer1
+        stepperContainer.backgroundColor = colors.layer5
+        stepperContainer.layer.shadowColor = colors.shadowDefault.cgColor
+        leftSeparator.backgroundColor = colors.borderPrimary
+        rightSeparator.backgroundColor = colors.borderPrimary
+        zoomLevel.tintColor = colors.textPrimary
+        zoomInButton.tintColor = colors.iconPrimary
+        zoomOutButton.tintColor = colors.iconPrimary
+        closeButton.tintColor = colors.iconPrimary
         gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
-        theme.colors.layerGradientOverlay.cgColors.reversed() :
-        theme.colors.layerGradientOverlay.cgColors
+        colors.layerGradientOverlay.cgColors.reversed() :
+        colors.layerGradientOverlay.cgColors
     }
 }
