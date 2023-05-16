@@ -8,6 +8,21 @@ import Common
 import Shared
 
 class PrivacyPolicyViewController: UIViewController, Themeable {
+    private enum UX {
+        static let leadingPaddingPad: CGFloat = 8
+        static let leadingPaddingPhone: CGFloat = 0
+        static let topPaddingPad: CGFloat = 0
+        static let topPaddingPhone: CGFloat = 0
+        static let contentScalePhone: CGFloat = 1.0
+        static var contentScaleIpad: CGFloat {
+            guard let isPortrait = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isPortrait else { return 1 }
+            if isPortrait {
+                return 0.84
+            } else {
+                return 0.58
+            }
+        }
+    }
     private var webView: WKWebView!
     private var url: URL
 
@@ -40,7 +55,29 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     }
 
     func setupView() {
-        webView = WKWebView(frame: view.frame)
+        var frame = CGRect(x: UX.leadingPaddingPhone,
+                           y: UX.topPaddingPhone,
+                           width: view.frame.width,
+                           height: view.frame.height)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if traitCollection.horizontalSizeClass == .regular {
+                frame = CGRect(x: UX.leadingPaddingPad,
+                               y: UX.topPaddingPad,
+                               width: view.frame.width * UX.contentScaleIpad,
+                               height: view.frame.height - UX.topPaddingPad)
+            } else {
+                frame = CGRect(x: UX.leadingPaddingPhone,
+                               y: UX.topPaddingPhone,
+                               width: view.frame.width * UX.contentScalePhone,
+                               height: view.frame.height - UX.topPaddingPhone)
+            }
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            frame = CGRect(x: UX.leadingPaddingPhone,
+                           y: UX.topPaddingPhone,
+                           width: view.frame.width * UX.contentScalePhone,
+                           height: view.frame.height - UX.topPaddingPhone)
+        }
+        webView = WKWebView(frame: frame)
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
         view.backgroundColor = .systemBackground
