@@ -55,7 +55,7 @@ struct CreditCardItemRow: View {
                     AdaptiveStack(horizontalAlignment: .leading,
                                   spacing: isAccessibilityCategory ? 0 : 5,
                                   isAccessibilityCategory: isAccessibilityCategory) {
-                        Text("Expires")
+                        Text(String.CreditCard.DisplayCard.ExpiresLabel)
                             .font(.body)
                             .foregroundColor(subTextColor)
                         Text(String(item.ccExpYear))
