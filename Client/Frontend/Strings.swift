@@ -247,7 +247,7 @@ extension String {
         // Displaying a credit card
         public struct DisplayCard {
             public static let ExpiresLabel = MZLocalizedString(
-                key: "CreditCard.EditCard.RevealLabel.v114",
+                key: "CreditCard.DisplayCard.ExpiresLabel.v115",
                 tableName: "DisplayCard",
                 value: "Expires",
                 comment: "Label for the expiry date of the credit card.")
