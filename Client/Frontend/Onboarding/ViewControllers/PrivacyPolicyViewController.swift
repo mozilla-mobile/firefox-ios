@@ -55,15 +55,27 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     }
 
     func setupView() {
-        var frame = CGRect(x: UX.leadingPaddingPhone, y: UX.topPaddingPhone, width: view.frame.width, height: view.frame.height)
+        var frame = CGRect(x: UX.leadingPaddingPhone,
+                           y: UX.topPaddingPhone,
+                           width: view.frame.width,
+                           height: view.frame.height)
         if UIDevice.current.userInterfaceIdiom == .pad {
             if traitCollection.horizontalSizeClass == .regular {
-                frame = CGRect(x: UX.leadingPaddingPad, y: UX.topPaddingPad, width: view.frame.width * UX.contentScaleIpad, height: view.frame.height - UX.topPaddingPad)
+                frame = CGRect(x: UX.leadingPaddingPad,
+                               y: UX.topPaddingPad,
+                               width: view.frame.width * UX.contentScaleIpad,
+                               height: view.frame.height - UX.topPaddingPad)
             } else {
-                frame = CGRect(x: UX.leadingPaddingPhone, y: UX.topPaddingPhone, width: view.frame.width * UX.contentScalePhone, height: view.frame.height - UX.topPaddingPhone)
+                frame = CGRect(x: UX.leadingPaddingPhone,
+                               y: UX.topPaddingPhone,
+                               width: view.frame.width * UX.contentScalePhone,
+                               height: view.frame.height - UX.topPaddingPhone)
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
-            frame = CGRect(x: UX.leadingPaddingPhone, y: UX.topPaddingPhone, width: view.frame.width * UX.contentScalePhone, height: view.frame.height - UX.topPaddingPhone)
+            frame = CGRect(x: UX.leadingPaddingPhone,
+                           y: UX.topPaddingPhone,
+                           width: view.frame.width * UX.contentScalePhone,
+                           height: view.frame.height - UX.topPaddingPhone)
         }
         webView = WKWebView(frame: frame)
         webView.navigationDelegate = self
