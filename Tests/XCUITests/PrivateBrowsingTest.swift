@@ -269,8 +269,8 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // History without counting Clear Recent History, Recently Closed
         let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
         XCTAssertEqual(history, 1, "There should be one entry in History")
-        let savedToHistory = app.tables[HistoryPanelA11y.tableView].cells.staticTexts[url2Label]
+        let savedToHistory = app.tables[HistoryPanelA11y.tableView].cells.element(boundBy: 1).staticTexts.element(boundBy: 1)
         waitForExistence(savedToHistory)
-        XCTAssertTrue(savedToHistory.exists)
+        XCTAssertNotNil(savedToHistory.label.range(of: url2Label))
     }
 }
