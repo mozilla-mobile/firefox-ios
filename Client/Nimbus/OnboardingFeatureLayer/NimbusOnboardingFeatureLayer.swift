@@ -63,10 +63,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Parameter cardData: Card data from ``FxNimbus/shared``
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
-        return cardData.compactMap { card in
-            let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
-            let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
+        let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
+        let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
 
+        return cardData.compactMap { card in
             return OnboardingCardInfoModel(
                 name: card.name,
                 title: String(format: card.title, AppName.shortName.rawValue),
@@ -77,6 +77,18 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
                 imageID: getOnboardingImageID(from: card.image))
         }
+            .enumerated()
+            .map { index, card in
+                return OnboardingCardInfoModel(
+                    name: card.name,
+                    title: card.title,
+                    body: card.body,
+                    link: card.link,
+                    buttons: card.buttons,
+                    type: card.type,
+                    a11yIdRoot: "\(card.a11yIdRoot)\(index)",
+                    imageID: card.imageID)
+            }
     }
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.

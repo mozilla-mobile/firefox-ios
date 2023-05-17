@@ -71,32 +71,33 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_a11yroot_isOnboarding() {
         setupNimbusWith(
-            cards: 1,
-            cardOrdering: ["\(CardElementNames.name) 1"])
+            cards: 2,
+            cardOrdering: [
+                "\(CardElementNames.name) 1",
+                "\(CardElementNames.name) 2"
+            ])
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
-            XCTFail("Expected a card, and got none.")
-            return
-        }
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
-        XCTAssertEqual(subject.a11yIdRoot, CardElementNames.a11yIDOnboarding)
+        XCTAssertEqual(subject[0].a11yIdRoot, "\(CardElementNames.a11yIDOnboarding)0")
+        XCTAssertEqual(subject[1].a11yIdRoot, "\(CardElementNames.a11yIDOnboarding)1")
     }
 
     func testLayer_a11yroot_isUpgrade() {
         setupNimbusWith(
-            cards: 1,
-            cardOrdering: ["\(CardElementNames.name) 1"],
-            type: OnboardingType.upgrade.rawValue
-        )
+            cards: 2,
+            cardOrdering: [
+                "\(CardElementNames.name) 1",
+                "\(CardElementNames.name) 2"
+            ],
+            type: OnboardingType.upgrade.rawValue)
         let layer = NimbusOnboardingFeatureLayer()
 
-        guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
-            XCTFail("Expected a card, and got none.")
-            return
-        }
+        let subject = layer.getOnboardingModel(for: .upgrade).cards
 
-        XCTAssertEqual(subject.a11yIdRoot, CardElementNames.a11yIDUpgrade)
+        XCTAssertEqual(subject[0].a11yIdRoot, "\(CardElementNames.a11yIDUpgrade)0")
+        XCTAssertEqual(subject[1].a11yIdRoot, "\(CardElementNames.a11yIDUpgrade)1")
     }
 
     // MARK: - Test card(s) being returned
@@ -141,7 +142,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertNotNil(subject.buttons.secondary)
         XCTAssertEqual(subject.buttons.secondary!.title, expectedCard.buttons.secondary!.title)
         XCTAssertEqual(subject.buttons.secondary!.action, expectedCard.buttons.secondary!.action)
-        XCTAssertEqual(subject.a11yIdRoot, expectedCard.a11yIdRoot)
     }
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {

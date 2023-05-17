@@ -5,11 +5,9 @@
 import XCTest
 
 class FirstRunTourTests: BaseTestCase {
-    let onboardingAccessibilityId = [AccessibilityIdentifiers.Onboarding.welcomeCard,
-                                     AccessibilityIdentifiers.Onboarding.signSyncCard]
     var currentScreen = 0
     var rootA11yId: String {
-        return onboardingAccessibilityId[currentScreen]
+        return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)."
     }
 
     override func setUp() {
@@ -19,11 +17,15 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     // Smoketest
-    // Temporary disabled as changes in PR #14231  modifies its behaviour
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
+        print("RGB - \(app.debugDescription)")
         waitForExistence(app.staticTexts["Welcome to an independent internet"], timeout: 15)
+
+        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
+        XCTAssertTrue(app.textViews["\(rootA11yId)TitleLabel"].exists)
+        XCTAssertTrue(app.textViews["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
