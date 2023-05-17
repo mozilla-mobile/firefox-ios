@@ -8,7 +8,8 @@ import Shared
 
 struct RemoveCardButton: View {
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State private var showAlert = false
 
     struct AlertDetails {

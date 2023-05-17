@@ -7,7 +7,8 @@ import Shared
 
 struct CreditCardSectionHeader: View {
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var textColor: Color = .clear
 
     var body: some View {

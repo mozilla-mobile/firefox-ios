@@ -72,7 +72,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     func preserveScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshot = tab.screenshot, let uuidString = tab.screenshotUUID?.uuidString {
             Task {
-                try await imageStore?.saveImageForKey(uuidString, image: screenshot)
+                try? await imageStore?.saveImageForKey(uuidString, image: screenshot)
             }
         }
     }
@@ -242,7 +242,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         // Clean up any screenshots that are no longer associated with a tab.
         let savedUUIDsCopy = savedUUIDs
         Task {
-            try await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
 
         return savedTabs.isEmpty ? nil : savedTabs
