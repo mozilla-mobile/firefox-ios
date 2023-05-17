@@ -184,7 +184,8 @@ class UpdateViewModelTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> UpdateViewModel {
-        let subject = UpdateViewModel(profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let subject = UpdateViewModel(profile: profile, model: onboardingModel)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

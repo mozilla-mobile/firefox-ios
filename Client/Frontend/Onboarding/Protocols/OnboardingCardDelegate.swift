@@ -5,6 +5,14 @@
 import Foundation
 import Shared
 
+/// The ``OnboardingCardDelegate`` is responsible for handling a variety of
+/// functions relating to onboarding actions taken by the user that are
+/// shared by both ``IntroViewController`` and ``UpdateViewController``.
+///
+/// The function has default implementations for all these actions, with the
+/// exception of ``OnboardingCardDelegate/handleButtonPress(for:from:)``. This
+/// function is implemented uniquely in its respective view controller, to account
+/// for the difference in flows that the two onboarding paths represent.
 protocol OnboardingCardDelegate: AnyObject {
     func handleButtonPress(for action: OnboardingActions,
                            from cardName: String)
@@ -43,7 +51,6 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         else { return }
 
         let privacyPolicyVC = PrivacyPolicyViewController(url: url)
-        let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -51,8 +58,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             action: selector)
 
         privacyPolicyVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
-
+        let controller = DismissableNavigationViewController(rootViewController: privacyPolicyVC)
         controller.onViewDismissed = completion
 
         present(controller, animated: true)
@@ -76,7 +82,6 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             flowType: flowType,
             referringPage: referringPage,
             profile: viewModel.profile)
-        let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -84,8 +89,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             action: selector)
         buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
 
+        let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = completion
 
         self.present(controller, animated: true)
@@ -107,10 +112,11 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
     func pageChanged(from cardName: String) {
-        if let cardIndex = viewModel.availableCards
+        guard let cardIndex = viewModel.availableCards
             .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           cardIndex != pageControl.currentPage {
-            pageControl.currentPage = cardIndex
-        }
+              cardIndex != pageControl.currentPage
+        else { return }
+
+        pageControl.currentPage = cardIndex
     }
 }

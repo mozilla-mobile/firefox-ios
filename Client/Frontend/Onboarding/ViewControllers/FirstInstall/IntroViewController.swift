@@ -125,6 +125,7 @@ class IntroViewController: UIViewController,
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
+// FXIOS-6358 - Implement telemetry
 //        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 

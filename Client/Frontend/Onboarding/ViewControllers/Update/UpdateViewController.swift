@@ -136,6 +136,7 @@ class UpdateViewController: UIViewController,
     @objc
     private func closeUpdate() {
         didFinishFlow?()
+// FXIOS-6358 - Implement telemetry
 //        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 

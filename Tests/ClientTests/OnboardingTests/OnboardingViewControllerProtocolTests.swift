@@ -160,7 +160,9 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> IntroViewController {
-        let viewModel = IntroViewModel(profile: MockProfile())
+        let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let viewModel = IntroViewModel(profile: MockProfile(),
+                                       model: onboardingViewModel)
         let subject = IntroViewController(viewModel: viewModel)
 
         subject.viewDidLoad()

@@ -138,7 +138,11 @@ class IntroViewModelTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> IntroViewModel {
-        let subject = IntroViewModel(profile: MockProfile(databasePrefix: "introViewModelTests_"))
+        let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+
+        let subject = IntroViewModel(
+            profile: MockProfile(databasePrefix: "introViewModelTests_"),
+            model: onboardingViewModel)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

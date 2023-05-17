@@ -24,15 +24,16 @@ extension OnboardingViewControllerProtocol {
     }
 
     func moveToNextPage(from cardName: String) {
-        if let index = viewModel.availableCards
+        guard let index = viewModel.availableCards
             .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
-           let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
-            pageControl.currentPage = index + 1
-            pageController.setViewControllers(
-                [nextViewController],
-                direction: .forward,
-                animated: false)
-        }
+              let nextViewController = getNextOnboardingCard(index: index, goForward: true)
+        else { return }
+        
+        pageControl.currentPage = index + 1
+        pageController.setViewControllers(
+            [nextViewController],
+            direction: .forward,
+            animated: false)
     }
 
     // Due to restrictions with PageViewController we need to get the index of the current view controller

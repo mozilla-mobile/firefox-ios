@@ -30,9 +30,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     }
 
     // MARK: - Initializer
-    init(profile: Profile) {
+    init(
+        profile: Profile,
+        model: OnboardingViewModel
+    ) {
         self.profile = profile
-        let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
         self.availableCards = []

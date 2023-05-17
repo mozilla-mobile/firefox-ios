@@ -12,7 +12,9 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()
-    var viewModel: OnboardingViewModelProtocol = IntroViewModel(profile: MockProfile())
+    var viewModel: OnboardingViewModelProtocol = IntroViewModel(
+        profile: MockProfile(),
+        model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall))
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
     var themeObserver: NSObjectProtocol?
@@ -43,8 +45,6 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
                                  completion: {})
         }
     }
-
-    func pageChanged(_ cardType: IntroViewModel.InformationCards) { }
 
     func presentPrivacyPolicy(
         from cardName: String,
