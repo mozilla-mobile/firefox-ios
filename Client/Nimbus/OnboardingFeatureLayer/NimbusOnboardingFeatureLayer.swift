@@ -64,6 +64,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
         return cardData.compactMap { card in
+            let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
+            let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
+
             return OnboardingCardInfoModel(
                 name: card.name,
                 title: String(format: card.title, AppName.shortName.rawValue),
@@ -71,7 +74,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 link: getOnboardingLink(from: card.link),
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,
-                a11yIdRoot: "test",
+                a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
                 imageID: getOnboardingImageID(from: card.image))
         }
     }

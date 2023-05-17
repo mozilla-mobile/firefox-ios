@@ -153,6 +153,7 @@ public struct AccessibilityIdentifiers {
 
     struct Onboarding {
         static let backgroundImage = "Onboarding.BackgroundImage"
+        static let onboarding = "onboarding."
         static let welcomeCard = "WelcomeCard"
         static let wallpapersCard = "WallpapersCard"
         static let signSyncCard = "SignSyncCard"
@@ -169,6 +170,7 @@ public struct AccessibilityIdentifiers {
 
     struct Upgrade {
         static let backgroundImage = "Upgrade.BackgroundImage"
+        static let upgrade = "upgrade."
         static let welcomeCard = "Upgrade.WelcomeCard"
         static let signSyncCard = "Upgrade.SignSyncCard"
         static let closeButton = "Upgrade.CloseButton"

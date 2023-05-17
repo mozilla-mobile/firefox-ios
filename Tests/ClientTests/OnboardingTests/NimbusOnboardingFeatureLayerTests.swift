@@ -14,7 +14,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"
-        static let a11yID = "A11yId"
+        static let a11yIDOnboarding = "onboarding."
+        static let a11yIDUpgrade = "upgrade."
         static let linkTitle = "MacRumors"
         static let linkURL = "https://macrumors.com"
         static let primaryButtonTitle = "Primary Button"
@@ -66,6 +67,38 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertFalse(subject.isDismissable)
     }
 
+    // MARK: - Test A11yRoot
+
+    func testLayer_a11yroot_isOnboarding() {
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"])
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.a11yIdRoot, CardElementNames.a11yIDOnboarding)
+    }
+
+    func testLayer_a11yroot_isUpgrade() {
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            type: OnboardingType.upgrade.rawValue
+        )
+        let layer = NimbusOnboardingFeatureLayer()
+
+        guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.a11yIdRoot, CardElementNames.a11yIDUpgrade)
+    }
+
     // MARK: - Test card(s) being returned
     func testLayer_cardIsReturned_OneCard() {
         setupNimbusWith(
@@ -92,7 +125,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                     title: CardElementNames.secondaryButtonTitle,
                     action: .nextCard)),
             type: .freshInstall,
-            a11yIdRoot: CardElementNames.a11yID,
+            a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.onboardingWelcomev106)
 
         XCTAssertEqual(subject.name, expectedCard.name)
@@ -108,6 +141,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertNotNil(subject.buttons.secondary)
         XCTAssertEqual(subject.buttons.secondary!.title, expectedCard.buttons.secondary!.title)
         XCTAssertEqual(subject.buttons.secondary!.action, expectedCard.buttons.secondary!.action)
+        XCTAssertEqual(subject.a11yIdRoot, expectedCard.a11yIdRoot)
     }
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {
