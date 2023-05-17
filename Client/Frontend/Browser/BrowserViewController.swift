@@ -2468,7 +2468,8 @@ extension BrowserViewController {
     }
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
-        let viewModel = UpdateViewModel(profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let viewModel = UpdateViewModel(profile: profile, model: onboardingModel)
         if viewModel.shouldShowUpdateSheet(force: force) && !hasPresentedUpgrade {
             viewModel.hasSyncableAccount {
                 self.buildUpdateVC(viewModel: viewModel, animated: animated)
@@ -2499,10 +2500,11 @@ extension BrowserViewController {
     }
 
     private func showProperIntroVC() {
-        let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(
-            viewModel: introViewModel,
-            profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let introViewModel = IntroViewModel(introScreenManager: nil,
+                                            profile: profile,
+                                            model: onboardingModel)
+        let introViewController = IntroViewController(viewModel: introViewModel)
 
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()

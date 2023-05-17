@@ -20,7 +20,8 @@ class LaunchScreenViewModel {
     init(profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
-        self.updateViewModel = UpdateViewModel(profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        self.updateViewModel = UpdateViewModel(profile: profile, model: onboardingModel)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 
