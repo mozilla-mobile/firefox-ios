@@ -15,7 +15,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func addBookmark(url: String, title: String?)
 
     func openURLInNewTab(_ url: URL?, isPrivate: Bool)
-    func openNewTabFromMenu(focusLocationField: Bool)
+    func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
     func showLibrary(panel: LibraryPanelType?)
     func showViewController(viewController: UIViewController)
@@ -301,11 +301,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: - Actions
 
-    private func getNewTabAction() -> PhotonRowActions {
+    private func getNewTabAction() -> PhotonRowActions? {
+        guard let tab = selectedTab else { return nil }
         return SingleActionViewModel(title: .AppMenu.NewTab,
                                      iconString: ImageIdentifiers.newTab) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
-            self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField)
+            self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
         }.items
     }
