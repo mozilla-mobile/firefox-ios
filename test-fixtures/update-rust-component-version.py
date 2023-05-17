@@ -80,22 +80,25 @@ def update_spm_file(current_tag, current_commit, rust_component_repo_tag, rust_c
         print("There was a problem updating the spm file")
 
 def update_proj_file(current_tag, rust_component_repo_tag, file_name):
+    # Read and update the data
     try:
-        file = open(file_name, "r+")
-        data = file.read()
-        data = data.replace(current_tag, rust_component_repo_tag)
-    except:
+        with open(file_name, "r") as file:
+            data = file.read()
+            data = data.replace(current_tag, rust_component_repo_tag)
+    except FileNotFoundError:
         print("Could not read project file")
-    finally:
-        file.close()
+        return
+    except IOError as e:
+        print(f"Error reading project file: {e}")
+        return
 
+    # Write the updated data back to the file
     try:
-        file = open(file_name, "wt")
-        file.write(data)
-    except:
-        print("Could not update project file")
-    finally:
-        file.close()
+        with open(file_name, "w") as file:
+            file.write(data)
+    except IOError as e:
+        print(f"Could not update project file: {e}")
+
 
 def main():
     '''
