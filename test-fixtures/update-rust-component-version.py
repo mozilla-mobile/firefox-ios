@@ -26,7 +26,7 @@ def get_newest_rust_components_version():
     return (str(newest_tag), str(only_commit[0]))
 
 
-def read_rust_components_tag_version():
+def read_rust_components_tag_version(SPM_PACKAGE):
     # Read Package file to find the current rust-component version
     try:
         with open(SPM_PACKAGE) as f:
@@ -34,13 +34,17 @@ def read_rust_components_tag_version():
 
             for i in data["pins"]:
                 if i["identity"] == "rust-components-swift":
-                    # return the json with the RustComponent info
-                    json_new_version = i["state"]
-    except:
+                    # Return the current version and commit
+                    return i["state"]["version"], i["state"]["revision"]
+    except FileNotFoundError:
         print("Could not read rust component tag")
-    # Return the current version and commit
-    finally:
-        return json_new_version["version"], json_new_version["revision"]
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+    return None, None
+
 
 
 def read_project_min_version():
