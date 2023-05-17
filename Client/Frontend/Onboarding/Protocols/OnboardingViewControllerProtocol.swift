@@ -28,7 +28,7 @@ extension OnboardingViewControllerProtocol {
             .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
               let nextViewController = getNextOnboardingCard(index: index, goForward: true)
         else { return }
-        
+
         pageControl.currentPage = index + 1
         pageController.setViewControllers(
             [nextViewController],

@@ -121,5 +121,4 @@ struct NimbusOnboardingConfigUtility {
 
         features.connect(with: FxNimbus.shared)
     }
-
 }
