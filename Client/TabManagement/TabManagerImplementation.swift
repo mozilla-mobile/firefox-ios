@@ -250,7 +250,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         Task {
-            try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
         }
     }
 
