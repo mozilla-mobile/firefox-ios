@@ -18,7 +18,6 @@ final class UserConversionMetricsTests: XCTestCase {
         mockUserDefaults = MockUserDefaults()
         metrics = UserConversionMetrics()
         metrics.userDefaults = mockUserDefaults
-        self.resetDefaults()
     }
 
     override func tearDown() {
@@ -27,9 +26,8 @@ final class UserConversionMetricsTests: XCTestCase {
     }
 
     func resetDefaults() {
-        UserDefaults.standard.removeObject(forKey: "appOpenTimestampsTest")
-        UserDefaults.standard.removeObject(forKey: "searchesTimestampsTest")
-        UserDefaults.standard.removeObject(forKey: "didUpdateConversionValueTest")
+        mockUserDefaults = nil
+        metrics = nil
     }
 
     func testShouldRecordMetric() {
@@ -51,17 +49,139 @@ final class UserConversionMetricsTests: XCTestCase {
         // Set the first app use to the current time (in milliseconds)
         let currentDate = Date.now()
         mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
-        let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
-        let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date())!
-        let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
-        let fourDaysAfter = Calendar.current.date(byAdding: .day, value: 4, to: Date())!
-        let fiveDaysAfter = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
+        guard let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+              let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let fourDaysAfter = Calendar.current.date(byAdding: .day, value: 4, to: Date()),
+              let fiveDaysAfter = Calendar.current.date(byAdding: .day, value: 5, to: Date()) else {
+            return
+        }
         let openTimestamps = [threeDaysAfter, twoDaysAfter, oneDayAfter]
-        mockUserDefaults.set(openTimestamps, forKey: PrefsKeys.Session.firstWeekAppOpenTimestamps)
         let searchesTimestamps = [fiveDaysAfter, fourDaysAfter]
-        mockUserDefaults.set(searchesTimestamps, forKey: PrefsKeys.Session.firstWeekSearchesTimestamps)
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
         XCTAssertTrue(metrics.shouldActivateProfile())
         mockUserDefaults.set(nil, forKey: PrefsKeys.Session.firstWeekSearchesTimestamps)
         XCTAssertFalse(metrics.shouldActivateProfile())
+    }
+
+    func testShouldActivateProfile_ValidOpenAndSearchButConversionUpdated() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        mockUserDefaults.set(true, forKey: PrefsKeys.Session.didUpdateConversionValue)
+        guard let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+              let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let fiveDaysAfter = Calendar.current.date(byAdding: .day, value: 5, to: Date()) else {
+            return
+        }
+        let openTimestamps = [threeDaysAfter, twoDaysAfter, oneDayAfter]
+        let searchesTimestamps = [fiveDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldRecordMetric()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenTwoTimesWithSearch() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let fiveDaysAfter = Calendar.current.date(byAdding: .day, value: 5, to: Date()) else {
+            return
+        }
+        let openTimestamps = [twoDaysAfter, oneDayAfter]
+        let searchesTimestamps = [fiveDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenThreeTimesWithoutSearch() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+              let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()) else {
+            return
+        }
+        let openTimestamps = [threeDaysAfter, twoDaysAfter, oneDayAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: [])
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenThreeTimesInMixedDatesWithSearch() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let eightDaysAfter = Calendar.current.date(byAdding: .day, value: 8, to: Date()),
+              let fiveDaysAfter = Calendar.current.date(byAdding: .day, value: 5, to: Date()) else {
+            return
+        }
+        let openTimestamps = [twoDaysAfter, oneDayAfter, eightDaysAfter]
+        let searchesTimestamps = [fiveDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenThreeTimesInInvalidDatesWithSearch() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let eightDaysAfter = Calendar.current.date(byAdding: .day, value: 8, to: Date()),
+              let nineDaysAfter = Calendar.current.date(byAdding: .day, value: 9, to: Date()),
+              let tenDaysAfter = Calendar.current.date(byAdding: .day, value: 10, to: Date()) else {
+            return
+        }
+        let openTimestamps = [eightDaysAfter, nineDaysAfter, tenDaysAfter]
+        let searchesTimestamps = [tenDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenThreeTimesValidDatesWithInvalidSearchDate() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+              let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let nineDaysAfter = Calendar.current.date(byAdding: .day, value: 9, to: Date()) else {
+            return
+        }
+        let openTimestamps = [threeDaysAfter, twoDaysAfter, oneDayAfter]
+        let searchesTimestamps = [nineDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertFalse(result)
+    }
+
+    func testShouldActivateProfile_OpenThreeTimesValidDatesWithSearchOnDayThree() {
+        let currentDate = Date.now()
+        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        guard let threeDaysAfter = Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+              let twoDaysAfter = Calendar.current.date(byAdding: .day, value: 2, to: Date()),
+              let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+              let fourDaysAfter = Calendar.current.date(byAdding: .day, value: 4, to: Date()) else {
+            return
+        }
+        let openTimestamps = [threeDaysAfter, twoDaysAfter, oneDayAfter]
+        let searchesTimestamps = [fourDaysAfter]
+        setupOpenAndSearchTimestamps(openTimestamps: openTimestamps, searchTimestamps: searchesTimestamps)
+
+        let result = metrics.shouldActivateProfile()
+        XCTAssertTrue(result)
+    }
+
+    private func setupOpenAndSearchTimestamps(openTimestamps: [Date], searchTimestamps: [Date]) {
+        mockUserDefaults.set(openTimestamps, forKey: PrefsKeys.Session.firstWeekAppOpenTimestamps)
+        mockUserDefaults.set(searchTimestamps, forKey: PrefsKeys.Session.firstWeekSearchesTimestamps)
     }
 }
