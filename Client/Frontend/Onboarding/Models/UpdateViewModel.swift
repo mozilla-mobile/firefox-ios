@@ -83,6 +83,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
+// FXIOS-6358 - Implement telemetry
 //    func sendCloseButtonTelemetry(index: Int) {
 //        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
 //

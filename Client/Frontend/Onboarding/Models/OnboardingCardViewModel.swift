@@ -19,6 +19,7 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
     }
 
     func sendCardViewTelemetry() {
+// FXIOS-6358 - Implement telemetry
 //        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
 //        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
 //            . onboardingCardView : .upgradeOnboardingCardView
