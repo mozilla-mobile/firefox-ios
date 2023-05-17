@@ -11,6 +11,7 @@ FIREFOX_PROJECT = "Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_ID = "433F87D62788F34500693368"
 github_access_token = "GITHUB_TOKEN"
 
+
 def get_newest_rust_components_version():
     g = Github()
     try:
@@ -24,8 +25,9 @@ def get_newest_rust_components_version():
 
     return (str(newest_tag), str(only_commit[0]))
 
+
 def read_rust_components_tag_version():
-     # Read Package file to find the current rust-component version
+    # Read Package file to find the current rust-component version
     try:
         with open(SPM_PACKAGE) as f:
             data = json.load(f)
@@ -40,9 +42,11 @@ def read_rust_components_tag_version():
     finally:
         return json_new_version["version"], json_new_version["revision"]
 
+
 def read_project_min_version():
     project = XcodeProject.load(FIREFOX_PROJECT)
     return project.get_object(RUST_COMPONENTS_ID).requirement.version
+
 
 def compare_versions(current_tag_version, repo_tag_version):
     # Compare rust-component version used and the newest available in rust-component repo
@@ -53,31 +57,28 @@ def compare_versions(current_tag_version, repo_tag_version):
         print("No new versions, skip")
         return False
 
+
 def update_spm_file(current_tag, current_commit, rust_component_repo_tag, rust_component_repo_commit, file_name):
     # Read the SPM package file and update it
     try:
-        file = open(file_name, "r+")
-        try:
+        with open(file_name, "r") as file:
             data = file.read()
             data = data.replace(current_tag, rust_component_repo_tag)
             data = data.replace(current_commit, rust_component_repo_commit)
-        except:
-            print("Could not read the file")
-        finally:
-            file.close()
-    except:
-        print("There was a problem reading to update the spm file")
+    except FileNotFoundError:
+        print("There was a problem reading to update the SPM file")
+        return
+    except IOError as e:
+        print(f"Could not read the file: {e}")
+        return
 
+    # Write the updated data back to the file
     try:
-        file = open(file_name, "wt")
-        try:
+        with open(file_name, "w") as file:
             file.write(data)
-        except:
-            print("Could not write to the file")
-        finally:
-            file.close()
-    except:
-        print("There was a problem updating the spm file")
+    except IOError as e:
+        print(f"Could not write to the file: {e}")
+
 
 def update_proj_file(current_tag, rust_component_repo_tag, file_name):
     # Read and update the data
@@ -107,20 +108,23 @@ def main():
     2. compare newest with current SPM and project versions in repo
     3. if same version exit, if not, continue 
     4. update both SMP and project files
-    
+
     '''
 
     rust_component_repo_tag, rust_component_repo_commit = get_newest_rust_components_version()
     current_tag, current_commit = read_rust_components_tag_version()
-    current_min_version  = read_project_min_version()
+    current_min_version = read_project_min_version()
     if compare_versions(current_tag, rust_component_repo_tag):
         # If the version does not match, then the files are updated
-        update_spm_file(current_tag, current_commit, rust_component_repo_tag, rust_component_repo_commit, SPM_PACKAGE)
-        update_proj_file(current_min_version, rust_component_repo_tag, FIREFOX_PROJECT)
+        update_spm_file(current_tag, current_commit, rust_component_repo_tag,
+                        rust_component_repo_commit, SPM_PACKAGE)
+        update_proj_file(current_min_version,
+                         rust_component_repo_tag, FIREFOX_PROJECT)
 
         # Save the newer version to be used in the PR info
-        f= open("test-fixtures/newest_tag.txt","w+")
+        f = open("test-fixtures/newest_tag.txt", "w+")
         f.write(rust_component_repo_tag+"\n")
+
 
 if __name__ == '__main__':
     main()
