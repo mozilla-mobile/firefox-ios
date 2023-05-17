@@ -81,7 +81,7 @@ class MetaGlobalTests: XCTestCase {
             "id": "global",
             "collection": "meta",
             "payload": metaGlobal.asPayload().json.stringify()!,
-            "modified": Double(Date.now())/1000]))
+            "modified": Double(Date.now())/1000] as [String: Any]))
         server.storeRecords(records: [envelope], inCollection: "meta")
     }
 
