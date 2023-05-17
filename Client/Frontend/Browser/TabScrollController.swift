@@ -283,7 +283,6 @@ private extension TabScrollingController {
         overKeyboardContainerOffset = clamp(overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
 
         header?.updateAlphaForSubviews(scrollAlpha)
-//        bottomContainer?.updateAlphaForSubviews(scrollAlpha)
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
