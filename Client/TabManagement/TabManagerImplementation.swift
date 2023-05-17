@@ -37,6 +37,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
     private func startUp() {
+        guard tabs.isEmpty else { return }
         let newTab = addTab()
         super.selectTab(newTab)
     }
@@ -90,7 +91,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         guard let windowData = window,
-              !windowData.tabData.isEmpty
+              !windowData.tabData.isEmpty,
+              tabs.isEmpty
         else {
             // Always make sure there is a single normal tab
             await generateEmptyTab()
