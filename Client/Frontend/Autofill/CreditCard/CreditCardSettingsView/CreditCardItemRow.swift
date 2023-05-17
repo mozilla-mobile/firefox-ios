@@ -12,7 +12,8 @@ struct CreditCardItemRow: View {
     let isAccessibilityCategory: Bool
 
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var separatorColor: Color = .clear

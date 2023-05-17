@@ -23,7 +23,8 @@ struct OpenTabsWidget: Widget {
 struct OpenTabsView: View {
     let entry: OpenTabsEntry
 
-    @Environment(\.widgetFamily) var widgetFamily
+    @Environment(\.widgetFamily)
+    var widgetFamily
 
     @ViewBuilder
     func lineItemForTab(_ tab: SimpleTab) -> some View {
