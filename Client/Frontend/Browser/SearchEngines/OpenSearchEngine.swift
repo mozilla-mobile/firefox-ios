@@ -4,7 +4,9 @@
 
 import UIKit
 
-class OpenSearchEngine: NSObject, NSCoding {
+class OpenSearchEngine: NSObject, NSSecureCoding {
+    static var supportsSecureCoding = true
+
     struct UX {
         static let preferredIconSize = 30
     }
@@ -54,7 +56,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        let isCustomEngine = aDecoder.decodeAsBool(forKey: CodingKeys.isCustomEngine.rawValue)
+        let isCustomEngine = aDecoder.decodeBool(forKey: CodingKeys.isCustomEngine.rawValue)
         guard let searchTemplate = aDecoder.decodeObject(forKey: CodingKeys.searchTemplate.rawValue) as? String,
               let shortName = aDecoder.decodeObject(forKey: CodingKeys.shortName.rawValue) as? String,
               let image = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? UIImage else {
