@@ -5,7 +5,8 @@
 import Foundation
 import Shared
 
-struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+    // MARK: - Properties
     enum InformationCards: Int, CaseIterable {
         case welcome
         case signSync
@@ -13,15 +14,6 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
         case updateWelcome
         case updateSignSync
-
-        var isOnboardingScreen: Bool {
-            switch self {
-            case .welcome, .signSync, .notification:
-                return true
-            case .updateWelcome, .updateSignSync:
-                return false
-            }
-        }
 
         var telemetryValue: String {
             switch self {
@@ -32,110 +24,48 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             case .updateSignSync: return "update.signToSync"
             }
         }
-
-        var position: Int {
-            switch self {
-            case .welcome: return 0
-            case .signSync: return 1
-            case .notification: return 2
-            case .updateWelcome: return 0
-            case .updateSignSync: return 1
-            }
-        }
     }
 
     // FXIOS-6036 - Make this non optional when coordinators are used
     var introScreenManager: IntroScreenManager?
 
-    var isFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
+    var availableCards: [OnboardingCardViewController]
+    var isDismissable: Bool
+    var profile: Profile
+    private var cardModels: [OnboardingCardInfoModelProtocol]
+
+    // MARK: - Initializer
+    init(
+        introScreenManager: IntroScreenManager? = nil,
+        profile: Profile,
+        model: OnboardingViewModel
+    ) {
+        self.introScreenManager = introScreenManager
+        self.profile = profile
+        self.cardModels = model.cards
+        self.isDismissable = model.isDismissable
+        self.availableCards = []
     }
 
-    var enabledCards: [IntroViewModel.InformationCards] {
-        let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
-
-        switch notificationCardPosition {
-        case .noCard:
-            return [.welcome, .signSync]
-        case .beforeSync:
-            return [.welcome, .notification, .signSync]
-        case .afterSync:
-            return [.welcome, .signSync, .notification]
+    // MARK: - Methods
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
+        availableCards.removeAll()
+        cardModels.forEach { card in
+            availableCards.append(OnboardingCardViewController(
+                viewModel: OnboardingCardViewModel(infoModel: card),
+                delegate: delegate))
         }
     }
 
-    func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingCardInfoModelProtocol? {
-        let shortName = AppName.shortName.rawValue
-
-        switch cardType {
-        case .welcome:
-            return OnboardingCardInfoModel(
-                name: "welcome",
-                title: String(format: .Onboarding.Welcome.Title),
-                body: String(format: .Onboarding.Welcome.Description, shortName),
-                link: OnboardingLinkInfoModel(
-                    title: .Onboarding.PrivacyPolicyLinkButtonTitle,
-                    url: URL(string: "https://macrumors.com")!),
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Welcome.GetStartedAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard,
-                imageID: ImageIdentifiers.onboardingWelcomev106)
-        case .signSync:
-            return OnboardingCardInfoModel(
-                name: "signSync",
-                title: String(format: .Onboarding.Sync.Title),
-                body: String(format: .Onboarding.Sync.Description),
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Sync.SignInAction,
-                        action: .syncSignIn),
-                    secondary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Sync.SkipAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
-                imageID: ImageIdentifiers.onboardingSyncv106)
-        case .notification:
-            return OnboardingCardInfoModel(
-                name: "notification",
-                title: String(format: .Onboarding.Notification.Title, shortName),
-                body: String(format: .Onboarding.Notification.Description, shortName),
-                link: nil,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Notification.ContinueAction,
-                        action: .requestNotifications),
-                    secondary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Notification.SkipAction,
-                        action: .nextCard)),
-                type: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard,
-                imageID: ImageIdentifiers.onboardingNotification)
-        default:
-            return nil
-        }
-    }
-
-    func getCardViewModel(cardType: InformationCards) -> OnboardingCardProtocol? {
-        guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
-
-        return LegacyOnboardingCardViewModel(cardType: cardType,
-                                             infoModel: infoModel,
-                                             isFeatureEnabled: isFeatureEnabled)
-    }
-
-    func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingClose,
-                                     extras: extra)
-    }
+// FXIOS-6358 - Implement telemetry
+//    func sendCloseButtonTelemetry(index: Int) {
+//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: availableCards[index].viewModel.infoModel.name]
+//
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .onboardingClose,
+//                                     extras: extra)
+//    }
 
     func saveHasSeenOnboarding() {
         introScreenManager?.didSeeIntroScreen()

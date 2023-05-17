@@ -105,7 +105,7 @@
 		21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
-		21B2844A28464FF0003EA521 /* LegacyOnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */; };
+		21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
 		21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */; };
@@ -310,7 +310,6 @@
 		435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435222C225882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435C85F02788F4D00072B526 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 435C85EF2788F4D00072B526 /* Glean */; };
-		435D660323D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660223D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift */; };
 		435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660423D794B90046EFA2 /* UpdateViewModel.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewController.swift */; };
 		435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650758F1E37F7AB006961AC /* TimeConstants.swift */; };
@@ -901,6 +900,8 @@
 		C8DC90C92A0675E70008832B /* MarkupParsingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90C82A0675E70008832B /* MarkupParsingUtility.swift */; };
 		C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90CF2A067C5B0008832B /* MarkupParseUtilityTests.swift */; };
 		C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90D12A067C6D0008832B /* MarkupAttributionUtilityTests.swift */; };
+		C8DF92F42A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */; };
+		C8DF92F72A14101500AA7B05 /* OnboardingViewControllerProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
@@ -2027,7 +2028,7 @@
 		21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontTypeButton.swift; sourceTree = "<group>"; };
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
-		21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyOnboardingCardViewModel.swift; sourceTree = "<group>"; };
+		21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModel.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
 		21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtility.swift; sourceTree = "<group>"; };
@@ -2839,7 +2840,6 @@
 		435C28C22A0BDC8D0006A61D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		435CC46729F69B3300CC7D73 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Notification.strings; sourceTree = "<group>"; };
 		435CC46829F69B3300CC7D73 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ZoomPageBar.strings; sourceTree = "<group>"; };
-		435D660223D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyOnboardingInfoModel.swift; sourceTree = "<group>"; };
 		435D660423D794B90046EFA2 /* UpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateViewModel.swift; sourceTree = "<group>"; };
 		435D7CC4246209AA0043ACB9 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		435E7439293E0A50004A8A9C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Alerts.strings"; sourceTree = "<group>"; };
@@ -5120,6 +5120,8 @@
 		C8DC90C82A0675E70008832B /* MarkupParsingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupParsingUtility.swift; sourceTree = "<group>"; };
 		C8DC90CF2A067C5B0008832B /* MarkupParseUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupParseUtilityTests.swift; sourceTree = "<group>"; };
 		C8DC90D12A067C6D0008832B /* MarkupAttributionUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupAttributionUtilityTests.swift; sourceTree = "<group>"; };
+		C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingConfigUtility.swift; sourceTree = "<group>"; };
+		C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocolTests.swift; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
@@ -7129,14 +7131,6 @@
 			path = WebcompatAtDocumentStart;
 			sourceTree = "<group>";
 		};
-		43446CED2412DDB100F5C643 /* UpdateViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
-			);
-			path = UpdateViewModel;
-			sourceTree = "<group>";
-		};
 		43879AFB287BDFB100B15D10 /* CC_Script */ = {
 			isa = PBXGroup;
 			children = (
@@ -8274,6 +8268,14 @@
 			path = LegacyThemeManager;
 			sourceTree = "<group>";
 		};
+		C87700472A13E612008BCA86 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		C87D8B7E2818331900A6307D /* Nimbus */ = {
 			isa = PBXGroup;
 			children = (
@@ -8391,8 +8393,7 @@
 			isa = PBXGroup;
 			children = (
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
-				21B2844928464FF0003EA521 /* LegacyOnboardingCardViewModel.swift */,
-				435D660223D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift */,
+				21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */,
 				C88E7A562A0553360072E638 /* OnboardingButtonInfoModel.swift */,
 				C8BD875F2A0C248000CD803A /* OnboardingButtonsModel.swift */,
 				C88E7A582A0553440072E638 /* OnboardingCardInfoModel.swift */,
@@ -8457,11 +8458,15 @@
 		C8B41E0C29F034E400FE218A /* OnboardingTests */ = {
 			isa = PBXGroup;
 			children = (
+				C8DF92F22A14078F00AA7B05 /* Helpers */,
+				C87700472A13E612008BCA86 /* Mocks */,
+				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
+				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
 				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
 				C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */,
 				C8610DA72A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift */,
-				C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */,
+				C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */,
 			);
 			path = OnboardingTests;
 			sourceTree = "<group>";
@@ -8528,6 +8533,14 @@
 				C8DC90D12A067C6D0008832B /* MarkupAttributionUtilityTests.swift */,
 			);
 			path = MarkupParseUtilityTests;
+			sourceTree = "<group>";
+		};
+		C8DF92F22A14078F00AA7B05 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		C8E2E80623D20FB3005AACE6 /* RustFxA */ = {
@@ -9580,7 +9593,6 @@
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 				8ACA8F722919870B00D3075D /* Helpers */,
 				C889D7D32858CD4500121E1D /* HistoryHighlights */,
-				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */,
 				8AED868128CA3A1F00351A50 /* Library */,
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
@@ -9620,7 +9632,6 @@
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
-				43446CED2412DDB100F5C643 /* UpdateViewModel */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
@@ -11560,7 +11571,6 @@
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
-				435D660323D793DF0046EFA2 /* LegacyOnboardingInfoModel.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
@@ -11652,6 +11662,7 @@
 				C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
+				C8DF92F42A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift in Sources */,
 				8A05123927D17EC3009930CC /* LegacyWallpaperStorageUtility.swift in Sources */,
 				DFACBF81277B916B003D5F41 /* ConfigurableGradientView.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
@@ -11843,7 +11854,7 @@
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
-				21B2844A28464FF0003EA521 /* LegacyOnboardingCardViewModel.swift in Sources */,
+				21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				DFD64DB727A1A909003D4534 /* LegacyWallpaper.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
@@ -12144,6 +12155,7 @@
 				E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */,
 				96A5F736298D8EDF00234E5F /* MockSearchEngineProvider.swift in Sources */,
 				21A1C3C72996AFF800181B7C /* OverlayModeManagerTests.swift in Sources */,
+				C8DF92F72A14101500AA7B05 /* OnboardingViewControllerProtocolTests.swift in Sources */,
 				6A3E5D8A283831D1001E706E /* DownloadQueueTests.swift in Sources */,
 				8AE80BB62891AEA100BC12EA /* MockDispatchGroup.swift in Sources */,
 				8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */,

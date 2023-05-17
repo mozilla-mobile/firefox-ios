@@ -43,9 +43,11 @@ class LaunchCoordinator: BaseCoordinator {
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
-        let introViewModel = IntroViewModel(introScreenManager: manager)
-        let introViewController = IntroViewController(viewModel: introViewModel,
-                                                      profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let introViewModel = IntroViewModel(introScreenManager: manager,
+                                            profile: profile,
+                                            model: onboardingModel)
+        let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

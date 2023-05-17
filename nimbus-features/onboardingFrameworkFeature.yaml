@@ -35,6 +35,7 @@ features:
             - name: "welcome"
               title: Onboarding/Onboarding.Welcome.Title.v114
               body: Onboarding/Onboarding.Welcome.Description.v114
+              image: welcome-globe
               link:
                 title: Onboarding/Onboarding.Welcome.Link.Action.v114
                 url: "https://www.mozilla.org/en-US/privacy/firefox/"
@@ -46,6 +47,7 @@ features:
             - name: "notificationPermissions"
               title: Onboarding/Onboarding.Notification.Title.v114
               body: Onboarding/Onboarding.Notification.Description.v114
+              image: notifications
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Notification.Continue.Action.v114
@@ -57,6 +59,7 @@ features:
             - name: "signToSync"
               title: Onboarding/Onboarding.Sync.Title.v114
               body: Onboarding/Onboarding.Sync.Description.v114
+              image: sync-devices
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Sync.SignIn.Action.v114
@@ -68,9 +71,7 @@ features:
             - name: "update.welcome"
               title: Upgrade/Upgrade.Welcome.Title.v114
               body: Upgrade/Upgrade.Welcome.Description.v114
-              link:
-                title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/en-US/privacy/firefox/"
+              image: welcome-globe
               buttons:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
@@ -79,6 +80,7 @@ features:
             - name: "update.signToSync"
               title: Upgrade/Upgrade.SyncSign.Title.v114
               body: Upgrade/Upgrade.SyncSign.Description.v114
+              image: sync-devices
               buttons:
                 primary:
                   title: Upgrade/Upgrade.SyncSign.Action.v114
@@ -214,6 +216,10 @@ enums:
       set-default-browser:
         description: >
           Will send the user to settings to set Firefox as their default browser
+      open-default-browser-popup:
+        description: >
+          Will open up a popup with instructions for setting
+          Firefox as their default browser.
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
