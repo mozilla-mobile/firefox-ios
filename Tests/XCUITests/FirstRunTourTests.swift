@@ -7,7 +7,7 @@ import XCTest
 class FirstRunTourTests: BaseTestCase {
     var currentScreen = 0
     var rootA11yId: String {
-        return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)."
+        return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
     }
 
     override func setUp() {
@@ -20,12 +20,10 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        print("RGB - \(app.debugDescription)")
-        waitForExistence(app.staticTexts["Welcome to an independent internet"], timeout: 15)
-
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.textViews["\(rootA11yId)TitleLabel"].exists)
-        XCTAssertTrue(app.textViews["\(rootA11yId)DescriptionLabel"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
@@ -33,9 +31,27 @@ class FirstRunTourTests: BaseTestCase {
         // Swipe to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.staticTexts["Hop from phone to laptop and back"])
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+
+        // Swipe to the third screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
+        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
+        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
+        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+
+        // Finish onboarding
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        waitForExistence(topSites)
     }
 
     func testCloseTour() {
