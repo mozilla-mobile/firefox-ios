@@ -36,6 +36,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                observing: [UIApplication.willResignActiveNotification])
         }
 
+    private func startUp() {
+        guard tabs.isEmpty else { return }
+        let newTab = addTab()
+        super.selectTab(newTab)
+    }
+
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
@@ -45,29 +51,34 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        guard tabMigration.shouldRunMigration else {
-            restoreOnly(forced)
+        guard !isRestoringTabs else { return }
+
+        startUp()
+
+        guard !AppConstants.isRunningUITests,
+              !DebugSettingsBundleOptions.skipSessionRestore
+        else {
             return
         }
 
-        migrateAndRestore(forced)
+        isRestoringTabs = true
+
+        guard tabMigration.shouldRunMigration else {
+            restoreOnly()
+            return
+        }
+
+        migrateAndRestore()
     }
 
-    private func migrateAndRestore(_ forced: Bool = false) {
+    private func migrateAndRestore() {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
         }
     }
 
-    private func restoreOnly(_ forced: Bool = false) {
-        guard !isRestoringTabs else { return }
-
-        // TODO: FXIOS-6112 Handle debug settings and UITests
-
-        if forced {
-            tabs = [Tab]()
-        }
-
+    private func restoreOnly() {
+        tabs = [Tab]()
         isRestoringTabs = true
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
@@ -75,7 +86,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func buildTabRestore(window: WindowData?) async {
-        guard let windowData = window
+        defer {
+            isRestoringTabs = false
+        }
+
+        guard let windowData = window,
+              !windowData.tabData.isEmpty,
+              tabs.isEmpty
         else {
             // Always make sure there is a single normal tab
             await generateEmptyTab()
@@ -86,8 +103,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
-
-        isRestoringTabs = false
     }
 
     /// Creates the webview so needs to live on the main thread
@@ -210,11 +225,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
         saveCurrentTabSessionData()
 
-        Task {
-            let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
-            await selectTabWithSession(tab: tab,
-                                       previous: previous,
-                                       sessionData: sessionData)
+        guard !AppConstants.isRunningUITests,
+              !DebugSettingsBundleOptions.skipSessionRestore
+        else {
+            super.selectTab(tab, previous: previous)
+            return
+        }
+
+        Task(priority: .high) {
+            if tab.isFxHomeTab {
+                await selectTabWithSession(tab: tab,
+                                           previous: previous,
+                                           sessionData: nil)
+            } else {
+                let sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+                await selectTabWithSession(tab: tab,
+                                           previous: previous,
+                                           sessionData: sessionData)
+            }
         }
     }
 
