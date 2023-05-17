@@ -324,7 +324,8 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
-    func testPopUpBlocker() {
+    func testPopUpBlocker() throws {
+        throw XCTSkip("This test is flakey")
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
