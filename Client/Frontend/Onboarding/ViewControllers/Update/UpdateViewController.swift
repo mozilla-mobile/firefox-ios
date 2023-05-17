@@ -79,12 +79,12 @@ class UpdateViewController: UIViewController,
 
         if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
-            setupCloseButton()
         } else {
             setupMultipleCards()
             setupMultipleCardsConstraints()
-            setupCloseButton()
         }
+
+        if viewModel.isDismissable { setupCloseButton() }
     }
 
     private func setupSingleInfoCard() {
