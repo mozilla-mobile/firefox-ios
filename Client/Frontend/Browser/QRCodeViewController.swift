@@ -291,7 +291,7 @@ class QRCodeViewController: UIViewController {
         videoPreviewLayer.frame = UIScreen.main.bounds
         view.layer.addSublayer(videoPreviewLayer)
         self.videoPreviewLayer = videoPreviewLayer
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global().async {
             self.captureSession.startRunning()
         }
     }
