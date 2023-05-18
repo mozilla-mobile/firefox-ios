@@ -14,7 +14,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"
-        static let a11yID = "A11yId"
+        static let a11yIDOnboarding = "onboarding."
+        static let a11yIDUpgrade = "upgrade."
         static let linkTitle = "MacRumors"
         static let linkURL = "https://macrumors.com"
         static let primaryButtonTitle = "Primary Button"
@@ -66,6 +67,39 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertFalse(subject.isDismissable)
     }
 
+    // MARK: - Test A11yRoot
+
+    func testLayer_a11yroot_isOnboarding() {
+        setupNimbusWith(
+            cards: 2,
+            cardOrdering: [
+                "\(CardElementNames.name) 1",
+                "\(CardElementNames.name) 2"
+            ])
+        let layer = NimbusOnboardingFeatureLayer()
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(subject[0].a11yIdRoot, "\(CardElementNames.a11yIDOnboarding)0")
+        XCTAssertEqual(subject[1].a11yIdRoot, "\(CardElementNames.a11yIDOnboarding)1")
+    }
+
+    func testLayer_a11yroot_isUpgrade() {
+        setupNimbusWith(
+            cards: 2,
+            cardOrdering: [
+                "\(CardElementNames.name) 1",
+                "\(CardElementNames.name) 2"
+            ],
+            type: OnboardingType.upgrade.rawValue)
+        let layer = NimbusOnboardingFeatureLayer()
+
+        let subject = layer.getOnboardingModel(for: .upgrade).cards
+
+        XCTAssertEqual(subject[0].a11yIdRoot, "\(CardElementNames.a11yIDUpgrade)0")
+        XCTAssertEqual(subject[1].a11yIdRoot, "\(CardElementNames.a11yIDUpgrade)1")
+    }
+
     // MARK: - Test card(s) being returned
     func testLayer_cardIsReturned_OneCard() {
         setupNimbusWith(
@@ -92,7 +126,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                     title: CardElementNames.secondaryButtonTitle,
                     action: .nextCard)),
             type: .freshInstall,
-            a11yIdRoot: CardElementNames.a11yID,
+            a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.onboardingWelcomev106)
 
         XCTAssertEqual(subject.name, expectedCard.name)
