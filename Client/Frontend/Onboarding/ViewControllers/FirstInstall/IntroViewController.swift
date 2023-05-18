@@ -128,7 +128,15 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         let index = viewModel.enabledCards.firstIndex(of: cardType) ?? 0
         if let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
             pageControl.currentPage = index + 1
-            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
+            let viewController = OnboardingDefaultSettingsViewController()
+            var bottomSheetViewModel = BottomSheetViewModel()
+            bottomSheetViewModel.shouldDismissForTapOutside = true
+            let bottomSheetVC = BottomSheetViewController(
+                viewModel: bottomSheetViewModel,
+                childViewController: viewController)
+
+            self.present(bottomSheetVC, animated: false, completion: nil)
+//            pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }
 
