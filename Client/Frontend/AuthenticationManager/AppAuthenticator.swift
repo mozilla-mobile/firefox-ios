@@ -25,7 +25,7 @@ class AppAuthenticator: AppAuthenticationProtocol {
 
         // First check if we have the needed hardware support.
         var error: NSError?
-        let localizedErrorMessage = AppAuthenticator.getDefaultErrorMessageForContext(context: context)
+        let localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReason
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
             context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: localizedErrorMessage) { success, error in
                 if success {
@@ -47,16 +47,5 @@ class AppAuthenticator: AppAuthenticationProtocol {
 
     func canAuthenticateDeviceOwner() -> Bool {
         return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
-    }
-
-    static func getDefaultErrorMessageForContext(context: LAContext) -> String {
-        var localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReason
-        if context.biometryType == .touchID {
-            localizedErrorMessage = .Biometry.Screen.FingerprintAuthenticationReason
-        } else if context.biometryType == .faceID {
-            localizedErrorMessage = .Biometry.Screen.FaceIDAuthenticationReason
-        }
-
-        return localizedErrorMessage
     }
 }

@@ -88,17 +88,7 @@ extension String {
             public static let UniversalAuthenticationReason = MZLocalizedString(
                 key: "Biometry.Screen.UniversalAuthenticationReason.v113",
                 tableName: "BiometricAuthentication",
-                value: "Enter your device passcode",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
-            public static let FingerprintAuthenticationReason = MZLocalizedString(
-                key: "Biometry.Screen.FingerprintAuthenticationReason.v114",
-                tableName: "BiometricAuthentication",
-                value: "Use your fingerprint to access passwords.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
-            public static let FaceIDAuthenticationReason = MZLocalizedString(
-                key: "Biometry.Screen.FaceIDAuthenticationReason.v114",
-                tableName: "BiometricAuthentication",
-                value: "Use Face ID to access passwords.",
+                value: "Authenticate to access passwords.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
         }
     }
