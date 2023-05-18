@@ -128,6 +128,9 @@ onboarding-framework-feature:
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
+    prerequisites:
+      type: json
+      description: "A collection of out the box prerequisite expressions. Each entry maps to a valid JEXL expression.\n"
 rust-sync-manager-component:
   description: The feature that controls whether we use the rust sync manager
   hasExposure: true
