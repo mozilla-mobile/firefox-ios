@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 class OnboardingButtonActionTests: XCTestCase {
-    var mockDelegate: MockIntroViewController!
+    var mockDelegate: MockOnboardinCardDelegateController!
 
     override func setUp() {
         super.setUp()
@@ -72,6 +72,14 @@ class OnboardingButtonActionTests: XCTestCase {
         XCTAssertEqual(mockDelegate.action, OnboardingActions.setDefaultBrowser)
     }
 
+    func testsubject_buttonAction_returnsOpenPopupAction() {
+        let subject = setSubjectUpWith(firstAction: .openDefaultBrowserPopup)
+
+        subject.primaryAction()
+
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.openDefaultBrowserPopup)
+    }
+
     // MARK: - Helpers
     func setSubjectUpWith(
         firstAction: OnboardingActions,
@@ -104,12 +112,9 @@ class OnboardingButtonActionTests: XCTestCase {
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
             imageID: ImageIdentifiers.onboardingSyncv106)
-        let mockCardViewModel = LegacyOnboardingCardViewModel(
-            cardType: .welcome,
-            infoModel: mockInfoModel,
-            isFeatureEnabled: true)
+        let mockCardViewModel = OnboardingCardViewModel(infoModel: mockInfoModel)
 
-        mockDelegate = MockIntroViewController()
+        mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingCardViewController(
             viewModel: mockCardViewModel,
             delegate: mockDelegate)

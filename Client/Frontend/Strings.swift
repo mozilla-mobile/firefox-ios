@@ -244,6 +244,15 @@ extension String {
                 comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
         }
 
+        // Displaying a credit card
+        public struct DisplayCard {
+            public static let ExpiresLabel = MZLocalizedString(
+                key: "CreditCard.DisplayCard.ExpiresLabel.v115",
+                tableName: "DisplayCard",
+                value: "Expires",
+                comment: "Label for the expiry date of the credit card.")
+        }
+
         // Editing and saving credit card
         public struct EditCard {
             public static let RevealLabel = MZLocalizedString(

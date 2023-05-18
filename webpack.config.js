@@ -73,7 +73,13 @@ module.exports = {
     path: path.resolve(__dirname, "Client/Assets"),
   },
   module: {
-    rules: [],
+    rules: [
+      {
+        test: /\.mjs$/,
+        include: [path.resolve(__dirname, "Client/Assets/CC_Script/")],
+        type: "javascript/auto",
+      },
+    ],
   },
   plugins: [CustomResourceURIWebpackPlugin],
   resolve: {

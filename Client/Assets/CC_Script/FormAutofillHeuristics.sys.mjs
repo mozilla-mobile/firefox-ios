@@ -2,14 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { creditCardRulesets } from "resource://gre/modules/shared/CreditCardRuleset.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
-import { LabelUtils } from "resource://gre/modules/shared/LabelUtils.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
-import { FieldScanner } from "resource://gre/modules/shared/FieldScanner.sys.mjs";
-import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
-import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { HeuristicsRegExp } from "resource://gre/modules/shared/HeuristicsRegExp.sys.mjs";
+import { FieldScanner } from "resource://gre/modules/shared/FieldScanner.sys.mjs";
+
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  creditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
+  LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
+  CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
+  FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
+});
 
 /**
  * Returns the autocomplete information of fields according to heuristics.
@@ -198,7 +202,7 @@ export const FormAutofillHeuristics = {
       const previousField = fieldScanner.getFieldDetailByIndex(
         fieldScanner.parsingIndex - 1
       );
-      const previousFieldType = FormAutofillUtils.getCategoryFromFieldName(
+      const previousFieldType = lazy.FormAutofillUtils.getCategoryFromFieldName(
         previousField.fieldName
       );
       if (
@@ -335,8 +339,8 @@ export const FormAutofillHeuristics = {
     // The heuristic below should be covered by fathom rules, so we can skip doing
     // it.
     if (
-      FormAutofillUtils.isFathomCreditCardsEnabled() &&
-      creditCardRulesets.types.includes(detail.fieldName)
+      lazy.FormAutofillUtils.isFathomCreditCardsEnabled() &&
+      lazy.creditCardRulesets.types.includes(detail.fieldName)
     ) {
       fieldScanner.parsingIndex++;
       return true;
@@ -349,8 +353,8 @@ export const FormAutofillHeuristics = {
     if (HTMLSelectElement.isInstance(element)) {
       for (let option of element.querySelectorAll("option")) {
         if (
-          CreditCard.getNetworkFromName(option.value) ||
-          CreditCard.getNetworkFromName(option.text)
+          lazy.CreditCard.getNetworkFromName(option.value) ||
+          lazy.CreditCard.getNetworkFromName(option.text)
         ) {
           fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-type");
           fieldScanner.parsingIndex++;
@@ -489,7 +493,7 @@ export const FormAutofillHeuristics = {
    */
   getFormInfo(form) {
     const eligibleFields = Array.from(form.elements).filter(elem =>
-      FormAutofillUtils.isCreditCardOrAddressFieldType(elem)
+      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(elem)
     );
 
     if (eligibleFields.length <= 0) {
@@ -515,7 +519,7 @@ export const FormAutofillHeuristics = {
       }
     }
 
-    LabelUtils.clearLabelMap();
+    lazy.LabelUtils.clearLabelMap();
 
     return fieldScanner.getSectionFieldDetails();
   },
@@ -587,10 +591,10 @@ export const FormAutofillHeuristics = {
       return ["email", null, null];
     }
 
-    if (FormAutofillUtils.isFathomCreditCardsEnabled()) {
+    if (lazy.FormAutofillUtils.isFathomCreditCardsEnabled()) {
       // We don't care fields that are not supported by fathom
       const fathomFields = fields.filter(r =>
-        creditCardRulesets.types.includes(r)
+        lazy.creditCardRulesets.types.includes(r)
       );
       const [matchedFieldName, confidence] = scanner.getFathomField(
         element,
@@ -642,9 +646,9 @@ export const FormAutofillHeuristics = {
         yield element.name;
         yield element.placeholder?.trim();
 
-        const labels = LabelUtils.findLabelElements(element);
+        const labels = lazy.LabelUtils.findLabelElements(element);
         for (let label of labels) {
-          yield* LabelUtils.extractLabelStrings(label);
+          yield* lazy.LabelUtils.extractLabelStrings(label);
         }
       },
     };
@@ -836,13 +840,13 @@ XPCOMUtils.defineLazyGetter(
   "CREDIT_CARD_FIELDNAMES",
   () =>
     Object.keys(FormAutofillHeuristics.RULES).filter(name =>
-      FormAutofillUtils.isCreditCardField(name)
+      lazy.FormAutofillUtils.isCreditCardField(name)
     )
 );
 
 XPCOMUtils.defineLazyGetter(FormAutofillHeuristics, "ADDRESS_FIELDNAMES", () =>
   Object.keys(FormAutofillHeuristics.RULES).filter(name =>
-    FormAutofillUtils.isAddressField(name)
+    lazy.FormAutofillUtils.isAddressField(name)
   )
 );
 

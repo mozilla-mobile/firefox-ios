@@ -46,6 +46,9 @@ public struct PrefsKeys {
         public static let FirstAppUse = "firstAppUse"
         public static let Last = "lastSession"
         public static let Count = "sessionCount"
+        public static let firstWeekAppOpenTimestamps = "firstWeekAppOpenTimestamps"
+        public static let firstWeekSearchesTimestamps = "firstWeekSearchesTimestamps"
+        public static let didUpdateConversionValue = "didUpdateConversionValue"
     }
 
     public struct AppVersion {

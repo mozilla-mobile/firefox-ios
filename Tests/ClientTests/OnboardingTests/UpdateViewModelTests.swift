@@ -9,13 +9,16 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
-    var viewModel: UpdateViewModel!
+    var nimbusUtility: NimbusOnboardingConfigUtility!
+    typealias cards = NimbusOnboardingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility.setupNimbus(withOrder: cards.allCards)
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
-        viewModel = UpdateViewModel(profile: profile)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -23,7 +26,8 @@ class UpdateViewModelTests: XCTestCase {
         super.tearDown()
         profile.shutdown()
         profile = nil
-        viewModel = nil
+        nimbusUtility.clearNimbus()
+        nimbusUtility = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
@@ -31,13 +35,14 @@ class UpdateViewModelTests: XCTestCase {
     // MARK: Enable cards
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
+        let subject = createSubject()
         let expectation = expectation(description: "The hasAccount var has value")
 
-        viewModel.hasSyncableAccount {
-            let enableCards = self.viewModel.enabledCards
+        subject.hasSyncableAccount {
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-            XCTAssertEqual(enableCards.count, 1)
-            XCTAssertEqual(enableCards[0], .updateWelcome)
+            XCTAssertEqual(subject.availableCards.count, 1)
+            XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.updateWelcome)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -45,14 +50,15 @@ class UpdateViewModelTests: XCTestCase {
 
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
+        let subject = createSubject()
         let expectation = expectation(description: "The hasAccount var has value")
 
-        viewModel.hasSyncableAccount {
-            let enableCards = self.viewModel.enabledCards
+        subject.hasSyncableAccount {
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-            XCTAssertEqual(enableCards.count, 2)
-            XCTAssertEqual(enableCards[0], .updateWelcome)
-            XCTAssertEqual(enableCards[1], .updateSignSync)
+            XCTAssertEqual(subject.availableCards.count, 2)
+            XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.updateWelcome)
+            XCTAssertEqual(subject.availableCards[1].viewModel.infoModel.name, cards.updateSync)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -61,10 +67,13 @@ class UpdateViewModelTests: XCTestCase {
     // MARK: Has Single card
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
+        let subject = createSubject()
         let expectation = expectation(description: "The hasAccount var has value")
 
-        viewModel.hasSyncableAccount {
-            XCTAssertEqual(self.viewModel.shouldShowSingleCard, true)
+        subject.hasSyncableAccount {
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+
+            XCTAssertEqual(subject.shouldShowSingleCard, true)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -72,38 +81,45 @@ class UpdateViewModelTests: XCTestCase {
 
     func testHasSingleCard_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
-        XCTAssertEqual(viewModel.shouldShowSingleCard, false)
+        let subject = createSubject()
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+
+        XCTAssertEqual(subject.shouldShowSingleCard, false)
     }
 
     // MARK: ShouldShowFeature
     func testShouldShowCoverSheet_forceIsTrue() {
+        let subject = createSubject()
         let currentTestAppVersion = "22.0"
 
-        let shouldShow = viewModel.shouldShowUpdateSheet(force: true, appVersion: currentTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(force: true, appVersion: currentTestAppVersion)
         XCTAssertTrue(shouldShow)
     }
 
     func testShouldNotShowCoverSheet_featureFlagOff_appVersionKeyNil() {
+        let subject = createSubject()
         let currentTestAppVersion = "22.0"
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldNotShowCoverSheetForSameVersion() {
+        let subject = createSubject()
         let currentTestAppVersion = "22.0"
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldNotShowCoverSheet_ForMinorVersionUpgrade() {
+        let subject = createSubject()
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let olderTestAppVersion = "21.0"
@@ -112,12 +128,13 @@ class UpdateViewModelTests: XCTestCase {
         // Setting clean install to false
         profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
 
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), olderTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldShowCoverSheetFromUpdateVersion() {
+        let subject = createSubject()
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let olderTestAppVersion = "21.0"
@@ -126,47 +143,52 @@ class UpdateViewModelTests: XCTestCase {
         // Setting clean install to false
         profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
 
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), updatedTestAppVersion)
         XCTAssertTrue(shouldShow)
     }
 
     func testShouldShowCoverSheetForVersionNil() {
+        let subject = createSubject()
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
-        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        let shouldShow = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldSaveVersion_CleanInstall() {
+        let subject = createSubject()
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-        _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        _ = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
     }
 
     func testShouldSaveVersion_UnsavedVersion() {
+        let subject = createSubject()
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
-        _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
+        _ = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
     }
 
-    func testGetViewModel_ForValidUpgradeCard() {
-        profile.hasSyncableAccountMock = false
-        XCTAssertNotNil(viewModel.getCardViewModel(cardType: .updateWelcome))
-        XCTAssertNotNil(viewModel.getCardViewModel(cardType: .updateSignSync))
-    }
+    // MARK: - Private Helpers
+    func createSubject(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> UpdateViewModel {
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let subject = UpdateViewModel(profile: profile, model: onboardingModel)
 
-    func testGetViewModel_ForInvalidUpgradeCard() {
-        XCTAssertNil(viewModel.getCardViewModel(cardType: .welcome))
-        XCTAssertNil(viewModel.getCardViewModel(cardType: .signSync))
+        trackForMemoryLeaks(subject, file: file, line: line)
+
+        return subject
     }
 }

@@ -22,8 +22,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
     var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
-    var layerGradientOverlay = Gradient(colors: [FXColors.LightGrey40.withAlphaComponent(0),
-                                                 FXColors.LightGrey40.withAlphaComponent(0.4)])
+    var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
+                                                 FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)

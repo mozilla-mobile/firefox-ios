@@ -34,7 +34,8 @@ struct CreditCardInputField: View {
     }
 
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var errorColor: Color = .clear
     @State var titleColor: Color = .clear
     @State var textFieldColor: Color = .clear

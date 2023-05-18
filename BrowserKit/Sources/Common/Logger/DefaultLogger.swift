@@ -52,13 +52,13 @@ public class DefaultLogger: Logger {
         // Log locally and in console
         switch level {
         case .debug:
-            logger.debug(loggerMessage, file, function, line: line, context: category)
+            logger.debug(loggerMessage, file: file, function: function, line: line, context: category)
         case .info:
-            logger.info(loggerMessage, file, function, line: line, context: category)
+            logger.info(loggerMessage, file: file, function: function, line: line, context: category)
         case .warning:
-            logger.warning(loggerMessage, file, function, line: line, context: category)
+            logger.warning(loggerMessage, file: file, function: function, line: line, context: category)
         case .fatal:
-            logger.error(loggerMessage, file, function, line: line, context: category)
+            logger.error(loggerMessage, file: file, function: function, line: line, context: category)
         }
 
         // Log to sentry

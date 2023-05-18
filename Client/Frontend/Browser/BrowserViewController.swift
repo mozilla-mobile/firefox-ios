@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController {
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
-    // ex: Find In Page, Zoom page bar, SnackBars
+    // ex: Find In Page, SnackBars
     var bottomContentStackView: BaseAlphaStackView = .build { stackview in
         stackview.isClearBackground = true
     }
@@ -667,6 +667,9 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
+        adjustBottomContainerHeight()
+        zoomPageBar?.changeGradientOpacity(alpha: 1)
+        zoomPageBar?.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
@@ -868,6 +871,13 @@ class BrowserViewController: UIViewController {
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
+    }
+
+    private func adjustBottomContainerHeight() {
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        if !showToolBar, zoomPageBar != nil {
+            bottomContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else { bottomContainer.removeBottomInsetSpacer() }
     }
 
     /// Used for dynamic type height adjustment
@@ -2472,7 +2482,8 @@ extension BrowserViewController {
     }
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
-        let viewModel = UpdateViewModel(profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let viewModel = UpdateViewModel(profile: profile, model: onboardingModel)
         if viewModel.shouldShowUpdateSheet(force: force) && !hasPresentedUpgrade {
             viewModel.hasSyncableAccount {
                 self.buildUpdateVC(viewModel: viewModel, animated: animated)
@@ -2503,10 +2514,11 @@ extension BrowserViewController {
     }
 
     private func showProperIntroVC() {
-        let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(
-            viewModel: introViewModel,
-            profile: profile)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let introViewModel = IntroViewModel(introScreenManager: nil,
+                                            profile: profile,
+                                            model: onboardingModel)
+        let introViewController = IntroViewController(viewModel: introViewModel)
 
         introViewController.didFinishFlow = {
             IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()

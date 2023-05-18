@@ -6,8 +6,12 @@ import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
-import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
-import { AutofillTelemetry } from "resource://autofill/AutofillTelemetry.sys.mjs";
+
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
+  AutofillTelemetry: "resource://autofill/AutofillTelemetry.sys.mjs",
+});
 
 const { FIELD_STATES } = FormAutofillUtils;
 
@@ -400,7 +404,7 @@ export class FormAutofillSection {
     }
     this.#focusedInput.focus({ preventScroll: true });
 
-    AutofillTelemetry.recordFormInteractionEvent("filled", this, {
+    lazy.AutofillTelemetry.recordFormInteractionEvent("filled", this, {
       profile,
     });
 
@@ -452,7 +456,7 @@ export class FormAutofillSection {
    * Clear a previously autofilled field in this section
    */
   clearFilled(fieldDetail) {
-    AutofillTelemetry.recordFormInteractionEvent("filled_modified", this, {
+    lazy.AutofillTelemetry.recordFormInteractionEvent("filled_modified", this, {
       fieldName: fieldDetail.fieldName,
     });
 
@@ -670,8 +674,8 @@ export class FormAutofillAddressSection extends FormAutofillSection {
 
     this._cacheValue.oneLineStreetAddress = null;
 
-    AutofillTelemetry.recordDetectedSectionCount(this);
-    AutofillTelemetry.recordFormInteractionEvent("detected", this);
+    lazy.AutofillTelemetry.recordDetectedSectionCount(this);
+    lazy.AutofillTelemetry.recordFormInteractionEvent("detected", this);
   }
 
   isValidSection() {
@@ -910,8 +914,8 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       return;
     }
 
-    AutofillTelemetry.recordDetectedSectionCount(this);
-    AutofillTelemetry.recordFormInteractionEvent("detected", this);
+    lazy.AutofillTelemetry.recordDetectedSectionCount(this);
+    lazy.AutofillTelemetry.recordFormInteractionEvent("detected", this);
 
     // Check whether the section is in an <iframe>; and, if so,
     // watch for the <iframe> to pagehide.
@@ -1247,7 +1251,7 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       return value;
     }
 
-    if (CreditCard.isValidNetwork(value)) {
+    if (lazy.CreditCard.isValidNetwork(value)) {
       return value;
     }
 
@@ -1257,8 +1261,8 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
     if (value && element.selectedOptions.length == 1) {
       let selectedOption = element.selectedOptions[0];
       let networkType =
-        CreditCard.getNetworkFromName(selectedOption.text) ??
-        CreditCard.getNetworkFromName(selectedOption.value);
+        lazy.CreditCard.getNetworkFromName(selectedOption.text) ??
+        lazy.CreditCard.getNetworkFromName(selectedOption.value);
       if (networkType) {
         return networkType;
       }
@@ -1328,12 +1332,12 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       return;
     }
     // Normalize cc-number
-    creditCard.record["cc-number"] = CreditCard.normalizeCardNumber(
+    creditCard.record["cc-number"] = lazy.CreditCard.normalizeCardNumber(
       creditCard.record["cc-number"]
     );
 
     // Normalize cc-exp-month and cc-exp-year
-    let { month, year } = CreditCard.normalizeExpiration({
+    let { month, year } = lazy.CreditCard.normalizeExpiration({
       expirationString: creditCard.record["cc-exp"],
       expirationMonth: creditCard.record["cc-exp-month"],
       expirationYear: creditCard.record["cc-exp-year"],

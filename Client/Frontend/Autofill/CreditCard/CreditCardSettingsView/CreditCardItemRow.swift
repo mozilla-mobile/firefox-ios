@@ -12,7 +12,8 @@ struct CreditCardItemRow: View {
     let isAccessibilityCategory: Bool
 
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var separatorColor: Color = .clear
@@ -55,7 +56,7 @@ struct CreditCardItemRow: View {
                     AdaptiveStack(horizontalAlignment: .leading,
                                   spacing: isAccessibilityCategory ? 0 : 5,
                                   isAccessibilityCategory: isAccessibilityCategory) {
-                        Text("Expires")
+                        Text(String.CreditCard.DisplayCard.ExpiresLabel)
                             .font(.body)
                             .foregroundColor(subTextColor)
                         Text(String(item.ccExpYear))

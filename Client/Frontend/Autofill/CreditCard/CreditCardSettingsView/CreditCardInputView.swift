@@ -12,7 +12,8 @@ struct CreditCardInputView: View {
     var dismiss: ((_ successVal: Bool) -> Void)
 
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var backgroundColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear

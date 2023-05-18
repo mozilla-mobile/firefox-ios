@@ -235,6 +235,7 @@ open class BrowserProfile: Profile {
     init(localName: String,
          syncDelegate: SyncDelegate? = nil,
          rustSyncManagerEnabled: Bool = false,
+         creditCardAutofillEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -323,7 +324,8 @@ open class BrowserProfile: Profile {
             let msg = "Setting `syncManager` property to `RustSyncManager"
             logger.log(msg, level: .debug, category: .sync)
 
-            self.syncManager = RustSyncManager(profile: self)
+            self.syncManager = RustSyncManager(profile: self,
+                                               creditCardAutofillEnabled: creditCardAutofillEnabled)
 
             // Setting this pref to true in the event this is the first time
             // RustSyncManager is being used. If it's been used before setting this pref

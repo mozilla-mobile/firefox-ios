@@ -26,6 +26,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
+    var creditCardAutofillEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
 
@@ -44,7 +45,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger)
+    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger,
+                                                 creditCardAutofillEnabled: creditCardAutofillEnabled)
 
     public var isSyncing: Bool {
         return syncDisplayState != nil && syncDisplayState! == .inProgress
@@ -57,6 +59,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     init(profile: BrowserProfile,
+         creditCardAutofillEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
@@ -65,6 +68,7 @@ public class RustSyncManager: NSObject, SyncManager {
         self.notificationCenter = notificationCenter
 
         super.init()
+        self.creditCardAutofillEnabled = creditCardAutofillEnabled
     }
 
     @objc
@@ -261,7 +265,7 @@ public class RustSyncManager: NSObject, SyncManager {
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
-            RustTogglableEngines.forEach { engine in
+            RustSyncManagerAPI.rustTogglableEngines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
@@ -311,7 +315,7 @@ public class RustSyncManager: NSObject, SyncManager {
         var rustEngines: [String] = []
         var registeredPlaces = false
 
-        for engine in engines {
+        for engine in engines.filter({ RustSyncManagerAPI.rustTogglableEngines.contains($0) }) {
             switch engine {
             case "tabs":
                 profile?.tabs.registerWithSyncManager()
@@ -323,6 +327,16 @@ public class RustSyncManager: NSObject, SyncManager {
                     rustEngines.append(engine)
                 } else {
                     logger.log("Login encryption key could not be retrieved for syncing",
+                               level: .warning,
+                               category: .sync)
+                }
+            case "creditcards":
+                profile?.autofill.registerWithSyncManager()
+                if let key = try? profile?.autofill.getStoredKey() {
+                    localEncryptionKeys[engine] = key
+                    rustEngines.append(engine)
+                } else {
+                    logger.log("Credit card encryption key could not be retrieved for syncing",
                                level: .warning,
                                category: .sync)
                 }
@@ -391,7 +405,7 @@ public class RustSyncManager: NSObject, SyncManager {
                             extra: enablementDetails)
         }
 
-        RustTogglableEngines.forEach({
+        RustSyncManagerAPI.rustTogglableEngines.forEach({
             if declined.contains($0) {
                 updateEnginePref($0, false)
             } else {
@@ -461,7 +475,8 @@ public class RustSyncManager: NSObject, SyncManager {
     @discardableResult
     public func syncEverything(why: OldSyncReason) -> Success {
         let rustReason = toRustSyncReason(reason: why)
-        return syncRustEngines(why: rustReason, engines: RustTogglableEngines) >>> succeed
+        return syncRustEngines(why: rustReason,
+                               engines: RustSyncManagerAPI.rustTogglableEngines) >>> succeed
     }
 
     /**
@@ -478,11 +493,8 @@ public class RustSyncManager: NSObject, SyncManager {
             engines.append(name)
         }
 
-        // Ensuring that only valid engines are submitted
-        let filteredEngines = engines.filter { RustTogglableEngines.contains($0) }
-
         let rustReason = toRustSyncReason(reason: why)
-        return syncRustEngines(why: rustReason, engines: filteredEngines) >>> succeed
+        return syncRustEngines(why: rustReason, engines: engines) >>> succeed
     }
 
     private func syncTabs() -> Deferred<Maybe<MZSyncResult>> {

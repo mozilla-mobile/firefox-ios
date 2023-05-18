@@ -3,7 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { IOSAppConstants } from "resource://gre/modules/shared/Constants.ios.mjs";
+import Overrides from "resource://gre/modules/Overrides.ios.js";
 
+/* eslint mozilla/use-isInstance: 0 */
 HTMLSelectElement.isInstance = element => element instanceof HTMLSelectElement;
 HTMLInputElement.isInstance = element => element instanceof HTMLInputElement;
 HTMLFormElement.isInstance = element => element instanceof HTMLFormElement;
@@ -53,6 +55,32 @@ const withNotImplementedError = obj =>
     },
   });
 
+// Webpack needs to be able to statically analyze require statements in order to build the dependency graph
+// In order to require modules dynamically at runtime, we use require.context() to create a dynamic require
+// that is still able to be parsed by Webpack at compile time. The "./" and ".mjs" tells webpack that files
+// in the current directory ending with .mjs might be needed and should be added to the dependency graph.
+// NOTE: This can't handle circular dependencies. A static import can be used in this case.
+// https://webpack.js.org/guides/dependency-management/
+const internalModuleResolvers = {
+  resolveModule(moduleURI) {
+    // eslint-disable-next-line no-undef
+    const moduleResolver = require.context("./", false, /.mjs$/);
+    // Desktop code uses uris for importing modules of the form resource://gre/modules/<module_path>
+    // We only need the filename here
+    const moduleName = moduleURI.split("/").pop();
+    const modulePath =
+      "./" + (Overrides.ModuleOverrides[moduleName] ?? moduleName);
+    return moduleResolver(modulePath);
+  },
+
+  resolveModules(obj, modules) {
+    for (const [exportName, moduleURI] of Object.entries(modules)) {
+      const resolvedModule = this.resolveModule(moduleURI);
+      obj[exportName] = resolvedModule?.[exportName];
+    }
+  },
+};
+
 // Define mock for XPCOMUtils
 export const XPCOMUtils = withNotImplementedError({
   defineLazyGetter: (obj, prop, getFn) => {
@@ -71,7 +99,21 @@ export const XPCOMUtils = withNotImplementedError({
     }
     obj[prop] = transform(IOSAppConstants.prefs[pref] ?? defaultValue);
   },
+  defineLazyModuleGetters(obj, modules) {
+    internalModuleResolvers.resolveModules(obj, modules);
+  },
 });
+
+// eslint-disable-next-line no-shadow
+export const ChromeUtils = withNotImplementedError({
+  defineESModuleGetters(obj, modules) {
+    internalModuleResolvers.resolveModules(obj, modules);
+  },
+  importESModule(moduleURI) {
+    return internalModuleResolvers.resolveModule(moduleURI);
+  },
+});
+window.ChromeUtils = ChromeUtils;
 
 // Define mock for Region.sys.mjs
 export const Region = withNotImplementedError({

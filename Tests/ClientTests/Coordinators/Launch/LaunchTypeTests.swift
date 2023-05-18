@@ -54,13 +54,23 @@ final class LaunchTypeTests: XCTestCase {
     }
 
     func testCanLaunch_updateFromBrowserCoordinator() {
-        let launchType = LaunchType.update(viewModel: UpdateViewModel(profile: MockProfile()))
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let launchType = LaunchType.update(
+            viewModel: UpdateViewModel(
+                profile: MockProfile(),
+                model: onboardingModel))
+
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
 
     func testCanLaunch_updateFromSceneCoordinator() {
-        let launchType = LaunchType.update(viewModel: UpdateViewModel(profile: MockProfile()))
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let launchType = LaunchType.update(
+            viewModel: UpdateViewModel(
+                profile: MockProfile(),
+                model: onboardingModel))
+
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
@@ -86,7 +96,12 @@ final class LaunchTypeTests: XCTestCase {
     }
 
     func testIsFullScreen_updateFullScreenOnIphone() {
-        let launchType = LaunchType.update(viewModel: UpdateViewModel(profile: MockProfile()))
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let launchType = LaunchType.update(
+            viewModel: UpdateViewModel(
+                profile: MockProfile(),
+                model: onboardingModel))
+
         XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
         XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: false))
     }

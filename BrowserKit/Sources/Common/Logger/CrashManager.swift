@@ -55,6 +55,10 @@ public class DefaultCrashManager: CrashManager {
         return appInfo.buildChannel == .beta
     }
 
+    private var shouldEnableMetricKit: Bool {
+        return appInfo.buildChannel == .beta
+    }
+
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator()) {
@@ -78,6 +82,9 @@ public class DefaultCrashManager: CrashManager {
             options.enableFileIOTracing = false
             options.enableNetworkTracking = false
             options.enableAppHangTracking = self.shouldEnableAppHangTracking
+            if #available(iOS 15.0, *) {
+                options.enableMetricKit = self.shouldEnableMetricKit
+            }
             options.enableCaptureFailedRequests = false
             options.enableSwizzling = false
             options.beforeBreadcrumb = { crumb in

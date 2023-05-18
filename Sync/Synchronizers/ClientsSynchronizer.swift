@@ -154,7 +154,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "appPackage": AppInfo.baseBundleIdentifier,
             "application": AppInfo.displayName,
             "device": DeviceInfo.deviceModel(),
-            "formfactor": formfactor])
+            "formfactor": formfactor] as [String: Any])
 
         let payload = ClientPayload(json)
         return Record(id: fxaDeviceId, payload: payload, ttl: ThreeWeeksInSeconds)

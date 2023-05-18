@@ -26,7 +26,8 @@ class ToggleModel: ObservableObject {
 
 struct CreditCardAutofillToggle: View {
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State var textColor: Color = .clear
     @State var backgroundColor: Color = .clear
     @State var toggleTintColor: Color = .clear

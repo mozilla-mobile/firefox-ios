@@ -2,8 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { FormAutofillHandler } from "resource://gre/modules/shared/FormAutofillHandler.sys.mjs";
-import { FormLikeFactory } from "resource://gre/modules/FormLikeFactory.sys.mjs";
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
+  FormAutofillHandler:
+    "resource://gre/modules/shared/FormAutofillHandler.sys.mjs",
+});
 
 export class FormStateManager {
   constructor(onSubmit, onAutofillCallback) {
@@ -101,15 +105,15 @@ export class FormStateManager {
     if (!element) {
       return null;
     }
-    let rootElement = FormLikeFactory.findRootForField(element);
+    let rootElement = lazy.FormLikeFactory.findRootForField(element);
     return this._formsDetails.get(rootElement);
   }
 
   identifyAutofillFields(element) {
     let formHandler = this._getFormHandler(element);
     if (!formHandler) {
-      let formLike = FormLikeFactory.createFromField(element);
-      formHandler = new FormAutofillHandler(
+      let formLike = lazy.FormLikeFactory.createFromField(element);
+      formHandler = new lazy.FormAutofillHandler(
         formLike,
         this.onSubmit,
         this.onAutofillCallback

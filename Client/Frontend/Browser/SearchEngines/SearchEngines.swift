@@ -174,10 +174,18 @@ class SearchEngines {
     }
 
     private lazy var customEngines: [OpenSearchEngine] = {
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)),
-           let unarchivedObject = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data),
-           let customEngines = unarchivedObject as? [OpenSearchEngine] {
-            return customEngines
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)) {
+            do {
+                let unarchiveClasses = [NSArray.self, OpenSearchEngine.self, NSString.self, UIImage.self]
+                let customEngines = try NSKeyedUnarchiver.unarchivedObject(ofClasses: unarchiveClasses,
+                                                                           from: data) as? [OpenSearchEngine]
+                return customEngines ?? []
+            } catch {
+                logger.log("Error unarchiving engines from data: \(error.localizedDescription)",
+                           level: .debug,
+                           category: .storage)
+                return []
+            }
         } else {
             return []
         }
@@ -185,19 +193,19 @@ class SearchEngines {
 
     private func saveCustomEngines() {
         do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: false)
+            let data = try NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: true)
 
             do {
                 try data.write(to: URL(fileURLWithPath: customEngineFilePath))
             } catch {
                 logger.log("Error writing data to file: \(error.localizedDescription)",
                            level: .debug,
-                           category: .images)
+                           category: .storage)
             }
         } catch {
             logger.log("Error archiving custom engines: \(error.localizedDescription)",
                        level: .debug,
-                       category: .images)
+                       category: .storage)
         }
     }
 }
