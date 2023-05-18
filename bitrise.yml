@@ -16,6 +16,7 @@ stages:
     - build_and_test_2_SmokeTest: {}
     - build_and_test_3_SmokeTest3: {}
     - build_and_test_4_SmokeTest4: {}
+    - build_and_test_5_SmokeTest5: {}
 workflows:
   configure_build_fennec:
     before_run:
@@ -26,17 +27,6 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
-        title: Bitrise Test Plan Sharder
-        inputs:
-        - xcode_project: Client.xcodeproj
-        - target: Client
-        - shards: '3'
-        - scheme: Fennec
-        - test_plan: SmokeXCUITests.xctestplan
-        - debug_mode: 'true'
-        - test_path: ''
-        - file_type: ".swift"
     - restore-spm-cache@1:
         is_always_run: true
     - script@1.1:
@@ -75,11 +65,13 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" \
             "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
             "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
+            "$BITRISE_SOURCE_DIR/Tests/Smoketest5.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest5_iphonesimulator16.4-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
@@ -335,6 +327,49 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.3.x-ventura
+        machine_type_id: g2-m1.8core
+  build_and_test_5_SmokeTest5:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.configure_build_fennec
+    - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+
+            echo "$BITRISE_ARTIFACT_PATHS"
+
+            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
+            echo "$derived_data"
+
+            echo "-- unzip -- "
+            exec unzip "$derived_data"
+            echo "show dir"
+            ls
+    - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        title: UI Smoketest4
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest5_iphonesimulator16.4-x86_64.xctestrun"
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        inputs:
+        - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_5_XCRESULT_PATH'
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
