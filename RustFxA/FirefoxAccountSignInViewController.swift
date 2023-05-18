@@ -20,6 +20,7 @@ enum FxASignInParentType {
 class FirefoxAccountSignInViewController: UIViewController, Themeable {
     struct UX {
         static let horizontalPadding: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
@@ -53,6 +54,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     private lazy var containerView: UIView = .build { view in
         view.backgroundColor = .clear
     }
+
+    private lazy var signinSyncQRImage = UIImage(named: ImageIdentifiers.signinSyncQRButton)
 
     private let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
@@ -92,11 +95,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     private lazy var scanButton: ResizableButton = .build { button in
-        button.layer.cornerRadius = 8
-        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-            .tinted(withColor: .white), for: .normal)
-        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-            .tinted(withColor: .white), for: .highlighted)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
         button.setTitle(.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
@@ -112,8 +112,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     private lazy var emailButton: ResizableButton = .build { button in
-        button.layer.borderWidth = 1
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
@@ -242,9 +241,11 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         qrSignInLabel.textColor = colors.textPrimary
         instructionsLabel.textColor = colors.textPrimary
         scanButton.backgroundColor = colors.actionPrimary
+        scanButton.setTitleColor(colors.textInverted, for: .normal)
+        scanButton.setImage(signinSyncQRImage?
+            .tinted(withColor: colors.textInverted), for: .normal)
         emailButton.backgroundColor = colors.actionSecondary
         emailButton.setTitleColor(colors.textSecondaryAction, for: .normal)
-        emailButton.layer.borderColor = colors.borderPrimary.cgColor
     }
 
     // MARK: Button Tap Functions
