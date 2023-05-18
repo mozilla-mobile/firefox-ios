@@ -184,7 +184,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3"
+            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-x86_64.xctestrun"
@@ -229,7 +229,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3"
+            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun"
@@ -274,7 +274,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3"
+            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun"
@@ -319,7 +319,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3"
+            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun"
