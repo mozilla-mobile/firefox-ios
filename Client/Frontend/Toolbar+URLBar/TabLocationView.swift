@@ -26,7 +26,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black
-        static let baseURLFontColor = UIColor.Photon.Grey50
+        static let baseURLFontColor = UIColor.darkText
         static let spacing: CGFloat = 8
         static let statusIconSize: CGFloat = 18
         static let buttonSize: CGFloat = 40
@@ -39,6 +39,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
 
+    private let themeManager: ThemeManager
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
@@ -72,7 +73,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     lazy var placeholder: NSAttributedString = {
-        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
+        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textSecondary])
     }()
 
     lazy var urlTextField: URLTextField = .build { urlTextField in
@@ -103,7 +104,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     lazy var shareButton: ShareButton = .build { shareButton in
         shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
         shareButton.clipsToBounds = false
-        shareButton.tintColor = UIColor.Photon.Grey50
+        shareButton.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
     }
@@ -129,7 +130,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
         reloadButton.addGestureRecognizer(
             UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
-        reloadButton.tintColor = UIColor.Photon.Grey50
+        reloadButton.tintColor = themeManager.currentTheme.colors.iconPrimary
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
@@ -140,10 +141,9 @@ class TabLocationView: UIView, FeatureFlaggable {
     }()
 
     override init(frame: CGRect) {
+        self.themeManager = AppContainer.shared.resolve()
         super.init(frame: frame)
-
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
-
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
 
@@ -344,9 +344,11 @@ extension TabLocationView: AccessibilityActionsSource {
 extension TabLocationView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         urlTextField.textColor = theme.colors.textPrimary
+        baseURLFontColor = theme.colors.textPrimary
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
+        reloadButton.applyTheme(theme: theme)
         menuBadge.badge.tintBackground(color: theme.colors.layer3)
     }
 }
@@ -363,8 +365,7 @@ extension TabLocationView: TabEventHandler {
             trackingProtectionButton.alpha = 1.0
 
             var lockImage: UIImage?
-            // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
-            let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
+            let imageID = themeManager.currentTheme.type.getThemedImageName(name: "lock_blocked")
             if !(tab.webView?.hasOnlySecureContent ?? false) {
                 lockImage = UIImage(imageLiteralResourceName: imageID)
             } else if let tintColor = trackingProtectionButton.tintColor {
@@ -376,7 +377,7 @@ extension TabLocationView: TabEventHandler {
             case .blocking, .noBlockedURLs:
                 trackingProtectionButton.setImage(lockImage, for: .normal)
             case .safelisted:
-                if let smallDotImage = UIImage(systemName: "circle.fill")?.withTintColor(UIColor.Photon.Blue40) {
+                if let smallDotImage = UIImage(systemName: "circle.fill")?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
                     trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
                 }
             case .disabled:
