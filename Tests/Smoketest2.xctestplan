@@ -96,6 +96,7 @@
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
+        "TrackingProtectionTests\/testTrackingProtection()",
         "WhatsNewTest"
       ],
       "target" : {

@@ -72,6 +72,7 @@
         "NavigationTest\/testTapSignInShowsFxAFromTour()",
         "NavigationTest\/testTapSigninShowsFxAFromSettings()",
         "NavigationTest\/testWriteToChildPopupTab()",
+        "NewTabSettingsTest",
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
         "NightModeTests",

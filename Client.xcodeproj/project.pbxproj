@@ -4079,6 +4079,7 @@
 		779D4B8EAE580D7B2B55EC3F /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		77A2482EA0D261745BFD8AE4 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		77C342F4AE20D931A1D2951B /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		7813A4432A16E3EF001FDF64 /* Smoketest5.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Smoketest5.xctestplan; sourceTree = "<group>"; };
 		7817451F8C836E21F734506D /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Menu.strings; sourceTree = "<group>"; };
 		7819488D9C50ED2293FA92B1 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		781F4692919CC38F17A90EE3 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -9670,6 +9671,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				7813A4432A16E3EF001FDF64 /* Smoketest5.xctestplan */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C3B297054EC00354BE8 /* Sources */,
