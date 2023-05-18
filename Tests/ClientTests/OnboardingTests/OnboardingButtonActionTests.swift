@@ -110,7 +110,7 @@ class OnboardingButtonActionTests: XCTestCase {
             link: nil,
             buttons: buttons,
             type: .freshInstall,
-            a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard,
+            a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
             imageID: ImageIdentifiers.onboardingSyncv106)
         let mockCardViewModel = OnboardingCardViewModel(infoModel: mockInfoModel)
 

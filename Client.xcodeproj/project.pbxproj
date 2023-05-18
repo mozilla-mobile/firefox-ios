@@ -750,7 +750,6 @@
 		C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11EF28B3C9150062922A /* MockUserDefaults.swift */; };
 		C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */; };
 		C80E1A102A0943640025B9E1 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E1A0F2A0943640025B9E1 /* UIFont+Extension.swift */; };
-		C80E2D1B2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */; };
 		C8124BB129D6F55400540B79 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8124BB029D6F55400540B79 /* Route.swift */; };
 		C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8163850268A0899004C7160 /* AddCredentialViewController.swift */; };
 		C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */; };
@@ -4893,7 +4892,6 @@
 		C80C11EF28B3C9150062922A /* MockUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaults.swift; sourceTree = "<group>"; };
 		C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaultsTests.swift; sourceTree = "<group>"; };
 		C80E1A0F2A0943640025B9E1 /* UIFont+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
-		C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerDefaultsTests.swift; sourceTree = "<group>"; };
 		C8124BB029D6F55400540B79 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		C8154C5887169941126C530A /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8163850268A0899004C7160 /* AddCredentialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCredentialViewController.swift; sourceTree = "<group>"; };
@@ -8464,7 +8462,6 @@
 				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
 				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
-				C80E2D1A2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift */,
 				C8610DA72A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift */,
 				C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */,
 			);
@@ -12250,7 +12247,6 @@
 				8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */,
 				965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */,
 				C869915628917803007ACC5C /* WallpaperJSONTestProvider.swift in Sources */,
-				C80E2D1B2A0BE55D00144185 /* NimbusOnboardingFeatureLayerDefaultsTests.swift in Sources */,
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
