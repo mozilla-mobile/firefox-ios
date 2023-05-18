@@ -28,6 +28,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testIntro() {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6433
 //        sleep(3)
 //        waitForExistence(app.scrollViews.staticTexts["WelcomeCardTitleLabel"], timeout: 15)
 //        snapshot("Onboarding-1")
