@@ -88,7 +88,7 @@ class IntroViewController: UIViewController,
 
     private func setupLayout() {
         setupPageController()
-        setupCloseButton()
+        if viewModel.isDismissable { setupCloseButton() }
     }
 
     private func setupPageController() {

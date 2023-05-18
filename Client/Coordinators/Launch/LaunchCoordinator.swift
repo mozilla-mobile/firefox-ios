@@ -61,6 +61,11 @@ class LaunchCoordinator: BaseCoordinator {
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
                 height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             introViewController.modalPresentationStyle = .formSheet
+            // Disables dismissing the view by tapping outside the view, based on
+            // Nimbus's configuration
+            if !introViewModel.isDismissable {
+                introViewController.isModalInPresentation = true
+            }
             router.present(introViewController, animated: true)
         }
     }
@@ -82,6 +87,10 @@ class LaunchCoordinator: BaseCoordinator {
                 width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
                 height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
             updateViewController.modalPresentationStyle = .formSheet
+            // Nimbus's configuration
+            if !updateViewModel.isDismissable {
+                updateViewController.isModalInPresentation = true
+            }
             router.present(updateViewController)
         }
     }
