@@ -1,4 +1,5 @@
 import json
+import logging
 import requests
 import re
 from github import Github
@@ -10,6 +11,12 @@ SPM_PACKAGE = "Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package
 FIREFOX_PROJECT = "Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_ID = "433F87D62788F34500693368"
 
+
+def _init_logging():
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
 
 # Get the newest version and commit of the Rust components from the GitHub repository
 def get_newest_rust_components_version(GITHUB_REPO):
@@ -30,9 +37,9 @@ def read_rust_components_tag_version(SPM_PACKAGE):
                 if i["identity"] == "rust-components-swift":
                     return i["state"]["version"], i["state"]["revision"]
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading rust component tag: {e}")
+        logging.info(f"Error reading rust component tag: {e}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logging.info(f"Unexpected error: {e}")
     return None, None
 
 
@@ -42,7 +49,7 @@ def read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID):
         project = XcodeProject.load(FIREFOX_PROJECT)
         return project.get_object(RUST_COMPONENTS_ID).requirement.version
     except Exception as e:
-        print(f"Error reading project minimum version: {e}")
+        logging.info(f"Error reading project minimum version: {e}")
         return None
 
 # Compare version strings to determine if we need to update current version
@@ -60,7 +67,7 @@ def update_file(current_tag, current_commit, rust_component_repo_tag, rust_compo
             file.seek(0)
             file.write(data)
     except (FileNotFoundError, IOError) as e:
-        print(f"Error updating file: {e}")
+        logging.info(f"Error updating file: {e}")
 
 
 def main():
@@ -72,6 +79,8 @@ def main():
     4. update both SMP and project files
     
     '''
+    _init_logging()
+
     rust_component_repo_tag, rust_component_repo_commit = get_newest_rust_components_version(GITHUB_REPO)
     current_tag, current_commit = read_rust_components_tag_version(SPM_PACKAGE)
     current_min_version = read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID)
