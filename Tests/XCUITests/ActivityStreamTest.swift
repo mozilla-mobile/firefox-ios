@@ -188,13 +188,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
 
         navigator.nowAt(TabTray)
-        if iPad() {
-            waitForExistence(app.collectionViews.element(boundBy: 1).cells.staticTexts["Wikipedia"], timeout: TIMEOUT)
-            app/*@START_MENU_TOKEN@*/.otherElements["Tabs Tray"].collectionViews/*[[".otherElements[\"Tabs Tray\"].collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.cells["Wikipedia"].tap()
-        } else {
-            waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: TIMEOUT)
-            app.collectionViews.element(boundBy: 1).cells.staticTexts["Wikipedia"].tap()
-        }
+        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"], timeout: TIMEOUT)
+        app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"].tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
