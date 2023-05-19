@@ -51,8 +51,8 @@ class PrivateBrowsingTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
-
-        waitForExistence(app.cells.staticTexts[url2Label])
+        waitForExistence(app.otherElements["Tabs Tray"])
+        XCTAssertNotNil(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts.element(boundBy: 1).label.range(of: url2Label))
         let numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
