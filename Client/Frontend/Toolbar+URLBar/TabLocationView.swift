@@ -26,7 +26,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black
-        static let baseURLFontColor = UIColor.darkText
         static let spacing: CGFloat = 8
         static let statusIconSize: CGFloat = 18
         static let buttonSize: CGFloat = 40
@@ -42,7 +41,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private let themeManager: ThemeManager
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
-    @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
+   lazy var baseURLFontColor: UIColor = themeManager.currentTheme.colors.textPrimary {
         didSet { updateTextWithURL() }
     }
 

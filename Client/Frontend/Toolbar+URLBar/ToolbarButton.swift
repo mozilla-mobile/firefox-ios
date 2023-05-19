@@ -10,7 +10,7 @@ class ToolbarButton: UIButton {
 
     var selectedTintColor: UIColor!
     var unselectedTintColor: UIColor!
-    var disabledTintColor = UIColor.darkGray
+    var disabledTintColor: UIColor!
 
     // Optionally can associate a separator line that hide/shows along with the button
     weak var separatorLine: UIView?
