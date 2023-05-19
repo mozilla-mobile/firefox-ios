@@ -234,17 +234,18 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let configuration: UISwipeActionsConfiguration?
         let section = indexPath.section
-        
+
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
-            let closeAction = UIContextualAction(style: .destructive,
-                                                 title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
-                if let tab = self.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
-                    self.removeInactiveTab(at: indexPath)
-                    self.delegate?.closeInactiveTab(tab, index: indexPath.item)
-                    completion(true)
+            let closeAction = UIContextualAction(
+                style: .destructive,
+                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
+                    if let tab = self.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
+                        self.removeInactiveTab(at: indexPath)
+                        self.delegate?.closeInactiveTab(tab, index: indexPath.item)
+                        completion(true)
+                    }
                 }
-            }
             configuration = UISwipeActionsConfiguration(actions: [closeAction])
         case .closeAllTabsButton, .none: return nil
         }
