@@ -21,7 +21,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
     }()
 
     lazy var helper: GleanPlumbMessageHelper = {
-        let utility = GleanPlumbMessageUtility()
+        let utility = GleanPlumbEvaluationUtility()
         return utility.createGleanPlumbHelper()!
     }()
 

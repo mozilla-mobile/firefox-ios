@@ -2515,7 +2515,7 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        guard onboardingModel.cards.count > 0 else { return }
+        guard !onboardingModel.cards.isEmpty else { return }
         let introViewModel = IntroViewModel(introScreenManager: nil,
                                             profile: profile,
                                             model: onboardingModel)

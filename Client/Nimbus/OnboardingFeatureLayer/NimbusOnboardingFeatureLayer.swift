@@ -75,7 +75,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // If `GleanPlumbHelper` creation fails, we cannot continue with
         // evaluating card triggers based on their JEXL prerequisites.
         // Therefore, we return an empty array.
-        guard let helper = GleanPlumbMessageUtility().createGleanPlumbHelper() else { return [] }
+        guard let helper = GleanPlumbEvaluationUtility().createGleanPlumbHelper() else { return [] }
 
         return cardData.compactMap { card in
             if verifyPrerequisites(
@@ -127,38 +127,12 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         else { return false }
 
         do {
-            return try isCardValid(checking: card.prerequisites,
-                                   using: helper,
-                                   and: &jexlCache)
+            return try GleanPlumbEvaluationUtility().isCardValid(
+                checking: card.prerequisites,
+                using: helper,
+                and: &jexlCache)
         } catch {
             return false
-        }
-    }
-
-    private func isCardValid(
-        checking prerequisites: [String],
-        using helper: GleanPlumbMessageHelper,
-        and jexlCache: inout [String: Bool]
-    ) throws -> Bool {
-        // Some unit test are failing in Bitrise during the jexlEvaluation
-        // process. We will bypass the check for unit test while we find a
-        // solution to mock properly `GleanPlumbMessageUtility` that right
-        // now is highly tied to `Experiments.shared`
-        guard !AppConstants.isRunningTest else { return true }
-
-        return try prerequisites.reduce(true) { accumulator, prerequisite in
-            guard accumulator else { return false }
-
-            // Check the jexlCache for the `Bool`, in the case we already
-            // evaluated it. Otherwise, perform an expensive Foreign Function
-            // Interface (FFI) operation once for the trigger.
-            guard let evaluation = jexlCache[prerequisite] else {
-                let evaluation = try helper.evalJexl(expression: prerequisite)
-                jexlCache[prerequisite] = evaluation
-                return evaluation
-            }
-
-            return evaluation
         }
     }
 

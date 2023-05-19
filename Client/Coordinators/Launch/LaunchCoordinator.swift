@@ -44,7 +44,7 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        guard onboardingModel.cards.count > 0 else { return }
+        guard !onboardingModel.cards.isEmpty else { return }
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
                                             model: onboardingModel)

@@ -34,7 +34,7 @@ final class NimbusMessagingMessageTests: XCTestCase {
     }
 
     func testAllMessageTriggers() throws {
-        let utility = GleanPlumbMessageUtility()
+        let utility = GleanPlumbEvaluationUtility()
         let helper = utility.createGleanPlumbHelper()!
 
         let messages = subject.getMessages(feature)

@@ -161,7 +161,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         line: UInt = #line
     ) -> IntroViewController {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        guard onboardingModel.cards.count > 0 else { return }
+        guard !onboardingModel.cards.isEmpty else { return }
         let viewModel = IntroViewModel(profile: MockProfile(),
                                        model: onboardingViewModel)
         let subject = IntroViewController(viewModel: viewModel)
