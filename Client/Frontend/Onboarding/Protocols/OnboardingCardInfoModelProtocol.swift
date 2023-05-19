@@ -13,6 +13,7 @@ protocol OnboardingCardInfoModelProtocol {
     var type: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
+    var defaultSettingsButton: OnboardingDefaultBrowserModelProtocol? { get set }
 
     var image: UIImage? { get }
 
@@ -24,6 +25,7 @@ protocol OnboardingCardInfoModelProtocol {
         buttons: OnboardingButtons,
         type: OnboardingType,
         a11yIdRoot: String,
-        imageID: String
+        imageID: String,
+        defaultSettingsButton: OnboardingDefaultBrowserModelProtocol?
     )
 }

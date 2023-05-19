@@ -12,6 +12,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var buttons: OnboardingButtons
     var type: OnboardingType
     var a11yIdRoot: String
+    var defaultSettingsButton: OnboardingDefaultBrowserModelProtocol?
 
     var imageID: String
 
@@ -27,7 +28,8 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         buttons: OnboardingButtons,
         type: OnboardingType,
         a11yIdRoot: String,
-        imageID: String
+        imageID: String,
+        defaultSettingsButton: OnboardingDefaultBrowserModelProtocol?
     ) {
         self.name = name
         self.title = title
@@ -37,5 +39,6 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         self.buttons = buttons
         self.type = type
         self.a11yIdRoot = a11yIdRoot
+        self.defaultSettingsButton = defaultSettingsButton
     }
 }

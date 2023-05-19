@@ -22,8 +22,14 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         static let cardShadowHeight: CGFloat = 14
 
         static let scrollViewVerticalPadding: CGFloat = 30
-        static let topPadding: CGFloat = 20
-        static let bottomStackViewPadding: CGFloat = 20
+        static let topPaddingPhone: CGFloat = 20
+        static let topPaddingPad: CGFloat = 60
+        static let leadingPaddingPhone: CGFloat = 40
+        static let leadingPaddingPad: CGFloat = 200
+        static let trailingPaddingPhone: CGFloat = 40
+        static let trailingPaddingPad: CGFloat = 200
+        static let bottomPaddingPhone: CGFloat = 20
+        static let bottomPaddingPad: CGFloat = 60
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
@@ -79,19 +85,16 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
                                                 right: UX.buttonHorizontalInset)
     }
 
-//    var viewModel: OnboardingCardProtocol
-//    weak var delegate: OnboardingCardDelegate?
+    var viewModel: OnboardingDefaultBrowserModelProtocol
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var contentViewHeightConstraint: NSLayoutConstraint!
 
-    init(// viewModel: OnboardingCardProtocol,
-//         delegate: OnboardingCardDelegate?,
+    init(viewModel: OnboardingDefaultBrowserModelProtocol,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-//        self.viewModel = viewModel
-//        self.delegate = delegate
+        self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -127,6 +130,30 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         contentViewHeightConstraint = contentContainerView.heightAnchor.constraint(equalToConstant: 300)
         contentViewHeightConstraint.priority = UILayoutPriority(999)
 
+        var topPadding = UX.topPaddingPhone
+        var leadingPadding = UX.leadingPaddingPhone
+        var trailingPadding = UX.trailingPaddingPhone
+        var bottomPadding = UX.bottomPaddingPhone
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if traitCollection.horizontalSizeClass == .regular {
+                topPadding = UX.topPaddingPad
+                leadingPadding = UX.leadingPaddingPad
+                trailingPadding = UX.leadingPaddingPad
+                bottomPadding = UX.bottomPaddingPad
+            } else {
+                topPadding = UX.topPaddingPhone
+                leadingPadding = UX.leadingPaddingPhone
+                trailingPadding = UX.leadingPaddingPhone
+                bottomPadding = UX.bottomPaddingPhone
+            }
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            topPadding = UX.topPaddingPhone
+            leadingPadding = UX.leadingPaddingPhone
+            trailingPadding = UX.leadingPaddingPhone
+            bottomPadding = UX.bottomPaddingPhone
+        }
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
@@ -151,10 +178,10 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
             contentContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: UX.topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: 40),
-            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -40),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.bottomStackViewPadding),
+            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: topPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: leadingPadding),
+            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -trailingPadding),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
             textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
             primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
             primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
@@ -163,12 +190,12 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 
     private func updateLayout() {
-        titleLabel.text = "Switch Your Default Browser"
-        primaryButton.setTitle("Go to Settings", for: .normal)
+        titleLabel.text = viewModel.title
+        primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
     }
 
     private func addViewsToView() {
-        createLabels(["1. Go to Settings", "2. Tap Default Browser App", "3. Select Firefox"])
+        createLabels(viewModel.descriptionSteps)
 
         contentStackView.addArrangedSubview(titleLabel)
         numeratedLabels.forEach { textStackView.addArrangedSubview($0)}
@@ -185,13 +212,18 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
 
     private func createLabels(_ descriptionTexts: [String]) {
         numeratedLabels = []
-        for text in descriptionTexts {
+        var attributedTexts: [NSAttributedString] = []
+        descriptionTexts.forEach { text in
+            let attributedText = MarkupAttributeUtility(baseFont: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)).addAttributesTo(text: text)
+            attributedTexts.append(attributedText)
+        }
+        attributedTexts.forEach { attributedText in
             let label: UILabel = .build { label in
                 label.textAlignment = .left
                 label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true
 //                label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)NumeratedLabel"
-                label.text = text
+                label.attributedText = attributedText
                 label.numberOfLines = 0
             }
             numeratedLabels.append(label)
@@ -200,7 +232,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
 
     @objc
     func primaryAction() {
-        // TO DO: Create Link to Settings App
+        DefaultApplicationHelper().openSettings()
     }
 
     func applyTheme() {

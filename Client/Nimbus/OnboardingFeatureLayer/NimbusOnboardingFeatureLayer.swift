@@ -72,7 +72,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,
                 a11yIdRoot: "test",
-                imageID: getOnboardingImageID(from: card.image))
+                imageID: getOnboardingImageID(from: card.image),
+                defaultSettingsButton: OnboardingDefaultBrowserModelProtocol(title: String.Onboarding.DefaultBrowserPopup.Title, descriptionSteps: [String.Onboarding.DefaultBrowserPopup.FirstInstruction, String.Onboarding.DefaultBrowserPopup.SecondInstruction, String.Onboarding.DefaultBrowserPopup.ThirdInstruction], buttonTitle: String.Onboarding.DefaultBrowserPopup.ButtonTitle))
         }
     }
 
