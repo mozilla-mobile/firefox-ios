@@ -1108,8 +1108,8 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
         } else {
             let passcodeViewController = DevicePasscodeRequiredViewController()
             passcodeViewController.profile = profile
-            navigationController?.pushViewController(passcodeViewController,
-                                                     animated: true)
+            navController.pushViewController(passcodeViewController,
+                                             animated: true)
         }
     }
 }
