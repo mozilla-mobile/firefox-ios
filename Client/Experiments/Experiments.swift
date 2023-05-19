@@ -167,7 +167,7 @@ enum Experiments {
         let bundles = [
             Bundle.main,
             Strings.bundle,
-            Strings.bundle.fallbackTranslationBundle()
+            Strings.bundle.fallbackTranslationBundle(language: "en-US")
         ].compactMap { $0 }
 
         return NimbusBuilder(dbPath: dbPath)
