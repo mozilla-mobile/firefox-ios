@@ -8,13 +8,12 @@ import Shared
 import Storage
 import SwiftUI
 
-class CreditCardSettingsViewController: UIViewController, Themeable {
+class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
     var themeObserver: NSObjectProtocol?
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
-    private let appAuthenticator: AppAuthenticationProtocol
     private let logger: Logger
 
     // MARK: Views
@@ -36,13 +35,11 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     init(creditCardViewModel: CreditCardSettingsViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
          logger: Logger = DefaultLogger.shared
     ) {
         self.viewModel = creditCardViewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.appAuthenticator = appAuthenticator
         self.logger = logger
         self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.tableViewModel)
 
