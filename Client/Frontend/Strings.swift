@@ -86,7 +86,7 @@ extension String {
     public struct Biometry {
         public struct Screen {
             public static let UniversalAuthenticationReason = MZLocalizedString(
-                key: "Biometry.Screen.UniversalAuthenticationReason.v113",
+                key: "Biometry.Screen.UniversalAuthenticationReason.v115",
                 tableName: "BiometricAuthentication",
                 value: "Authenticate to access passwords.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
