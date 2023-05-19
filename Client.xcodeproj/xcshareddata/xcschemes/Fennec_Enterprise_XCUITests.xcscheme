@@ -219,7 +219,7 @@
             reference = "container:Tests/Smoketest4.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Smoketest5.xctestplan">
+            reference = "container:Tests/Smoketest5.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

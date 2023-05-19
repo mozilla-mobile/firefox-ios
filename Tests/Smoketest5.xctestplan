@@ -42,7 +42,7 @@
         "HomeButtonTests",
         "HomePageSettingsUITests",
         "IntegrationTests",
-        "JumpBackInTests",
+        "JumpBackInTests\/testJumpBackInSection()",
         "LibraryTestsIpad",
         "MailAppSettingsTests",
         "NavigationTest",
