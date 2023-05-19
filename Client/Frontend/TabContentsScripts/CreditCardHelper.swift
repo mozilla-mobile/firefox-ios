@@ -175,7 +175,7 @@ class CreditCardHelper: TabContentScript {
 
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
             guard let err = err else { return }
-            logger.log("Unable to go next field: \(err)",
+            logger.log("Unable to go previous field: \(err)",
                        level: .debug,
                        category: .webview)
         }
