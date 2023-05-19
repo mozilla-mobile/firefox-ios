@@ -8,6 +8,7 @@ on:
         description: 'Branch used as target for automation'
         required: true
         default: 'main'
+        
 jobs:
   build:
     runs-on: ubuntu-latest
