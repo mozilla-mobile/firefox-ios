@@ -222,7 +222,8 @@ class ZoomPageBar: UIView, ThemeApplicable {
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
-        if traitCollection.horizontalSizeClass == .regular || UIWindow.isLandscape {
+        if traitCollection.horizontalSizeClass == .regular ||
+            (UIWindow.isLandscape && traitCollection.verticalSizeClass == .compact) {
             stepperDefaultConstraints.forEach { $0.isActive = true }
             stepperCompactConstraints.forEach { $0.isActive = false }
         } else {
