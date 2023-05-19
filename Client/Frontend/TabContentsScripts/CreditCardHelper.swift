@@ -49,10 +49,6 @@ class CreditCardHelper: TabContentScript {
         return "CreditCardHelper"
     }
 
-    // Stubs for the inputAccessoryView of the system keyboard's previous and next buttons.
-    static func previousInput() { }
-    static func nextInput() { }
-
     required init(tab: Tab) {
         self.tab = tab
     }
@@ -155,5 +151,33 @@ class CreditCardHelper: TabContentScript {
         ]
 
         return injectionJSON
+    }
+
+    // MARK: Next & Previous focus fields
+
+    static func focusNextInputField(tabWebView: WKWebView,
+                                    logger: Logger = DefaultLogger.shared) {
+        let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
+        let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusNextInputField()"
+
+        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
+            guard let err = err else { return }
+            logger.log("Unable to go next field: \(err)",
+                       level: .debug,
+                       category: .webview)
+        }
+    }
+
+    static func focusPreviousInputField(tabWebView: WKWebView,
+                                        logger: Logger = DefaultLogger.shared) {
+        let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
+        let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusPreviousInputField()"
+
+        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
+            guard let err = err else { return }
+            logger.log("Unable to go next field: \(err)",
+                       level: .debug,
+                       category: .webview)
+        }
     }
 }

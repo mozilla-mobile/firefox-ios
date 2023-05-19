@@ -4,6 +4,7 @@
 
 // /* eslint-disable mozilla/balanced-listeners, no-undef */
 import CreditCardHelper from "resource://gre/modules/shared/EntryFile.sys.mjs";
+import { CreditCardExtras } from "Assets/CC_Script/CreditCardExtras.shared.mjs";
 
 // Define supported message types.
 const messageTypes = {
@@ -47,5 +48,16 @@ Object.defineProperty(window.__firefox__, "CreditCardHelper", {
       sendCaptureCreditCardFormMessage,
       sendFillCreditCardFormMessage
     )
+  ),
+});
+
+// Create a CreditCardExtras object and expose it to the window object.
+// CreditCardExtras class contains methods to focus next and previous input fields.
+Object.defineProperty(window.__firefox__, "CreditCardExtras", {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: Object.freeze(
+    new CreditCardExtras()
   ),
 });

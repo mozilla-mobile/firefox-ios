@@ -61,6 +61,29 @@ export class FormAutofillChild {
       JSON.parse(payload)
     );
   }
+
+  focusNextInputField() {
+    var inputFields = document.getElementsByTagName('input');
+    var activeElement = document.activeElement;
+    var currentIndex = Array.prototype.indexOf.call(inputFields, activeElement);
+    var inputFieldCount = inputFields.length - 1;
+
+    if (currentIndex < inputFieldCount) {
+      var nextField = inputFields[currentIndex + 1];
+      nextField.focus();
+    }
+  }
+
+  focusPreviousField() {
+    var inputFields = document.getElementsByTagName('input');
+    var activeElement = document.activeElement;
+    var currentIndex = Array.prototype.indexOf.call(inputFields, activeElement);
+
+    if (currentIndex > 0) {
+      var nextField = inputFields[currentIndex - 1];
+      nextField.focus();
+    }
+  }
 }
 
 export default FormAutofillChild;
