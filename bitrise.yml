@@ -26,17 +26,6 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
-        title: Bitrise Test Plan Sharder
-        inputs:
-        - xcode_project: Client.xcodeproj
-        - target: Client
-        - shards: '3'
-        - scheme: Fennec
-        - test_plan: SmokeXCUITests.xctestplan
-        - debug_mode: 'true'
-        - test_path: ''
-        - file_type: ".swift"
     - restore-spm-cache@1:
         is_always_run: true
     - script@1.1:
