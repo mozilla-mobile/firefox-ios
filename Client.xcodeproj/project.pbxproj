@@ -701,7 +701,9 @@
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
+		ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
@@ -4473,8 +4475,10 @@
 		AAAB41FC97F6C8F8A1506603 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		AAF64ABAB8A585208603D45B /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		AB2B45078A7F1E09F65ACEC5 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Shared.strings; sourceTree = "<group>"; };
+		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
 		AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgentTests.swift"; sourceTree = "<group>"; };
+		ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConversionMetricsTests.swift; sourceTree = "<group>"; };
 		AC1846BB804B44D52BA6F0F2 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		AC434095AC70313F20D9EEFE /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Shared.strings; sourceTree = "<group>"; };
 		AC65443AB444EAE083C479E5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -9230,6 +9234,7 @@
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
 				43446CED2412DDB100F5C643 /* UpdateViewModel */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
+				ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
@@ -9268,6 +9273,7 @@
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
+				AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */,
 				E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */,
 				E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */,
 				5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */,
@@ -11331,6 +11337,7 @@
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
+				AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */,
 				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
 				21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
@@ -11845,6 +11852,7 @@
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */,
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
+				ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
 				E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
