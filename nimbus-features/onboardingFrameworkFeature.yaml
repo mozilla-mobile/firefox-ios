@@ -5,9 +5,10 @@ features:
       The new onboarding framework feature that will allow onboarding
       to be experimentable through initial experiments.
     variables:
-      prerequisites:
+      conditions:
         description: >
-          A collection of out the box prerequisite expressions.
+          A collection of out the box conditional expressions to be
+          used in determining whether a card should show or not.
           Each entry maps to a valid JEXL expression.
         type: Map<String, String>
         default: {}
@@ -32,9 +33,10 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          prerequisites:
+          conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
+            NONE:                     "false"
           cards:
             - name: "welcome"
               title: Onboarding/Onboarding.Welcome.Title.v114
@@ -47,8 +49,6 @@ features:
                 primary:
                   title: Onboarding/Onboarding.Welcome.Action.v114
                   action: next-card
-              prerequisites:
-                - NEVER
               type: fresh-install
             - name: "notificationPermissions"
               title: Onboarding/Onboarding.Notification.Title.v114
@@ -61,8 +61,6 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v114
                   action: next-card
-              prerequisites:
-                - ALWAYS
               type: fresh-install
             - name: "signToSync"
               title: Onboarding/Onboarding.Sync.Title.v114
@@ -75,8 +73,6 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: next-card
-              prerequisites:
-                - ALWAYS
               type: fresh-install
             - name: "update.welcome"
               title: Upgrade/Upgrade.Welcome.Title.v114
@@ -86,8 +82,6 @@ features:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
                   action: next-card
-              prerequisites:
-                - ALWAYS
               type: upgrade
             - name: "update.signToSync"
               title: Upgrade/Upgrade.SyncSign.Title.v114
@@ -100,8 +94,6 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.LaterAction.v114
                   action: next-card
-              prerequisites:
-                - ALWAYS
               type: upgrade
           card-ordering:
             - "welcome"
@@ -162,7 +154,15 @@ objects:
         description: >
           A list of strings corresponding to targeting expressions.
           The card will be shown if all expressions `true`.
-        default: []
+        default:
+          - ALWAYS
+      disqualifiers:
+        type: List<String>
+        description: >
+          A list of strings corresponding to targeting expressions.
+          The card will not be shown if any expression is `true`.
+        default:
+          - NONE
       type:
         type: OnboardingType
         description: >

@@ -43,12 +43,12 @@ class GleanPlumbEvaluationUtility {
                                                and: &jexlCache)
     }
 
-    func isCardValid(
-        checking prerequisites: [String],
+    func doCardPropertiesMeet(
+        verificationRequirements lookupTable: [String],
         using helper: GleanPlumbMessageHelper,
         and jexlCache: inout [String: Bool]
     ) throws -> Bool {
-        return try isGleanPlumbElementEligible(checking: prerequisites,
+        return try isGleanPlumbElementEligible(checking: lookupTable,
                                                using: helper,
                                                and: &jexlCache)
     }
