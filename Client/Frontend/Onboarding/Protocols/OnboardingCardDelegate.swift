@@ -21,7 +21,7 @@ protocol OnboardingCardDelegate: AnyObject {
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
-    func presentDefaultBrowserPopup(from cardName: String)
+    func presentDefaultBrowserPopup()
 
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
@@ -66,12 +66,11 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
     // MARK: - Default Browser Popup
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6359
-    func presentDefaultBrowserPopup(from cardName: String) {
-        guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.infoModel.name == cardName })?
-            .viewModel.infoModel
+    func presentDefaultBrowserPopup() {
+        guard let viewModel = viewModel.availableCards.first?.viewModel.infoModel
         else { return }
-        let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel.defaultSettingsButton!)
+        let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: viewModel.a11yIdRoot)
+        let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel)
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(

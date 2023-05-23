@@ -75,8 +75,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,
                 a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                imageID: getOnboardingImageID(from: card.image),
-                defaultSettingsButton: OnboardingDefaultBrowserModelProtocol(title: String.Onboarding.DefaultBrowserPopup.Title, descriptionSteps: [String.Onboarding.DefaultBrowserPopup.FirstInstruction, String.Onboarding.DefaultBrowserPopup.SecondInstruction, String.Onboarding.DefaultBrowserPopup.ThirdInstruction], buttonTitle: String.Onboarding.DefaultBrowserPopup.ButtonTitle))
+                imageID: getOnboardingImageID(from: card.image))
         }
             .enumerated()
             .map { index, card in
@@ -88,8 +87,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     buttons: card.buttons,
                     type: card.type,
                     a11yIdRoot: "\(card.a11yIdRoot)\(index)",
-                    imageID: card.imageID,
-                    defaultSettingsButton: OnboardingDefaultBrowserModelProtocol(title: String.Onboarding.DefaultBrowserPopup.Title, descriptionSteps: [String.Onboarding.DefaultBrowserPopup.FirstInstruction, String.Onboarding.DefaultBrowserPopup.SecondInstruction, String.Onboarding.DefaultBrowserPopup.ThirdInstruction], buttonTitle: String.Onboarding.DefaultBrowserPopup.ButtonTitle))
+                    imageID: card.imageID)
             }
     }
 

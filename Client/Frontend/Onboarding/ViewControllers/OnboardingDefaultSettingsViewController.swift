@@ -32,14 +32,6 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         static let bottomPaddingPad: CGFloat = 60
     }
 
-    private lazy var scrollView: UIScrollView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    lazy var containerView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
     lazy var contentContainerView: UIView = .build { stack in
         stack.backgroundColor = .clear
     }
@@ -57,7 +49,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3, size: UX.titleFontSize)
         label.adjustsFontForContentSizeCategory = true
-//        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
 
     private lazy var numeratedLabels: [UILabel] = []
@@ -78,7 +70,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
@@ -108,11 +100,6 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
-
-//        let height = contentContainerView.intrinsicContentSize.height + UX.cardShadowHeight
-        let height = contentContainerView.frame.height + UX.cardShadowHeight
-        contentViewHeightConstraint.constant = height
-        view.layoutIfNeeded()
     }
 
     override func viewDidLoad() {
@@ -155,37 +142,19 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         }
 
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
-
-            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
-            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
-            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
-
-            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
-            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
-            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-
             // Content view wrapper around text
-            contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            contentContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            contentContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
+            contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: topPadding),
+            contentStackView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: topPadding),
             contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: leadingPadding),
             contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -trailingPadding),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
+            contentStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
             textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
             primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
             primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-            contentViewHeightConstraint
         ])
     }
 
@@ -202,27 +171,20 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         contentStackView.addArrangedSubview(textStackView)
         contentStackView.addArrangedSubview(primaryButton)
 
-        containerView.addSubview(contentStackView)
-        contentContainerView.addSubview(containerView)
-        scrollView.addSubview(contentContainerView)
-        view.addSubview(scrollView)
+        contentContainerView.addSubview(contentStackView)
+        view.addSubview(contentContainerView)
 
         view.backgroundColor = .white
     }
 
     private func createLabels(_ descriptionTexts: [String]) {
         numeratedLabels = []
-        var attributedTexts: [NSAttributedString] = []
-        descriptionTexts.forEach { text in
-            let attributedText = MarkupAttributeUtility(baseFont: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)).addAttributesTo(text: text)
-            attributedTexts.append(attributedText)
-        }
-        attributedTexts.forEach { attributedText in
+        viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)).forEach { attributedText in
             let label: UILabel = .build { label in
                 label.textAlignment = .left
                 label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true
-//                label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)NumeratedLabel"
+                label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)NumeratedLabel"
                 label.attributedText = attributedText
                 label.numberOfLines = 0
             }
@@ -249,7 +211,5 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
 
 extension OnboardingDefaultSettingsViewController: BottomSheetChild {
     func willDismiss() {
-//        viewModel.removeAssetsOnDismiss()
-//        viewModel.sendDismissImpressionTelemetry()
     }
 }

@@ -216,7 +216,7 @@ extension UpdateViewController: OnboardingCardDelegate {
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openDefaultBrowserPopup:
-            presentDefaultBrowserPopup(from: cardName)
+            presentDefaultBrowserPopup()
         default:
             break
         }

@@ -29,6 +29,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
     }
     private lazy var topTapView: UIView = .build { view in
         view.backgroundColor = .clear
@@ -125,7 +126,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        contentView.backgroundColor = themeManager.currentTheme.colors.shadowDefault
+        contentView.backgroundColor = themeManager.currentTheme.colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
     }
 }

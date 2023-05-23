@@ -205,7 +205,7 @@ extension IntroViewController: OnboardingCardDelegate {
             DefaultApplicationHelper().openSettings()
         case .openDefaultBrowserPopup:
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5922
-            presentDefaultBrowserPopup(from: cardName)
+            presentDefaultBrowserPopup()
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
                 from: cardName,

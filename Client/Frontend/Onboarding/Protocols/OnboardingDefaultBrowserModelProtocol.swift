@@ -4,16 +4,16 @@
 
 import Foundation
 
-struct OnboardingDefaultBrowserModelProtocol {
-    var title: String
-    var descriptionSteps: [String]
-    var buttonTitle: String
+protocol OnboardingDefaultBrowserModelProtocol {
+    var title: String { get set }
+    var descriptionSteps: [String] { get set }
+    var buttonTitle: String { get set }
+    var a11yIdRoot: String { get set }
 
     init(title: String,
          descriptionSteps: [String],
-         buttonTitle: String) {
-        self.title = title
-        self.descriptionSteps = descriptionSteps
-        self.buttonTitle = buttonTitle
-    }
+         buttonTitle: String,
+         a11yIdRoot: String)
+
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString]
 }
