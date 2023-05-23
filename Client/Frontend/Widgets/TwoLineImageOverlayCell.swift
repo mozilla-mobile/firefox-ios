@@ -10,8 +10,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
                                ReusableCell,
                                ThemeApplicable {
     struct UX {
-        static let ImageSize: CGFloat = 29
-        static let BorderViewMargin: CGFloat = 16
+        static let imageSize: CGFloat = 28
+        static let borderViewMargin: CGFloat = 16
         static let iconBorderWidth: CGFloat = 0.5
     }
 
@@ -19,8 +19,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
     static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
 
     // Tableview cell items
-    private lazy var selectedView: UIView = .build { view in
-    }
+    private lazy var selectedView: UIView = .build { _ in }
 
     lazy var containerView: UIView = .build { view in
         view.backgroundColor = .clear
@@ -66,7 +65,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
 
     private func setupLayout() {
         separatorInset = UIEdgeInsets(top: 0,
-                                      left: UX.ImageSize + 2 * UX.BorderViewMargin,
+                                      left: UX.imageSize + 2 * UX.borderViewMargin,
                                       bottom: 0,
                                       right: 0)
         selectionStyle = .default
@@ -90,8 +89,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                    constant: 16),
             leftImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            leftImageView.heightAnchor.constraint(equalToConstant: 28),
-            leftImageView.widthAnchor.constraint(equalToConstant: 28),
+            leftImageView.heightAnchor.constraint(equalToConstant: UX.imageSize),
+            leftImageView.widthAnchor.constraint(equalToConstant: UX.imageSize),
             leftImageView.trailingAnchor.constraint(equalTo: stackView.leadingAnchor,
                                                     constant: -16),
 
@@ -126,7 +125,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
 
         selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0,
-                                      left: UX.ImageSize + 2 * UX.BorderViewMargin,
+                                      left: UX.imageSize + 2 * UX.borderViewMargin,
                                       bottom: 0,
                                       right: 0)
         leftImageView.image = nil

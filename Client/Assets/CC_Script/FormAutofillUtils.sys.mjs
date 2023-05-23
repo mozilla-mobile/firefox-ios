@@ -577,10 +577,17 @@ FormAutofillUtils = {
   /**
    * Get the collators based on the specified country.
    *
-   * @param   {string} country The specified country.
+   * @param {string}  country The specified country.
+   * @param {object}  [options = {}] a list of options for this method
+   * @param {boolean} [options.ignorePunctuation = true] Whether punctuation should be ignored.
+   * @param {string}  [options.sensitivity = 'base'] Which differences in the strings should lead to non-zero result values
+   * @param {string}  [options.usage = 'search'] Whether the comparison is for sorting or for searching for matching strings
    * @returns {Array} An array containing several collator objects.
    */
-  getSearchCollators(country) {
+  getSearchCollators(
+    country,
+    { ignorePunctuation = true, sensitivity = "base", usage = "search" } = {}
+  ) {
     // TODO: Only one language should be used at a time per country. The locale
     //       of the page should be taken into account to do this properly.
     //       We are going to support more countries in bug 1370193 and this
@@ -590,9 +597,9 @@ FormAutofillUtils = {
       let dataset = this.getCountryAddressData(country);
       let languages = dataset.languages || [dataset.lang];
       let options = {
-        ignorePunctuation: true,
-        sensitivity: "base",
-        usage: "search",
+        ignorePunctuation,
+        sensitivity,
+        usage,
       };
       this._collators[country] = languages.map(
         lang => new Intl.Collator(lang, options)
@@ -706,7 +713,7 @@ FormAutofillUtils = {
   },
 
   /**
-   * Use alternative country name list to identify a country code from a
+   * Use address data and alternative country name list to identify a country code from a
    * specified country name.
    *
    * @param   {string} countryName A country name to be identified
@@ -715,11 +722,19 @@ FormAutofillUtils = {
    * @returns {string} The matching country code.
    */
   identifyCountryCode(countryName, countrySpecified) {
-    let countries = countrySpecified
+    if (!countryName) {
+      return null;
+    }
+
+    if (AddressDataLoader.getData(countryName)) {
+      return countryName;
+    }
+
+    const countries = countrySpecified
       ? [countrySpecified]
       : [...FormAutofill.countries.keys()];
 
-    for (let country of countries) {
+    for (const country of countries) {
       let collators = this.getSearchCollators(country);
       let metadata = this.getCountryAddressData(country);
       if (country != metadata.key) {
@@ -739,6 +754,12 @@ FormAutofillUtils = {
         reAlternativeCountryNames = this._reAlternativeCountryNames[
           country
         ] = [];
+      }
+
+      if (countryName.length == 3) {
+        if (this.strCompare(metadata.alpha_3_code, countryName, collators)) {
+          return country;
+        }
       }
 
       for (let i = 0; i < alternativeCountryNames.length; i++) {

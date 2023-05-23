@@ -63,6 +63,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Parameter cardData: Card data from ``FxNimbus/shared``
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
+        let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
+        let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
+
         return cardData.compactMap { card in
             return OnboardingCardInfoModel(
                 name: card.name,
@@ -71,10 +74,23 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 link: getOnboardingLink(from: card.link),
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,
-                a11yIdRoot: "test",
+                a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
                 imageID: getOnboardingImageID(from: card.image),
                 defaultSettingsButton: OnboardingDefaultBrowserModelProtocol(title: String.Onboarding.DefaultBrowserPopup.Title, descriptionSteps: [String.Onboarding.DefaultBrowserPopup.FirstInstruction, String.Onboarding.DefaultBrowserPopup.SecondInstruction, String.Onboarding.DefaultBrowserPopup.ThirdInstruction], buttonTitle: String.Onboarding.DefaultBrowserPopup.ButtonTitle))
         }
+            .enumerated()
+            .map { index, card in
+                return OnboardingCardInfoModel(
+                    name: card.name,
+                    title: card.title,
+                    body: card.body,
+                    link: card.link,
+                    buttons: card.buttons,
+                    type: card.type,
+                    a11yIdRoot: "\(card.a11yIdRoot)\(index)",
+                    imageID: card.imageID,
+                    defaultSettingsButton: OnboardingDefaultBrowserModelProtocol(title: String.Onboarding.DefaultBrowserPopup.Title, descriptionSteps: [String.Onboarding.DefaultBrowserPopup.FirstInstruction, String.Onboarding.DefaultBrowserPopup.SecondInstruction, String.Onboarding.DefaultBrowserPopup.ThirdInstruction], buttonTitle: String.Onboarding.DefaultBrowserPopup.ButtonTitle))
+            }
     }
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.

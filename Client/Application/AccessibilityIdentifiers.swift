@@ -33,7 +33,8 @@ public struct AccessibilityIdentifiers {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
             static let tabsButton = "URLBarView.tabsButton"
-            static let backButton = "URLBarView.backButton"
+            static let backButton = "TabToolbar.backButton"
+            static let forwardButton = "TabToolbar.forwardButton"
             static let searchTextField = "address"
         }
     }
@@ -153,10 +154,7 @@ public struct AccessibilityIdentifiers {
 
     struct Onboarding {
         static let backgroundImage = "Onboarding.BackgroundImage"
-        static let welcomeCard = "WelcomeCard"
-        static let wallpapersCard = "WallpapersCard"
-        static let signSyncCard = "SignSyncCard"
-        static let notificationCard = "NotificationCard"
+        static let onboarding = "onboarding."
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
 
@@ -169,8 +167,7 @@ public struct AccessibilityIdentifiers {
 
     struct Upgrade {
         static let backgroundImage = "Upgrade.BackgroundImage"
-        static let welcomeCard = "Upgrade.WelcomeCard"
-        static let signSyncCard = "Upgrade.SignSyncCard"
+        static let upgrade = "upgrade."
         static let closeButton = "Upgrade.CloseButton"
         static let pageControl = "Upgrade.PageControl"
     }

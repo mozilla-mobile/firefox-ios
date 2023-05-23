@@ -17,9 +17,10 @@ enum FxASignInParentType {
 }
 
 /// ViewController handling Sign In through QR Code or Email address
-class FirefoxAccountSignInViewController: UIViewController {
+class FirefoxAccountSignInViewController: UIViewController, Themeable {
     struct UX {
         static let horizontalPadding: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
@@ -32,7 +33,9 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     private let profile: Profile
     private let deepLinkParams: FxALaunchParams
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
@@ -48,11 +51,13 @@ class FirefoxAccountSignInViewController: UIViewController {
         view.backgroundColor = .clear
     }
 
-    lazy var containerView: UIView = .build { view in
+    private lazy var containerView: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    let qrSignInLabel: UILabel = .build { label in
+    private lazy var signinSyncQRImage = UIImage(named: ImageIdentifiers.signinSyncQRButton)
+
+    private let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -60,19 +65,17 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
                                                                        size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .label
     }
 
-    let pairImageView: UIImageView = .build { imageView in
+    private let pairImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: ImageIdentifiers.signinSync)
         imageView.contentMode = .scaleAspectFit
     }
 
-    let instructionsLabel: UILabel = .build { label in
+    private let instructionsLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textColor = .label
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
                                                                    size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
@@ -91,13 +94,9 @@ class FirefoxAccountSignInViewController: UIViewController {
         }
     }
 
-    lazy var scanButton: ResizableButton = .build { button in
-        button.backgroundColor = UIColor.Photon.Blue50
-        button.layer.cornerRadius = 8
-        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-            .tinted(withColor: .white), for: .normal)
-        button.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-            .tinted(withColor: .white), for: .highlighted)
+    private lazy var scanButton: ResizableButton = .build { button in
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
         button.setTitle(.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
@@ -112,12 +111,8 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
-    lazy var emailButton: ResizableButton = .build { button in
-        button.backgroundColor = UIColor.Photon.LightGrey30
-        button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
-        button.layer.borderColor = UIColor.Photon.Grey30.cgColor
-        button.layer.borderWidth = 1
-        button.layer.cornerRadius = 8
+    private lazy var emailButton: ResizableButton = .build { button in
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
@@ -140,7 +135,9 @@ class FirefoxAccountSignInViewController: UIViewController {
     init(profile: Profile,
          parentType: FxASignInParentType,
          deepLinkParams: FxALaunchParams,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         switch parentType {
@@ -161,6 +158,8 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.fxaDismissStyle = .popToTabTray
         }
         self.logger = logger
+        self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -172,14 +171,15 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .systemBackground
+        listenForThemeChange(view)
         title = .Settings.Sync.SignInView.Title
         accessibilityLabel = "FxASingin.navBar"
 
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
         setupLayout()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         applyTheme()
     }
 
@@ -236,19 +236,16 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-
-        if theme == .dark {
-            scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-                .tinted(withColor: .black), for: .normal)
-            scanButton.setTitleColor(.black, for: .normal)
-            scanButton.backgroundColor = UIColor.legacyTheme.homePanel.activityStreamHeaderButton
-        } else {
-            scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
-                .tinted(withColor: .white), for: .normal)
-            scanButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
-            scanButton.backgroundColor = UIColor.Photon.Blue50
-        }
+        let colors = themeManager.currentTheme.colors
+        view.backgroundColor = colors.layer1
+        qrSignInLabel.textColor = colors.textPrimary
+        instructionsLabel.textColor = colors.textPrimary
+        scanButton.backgroundColor = colors.actionPrimary
+        scanButton.setTitleColor(colors.textInverted, for: .normal)
+        scanButton.setImage(signinSyncQRImage?
+            .tinted(withColor: colors.textInverted), for: .normal)
+        emailButton.backgroundColor = colors.actionSecondary
+        emailButton.setTitleColor(colors.textSecondaryAction, for: .normal)
     }
 
     // MARK: Button Tap Functions
@@ -344,17 +341,5 @@ extension FirefoxAccountSignInViewController {
         let settingsTableViewController = SyncContentSettingsViewController()
         settingsTableViewController.profile = profile
         return settingsTableViewController
-    }
-}
-
-// MARK: - Notifiable
-extension FirefoxAccountSignInViewController: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
     }
 }

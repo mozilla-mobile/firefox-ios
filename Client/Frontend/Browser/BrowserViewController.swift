@@ -1636,9 +1636,9 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openNewTabFromMenu(focusLocationField: Bool) {
+    func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool) {
         overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
-        openBlankNewTab(focusLocationField: focusLocationField)
+        openBlankNewTab(focusLocationField: focusLocationField, isPrivate: isPrivate)
     }
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {

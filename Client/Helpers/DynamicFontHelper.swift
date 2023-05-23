@@ -173,7 +173,7 @@ class DynamicFontHelper: NSObject {
         return fontMetrics.scaledFont(for: font, maximumPointSize: min(fontDescriptor.pointSize, maxSize))
     }
 
-    /// Return a font that will dynamically scale up to a certain size
+    /// Returns a font that will dynamically scale with dynamic text
     /// - Parameters:
     ///   - textStyle: The desired textStyle for the font
     ///   - size: The size of the font
