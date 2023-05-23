@@ -4,8 +4,8 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=6
-THRESHOLD_XCUITEST=6
+THRESHOLD_UNIT_TEST=4
+THRESHOLD_XCUITEST=4
 
 WARNING_COUNT=`egrep '^(\/(?!.*SourcePackages\/checkouts).+:[0-9+:[0-9]+:.|warning:|⚠️|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
 
