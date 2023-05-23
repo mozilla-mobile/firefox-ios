@@ -4,7 +4,7 @@
 
 // /* eslint-disable mozilla/balanced-listeners, no-undef */
 import CreditCardHelper from "resource://gre/modules/shared/EntryFile.sys.mjs";
-import { CreditCardExtras } from "Assets/CC_Script/CreditCardExtras.shared.mjs";
+import { CreditCardExtras } from "Assets/CC_Script/CreditCardExtras.ios.mjs";
 
 // Define supported message types.
 const messageTypes = {

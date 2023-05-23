@@ -2618,7 +2618,7 @@
 		4320BE4729D1B24B00D0B308 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/EditCard.strings; sourceTree = "<group>"; };
 		4320BE4829D1B24B00D0B308 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/ErrorState.strings; sourceTree = "<group>"; };
 		4320BE4929D1B24B00D0B308 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Onboarding.strings; sourceTree = "<group>"; };
-		4320E17E2A16E5A9009A4B5F /* CreditCardExtras.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardExtras.shared.mjs; sourceTree = "<group>"; };
+		4320E17E2A16E5A9009A4B5F /* CreditCardExtras.ios.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardExtras.ios.mjs; sourceTree = "<group>"; };
 		4322680229225CA3008F8C47 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		4322E39F28B39DFE00BA0883 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		43233C9E29BF3BBD002E6B6D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Onboarding.strings; sourceTree = "<group>"; };
@@ -7218,7 +7218,7 @@
 				43B9F4A02A09DE390028B9E1 /* LabelUtils.sys.mjs */,
 				43B9F49F2A09DE390028B9E1 /* LoginManager.shared.mjs */,
 				43B9F4A42A09DE3A0028B9E1 /* Overrides.ios.js */,
-				4320E17E2A16E5A9009A4B5F /* CreditCardExtras.shared.mjs */,
+				4320E17E2A16E5A9009A4B5F /* CreditCardExtras.ios.mjs */,
 			);
 			path = CC_Script;
 			sourceTree = "<group>";
