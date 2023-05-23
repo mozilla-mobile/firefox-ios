@@ -347,6 +347,54 @@ extension String {
                 comment: "Button title which, when tapped, will allow the user to save valid credit card details.")
         }
 
+        // Remember Card
+        public struct RememberCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "RememberCardTitle.Default",
+                tableName: nil,
+                value: "Remember this card?",
+                comment: "This value is used as the title for the remember card page")
+            public static let Header = MZLocalizedString(
+                key: "RememberCardHeader.Default",
+                tableName: nil,
+                value: "Save your card information securely with Firefox to check out faster next time.",
+                comment: "This value is used as the header for the remember card page")
+            public static let MainButtonTitle = MZLocalizedString(
+                key: "RememberCardPromptButtonYes.Default",
+                tableName: nil,
+                value: "Yes",
+                comment: "This value is used as the title for the Yes button in the remember card page")
+            public static let SecondaryButtonTitle = MZLocalizedString(
+                key: "RememberCardPromptButtonNotNow.Default",
+                tableName: nil,
+                value: "Not Now",
+                comment: "This value is used as the title for the Not Now button in the remember card page")
+        }
+
+        // Update Card
+        public struct UpdateCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "UpdateCardPromptTitle.Default",
+                tableName: nil,
+                value: "Update this card?",
+                comment: "This value is used as the title for the update card page")
+            public static let ManageCardsButtonTitle = MZLocalizedString(
+                key: "UpdateCardManageCardsButtonTitle.Default",
+                tableName: nil,
+                value: "Manage cards",
+                comment: "This value is used as the title for the Manage Cards button from the update cards page")
+            public static let YesButtonTitle = MZLocalizedString(
+                key: "UpdateCardPromptTitle.Default",
+                tableName: nil,
+                value: "Yes",
+                comment: "This value is used as the title for the button in the update card page")
+            public static let NotNowButtonTitle = MZLocalizedString(
+                key: "UpdateCardPromptButtonNotNow.Default",
+                tableName: nil,
+                value: "Not Now",
+                comment: "This value is used as the title for the Not Now button in the remember card page")
+        }
+
         // Error States for wrong input while editing credit card
         public struct ErrorState {
             public static let NameOnCardSublabel = MZLocalizedString(
