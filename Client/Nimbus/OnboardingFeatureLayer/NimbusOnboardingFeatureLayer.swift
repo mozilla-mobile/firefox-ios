@@ -78,7 +78,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         guard let helper = GleanPlumbEvaluationUtility().createGleanPlumbHelper() else { return [] }
 
         return cardData.compactMap { card in
-            if verifyPrerequisites(
+            if prerequisitesAreMet(
                 from: card,
                 against: prerequisiteTable,
                 using: &jexlCache,
@@ -111,7 +111,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
-    private func verifyPrerequisites(
+    private func prerequisitesAreMet(
         from card: NimbusOnboardingCardData,
         against prerequisiteTable: [String: String],
         using jexlCache: inout [String: Bool],

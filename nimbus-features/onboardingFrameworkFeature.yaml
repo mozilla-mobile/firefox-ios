@@ -105,9 +105,9 @@ features:
               type: upgrade
           card-ordering:
             - "welcome"
-            - "update.welcome"
-            - "notificationPermissions"
             - "signToSync"
+            - "notificationPermissions"
+            - "update.welcome"
             - "update.signToSync"
           dismissable: true
 
