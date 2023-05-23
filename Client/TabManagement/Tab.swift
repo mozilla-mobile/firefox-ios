@@ -279,8 +279,9 @@ class Tab: NSObject {
            internalUrl.isAboutHomeURL {
             return true
         }
-
-        setZoomLevelforDomain()
+        ensureMainThread {
+            self.setZoomLevelforDomain()
+        }
         return false
     }
 
@@ -695,7 +696,9 @@ class Tab: NSObject {
         if let host = url?.host,
            let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
             pageZoom = domainZoomLevel.zoomLevel
-        } else { resetZoom() }
+        } else {
+            resetZoom()
+        }
     }
 
     func addContentScript(_ helper: TabContentScript, name: String) {
