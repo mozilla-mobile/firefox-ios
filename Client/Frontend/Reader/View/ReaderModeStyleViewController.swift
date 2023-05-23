@@ -30,8 +30,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
-    init(
-        viewModel: ReaderModeStyleViewModel,
+    init(viewModel: ReaderModeStyleViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
