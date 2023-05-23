@@ -11,7 +11,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func didChangeZoomLevel()
 }
 
-class ZoomPageBar: UIView, ThemeApplicable {
+class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private struct UX {
         static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
@@ -292,6 +292,10 @@ class ZoomPageBar: UIView, ThemeApplicable {
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .layoutChanged, argument: nil)
         }
+    }
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        self.alpha = alpha
     }
 
     func applyTheme(theme: Theme) {

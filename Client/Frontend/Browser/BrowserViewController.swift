@@ -91,13 +91,13 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header stack view can contain the top url bar or top reader mode
+    // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
 
     // OverKeyboardContainer stack view contains the bottom reader mode and the bottom url bar
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
 
-    // BottomContainer stack view only contains toolbar
+    // BottomContainer stack view contains toolbar, ZoomPageBar
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
