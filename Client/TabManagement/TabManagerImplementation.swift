@@ -101,7 +101,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         await generateTabs(from: windowData)
 
         for delegate in delegates {
-            delegate.get()?.tabManagerDidRestoreTabs(self)
+            ensureMainThread {
+                delegate.get()?.tabManagerDidRestoreTabs(self)
+            }
         }
     }
 
