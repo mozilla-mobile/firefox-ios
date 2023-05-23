@@ -320,6 +320,30 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
 
+    // Smoke & Functional
+    func testTabHistory() {
+        navigator.nowAt(NewTabScreen)
+        openBookOfMozilla()
+        let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton]
+        let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.forwardButton]
+        urlBarBackButton.press(forDuration: 1)
+        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        app.tables.staticTexts["The Book of Mozilla"].tap()
+        XCTAssertFalse(app.tables.staticTexts["The Book of Mozilla"].exists)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openBookOfMozilla()
+        urlBarBackButton.press(forDuration: 1)
+        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        app.tables.staticTexts["The Book of Mozilla"].tap()
+        urlBarBackButton.tap()
+        XCTAssertFalse(urlBarBackButton.isEnabled)
+        urlBarForwardButton.press(forDuration: 1)
+        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        app.tables.staticTexts["The Book of Mozilla"].tap()
+        waitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
+    }
+
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this approach to avoid code duplication
     /*
