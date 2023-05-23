@@ -25,7 +25,7 @@ enum ReaderModeState: String {
     case active = "Active"
 }
 
-enum ReaderModeTheme: String {
+enum ReaderModeTheme: String, Equatable {
     case light
     case dark
     case sepia
@@ -43,7 +43,7 @@ private struct FontFamily {
     static let families = [serifFamily, sansFamily]
 }
 
-enum ReaderModeFontType: String {
+enum ReaderModeFontType: String, Equatable {
     case serif = "serif"
     case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
@@ -70,7 +70,7 @@ enum ReaderModeFontType: String {
     }
 }
 
-enum ReaderModeFontSize: Int {
+enum ReaderModeFontSize: Int, Equatable, Comparable {
     case size1 = 1
     case size2 = 2
     case size3 = 3
@@ -129,9 +129,13 @@ enum ReaderModeFontSize: Int {
             return ReaderModeFontSize(rawValue: self.rawValue + 1)!
         }
     }
+
+    static func < (lhs: ReaderModeFontSize, rhs: ReaderModeFontSize) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
 }
 
-struct ReaderModeStyle {
+struct ReaderModeStyle: Equatable {
     var theme: ReaderModeTheme
     var fontType: ReaderModeFontType
     var fontSize: ReaderModeFontSize
@@ -176,9 +180,9 @@ struct ReaderModeStyle {
     mutating func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
-}
 
-let DefaultReaderModeStyle = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+    static let `default` = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+}
 
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
@@ -335,7 +339,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
-    var style: ReaderModeStyle = DefaultReaderModeStyle {
+    var style: ReaderModeStyle = .default {
         didSet {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).setStyle(\(style.encode()))") { object, error in

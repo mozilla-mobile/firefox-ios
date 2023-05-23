@@ -108,18 +108,94 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_delegateMemoryLeak() {
-        let mockReaderModeStyleViewControllerDelegate = MockReaderModeStyleViewControllerDelegate()
+        let mockReaderModeStyleViewControllerDelegate = MockDelegate()
         let readerModeStyleViewModel = ReaderModeStyleViewModel(isBottomPresented: false)
-        let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeStyleViewModel)
-        readerModeStyleViewController.delegate = mockReaderModeStyleViewControllerDelegate
-        trackForMemoryLeaks(readerModeStyleViewController)
+        readerModeStyleViewModel.delegate = mockReaderModeStyleViewControllerDelegate
+        trackForMemoryLeaks(readerModeStyleViewModel)
+    }
+
+    // MARK: - Tests
+
+    func testSelectTheme() {
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+
+        let theme = ReaderModeTheme.dark
+        viewModel.selectTheme(theme)
+
+        XCTAssertEqual(viewModel.readerModeStyle.theme, theme)
+    }
+
+    func testSelectFontType() {
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+
+        let fontType = ReaderModeFontType.sansSerif
+        viewModel.selectFontType(fontType)
+
+        XCTAssertEqual(viewModel.readerModeStyle.fontType, fontType)
+    }
+
+    func testReaderModeDidChangeTheme() {
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let mockDelegate = MockDelegate()
+        viewModel.delegate = mockDelegate
+
+        let theme = ReaderModeTheme.light
+        viewModel.readerModeDidChangeTheme(theme)
+
+        XCTAssertEqual(viewModel.readerModeStyle.theme, theme)
+        XCTAssertTrue(viewModel.isUsingUserDefinedColor)
+        XCTAssertTrue(mockDelegate.didCallConfigureStyle)
+        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, true)
+    }
+
+    func testFontSizeDidChangeSizeAction() {
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let mockDelegate = MockDelegate()
+        viewModel.delegate = mockDelegate
+
+        let originalFontSize = viewModel.readerModeStyle.fontSize
+
+        viewModel.fontSizeDidChangeSizeAction(.smaller)
+        XCTAssertTrue(viewModel.readerModeStyle.fontSize < originalFontSize)
+
+        viewModel.fontSizeDidChangeSizeAction(.bigger)
+        viewModel.fontSizeDidChangeSizeAction(.bigger)
+        XCTAssertTrue(viewModel.readerModeStyle.fontSize > originalFontSize)
+
+        viewModel.fontSizeDidChangeSizeAction(.reset)
+        XCTAssertEqual(viewModel.readerModeStyle.fontSize, ReaderModeFontSize.defaultSize)
+
+        XCTAssertTrue(mockDelegate.didCallConfigureStyle)
+        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, viewModel.isUsingUserDefinedColor)
+    }
+
+    func testFontTypeDidChange() {
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let mockDelegate = MockDelegate()
+        viewModel.delegate = mockDelegate
+
+        let fontType = ReaderModeFontType.serif
+        viewModel.fontTypeDidChange(fontType)
+
+        XCTAssertEqual(viewModel.readerModeStyle.fontType, fontType)
+        XCTAssertTrue(mockDelegate.didCallConfigureStyle)
+        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, viewModel.isUsingUserDefinedColor)
     }
 }
 
-class MockReaderModeStyleViewControllerDelegate: ReaderModeStyleViewControllerDelegate {
-    init() {}
+// MARK: - Mocks
 
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController,
-                                       didConfigureStyle style: ReaderModeStyle,
-                                       isUsingUserDefinedColor: Bool) {}
+class MockDelegate: ReaderModeStyleViewModelDelegate {
+    var didCallConfigureStyle = false
+    var receivedStyle: ReaderModeStyle?
+    var receivedIsUsingUserDefinedColor: Bool?
+
+    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel, didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {
+        didCallConfigureStyle = true
+        receivedStyle = style
+        receivedIsUsingUserDefinedColor = isUsingUserDefinedColor
+    }
 }
