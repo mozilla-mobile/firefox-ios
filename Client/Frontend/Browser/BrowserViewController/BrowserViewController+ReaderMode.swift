@@ -26,8 +26,9 @@ extension BrowserViewController: ReaderModeDelegate {
 }
 
 extension BrowserViewController: ReaderModeStyleViewModelDelegate {
-
-    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel, didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {
+    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel,
+                                  didConfigureStyle style: ReaderModeStyle,
+                                  isUsingUserDefinedColor: Bool) {
         var newStyle = style
         if !isUsingUserDefinedColor {
             newStyle.ensurePreferredColorThemeIfNeeded()

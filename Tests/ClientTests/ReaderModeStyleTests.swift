@@ -193,7 +193,9 @@ class MockDelegate: ReaderModeStyleViewModelDelegate {
     var receivedStyle: ReaderModeStyle?
     var receivedIsUsingUserDefinedColor: Bool?
 
-    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel, didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {
+    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel,
+                                  didConfigureStyle style: ReaderModeStyle,
+                                  isUsingUserDefinedColor: Bool) {
         didCallConfigureStyle = true
         receivedStyle = style
         receivedIsUsingUserDefinedColor = isUsingUserDefinedColor

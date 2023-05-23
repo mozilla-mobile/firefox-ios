@@ -8,7 +8,9 @@ import Foundation
 
 protocol ReaderModeStyleViewModelDelegate: AnyObject {
     // isUsingUserDefinedColor should be false by default unless we need to override the default color
-    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel, didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool)
+    func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel,
+                                  didConfigureStyle style: ReaderModeStyle,
+                                  isUsingUserDefinedColor: Bool)
 }
 
 // MARK: - ReaderModeStyleViewModel
@@ -63,7 +65,11 @@ class ReaderModeStyleViewModel {
     func readerModeDidChangeTheme(_ theme: ReaderModeTheme) {
         selectTheme(theme)
         isUsingUserDefinedColor = true
-        delegate?.readerModeStyleViewModel(self, didConfigureStyle: readerModeStyle, isUsingUserDefinedColor: true)
+        delegate?.readerModeStyleViewModel(
+            self,
+            didConfigureStyle: readerModeStyle,
+            isUsingUserDefinedColor: true
+        )
     }
 
     func fontSizeDidChangeSizeAction(_ fontSizeAction: FontSizeAction) {
@@ -76,7 +82,11 @@ class ReaderModeStyleViewModel {
             readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
         }
 
-        delegate?.readerModeStyleViewModel(self, didConfigureStyle: readerModeStyle, isUsingUserDefinedColor: isUsingUserDefinedColor)
+        delegate?.readerModeStyleViewModel(
+            self,
+            didConfigureStyle: readerModeStyle,
+            isUsingUserDefinedColor: isUsingUserDefinedColor
+        )
     }
 
     func fontTypeDidChange(_ fontType: ReaderModeFontType) {
