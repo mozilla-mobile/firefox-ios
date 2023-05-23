@@ -49,7 +49,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     // MARK: - Helper methods
-
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
         launchCoordinator.parentCoordinator = self
@@ -58,14 +57,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     // MARK: - LaunchCoordinatorDelegate
-
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
     }
 
     // MARK: - BrowserDelegate
-
     func showHomepage(inline: Bool,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
@@ -119,7 +116,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     // MARK: - Route handling
-
     override func handle(route: Route) -> Bool {
         switch route {
         case let .searchQuery(query):
