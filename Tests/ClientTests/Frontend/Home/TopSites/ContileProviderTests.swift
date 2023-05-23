@@ -228,18 +228,17 @@ private extension ContileProviderTests {
         let session = URLSession(configuration: configuration)
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
 
-        let provider = ContileProvider()
-        provider.urlSession = session
-        provider.urlCache = cache
+        let subject = ContileProvider()
+        subject.urlSession = session
+        subject.urlCache = cache
 
-        trackForMemoryLeaks(provider, file: file, line: line)
-        trackForMemoryLeaks(cache, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
 
-        return provider
+        return subject
     }
 
-    func testProvider(completion: @escaping (ContileResult) -> Void) {
-        let provider = getProvider()
+    func testProvider(file: StaticString = #filePath, line: UInt = #line, completion: @escaping (ContileResult) -> Void) {
+        let provider = getProvider(file: file, line: line)
         let expectation = expectation(description: "Wait for completion")
         provider.fetchContiles { result in
             completion(result)
