@@ -237,6 +237,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self),
                 FasterInactiveTabs(settings: self)
+                AppReviewPromptSetting(settings: self)
             ])]
 
         return settings
