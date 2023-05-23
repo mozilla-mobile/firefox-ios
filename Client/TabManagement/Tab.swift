@@ -958,9 +958,13 @@ class TabWebView: WKWebView, MenuHelperInterface {
         self.accessoryView = AccessoryViewProvider()
 
         super.init(frame: frame, configuration: configuration)
+        accessoryView.previousClosure = {
+            CreditCardHelper.focusPreviousInputField(tabWebView: self)
+        }
 
-        accessoryView.previousClosure = { CreditCardHelper.previousInput() }
-        accessoryView.nextClosure = { CreditCardHelper.nextInput() }
+        accessoryView.nextClosure = {
+            CreditCardHelper.focusNextInputField(tabWebView: self)
+        }
         accessoryView.doneClosure = { self.endEditing(true) }
     }
 
