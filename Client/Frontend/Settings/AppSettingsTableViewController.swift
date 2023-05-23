@@ -235,7 +235,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ToggleHistoryGroups(settings: self),
                 ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
-                ExperimentsSettings(settings: self)
+                ExperimentsSettings(settings: self),
+                AppReviewPromptSetting(settings: self)
             ])]
 
         return settings
