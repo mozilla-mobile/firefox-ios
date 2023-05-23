@@ -91,6 +91,10 @@ class CreditCardInputViewModel: ObservableObject {
         Int64(expirationDate.suffix(2))
     }
 
+    // MARK: View
+
+    var dismiss: ((_ successVal: Bool) -> Void)?
+
     @Published var state: CreditCardEditState
     @Published var errorState: String = ""
     @Published var enteredValue: String = ""
@@ -123,6 +127,8 @@ class CreditCardInputViewModel: ObservableObject {
         }
     }
 
+    // MARK: Business logic
+
     var isRightBarButtonEnabled: Bool {
         let viewMode = state == .view && state.rightBarBtn == .edit
         let saveMode = state.rightBarBtn == .save && (nameIsValid &&
@@ -140,8 +146,7 @@ class CreditCardInputViewModel: ObservableObject {
             alertBody: Text(CreditCardText.RemoveCardSublabel),
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
-
-                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
+                dismissAndRemoveCreditCard()
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -154,8 +159,7 @@ class CreditCardInputViewModel: ObservableObject {
             alertBody: nil,
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
-
-                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
+                dismissAndRemoveCreditCard()
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -200,12 +204,6 @@ class CreditCardInputViewModel: ObservableObject {
 
     // MARK: - Helpers
 
-    private func removeSelectedCreditCard(creditCardGUID: String) {
-        autofill.deleteCreditCard(id: creditCardGUID) { _, error in
-            // no-op
-        }
-    }
-
     public func updateState(state: CreditCardEditState) {
         self.state = state
         switch state {
@@ -236,6 +234,23 @@ class CreditCardInputViewModel: ObservableObject {
         autofill.updateCreditCard(id: creditCard.guid,
                                   creditCard: plainCreditCard,
                                   completion: completion)
+    }
+
+    private func dismissAndRemoveCreditCard() {
+        guard let currentCreditCard = creditCard,
+              !currentCreditCard.guid.isEmpty else {
+            return
+        }
+        autofill.deleteCreditCard(id: currentCreditCard.guid) {
+            status, error in
+            guard let error = error, status == true else {
+                self.dismiss?(true)
+                return
+            }
+            self.logger?.log("Unable to remove credit card: \(error)",
+                             level: .warning,
+                             category: .storage)
+        }
     }
 
     public func clearValues() {

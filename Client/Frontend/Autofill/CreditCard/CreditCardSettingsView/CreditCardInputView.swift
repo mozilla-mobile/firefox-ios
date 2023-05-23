@@ -10,7 +10,6 @@ import Shared
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     @State private var isBlurred = false
-    var dismiss: ((_ successVal: Bool) -> Void)
 
     // Theming
     @Environment(\.themeType)
@@ -128,25 +127,25 @@ struct CreditCardInputView: View {
                 if viewModel.state == .edit {
                     viewModel.updateCreditCard { _, error in
                         guard let error = error else {
-                            dismiss(true)
+                            viewModel.dismiss?(true)
                             return
                         }
                         viewModel.logger?.log("Unable to update card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        dismiss(false)
+                        viewModel.dismiss?(false)
                     }
                 } else {
                     // Save new card
                     viewModel.saveCreditCard { _, error in
                         guard let error = error else {
-                            dismiss(true)
+                            viewModel.dismiss?(true)
                             return
                         }
                         viewModel.logger?.log("Unable to save credit card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        dismiss(false)
+                        viewModel.dismiss?(false)
                     }
                 }
             }
@@ -160,7 +159,7 @@ struct CreditCardInputView: View {
             case .cancel:
                 viewModel.updateState(state: .view)
             case.close:
-                dismiss(false)
+                viewModel.dismiss?(false)
             }
         }
     }
@@ -187,10 +186,6 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                                  creditCard: sampleCreditCard,
                                                  state: .view)
 
-        return CreditCardInputView(
-            viewModel: viewModel,
-            dismiss: { successVal in
-            // dismiss view
-        })
+        return CreditCardInputView(viewModel: viewModel)
     }
 }
