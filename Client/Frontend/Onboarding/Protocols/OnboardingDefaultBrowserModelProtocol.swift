@@ -6,12 +6,12 @@ import Foundation
 
 protocol OnboardingDefaultBrowserModelProtocol {
     var title: String { get set }
-    var descriptionSteps: [String] { get set }
+    var instructionSteps: [String] { get set }
     var buttonTitle: String { get set }
     var a11yIdRoot: String { get set }
 
     init(title: String,
-         descriptionSteps: [String],
+         instructionSteps: [String],
          buttonTitle: String,
          a11yIdRoot: String)
 

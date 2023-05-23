@@ -7,29 +7,28 @@ import Shared
 
 struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol {
     var title: String
-    var descriptionSteps: [String]
+    var instructionSteps: [String]
     var buttonTitle: String
     var a11yIdRoot: String
 
     init(title: String = String.Onboarding.DefaultBrowserPopup.Title,
-         descriptionSteps: [String] = [String.Onboarding.DefaultBrowserPopup.FirstInstruction,
+         instructionSteps: [String] = [String.Onboarding.DefaultBrowserPopup.FirstInstruction,
               String.Onboarding.DefaultBrowserPopup.SecondInstruction,
               String(format: String.Onboarding.DefaultBrowserPopup.ThirdInstruction, AppName.shortName.rawValue)],
          buttonTitle: String = String.Onboarding.DefaultBrowserPopup.ButtonTitle,
          a11yIdRoot: String) {
         self.title = title
-        self.descriptionSteps = descriptionSteps
+        self.instructionSteps = instructionSteps
         self.buttonTitle = buttonTitle
         self.a11yIdRoot = a11yIdRoot
     }
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
         var attributedTexts: [NSAttributedString] = []
-        descriptionSteps.forEach { text in
+        instructionSteps.forEach { text in
             let attributedText = MarkupAttributeUtility(baseFont: font).addAttributesTo(text: text)
             attributedTexts.append(attributedText)
         }
         return attributedTexts
     }
-
 }

@@ -49,10 +49,10 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3, size: UX.titleFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
     }
 
-    private lazy var numeratedLabels: [UILabel] = []
+    private lazy var numeratedLabels = [UILabel]()
 
     private lazy var textStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
@@ -70,7 +70,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
@@ -164,7 +164,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 
     private func addViewsToView() {
-        createLabels(viewModel.descriptionSteps)
+        createLabels(from: viewModel.instructionSteps)
 
         contentStackView.addArrangedSubview(titleLabel)
         numeratedLabels.forEach { textStackView.addArrangedSubview($0)}
@@ -177,14 +177,16 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         view.backgroundColor = .white
     }
 
-    private func createLabels(_ descriptionTexts: [String]) {
-        numeratedLabels = []
-        viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)).forEach { attributedText in
+    private func createLabels(from descriptionTexts: [String]) {
+        numeratedLabels.removeAll()
+        let attributedStrings = viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize))
+        attributedStrings.forEach { attributedText in
+            let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
                 label.textAlignment = .left
                 label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true
-                label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)NumeratedLabel"
+                label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
                 label.attributedText = attributedText
                 label.numberOfLines = 0
             }
