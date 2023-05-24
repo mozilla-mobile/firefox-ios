@@ -120,9 +120,7 @@ final class RatingPromptManager {
         // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
         // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
         // will be implemented later in the future.
-        guard requestCount < 1 else { return false }
-
-        return true
+        return requestCount < 1
     }
 
     private func requestRatingPrompt(at date: Date) {
