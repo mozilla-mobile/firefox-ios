@@ -485,6 +485,7 @@
 		6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB550B28633860007A6ABD /* TabManagerNavDelegate.swift */; };
 		6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */; };
 		742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */; };
+		742BD99E2A13AC9000BA6B15 /* OnboardingDefaultSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742BD99D2A13AC9000BA6B15 /* OnboardingDefaultSettingsViewController.swift */; };
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */; };
 		745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */; };
@@ -493,6 +494,8 @@
 		74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */; };
 		7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7482205B1DBAB56300EEEA72 /* MailProviders.swift */; };
 		74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B195431CF503FC007F36EF /* RecentlyClosedTabs.swift */; };
+		74B420C92A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B420C82A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift */; };
+		74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BBDF462A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift */; };
 		74C027451B2A348C001B1E88 /* LegacySessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* LegacySessionData.swift */; };
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
@@ -4052,6 +4055,7 @@
 		73AE44D19013492056E1416D /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		73EC47B2B45CEC067D0CB266 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Shared.strings"; sourceTree = "<group>"; };
 		742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
+		742BD99D2A13AC9000BA6B15 /* OnboardingDefaultSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDefaultSettingsViewController.swift; sourceTree = "<group>"; };
 		74364B73872F21F4DA1EB543 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailtoLinkHandler.swift; sourceTree = "<group>"; };
@@ -4065,6 +4069,8 @@
 		74934281AE0F15BB6EC1E756 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Today.strings; sourceTree = "<group>"; };
 		74A44FBEBA309D6D780BC6F8 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		74B195431CF503FC007F36EF /* RecentlyClosedTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabs.swift; sourceTree = "<group>"; };
+		74B420C82A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDefaultBrowserInfoModel.swift; sourceTree = "<group>"; };
+		74BBDF462A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDefaultBrowserModelProtocol.swift; sourceTree = "<group>"; };
 		74C027441B2A348C001B1E88 /* LegacySessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacySessionData.swift; sourceTree = "<group>"; };
 		74C14EA28570D995C545434D /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		74D949BEA49BE912BAFD4406 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/FindInPage.strings"; sourceTree = "<group>"; };
@@ -8596,6 +8602,7 @@
 				C88E7A5A2A0553510072E638 /* OnboardingLinkInfoModel.swift */,
 				C88E7A542A0553180072E638 /* OnboardingViewModel.swift */,
 				435D660423D794B90046EFA2 /* UpdateViewModel.swift */,
+				74B420C82A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -8607,6 +8614,7 @@
 				2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */,
 				21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */,
 				C8610DA92A0EBF7100B79FF1 /* OnboardingCardDelegate.swift */,
+				74BBDF462A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -8682,6 +8690,7 @@
 				E49943F31AE6879C00BF9DE4 /* FirstInstall */,
 				21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */,
 				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
+				742BD99D2A13AC9000BA6B15 /* OnboardingDefaultSettingsViewController.swift */,
 				43A5643423CD1E1B00B6857D /* Update */,
 			);
 			path = ViewControllers;
@@ -11948,10 +11957,12 @@
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift in Sources */,
 				C87DC85627B2C8B0006EFCE2 /* LegacyWallpaperNetworkUtility.swift in Sources */,
+				74B420C92A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift in Sources */,
 				E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
+				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
@@ -12197,6 +12208,7 @@
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				8AD40FD127BADCBA00672675 /* ToolbarButton.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
+				742BD99E2A13AC9000BA6B15 /* OnboardingDefaultSettingsViewController.swift in Sources */,
 				9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */,
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
 				E10A1F752863BC51001EEA80 /* InactiveTabItemCell.swift in Sources */,
