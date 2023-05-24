@@ -102,7 +102,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
-                .onboardingNotificationCard,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,
@@ -170,9 +169,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
-
-        case .onboardingNotificationCard:
-            return nimbusLayer.checkNimbusConfigForOnboardingNotificationCard().rawValue
 
         case .startAtHome:
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue

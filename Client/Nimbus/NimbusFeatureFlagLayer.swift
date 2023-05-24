@@ -48,8 +48,7 @@ final class NimbusFeatureFlagLayer {
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
-                .onboardingFreshInstall,
-                .onboardingNotificationCard:
+                .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .shareSheetChanges,
@@ -94,18 +93,6 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
-        }
-    }
-
-    public func checkNimbusConfigForOnboardingNotificationCard(
-        using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
-        let config = nimbus.features.onboardingFeature.value()
-        let nimbusSetting = config.notificationCardPosition
-
-        switch nimbusSetting {
-        case .noCard: return .noCard
-        case .afterSync: return .afterSync
-        case .beforeSync: return .beforeSync
         }
     }
 
