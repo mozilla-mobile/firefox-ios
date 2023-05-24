@@ -163,7 +163,7 @@ public struct PrefsKeys {
 
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
-    
+
     // Only used to force faster transition of tabs to the inactive state (10 seconds)
     public static let FasterInactiveTabsOverride = "FasterInactiveTabsOverride"
 }

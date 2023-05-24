@@ -38,7 +38,7 @@ class SearchGroupedItemsViewController: UIViewController {
         }
     }
 
-    fileprivate lazy var doneButton: UIBarButtonItem =  {
+    fileprivate lazy var doneButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(doneButtonAction))
         button.accessibilityIdentifier = "ShowGroupDoneButton"
         return button

@@ -73,12 +73,12 @@ class BookmarkDetailPanel: SiteTableViewController {
     // Additional UI elements only used if `BookmarkDetailPanel` is called from the toast button
     var isPresentedFromToast = false
 
-    fileprivate lazy var topRightButton: UIBarButtonItem =  {
+    fileprivate lazy var topRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
         return button
     }()
 
-    fileprivate lazy var topLeftButton: UIBarButtonItem =  {
+    fileprivate lazy var topLeftButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-stop"), style: .done, target: self, action: #selector(topLeftButtonAction))
         return button
     }()
