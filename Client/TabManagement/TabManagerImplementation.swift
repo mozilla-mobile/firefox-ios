@@ -46,7 +46,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         guard !isRestoringTabs,
-              tabs.isEmpty
+              forced || tabs.isEmpty
         else { return }
 
         guard !AppConstants.isRunningUITests,
