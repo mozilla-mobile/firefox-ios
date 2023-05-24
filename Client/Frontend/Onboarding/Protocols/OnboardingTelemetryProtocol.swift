@@ -5,7 +5,9 @@
 import Foundation
 
 protocol OnboardingTelemetryProtocol: AnyObject {
-    func sendCardViewTelemetry(from card: OnboardingCardInfoModelProtocol)
-    func sendButtonActionTelemetry(from card: OnboardingCardInfoModelProtocol)
-    func sendDismissOnboardingTelemetry(from card: OnboardingCardInfoModelProtocol)
+    func sendCardViewTelemetry(from cardName: String)
+    func sendButtonActionTelemetry(from cardName: String,
+                                   with action: OnboardingActions,
+                                   and primaryButton: Bool)
+    func sendDismissOnboardingTelemetry(from cardName: String)
 }

@@ -196,11 +196,12 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from card: OnboardingCardInfoModelProtocol
+        from cardName: String,
+        isPrimaryButton: Bool
     ) {
         switch action {
         case .nextCard:
-            showNextPage(from: card.name) {
+            showNextPage(from: cardName) {
                 self.didFinishFlow?()
             }
         case .syncSignIn:
@@ -213,7 +214,7 @@ extension UpdateViewController: OnboardingCardDelegate {
             }
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
-                from: card.name,
+                from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openDefaultBrowserPopup:
             presentDefaultBrowserPopup()
@@ -222,8 +223,8 @@ extension UpdateViewController: OnboardingCardDelegate {
         }
     }
 
-    func sendCardViewTelemetry(from card: OnboardingCardInfoModelProtocol) {
-        viewModel.telemetryUtility.sendCardViewTelemetry(from: card)
+    func sendCardViewTelemetry(from cardName: String) {
+        viewModel.telemetryUtility.sendCardViewTelemetry(from: cardName)
     }
 }
 

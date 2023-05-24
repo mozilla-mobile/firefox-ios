@@ -16,8 +16,9 @@ import Shared
 protocol OnboardingCardDelegate: AnyObject {
     // These methods must be implemented by the object
     func handleButtonPress(for action: OnboardingActions,
-                           from card: OnboardingCardInfoModelProtocol)
-    func sendCardViewTelemetry(from card: OnboardingCardInfoModelProtocol)
+                           from cardName: String,
+                           isPrimaryButton: Bool)
+    func sendCardViewTelemetry(from cardName: String)
 
     // Implemented by default for code sharing
     func presentPrivacyPolicy(from cardName: String,

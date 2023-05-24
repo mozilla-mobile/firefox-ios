@@ -201,7 +201,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         super.viewWillAppear(animated)
 
         delegate?.pageChanged(from: viewModel.name)
-        delegate?.sendCardViewTelemetry(from: viewModel)
+        delegate?.sendCardViewTelemetry(from: viewModel.name)
     }
 
     // MARK: - View setup
@@ -344,7 +344,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
     func primaryAction() {
         delegate?.handleButtonPress(
             for: viewModel.buttons.primary.action,
-            from: viewModel)
+            from: viewModel.name,
+            isPrimaryButton: true)
     }
 
     @objc
@@ -353,14 +354,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
         delegate?.handleButtonPress(
             for: buttonAction,
-            from: viewModel)
+            from: viewModel.name,
+            isPrimaryButton: false)
     }
 
     @objc
     func linkButtonAction() {
         delegate?.handleButtonPress(
             for: .readPrivacyPolicy,
-            from: viewModel)
+            from: viewModel.name,
+            isPrimaryButton: false)
     }
 
     // MARK: - Themeable

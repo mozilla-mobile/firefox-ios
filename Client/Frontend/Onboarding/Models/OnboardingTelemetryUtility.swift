@@ -14,29 +14,45 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     }
 
     // MARK: - Public methods
-    func sendCardViewTelemetry(from card: OnboardingCardInfoModelProtocol) {
+    func sendCardViewTelemetry(from cardName: String) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .onboardingCardView,
                                      value: nil,
-                                     extras: buildTelemetryExtras(using: card))
+                                     extras: buildTelemetryExtras(using: cardName))
     }
 
-    func sendButtonActionTelemetry(from card: OnboardingCardInfoModelProtocol) {
+    func sendButtonActionTelemetry(
+        from cardName: String,
+        with action: OnboardingActions,
+        and primaryButton: Bool
+    ) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: primaryButton ? .onboardingPrimaryButton : .onboardingSecondaryButton,
+            value: nil,
+            extras: buildTelemetryExtras(using: cardName))
     }
 
-    func sendDismissOnboardingTelemetry(from card: OnboardingCardInfoModelProtocol) {
+    func sendDismissOnboardingTelemetry(from cardName: String) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .onboardingClose,
+            value: nil,
+            extras: buildTelemetryExtras(using: cardName))
     }
 
     // MARK: - Private fuctions
     private func buildTelemetryExtras(
-        using card: OnboardingCardInfoModelProtocol
+        using cardName: String
     ) -> [String: String] {
         typealias Key = TelemetryWrapper.EventExtraKey
         return [
-            Key.cardType.rawValue: card.name,
+            Key.cardType.rawValue: cardName,
             Key.sequenceID.rawValue: sequenceID(from: cardOrder),
-            Key.sequencePosition.rawValue: sequencePosition(for: card.name, from: cardOrder)
+            Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder)
         ]
     }
 
@@ -51,8 +67,5 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         from sequence: [String]
     ) -> String {
         return String(sequence.firstIndex { $0 == cardName } ?? -1)
-    }
-
-    private func elementType() {
     }
 }
