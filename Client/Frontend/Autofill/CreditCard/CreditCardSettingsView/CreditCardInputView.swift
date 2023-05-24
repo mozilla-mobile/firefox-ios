@@ -9,6 +9,7 @@ import Shared
 
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
+    @State private var isBlurred = false
     var dismiss: ((_ successVal: Bool) -> Void)
 
     // Theming
@@ -90,11 +91,22 @@ struct CreditCardInputView: View {
                 .padding(.top, 0)
                 .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
             }
+            .blur(radius: isBlurred ? 10 : 0)
             .onAppear {
                 applyTheme(theme: themeVal.theme)
             }
             .onChange(of: themeVal) { val in
                 applyTheme(theme: val.theme)
+            }
+            .onReceive(NotificationCenter.default.publisher(
+                for: UIApplication.willResignActiveNotification)
+            ) { _ in
+                isBlurred = true
+            }
+            .onReceive(NotificationCenter.default.publisher(
+                for: UIApplication.didBecomeActiveNotification)
+            ) { _ in
+                isBlurred = false
             }
         }
     }

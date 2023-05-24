@@ -34,12 +34,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
             setupNotifications(forObserver: self,
                                observing: [UIApplication.willResignActiveNotification])
-        }
-
-    private func startUp() {
-        guard tabs.isEmpty else { return }
-        let newTab = addTab()
-        super.selectTab(newTab)
     }
 
     // MARK: - Restore tabs
@@ -53,11 +47,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         guard !isRestoringTabs else { return }
 
-        startUp()
-
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
+            if tabs.isEmpty {
+                let newTab = addTab()
+                super.selectTab(newTab)
+            }
             return
         }
 
@@ -79,7 +75,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func restoreOnly() {
         tabs = [Tab]()
-        isRestoringTabs = true
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
         }
@@ -101,7 +96,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         await generateTabs(from: windowData)
 
         for delegate in delegates {
-            delegate.get()?.tabManagerDidRestoreTabs(self)
+            ensureMainThread {
+                delegate.get()?.tabManagerDidRestoreTabs(self)
+            }
         }
     }
 

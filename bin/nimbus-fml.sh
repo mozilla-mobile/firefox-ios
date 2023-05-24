@@ -84,7 +84,7 @@ if [ -z "$number_string" ]; then
     # We try to resolve that, and find the version from the Package.swift file in that local directory.
     # https://github.com/mozilla-mobile/firefox-ios/issues/12243
     rust_components_path=$(grep -A 3 $'XCRemoteSwiftPackageReference "rust-components-swift"' "$SOURCE_ROOT/$PROJECT.xcodeproj/project.pbxproj" | grep 'repositoryURL = "file://' | grep -o -E '/\w[^"]+')
-    number_string=$(grep 'let version =' "$rust_components_path/Package.swift" | grep -E -o "\d+\.\d+\.\d+")
+    number_string=$(grep 'let version =' "$rust_components_path/Package.swift" | grep -E -o "\d+\.\d+" | sed 's/\./\.0\./g')
 
     if [ -z "$number_string" ]; then
         echo "Error: No https://github.com/mozilla/rust-components-swift package was detected."
@@ -93,7 +93,7 @@ if [ -z "$number_string" ]; then
     fi
 fi
 
-AS_VERSION=$(echo "v$number_string" | sed 's/\.0\./\./g') # rust-component-swift tags have a middle `.0.` to force it to align with spm. We remove it
+AS_VERSION=$(echo "$number_string" | sed 's/\.0\./\./g') # rust-component-swift tags have a middle `.0.` to force it to align with spm. We remove it
 FRESHEN_FML=
 NIMBUS_DIR="$SOURCE_ROOT/build/nimbus"
 
@@ -164,14 +164,22 @@ if [ -n "$MOZ_APPSERVICES_LOCAL" ] ; then
     LOCAL_FML_DIR="$MOZ_APPSERVICES_LOCAL/components/support/nimbus-fml"
     export BINARY_PATH="$HOME/.cargo/bin/cargo run --manifest-path $LOCAL_FML_DIR/Cargo.toml --"
 else
-    # Otherwise, we should download a pre-built copy from github.com/mozilla/application-services/releases
+    # Otherwise, we should download a pre-built copy
+    AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/v$AS_VERSION"
+    CHECKSUM_URL="$AS_DOWNLOAD_URL/nimbus-fml.sha256"
+    FML_URL="$AS_DOWNLOAD_URL/nimbus-fml.zip"
+    RELEASE_STATUS_CODE=$(curl -L --write-out '%{http_code}' --silent --output /dev/null "$CHECKSUM_URL")
+    if [ $RELEASE_STATUS_CODE != 200 ]; then
+        AS_DOWNLOAD_URL="https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.nimbus-fml.$AS_VERSION/artifacts/public%2Fbuild%2F"
+        CHECKSUM_URL="${AS_DOWNLOAD_URL}nimbus-fml.sha256"
+        FML_URL="${AS_DOWNLOAD_URL}nimbus-fml.zip"
+    fi
     FML_DIR="$NIMBUS_DIR/bin"
     export BINARY_PATH="$FML_DIR/nimbus-fml"
-    AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/$AS_VERSION"
     # Check whether the cached copy is still the right one to use.
     if [[ -f $FML_DIR/nimbus-fml.sha256 ]]; then
         echo "Checking if we need to redownload the FML"
-        NEW_CHECKSUM=$(curl -L "$AS_DOWNLOAD_URL/nimbus-fml.sha256")
+        NEW_CHECKSUM=$(curl -L "$CHECKSUM_URL")
         OLD_CHECKSUM=$(cat "$FML_DIR/nimbus-fml.sha256")
         if [ ! "$OLD_CHECKSUM" == "$NEW_CHECKSUM" ]; then
             FRESHEN_FML="true"
@@ -185,9 +193,9 @@ else
     mkdir -p "$FML_DIR"
     if [[ ! -f "$FML_DIR/nimbus-fml.zip" ]] ; then
         # We now download the nimbus-fml from the github release
-        curl -L "$AS_DOWNLOAD_URL/nimbus-fml.zip" --output "$FML_DIR/nimbus-fml.zip"
+        curl -L "$FML_URL" --output "$FML_DIR/nimbus-fml.zip"
         # We also download the checksum
-        curl -L "$AS_DOWNLOAD_URL/nimbus-fml.sha256" --output "$FML_DIR/nimbus-fml.sha256"
+        curl -L "$CHECKSUM_URL" --output "$FML_DIR/nimbus-fml.sha256"
         pushd "${FML_DIR}"
         shasum --check nimbus-fml.sha256
         popd

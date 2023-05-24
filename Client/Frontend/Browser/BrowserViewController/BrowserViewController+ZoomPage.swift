@@ -87,6 +87,5 @@ extension BrowserViewController: ZoomPageBarDelegate {
 
     func zoomPageDidPressClose() {
         updateZoomPageBarVisibility(visible: false)
-        saveZoomLevel()
     }
 }

@@ -326,37 +326,37 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testPopUpBlocker() throws {
         throw XCTSkip("This test is flakey")
-        // Check that it is enabled by default
-        navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
-        navigator.goto(SettingsScreen)
-        waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
-        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
-        let switchValue = switchBlockPopUps.value!
-        XCTAssertEqual(switchValue as? String, "1")
-
-        // Check that there are no pop ups
-        navigator.openURL(popUpTestUrl)
-        waitForValueContains(app.textFields["url"], value: "blocker.html")
-        waitForExistence(app.webViews.staticTexts["Blocked Element"])
-
-        let numTabs = app.buttons["Show Tabs"].value
-        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
-
-        // Now disable the Block PopUps option
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(SettingsScreen)
-        waitForExistence(switchBlockPopUps, timeout: TIMEOUT)
-        switchBlockPopUps.tap()
-        let switchValueAfter = switchBlockPopUps.value!
-        XCTAssertEqual(switchValueAfter as? String, "0")
-
-        // Check that now pop ups are shown, two sites loaded
-        navigator.openURL(popUpTestUrl)
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "example.com")
-        let numTabsAfter = app.buttons["Show Tabs"].value
-        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
+//        // Check that it is enabled by default
+//        navigator.nowAt(BrowserTab)
+//        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
+//        navigator.goto(SettingsScreen)
+//        waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
+//        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+//        let switchValue = switchBlockPopUps.value!
+//        XCTAssertEqual(switchValue as? String, "1")
+//
+//        // Check that there are no pop ups
+//        navigator.openURL(popUpTestUrl)
+//        waitForValueContains(app.textFields["url"], value: "blocker.html")
+//        waitForExistence(app.webViews.staticTexts["Blocked Element"])
+//
+//        let numTabs = app.buttons["Show Tabs"].value
+//        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
+//
+//        // Now disable the Block PopUps option
+//        navigator.goto(BrowserTabMenu)
+//        navigator.goto(SettingsScreen)
+//        waitForExistence(switchBlockPopUps, timeout: TIMEOUT)
+//        switchBlockPopUps.tap()
+//        let switchValueAfter = switchBlockPopUps.value!
+//        XCTAssertEqual(switchValueAfter as? String, "0")
+//
+//        // Check that now pop ups are shown, two sites loaded
+//        navigator.openURL(popUpTestUrl)
+//        waitUntilPageLoad()
+//        waitForValueContains(app.textFields["url"], value: "example.com")
+//        let numTabsAfter = app.buttons["Show Tabs"].value
+//        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
     // Smoketest

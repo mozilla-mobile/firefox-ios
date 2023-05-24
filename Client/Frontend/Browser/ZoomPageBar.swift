@@ -11,7 +11,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func didChangeZoomLevel()
 }
 
-class ZoomPageBar: UIView, ThemeApplicable {
+class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private struct UX {
         static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
@@ -222,7 +222,8 @@ class ZoomPageBar: UIView, ThemeApplicable {
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
-        if traitCollection.horizontalSizeClass == .regular || UIWindow.isLandscape {
+        if traitCollection.horizontalSizeClass == .regular ||
+            (UIWindow.isLandscape && traitCollection.verticalSizeClass == .compact) {
             stepperDefaultConstraints.forEach { $0.isActive = true }
             stepperCompactConstraints.forEach { $0.isActive = false }
         } else {
@@ -291,6 +292,10 @@ class ZoomPageBar: UIView, ThemeApplicable {
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .layoutChanged, argument: nil)
         }
+    }
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        self.alpha = alpha
     }
 
     func applyTheme(theme: Theme) {
