@@ -603,8 +603,10 @@ class Tab: NSObject {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
             return webView.load(request)
+        } else {
+            logger.log("Webview was nil, could not load request", level: .info, category: .webview)
+            return nil
         }
-        return nil
     }
 
     func stop() {
