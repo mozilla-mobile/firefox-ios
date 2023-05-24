@@ -24,6 +24,13 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
     }
 
     func scheduleTaskOnAppBackground() {
+        guard !AppConstants.isRunningUITests else {
+            Task {
+                await triggerSurfaceManager()
+            }
+            return
+        }
+
         let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
 
         // Fetch no earlier than 4 hours from now.
