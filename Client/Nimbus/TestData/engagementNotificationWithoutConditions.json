@@ -1,0 +1,15 @@
+{
+  "message-under-experiment": "engagement-notification",
+  "messages": {
+    "engagement-notification": {
+      "title": "EngagementNotification/Engagement.Notification.Title.v112",
+      "text": "EngagementNotification/Engagement.Notification.Body.v112",
+      "surface": "notification",
+      "style": "NOTIFICATION",
+      "action": "https://mozilla.com",
+      "trigger": [
+        "ALWAYS"
+      ]
+    }
+  }
+}
