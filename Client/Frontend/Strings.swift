@@ -350,49 +350,49 @@ extension String {
         // Remember Card
         public struct RememberCard {
             public static let MainTitle = MZLocalizedString(
-                key: "RememberCardTitle.Default",
-                tableName: nil,
+                key: "CreditCard.RememberCardTitle.v115",
+                tableName: "RememberCard",
                 value: "Remember this card?",
-                comment: "This value is used as the title for the remember card page")
+                comment: "This value is used as the title for the remember credit card page")
             public static let Header = MZLocalizedString(
-                key: "RememberCardHeader.Default",
-                tableName: nil,
+                key: "CreditCard.RememberCardHeader.v115",
+                tableName: "RememberCard",
                 value: "Save your card information securely with Firefox to check out faster next time.",
                 comment: "This value is used as the header for the remember card page")
             public static let MainButtonTitle = MZLocalizedString(
-                key: "RememberCardPromptButtonYes.Default",
-                tableName: nil,
+                key: "CreditCard.RememberCardPromptButtonYes.v115",
+                tableName: "RememberCard",
                 value: "Yes",
-                comment: "This value is used as the title for the Yes button in the remember card page")
+                comment: "This value is used as the title for the Yes button in the remember credit card page")
             public static let SecondaryButtonTitle = MZLocalizedString(
-                key: "RememberCardPromptButtonNotNow.Default",
-                tableName: nil,
+                key: "CreditCard.RememberCardPromptButtonNotNow.v115",
+                tableName: "RememberCard",
                 value: "Not Now",
-                comment: "This value is used as the title for the Not Now button in the remember card page")
+                comment: "This value is used as the title for the Not Now button in the remember credit card page")
         }
 
         // Update Card
         public struct UpdateCard {
             public static let MainTitle = MZLocalizedString(
-                key: "UpdateCardPromptTitle.Default",
-                tableName: nil,
+                key: "CreditCard.UpdateCardPromptTitle.v115",
+                tableName: "RememberCard",
                 value: "Update this card?",
                 comment: "This value is used as the title for the update card page")
             public static let ManageCardsButtonTitle = MZLocalizedString(
-                key: "UpdateCardManageCardsButtonTitle.Default",
-                tableName: nil,
+                key: "CreditCard.UpdateCardManageCardsButtonTitle.v115",
+                tableName: "RememberCard",
                 value: "Manage cards",
-                comment: "This value is used as the title for the Manage Cards button from the update cards page")
+                comment: "This value is used as the title for the Manage Cards button from the update credit card page")
             public static let YesButtonTitle = MZLocalizedString(
-                key: "UpdateCardPromptTitle.Default",
-                tableName: nil,
+                key: "CreditCard.UpdateCardPromptTitle.v115",
+                tableName: "RememberCard",
                 value: "Yes",
-                comment: "This value is used as the title for the button in the update card page")
+                comment: "This value is used as the title for the button in the update credit card page")
             public static let NotNowButtonTitle = MZLocalizedString(
-                key: "UpdateCardPromptButtonNotNow.Default",
-                tableName: nil,
+                key: "CreditCard.UpdateCardPromptButtonNotNow.v115",
+                tableName: "RememberCard",
                 value: "Not Now",
-                comment: "This value is used as the title for the Not Now button in the remember card page")
+                comment: "This value is used as the title for the Not Now button in the update credit card page")
         }
 
         // Error States for wrong input while editing credit card
