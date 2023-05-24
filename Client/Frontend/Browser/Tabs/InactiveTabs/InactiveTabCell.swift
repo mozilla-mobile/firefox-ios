@@ -94,6 +94,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return InactiveTabSection.allCases.count
@@ -229,17 +230,26 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let configuration: UISwipeActionsConfiguration?
         let section = indexPath.section
-        guard editingStyle == .delete else { return }
+
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
-            if let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
-                removeInactiveTab(at: indexPath)
-                delegate?.closeInactiveTab(tab, index: indexPath.item)
-            }
-        case .closeAllTabsButton, .none: return
+            let closeAction = UIContextualAction(
+                style: .destructive,
+                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
+                    if let tab = self.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
+                        self.removeInactiveTab(at: indexPath)
+                        self.delegate?.closeInactiveTab(tab, index: indexPath.item)
+                        completion(true)
+                    }
+                }
+            configuration = UISwipeActionsConfiguration(actions: [closeAction])
+        case .closeAllTabsButton, .none: return nil
         }
+        return configuration
     }
 
     private func removeInactiveTab(at indexPath: IndexPath) {

@@ -15,7 +15,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func addBookmark(url: String, title: String?)
 
     func openURLInNewTab(_ url: URL?, isPrivate: Bool)
-    func openNewTabFromMenu(focusLocationField: Bool)
+    func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
     func showLibrary(panel: LibraryPanelType?)
     func showViewController(viewController: UIViewController)
@@ -221,10 +221,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
-            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
-                let zoomSection = getZoomSection()
-                append(to: &section, action: zoomSection)
-            }
+            let zoomAction = getZoomAction()
+            append(to: &section, action: zoomAction)
 
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
@@ -301,11 +299,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: - Actions
 
-    private func getNewTabAction() -> PhotonRowActions {
+    private func getNewTabAction() -> PhotonRowActions? {
+        guard let tab = selectedTab else { return nil }
         return SingleActionViewModel(title: .AppMenu.NewTab,
                                      iconString: ImageIdentifiers.newTab) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
-            self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField)
+            self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
         }.items
     }
@@ -324,6 +323,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             self.delegate?.showLibrary(panel: .downloads)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewDownloadsPanel)
         }.items
+    }
+
+    // MARK: Zoom
+
+    private func getZoomAction() -> PhotonRowActions? {
+        guard let tab = selectedTab else { return nil }
+        let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
+        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
+        let zoomAction = SingleActionViewModel(title: title,
+                                               iconString: ImageIdentifiers.zoomIn) { _ in
+            self.delegate?.showZoomPage(tab: tab)
+        }.items
+        return zoomAction
     }
 
     private func getFindInPageAction() -> PhotonRowActions {
@@ -757,22 +769,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
-    }
-
-    // MARK: Zoom
-
-    private func getZoomSection() -> [PhotonRowActions] {
-        var section = [PhotonRowActions]()
-        guard let tab = selectedTab else { return section }
-        let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
-        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
-        let zoomAction = SingleActionViewModel(title: title,
-                                               iconString: ImageIdentifiers.zoomIn) { _ in
-            self.delegate?.showZoomPage(tab: tab)
-        }
-
-        section.append(PhotonRowActions([zoomAction]))
-        return section
     }
 
     // MARK: Password

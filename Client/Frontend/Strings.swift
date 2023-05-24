@@ -1552,6 +1552,11 @@ extension String {
                 tableName: nil,
                 value: "Close All Inactive Tabs",
                 comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+            public static let CloseInactiveTabSwipeActionTitle = MZLocalizedString(
+                key: "InactiveTabs.TabTray.CloseSwipeActionTitle.v115",
+                tableName: "TabsTray",
+                value: "Close",
+                comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
         }
 
         public struct CloseTabsToast {
