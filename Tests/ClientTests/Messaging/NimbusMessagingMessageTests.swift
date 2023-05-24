@@ -34,14 +34,17 @@ final class NimbusMessagingMessageTests: XCTestCase {
     }
 
     func testAllMessageTriggers() throws {
-        let utility = GleanPlumbMessageUtility()
-        let helper = utility.createGleanPlumbHelper()!
+        let evaluationUtility = GleanPlumbEvaluationUtility()
+        let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
 
         let messages = subject.getMessages(feature)
         var cache = [String: Bool]()
         messages.forEach { message in
             do {
-                _ = try utility.isMessageEligible(message, messageHelper: helper, jexlCache: &cache)
+                _ = try evaluationUtility.isMessageEligible(
+                    message,
+                    messageHelper: helper,
+                    jexlCache: &cache)
             } catch {
                 XCTFail("Message \(message.id) failed with invalid JEXL triggers")
             }

@@ -2,10 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Shared
+import MozillaAppServices
 
 class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
+    private var helperUtility: NimbusMessagingHelperUtilityProtocol
+
+    init(with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
+        self.helperUtility = helperUtility
+    }
+
     /// Fetches an ``OnboardingViewModel`` from ``FxNimbus`` configuration.
     ///
     /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
@@ -20,7 +26,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             cards: getOrderedOnboardingCards(
                 for: onboardingType,
                 from: framework.cards,
-                using: framework.cardOrdering),
+                using: framework.cardOrdering,
+                withConditions: framework.conditions),
             isDismissable: framework.dismissable)
     }
 
@@ -31,13 +38,15 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// - Parameters:
     ///   - cardData: Card data from ``FxNimbus/shared``
     ///   - cardOrder: Card order from ``FxNimbus/shared``
+    ///   - conditionTable: Condition table from ``FxNimbus/shared``
     /// - Returns: Card data converted to ``OnboardingCardInfoModel`` and ordered.
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [NimbusOnboardingCardData],
-        using cardOrder: [String]
+        using cardOrder: [String],
+        withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
-        let cards = getOnboardingCards(from: cardData)
+        let cards = getOnboardingCards(from: cardData, withConditions: conditionTable)
 
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
@@ -60,35 +69,92 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// the app name. Testing accounts for this, ensuring that the string, when
     /// there is no placeholder, is as expected.
     ///
-    /// - Parameter cardData: Card data from ``FxNimbus/shared``
+    /// - Parameters
+    ///   - cardData: Card data from ``FxNimbus/shared``
+    ///   - conditionTable: Condition table from ``FxNimbus/shared``
     /// - Returns: An array of viable ``OnboardingCardInfoModel``
-    private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfoModel] {
+    private func getOnboardingCards(
+        from cardData: [NimbusOnboardingCardData],
+        withConditions conditionTable: [String: String]
+    ) -> [OnboardingCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
+        var jexlCache = [String: Bool]()
+
+        // If `GleanPlumbHelper` creation fails, we cannot continue with
+        // evaluating card triggers based on their JEXL prerequisites.
+        // Therefore, we return an empty array.
+        guard let helper = helperUtility.createNimbusMessagingHelper() else { return [] }
 
         return cardData.compactMap { card in
-            return OnboardingCardInfoModel(
-                name: card.name,
-                title: String(format: card.title, AppName.shortName.rawValue),
-                body: String(format: card.body, AppName.shortName.rawValue),
-                link: getOnboardingLink(from: card.link),
-                buttons: getOnboardingCardButtons(from: card.buttons),
-                type: card.type,
-                a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                imageID: getOnboardingImageID(from: card.image))
-        }
-            .enumerated()
-            .map { index, card in
+            if cardIsValid(with: card, using: conditionTable, jexlCache: &jexlCache, and: helper) {
                 return OnboardingCardInfoModel(
                     name: card.name,
-                    title: card.title,
-                    body: card.body,
-                    link: card.link,
-                    buttons: card.buttons,
+                    title: String(format: card.title, AppName.shortName.rawValue),
+                    body: String(format: card.body, AppName.shortName.rawValue),
+                    link: getOnboardingLink(from: card.link),
+                    buttons: getOnboardingCardButtons(from: card.buttons),
                     type: card.type,
-                    a11yIdRoot: "\(card.a11yIdRoot)\(index)",
-                    imageID: card.imageID)
+                    a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
+                    imageID: getOnboardingImageID(from: card.image))
             }
+
+            return nil
+        }
+        .enumerated()
+        .map { index, card in
+            return OnboardingCardInfoModel(
+                name: card.name,
+                title: card.title,
+                body: card.body,
+                link: card.link,
+                buttons: card.buttons,
+                type: card.type,
+                a11yIdRoot: "\(card.a11yIdRoot)\(index)",
+                imageID: card.imageID)
+        }
+    }
+
+    private func cardIsValid(
+        with card: NimbusOnboardingCardData,
+        using conditionTable: [String: String],
+        jexlCache: inout [String: Bool],
+        and helper: NimbusMessagingHelperProtocol
+    ) -> Bool {
+        // Basically, check if prerequisites are met and if no disqualifers are met
+        return verifyConditionEligibility(from: card.prerequisites,
+                                          checkingAgainst: conditionTable,
+                                          using: &jexlCache,
+                                          and: helper)
+            && !verifyConditionEligibility(from: card.disqualifiers,
+                                           checkingAgainst: conditionTable,
+                                           using: &jexlCache,
+                                           and: helper)
+    }
+
+    private func verifyConditionEligibility(
+        from cardConditions: [String],
+        checkingAgainst conditionLookupTable: [String: String],
+        using jexlCache: inout [String: Bool],
+        and helper: NimbusMessagingHelperProtocol
+    ) -> Bool {
+        // Make sure conditions exist and have a value, and that the number
+        // of valid conditions matches the number of conditions on the card's
+        // respective prerequisite or disqualifier table. If these mismatch,
+        // that means a card contains a condition that's not in the feature
+        // conditions lookup table. JEXLS can only be evaluated on
+        // supported conditions. Otherwise, consider the card invalid.
+        let conditions = cardConditions.compactMap({ conditionLookupTable[$0] })
+        guard conditions.count == cardConditions.count else { return false }
+
+        do {
+            return try GleanPlumbEvaluationUtility().doesObjectMeet(
+                verificationRequirements: conditions,
+                using: helper,
+                and: &jexlCache)
+        } catch {
+            return false
+        }
     }
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.

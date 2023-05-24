@@ -54,7 +54,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Properties
     static let shared = GleanPlumbMessageManager()
 
-    private let messagingUtility: GleanPlumbMessageUtility
+    private let helperUtility: NimbusMessagingHelperUtilityProtocol
+    private let evaluationUtility: GleanPlumbEvaluationUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature = FxNimbus.shared.features.messaging
     private let applicationHelper: ApplicationHelper
@@ -68,10 +69,14 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     // MARK: - Inits
 
-    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
-         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
-        self.messagingUtility = messagingUtility
+    init(
+        helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        messagingUtility: GleanPlumbEvaluationUtility = GleanPlumbEvaluationUtility(),
+        messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
+        applicationHelper: ApplicationHelper = DefaultApplicationHelper()
+    ) {
+        self.helperUtility = helperUtility
+        self.evaluationUtility = messagingUtility
         self.messagingStore = messagingStore
         self.applicationHelper = applicationHelper
 
@@ -98,7 +103,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         // If `GleanPlumbHelper` creation fails, we cannot continue with this feature! For that reason, return `nil`.
         // We need to recreate the helper for each request to get a message because device context can change.
-        guard let gleanPlumbHelper = messagingUtility.createGleanPlumbHelper() else { return nil }
+        guard let gleanPlumbHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
 
         // Take the first triggered message.
         guard let message = getNextTriggeredMessage(messages, gleanPlumbHelper) else { return nil }
@@ -132,12 +137,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessagePressed(_ message: GleanPlumbMessage) {
         messagingStore.onMessagePressed(message)
 
-        guard let messageUtility = messagingUtility.createGleanPlumbHelper() else { return }
+        guard let helper = helperUtility.createNimbusMessagingHelper() else { return }
 
         // Make substitutions where they're needed.
         let template = message.action
-        let uuid = messageUtility.getUuid(template: template)
-        let action = messageUtility.stringFormat(template: template, uuid: uuid)
+        let uuid = helper.getUuid(template: template)
+        let action = helper.stringFormat(template: template, uuid: uuid)
 
         // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
@@ -283,7 +288,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         var jexlCache = [String: Bool]()
         return messages.first { message in
             do {
-                return try messagingUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
+                return try evaluationUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
             } catch {
                 return false
             }
@@ -320,7 +325,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             var jexlCache = [String: Bool]()
             return messages.first { message in
                 do {
-                    return try messagingUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
+                    return try evaluationUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
                     && !message.data.isControl
                 } catch {
                     onMalformedMessage(id: message.id, surface: message.data.surface)
