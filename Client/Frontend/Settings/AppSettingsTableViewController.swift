@@ -236,7 +236,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self),
+<<<<<<< HEAD
                 AppReviewPromptSetting(settings: self)
+=======
+                FasterInactiveTabs(settings: self)
+>>>>>>> 6ecadd1fc (Add FXIOS-6038 [v115] Implemented debug option to move tabs faster into the inactive state #13688 (#14508))
             ])]
 
         return settings

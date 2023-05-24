@@ -522,6 +522,20 @@ class ChangeToChinaSetting: HiddenSetting {
     }
 }
 
+class FasterInactiveTabs: HiddenSetting {
+    override var title: NSAttributedString? {
+        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let buttonTitle = isFasterEnabled ? "Debug: Set Inactive Tab Timeout to Default" : "Debug: Set Inactive Tab Timeout to 10s"
+        return NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
+        updateCell(navigationController)
+    }
+}
+
 class SlowTheDatabase: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
