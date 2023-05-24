@@ -6,6 +6,12 @@ import Shared
 import MozillaAppServices
 
 class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
+    private var helperUtility: GleanPlumbHelperUtilityProtocol
+
+    init(with helperUtility: GleanPlumbHelperUtilityProtocol = GleanPlumbHelperUtility()) {
+        self.helperUtility = helperUtility
+    }
+
     /// Fetches an ``OnboardingViewModel`` from ``FxNimbus`` configuration.
     ///
     /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
@@ -78,20 +84,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // If `GleanPlumbHelper` creation fails, we cannot continue with
         // evaluating card triggers based on their JEXL prerequisites.
         // Therefore, we return an empty array.
-        guard let helper = GleanPlumbEvaluationUtility().createGleanPlumbHelper() else { return [] }
+        guard let helper = helperUtility.createGleanPlumbHelper() else { return [] }
 
         return cardData.compactMap { card in
-            if prerequisitesAreMet(
-                from: card,
-                checking: conditionTable,
-                using: &jexlCache,
-                and: helper
-            ) && noDisqualifiersAreMet(
-                from: card,
-                checking: conditionTable,
-                using: &jexlCache,
-                and: helper
-            ) {
+            if cardIsValid(with: card, using: conditionTable, jexlCache: &jexlCache, and: helper) {
                 return OnboardingCardInfoModel(
                     name: card.name,
                     title: String(format: card.title, AppName.shortName.rawValue),
@@ -119,47 +115,44 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
-    private func prerequisitesAreMet(
-        from card: NimbusOnboardingCardData,
-        checking prerequisiteTable: [String: String],
-        using jexlCache: inout [String: Bool],
+    private func cardIsValid(
+        with card: NimbusOnboardingCardData,
+        using conditionTable: [String: String],
+        jexlCache: inout [String: Bool],
         and helper: GleanPlumbMessageHelper
     ) -> Bool {
-        // Make sure prerequisites exist and have a value, and that the number
-        // of valid conditions matches the number of prerequisites on the card.
-        // If these mismatch, that means a card contains a prerequisite that's
-        // not in the conditions lookup table. JEXLS can only be evaluated on
-        // supported prerequisites. Otherwise, consider the card invalid.
-        let cardPrereqs = card.prerequisites.compactMap({ prerequisiteTable[$0] })
-        guard cardPrereqs.count == card.prerequisites.count else { return false }
+        let prerequisitesAreMet = verifyConditionEligibility(
+            from: card.prerequisites,
+            checkingAgainst: conditionTable,
+            using: &jexlCache,
+            and: helper)
+        let noDisqualifiersAreMet = !verifyConditionEligibility(
+            from: card.disqualifiers,
+            checkingAgainst: conditionTable,
+            using: &jexlCache,
+            and: helper)
 
-        do {
-            return try GleanPlumbEvaluationUtility().doCardPropertiesMeet(
-                verificationRequirements: cardPrereqs,
-                using: helper,
-                and: &jexlCache)
-        } catch {
-            return false
-        }
+        return prerequisitesAreMet && noDisqualifiersAreMet
     }
 
-    private func noDisqualifiersAreMet(
-        from card: NimbusOnboardingCardData,
-        checking disqualifierTable: [String: String],
+    private func verifyConditionEligibility(
+        from cardConditions: [String],
+        checkingAgainst conditionLookupTable: [String: String],
         using jexlCache: inout [String: Bool],
         and helper: GleanPlumbMessageHelper
     ) -> Bool {
-        // Make sure disqualifiers exist and have a value, and that the number
-        // of valid disqualifiers matches the number of conditions on the card.
-        // If these mismatch, that means a card contains a disqualifier that's
-        // not in the conditions lookup table. JEXLS can only be evaluated on
+        // Make sure conditions exist and have a value, and that the number
+        // of valid conditions matches the number of conditions on the card's
+        // respective prerequisite or disqualifier table. If these mismatch,
+        // that means a card contains a condition that's not in the feature
+        // conditions lookup table. JEXLS can only be evaluated on
         // supported conditions. Otherwise, consider the card invalid.
-        let cardDisqualifiers = card.disqualifiers.compactMap({ disqualifierTable[$0] })
-        guard cardDisqualifiers.count == card.disqualifiers.count else { return false }
+        let conditions = cardConditions.compactMap({ conditionLookupTable[$0] })
+        guard conditions.count == cardConditions.count else { return false }
 
         do {
-            return try !GleanPlumbEvaluationUtility().doCardPropertiesMeet(
-                verificationRequirements: cardDisqualifiers,
+            return try GleanPlumbEvaluationUtility().doesObjectMeet(
+                verificationRequirements: conditions,
                 using: helper,
                 and: &jexlCache)
         } catch {

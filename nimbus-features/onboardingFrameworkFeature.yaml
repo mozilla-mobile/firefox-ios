@@ -36,7 +36,6 @@ features:
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
-            NONE:                     "false"
           cards:
             - name: "welcome"
               title: Onboarding/Onboarding.Welcome.Title.v114
@@ -162,7 +161,7 @@ objects:
           A list of strings corresponding to targeting expressions.
           The card will not be shown if any expression is `true`.
         default:
-          - NONE
+          - NEVER
       type:
         type: OnboardingType
         description: >

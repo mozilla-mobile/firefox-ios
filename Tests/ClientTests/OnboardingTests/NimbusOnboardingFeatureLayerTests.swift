@@ -39,7 +39,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusForStringTesting()
         let expectedPlaceholderString = "A string inside Firefox with a placeholder"
         let expectedNoPlaceholderString = "On Wednesday's, we wear pink"
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -53,7 +53,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     // MARK: - Test Dismissable
     func testLayer_dismissable_isTrue() {
         setupNimbusWith(cards: nil, cardOrdering: nil, dismissable: true)
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertTrue(subject.isDismissable)
@@ -61,14 +61,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_dismissable_isFalse() {
         setupNimbusWith(dismissable: false)
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertFalse(subject.isDismissable)
     }
 
     // MARK: - Test A11yRoot
-
     func testLayer_a11yroot_isOnboarding() {
         setupNimbusWith(
             cards: 2,
@@ -76,7 +75,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 "\(CardElementNames.name) 1",
                 "\(CardElementNames.name) 2"
             ])
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
@@ -92,7 +91,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 "\(CardElementNames.name) 2"
             ],
             type: OnboardingType.upgrade.rawValue)
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .upgrade).cards
 
@@ -105,7 +104,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
             cards: 1,
             cardOrdering: ["\(CardElementNames.name) 1"])
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -153,7 +152,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 "\(CardElementNames.name) 2",
                 "\(CardElementNames.name) 3",
             ])
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
@@ -169,13 +168,138 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 "\(CardElementNames.name) 1",
                 "\(CardElementNames.name) 2",
             ])
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
 
         XCTAssertEqual("\(CardElementNames.name) 3", subject[0].name)
         XCTAssertEqual("\(CardElementNames.name) 1", subject[1].name)
         XCTAssertEqual("\(CardElementNames.name) 2", subject[2].name)
+    }
+
+    // MARK: - Test conditions
+    // Conditions for cards are based on the feature's condition table. A card's
+    // conditions (it's prerequisites & disqualifiers) get, respectively, reduced
+    // down to a single boolean value. These tests will test the conditions
+    // independently and then in a truth table fashion, reflecting real world evaulation
+    //    - (T, T) (T, F), (F, T), and (F, F)
+    // Testing for defaults was implicit in the previous tests, as defaults are:
+    //    - prerequisities: true
+    //    - disqualifiers: false
+    func testLayer_conditionPrerequisiteAlways_returnsCard() {
+        let expectedNumberOfCards = 1
+        setupNimbusWith(
+            cards: expectedNumberOfCards,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "ALWAYS",
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionPrerequisiteNever_returnsNoCard() {
+        let expectedNumberOfCards = 0
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "NEVER",
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionDisqualifierAlways_returnsNoCard() {
+        let expectedNumberOfCards = 0
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            disqualifiers: "ALWAYS",
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionDesqualifierNever_returnsCard() {
+        let expectedNumberOfCards = 1
+        setupNimbusWith(
+            cards: expectedNumberOfCards,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            disqualifiers: "NEVER",
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionPrerequisiteAlwaysDisqualifierNever_returnsCard() {
+        let expectedNumberOfCards = 1
+        setupNimbusWith(
+            cards: expectedNumberOfCards,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "ALWAYS",
+            disqualifiers: "NEVER"
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionPrerequisiteNeverDisqualifierNever_returnsNoCard() {
+        let expectedNumberOfCards = 0
+        setupNimbusWith(
+            cards: expectedNumberOfCards,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "NEVER",
+            disqualifiers: "NEVER"
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionPrerequisiteAlwaysDisqualifierAlways_returnsNoCard() {
+        let expectedNumberOfCards = 0
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "ALWAYS",
+            disqualifiers: "ALWAYS"
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
+    }
+
+    func testLayer_conditionPrerequisiteNeverDisqualifierAlways_returnsNoCard() {
+        let expectedNumberOfCards = 0
+        setupNimbusWith(
+            cards: 1,
+            cardOrdering: ["\(CardElementNames.name) 1"],
+            prerequisites: "NEVER",
+            disqualifiers: "ALWAYS"
+        )
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).cards
+
+        XCTAssertEqual(expectedNumberOfCards, subject.count)
     }
 
     // MARK: - Test image IDs
@@ -185,7 +309,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cardOrdering: ["\(CardElementNames.name) 1"],
             image: NimbusOnboardingImages.welcomeGlobe.rawValue
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -201,7 +325,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           image: NimbusOnboardingImages.notifications.rawValue
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -217,7 +341,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           image: NimbusOnboardingImages.syncDevices.rawValue
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -233,7 +357,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           image: "i am a bad image"
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -250,7 +374,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           type: OnboardingType.freshInstall.rawValue
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -266,7 +390,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           type: OnboardingType.upgrade.rawValue
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -283,7 +407,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           shouldAddLink: false
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -301,7 +425,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           numberOfButtons: expectedNumberOfButtons
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -319,7 +443,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           numberOfButtons: expectedNumberOfButtons
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -336,7 +460,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           cardOrdering: ["\(CardElementNames.name) 1"],
           numberOfButtons: 0
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         XCTAssertNotNil(layer.getOnboardingModel(for: .freshInstall).cards.first)
     }
@@ -349,7 +473,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           numberOfButtons: 1,
           buttonActions: .nextCard
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -366,7 +490,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           numberOfButtons: 1,
           buttonActions: .setDefaultBrowser
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -383,7 +507,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           numberOfButtons: 1,
           buttonActions: .syncSignIn
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -400,7 +524,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
           numberOfButtons: 1,
           buttonActions: .requestNotifications
         )
-        let layer = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
             XCTFail("Expected a card, and got none.")
@@ -450,7 +574,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         dismissable: Bool? = nil,
         shouldAddLink: Bool = true,
         numberOfButtons: Int = 2,
-        buttonActions: OnboardingActions = .nextCard
+        buttonActions: OnboardingActions = .nextCard,
+        prerequisites: String? = nil,
+        disqualifiers: String? = nil
     ) {
         var string = ""
 
@@ -461,7 +587,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 type: type,
                 shouldAddLink: shouldAddLink,
                 numberOfButtons: numberOfButtons,
-                buttonActions: buttonActions))
+                buttonActions: buttonActions,
+                prerequisites: prerequisites,
+                disqualifiers: disqualifiers))
             string.append(contentsOf: "\"card-ordering\": \(cardOrdering),")
         }
 
@@ -490,7 +618,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         type: String,
         shouldAddLink: Bool,
         numberOfButtons: Int,
-        buttonActions: OnboardingActions
+        buttonActions: OnboardingActions,
+        prerequisites: String?,
+        disqualifiers: String?
     ) -> String {
         var string = "\"cards\": ["
         for x in 1...numberOfCards {
@@ -500,7 +630,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 type: type,
                 shouldAddLink: shouldAddLink,
                 numberOfButtons: numberOfButtons,
-                buttonActions: buttonActions)
+                buttonActions: buttonActions,
+                prerequisites: prerequisites,
+                disqualifiers: disqualifiers)
             string.append(contentsOf: "\(cardString),")
         }
         string.append(contentsOf: "],")
@@ -514,12 +646,20 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         type: String,
         shouldAddLink: Bool,
         numberOfButtons: Int,
-        buttonActions: OnboardingActions
+        buttonActions: OnboardingActions,
+        prerequisites: String?,
+        disqualifiers: String?
     ) -> String {
         var string = "{"
         string.append(contentsOf: addBasicElements(number: number,
                                                    image: image,
                                                    type: type))
+        if let prerequisites = prerequisites {
+            string.append(contentsOf: addPrerequisites(prerequisites))
+        }
+        if let disqualifiers = disqualifiers {
+            string.append(contentsOf: addDisqualifiers(disqualifiers))
+        }
         string.append(contentsOf: addLink(number: number,
                                           shouldAddLink: shouldAddLink))
         string.append(contentsOf: addButtons(numberOfButtons: numberOfButtons,
@@ -540,6 +680,17 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
   "body": "\(CardElementNames.body) \(number)",
   "image": "\(image)",
   "type": "\(type)",
+"""
+    }
+    private func addPrerequisites(_ string: String) -> String {
+        return """
+  "prerequisites": ["\(string)"],
+"""
+    }
+
+    private func addDisqualifiers(_ string: String) -> String {
+        return """
+  "disqualifiers": ["\(string)"],
 """
     }
 
