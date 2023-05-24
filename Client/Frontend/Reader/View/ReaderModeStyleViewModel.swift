@@ -7,7 +7,6 @@ import Foundation
 // MARK: - ReaderModeStyleViewModelDelegate
 
 protocol ReaderModeStyleViewModelDelegate: AnyObject {
-    // isUsingUserDefinedColor should be false by default unless we need to override the default color
     func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel,
                                   didConfigureStyle style: ReaderModeStyle,
                                   isUsingUserDefinedColor: Bool)
