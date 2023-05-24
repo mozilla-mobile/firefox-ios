@@ -14,11 +14,6 @@ import XCTest
 
 import Glean
 
-class MockSyncDelegate: SyncDelegate {
-    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-    }
-}
-
 class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
     override func getProfileAndDeviceId() -> (MozillaAppServices.Profile, String) {
         return (MozillaAppServices.Profile(

@@ -2798,21 +2798,6 @@ extension String {
         tableName: nil,
         value: "Tab received",
         comment: "Title of notification shown when the device is sent one or more tabs from an unnamed device.")
-    public static let SentTab_TabArrivingNotification_NoDevice_body = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_NoDevice_body",
-        tableName: nil,
-        value: "New tab arrived from another device.",
-        comment: "Body of notification shown when the device is sent one or more tabs from an unnamed device.")
-    public static let SentTab_TabArrivingNotification_WithDevice_title = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_WithDevice_title",
-        tableName: nil,
-        value: "Tab received from %@",
-        comment: "Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device.")
-    public static let SentTab_TabArrivingNotification_WithDevice_body = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_WithDevice_body",
-        tableName: nil,
-        value: "New tab arrived in %@",
-        comment: "Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name.")
 
     // Notification Actions
     public static let SentTabViewActionTitle = MZLocalizedString(

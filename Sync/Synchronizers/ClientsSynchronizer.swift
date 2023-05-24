@@ -42,62 +42,12 @@ open class WipeCommand: Command {
     }
 }
 
-open class DisplayURICommand: Command {
-    let uri: URL
-    let title: String
-    let sender: String
-
-    public init?(command: String, args: [JSON]) {
-        if let uri = args[0].string?.asURL,
-            let sender = args[1].string,
-            let title = args[2].string {
-            self.uri = uri
-            self.sender = sender
-            self.title = title
-        } else {
-            // Oh, Swift.
-            self.uri = "http://localhost/".asURL!
-            self.title = ""
-            return nil
-        }
-    }
-
-    open class func fromName(_ command: String, args: [JSON]) -> Command? {
-        return DisplayURICommand(command: command, args: args)
-    }
-
-    open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        func display(_ deviceName: String? = nil) -> Success {
-            synchronizer.delegate.displaySentTab(for: uri, title: title, from: deviceName)
-            return succeed()
-        }
-
-        guard let sender = synchronizer.localClients?.getClient(guid: sender) else {
-            return display()
-        }
-
-        return sender >>== { client in
-            return display(client?.name)
-        }
-    }
-
-    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
-        let json = JSON(parseJSON: syncCommand.value)
-        if let name = json["command"].string,
-            let args = json["args"].array {
-                return DisplayURICommand.fromName(name, args: args)
-        }
-        return nil
-    }
-}
-
 let Commands: [String: (String, [JSON]) -> Command?] = [
     "wipeAll": WipeCommand.fromName,
     "wipeEngine": WipeCommand.fromName,
     // resetEngine
     // resetAll
     // logout
-    "displayURI": DisplayURICommand.fromName,
     // repairResponse
 ]
 
@@ -105,12 +55,11 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     private var logger: Logger
 
     public required init(scratchpad: Scratchpad,
-                         delegate: SyncDelegate,
                          basePrefs: Prefs,
                          why: OldSyncReason,
                          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
+        super.init(scratchpad: scratchpad, basePrefs: basePrefs, why: why, collection: "clients")
     }
 
     var localClients: RemoteClientsAndTabs?

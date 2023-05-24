@@ -20,7 +20,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
         Experiments.shared
     }()
 
-    lazy var helper: GleanPlumbMessageHelper = {
+    lazy var helper: NimbusMessagingHelperProtocol = {
         let utility = GleanPlumbMessageUtility()
         return utility.createGleanPlumbHelper()!
     }()
