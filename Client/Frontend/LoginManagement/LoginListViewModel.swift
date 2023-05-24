@@ -107,9 +107,7 @@ final class LoginListViewModel {
             return nil
         }
 
-        assert(indexPath.row <= section.count)
-
-        return section[indexPath.row]
+        return section[safe: indexPath.row]
     }
 
     func indexPathForLogin(_ login: LoginRecord) -> IndexPath? {
