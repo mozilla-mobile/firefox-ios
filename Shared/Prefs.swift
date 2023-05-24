@@ -163,7 +163,7 @@ public struct PrefsKeys {
 
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
-    
+
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
 }
