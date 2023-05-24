@@ -19,19 +19,19 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
     }
 
     func sendCardViewTelemetry() {
-// FXIOS-6358 - Implement telemetry
-//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
-//        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
-//            . onboardingCardView : .upgradeOnboardingCardView
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
+            . onboardingCardView : .upgradeOnboardingCardView
 
-//        TelemetryWrapper.recordEvent(category: .action,
-//                                     method: .view,
-//                                     object: eventObject,
-//                                     value: nil,
-//                                     extras: extra)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: eventObject,
+                                     value: nil,
+                                     extras: extra)
     }
 
     func sendTelemetryButton(isPrimaryAction: Bool) {
+        // 6358
 //        let eventObject: TelemetryWrapper.EventObject
 //        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
 //

@@ -32,6 +32,8 @@ extension TelemetryWrapperProtocol {
 }
 
 class TelemetryWrapper: TelemetryWrapperProtocol {
+    typealias ExtraKey = TelemetryWrapper.EventExtraKey
+
     static let shared = TelemetryWrapper()
     let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
@@ -416,19 +418,16 @@ extension TelemetryWrapper {
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
-        case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
         case onboardingPrimaryButton = "onboarding-card-primary-button"
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
-        case onboardingSelectWallpaper = "onboarding-select-wallpaper"
-        case onboarding = "onboarding"
+        case onboardingClose = "onboarding-close"
         case onboardingWallpaperSelector = "onboarding-wallpaper-selector"
-        // MARK: New Upgrade screen
-        case upgradeOnboardingClose = "upgrade-onboarding-close"
-        case upgradeOnboardingCardView = "upgrade-onboarding-card-view"
-        case upgradeOnboardingPrimaryButton = "upgrade-onboarding-card-primary-button"
-        case upgradeOnboardingSecondaryButton = "upgrade-onboarding-card-secondary-button"
+        case onboardingSelectWallpaper = "onboarding-select-wallpaper"
+        // MARK: FXASignIn
+        case onboarding = "onboarding"
         case upgradeOnboarding = "upgrade-onboarding"
+        // MARK: New Upgrade screen
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
@@ -636,6 +635,8 @@ extension TelemetryWrapper {
 
         // Onboarding
         case cardType = "card-type"
+        case sequenceID = "sequence-ID"
+        case sequencePosition = "sequence-position"
 
         // Notification permission
         case notificationPermissionIsGranted = "is-granted"
@@ -858,11 +859,17 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
-                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? Int32 {
+                let cardExtras = GleanMetrics.Onboarding.CardViewExtra(
+                    cardType: type,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.cardView.record(cardExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -880,17 +887,17 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        case (.action, .tap, .onboardingClose, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
                let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
                 let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
                 GleanMetrics.Onboarding.wallpaperSelected.record(wallpaperExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .onboardingClose, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -917,35 +924,6 @@ extension TelemetryWrapper {
                     object: object,
                     value: value,
                     extras: extras)
-            }
-
-        // MARK: Upgrade onboarding
-        case (.action, .view, .upgradeOnboardingCardView, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Upgrade.CardViewExtra(cardType: type)
-                GleanMetrics.Upgrade.cardView.record(cardTypeExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .upgradeOnboardingPrimaryButton, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Upgrade.PrimaryButtonTapExtra(cardType: type)
-                GleanMetrics.Upgrade.primaryButtonTap.record(cardTypeExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .upgradeOnboardingSecondaryButton, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Upgrade.SecondaryButtonTapExtra(cardType: type)
-                GleanMetrics.Upgrade.secondaryButtonTap.record(cardTypeExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .upgradeOnboardingClose, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                GleanMetrics.Upgrade.closeTap.record(GleanMetrics.Upgrade.CloseTapExtra(cardType: type))
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: Widget

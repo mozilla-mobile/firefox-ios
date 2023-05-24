@@ -14,6 +14,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
+    var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
 
     var shouldShowSingleCard: Bool {
@@ -32,9 +33,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Initializer
     init(
         profile: Profile,
-        model: OnboardingViewModel
+        model: OnboardingViewModel,
+        telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.profile = profile
+        self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
         self.availableCards = []

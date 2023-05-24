@@ -7,41 +7,25 @@ import Shared
 
 class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     // MARK: - Properties
-    enum InformationCards: Int, CaseIterable {
-        case welcome
-        case signSync
-        case notification
-
-        case updateWelcome
-        case updateSignSync
-
-        var telemetryValue: String {
-            switch self {
-            case .welcome: return "welcome"
-            case .signSync: return "signToSync"
-            case .notification: return "notificationPermission"
-            case .updateWelcome: return "update.welcome"
-            case .updateSignSync: return "update.signToSync"
-            }
-        }
-    }
-
     // FXIOS-6036 - Make this non optional when coordinators are used
     var introScreenManager: IntroScreenManager?
 
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
     var profile: Profile
+    var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
 
     // MARK: - Initializer
     init(
         introScreenManager: IntroScreenManager? = nil,
         profile: Profile,
-        model: OnboardingViewModel
+        model: OnboardingViewModel,
+        telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.introScreenManager = introScreenManager
         self.profile = profile
+        self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
         self.availableCards = []
