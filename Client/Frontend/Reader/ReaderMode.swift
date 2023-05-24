@@ -25,7 +25,7 @@ enum ReaderModeState: String {
     case active = "Active"
 }
 
-enum ReaderModeTheme: String, Equatable {
+enum ReaderModeTheme: String {
     case light
     case dark
     case sepia
@@ -43,7 +43,7 @@ private struct FontFamily {
     static let families = [serifFamily, sansFamily]
 }
 
-enum ReaderModeFontType: String, Equatable {
+enum ReaderModeFontType: String {
     case serif = "serif"
     case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
@@ -70,7 +70,7 @@ enum ReaderModeFontType: String, Equatable {
     }
 }
 
-enum ReaderModeFontSize: Int, Equatable, Comparable {
+enum ReaderModeFontSize: Int {
     case size1 = 1
     case size2 = 2
     case size3 = 3
@@ -129,13 +129,9 @@ enum ReaderModeFontSize: Int, Equatable, Comparable {
             return ReaderModeFontSize(rawValue: self.rawValue + 1)!
         }
     }
-
-    static func < (lhs: ReaderModeFontSize, rhs: ReaderModeFontSize) -> Bool {
-        lhs.rawValue < rhs.rawValue
-    }
 }
 
-struct ReaderModeStyle: Equatable {
+struct ReaderModeStyle {
     var theme: ReaderModeTheme
     var fontType: ReaderModeFontType
     var fontSize: ReaderModeFontSize
