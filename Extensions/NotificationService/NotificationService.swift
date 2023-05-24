@@ -11,7 +11,7 @@ import UserNotifications
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
-    var profile: ExtensionProfile?
+    var profile: BrowserProfile?
 
     // This is run when an APNS notification with `mutable-content` is received.
     // If the app is backgrounded, then the alert notification is displayed.
@@ -24,7 +24,7 @@ class NotificationService: UNNotificationServiceExtension {
         let content = request.content.mutableCopy() as! UNMutableNotificationContent
 
         if self.profile == nil {
-            self.profile = ExtensionProfile(localName: "profile")
+            self.profile = BrowserProfile(localName: "profile")
         }
 
         guard let profile = self.profile else {
@@ -32,43 +32,27 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
 
-        let queue = profile.queue
-        let display = SyncDataDisplay(content: content, contentHandler: contentHandler, tabQueue: queue)
+        let display = SyncDataDisplay(content: content, contentHandler: contentHandler)
         self.display = display
-        profile.syncDelegate = display
 
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon { res in
-            guard res.isSuccess, let events = res.successValue, let firstEvent = events.first else {
+            guard res.isSuccess, let event = res.successValue else {
                 self.didFinish(nil, with: res.failureValue as? PushMessageError)
                 return
             }
-            // We pass the first event to the notification handler, and add the rest directly
-            // to our own handling of send tab if they are send tabs so users don't miss them
-            for (idx, event) in events.enumerated() {
-                if  idx != 0,
-                    case let .commandReceived(tab) = event,
-                    let urlString = tab["url"],
-                    let url = URL(string: urlString),
-                    url.isWebPage(),
-                    let title = tab["title"] {
-                    self.profile?.syncDelegate?.displaySentTab(for: url, title: title, from: tab["deviceName"])
-                }
-            }
-            self.didFinish(firstEvent)
+
+            self.didFinish(event)
         }
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
         defer {
-            // We cannot use tabqueue after the profile has shutdown;
-            // however, we can't use weak references, because TabQueue isn't a class.
-            // Rather than changing tabQueue, we manually nil it out here.
-            self.display?.tabQueue = nil
-
             profile?.shutdown()
         }
+
+        profile?.setCommandArrived()
 
         guard let display = self.display else { return }
 
@@ -94,14 +78,12 @@ class SyncDataDisplay {
     var messageDelivered = false
 
     init(content: UNMutableNotificationContent,
-         contentHandler: @escaping (UNNotificationContent) -> Void,
-         tabQueue: TabQueue) {
+         contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         self.notificationContent = content
-        self.tabQueue = tabQueue
     }
 
-    func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
+    func displayNotification(_ message: PushMessage? = nil, profile: BrowserProfile?, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
             return displayUnknownMessageNotification(debugInfo: "Error \(error?.description ?? "")")
         }
@@ -120,9 +102,7 @@ class SyncDataDisplay {
             break
         }
     }
-}
 
-extension SyncDataDisplay {
     func displayDeviceConnectedNotification(_ deviceName: String) {
         presentNotification(title: .FxAPush_DeviceConnected_title,
                             body: .FxAPush_DeviceConnected_body,
@@ -163,9 +143,7 @@ extension SyncDataDisplay {
         presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
         #endif
     }
-}
 
-extension SyncDataDisplay {
     func displayNewSentTabNotification(tab: [String: String]) {
         if let urlString = tab["url"], let url = URL(string: urlString), url.isWebPage(), let title = tab["title"] {
             let tab = [
@@ -177,48 +155,8 @@ extension SyncDataDisplay {
 
             notificationContent.userInfo["sentTabs"] = [tab] as NSArray
 
-            // Add tab to the queue.
-            let item = ShareItem(url: urlString, title: title)
-            _ = tabQueue?.addToQueue(item).value // Force synchronous.
-
             presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
         }
-    }
-}
-
-extension SyncDataDisplay {
-    func presentSentTabsNotification(_ tabs: [NSDictionary]) {
-        let title: String
-        let body: String
-
-        if tabs.isEmpty {
-            title = .SentTab_NoTabArrivingNotification_title
-            #if MOZ_CHANNEL_BETA || DEBUG
-                body = "DEBUG: Sent Tabs with no tab"
-            #else
-                body = .SentTab_NoTabArrivingNotification_body
-            #endif
-        } else {
-            let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
-            if let deviceName = deviceNames.first, deviceNames.count == 1 {
-                title = String(format: .SentTab_TabArrivingNotification_WithDevice_title, deviceName)
-            } else {
-                title = .SentTab_TabArrivingNotification_NoDevice_title
-            }
-
-            if tabs.count == 1 {
-                // We give the fallback string as the url,
-                // because we have only just introduced "displayURL" as a key.
-                body = (tabs[0]["displayURL"] as? String) ??
-                    (tabs[0]["url"] as! String)
-            } else if deviceNames.isEmpty {
-                body = .SentTab_TabArrivingNotification_NoDevice_body
-            } else {
-                body = String(format: .SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)
-            }
-        }
-
-        presentNotification(title: title, body: body)
     }
 
     func presentNotification(title: String, body: String, titleArg: String? = nil, bodyArg: String? = nil) {
@@ -237,15 +175,6 @@ extension SyncDataDisplay {
         // This is the only place we change messageDelivered. We can check if contentHandler hasn't be called because of
         // our logic (rather than something funny with our environment, or iOS killing us).
         messageDelivered = true
-    }
-}
-
-extension SyncDataDisplay: SyncDelegate {
-    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        if url.isWebPage() {
-            let item = ShareItem(url: url.absoluteString, title: title)
-            _ = tabQueue?.addToQueue(item).value // Force synchronous.
-        }
     }
 }
 

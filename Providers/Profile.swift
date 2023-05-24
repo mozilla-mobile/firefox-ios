@@ -39,7 +39,13 @@ public protocol SyncManager {
     func onAddedAccount() -> Success
 }
 
-typealias SyncFunction = (SyncDelegate, Prefs, Ready, OldSyncReason) -> OldSyncResult
+/// This exists to pass in external context: e.g., the UIApplication can
+/// expose notification functionality in this way.
+public protocol SendTabDelegate: AnyObject {
+    func openSendTabs(for urls: [URL])
+}
+
+typealias SyncFunction = (Prefs, Ready, OldSyncReason) -> OldSyncResult
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -65,19 +71,6 @@ class ProfileFileAccessor: FileAccessor {
     }
 }
 
-class CommandStoringSyncDelegate: SyncDelegate {
-    let profile: Profile
-
-    init(profile: Profile) {
-        self.profile = profile
-    }
-
-    public func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        let item = ShareItem(url: url.absoluteString, title: title)
-        _ = self.profile.queue.addToQueue(item)
-    }
-}
-
 /**
  * A Profile manages access to the user's data.
  */
@@ -86,16 +79,18 @@ protocol Profile: AnyObject {
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
+    #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
     var searchEngines: SearchEngines { get }
+    #endif
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        var readingList: ReadingList { get }
-    #endif
+#if !MOZ_TARGET_NOTIFICATIONSERVICE
+    var readingList: ReadingList { get }
+#endif
 
     var isShutdown: Bool { get }
 
@@ -142,6 +137,8 @@ protocol Profile: AnyObject {
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
     func clearCredentialStore() -> Deferred<Result<Void, Error>>
+
+    func setCommandArrived()
 }
 
 extension Profile {
@@ -217,7 +214,7 @@ open class BrowserProfile: Profile {
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
-    var syncDelegate: SyncDelegate?
+    var sendTabDelegate: SendTabDelegate?
     var useRustSyncManager = false
 
     /**
@@ -229,11 +226,11 @@ open class BrowserProfile: Profile {
      * subsequently — and asynchronously — expects the profile to stick around:
      * see Bug 1218833. Be sure to only perform synchronous actions here.
      *
-     * A SyncDelegate can be provided in this initializer, or once the profile is initialized.
+     * A SentTabDelegate can be provided in this initializer, or once the profile is initialized.
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
     init(localName: String,
-         syncDelegate: SyncDelegate? = nil,
+         sendTabDelegate: SendTabDelegate? = nil,
          rustSyncManagerEnabled: Bool = false,
          creditCardAutofillEnabled: Bool = false,
          clear: Bool = false,
@@ -244,8 +241,8 @@ open class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        self.syncDelegate = syncDelegate
         self.logger = logger
+        self.sendTabDelegate = sendTabDelegate
 
         if clear {
             do {
@@ -508,9 +505,11 @@ open class BrowserProfile: Profile {
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
+    #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
     lazy var searchEngines: SearchEngines = {
         return SearchEngines(prefs: self.prefs, files: self.files)
     }()
+    #endif
 
     func makePrefs() -> Prefs {
         return NSUserDefaultsPrefs(prefix: self.localName())
@@ -535,10 +534,6 @@ open class BrowserProfile: Profile {
     lazy var recentlyClosedTabs: ClosedTabsStore = {
         return ClosedTabsStore(prefs: self.prefs)
     }()
-
-    open func getSyncDelegate() -> SyncDelegate {
-        return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
-    }
 
     // This function exists to service the `FxaPushMessengerHandler.handle` function and
     // will be removed after the rust sync manager experiment is complete
@@ -725,6 +720,10 @@ open class BrowserProfile: Profile {
         return deferred
     }
 
+    public func setCommandArrived() {
+        prefs.setTimestamp(0, forKey: PrefsKeys.PollCommandsTimestamp)
+    }
+
     /// Polls for missed send tabs and handles them
     /// The method will not poll FxA if the interval hasn't passed
     /// See AppConstants.fxaCommandsInterval for the interval value
@@ -733,30 +732,21 @@ open class BrowserProfile: Profile {
         // overwhelm FxA
         let lastPoll = self.prefs.timestampForKey(PrefsKeys.PollCommandsTimestamp)
         let now = Date.now()
-        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.fxaCommandsInterval {
+        if let lastPoll = lastPoll, lastPoll != 0, !forcePoll, now - lastPoll < AppConstants.fxaCommandsInterval {
             return
         }
         self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
-        let accountManager = self.rustFxA.accountManager.peek()
-        accountManager?.deviceConstellation()?.pollForCommands { commands in
-            if let commands = try? commands.get() {
-                for command in commands {
+        self.rustFxA.accountManager.upon { accountManager in
+            accountManager.deviceConstellation()?.pollForCommands { commands in
+                guard let commands = try? commands.get() else { return }
+                let urls = commands.compactMap { command in
                     switch command {
-                    case .tabReceived(let sender, let tabData):
-                        // The tabData.entries is the tabs history
-                        // we only want the last item, which is the tab
-                        // to display
-                        let title = tabData.entries.last?.title ?? ""
+                    case .tabReceived(_, let tabData):
                         let url = tabData.entries.last?.url ?? ""
-                        if let json = try? accountManager?.gatherTelemetry() {
-                            let events = FxATelemetry.parseTelemetry(fromJSONString: json)
-                            events.forEach { $0.record(intoPrefs: self.prefs) }
-                        }
-                        if let url = URL(string: url) {
-                            self.syncDelegate?.displaySentTab(for: url, title: title, from: sender?.displayName)
-                        }
+                        return URL(string: url)
                     }
                 }
+                self.sendTabDelegate?.openSendTabs(for: urls)
             }
         }
     }
@@ -1177,7 +1167,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
+        fileprivate func syncClientsWithDelegate(prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing clients to storage.",
                        level: .info,
                        category: .sync)
@@ -1206,7 +1196,7 @@ open class BrowserProfile: Profile {
                 }
             }
 
-            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
+            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, prefs: prefs, why: why)
             return clientSynchronizer.synchronizeLocalClients(
                 self.profile.remoteClientsAndTabs,
                 withServer: ready.client,
@@ -1283,7 +1273,7 @@ open class BrowserProfile: Profile {
             return syncUnlockInfo
         }
 
-        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
+        fileprivate func syncLoginsWithDelegate(prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             self.logger.log("Syncing logins to storage.",
                             level: .debug,
                             category: .sync)
@@ -1308,7 +1298,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
+        fileprivate func syncBookmarksWithDelegate(prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing bookmarks to storage.",
                        level: .debug,
                        category: .storage)
@@ -1328,7 +1318,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
+        fileprivate func syncHistoryWithDelegate(prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing History to storage.",
                        level: .debug,
                        category: .storage)
@@ -1348,7 +1338,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
+        fileprivate func syncTabsWithDelegate(prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing tabs to storage.",
                        level: .debug,
                        category: .storage)
@@ -1526,7 +1516,6 @@ open class BrowserProfile: Profile {
                        level: .info,
                        category: .sync)
             var authState = RustFirefoxAccounts.shared.syncAuthState
-            let delegate = self.profile.getSyncDelegate()
             if let enginesEnablements = self.engineEnablementChangesForAccount(),
                !enginesEnablements.isEmpty {
                 authState.enginesEnablements = enginesEnablements
@@ -1540,13 +1529,13 @@ open class BrowserProfile: Profile {
 
             let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
 
-            let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
+            let function: (Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = {syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
                     return { () -> Deferred<Maybe<EngineStatus>> in
                         self.logger.log("Syncing \(i)…",
                                         level: .debug,
                                         category: .sync)
-                        return f(delegate, syncPrefs, ready, why) >>== { deferMaybe((i, $0)) }
+                        return f(syncPrefs, ready, why) >>== { deferMaybe((i, $0)) }
                     }
                 }
                 return accumulate(thunks)
@@ -1564,7 +1553,7 @@ open class BrowserProfile: Profile {
                     ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
 
                     statsSession.start()
-                    return function(delegate, self.prefsForSync, ready)
+                    return function(self.prefsForSync, ready)
                 }
             }
         }

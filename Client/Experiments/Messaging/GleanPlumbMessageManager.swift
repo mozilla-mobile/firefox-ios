@@ -279,7 +279,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// From the list of messages that are well-formed and non-expired, we return the next / first triggered message.
     ///
     /// - Returns: The next triggered message, if one exists.
-    private func getNextTriggeredMessage(_ messages: [GleanPlumbMessage], _ helper: GleanPlumbMessageHelper) -> GleanPlumbMessage? {
+    private func getNextTriggeredMessage(_ messages: [GleanPlumbMessage], _ helper: NimbusMessagingHelperProtocol) -> GleanPlumbMessage? {
         var jexlCache = [String: Bool]()
         return messages.first { message in
             do {
@@ -306,7 +306,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// - Returns: The next triggered message, if one exists.
     private func handleMessageUnderExperiment(_ message: GleanPlumbMessage,
                                               _ messages: [GleanPlumbMessage],
-                                              _ helper: GleanPlumbMessageHelper,
+                                              _ helper: NimbusMessagingHelperProtocol,
                                               _ onControl: ControlMessageBehavior) -> GleanPlumbMessage? {
         messagingFeature.recordExposure()
         let onControlActions = onControl

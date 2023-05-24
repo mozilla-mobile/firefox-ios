@@ -17,15 +17,15 @@ class GleanPlumbMessageUtility {
 
     // MARK: - Public helpers
 
-    func createGleanPlumbHelper() -> GleanPlumbMessageHelper? {
+    func createGleanPlumbHelper() -> NimbusMessagingHelperProtocol? {
         let contextProvider = GleanPlumbContextProvider()
 
-        // Create our GleanPlumbMessageHelper.
+        // Create our message helper
         do {
             return try Experiments.shared.createMessageHelper(additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
             // If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
-            logger.log("GleanPlumbMessageHelper could not be created! With error \(error)",
+            logger.log("NimbusMessagingHelper could not be created! With error \(error)",
                        level: .warning,
                        category: .experiments)
             return nil
@@ -34,7 +34,7 @@ class GleanPlumbMessageUtility {
 
     /// We check whether this message is triggered by evaluating message JEXLs.
     func isMessageEligible(_ message: GleanPlumbMessage,
-                           messageHelper: GleanPlumbMessageHelper,
+                           messageHelper: NimbusMessagingHelperProtocol,
                            jexlCache: inout [String: Bool]) throws -> Bool {
         // Some unit test are failing in Bitrise during the jexlEvaluation process we will bypass the check for unit test while we find a solution to mock properly
         // `GleanPlumbMessageUtility` that right now is highly tied to `Experiments.shared`
