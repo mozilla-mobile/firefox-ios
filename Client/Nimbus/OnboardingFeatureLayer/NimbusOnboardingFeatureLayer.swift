@@ -121,18 +121,15 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         jexlCache: inout [String: Bool],
         and helper: GleanPlumbMessageHelper
     ) -> Bool {
-        let prerequisitesAreMet = verifyConditionEligibility(
-            from: card.prerequisites,
-            checkingAgainst: conditionTable,
-            using: &jexlCache,
-            and: helper)
-        let noDisqualifiersAreMet = !verifyConditionEligibility(
-            from: card.disqualifiers,
-            checkingAgainst: conditionTable,
-            using: &jexlCache,
-            and: helper)
-
-        return prerequisitesAreMet && noDisqualifiersAreMet
+        // Basically, check if prerequisites are met and if no disqualifers are met
+        return verifyConditionEligibility(from: card.prerequisites,
+                                          checkingAgainst: conditionTable,
+                                          using: &jexlCache,
+                                          and: helper)
+            && !verifyConditionEligibility(from: card.disqualifiers,
+                                           checkingAgainst: conditionTable,
+                                           using: &jexlCache,
+                                           and: helper)
     }
 
     private func verifyConditionEligibility(

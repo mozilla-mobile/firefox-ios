@@ -191,8 +191,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
             cards: expectedNumberOfCards,
             cardOrdering: ["\(CardElementNames.name) 1"],
-            prerequisites: "ALWAYS",
-        )
+            prerequisites: "ALWAYS")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -205,8 +204,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
             cards: 1,
             cardOrdering: ["\(CardElementNames.name) 1"],
-            prerequisites: "NEVER",
-        )
+            prerequisites: "NEVER")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -219,8 +217,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
             cards: 1,
             cardOrdering: ["\(CardElementNames.name) 1"],
-            disqualifiers: "ALWAYS",
-        )
+            disqualifiers: "ALWAYS")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -233,8 +230,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         setupNimbusWith(
             cards: expectedNumberOfCards,
             cardOrdering: ["\(CardElementNames.name) 1"],
-            disqualifiers: "NEVER",
-        )
+            disqualifiers: "NEVER")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -248,8 +244,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cards: expectedNumberOfCards,
             cardOrdering: ["\(CardElementNames.name) 1"],
             prerequisites: "ALWAYS",
-            disqualifiers: "NEVER"
-        )
+            disqualifiers: "NEVER")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -263,8 +258,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cards: expectedNumberOfCards,
             cardOrdering: ["\(CardElementNames.name) 1"],
             prerequisites: "NEVER",
-            disqualifiers: "NEVER"
-        )
+            disqualifiers: "NEVER")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -278,8 +272,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cards: 1,
             cardOrdering: ["\(CardElementNames.name) 1"],
             prerequisites: "ALWAYS",
-            disqualifiers: "ALWAYS"
-        )
+            disqualifiers: "ALWAYS")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -293,8 +286,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             cards: 1,
             cardOrdering: ["\(CardElementNames.name) 1"],
             prerequisites: "NEVER",
-            disqualifiers: "ALWAYS"
-        )
+            disqualifiers: "ALWAYS")
         let layer = NimbusOnboardingFeatureLayer(with: MockGleanPlumbHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
