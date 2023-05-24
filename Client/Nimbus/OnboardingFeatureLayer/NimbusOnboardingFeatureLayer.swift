@@ -81,7 +81,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
         var jexlCache = [String: Bool]()
 
-        // If `GleanPlumbHelper` creation fails, we cannot continue with
+        // If `NimbusMessagingHelper` creation fails, we cannot continue with
         // evaluating card triggers based on their JEXL prerequisites.
         // Therefore, we return an empty array.
         guard let helper = helperUtility.createNimbusMessagingHelper() else { return [] }
@@ -148,7 +148,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         guard conditions.count == cardConditions.count else { return false }
 
         do {
-            return try GleanPlumbEvaluationUtility().doesObjectMeet(
+            return try NimbusMessagingEvaluationUtility().doesObjectMeet(
                 verificationRequirements: conditions,
                 using: helper,
                 and: &jexlCache)

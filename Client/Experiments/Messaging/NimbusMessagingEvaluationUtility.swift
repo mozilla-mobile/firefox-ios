@@ -10,7 +10,7 @@ import Shared
 /// A utility for evaluating a Nimbus feature based on a set of valid JEXLs.
 /// Adaptable to any Nimbus feature by implementing a variable of type
 ///  `Map<String, String>` and adding respective fields to required objects.
-class GleanPlumbEvaluationUtility {
+class NimbusMessagingEvaluationUtility {
     /// Checks whether a message is eligible to be show by evaluating message JEXLs.
     func isMessageEligible(
         _ message: GleanPlumbMessage,

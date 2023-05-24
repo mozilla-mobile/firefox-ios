@@ -12,7 +12,7 @@ protocol NimbusMessagingHelperUtilityProtocol {
     init(logger: Logger)
 }
 
-/// Responsible for creating a ``GleanPlumbMessageHelper`` with appropriate context.
+/// Responsible for creating a ``NimbusMessagingHelper`` with appropriate context.
 class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
     private var logger: Logger
 
@@ -20,15 +20,16 @@ class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
         self.logger = logger
     }
 
-    // MARK: - Public helpers
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol? {
         let contextProvider = GleanPlumbContextProvider()
 
-        // Create our message helper
         do {
-            return try Experiments.shared.createMessageHelper(additionalContext: contextProvider.createAdditionalDeviceContext())
+            // Attempt to create our message helper
+            return try Experiments.shared.createMessageHelper(
+                additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
-            // If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
+            // If we're here, then all of Messaging is in limbo!
+            // Report the error and let the caller handle the error.
             logger.log("NimbusMessagingHelper could not be created! With error \(error)",
                        level: .warning,
                        category: .experiments)

@@ -55,7 +55,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     static let shared = GleanPlumbMessageManager()
 
     private let helperUtility: NimbusMessagingHelperUtilityProtocol
-    private let evaluationUtility: GleanPlumbEvaluationUtility
+    private let evaluationUtility: NimbusMessagingEvaluationUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature = FxNimbus.shared.features.messaging
     private let applicationHelper: ApplicationHelper
@@ -71,7 +71,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     init(
         helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
-        messagingUtility: GleanPlumbEvaluationUtility = GleanPlumbEvaluationUtility(),
+        messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper()
     ) {
