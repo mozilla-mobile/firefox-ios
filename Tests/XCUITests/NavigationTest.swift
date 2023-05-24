@@ -22,7 +22,8 @@ class NavigationTest: BaseTestCase {
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
         if iPad() {
-            XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
+            print(app.debugDescription)
+            XCTAssertFalse(app.buttons["TabToolbar.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
             app.textFields["url"].tap()
         } else {
@@ -39,7 +40,7 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
         if iPad() {
-            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
+            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
         } else {
             XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
@@ -51,10 +52,10 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
         if iPad() {
-            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
+            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
             // Go back to previous visited web site
-            app.buttons["URLBarView.backButton"].tap()
+            app.buttons["TabToolbar.backButton"].tap()
         } else {
             XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)

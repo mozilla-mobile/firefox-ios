@@ -338,7 +338,11 @@ class HistoryTests: BaseTestCase {
         app.tables.staticTexts["The Book of Mozilla"].tap()
         urlBarBackButton.tap()
         XCTAssertFalse(urlBarBackButton.isEnabled)
-        urlBarForwardButton.press(forDuration: 1)
+        if iPad() {
+            app.windows.otherElements.buttons["Forward"].press(forDuration: 1)
+        } else {
+            urlBarForwardButton.press(forDuration: 1)
+        }
         XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
         app.tables.staticTexts["The Book of Mozilla"].tap()
         waitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
