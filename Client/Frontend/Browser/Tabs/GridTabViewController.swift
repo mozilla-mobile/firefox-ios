@@ -210,13 +210,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.focusItem()
-        }
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // When the app enters split screen mode we refresh the collection view layout to show the proper grid
         collectionView.collectionViewLayout.invalidateLayout()
@@ -226,6 +219,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         super.viewWillLayoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowlayout.invalidateLayout()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.focusItem()
+        }
     }
 
     private func tabManagerTeardown() {
@@ -280,15 +280,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     func focusTab(_ selectedTab: Tab) {
         if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
-            guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
-            if indexOfRegularTab >= self.tabDisplayManager.dataStore.count - 2 {
-                rect.origin.y += 10
-                self.collectionView.scrollRectToVisible(rect, animated: false)
-            } else {
-                self.collectionView.scrollToItem(at: indexPath,
-                                                 at: [.centeredVertically, .centeredHorizontally],
-                                                 animated: false)
-            }
+            self.collectionView.scrollToItem(at: indexPath,
+                                             at: [.centeredVertically, .centeredHorizontally],
+                                             animated: false)
         }
     }
 
