@@ -68,8 +68,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testDefaultNimbusCustomFlags() {
-        XCTAssertEqual(featureFlags.getCustomState(for: .onboardingNotificationCard),
-                       OnboardingNotificationCardPosition.afterSync)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
         XCTAssertEqual(featureFlags.getCustomState(for: .wallpaperVersion), WallpaperVersion.v1)

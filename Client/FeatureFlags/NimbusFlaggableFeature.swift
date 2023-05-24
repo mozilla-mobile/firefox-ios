@@ -24,7 +24,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case notificationSettings
     case onboardingUpgrade
     case onboardingFreshInstall
-    case onboardingNotificationCard
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -48,7 +47,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
-    case onboardingNotificationCard
     case searchBarPosition
     case startAtHome
     case wallpaperVersion
