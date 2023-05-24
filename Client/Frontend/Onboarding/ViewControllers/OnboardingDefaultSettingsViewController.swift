@@ -212,6 +212,5 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
 }
 
 extension OnboardingDefaultSettingsViewController: BottomSheetChild {
-    func willDismiss() {
-    }
+    func willDismiss() { }
 }

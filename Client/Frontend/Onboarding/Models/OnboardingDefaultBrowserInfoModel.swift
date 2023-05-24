@@ -24,11 +24,6 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
     }
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
-        var attributedTexts: [NSAttributedString] = []
-        instructionSteps.forEach { text in
-            let attributedText = MarkupAttributeUtility(baseFont: font).addAttributesTo(text: text)
-            attributedTexts.append(attributedText)
-        }
-        return attributedTexts
+        return instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
     }
 }

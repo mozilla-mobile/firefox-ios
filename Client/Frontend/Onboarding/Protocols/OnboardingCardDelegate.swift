@@ -67,9 +67,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     // MARK: - Default Browser Popup
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6359
     func presentDefaultBrowserPopup() {
-        guard let viewModel = viewModel.availableCards.first?.viewModel.infoModel
-        else { return }
-        let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: viewModel.a11yIdRoot)
+        guard let a11yIDRoot = viewModel.availableCards.first?.viewModel.infoModel.a11yIdRoot else { return }
+        let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
         let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel)
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
