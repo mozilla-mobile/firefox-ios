@@ -27,6 +27,7 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.addresses.ignoreAutocompleteOff": true,
   "extensions.formautofill.heuristics.enabled": true,
   "extensions.formautofill.section.enabled": true,
+  "extensions.formautofill.focusOnAutofill": false,
 };
 
 // Used Mimic the behavior of .getAutocompleteInfo()
