@@ -49,7 +49,7 @@ class LibraryViewController: UIViewController, Themeable {
         toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
     }
 
-    private lazy var topLeftButton: UIBarButtonItem = {
+    private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             image: UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection(),
             style: .plain,
@@ -59,7 +59,7 @@ class LibraryViewController: UIViewController, Themeable {
         return button
     }()
 
-    private lazy var topRightButton: UIBarButtonItem = {
+    private lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topRightButton
         return button
