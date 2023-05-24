@@ -99,11 +99,7 @@ final class RatingPromptManager {
         if UserDefaults.standard.bool(forKey: PrefsKeys.ForceShowAppReviewPromptOverride) {
             return true
         }
-<<<<<<< HEAD
-
-=======
         
->>>>>>> 96a911033 (Implemented debug option to force App Store review prompt (FXIOS-5559))
         // Required: 5th launch or more
         let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
         guard currentSessionCount >= 5 else { return false }
