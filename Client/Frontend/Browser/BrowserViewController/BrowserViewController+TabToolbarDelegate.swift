@@ -7,6 +7,7 @@ import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        updateZoomPageBarVisibility(visible: false)
         userHasPressedHomeButton = true
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
@@ -99,6 +100,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        updateZoomPageBarVisibility(visible: false)
         showTabTray()
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
