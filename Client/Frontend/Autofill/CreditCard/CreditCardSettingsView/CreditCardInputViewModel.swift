@@ -75,6 +75,22 @@ enum InputVMError: Error {
     case unableToUpdateCC
 }
 
+enum CreditCardModifiedStatus {
+    case savedCard
+    case updatedCard
+    case removedCard
+    case none
+
+    var message: String {
+        switch self {
+        case .savedCard: return String.CreditCard.SnackBar.SavedCardLabel
+        case .updatedCard: return String.CreditCard.SnackBar.UpdatedCardLabel
+        case .removedCard: return String.CreditCard.SnackBar.RemovedCardLabel
+        default: return ""
+        }
+    }
+}
+
 class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
     var logger: Logger?
@@ -93,7 +109,8 @@ class CreditCardInputViewModel: ObservableObject {
 
     // MARK: View
 
-    var dismiss: ((_ successVal: Bool) -> Void)?
+    var dismiss: ((_ modifiedStatus: CreditCardModifiedStatus,
+                   _ successVal: Bool) -> Void)?
 
     @Published var state: CreditCardEditState
     @Published var errorState: String = ""
@@ -244,7 +261,7 @@ class CreditCardInputViewModel: ObservableObject {
         autofill.deleteCreditCard(id: currentCreditCard.guid) {
             status, error in
             guard let error = error, status == true else {
-                self.dismiss?(true)
+                self.dismiss?(.removedCard, true)
                 return
             }
             self.logger?.log("Unable to remove credit card: \(error)",

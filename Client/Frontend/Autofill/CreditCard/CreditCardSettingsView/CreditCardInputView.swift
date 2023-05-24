@@ -127,25 +127,25 @@ struct CreditCardInputView: View {
                 if viewModel.state == .edit {
                     viewModel.updateCreditCard { _, error in
                         guard let error = error else {
-                            viewModel.dismiss?(true)
+                            viewModel.dismiss?(.updatedCard, true)
                             return
                         }
                         viewModel.logger?.log("Unable to update card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        viewModel.dismiss?(false)
+                        viewModel.dismiss?(.none, false)
                     }
                 } else {
                     // Save new card
                     viewModel.saveCreditCard { _, error in
                         guard let error = error else {
-                            viewModel.dismiss?(true)
+                            viewModel.dismiss?(.savedCard, true)
                             return
                         }
                         viewModel.logger?.log("Unable to save credit card with error: \(error)",
                                               level: .fatal,
                                               category: .creditcard)
-                        viewModel.dismiss?(false)
+                        viewModel.dismiss?(.savedCard, false)
                     }
                 }
             }
@@ -159,7 +159,7 @@ struct CreditCardInputView: View {
             case .cancel:
                 viewModel.updateState(state: .view)
             case.close:
-                viewModel.dismiss?(false)
+                viewModel.dismiss?(.none, false)
             }
         }
     }
