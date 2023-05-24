@@ -39,7 +39,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    var viewModel: OnboardingCardProtocol
+    var viewModel: OnboardingCardInfoModelProtocol
     weak var delegate: OnboardingCardDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -86,7 +86,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -96,7 +96,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
                                                                        size: fontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -105,7 +105,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.descriptionFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)DescriptionLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
 
     lazy var buttonStackView: UIStackView = .build { stack in
@@ -123,7 +123,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
@@ -137,7 +137,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
-        button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)SecondaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)SecondaryButton"
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
@@ -170,7 +170,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     // MARK: - Initializers
     init(
-        viewModel: OnboardingCardProtocol,
+        viewModel: OnboardingCardInfoModelProtocol,
         delegate: OnboardingCardDelegate?,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -200,8 +200,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        delegate?.pageChanged(from: viewModel.infoModel.name)
-        viewModel.sendCardViewTelemetry()
+        delegate?.pageChanged(from: viewModel.name)
+        delegate?.sendCardViewTelemetry(from: viewModel)
     }
 
     // MARK: - View setup
@@ -309,11 +309,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private func updateLayout() {
-        titleLabel.text = viewModel.infoModel.title
-        descriptionLabel.text = viewModel.infoModel.body
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.body
 
-        imageView.image = viewModel.infoModel.image
-        primaryButton.setTitle(viewModel.infoModel.buttons.primary.title,
+        imageView.image = viewModel.image
+        primaryButton.setTitle(viewModel.buttons.primary.title,
                                for: .normal)
         setupSecondaryButton()
     }
@@ -321,7 +321,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private func setupSecondaryButton() {
         // To keep Title, Description aligned between cards we don't hide the button
         // we clear the background and make disabled
-        guard let buttonTitle = viewModel.infoModel.buttons.secondary?.title else {
+        guard let buttonTitle = viewModel.buttons.secondary?.title else {
             secondaryButton.isUserInteractionEnabled = false
             secondaryButton.backgroundColor = .clear
             return
@@ -331,7 +331,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private func setupLinkButton() {
-        guard let buttonTitle = viewModel.infoModel.link?.title else {
+        guard let buttonTitle = viewModel.link?.title else {
             linkButton.isUserInteractionEnabled = false
             linkButton.isHidden = true
             return
@@ -342,27 +342,25 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - Button Actions
     @objc
     func primaryAction() {
-        viewModel.sendTelemetryButton(isPrimaryAction: true)
         delegate?.handleButtonPress(
-            for: viewModel.infoModel.buttons.primary.action,
-            from: viewModel.infoModel.name)
+            for: viewModel.buttons.primary.action,
+            from: viewModel)
     }
 
     @objc
     func secondaryAction() {
-        guard let buttonAction = viewModel.infoModel.buttons.secondary?.action else { return }
+        guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
-        viewModel.sendTelemetryButton(isPrimaryAction: false)
         delegate?.handleButtonPress(
             for: buttonAction,
-            from: viewModel.infoModel.name)
+            from: viewModel)
     }
 
     @objc
     func linkButtonAction() {
         delegate?.handleButtonPress(
             for: .readPrivacyPolicy,
-            from: viewModel.infoModel.name)
+            from: viewModel)
     }
 
     // MARK: - Themeable

@@ -628,7 +628,7 @@ onboarding:
         description: |
           The sequence of the cards in the current branch.
       sequence_position:
-        type: quantity
+        type: string
         description: |
           The position of the card in the current branch.
     bugs:

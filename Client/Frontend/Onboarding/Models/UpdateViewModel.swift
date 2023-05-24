@@ -100,16 +100,16 @@ class UpdateViewModel: OnboardingViewModelProtocol,
 
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
-        for card in cardModels {
+        for cardModel in cardModels {
             // If it's a sync sign in card and we're already signed in, don't add
             // the card to the available cards.
-            if (card.buttons.primary.action == .syncSignIn || card.buttons.secondary?.action == .syncSignIn)
+            if (cardModel.buttons.primary.action == .syncSignIn || cardModel.buttons.secondary?.action == .syncSignIn)
                 && hasSyncableAccount ?? false {
                 break
             }
 
             availableCards.append(OnboardingCardViewController(
-                viewModel: OnboardingCardViewModel(infoModel: card),
+                viewModel: cardModel,
                 delegate: delegate))
         }
     }

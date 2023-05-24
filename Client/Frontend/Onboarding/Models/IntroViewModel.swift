@@ -34,9 +34,9 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     // MARK: - Methods
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
-        cardModels.forEach { card in
+        cardModels.forEach { cardModel in
             availableCards.append(OnboardingCardViewController(
-                viewModel: OnboardingCardViewModel(infoModel: card),
+                viewModel: cardModel,
                 delegate: delegate))
         }
     }

@@ -182,13 +182,13 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from cardName: String
+        from card: OnboardingCardInfoModelProtocol
     ) {
         switch action {
         case .requestNotifications:
-            askForNotificationPermission(from: cardName)
+            askForNotificationPermission(from: card.name)
         case .nextCard:
-            showNextPage(from: cardName) {
+            showNextPage(from: card.name) {
                 showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
@@ -197,7 +197,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController)
             ) {
-                self.showNextPage(from: cardName) {
+                self.showNextPage(from: card.name) {
                     self.showNextPageCompletionForLastCard()
                 }
             }
@@ -208,9 +208,13 @@ extension IntroViewController: OnboardingCardDelegate {
             presentDefaultBrowserPopup()
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
-                from: cardName,
+                from: card.name,
                 selector: #selector(dismissPrivacyPolicyViewController))
         }
+    }
+
+    func sendCardViewTelemetry(from card: OnboardingCardInfoModelProtocol) {
+        viewModel.telemetryUtility.sendCardViewTelemetry(from: card)
     }
 
     private func showNextPageCompletionForLastCard() {

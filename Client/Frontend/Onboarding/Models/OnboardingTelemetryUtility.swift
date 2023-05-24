@@ -22,16 +22,16 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                                      extras: buildTelemetryExtras(using: card))
     }
 
-    func sendButtonActionTelemetry() {
+    func sendButtonActionTelemetry(from card: OnboardingCardInfoModelProtocol) {
     }
 
-    func sendDismissOnboardingTelemetry() {
+    func sendDismissOnboardingTelemetry(from card: OnboardingCardInfoModelProtocol) {
     }
 
     // MARK: - Private fuctions
     private func buildTelemetryExtras(
         using card: OnboardingCardInfoModelProtocol
-    ) -> [String: Any] {
+    ) -> [String: String] {
         typealias Key = TelemetryWrapper.EventExtraKey
         return [
             Key.cardType.rawValue: card.name,
@@ -49,8 +49,8 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private func sequencePosition(
         for cardName: String,
         from sequence: [String]
-    ) -> Int {
-        return sequence.firstIndex { $0 == cardName } ?? -1
+    ) -> String {
+        return String(sequence.firstIndex { $0 == cardName } ?? -1)
     }
 
     private func elementType() {

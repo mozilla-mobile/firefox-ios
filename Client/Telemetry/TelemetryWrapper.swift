@@ -864,12 +864,12 @@ extension TelemetryWrapper {
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
-               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? Int32 {
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.CardViewExtra(
                     cardType: type,
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
-                GleanMetrics.Onboarding.cardView.record(cardExtra)
+                GleanMetrics.Onboarding.cardView.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

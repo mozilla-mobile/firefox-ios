@@ -4,14 +4,7 @@
 
 import Foundation
 
-protocol OnboardingCardProtocol {
-    var infoModel: OnboardingCardInfoModelProtocol { get }
-
-    func sendCardViewTelemetry()
-    func sendTelemetryButton(isPrimaryAction: Bool)
-}
-
-struct OnboardingCardViewModel: OnboardingCardProtocol {
+struct OnboardingCardViewModel {
     var infoModel: OnboardingCardInfoModelProtocol
 
     init(infoModel: OnboardingCardInfoModelProtocol) {
@@ -19,15 +12,15 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
     }
 
     func sendCardViewTelemetry() {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
-        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
-            . onboardingCardView : .upgradeOnboardingCardView
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: eventObject,
-                                     value: nil,
-                                     extras: extra)
+//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+//        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
+//            . onboardingCardView : .upgradeOnboardingCardView
+//
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .view,
+//                                     object: eventObject,
+//                                     value: nil,
+//                                     extras: extra)
     }
 
     func sendTelemetryButton(isPrimaryAction: Bool) {
