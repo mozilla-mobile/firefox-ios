@@ -166,10 +166,10 @@ public struct PrefsKeys {
 
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
-    
+
     // Only used to force faster transition of tabs to the inactive state (10 seconds)
     public static let FasterInactiveTabsOverride = "FasterInactiveTabsOverride"
-    
+
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
 }
