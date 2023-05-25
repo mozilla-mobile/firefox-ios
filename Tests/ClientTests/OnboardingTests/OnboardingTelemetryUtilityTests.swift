@@ -9,7 +9,7 @@ import Glean
 
 class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingConfigUtility.CardOrder
-    
+
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
@@ -132,20 +132,5 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)
 
         return telemetryUtility
-    }
-    private func createInfoModel() -> OnboardingCardInfoModelProtocol {
-        return OnboardingCardInfoModel(
-            name: "name",
-            title: "Title",
-            body: "Description",
-            link: OnboardingLinkInfoModel(
-                title: "Link",
-                url: URL(string: "https://macrumors.com")!),
-            buttons: OnboardingButtons(
-                primary: OnboardingButtonInfoModel(title: "Button1", action: .nextCard),
-                secondary: OnboardingButtonInfoModel(title: "Button2", action: .nextCard)),
-            type: .freshInstall,
-            a11yIdRoot: "A11yId",
-            imageID: "image")
     }
 }
