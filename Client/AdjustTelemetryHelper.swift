@@ -4,7 +4,6 @@
 
 import Foundation
 import Adjust
-import Glean
 
 protocol AdjustTelemetryData {
     var campaign: String? { get set }
@@ -22,30 +21,38 @@ protocol AdjustTelemetryProtocol {
 }
 
 class AdjustTelemetryHelper: AdjustTelemetryProtocol {
+    var gleanWrapper: GleanWrapper
+    var telemetry: AdjustWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+         telemetry: AdjustWrapper = DefaultAdjustWrapper()) {
+        self.gleanWrapper = gleanWrapper
+        self.telemetry = telemetry
+    }
+
     func sendDeeplinkTelemetry(url: URL, attribution: AdjustTelemetryData?) {
-        let extra = GleanMetrics.Adjust.DeeplinkReceivedExtra(receivedUrl: url.absoluteString)
-        GleanMetrics.Adjust.deeplinkReceived.record(extra)
+        telemetry.recordDeeplink(url: url)
 
         setAttributionData(attribution)
     }
 
     func setAttributionData(_ attribution: AdjustTelemetryData?) {
         if let campaign = attribution?.campaign {
-            GleanMetrics.Adjust.campaign.set(campaign)
+            telemetry.record(campaign: campaign)
         }
 
         if let adgroup = attribution?.adgroup {
-            GleanMetrics.Adjust.adGroup.set(adgroup)
+            telemetry.record(adgroup: adgroup)
         }
 
         if let creative = attribution?.creative {
-            GleanMetrics.Adjust.creative.set(creative)
+            telemetry.record(creative: creative)
         }
 
         if let network = attribution?.network {
-            GleanMetrics.Adjust.network.set(network)
+            telemetry.record(network: network)
         }
 
-        GleanMetrics.Pings.shared.firstSession.submit()
+        gleanWrapper.submitPing()
     }
 }
