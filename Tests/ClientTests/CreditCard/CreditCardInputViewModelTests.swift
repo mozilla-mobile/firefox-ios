@@ -14,7 +14,12 @@ class CreditCardInputViewModelTests: XCTestCase {
     private var files: FileAccessor!
     private var autofill: RustAutofill!
     private var encryptionKey: String!
-
+    private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
+                                                                  ccNumber: "4539185806954013",
+                                                                  ccNumberLast4: "4013",
+                                                                  ccExpMonth: 08,
+                                                                  ccExpYear: 2055,
+                                                                  ccType: "VISA")
     override func setUp() {
         super.setUp()
         files = MockFiles()
@@ -194,16 +199,9 @@ class CreditCardInputViewModelTests: XCTestCase {
     }
 
     func testSuccessRemoveCreditCard() {
-        let unencryptedCreditCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
-                                                                ccNumber: "4539185806954013",
-                                                                ccNumberLast4: "4013",
-                                                                ccExpMonth: 08,
-                                                                ccExpYear: 2055,
-                                                                ccType: "VISA")
-
         let expectation = expectation(description: "wait for credit card to be removed")
 
-        viewModel.autofill.addCreditCard(creditCard: unencryptedCreditCard) {
+        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) {
             ccCard, error in
             guard let ccCard = ccCard else {
                 XCTFail("no credit card saved to be tested")
@@ -233,6 +231,48 @@ class CreditCardInputViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func testUpdateCreditCard() {
+        let expectation = expectation(description: "wait for credit card to be removed")
+        // Add sample card
+        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) {
+            ccCard, error in
+            guard let ccCard = ccCard else {
+                XCTFail("no credit card saved to be tested")
+                return
+            }
+
+            guard let error = error else {
+                self.viewModel.creditCard = ccCard
+                // Update name and expiration
+                self.viewModel.nameOnCard = "Mickey Mouse"
+                self.viewModel.expirationDate = "0256"
+                // Note: We do not test encrypted card number
+                // but is required to update card
+                self.viewModel.cardNumber = "5427754897487332"
+                // Update card with new values
+                self.viewModel.updateCreditCard { success, error in
+                    XCTAssertNil(error)
+                    XCTAssertTrue(success)
+                    // Check updated values
+                    self.viewModel.autofill.getCreditCard(id: ccCard.guid) {
+                        ccUpdatedCard, error in
+                        XCTAssertNil(error)
+                        XCTAssertNotNil(ccUpdatedCard)
+
+                        XCTAssertEqual(ccUpdatedCard?.ccName, "Mickey Mouse")
+                        XCTAssertEqual(ccUpdatedCard?.ccExpYear, 56)
+                        XCTAssertEqual(ccUpdatedCard?.ccExpMonth, 02)
+                        expectation.fulfill()
+                    }
+                }
+
+                return
+            }
+            XCTFail("Error removing credit card \(error)")
+        }
         waitForExpectations(timeout: 1.0)
     }
 
