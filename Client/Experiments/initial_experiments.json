@@ -2,26 +2,26 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-notification-opt-in-prompt",
-      "id": "ios-notification-opt-in-prompt",
+      "slug": "beta-real-one-ios-re-engagement-notifications-ab-experiment-114",
+      "id": "beta-real-one-ios-re-engagement-notifications-ab-experiment-114",
       "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
+      "application": "org.mozilla.ios.FirefoxBeta",
       "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "iOS Notification Opt-in Prompt",
-      "userFacingDescription": "Testing the placement of notification opt-in during onboarding.",
+      "appId": "org.mozilla.ios.FirefoxBeta",
+      "channel": "beta",
+      "userFacingName": "Beta (real one) iOS re-engagement notifications A/B experiment 114",
+      "userFacingDescription": "We are looking to test privacy and search messages against a control that receives no message. This is our first A/B test on messaging for iOS.",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-feature-release-1",
+        "namespace": "ios-messaging-beta-2",
         "start": 0,
         "count": 10000,
         "total": 10000
       },
       "featureIds": [
-        "onboarding-feature"
+        "messaging"
       ],
       "probeSets": [],
       "outcomes": [],
@@ -30,10 +30,20 @@
           "slug": "control",
           "ratio": 1,
           "feature": {
-            "featureId": "onboarding-feature",
+            "featureId": "messaging",
             "enabled": true,
             "value": {
-              "notification-card-position": "no-card"
+              "messages": {
+                "notification-validation-message": {
+                  "is-control": true,
+                  "surface": "notification",
+                  "style": "NOTIFICATION",
+                  "trigger": [
+                    "INACTIVE_NEW_USER",
+                    "ALLOWED_TIPS_NOTIFICATIONS"
+                  ]
+                }
+              }
             }
           }
         },
@@ -41,10 +51,23 @@
           "slug": "treatment-a",
           "ratio": 1,
           "feature": {
-            "featureId": "onboarding-feature",
+            "featureId": "messaging",
             "enabled": true,
             "value": {
-              "notification-card-position": "before-sync"
+              "message-under-experiment": "engagement-notification-114",
+              "messages": {
+                "engagement-notification-114": {
+                  "title": "Engagement.Notification.Treatment.B.Title.v114",
+                  "text": "Engagement.Notification.Treatment.B.Body.v114",
+                  "surface": "notification",
+                  "style": "NOTIFICATION",
+                  "action": "://open-url?private=true&url=https://www.mozilla.org/en-US/firefox/privacy/",
+                  "trigger": [
+                    "INACTIVE_NEW_USER",
+                    "ALLOWED_TIPS_NOTIFICATIONS"
+                  ]
+                }
+              }
             }
           }
         },
@@ -52,17 +75,54 @@
           "slug": "treatment-b",
           "ratio": 1,
           "feature": {
-            "featureId": "onboarding-feature",
+            "featureId": "messaging",
             "enabled": true,
             "value": {
-              "notification-card-position": "after-sync"
+              "message-under-experiment": "engagement-notification-114",
+              "messages": {
+                "engagement-notification-114": {
+                  "title": "Engagement.Notification.Treatment.A.Title.v114",
+                  "text": "Engagement.Notification.Treatment.A.Body.v114",
+                  "surface": "notification",
+                  "style": "NOTIFICATION",
+                  "action": "://open-url?private=true&url=https://www.mozilla.org/en-US/firefox/privacy/",
+                  "trigger": [
+                    "INACTIVE_NEW_USER",
+                    "ALLOWED_TIPS_NOTIFICATIONS"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "slug": "treatment-c",
+          "ratio": 1,
+          "feature": {
+            "featureId": "messaging",
+            "enabled": true,
+            "value": {
+              "message-under-experiment": "engagement-notification-114",
+              "messages": {
+                "engagement-notification-114": {
+                  "title": "Engagement.Notification.Title.v112",
+                  "text": "Engagement.Notification.Body.v112",
+                  "surface": "notification",
+                  "style": "NOTIFICATION",
+                  "action": "OPEN_NEW_TAB",
+                  "trigger": [
+                    "INACTIVE_NEW_USER",
+                    "ALLOWED_TIPS_NOTIFICATIONS"
+                  ]
+                }
+              }
             }
           }
         }
       ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('112.!') >= 0)))",
-      "startDate": "2023-03-28",
-      "enrollmentEndDate": "2023-05-03",
+      "targeting": "(app_version|versionCompare('116.*') <= 0) && ((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
+      "startDate": "2023-05-24",
+      "enrollmentEndDate": "2023-06-07",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
@@ -121,6 +181,194 @@
       "proposedDuration": 28,
       "proposedEnrollment": 7,
       "referenceBranch": "treatment-a",
+      "featureValidationOptOut": false,
+      "localizations": null
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "ios-set-to-default-in-onboarding",
+      "id": "ios-set-to-default-in-onboarding",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "iOS Set to Default in Onboarding",
+      "userFacingDescription": "Onboarding experiment",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-release-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "default_browser",
+          "priority": "primary"
+        },
+        {
+          "slug": "onboarding",
+          "priority": "secondary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "onboarding-framework-feature",
+            "enabled": true,
+            "value": {
+              "cards": [
+                {
+                  "name": "welcome",
+                  "title": "Onboarding/Onboarding.Welcome.Title.v114",
+                  "body": "Onboarding/Onboarding.Welcome.Description.v114",
+                  "image": "welcome-globe",
+                  "link": {
+                    "title": "Onboarding/Onboarding.Welcome.Link.Action.v114",
+                    "url": "https://www.mozilla.org/en-US/privacy/firefox/"
+                  },
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Welcome.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                },
+                {
+                  "name": "notificationPermissions",
+                  "title": "Onboarding/Onboarding.Notification.Title.v114",
+                  "body": "Onboarding/Onboarding.Notification.Description.v114",
+                  "image": "notifications",
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Notification.Continue.Action.v114",
+                      "action": "request-notifications"
+                    },
+                    "secondary": {
+                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                },
+                {
+                  "name": "signToSync",
+                  "title": "Onboarding/Onboarding.Sync.Title.v114",
+                  "body": "Onboarding/Onboarding.Sync.Description.v114",
+                  "image": "sync-devices",
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Sync.SignIn.Action.v114",
+                      "action": "sync-sign-in"
+                    },
+                    "secondary": {
+                      "title": "Onboarding/Onboarding.Sync.Skip.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                }
+              ],
+              "card-ordering": [
+                "welcome",
+                "signToSync",
+                "notificationPermissions"
+              ],
+              "dismissable": true
+            }
+          }
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "onboarding-framework-feature",
+            "enabled": true,
+            "value": {
+              "cards": [
+                {
+                  "name": "welcome",
+                  "title": "Onboarding/Onboarding.Welcome.Title.TreatementA.v114",
+                  "body": "Onboarding/Onboarding.Welcome.Description.TreatementA.v114",
+                  "image": "welcome-globe",
+                  "link": {
+                    "title": "Onboarding/Onboarding.Welcome.Link.Action.v114",
+                    "url": "https://www.mozilla.org/en-US/privacy/firefox/"
+                  },
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Welcome.ActionTreatementA.v114",
+                      "action": "set-default-browser"
+                    },
+                    "secondary": {
+                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                },
+                {
+                  "name": "notificationPermissions",
+                  "title": "Onboarding/Onboarding.Notification.Title.v114",
+                  "body": "Onboarding/Onboarding.Notification.Description.v114",
+                  "image": "notifications",
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Notification.Continue.Action.v114",
+                      "action": "request-notifications"
+                    },
+                    "secondary": {
+                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                },
+                {
+                  "name": "signToSync",
+                  "title": "Onboarding/Onboarding.Sync.Title.v114",
+                  "body": "Onboarding/Onboarding.Sync.Description.v114",
+                  "image": "sync-devices",
+                  "buttons": {
+                    "primary": {
+                      "title": "Onboarding/Onboarding.Sync.SignIn.Action.v114",
+                      "action": "sync-sign-in"
+                    },
+                    "secondary": {
+                      "title": "Onboarding/Onboarding.Sync.Skip.Action.v114",
+                      "action": "next-card"
+                    }
+                  },
+                  "type": "fresh-install"
+                }
+              ],
+              "card-ordering": [
+                "welcome",
+                "signToSync",
+                "notificationPermissions"
+              ],
+              "dismissable": true
+            }
+          }
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
+      "startDate": "2023-05-19",
+      "enrollmentEndDate": "2023-05-26",
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null
     }
