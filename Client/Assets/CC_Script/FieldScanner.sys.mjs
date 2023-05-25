@@ -4,40 +4,14 @@
 
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
-import { FormAutofillHeuristics } from "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs";
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  CreditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
+  FormAutofillHeuristics:
+    "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
-  creditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
 });
-
-const DEFAULT_SECTION_NAME = "-moz-section-default";
-
-/**
- * To help us classify sections, we want to know what fields can appear
- * multiple times in a row.
- * Such fields, like `address-line{X}`, should not break sections.
- */
-const MULTI_FIELD_NAMES = [
-  "address-level3",
-  "address-level2",
-  "address-level1",
-  "tel",
-  "postal-code",
-  "email",
-  "street-address",
-];
-
-/**
- * To help us classify sections that can appear only N times in a row.
- * For example, the only time multiple cc-number fields are valid is when
- * there are four of these fields in a row.
- * Otherwise, multiple cc-number fields should be in separate sections.
- */
-const MULTI_N_FIELD_NAMES = {
-  "cc-number": 4,
-};
 
 /**
  * Represents the detailed information about a form field, including
@@ -97,14 +71,12 @@ export class FieldDetail {
     }
   }
 
-  isSame(other) {
-    return (
-      this.fieldName == other.fieldName &&
-      this.section == other.section &&
-      this.addressType == other.addressType &&
-      !this.part &&
-      !other.part
-    );
+  get element() {
+    return this.elementWeakRef.get();
+  }
+
+  get sectionName() {
+    return this.section || this.addressType;
   }
 }
 
@@ -117,8 +89,6 @@ export class FieldScanner {
   #elementsWeakRef = null;
 
   #parsingIndex = 0;
-
-  #sections = [];
 
   fieldDetails = [];
 
@@ -149,6 +119,10 @@ export class FieldScanner {
    */
   get parsingIndex() {
     return this.#parsingIndex;
+  }
+
+  get parsingFinished() {
+    return this.parsingIndex >= this.#elements.length;
   }
 
   /**
@@ -192,164 +166,9 @@ export class FieldScanner {
     return this.fieldDetails[index];
   }
 
-  get parsingFinished() {
-    return this.parsingIndex >= this.#elements.length;
-  }
-
-  #pushToSection(name, fieldDetail) {
-    const section = this.#sections.find(s => s.name == name);
-    if (section) {
-      section.fieldDetails.push(fieldDetail);
-      return;
-    }
-    this.#sections.push({ name, fieldDetails: [fieldDetail] });
-  }
-  /**
-   * Merges the next N fields if the currentType is in the list of MULTI_N_FIELD_NAMES
-   *
-   * @param {number} mergeNextNFields How many of the next N fields to merge into the current section
-   * @param {string} currentType Type of the current field detail
-   * @param {Array<object>} fieldDetails List of current field details
-   * @param {number} i Index to keep track of the fieldDetails list
-   * @param {boolean} createNewSection Determines if a new section should be created
-   * @returns {Array<(number|boolean)>} mergeNextNFields and creatNewSection for use in #classifySections
-   * @memberof FieldScanner
-   */
-  #mergeNextNFields(
-    mergeNextNFields,
-    currentType,
-    fieldDetails,
-    i,
-    createNewSection
-  ) {
-    if (mergeNextNFields) {
-      mergeNextNFields--;
-    } else {
-      // We use -2 here because we have already seen two consecutive fields,
-      // the previous one and the current one.
-      // This ensures we don't accidentally add a field we've already seen.
-      const nextN = MULTI_N_FIELD_NAMES[currentType] - 2;
-      const array = fieldDetails.slice(i + 1, i + 1 + nextN);
-      if (
-        array.length == nextN &&
-        array.every(detail => detail.fieldName == currentType)
-      ) {
-        mergeNextNFields = nextN;
-      } else {
-        createNewSection = true;
-      }
-    }
-    return { mergeNextNFields, createNewSection };
-  }
-
-  #classifySections() {
-    const fieldDetails = this.#sections[0].fieldDetails;
-    this.#sections = [];
-    let seenTypes = new Set();
-    let previousType;
-    let sectionCount = 0;
-    let mergeNextNFields = 0;
-
-    for (let i = 0; i < fieldDetails.length; i++) {
-      let currentType = fieldDetails[i].fieldName;
-      if (!currentType) {
-        continue;
-      }
-
-      let createNewSection = false;
-      if (seenTypes.has(currentType)) {
-        if (previousType != currentType) {
-          // If we have seen this field before and it is different from
-          // the previous one, always create a new section.
-          createNewSection = true;
-        } else if (MULTI_FIELD_NAMES.includes(currentType)) {
-          // For fields that can appear multiple times in a row
-          // within one section, don't create a new section
-        } else if (currentType in MULTI_N_FIELD_NAMES) {
-          // This is the heuristic to handle special cases where we can have multiple
-          // fields in one section, but only if the field has appeared N times in a row.
-          // For example, websites can use 4 consecutive 4-digit `cc-number` fields
-          // instead of one 16-digit `cc-number` field.
-          ({ mergeNextNFields, createNewSection } = this.#mergeNextNFields(
-            mergeNextNFields,
-            currentType,
-            fieldDetails,
-            i,
-            createNewSection
-          ));
-        } else {
-          // Fields that should not appear multiple times in one section.
-          createNewSection = true;
-        }
-      }
-
-      if (createNewSection) {
-        mergeNextNFields = 0;
-        seenTypes.clear();
-        sectionCount++;
-      }
-
-      previousType = currentType;
-      seenTypes.add(currentType);
-      this.#pushToSection(
-        DEFAULT_SECTION_NAME + "-" + sectionCount,
-        fieldDetails[i]
-      );
-    }
-  }
-
-  /**
-   * The result is an array contains the sections with its belonging field
-   * details. If `this.#sections` contains one section only with the default
-   * section name (DEFAULT_SECTION_NAME), `this.#classifySections` should be
-   * able to identify all sections in the heuristic way.
-   *
-   * @returns {Array<object>}
-   *          The array with the sections, and the belonging fieldDetails are in
-   *          each section. For example, it may return something like this:
-   *          [{
-   *             type: FormAutofillUtils.SECTION_TYPES.ADDRESS,  // section type
-   *             fieldDetails: [{  // a record for each field
-   *                 fieldName: "email",
-   *                 section: "",
-   *                 addressType: "",
-   *                 contactType: "",
-   *                 elementWeakRef: the element
-   *               }, ...]
-   *           },
-   *           {
-   *             type: FormAutofillUtils.SECTION_TYPES.CREDIT_CARD,
-   *             fieldDetails: [{
-   *                fieldName: "cc-exp-month",
-   *                section: "",
-   *                addressType: "",
-   *                contactType: "",
-   *                 elementWeakRef: the element
-   *               }, ...]
-   *           }]
-   */
-  getSectionFieldDetails() {
-    if (!this.#sections.length) {
-      return [];
-    }
-    if (
-      this.#sections.length == 1 &&
-      this.#sections[0].name == DEFAULT_SECTION_NAME
-    ) {
-      this.#classifySections();
-    }
-
-    return this.#sections.reduce((sections, current) => {
-      sections.push(...this.#getFinalDetails(current.fieldDetails));
-      return sections;
-    }, []);
-  }
-
   /**
    * This function will prepare an autocomplete info object with getInferredInfo
    * function and push the detail to fieldDetails property.
-   * Any field will be pushed into `this.#sections` based on the section name
-   * in `autocomplete` attribute.
    *
    * Any element without the related detail will be used for adding the detail
    * to the end of field details.
@@ -360,29 +179,14 @@ export class FieldScanner {
       throw new Error("Try to push the non-existing element info.");
     }
     const element = this.#elements[elementIndex];
-    const [
-      fieldName,
-      autocompleteInfo,
-      confidence,
-    ] = FormAutofillHeuristics.getInferredInfo(element, this);
+    const [fieldName, autocompleteInfo, confidence] =
+      lazy.FormAutofillHeuristics.getInferredInfo(element, this);
     const fieldDetail = new FieldDetail(element, fieldName, {
       autocompleteInfo,
       confidence,
     });
 
     this.fieldDetails.push(fieldDetail);
-    this.#pushToSection(this.#getSectionName(fieldDetail), fieldDetail);
-  }
-
-  #getSectionName(info) {
-    let names = [];
-    if (info.section) {
-      names.push(info.section);
-    }
-    if (info.addressType) {
-      names.push(info.addressType);
-    }
-    return names.length ? names.join(" ") : DEFAULT_SECTION_NAME;
   }
 
   /**
@@ -393,91 +197,17 @@ export class FieldScanner {
    *        The index indicates a field detail to be updated.
    * @param {string} fieldName
    *        The new fieldName
+   * @param {string} reason
+   *        What approach we use to identify this field
    */
-  updateFieldName(index, fieldName) {
+  updateFieldName(index, fieldName, reason = null) {
     if (index >= this.fieldDetails.length) {
       throw new Error("Try to update the non-existing field detail.");
     }
     this.fieldDetails[index].fieldName = fieldName;
-  }
-
-  /**
-   * When a site has four credit card number fields and
-   * these fields have a max length of four
-   * then we transform the credit card number into
-   * four subsections in order to fill correctly.
-   *
-   * @param {Array<object>} creditCardFieldDetails
-   *        The credit card field details to be transformed for multiple cc-number fields filling
-   * @memberof FieldScanner
-   */
-  #transformCCNumberForMultipleFields(creditCardFieldDetails) {
-    const details = creditCardFieldDetails.filter(
-      field =>
-        field.fieldName == "cc-number" &&
-        field.elementWeakRef.get().maxLength == 4
-    );
-    if (details.length != 4) {
-      return;
+    if (reason) {
+      this.fieldDetails[index].reason = reason;
     }
-
-    details.map((detail, idx) => {
-      detail.part = idx + 1;
-    });
-  }
-
-  /**
-   * Provide the final field details without invalid field name, and the
-   * duplicated fields will be removed as well. For the debugging purpose,
-   * the final `fieldDetails` will include the duplicated fields if
-   * `_allowDuplicates` is true.
-   *
-   * Each item should contain one type of fields only, and the two valid types
-   * are Address and CreditCard.
-   *
-   * @param   {Array<object>} fieldDetails
-   *          The field details for trimming.
-   * @returns {Array<object>}
-   *          The array with the field details without invalid field name and
-   *          duplicated fields.
-   */
-  #getFinalDetails(fieldDetails) {
-    let addressFieldDetails = [];
-    let creditCardFieldDetails = [];
-    for (const fieldDetail of fieldDetails) {
-      const fieldName = fieldDetail.fieldName;
-      if (lazy.FormAutofillUtils.isAddressField(fieldName)) {
-        addressFieldDetails.push(fieldDetail);
-      } else if (lazy.FormAutofillUtils.isCreditCardField(fieldName)) {
-        creditCardFieldDetails.push(fieldDetail);
-      } else {
-        this.log.debug(
-          "Not collecting a field with a unknown fieldName",
-          fieldDetail
-        );
-      }
-    }
-    this.#transformCCNumberForMultipleFields(creditCardFieldDetails);
-    return [
-      {
-        type: lazy.FormAutofillUtils.SECTION_TYPES.ADDRESS,
-        fieldDetails: addressFieldDetails,
-      },
-      {
-        type: lazy.FormAutofillUtils.SECTION_TYPES.CREDIT_CARD,
-        fieldDetails: creditCardFieldDetails,
-      },
-    ]
-      .map(section => {
-        // Deduplicate each set of fieldDetails
-        const details = section.fieldDetails;
-        section.fieldDetails = details.filter((detail, index) => {
-          const previousFields = details.slice(0, index);
-          return !previousFields.find(f => f.isSame(detail));
-        });
-        return section;
-      })
-      .filter(section => !!section.fieldDetails.length);
   }
 
   elementExisting(index) {
@@ -561,9 +291,10 @@ export class FieldScanner {
       return confidences.map(c => {
         let result = {};
         for (let [fieldName, confidence] of Object.entries(c)) {
-          let type = lazy.FormAutofillUtils.formAutofillConfidencesKeyToCCFieldType(
-            fieldName
-          );
+          let type =
+            lazy.FormAutofillUtils.formAutofillConfidencesKeyToCCFieldType(
+              fieldName
+            );
           result[type] = confidence;
         }
         return result;
@@ -581,7 +312,7 @@ export class FieldScanner {
        * @returns {number} Confidence in range [0, 1]
        */
       function confidence(fieldName) {
-        const ruleset = lazy.creditCardRulesets[fieldName];
+        const ruleset = lazy.CreditCardRulesets[fieldName];
         const fnodes = ruleset.against(element).get(fieldName);
 
         // fnodes is either 0 or 1 item long, since we ran the ruleset
@@ -591,7 +322,7 @@ export class FieldScanner {
 
       // Bang the element against the ruleset for every type of field:
       const confidences = {};
-      lazy.creditCardRulesets.types.map(fieldName => {
+      lazy.CreditCardRulesets.types.map(fieldName => {
         confidences[fieldName] = confidence(fieldName);
       });
 

@@ -5,15 +5,83 @@
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { HeuristicsRegExp } from "resource://gre/modules/shared/HeuristicsRegExp.sys.mjs";
-import { FieldScanner } from "resource://gre/modules/shared/FieldScanner.sys.mjs";
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  creditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
-  LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
   CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
+  CreditCardRulesets: "resource://gre/modules/shared/CreditCardRuleset.sys.mjs",
+  FieldScanner: "resource://gre/modules/shared/FieldScanner.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
+  LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
 });
+
+XPCOMUtils.defineLazyGetter(lazy, "log", () =>
+  FormAutofill.defineLogGetter(lazy, "FormAutofillHeuristics")
+);
+
+/**
+ * To help us classify sections, we want to know what fields can appear
+ * multiple times in a row.
+ * Such fields, like `address-line{X}`, should not break sections.
+ */
+const MULTI_FIELD_NAMES = [
+  "address-level3",
+  "address-level2",
+  "address-level1",
+  "tel",
+  "postal-code",
+  "email",
+  "street-address",
+];
+
+/**
+ * To help us classify sections that can appear only N times in a row.
+ * For example, the only time multiple cc-number fields are valid is when
+ * there are four of these fields in a row.
+ * Otherwise, multiple cc-number fields should be in separate sections.
+ */
+const MULTI_N_FIELD_NAMES = {
+  "cc-number": 4,
+};
+
+export class FormSection {
+  static ADDRESS = "address";
+  static CREDIT_CARD = "creditCard";
+
+  #fieldDetails = [];
+
+  #name = "";
+
+  constructor(fieldDetails) {
+    if (!fieldDetails.length) {
+      throw new TypeError("A section should contain at least one field");
+    }
+
+    fieldDetails.forEach(field => this.addField(field));
+
+    const fieldName = fieldDetails[0].fieldName;
+    if (lazy.FormAutofillUtils.isAddressField(fieldName)) {
+      this.type = FormSection.ADDRESS;
+    } else if (lazy.FormAutofillUtils.isCreditCardField(fieldName)) {
+      this.type = FormSection.CREDIT_CARD;
+    } else {
+      throw new Error("Unknown field type to create a section.");
+    }
+  }
+
+  get fieldDetails() {
+    return this.#fieldDetails;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  addField(fieldDetail) {
+    this.#name ||= fieldDetail.sectionName;
+    this.#fieldDetails.push(fieldDetail);
+  }
+}
 
 /**
  * Returns the autocomplete information of fields according to heuristics.
@@ -233,41 +301,46 @@ export const FormAutofillHeuristics = {
    *          otherwise false.
    */
   _parseAddressFields(fieldScanner) {
-    let parsedFields = false;
-    const addressLines = ["address-line1", "address-line2", "address-line3"];
+    if (fieldScanner.parsingFinished) {
+      return false;
+    }
 
     // TODO: These address-line* regexps are for the lines with numbers, and
     // they are the subset of the regexps in `heuristicsRegexp.js`. We have to
     // find a better way to make them consistent.
+    const addressLines = ["address-line1", "address-line2", "address-line3"];
     const addressLineRegexps = {
       "address-line1": new RegExp(
         "address[_-]?line(1|one)|address1|addr1" +
-        "|addrline1|address_1" + // Extra rules by Firefox
-        "|indirizzo1" + // it-IT
-        "|住所1" + // ja-JP
-        "|地址1" + // zh-CN
+          "|addrline1|address_1" + // Extra rules by Firefox
+          "|indirizzo1" + // it-IT
+          "|住所1" + // ja-JP
+          "|地址1" + // zh-CN
           "|주소.?1", // ko-KR
         "iu"
       ),
       "address-line2": new RegExp(
         "address[_-]?line(2|two)|address2|addr2" +
-        "|addrline2|address_2" + // Extra rules by Firefox
-        "|indirizzo2" + // it-IT
-        "|住所2" + // ja-JP
-        "|地址2" + // zh-CN
+          "|addrline2|address_2" + // Extra rules by Firefox
+          "|indirizzo2" + // it-IT
+          "|住所2" + // ja-JP
+          "|地址2" + // zh-CN
           "|주소.?2", // ko-KR
         "iu"
       ),
       "address-line3": new RegExp(
         "address[_-]?line(3|three)|address3|addr3" +
-        "|addrline3|address_3" + // Extra rules by Firefox
-        "|indirizzo3" + // it-IT
-        "|住所3" + // ja-JP
-        "|地址3" + // zh-CN
+          "|addrline3|address_3" + // Extra rules by Firefox
+          "|indirizzo3" + // it-IT
+          "|住所3" + // ja-JP
+          "|地址3" + // zh-CN
           "|주소.?3", // ko-KR
         "iu"
       ),
     };
+
+    let parsedFields = false;
+    const startIndex = fieldScanner.parsingIndex;
     while (!fieldScanner.parsingFinished) {
       let detail = fieldScanner.getFieldDetailByIndex(
         fieldScanner.parsingIndex
@@ -294,6 +367,23 @@ export const FormAutofillHeuristics = {
         break;
       }
       fieldScanner.parsingIndex++;
+    }
+
+    // If "address-line2" is found but the previous field is "street-address",
+    // then we assume what the website actually wants is "address-line1" instead
+    // of "street-address".
+    if (
+      startIndex > 0 &&
+      fieldScanner.getFieldDetailByIndex(startIndex)?.fieldName ==
+        "address-line2" &&
+      fieldScanner.getFieldDetailByIndex(startIndex - 1)?.fieldName ==
+        "street-address"
+    ) {
+      fieldScanner.updateFieldName(
+        startIndex - 1,
+        "address-line1",
+        "regexp-heuristic"
+      );
     }
 
     return parsedFields;
@@ -340,7 +430,7 @@ export const FormAutofillHeuristics = {
     // it.
     if (
       lazy.FormAutofillUtils.isFathomCreditCardsEnabled() &&
-      lazy.creditCardRulesets.types.includes(detail.fieldName)
+      lazy.CreditCardRulesets.types.includes(detail.fieldName)
     ) {
       fieldScanner.parsingIndex++;
       return true;
@@ -488,25 +578,36 @@ export const FormAutofillHeuristics = {
    *
    * @param {HTMLFormElement} form
    *        the elements in this form to be predicted the field info.
-   * @returns {Array<Array<object>>}
+   * @returns {Array<FormSection>}
    *        all sections within its field details in the form.
    */
   getFormInfo(form) {
-    const eligibleFields = Array.from(form.elements).filter(elem =>
-      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(elem)
+    let elements = Array.from(form.elements).filter(element =>
+      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
     );
 
-    if (eligibleFields.length <= 0) {
-      return [];
+    // Due to potential performance impact while running visibility check on
+    // a large amount of elements, a comprehensive visibility check
+    // (considering opacity and CSS visibility) is only applied when the number
+    // of eligible elements is below a certain threshold.
+    const runVisiblityCheck =
+      elements.length < lazy.FormAutofillUtils.visibilityCheckThreshold;
+    if (!runVisiblityCheck) {
+      lazy.log.debug(
+        `Skip running visibility check, because of too many elements (${elements.length})`
+      );
     }
 
-    let fieldScanner = new FieldScanner(eligibleFields);
+    elements = elements.filter(element =>
+      lazy.FormAutofillUtils.isFieldVisible(element, runVisiblityCheck)
+    );
+
+    let fieldScanner = new lazy.FieldScanner(elements);
     while (!fieldScanner.parsingFinished) {
       let parsedPhoneFields = this._parsePhoneFields(fieldScanner);
       let parsedAddressFields = this._parseAddressFields(fieldScanner);
-      let parsedExpirationDateFields = this._parseCreditCardFields(
-        fieldScanner
-      );
+      let parsedExpirationDateFields =
+        this._parseCreditCardFields(fieldScanner);
 
       // If there is no field parsed, the parsing cursor can be moved
       // forward to the next one.
@@ -521,7 +622,109 @@ export const FormAutofillHeuristics = {
 
     lazy.LabelUtils.clearLabelMap();
 
-    return fieldScanner.getSectionFieldDetails();
+    const fields = fieldScanner.fieldDetails;
+    const sections = [
+      ...this._classifySections(
+        fields.filter(f => lazy.FormAutofillUtils.isAddressField(f.fieldName))
+      ),
+      ...this._classifySections(
+        fields.filter(f =>
+          lazy.FormAutofillUtils.isCreditCardField(f.fieldName)
+        )
+      ),
+    ];
+
+    return sections.sort(
+      (a, b) =>
+        fields.indexOf(a.fieldDetails[0]) - fields.indexOf(b.fieldDetails[0])
+    );
+  },
+
+  /**
+   * The result is an array contains the sections with its belonging field details.
+   *
+   * @param   {Array<FieldDetails>} fieldDetails field detail array to be classified
+   * @returns {Array<FormSection>} The array with the sections.
+   */
+  _classifySections(fieldDetails) {
+    let sections = [];
+    for (let i = 0; i < fieldDetails.length; i++) {
+      const fieldName = fieldDetails[i].fieldName;
+      const sectionName = fieldDetails[i].sectionName;
+
+      const [currentSection] = sections.slice(-1);
+
+      // The section this field might belong to
+      let candidateSection = null;
+
+      // If the field doesn't have a section name, MAYBE put it to the previous
+      // section if exists. If the field has a section name, maybe put it to the
+      // nearest section that either has the same name or it doesn't has a name.
+      // Otherwise, create a new section.
+      if (!currentSection || !sectionName) {
+        candidateSection = currentSection;
+      } else if (sectionName) {
+        for (let idx = sections.length - 1; idx >= 0; idx--) {
+          if (!sections[idx].name || sections[idx].name == sectionName) {
+            candidateSection = sections[idx];
+            break;
+          }
+        }
+      }
+
+      // We got an candidate section to put the field to, check whether the section
+      // already has a field with the same field name. If yes, only add the field to when
+      // the type of the field might appear multiple times in a row.
+      if (candidateSection) {
+        let createNewSection = true;
+        if (candidateSection.fieldDetails.find(f => f.fieldName == fieldName)) {
+          const [lastFieldDetail] = candidateSection.fieldDetails.slice(-1);
+          if (lastFieldDetail.fieldName == fieldName) {
+            if (MULTI_FIELD_NAMES.includes(fieldName)) {
+              createNewSection = false;
+            } else if (fieldName in MULTI_N_FIELD_NAMES) {
+              // This is the heuristic to handle special cases where we can have multiple
+              // fields in one section, but only if the field has appeared N times in a row.
+              // For example, websites can use 4 consecutive 4-digit `cc-number` fields
+              // instead of one 16-digit `cc-number` field.
+
+              const N = MULTI_N_FIELD_NAMES[fieldName];
+              if (lastFieldDetail.part) {
+                // If `part` is set, we have already identified this field can be
+                // merged previously
+                if (lastFieldDetail.part < N) {
+                  createNewSection = false;
+                  fieldDetails[i].part = lastFieldDetail.part + 1;
+                }
+                // If the next N fields are all the same field, we can merge them
+              } else if (
+                N == 2 ||
+                fieldDetails
+                  .slice(i + 1, i + N - 1)
+                  .every(f => f.fieldName == fieldName)
+              ) {
+                lastFieldDetail.part = 1;
+                fieldDetails[i].part = 2;
+                createNewSection = false;
+              }
+            }
+          }
+        } else {
+          // The field doesn't exist in the candidate section, add it.
+          createNewSection = false;
+        }
+
+        if (!createNewSection) {
+          candidateSection.addField(fieldDetails[i]);
+          continue;
+        }
+      }
+
+      // Create a new section
+      sections.push(new FormSection([fieldDetails[i]]));
+    }
+
+    return sections;
   },
 
   _getPossibleFieldNames(element) {
@@ -594,7 +797,7 @@ export const FormAutofillHeuristics = {
     if (lazy.FormAutofillUtils.isFathomCreditCardsEnabled()) {
       // We don't care fields that are not supported by fathom
       const fathomFields = fields.filter(r =>
-        lazy.creditCardRulesets.types.includes(r)
+        lazy.CreditCardRulesets.types.includes(r)
       );
       const [matchedFieldName, confidence] = scanner.getFathomField(
         element,

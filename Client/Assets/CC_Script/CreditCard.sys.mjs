@@ -274,10 +274,7 @@ export class CreditCard {
     if (!name) {
       return null;
     }
-    let lcName = name
-      .trim()
-      .toLowerCase()
-      .normalize("NFKC");
+    let lcName = name.trim().toLowerCase().normalize("NFKC");
     if (SUPPORTED_NETWORKS.includes(lcName)) {
       return lcName;
     }
