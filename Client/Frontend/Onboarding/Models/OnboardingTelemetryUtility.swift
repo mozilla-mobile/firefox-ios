@@ -6,11 +6,13 @@ import Foundation
 
 class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
-    private var cardOrder: [String]
+    private let cardOrder: [String]
+    private let flowType: String
 
     // MARK: - Initializer
     init(with model: OnboardingViewModel) {
         self.cardOrder = model.cards.map { $0.name }
+        self.flowType = model.cards.first?.type ?? "unknown"
     }
 
     // MARK: - Public methods
@@ -56,7 +58,8 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         return [
             Key.cardType.rawValue: cardName,
             Key.sequenceID.rawValue: sequenceID(from: cardOrder),
-            Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder)
+            Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder),
+            Key.flowType.rawValue: flowType
         ]
     }
 
@@ -65,7 +68,9 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     }
 
     // If the card is not available in the original card order, return -1
-    // to indicate an error in telemetry
+    // to indicate an error in telemetry. Given how ``NimbusOnboardingFeatureLayer``
+    // is built & tested, this should never happen, but we want eyes on it, in
+    // the case that it does.
     private func sequencePosition(
         for cardName: String,
         from sequence: [String]

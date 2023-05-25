@@ -637,6 +637,7 @@ extension TelemetryWrapper {
         case cardType = "card-type"
         case sequenceID = "sequence-ID"
         case sequencePosition = "sequence-position"
+        case flowType = "flow-type"
         case buttonAction = "button-action"
 
         // Notification permission
@@ -865,9 +866,11 @@ extension TelemetryWrapper {
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
-               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String {
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.CardViewExtra(
                     cardType: type,
+                    flowType: flowType,
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.cardView.record(cardExtras)
@@ -878,10 +881,12 @@ extension TelemetryWrapper {
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
-               let action = extras?[ExtraKey.buttonAction.rawValue] as? String {
+               let action = extras?[ExtraKey.buttonAction.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.PrimaryButtonTapExtra(
                     buttonAction: action,
                     cardType: type,
+                    flowType: flowType,
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.primaryButtonTap.record(cardExtras)
@@ -892,10 +897,12 @@ extension TelemetryWrapper {
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
-               let action = extras?[ExtraKey.buttonAction.rawValue] as? String {
+               let action = extras?[ExtraKey.buttonAction.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.SecondaryButtonTapExtra(
                     buttonAction: action,
                     cardType: type,
+                    flowType: flowType,
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
@@ -905,9 +912,11 @@ extension TelemetryWrapper {
         case (.action, .tap, .onboardingClose, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
-               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String {
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.CloseTapExtra(
                     cardType: type,
+                    flowType: flowType,
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.closeTap.record(cardExtras)

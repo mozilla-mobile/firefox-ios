@@ -631,13 +631,18 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   primary_button_tap:
     type: event
     description: |
@@ -655,18 +660,23 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
       button_action:
         type: string
         description: |
           The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   secondary_button_tap:
     type: event
     description: |
@@ -684,18 +694,23 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
       button_action:
         type: string
         description: |
           The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   close_tap:
     type: event
     description: |
@@ -713,14 +728,19 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   wallpaper_selected:
     type: event
     description: |
