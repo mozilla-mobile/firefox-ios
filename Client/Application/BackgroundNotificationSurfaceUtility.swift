@@ -31,6 +31,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
             return
         }
 
+        print("WT ### scheduleTaskOnAppBackground")
         let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
 
         // Fetch no earlier than 4 hours from now.
@@ -47,6 +48,8 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
 
     func triggerSurfaceManager() async {
         let hasPermission = await notificationManager.hasPermission()
+		print("WT ### hasPermission \(hasPermission)")
+		print("WT ### shouldShowSurface \(self.surfaceManager.shouldShowSurface)")
 
         if hasPermission, surfaceManager.shouldShowSurface {
             surfaceManager.showNotificationSurface()
