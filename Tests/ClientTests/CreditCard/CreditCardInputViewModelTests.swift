@@ -249,8 +249,6 @@ class CreditCardInputViewModelTests: XCTestCase {
                 // Update name and expiration
                 self.viewModel.nameOnCard = "Mickey Mouse"
                 self.viewModel.expirationDate = "0256"
-                // Note: We do not test encrypted card number
-                // but is required to update card
                 self.viewModel.cardNumber = "5427754897487332"
                 // Update card with new values
                 self.viewModel.updateCreditCard { success, error in
@@ -261,10 +259,12 @@ class CreditCardInputViewModelTests: XCTestCase {
                         ccUpdatedCard, error in
                         XCTAssertNil(error)
                         XCTAssertNotNil(ccUpdatedCard)
-
                         XCTAssertEqual(ccUpdatedCard?.ccName, "Mickey Mouse")
                         XCTAssertEqual(ccUpdatedCard?.ccExpYear, 56)
                         XCTAssertEqual(ccUpdatedCard?.ccExpMonth, 02)
+                        // Note: We do not test encrypted card number
+                        // but the last 4 digits
+                        XCTAssertNotNil(ccUpdatedCard?.ccNumberLast4, "7332")
                         expectation.fulfill()
                     }
                 }
