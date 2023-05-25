@@ -485,6 +485,15 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             }
         }
         return headerView
+
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let footerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: PocketFooterView.cellIdentifier,
+                for: indexPath) as? PocketFooterView,
+              viewModel.getSectionViewModel(shownSection: indexPath.section)?.sectionType == .pocket
+        else { return UICollectionReusableView() }
+        return footerView
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
