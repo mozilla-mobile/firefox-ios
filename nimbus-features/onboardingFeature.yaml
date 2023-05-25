@@ -12,32 +12,14 @@ features:
           If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
         default: true
-      notification-card-position:
-        description: >
-          This provides the setting for how we show the notification card in onboarding.
-        type: NotificationCard
-        default: no-card
     defaults:
       - channel: beta
         value: {
           "upgrade-flow": false,
           "first-run-flow": true,
-          "notification-card-position": no-card
         }
       - channel: developer
         value: {
           "upgrade-flow": false,
           "first-run-flow": true,
-          "notification-card-position": after-sync
         }
-
-enums:
-  NotificationCard:
-    description: The identifiers for the different types of options for the notification card in onboarding
-    variants:
-      no-card:
-        description: The notification card is not shown
-      before-sync:
-        description: The notification card is shown before the sync card
-      after-sync:
-        description: The notification card is shown after the sync card
