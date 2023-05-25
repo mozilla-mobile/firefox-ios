@@ -740,13 +740,8 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-<<<<<<< HEAD
-        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
-    - deploy-to-bitrise-io@1.9: {}
-=======
         - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
     - deploy-to-bitrise-io@2.2: {}
->>>>>>> 270b4e0d5 (Refactor MTE-446 [v114] Use XCode 14.3 and iOS 16.4 (#14233))
     - cache-push@2.4: {}
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
