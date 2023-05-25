@@ -8,29 +8,27 @@ import Glean
 @testable import Client
 
 class OnboardingCardViewModelTests: XCTestCase {
+    typealias CardNames = NimbusOnboardingConfigUtility.CardOrder
 // Disabled. To be fixed when https://mozilla-hub.atlassian.net/browse/FXIOS-6358
 // is implemented.
-//    var subject: OnboardingCardViewModel!
-//
-//    override func setUp() {
-//        super.setUp()
-//        Glean.shared.resetGlean(clearStores: true)
-//    }
-//
-//    override func tearDown() {
-//        super.tearDown()
-//        Glean.shared.resetGlean(clearStores: true)
-//        subject = nil
-//    }
-//
-//    func testSendOnboardingCardView_WelcomeCard() {
-//        subject = OnboardingCardViewModel(cardType: .welcome,
-//                                          infoModel: createInfoModel())
-//        subject.sendCardViewTelemetry()
-//
-//        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
-//    }
-//
+    override func setUp() {
+        super.setUp()
+        Glean.shared.resetGlean(clearStores: true)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        Glean.shared.resetGlean(clearStores: true)
+    }
+
+    func testSendOnboardingCardView_WelcomeCard_Success() {
+        let subject = createTelemetryUtility()
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+    }
+
 //    func testSendOnboardingCardView_SyncCard() {
 //        subject = OnboardingCardViewModel(cardType: .signSync,
 //                                          infoModel: createInfoModel())
@@ -104,21 +102,36 @@ class OnboardingCardViewModelTests: XCTestCase {
 //
 //        testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.secondaryButtonTap)
 //    }
-//
-//    // MARK: Private
-//    private func createInfoModel() -> OnboardingCardInfoModelProtocol {
-//        return OnboardingCardInfoModel(
-//            name: "name",
-//            title: "Title",
-//            body: "Description",
-//            link: OnboardingLinkInfoModel(
-//                title: "Link",
-//                url: URL(string: "https://macrumors.com")!),
-//            buttons: OnboardingButtons(
-//                primary: OnboardingButtonInfoModel(title: "Button1", action: .nextCard),
-//                secondary: OnboardingButtonInfoModel(title: "Button2", action: .nextCard)),
-//            type: .freshInstall,
-//            a11yIdRoot: "A11yId",
-//            imageID: "image")
-//    }
+
+    // MARK: Private
+    private func createTelemetryUtility(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> OnboardingTelemetryUtility {
+        let nimbusConfigUtility = NimbusOnboardingConfigUtility()
+        nimbusConfigUtility.clearNimbus()
+        nimbusConfigUtility.setupNimbus(
+            withOrder: NimbusOnboardingConfigUtility.CardOrder.allCards)
+        let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+
+        let telemetryUtility = OnboardingTelemetryUtility(with: model)
+        trackForMemoryLeaks(telemetryUtility, file: file, line: line)
+
+        return telemetryUtility
+    }
+    private func createInfoModel() -> OnboardingCardInfoModelProtocol {
+        return OnboardingCardInfoModel(
+            name: "name",
+            title: "Title",
+            body: "Description",
+            link: OnboardingLinkInfoModel(
+                title: "Link",
+                url: URL(string: "https://macrumors.com")!),
+            buttons: OnboardingButtons(
+                primary: OnboardingButtonInfoModel(title: "Button1", action: .nextCard),
+                secondary: OnboardingButtonInfoModel(title: "Button2", action: .nextCard)),
+            type: .freshInstall,
+            a11yIdRoot: "A11yId",
+            imageID: "image")
+    }
 }

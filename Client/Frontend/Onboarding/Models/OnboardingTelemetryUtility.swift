@@ -15,11 +15,12 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     // MARK: - Public methods
     func sendCardViewTelemetry(from cardName: String) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .onboardingCardView,
-                                     value: nil,
-                                     extras: buildBaseTelemetryExtras(using: cardName))
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .onboardingCardView,
+            value: nil,
+            extras: buildBaseTelemetryExtras(using: cardName))
     }
 
     func sendButtonActionTelemetry(
@@ -36,7 +37,6 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 .merging(
                     buildAdditioalButtonTelemetryExtras(using: action),
                     uniquingKeysWith: { (first, _) in first }))
-        )
     }
 
     func sendDismissOnboardingTelemetry(from cardName: String) {
@@ -45,7 +45,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             method: .tap,
             object: .onboardingClose,
             value: nil,
-            extras: buildTelemetryExtras(using: cardName))
+            extras: buildBaseTelemetryExtras(using: cardName))
     }
 
     // MARK: - Private fuctions

@@ -875,22 +875,42 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .onboardingPrimaryButton, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: type)
-                GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let action = extras?[ExtraKey.buttonAction.rawValue] as? String {
+                let cardExtras = GleanMetrics.Onboarding.PrimaryButtonTapExtra(
+                    buttonAction: action,
+                    cardType: type,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.primaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .onboardingSecondaryButton, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Onboarding.SecondaryButtonTapExtra(cardType: type)
-                GleanMetrics.Onboarding.secondaryButtonTap.record(cardTypeExtra)
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let action = extras?[ExtraKey.buttonAction.rawValue] as? String {
+                let cardExtras = GleanMetrics.Onboarding.SecondaryButtonTapExtra(
+                    buttonAction: action,
+                    cardType: type,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .onboardingClose, _, let extras):
-            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String {
+                let cardExtras = GleanMetrics.Onboarding.CloseTapExtra(
+                    cardType: type,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.closeTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
