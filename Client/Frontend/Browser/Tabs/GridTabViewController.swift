@@ -223,6 +223,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        // Temporary solution using asyncAfter for fixing https://mozilla-hub.atlassian.net/browse/FXIOS-5711
+        // Will be changed once the TabTray logic will be reimplemented
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.focusItem()
         }
