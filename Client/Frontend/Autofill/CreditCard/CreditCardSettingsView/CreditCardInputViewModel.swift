@@ -162,7 +162,7 @@ class CreditCardInputViewModel: ObservableObject {
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: Text(CreditCardText.RemoveCardSublabel),
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
-                [self] in
+                [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
@@ -177,7 +177,7 @@ class CreditCardInputViewModel: ObservableObject {
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: nil,
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
-                [self] in
+                [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
