@@ -637,6 +637,7 @@ extension TelemetryWrapper {
         case cardType = "card-type"
         case sequenceID = "sequence-ID"
         case sequencePosition = "sequence-position"
+        case buttonAction = "button-action"
 
         // Notification permission
         case notificationPermissionIsGranted = "is-granted"

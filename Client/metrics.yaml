@@ -647,6 +647,18 @@ onboarding:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
@@ -664,6 +676,18 @@ onboarding:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
@@ -681,6 +705,14 @@ onboarding:
         type: string
         description: |
           The card presented when the onboarding was closed
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:

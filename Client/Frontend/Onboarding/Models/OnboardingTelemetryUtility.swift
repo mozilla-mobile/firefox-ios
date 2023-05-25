@@ -19,7 +19,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                                      method: .view,
                                      object: .onboardingCardView,
                                      value: nil,
-                                     extras: buildTelemetryExtras(using: cardName))
+                                     extras: buildBaseTelemetryExtras(using: cardName))
     }
 
     func sendButtonActionTelemetry(
@@ -32,7 +32,11 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             method: .tap,
             object: primaryButton ? .onboardingPrimaryButton : .onboardingSecondaryButton,
             value: nil,
-            extras: buildTelemetryExtras(using: cardName))
+            extras: buildBaseTelemetryExtras(using: cardName)
+                .merging(
+                    buildAdditioalButtonTelemetryExtras(using: action),
+                    uniquingKeysWith: { (first, _) in first }))
+        )
     }
 
     func sendDismissOnboardingTelemetry(from cardName: String) {
@@ -45,7 +49,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     }
 
     // MARK: - Private fuctions
-    private func buildTelemetryExtras(
+    private func buildBaseTelemetryExtras(
         using cardName: String
     ) -> [String: String] {
         typealias Key = TelemetryWrapper.EventExtraKey
@@ -67,5 +71,11 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         from sequence: [String]
     ) -> String {
         return String(sequence.firstIndex { $0 == cardName } ?? -1)
+    }
+
+    private func buildAdditioalButtonTelemetryExtras(
+        using buttonAction: OnboardingActions
+    ) -> [String: String] {
+        return [TelemetryWrapper.EventExtraKey.buttonAction.rawValue: buttonAction.rawValue]
     }
 }

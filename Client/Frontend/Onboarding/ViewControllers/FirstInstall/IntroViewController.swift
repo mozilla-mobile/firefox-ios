@@ -125,8 +125,8 @@ class IntroViewController: UIViewController,
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
-// FXIOS-6358 - Implement telemetry
-//        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
+        viewModel.telemetryUtility.sendDismissOnboardingTelemetry(
+            from: viewModel.availableCards[pageControl.currentPage].viewModel.name)
     }
 
     @objc
@@ -185,6 +185,11 @@ extension IntroViewController: OnboardingCardDelegate {
         from cardName: String,
         isPrimaryButton: Bool
     ) {
+        viewModel.telemetryUtility.sendButtonActionTelemetry(
+            from: cardName,
+            with: action,
+            and: isPrimaryButton)
+
         switch action {
         case .requestNotifications:
             askForNotificationPermission(from: cardName)
