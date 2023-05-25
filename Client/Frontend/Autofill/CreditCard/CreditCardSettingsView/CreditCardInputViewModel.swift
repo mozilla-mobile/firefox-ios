@@ -161,9 +161,9 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: Text(CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
-                guard let creditCard = creditCard else { return }
-                dismissAndRemoveCreditCard()
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
+                [self] in
+                self.dismissAndRemoveCreditCard()
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -174,9 +174,9 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
-                guard let creditCard = creditCard else { return }
-                dismissAndRemoveCreditCard()
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
+                [self] in
+                self.dismissAndRemoveCreditCard()
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
