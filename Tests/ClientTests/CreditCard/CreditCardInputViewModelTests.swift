@@ -235,7 +235,7 @@ class CreditCardInputViewModelTests: XCTestCase {
     }
 
     func testUpdateCreditCard() {
-        let expectation = expectation(description: "wait for credit card to be removed")
+        let expectation = expectation(description: "wait for credit card to be updated")
         // Add sample card
         viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) {
             ccCard, error in
