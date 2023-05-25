@@ -16,14 +16,14 @@ class GleanPlumbContextProvider {
     }
 
     struct Constant {
-        #if MOZ_CHANNEL_FENNEC
-        // shorter time interval for development
-        static let activityReferencePeriod = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
-        static let inactivityPeriod = activityReferencePeriod / 2 // 1 minutes in milliseconds
-        #else
+//        #if MOZ_CHANNEL_FENNEC && TARGET_OS_SIMULATOR
+//        // shorter time interval for development
+//        static let activityReferencePeriod = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
+//        static let inactivityPeriod = activityReferencePeriod / 2 // 1 minutes in milliseconds
+//        #else
         static let activityReferencePeriod = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
         static let inactivityPeriod = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
-        #endif
+//        #endif
     }
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
