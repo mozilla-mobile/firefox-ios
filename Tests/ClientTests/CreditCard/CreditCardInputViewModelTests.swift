@@ -224,13 +224,6 @@ class CreditCardInputViewModelTests: XCTestCase {
     }
 
     func testFailureToRemoveCreditCard() {
-        let unencryptedCreditCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
-                                                                ccNumber: "4539185806954013",
-                                                                ccNumberLast4: "4013",
-                                                                ccExpMonth: 08,
-                                                                ccExpYear: 2055,
-                                                                ccType: "VISA")
-
         let expectation = expectation(description: "wait for credit card to be removed")
 
         self.viewModel.removeCreditCard(creditCard: nil) {
