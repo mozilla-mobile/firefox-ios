@@ -101,18 +101,19 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                 $0.data.surface == surface
             }
 
-        // If `GleanPlumbHelper` creation fails, we cannot continue with this feature! For that reason, return `nil`.
-        // We need to recreate the helper for each request to get a message because device context can change.
-        guard let gleanPlumbHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
+        // If `NimbusMessagingHelper` creation fails, we cannot continue with this
+        // feature! For that reason, return `nil`. We need to recreate the helper
+        // for each request to get a message because device context can change.
+        guard let messagingHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
 
         // Take the first triggered message.
-        guard let message = getNextTriggeredMessage(messages, gleanPlumbHelper) else { return nil }
+        guard let message = getNextTriggeredMessage(messages, messagingHelper) else { return nil }
 
         // If it's a message under experiment, we need to react to whether it's a control or not.
         if message.isUnderExperimentWith(key: feature.messageUnderExperiment) {
             guard let nextTriggeredMessage = handleMessageUnderExperiment(message,
                                                                           messages,
-                                                                          gleanPlumbHelper,
+                                                                          messagingHelper,
                                                                           feature.onControl)
             else { return nil }
 

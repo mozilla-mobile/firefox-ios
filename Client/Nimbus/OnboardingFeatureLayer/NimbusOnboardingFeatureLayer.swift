@@ -53,9 +53,26 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // and not included in the list of cards.
         return cardOrder
             .compactMap { cardName in
-                guard let card = cards.first(where: { $0.name == cardName }) else { return nil }
-                return card
-            }.filter { $0.type == onboardingType }
+                if let card = cards.first(where: { $0.name == cardName }) {
+                    return card
+                }
+
+                return nil
+            }
+            .filter { $0.type == onboardingType }
+            .enumerated()
+            .map { index, card in
+                // We have to update the a11yIdRoot using the correct order of the cards
+                return OnboardingCardInfoModel(
+                    name: card.name,
+                    title: card.title,
+                    body: card.body,
+                    link: card.link,
+                    buttons: card.buttons,
+                    type: card.type,
+                    a11yIdRoot: "\(card.a11yIdRoot)\(index)",
+                    imageID: card.imageID)
+            }
     }
 
     /// Converts ``NimbusOnboardingCardData`` to ``OnboardingCardInfoModel``
@@ -100,18 +117,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             }
 
             return nil
-        }
-        .enumerated()
-        .map { index, card in
-            return OnboardingCardInfoModel(
-                name: card.name,
-                title: card.title,
-                body: card.body,
-                link: card.link,
-                buttons: card.buttons,
-                type: card.type,
-                a11yIdRoot: "\(card.a11yIdRoot)\(index)",
-                imageID: card.imageID)
         }
     }
 
