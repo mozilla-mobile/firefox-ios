@@ -67,7 +67,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         return sequence.joined(separator: "_")
     }
 
-    // If the card is not available in the original card order, return -1
+    // If the card is not available in the original card order, return 0 (zero)
     // to indicate an error in telemetry. Given how ``NimbusOnboardingFeatureLayer``
     // is built & tested, this should never happen, but we want eyes on it, in
     // the case that it does.
@@ -75,7 +75,9 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         for cardName: String,
         from sequence: [String]
     ) -> String {
-        return String(sequence.firstIndex { $0 == cardName } ?? -1)
+        // We add 1 to a regular index for a DataScience requested sequence
+        // starting at 1, rather than 0.
+        return String((sequence.firstIndex { $0 == cardName } ?? -1) + 1)
     }
 
     private func buildAdditioalButtonTelemetryExtras(
