@@ -118,6 +118,9 @@ onboarding-framework-feature:
     cards:
       type: json
       description: "The list of available cards for onboarding.\n"
+    conditions:
+      type: json
+      description: "A collection of out the box conditional expressions to be used in determining whether a card should show or not. Each entry maps to a valid JEXL expression.\n"
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
