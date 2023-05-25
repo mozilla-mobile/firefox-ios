@@ -51,7 +51,6 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
 
     func sendCardViewTelemetry(from cardName: String) { }
 
-
     func presentPrivacyPolicy(
         from cardName: String,
         selector: Selector?,
