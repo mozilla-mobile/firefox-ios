@@ -37,9 +37,11 @@ class NotificationService: UNNotificationServiceExtension {
 
         let handler = FxAPushMessageHandler(with: profile)
 
-        handler.handle(userInfo: userInfo).upon { res in
-            guard res.isSuccess, let event = res.successValue else {
-                self.didFinish(nil, with: res.failureValue as? PushMessageError)
+        handler.handle(userInfo: userInfo) { res in
+            guard case .success(let event) = res else {
+                if case .failure(let failure) = res {
+                    self.didFinish(nil, with: failure)
+                }
                 return
             }
 
