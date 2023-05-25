@@ -11,12 +11,12 @@ on:
 
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-13
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.9]
-        xcode: ["13.0"]
+        xcode: ["14.3.0"]
     steps:
     - uses: actions/checkout@v2
       with:
