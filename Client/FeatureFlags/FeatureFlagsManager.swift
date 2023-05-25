@@ -74,7 +74,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
         switch featureID {
-        case .onboardingNotificationCard: return OnboardingNotificationCardPosition(rawValue: userSetting) as? T
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
         case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
@@ -83,7 +82,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
 
     private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
         switch featureID {
-        case .onboardingNotificationCard: return .onboardingNotificationCard
         case .searchBarPosition: return .bottomSearchBar
         case .startAtHome: return .startAtHome
         case .wallpaperVersion: return .wallpaperVersion
@@ -119,7 +117,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
                 feature.setUserPreference(to: option.rawValue)
             }
 
-        case .wallpaperVersion, .onboardingNotificationCard: return
+        case .wallpaperVersion: return
         }
     }
 
