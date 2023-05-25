@@ -199,8 +199,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         delegate?.pageChanged(from: viewModel.name)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         delegate?.sendCardViewTelemetry(from: viewModel.name)
     }
 

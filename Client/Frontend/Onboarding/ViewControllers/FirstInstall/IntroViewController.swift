@@ -121,7 +121,7 @@ class IntroViewController: UIViewController,
 
     // MARK: - Button actions
     @objc
-    private func closeOnboarding() {
+    func closeOnboarding() {
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
