@@ -163,7 +163,9 @@ class CreditCardInputViewModel: ObservableObject {
             alertBody: Text(CreditCardText.RemoveCardSublabel),
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
                 [self] in
-                self.dismissAndRemoveCreditCard()
+                self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                    self.dismiss?(status, successVal)
+                }
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -176,7 +178,9 @@ class CreditCardInputViewModel: ObservableObject {
             alertBody: nil,
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
                 [self] in
-                self.dismissAndRemoveCreditCard()
+                self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                    self.dismiss?(status, successVal)
+                }
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -253,20 +257,24 @@ class CreditCardInputViewModel: ObservableObject {
                                   completion: completion)
     }
 
-    private func dismissAndRemoveCreditCard() {
+    func removeCreditCard(creditCard: CreditCard?,
+                          completion: @escaping (CreditCardModifiedStatus, Bool) -> Void) {
         guard let currentCreditCard = creditCard,
               !currentCreditCard.guid.isEmpty else {
+            completion(.none, false)
             return
         }
+
         autofill.deleteCreditCard(id: currentCreditCard.guid) {
             status, error in
             guard let error = error, status == true else {
-                self.dismiss?(.removedCard, true)
+                completion(.removedCard, true)
                 return
             }
             self.logger?.log("Unable to remove credit card: \(error)",
                              level: .warning,
                              category: .storage)
+            completion(.none, false)
         }
     }
 

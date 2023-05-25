@@ -193,6 +193,56 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.creditCard)
     }
 
+    func testSuccessRemoveCreditCard() {
+        let unencryptedCreditCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
+                                                                ccNumber: "4539185806954013",
+                                                                ccNumberLast4: "4013",
+                                                                ccExpMonth: 08,
+                                                                ccExpYear: 2055,
+                                                                ccType: "VISA")
+
+        let expectation = expectation(description: "wait for credit card to be removed")
+
+        viewModel.autofill.addCreditCard(creditCard: unencryptedCreditCard) {
+            ccCard, error in
+            guard let ccCard = ccCard else {
+                XCTFail("no credit card saved to be tested")
+                return
+            }
+            guard let error = error else {
+                self.viewModel.removeCreditCard(creditCard: ccCard) {
+                    status, success in
+                    XCTAssertEqual(status, .removedCard)
+                    XCTAssertTrue(success)
+                    expectation.fulfill()
+                }
+                return
+            }
+            XCTFail("Error removing credit card \(error)")
+        }
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func testFailureToRemoveCreditCard() {
+        let unencryptedCreditCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
+                                                                ccNumber: "4539185806954013",
+                                                                ccNumberLast4: "4013",
+                                                                ccExpMonth: 08,
+                                                                ccExpYear: 2055,
+                                                                ccType: "VISA")
+
+        let expectation = expectation(description: "wait for credit card to be removed")
+
+        self.viewModel.removeCreditCard(creditCard: nil) {
+            status, success in
+            XCTAssertEqual(status, .none)
+            XCTAssertFalse(success)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0)
+    }
+
     // MARK: Helpers
 
     func rightBarButtonDisabled_Empty_CardName(
