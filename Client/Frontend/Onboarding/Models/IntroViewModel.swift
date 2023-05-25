@@ -41,16 +41,6 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-// FXIOS-6358 - Implement telemetry
-//    func sendCloseButtonTelemetry(index: Int) {
-//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: availableCards[index].viewModel.infoModel.name]
-//
-//        TelemetryWrapper.recordEvent(category: .action,
-//                                     method: .tap,
-//                                     object: .onboardingClose,
-//                                     extras: extra)
-//    }
-
     func saveHasSeenOnboarding() {
         introScreenManager?.didSeeIntroScreen()
     }

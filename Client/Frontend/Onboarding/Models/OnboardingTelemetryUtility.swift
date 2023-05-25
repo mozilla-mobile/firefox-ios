@@ -5,7 +5,7 @@
 import Foundation
 
 class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
-    // MARK: - Properties 6358
+    // MARK: - Properties
     private var cardOrder: [String]
 
     // MARK: - Initializer
