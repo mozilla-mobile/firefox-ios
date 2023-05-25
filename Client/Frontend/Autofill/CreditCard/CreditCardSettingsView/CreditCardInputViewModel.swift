@@ -267,7 +267,7 @@ class CreditCardInputViewModel: ObservableObject {
 
         autofill.deleteCreditCard(id: currentCreditCard.guid) {
             status, error in
-            guard let error = error, status == true else {
+            guard let error = error, status else {
                 completion(.removedCard, true)
                 return
             }
