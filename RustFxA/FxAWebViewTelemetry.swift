@@ -55,7 +55,10 @@ class FxAWebViewTelemetry {
 
         return flow
     }
-
+    /// Records telemetry for  a particular FxAFlow
+    ///
+    /// - Parameters:
+    ///     - flow: A type of FxAFlow for which telemetry has
     func recordTelemetry(for flow: FxAFlow) {
         let eventObject: TelemetryWrapper.EventObject
         
