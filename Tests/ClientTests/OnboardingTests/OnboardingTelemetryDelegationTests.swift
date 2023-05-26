@@ -7,7 +7,7 @@ import Glean
 
 @testable import Client
 
-class OnboardingTelemetryDelegationTestse: XCTestCase {
+class OnboardingTelemetryDelegationTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingConfigUtility!
     typealias cards = NimbusOnboardingConfigUtility.CardOrder
 
