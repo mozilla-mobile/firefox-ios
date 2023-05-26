@@ -121,12 +121,12 @@ class IntroViewController: UIViewController,
 
     // MARK: - Button actions
     @objc
-    private func closeOnboarding() {
+    func closeOnboarding() {
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
-// FXIOS-6358 - Implement telemetry
-//        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
+        viewModel.telemetryUtility.sendDismissOnboardingTelemetry(
+            from: viewModel.availableCards[pageControl.currentPage].viewModel.name)
     }
 
     @objc
@@ -182,8 +182,14 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from cardName: String
+        from cardName: String,
+        isPrimaryButton: Bool
     ) {
+        viewModel.telemetryUtility.sendButtonActionTelemetry(
+            from: cardName,
+            with: action,
+            and: isPrimaryButton)
+
         switch action {
         case .requestNotifications:
             askForNotificationPermission(from: cardName)
@@ -211,6 +217,10 @@ extension IntroViewController: OnboardingCardDelegate {
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         }
+    }
+
+    func sendCardViewTelemetry(from cardName: String) {
+        viewModel.telemetryUtility.sendCardViewTelemetry(from: cardName)
     }
 
     private func showNextPageCompletionForLastCard() {

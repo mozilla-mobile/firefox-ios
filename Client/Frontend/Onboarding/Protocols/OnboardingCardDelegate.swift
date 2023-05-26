@@ -14,9 +14,13 @@ import Shared
 /// function is implemented uniquely in its respective view controller, to account
 /// for the difference in flows that the two onboarding paths represent.
 protocol OnboardingCardDelegate: AnyObject {
+    // These methods must be implemented by the object
     func handleButtonPress(for action: OnboardingActions,
-                           from cardName: String)
+                           from cardName: String,
+                           isPrimaryButton: Bool)
+    func sendCardViewTelemetry(from cardName: String)
 
+    // Implemented by default for code sharing
     func presentPrivacyPolicy(from cardName: String,
                               selector: Selector?,
                               completion: (() -> Void)?,
@@ -45,8 +49,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         referringPage: ReferringPage = .onboarding
     ) {
         guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.infoModel.name == cardName})?
-            .viewModel.infoModel,
+            .first(where: { $0.viewModel.name == cardName})?
+            .viewModel,
               let url = infoModel.link?.url
         else { return }
 
@@ -67,6 +71,19 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     // MARK: - Default Browser Popup
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6359
     func presentDefaultBrowserPopup() {
+<<<<<<< HEAD
+=======
+        guard let a11yIdRoot = viewModel.availableCards.first?.viewModel.a11yIdRoot else { return }
+        let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
+        let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel)
+        var bottomSheetViewModel = BottomSheetViewModel()
+        bottomSheetViewModel.shouldDismissForTapOutside = true
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController)
+
+        self.present(bottomSheetVC, animated: false, completion: nil)
+>>>>>>> 46155d2a8 (Add FXIOS-6358 [v114] Onboarding telemetry (#14566))
     }
 
     // MARK: - Sync sign in
@@ -101,7 +118,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         from cardName: String,
         completionIfLastCard completion: () -> Void
     ) {
-        guard cardName != viewModel.availableCards.last?.viewModel.infoModel.name else {
+        guard cardName != viewModel.availableCards.last?.viewModel.name else {
             completion()
             return
         }
@@ -113,7 +130,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     // because UIPageViewControllerDataSource call fails
     func pageChanged(from cardName: String) {
         guard let cardIndex = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
+            .firstIndex(where: { $0.viewModel.name == cardName }),
               cardIndex != pageControl.currentPage
         else { return }
 

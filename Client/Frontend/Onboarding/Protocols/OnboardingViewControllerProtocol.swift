@@ -25,7 +25,7 @@ extension OnboardingViewControllerProtocol {
 
     func moveToNextPage(from cardName: String) {
         guard let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName }),
+            .firstIndex(where: { $0.viewModel.name == cardName }),
               let nextViewController = getNextOnboardingCard(index: index, goForward: true)
         else { return }
 
@@ -39,10 +39,10 @@ extension OnboardingViewControllerProtocol {
     // Due to restrictions with PageViewController we need to get the index of the current view controller
     // to calculate the next view controller
     func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardName = viewController.viewModel.infoModel.name
+        let cardName = viewController.viewModel.name
 
         guard let index = viewModel.availableCards
-            .firstIndex(where: { $0.viewModel.infoModel.name == cardName })
+            .firstIndex(where: { $0.viewModel.name == cardName })
         else { return nil }
 
         return index
