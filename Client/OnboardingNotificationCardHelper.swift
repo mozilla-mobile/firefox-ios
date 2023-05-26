@@ -4,17 +4,22 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper: FeatureFlaggable {
-    var cardPosition: OnboardingNotificationCardPosition {
-        return featureFlags.getCustomState(for: .onboardingNotificationCard) ?? .noCard
+struct OnboardingNotificationCardHelper {
+    private func notificationCardIsInOnboarding(
+        from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
+    ) -> Bool {
+        return featureLayer
+            .getOnboardingModel(for: .freshInstall)
+            .cards
+            .contains {
+                return $0.buttons.primary.action == .requestNotifications
+                || $0.buttons.secondary?.action == .requestNotifications
+            }
     }
 
     func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
-        switch cardPosition {
-        case .noCard:
-            return true
-        case .beforeSync, .afterSync:
-            return !isOnboarding // we ask for permission on notification card instead
-        }
+        if notificationCardIsInOnboarding() { return false }
+
+        return isOnboarding
     }
 }
