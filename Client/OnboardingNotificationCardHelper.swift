@@ -4,7 +4,7 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper {
+struct OnboardingNotificationCardHelper {
     private func notificationCardIsInOnboarding(
         from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
     ) -> Bool {

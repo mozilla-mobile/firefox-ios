@@ -26,9 +26,9 @@ class OnboardingNotificationHelperTests: XCTestCase {
     func testHelper_fromOnboarding_noNotificationCard_returnsTrue() {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeSync)
         let expectedResult = true
+        let subject = createSubject()
 
-        let result = OnboardingNotificationCardHelper()
-            .askForPermissionDuringSync(isOnboarding: true)
+        let result = subject.askForPermissionDuringSync(isOnboarding: true)
 
         XCTAssertEqual(result, expectedResult)
     }
@@ -36,9 +36,9 @@ class OnboardingNotificationHelperTests: XCTestCase {
     func testHelper_fromUpgrade_noNotificationCard_returnsFalse() {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeSync)
         let expectedResult = false
+        let subject = createSubject()
 
-        let result = OnboardingNotificationCardHelper()
-            .askForPermissionDuringSync(isOnboarding: false)
+        let result = subject.askForPermissionDuringSync(isOnboarding: false)
 
         XCTAssertEqual(result, expectedResult)
     }
@@ -46,10 +46,22 @@ class OnboardingNotificationHelperTests: XCTestCase {
     func testHelper_fromOnboarding_withNotificationCard_returnsFalse() {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
         let expectedResult = false
+        let subject = createSubject()
 
-        let result = OnboardingNotificationCardHelper()
-            .askForPermissionDuringSync(isOnboarding: true)
+        let result = subject.askForPermissionDuringSync(isOnboarding: true)
 
         XCTAssertEqual(result, expectedResult)
+    }
+
+    // MARK: - Helper
+    private func createSubject(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> OnboardingNotificationCardHelper {
+        let subject = OnboardingNotificationCardHelper()
+
+        trackForMemoryLeaks(subject, file: file, line: line)
+
+        return subject
     }
 }
