@@ -37,17 +37,17 @@ class SessionRestoreTests: KIFTestCase {
         tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: restoreURL!.absoluteString)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.backButton)
 
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.backButton)
 
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish(withTimeout: 5)
 
         let canGoBack: Bool
         do {
-            try tester().tryFindingTappableView(withAccessibilityLabel: "Back")
+            try tester().tryFindingTappableView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.backButton)
             canGoBack = true
         } catch _ {
             canGoBack = false
@@ -55,15 +55,15 @@ class SessionRestoreTests: KIFTestCase {
 
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
 
-        tester().tapView(withAccessibilityLabel: "Forward")
-        tester().tapView(withAccessibilityLabel: "Forward")
-        tester().tapView(withAccessibilityLabel: "Forward")
+        tester().tapView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.forwardButton)
+        tester().tapView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.forwardButton)
+        tester().tapView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.forwardButton)
 
         tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool
         do {
-            try tester().tryFindingTappableView(withAccessibilityLabel: "Forward")
+            try tester().tryFindingTappableView(withAccessibilityLabel: AccessibilityIdentifiers.Toolbar.forwardButton)
             canGoForward = true
         } catch _ {
             canGoForward = false

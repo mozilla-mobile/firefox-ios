@@ -131,11 +131,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         tester().tapView(withAccessibilityIdentifier: "prefkey.trackingprotection.normalbrowsing")
         closeTPSetting()
 
-        if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")
-        } else {
-            tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        }
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
 
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.newTabButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

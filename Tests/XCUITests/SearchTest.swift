@@ -142,11 +142,7 @@ class SearchTests: BaseTestCase {
             waitUntilPageLoad()
 
             // Go back, write part of moz, check the autocompletion
-            if iPad() {
-                app.buttons["URLBarView.backButton"].tap()
-            } else {
-                app.buttons["TabToolbar.backButton"].tap()
-            }
+            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
             navigator.nowAt(HomePanelsScreen)
             waitForTabsButton()
             typeOnSearchBar(text: "moz")
@@ -246,7 +242,7 @@ class SearchTests: BaseTestCase {
             waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
             app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-            app.buttons["TabToolbar.backButton"].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
 
             waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")

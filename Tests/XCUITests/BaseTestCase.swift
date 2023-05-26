@@ -228,14 +228,9 @@ class BaseTestCase: XCTestCase {
 
     func waitForTabsButton() {
         if iPad() {
-        waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
         } else {
-            // iPhone sim tabs button is called differently when in portrait or landscape
-            if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 15)
-            } else {
-                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 15)
-            }
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
         }
     }
 }
@@ -260,7 +255,7 @@ class IphoneOnlyTestCase: BaseTestCase {
 
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
-        return app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
+        return app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
     }
 }
 
