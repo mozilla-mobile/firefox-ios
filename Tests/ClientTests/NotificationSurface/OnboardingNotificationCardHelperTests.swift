@@ -4,10 +4,12 @@
 
 import Foundation
 import XCTest
+import Shared
+import Common
 
 @testable import Client
 
-class OnboardingNotificationHelperTests: XCTestCase {
+class OnboardingNotificationCardHelperTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingConfigUtility!
     typealias cards = NimbusOnboardingConfigUtility.CardOrder
 
