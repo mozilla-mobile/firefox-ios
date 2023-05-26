@@ -230,7 +230,7 @@ class BaseTestCase: XCTestCase {
         if iPad() {
             waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
         } else {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
         }
     }
 }
