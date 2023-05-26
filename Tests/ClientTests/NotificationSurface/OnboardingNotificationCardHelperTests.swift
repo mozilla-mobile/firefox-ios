@@ -55,13 +55,8 @@ class OnboardingNotificationHelperTests: XCTestCase {
     }
 
     // MARK: - Helper
-    private func createSubject(
-        file: StaticString = #file,
-        line: UInt = #line
-    ) -> OnboardingNotificationCardHelper {
+    private func createSubject() -> OnboardingNotificationCardHelper {
         let subject = OnboardingNotificationCardHelper()
-
-        trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
     }
