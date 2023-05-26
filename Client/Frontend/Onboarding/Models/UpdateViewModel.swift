@@ -14,6 +14,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
+    var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
 
     var shouldShowSingleCard: Bool {
@@ -32,9 +33,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Initializer
     init(
         profile: Profile,
-        model: OnboardingViewModel
+        model: OnboardingViewModel,
+        telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.profile = profile
+        self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
         self.availableCards = []
@@ -85,28 +88,18 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
-// FXIOS-6358 - Implement telemetry
-//    func sendCloseButtonTelemetry(index: Int) {
-//        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
-//
-//        TelemetryWrapper.recordEvent(category: .action,
-//                                     method: .tap,
-//                                     object: .onboardingClose,
-//                                     extras: extra)
-//    }
-
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
-        for card in cardModels {
+        for cardModel in cardModels {
             // If it's a sync sign in card and we're already signed in, don't add
             // the card to the available cards.
-            if (card.buttons.primary.action == .syncSignIn || card.buttons.secondary?.action == .syncSignIn)
+            if (cardModel.buttons.primary.action == .syncSignIn || cardModel.buttons.secondary?.action == .syncSignIn)
                 && hasSyncableAccount ?? false {
                 break
             }
 
             availableCards.append(OnboardingCardViewController(
-                viewModel: OnboardingCardViewModel(infoModel: card),
+                viewModel: cardModel,
                 delegate: delegate))
         }
     }

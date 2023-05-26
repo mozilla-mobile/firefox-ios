@@ -8,6 +8,7 @@ protocol OnboardingViewModelProtocol {
     var availableCards: [OnboardingCardViewController] { get }
     var isDismissable: Bool { get }
     var profile: Profile { get }
+    var telemetryUtility: OnboardingTelemetryProtocol { get }
 
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate)
 }
