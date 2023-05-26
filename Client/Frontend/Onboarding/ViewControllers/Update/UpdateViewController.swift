@@ -136,8 +136,8 @@ class UpdateViewController: UIViewController,
     @objc
     private func closeUpdate() {
         didFinishFlow?()
-// FXIOS-6358 - Implement telemetry
-//        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
+        viewModel.telemetryUtility.sendDismissOnboardingTelemetry(
+            from: viewModel.availableCards[pageControl.currentPage].viewModel.name)
     }
 
     @objc
@@ -196,8 +196,14 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 extension UpdateViewController: OnboardingCardDelegate {
     func handleButtonPress(
         for action: OnboardingActions,
-        from cardName: String
+        from cardName: String,
+        isPrimaryButton: Bool
     ) {
+        viewModel.telemetryUtility.sendButtonActionTelemetry(
+            from: cardName,
+            with: action,
+            and: isPrimaryButton)
+
         switch action {
         case .nextCard:
             showNextPage(from: cardName) {
@@ -220,6 +226,10 @@ extension UpdateViewController: OnboardingCardDelegate {
         default:
             break
         }
+    }
+
+    func sendCardViewTelemetry(from cardName: String) {
+        viewModel.telemetryUtility.sendCardViewTelemetry(from: cardName)
     }
 }
 

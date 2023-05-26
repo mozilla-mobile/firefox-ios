@@ -62,7 +62,10 @@ final class LaunchCoordinatorTests: XCTestCase {
     // MARK: - Update
     func testStart_updateNotIphone_present() throws {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let viewModel = UpdateViewModel(profile: profile, model: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let viewModel = UpdateViewModel(profile: profile,
+                                        model: onboardingModel,
+                                        telemetryUtility: telemetryUtility)
         let subject = createSubject(isIphone: false)
         subject.start(with: .update(viewModel: viewModel))
 
@@ -74,7 +77,10 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     func testStart_updateIsIphone_setRootView() throws {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let viewModel = UpdateViewModel(profile: profile, model: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let viewModel = UpdateViewModel(profile: profile,
+                                        model: onboardingModel,
+                                        telemetryUtility: telemetryUtility)
         let subject = createSubject(isIphone: true)
         subject.start(with: .update(viewModel: viewModel))
 

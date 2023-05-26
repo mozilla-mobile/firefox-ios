@@ -44,9 +44,11 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
-                                            model: onboardingModel)
+                                            model: onboardingModel,
+                                            telemetryUtility: telemetryUtility)
         let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
