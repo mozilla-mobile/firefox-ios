@@ -19,6 +19,7 @@ class OnboardingNotificationHelperTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         nimbusUtility.clearNimbus()
         nimbusUtility = nil
     }
