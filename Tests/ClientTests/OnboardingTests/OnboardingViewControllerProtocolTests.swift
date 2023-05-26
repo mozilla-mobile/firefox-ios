@@ -32,7 +32,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome)
     }
 
     func testProtocol_getsCorrectViewController_notifications() {
@@ -43,7 +43,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications)
     }
 
     func testProtocol_getsCorrectViewController_sync() {
@@ -54,7 +54,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.sync)
+        XCTAssertEqual(result.viewModel.name, cards.sync)
     }
 
     func testProtocol_getsNoViewContoller_afterLastCard() {
@@ -82,7 +82,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome)
     }
 
     func testProtocol_getsCorrectViewController_fromThirdCard_isNotifications() {
@@ -93,7 +93,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications)
     }
 
     // MARK: - Test `moveToNextPage`
@@ -106,7 +106,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome)
     }
 
     func testProtocol_moveToNextPage_FromFirstCard() {
@@ -119,7 +119,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 1)
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications)
     }
 
     func testProtocol_moveToNextPage_FromSecondCard() {
@@ -132,7 +132,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 2)
-        XCTAssertEqual(result.viewModel.infoModel.name, cards.sync)
+        XCTAssertEqual(result.viewModel.name, cards.sync)
     }
 
     // MARK: - Test `getCardIndex`
@@ -161,8 +161,10 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         line: UInt = #line
     ) -> IntroViewController {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel)
         let viewModel = IntroViewModel(profile: MockProfile(),
-                                       model: onboardingViewModel)
+                                       model: onboardingViewModel,
+                                       telemetryUtility: telemetryUtility)
         let subject = IntroViewController(viewModel: viewModel)
 
         subject.viewDidLoad()
