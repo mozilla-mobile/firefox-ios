@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 enum ReloadButtonState: String {
     case reload = "Reload"
@@ -44,5 +45,13 @@ class StatefulButton: UIButton {
                 self.isHidden = true
             }
         }
+    }
+}
+
+// MARK: - Theme protocols
+extension StatefulButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        tintColor = isEnabled ? theme.colors.iconSecondary : theme.colors.iconDisabled
+        imageView?.tintColor = tintColor
     }
 }

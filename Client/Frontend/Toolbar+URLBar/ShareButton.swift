@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Foundation
+import Shared
 
 class ShareButton: UIButton {
     // MARK: - Variables
@@ -32,7 +33,6 @@ class ShareButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        applyTheme()
 
         clipsToBounds = false
         setImage(UIImage.templateImageNamed(ImageIdentifiers.share), for: .normal)
@@ -47,12 +47,12 @@ class ShareButton: UIButton {
 
 // MARK: - Theme protocols
 
-extension ShareButton: NotificationThemeable {
-    func applyTheme() {
-        selectedTintColor = UIColor.Photon.Grey70
-        disabledTintColor = UIColor.Photon.Grey50
-        unselectedTintColor = UIColor.Photon.Grey50
-        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+extension ShareButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        selectedTintColor = theme.colors.iconSecondary
+        disabledTintColor = theme.colors.iconDisabled
+        unselectedTintColor = theme.colors.iconDisabled
+        tintColor = isEnabled ? selectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
 }

@@ -3,10 +3,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-
+import Common
 @testable import Client
 
 class TabLocationViewTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        AppContainer.shared.reset()
+    }
+
     func testDelegateMemoryLeak() {
         let tabLocationView = TabLocationView()
         let delegate = MockTabLocationViewDelegate()
