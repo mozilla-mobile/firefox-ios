@@ -4,7 +4,7 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper: FeatureFlaggable {
+class OnboardingNotificationCardHelper {
     var notificationCardIsInOnboarding: Bool {
         return NimbusOnboardingFeatureLayer()
             .getOnboardingModel(for: .freshInstall)
@@ -13,10 +13,8 @@ class OnboardingNotificationCardHelper: FeatureFlaggable {
     }
 
     func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
-        if notificationCardIsInOnboarding {
-            return !isOnboarding // we ask for permission on notification card instead
-        }
+        if notificationCardIsInOnboarding { return false }
 
-        return true
+        return isOnboarding
     }
 }
