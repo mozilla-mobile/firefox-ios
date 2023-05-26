@@ -75,6 +75,22 @@ enum InputVMError: Error {
     case unableToUpdateCC
 }
 
+enum CreditCardModifiedStatus {
+    case savedCard
+    case updatedCard
+    case removedCard
+    case none
+
+    var message: String {
+        switch self {
+        case .savedCard: return String.CreditCard.SnackBar.SavedCardLabel
+        case .updatedCard: return String.CreditCard.SnackBar.UpdatedCardLabel
+        case .removedCard: return String.CreditCard.SnackBar.RemovedCardLabel
+        default: return ""
+        }
+    }
+}
+
 class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
     var logger: Logger?
@@ -90,6 +106,11 @@ class CreditCardInputViewModel: ObservableObject {
     var year: Int64? {
         Int64(expirationDate.suffix(2))
     }
+
+    // MARK: View
+
+    var dismiss: ((_ modifiedStatus: CreditCardModifiedStatus,
+                   _ successVal: Bool) -> Void)?
 
     @Published var state: CreditCardEditState
     @Published var errorState: String = ""
@@ -123,6 +144,8 @@ class CreditCardInputViewModel: ObservableObject {
         }
     }
 
+    // MARK: Business logic
+
     var isRightBarButtonEnabled: Bool {
         let viewMode = state == .view && state.rightBarBtn == .edit
         let saveMode = state.rightBarBtn == .save && (nameIsValid &&
@@ -138,10 +161,11 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: Text(CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
-                guard let creditCard = creditCard else { return }
-
-                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
+                [unowned self] in
+                self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                    self.dismiss?(status, successVal)
+                }
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -152,10 +176,11 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
-                guard let creditCard = creditCard else { return }
-
-                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
+                [unowned self] in
+                self.removeCreditCard(creditCard: creditCard) { status, successVal in
+                    self.dismiss?(status, successVal)
+                }
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -200,12 +225,6 @@ class CreditCardInputViewModel: ObservableObject {
 
     // MARK: - Helpers
 
-    private func removeSelectedCreditCard(creditCardGUID: String) {
-        autofill.deleteCreditCard(id: creditCardGUID) { _, error in
-            // no-op
-        }
-    }
-
     public func updateState(state: CreditCardEditState) {
         self.state = state
         switch state {
@@ -236,6 +255,27 @@ class CreditCardInputViewModel: ObservableObject {
         autofill.updateCreditCard(id: creditCard.guid,
                                   creditCard: plainCreditCard,
                                   completion: completion)
+    }
+
+    func removeCreditCard(creditCard: CreditCard?,
+                          completion: @escaping (CreditCardModifiedStatus, Bool) -> Void) {
+        guard let currentCreditCard = creditCard,
+              !currentCreditCard.guid.isEmpty else {
+            completion(.none, false)
+            return
+        }
+
+        autofill.deleteCreditCard(id: currentCreditCard.guid) {
+            status, error in
+            guard let error = error, status else {
+                completion(.removedCard, true)
+                return
+            }
+            self.logger?.log("Unable to remove credit card: \(error)",
+                             level: .warning,
+                             category: .storage)
+            completion(.none, false)
+        }
     }
 
     public func clearValues() {
