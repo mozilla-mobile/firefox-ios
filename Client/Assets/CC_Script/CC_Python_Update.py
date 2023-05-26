@@ -19,8 +19,7 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/shared/FormAutofillHandler.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillHeuristics.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillNameUtils.sys.mjs",
-    "toolkit/components/formautofill/FormAutofillSection.ios.sys.mjs",
-    "toolkit/components/formautofill/FormAutofillSection.sys.mjs",
+    "toolkit/components/formautofill/shared/FormAutofillSection.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillUtils.sys.mjs",
     "toolkit/modules/FormLikeFactory.sys.mjs",
     "toolkit/components/formautofill/shared/FormStateManager.sys.mjs",
@@ -101,9 +100,11 @@ def main():
         # download file to compare changes
         downloaded = downloadTemporaryFileToCompare(file_info)
 
+        # This can happen if the file was removed and doesn't exist anymore on central
+        # We don't want to fail if that's the case
         if not downloaded:
             print(f"Skipping file: {file_info['filename']}")
-            return 
+            continue
 
         # move file if it does not exist
         if os.path.exists(file_info["path"]) == False:

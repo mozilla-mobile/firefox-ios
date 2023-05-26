@@ -4,33 +4,36 @@
 
 import XCTest
 
-let NoImageButtonIdentifier = ImageIdentifiers.noImageMode
-let ContextMenuIdentifier = "Context Menu"
-
 class NoImageTests: BaseTestCase {
-    private func checkShowImages() {
-        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
-        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
-    }
-
-    private func checkHideImages() {
-        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
-        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
+    private func checkShowImages(showImages: Bool = true) {
+        let noImageStatusMode = app.otherElements.tables.cells.switches["NoImageModeStatus"]
+        waitForExistence(noImageStatusMode)
+        if showImages {
+            XCTAssertEqual(noImageStatusMode.value as! String, "0")
+        } else {
+            XCTAssertEqual(noImageStatusMode.value as! String, "1")
+        }
     }
 
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // Since it is tested in UI let's disable. Keeping here just in case it needs to be re-enabled
     func testImageOnOff() {
-        // Go to a webpage, and select no images or hide images, check it's hidden or not
-        navigator.openNewURL(urlString: "www.google.com")
+        // Select no images or hide images, check it's hidden or not
         waitUntilPageLoad()
 
-        // Select hide images, and check the UI is updated
+        // Select hide images
+        let blockImagesSwitch = app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.blockImages]
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        waitForExistence(blockImagesSwitch)
         navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages()
+        checkShowImages(showImages: false)
 
-        // Select show images, and check the UI is updated
+        // Select show images
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        waitForExistence(blockImagesSwitch)
         navigator.performAction(Action.ToggleNoImageMode)
-        checkHideImages()
+        checkShowImages(showImages: true)
     }
 }

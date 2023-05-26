@@ -20,18 +20,13 @@ final class NimbusMessagingTriggerTests: XCTestCase {
         Experiments.shared
     }()
 
-    lazy var helper: NimbusMessagingHelperProtocol = {
-        let utility = GleanPlumbMessageUtility()
-        return utility.createGleanPlumbHelper()!
-    }()
-
     override func setUpWithError() throws {
         try super.setUpWithError()
         XCTAssert(nimbus is Nimbus)
     }
 
     func testTriggers() throws {
-        let helper = self.helper
+        let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
         let triggers = feature.triggers
 
         var badJexlExpressions = [String: String]()
