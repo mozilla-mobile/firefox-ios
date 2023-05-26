@@ -237,6 +237,10 @@ public struct AccessibilityIdentifiers {
             static let topSetting = "TopSearchBar"
             static let bottomSetting = "BottomSearchBar"
         }
+
+        struct BlockImages {
+            static let blockImages = "Block Images"
+        }
     }
 
     struct ShareTo {

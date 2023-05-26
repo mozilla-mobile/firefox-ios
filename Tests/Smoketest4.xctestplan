@@ -70,7 +70,6 @@
         "NavigationTest\/testWriteToChildPopupTab()",
         "NewTabSettingsTest",
         "NightModeTests",
-        "NoImageTests",
         "PhotonActionSheetTest",
         "PocketTest",
         "PrivateBrowsingTest",
