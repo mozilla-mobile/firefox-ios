@@ -5,15 +5,20 @@
 import Foundation
 
 class OnboardingNotificationCardHelper {
-    var notificationCardIsInOnboarding: Bool {
-        return NimbusOnboardingFeatureLayer()
+    private func notificationCardIsInOnboarding(
+        from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
+    ) -> Bool {
+        return featureLayer
             .getOnboardingModel(for: .freshInstall)
             .cards
-            .contains { $0.buttons.primary.action == .requestNotifications }
+            .contains {
+                return $0.buttons.primary.action == .requestNotifications
+                || $0.buttons.secondary?.action == .requestNotifications
+            }
     }
 
     func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
-        if notificationCardIsInOnboarding { return false }
+        if notificationCardIsInOnboarding() { return false }
 
         return isOnboarding
     }

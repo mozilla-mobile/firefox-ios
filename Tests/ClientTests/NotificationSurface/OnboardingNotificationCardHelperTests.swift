@@ -23,9 +23,29 @@ class OnboardingNotificationHelperTests: XCTestCase {
         nimbusUtility = nil
     }
 
-    func testHelper_noNotificationCard_returnsTrue() {
+    func testHelper_fromOnboarding_noNotificationCard_returnsTrue() {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeSync)
         let expectedResult = true
+
+        let result = OnboardingNotificationCardHelper()
+            .askForPermissionDuringSync(isOnboarding: true)
+
+        XCTAssertEqual(result, expectedResult)
+    }
+
+    func testHelper_fromUpgrade_noNotificationCard_returnsFalse() {
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeSync)
+        let expectedResult = false
+
+        let result = OnboardingNotificationCardHelper()
+            .askForPermissionDuringSync(isOnboarding: false)
+
+        XCTAssertEqual(result, expectedResult)
+    }
+
+    func testHelper_fromOnboarding_withNotificationCard_returnsFalse() {
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        let expectedResult = false
 
         let result = OnboardingNotificationCardHelper()
             .askForPermissionDuringSync(isOnboarding: true)
