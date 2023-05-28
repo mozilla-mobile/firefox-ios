@@ -37,6 +37,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.glean = glean
         self.wallpaperManager = wallpaperManager
         super.init(router: router)
+        self.browserViewController.coordinator = self
         self.browserViewController.browserDelegate = self
     }
 
@@ -173,7 +174,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func handleQRCode() {
-        browserViewController.handleQRCode()
+        let qrCodeViewController = QRCodeViewController()
+        qrCodeViewController.qrCodeDelegate = browserViewController
+        let rootQrCodeViewController = QRCodeNavigationController(rootViewController: qrCodeViewController)
+        browserViewController.present(rootQrCodeViewController, animated: true, completion: nil)
     }
 
     private func handleClosePrivateTabs() {

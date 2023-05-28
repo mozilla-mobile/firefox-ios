@@ -44,6 +44,7 @@ class BrowserViewController: UIViewController {
     ]
 
     weak var browserDelegate: BrowserDelegate?
+    weak var coordinator: BaseCoordinator?
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -1560,13 +1561,6 @@ class BrowserViewController: UIViewController {
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
-    }
-
-    func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        presentedViewController?.dismiss(animated: true)
-        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
     }
 
     func handleClosePrivateTabs() {

@@ -102,10 +102,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
-        self.present(controller, animated: true, completion: nil)
+        coordinator?.findAndHandle(route: .action(action: .showQRCode))
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
