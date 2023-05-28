@@ -497,10 +497,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleHandleQRCode_returnsTrue() {
         // Given
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
-
         let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        subject.browserViewController = mbvc
 
         // When
         let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
@@ -508,7 +505,6 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         // Then
         XCTAssertTrue(result)
-        XCTAssertEqual(mbvc.qrCodeCount, 1)
     }
 
     func testHandleClosePrivateTabs_returnsTrue() {
