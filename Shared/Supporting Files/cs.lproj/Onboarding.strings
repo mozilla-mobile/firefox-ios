@@ -1,6 +1,15 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "Přejít do nastavení";
 
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. Přejděte do *Nastavení*";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Klepněte na *Výchozí prohlížeč*";
+
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.ThirdLabel.v114" = "3. Vyberte *%@*";
+
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "Nastavte si svůj výchozí prohlížeč";
 
@@ -16,8 +25,14 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Pokračovat";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v114" = "Posílejte si panely mezi svými zařízeními a získejte tipy, jako ze svého prohlížeče %@ vytěžit maximum.";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v114" = "Teď ne";
+
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v114" = "Oznámení vám pomohou s prohlížečem %@ udělat více";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Zapnout oznámení";
@@ -49,14 +64,29 @@
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "Zkuste barevný nádech";
 
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "Zvolte tapetu pro %@";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
 "Onboarding.Welcome.Action.v114" = "Začít";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Nastavit jako výchozí prohlížeč";
 
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.TreatementA.v114" = "%@ upřednostňuje lidi před ziskem a chrání vaše soukromí při prohlížení.";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v114" = "%@ upřednostňuje lidi před ziskem a chrání vaše soukromí při prohlížení.";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "Další informace naleznete v našich oznámeních o ochraně osobních údajů";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Přeskočit";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Title.TreatementA.v114" = "Používejte %@ jako svůj hlavní prohlížeč";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Vítejte na nezávislém internetu";
