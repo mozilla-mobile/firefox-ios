@@ -155,6 +155,7 @@ class Action {
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
     static let GoToHomePage = "GoToHomePage"
+    static let ClickSearchButton = "ClickSearchButton"
 
     static let OpenSiriFromSettings = "OpenSiriFromSettings"
 
@@ -852,7 +853,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], to: TrackingProtectionContextMenuDetails)
 
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) { userState in
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) {
+            userState in
+        }
+
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton], forAction: Action.ClickSearchButton) { userState in
         }
 
         makeToolBarAvailable(screenState)

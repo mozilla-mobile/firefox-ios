@@ -227,11 +227,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func waitForTabsButton() {
-        if iPad() {
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
-        } else {
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
-        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
     }
 }
 

@@ -217,7 +217,13 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForTabsButton()
         checkRecentlySaved()
         navigator.performAction(Action.ToggleRecentlySaved)
-        navigator.performAction(Action.GoToHomePage)
+        // On iPad we have the homepage button always present,
+        // on iPhone we have the search button instead when we're on a new tab page
+        if !iPad() {
+            navigator.performAction(Action.ClickSearchButton)
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
         XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists)
         if !iPad() {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
@@ -253,7 +259,15 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForExistence(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel])
         navigator.goto(HomeSettings)
         navigator.performAction(Action.ToggleRecentlyVisited)
-        navigator.performAction(Action.GoToHomePage)
+
+        // On iPad we have the homepage button always present,
+        // on iPhone we have the search button instead when we're on a new tab page
+        if !iPad() {
+            navigator.performAction(Action.ClickSearchButton)
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
+
         XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
         if !iPad() {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
