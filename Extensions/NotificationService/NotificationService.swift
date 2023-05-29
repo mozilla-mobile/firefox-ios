@@ -95,8 +95,8 @@ class SyncDataDisplay {
             displayNewSentTabNotification(tab: tab)
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
-        case .deviceDisconnected(let deviceName):
-            displayDeviceDisconnectedNotification(deviceName)
+        case .deviceDisconnected:
+            displayDeviceDisconnectedNotification()
         case .thisDeviceDisconnected:
             displayThisDeviceDisconnectedNotification()
         default:
@@ -111,16 +111,9 @@ class SyncDataDisplay {
                             bodyArg: deviceName)
     }
 
-    func displayDeviceDisconnectedNotification(_ deviceName: String?) {
-        if let deviceName = deviceName {
-            presentNotification(title: .FxAPush_DeviceDisconnected_title,
-                                body: .FxAPush_DeviceDisconnected_body,
-                                bodyArg: deviceName)
-        } else {
-            // We should never see this branch
-            presentNotification(title: .FxAPush_DeviceDisconnected_title,
-                                body: .FxAPush_DeviceDisconnected_UnknownDevice_body)
-        }
+    func displayDeviceDisconnectedNotification() {
+        presentNotification(title: .FxAPush_DeviceDisconnected_title,
+                            body: .FxAPush_DeviceDisconnected_UnknownDevice_body)
     }
 
     func displayThisDeviceDisconnectedNotification() {

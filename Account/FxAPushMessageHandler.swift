@@ -101,30 +101,14 @@ extension FxAPushMessageHandler {
                         }
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))
-                    case let .deviceDisconnected(deviceId, isLocalDevice):
+                    case let .deviceDisconnected(_, isLocalDevice):
                         if isLocalDevice {
                             // We can't disconnect the device from the account until we have access to the application, so we'll handle this properly in the AppDelegate (as this code in an extension),
                             // by calling the FxALoginHelper.applicationDidDisonnect(application).
                             self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
                             completion(.success(PushMessage.thisDeviceDisconnected))
                         }
-
-                        guard let profile = self.profile as? BrowserProfile else {
-                            // We can't look up a name in testing, so this is the same as not knowing about it.
-                            completion(.success(PushMessage.deviceDisconnected(nil)))
-                            break
-                        }
-
-                        profile.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
-                            guard let device = result.successValue else {
-                                completion(.failure(PushMessageError.accountError))
-                                return
-                            }
-                            if let id = device?.guid {
-                                profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in }
-                            }
-                            completion(.success(PushMessage.deviceDisconnected(device?.name)))
-                        }
+                        completion(.success(PushMessage.deviceDisconnected))
                     default:
                         // There are other events, but we ignore them at this level.
                         break
@@ -147,7 +131,7 @@ enum PushMessageType: String {
 enum PushMessage: Equatable {
     case commandReceived(tab: [String: String])
     case deviceConnected(String)
-    case deviceDisconnected(String?)
+    case deviceDisconnected
     case profileUpdated
     case passwordChanged
     case passwordReset
