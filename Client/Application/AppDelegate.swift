@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate,
+        sendTabDelegate: UIApplication.shared.sendTabDelegate,
         rustSyncManagerEnabled: rustSyncManagerStatus,
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
@@ -147,6 +147,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
+        }
+
+        DispatchQueue.global().async { [weak self] in
+            self?.profile.pollCommands(forcePoll: false)
         }
 
         logger.log("applicationDidBecomeActive end",

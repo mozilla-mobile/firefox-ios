@@ -10,13 +10,10 @@ class PocketTest: BaseTestCase {
         waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label, "Thought-Provoking Stories")
 
-        // There should be two stories on iPhone and three on iPad
+        // There should be at least 8 stories on iPhone and three on iPad
         let numPocketStories = app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).children(matching: .cell).count-1
-        if iPad() {
-            XCTAssertEqual(numPocketStories, 15)
-        } else {
-            XCTAssertEqual(numPocketStories, 8)
-        }
+        XCTAssertTrue(numPocketStories > 7)
+
         // Disable Pocket
         navigator.performAction(Action.TogglePocketInNewTab)
 

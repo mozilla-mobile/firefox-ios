@@ -53,8 +53,15 @@ open class RustFirefoxAccounts {
      hook into notifications like `.accountProfileUpdate` to refresh once initialize() is complete.
      Or they can wait on the accountManager deferred to fill.
      */
-    public static func startup(prefs: Prefs) -> Deferred<FxAccountManager> {
+    public static func startup(prefs: Prefs,
+                               logger: Logger = DefaultLogger.shared) -> Deferred<FxAccountManager> {
         assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            logger.log("Startup of RustFirefoxAccounts is happening OFF the main thread!",
+                       level: .warning,
+                       category: .sync)
+        }
+
         RustFirefoxAccounts.prefs = prefs
         if RustFirefoxAccounts.shared.accountManager.isFilled || isInitializingAccountManager {
             return RustFirefoxAccounts.shared.accountManager
@@ -66,6 +73,12 @@ open class RustFirefoxAccounts {
         let manager = RustFirefoxAccounts.shared.createAccountManager()
         manager.initialize { result in
             assert(Thread.isMainThread)
+            if !Thread.isMainThread {
+                logger.log("Initialization of RustFirefoxAccountsManager is happening OFF the main thread!",
+                           level: .warning,
+                           category: .sync)
+            }
+
             isInitializingAccountManager = false
 
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
