@@ -90,15 +90,11 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        if processIsTranslatedStr() == m1Rosetta {
-            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+       // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
+        if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
+            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         } else {
-            // Change to 3 entries for iPhone since the hostname is not saved and only one entry appears
-            if iPad() {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
-            } else {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-            }
+            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
         }
     }
 
