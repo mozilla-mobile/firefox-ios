@@ -79,6 +79,7 @@ public struct AccessibilityIdentifiers {
 
         struct Pocket {
             static let itemCell = "PocketCell"
+            static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }
 
         struct HistoryHighlights {
