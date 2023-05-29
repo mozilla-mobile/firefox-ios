@@ -26,7 +26,8 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     private let subtitleLabel: UILabel = .build { label in
-        label.text = .FirefoxHomepage.Pocket.Footer.Subtitle
+        label.text = String(format: .FirefoxHomepage.Pocket.Footer.Subtitle,
+                            AppName.shortName.rawValue)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
