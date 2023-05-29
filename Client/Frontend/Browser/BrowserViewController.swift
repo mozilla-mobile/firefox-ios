@@ -282,6 +282,7 @@ class BrowserViewController: UIViewController {
         updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
+        zoomPageBar?.updateConstraints()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {

@@ -11,7 +11,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func didChangeZoomLevel()
 }
 
-class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
+class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, SearchBarLocationProvider {
     private struct UX {
         static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
@@ -31,6 +31,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let upperZoomLimit: CGFloat = 2.0
         static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 12)
         static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 0)
+        static let gradientViewBottomAnchorConstant: CGFloat = 0.0
     }
 
     weak var delegate: ZoomPageBarDelegate?
@@ -38,6 +39,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private var stepperCompactConstraints = [NSLayoutConstraint]()
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
     private var gradientViewHeightConstraint = NSLayoutConstraint()
+    private var gradientViewBottomConstraint = NSLayoutConstraint()
 
     private let tab: Tab
 
@@ -186,8 +188,14 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         if traitCollection.userInterfaceIdiom == .pad {
             gradientView.topAnchor.constraint(equalTo: bottomAnchor).isActive = true
         } else {
-            gradientView.bottomAnchor.constraint(equalTo: topAnchor).isActive = true
+            setupGradientViewBottomConstraintPhoneLayout()
         }
+    }
+
+    private func setupGradientViewBottomConstraintPhoneLayout() {
+        gradientViewBottomConstraint.isActive = false
+        gradientViewBottomConstraint = gradientView.bottomAnchor.constraint(equalTo: topAnchor, constant: isBottomSearchBar ? -UIConstants.UrlBarHeight : UX.gradientViewBottomAnchorConstant)
+        gradientViewBottomConstraint.isActive = true
     }
 
     private func remakeGradientViewHeightConstraint() {
@@ -198,6 +206,13 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gradientViewHeightConstraint = gradientView.heightAnchor.constraint(equalToConstant: viewPortHeight * 0.2)
         gradientViewHeightConstraint.isActive = true
         gradient.frame = gradientView.bounds
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        if traitCollection.userInterfaceIdiom == .phone {
+            setupGradientViewBottomConstraintPhoneLayout()
+        }
     }
 
     private func updateZoomLabel() {
