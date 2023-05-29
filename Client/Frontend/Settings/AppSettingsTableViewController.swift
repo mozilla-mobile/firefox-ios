@@ -236,7 +236,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self),
-                FasterInactiveTabs(settings: self)
+                FasterInactiveTabs(settings: self),
+                AppReviewPromptSetting(settings: self)
             ])]
 
         return settings

@@ -4,6 +4,12 @@
 /* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
 "CloseTabsToast.SingleTabTitle.v113" = "පටිත්ත වැසිණි";
 
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+"CloseTabsToast.Title.v113" = "වැසුණු පටිති: %d";
+
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "වසන්න";
+
 /* Button label to sync tabs in your Firefox Account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "පටිති සමමුහූර්තය";
 
