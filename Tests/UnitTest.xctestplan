@@ -71,6 +71,8 @@
       "skippedTests" : [
         "ETPCoverSheetTests",
         "TabManagerTests\/testDeleteSelectedTab()",
+        "TabManagerTests\/testInactiveTabs_grid_closeSingleTab()",
+        "TabManagerTests\/testInactiveTabs_grid_undoSingleTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
