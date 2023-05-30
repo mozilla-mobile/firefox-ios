@@ -144,7 +144,16 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
         case let .settings(section):
             // Note: This will be handled in the settings coordinator when FXIOS-6274 is done
-            handle(settingsSection: section)
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                let settingsCoordinator = SettingsCoordinator(
+                    router: router,
+                    browserViewController: browserViewController
+                )
+                add(child: settingsCoordinator)
+                settingsCoordinator.start(with: section)
+            } else {
+                handle(settingsSection: section)
+            }
             return true
 
         case let .action(routeAction):
@@ -211,6 +220,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.handle(url: searchURL, tabId: tabId)
     }
 
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
+    }
+
+    // Will be removed with FXIOS-6529
     private func handle(settingsSection: Route.SettingsSection) {
         let baseSettingsVC = AppSettingsTableViewController(
             with: profile,
@@ -227,6 +241,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         controller.pushViewController(viewController, animated: true)
     }
 
+    // Will be removed with FXIOS-6529
     func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:
@@ -283,9 +298,5 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
             return nil
         }
-    }
-
-    private func handle(fxaParams: FxALaunchParams) {
-        browserViewController.presentSignInViewController(fxaParams)
     }
 }

@@ -2,7 +2,106 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
+import Shared
 
 class SettingsCoordinator: BaseCoordinator {
+    private let browserViewController: BrowserViewController
+    private let wallpaperManager: WallpaperManagerInterface
+    private let profile: Profile
+    private let tabManager: TabManager
+    private let themeManager: ThemeManager
+
+    init(router: Router,
+         browserViewController: BrowserViewController,
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+         profile: Profile = AppContainer.shared.resolve(),
+         tabManager: TabManager = AppContainer.shared.resolve(),
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.browserViewController = browserViewController
+        self.wallpaperManager = wallpaperManager
+        self.profile = profile
+        self.tabManager = tabManager
+        self.themeManager = themeManager
+        super.init(router: router)
+    }
+
+    deinit {
+        // FXIOS-6534: Make sure SettingsCoordinator is deinit/removed as child once done with it
+    }
+
+    func start(with settingsSection: Route.SettingsSection) {
+        let baseSettingsVC = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: browserViewController
+        )
+
+        let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
+        controller.presentingModalViewControllerDelegate = browserViewController
+        controller.modalPresentationStyle = .formSheet
+        router.present(controller)
+
+        guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
+        controller.pushViewController(viewController, animated: true)
+    }
+
+    func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
+        switch section {
+        case .newTab:
+            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            return viewController
+
+        case .homePage:
+            let viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            return viewController
+
+        case .mailto:
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            return viewController
+
+        case .search:
+            let viewController = SearchSettingsTableViewController(profile: profile)
+            return viewController
+
+        case .clearPrivateData:
+            let viewController = ClearPrivateDataTableViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            return viewController
+
+        case .fxa:
+            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+                fxaParams,
+                flowType: .emailLoginFlow,
+                referringPage: .settings,
+                profile: browserViewController.profile
+            )
+            return viewController
+
+        case .theme:
+            return ThemeSettingsController()
+
+        case .wallpaper:
+            if wallpaperManager.canSettingsBeShown {
+                let viewModel = WallpaperSettingsViewModel(
+                    wallpaperManager: wallpaperManager,
+                    tabManager: tabManager,
+                    theme: themeManager.currentTheme
+                )
+                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                return wallpaperVC
+            } else {
+                return nil
+            }
+
+        default:
+            // FXIOS-6483: For cases that are not yet handled we show the main settings page
+            return nil
+        }
+    }
 }
