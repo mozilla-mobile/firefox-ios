@@ -1607,7 +1607,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
+    @discardableResult
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) -> Tab {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
@@ -1619,7 +1620,9 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
+        let tab = tabManager.addTab(request, isPrivate: isPrivate)
+        tabManager.selectTab(tab)
+        return tab
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
@@ -1649,9 +1652,8 @@ class BrowserViewController: UIViewController {
         }
         openedUrlFromExternalSource = true
 
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        let freshTab = tabManager.selectedTab
-        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab?.isPrivate ?? false)
+        let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
+        freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
