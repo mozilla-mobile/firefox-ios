@@ -447,6 +447,12 @@ class Tab: NSObject {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = true
+            
+            // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
+            if #available(iOS 16.4, *) {
+                webView.isInspectable = true
+            }
+
             // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
             webView.backgroundColor = .black
 

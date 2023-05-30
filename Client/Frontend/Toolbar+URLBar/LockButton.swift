@@ -47,17 +47,6 @@ class LockButton: UIButton {
 }
 
 // MARK: - Theme protocols
-
-extension LockButton: NotificationThemeable {
-    func applyTheme() {
-        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
-        disabledTintColor = UIColor.Photon.Grey50
-        unselectedTintColor = UIColor.legacyTheme.browser.tint
-        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
-        imageView?.tintColor = tintColor
-    }
-}
-
 extension LockButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
         selectedTintColor = theme.colors.actionPrimary
