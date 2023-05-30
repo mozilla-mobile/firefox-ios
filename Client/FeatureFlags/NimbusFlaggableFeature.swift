@@ -21,6 +21,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case jumpBackInSyncedTab
+    case libraryCoordinatorRefactor
     case notificationSettings
     case onboardingUpgrade
     case onboardingFreshInstall
@@ -29,6 +30,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case recentlySaved
     case reportSiteIssue
     case searchHighlights
+    case settingsCoordinatorRefactor
     case shakeToRestore
     case shareSheetChanges
     case shareToolbarChanges
@@ -97,11 +99,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .creditCardAutofillStatus,
                 .engagementNotificationStatus,
                 .jumpBackInSyncedTab,
+                .libraryCoordinatorRefactor,
                 .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
                 .reportSiteIssue,
                 .searchHighlights,
+                .settingsCoordinatorRefactor,
                 .shakeToRestore,
                 .shareSheetChanges,
                 .shareToolbarChanges,
