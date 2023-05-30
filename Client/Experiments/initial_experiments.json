@@ -2,136 +2,6 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
-      "slug": "beta-real-one-ios-re-engagement-notifications-ab-experiment-114",
-      "id": "beta-real-one-ios-re-engagement-notifications-ab-experiment-114",
-      "arguments": {},
-      "application": "org.mozilla.ios.FirefoxBeta",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.FirefoxBeta",
-      "channel": "beta",
-      "userFacingName": "Beta (real one) iOS re-engagement notifications A/B experiment 114",
-      "userFacingDescription": "We are looking to test privacy and search messages against a control that receives no message. This is our first A/B test on messaging for iOS.",
-      "isEnrollmentPaused": false,
-      "isRollout": false,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-messaging-beta-2",
-        "start": 0,
-        "count": 10000,
-        "total": 10000
-      },
-      "featureIds": [
-        "messaging"
-      ],
-      "probeSets": [],
-      "outcomes": [],
-      "branches": [
-        {
-          "slug": "control",
-          "ratio": 1,
-          "feature": {
-            "featureId": "messaging",
-            "enabled": true,
-            "value": {
-              "messages": {
-                "notification-validation-message": {
-                  "is-control": true,
-                  "surface": "notification",
-                  "style": "NOTIFICATION",
-                  "trigger": [
-                    "INACTIVE_NEW_USER",
-                    "ALLOWED_TIPS_NOTIFICATIONS"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        {
-          "slug": "treatment-a",
-          "ratio": 1,
-          "feature": {
-            "featureId": "messaging",
-            "enabled": true,
-            "value": {
-              "message-under-experiment": "engagement-notification-114",
-              "messages": {
-                "engagement-notification-114": {
-                  "title": "Engagement.Notification.Treatment.B.Title.v114",
-                  "text": "Engagement.Notification.Treatment.B.Body.v114",
-                  "surface": "notification",
-                  "style": "NOTIFICATION",
-                  "action": "://open-url?private=true&url=https://www.mozilla.org/en-US/firefox/privacy/",
-                  "trigger": [
-                    "INACTIVE_NEW_USER",
-                    "ALLOWED_TIPS_NOTIFICATIONS"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        {
-          "slug": "treatment-b",
-          "ratio": 1,
-          "feature": {
-            "featureId": "messaging",
-            "enabled": true,
-            "value": {
-              "message-under-experiment": "engagement-notification-114",
-              "messages": {
-                "engagement-notification-114": {
-                  "title": "Engagement.Notification.Treatment.A.Title.v114",
-                  "text": "Engagement.Notification.Treatment.A.Body.v114",
-                  "surface": "notification",
-                  "style": "NOTIFICATION",
-                  "action": "://open-url?private=true&url=https://www.mozilla.org/en-US/firefox/privacy/",
-                  "trigger": [
-                    "INACTIVE_NEW_USER",
-                    "ALLOWED_TIPS_NOTIFICATIONS"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        {
-          "slug": "treatment-c",
-          "ratio": 1,
-          "feature": {
-            "featureId": "messaging",
-            "enabled": true,
-            "value": {
-              "message-under-experiment": "engagement-notification-114",
-              "messages": {
-                "engagement-notification-114": {
-                  "title": "Engagement.Notification.Title.v112",
-                  "text": "Engagement.Notification.Body.v112",
-                  "surface": "notification",
-                  "style": "NOTIFICATION",
-                  "action": "OPEN_NEW_TAB",
-                  "trigger": [
-                    "INACTIVE_NEW_USER",
-                    "ALLOWED_TIPS_NOTIFICATIONS"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      ],
-      "targeting": "(app_version|versionCompare('116.*') <= 0) && ((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
-      "startDate": "2023-05-24",
-      "enrollmentEndDate": "2023-06-07",
-      "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 14,
-      "referenceBranch": "control",
-      "featureValidationOptOut": false,
-      "localizations": null
-    },
-    {
-      "schemaVersion": "1.12.0",
       "slug": "ios-search-bar-placement-v2-treatment-a-rollout",
       "id": "ios-search-bar-placement-v2-treatment-a-rollout",
       "arguments": {},
@@ -186,20 +56,20 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-set-to-default-in-onboarding",
-      "id": "ios-set-to-default-in-onboarding",
+      "slug": "ios-set-to-default-in-onboarding-final",
+      "id": "ios-set-to-default-in-onboarding-final",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "iOS Set to Default in Onboarding",
+      "userFacingName": "iOS Set to Default in Onboarding Final",
       "userFacingDescription": "Onboarding experiment",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-release-1",
+        "namespace": "ios-onboarding-framework-feature-release-2",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -251,11 +121,11 @@
                   "image": "notifications",
                   "buttons": {
                     "primary": {
-                      "title": "Onboarding/Onboarding.Notification.Continue.Action.v114",
+                      "title": "Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114",
                       "action": "request-notifications"
                     },
                     "secondary": {
-                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "title": "Onboarding/Onboarding.Sync.Skip.Action.v114",
                       "action": "next-card"
                     }
                   },
@@ -311,7 +181,7 @@
                       "action": "set-default-browser"
                     },
                     "secondary": {
-                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "title": "Onboarding/Onboarding.Welcome.Skip.v114",
                       "action": "next-card"
                     }
                   },
@@ -324,11 +194,11 @@
                   "image": "notifications",
                   "buttons": {
                     "primary": {
-                      "title": "Onboarding/Onboarding.Notification.Continue.Action.v114",
+                      "title": "Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114",
                       "action": "request-notifications"
                     },
                     "secondary": {
-                      "title": "Onboarding/Onboarding.Notification.Skip.Action.v114",
+                      "title": "Onboarding/Onboarding.Sync.Skip.Action.v114",
                       "action": "next-card"
                     }
                   },
@@ -363,11 +233,11 @@
         }
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
-      "startDate": "2023-05-19",
-      "enrollmentEndDate": "2023-05-26",
+      "startDate": "2023-05-30",
+      "enrollmentEndDate": "2023-06-07",
       "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 7,
+      "proposedDuration": 36,
+      "proposedEnrollment": 8,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null
