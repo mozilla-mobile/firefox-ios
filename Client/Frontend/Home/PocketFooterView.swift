@@ -88,6 +88,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
 
     @objc
     func didTapLearnMore() {
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-6411
         // Will next be implemented
     }
 
