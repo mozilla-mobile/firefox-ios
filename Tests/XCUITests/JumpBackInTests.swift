@@ -6,13 +6,14 @@ import XCTest
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
     }
 
     func scrollDown() {
         if !isTablet {
-            app.collectionViews["FxCollectionView"].swipeUp()
             while app.staticTexts["Switch Your Default Browser"].exists || app.buttons["Learn How"].exists {
                 app.collectionViews["FxCollectionView"].swipeUp()
             }
@@ -21,8 +22,6 @@ class JumpBackInTests: BaseTestCase {
 
     override func setUp() {
         super.setUp()
-
-        closeKeyboard()
 
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         navigator.goto(HomeSettings)

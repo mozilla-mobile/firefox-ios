@@ -12,7 +12,11 @@ class PocketTest: BaseTestCase {
 
         // There should be two stories on iPhone and three on iPad
         let numPocketStories = app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).children(matching: .cell).count-1
-        XCTAssertEqual(numPocketStories, 8)
+         if iPad() {
+            XCTAssertEqual(numPocketStories, 15)
+        } else {
+            XCTAssertEqual(numPocketStories, 8)
+        }
         // Disable Pocket
         navigator.performAction(Action.TogglePocketInNewTab)
 

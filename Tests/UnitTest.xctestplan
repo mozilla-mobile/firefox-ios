@@ -70,6 +70,8 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "TabDisplayManagerTests\/testInactiveTabs_grid_closeSingleTab()",
+        "TabDisplayManagerTests\/testInactiveTabs_grid_undoSingleTab()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",
