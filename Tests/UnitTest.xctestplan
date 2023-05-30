@@ -140,6 +140,13 @@
         "identifier" : "TabDataStoreTests",
         "name" : "TabDataStoreTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:BrowserKit",
+        "identifier" : "ReduxTests",
+        "name" : "ReduxTests"
+      }
     }
   ],
   "version" : 1
