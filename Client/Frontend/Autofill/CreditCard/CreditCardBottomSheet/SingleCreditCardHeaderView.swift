@@ -8,7 +8,7 @@ import Common
 import Shared
 
 // MARK: Header View
-class SaveCardTableHeaderView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable {
+class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable {
     // MARK: UX
     struct UX {
         static let titleLabelFontSize: CGFloat = 17
@@ -20,6 +20,12 @@ class SaveCardTableHeaderView: UITableViewHeaderFooterView, ReusableCell, Notifi
     }
 
     // MARK: Views
+    public var viewModel: SingleCreditCardViewModel? {
+        didSet {
+            setupContent()
+        }
+    }
+
     private var logoContainerView = UIView()
     private var firefoxLogoImage: UIImageView = .build { image in
         image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
@@ -70,6 +76,7 @@ class SaveCardTableHeaderView: UITableViewHeaderFooterView, ReusableCell, Notifi
         super.init(reuseIdentifier: reuseIdentifier)
         accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.rememberCreditCardHeader
         setupView()
+        setupContent()
     }
 
     required init?(coder: NSCoder) {
@@ -104,11 +111,18 @@ class SaveCardTableHeaderView: UITableViewHeaderFooterView, ReusableCell, Notifi
         ])
     }
 
+    private func setupContent() {
+        if let viewModel = viewModel {
+            titleLabel.text = viewModel.state.title
+            headerLabel.text = viewModel.state.header
+        }
+    }
+
     func applyTheme() {
     }
 }
 
-extension SaveCardTableHeaderView: ThemeApplicable {
+extension SingleCreditCardHeaderView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         headerLabel.textColor = theme.colors.textPrimary

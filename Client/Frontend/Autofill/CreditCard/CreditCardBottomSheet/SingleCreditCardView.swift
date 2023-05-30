@@ -12,6 +12,7 @@ import UIKit
 class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themeable {
     // MARK: UX
     struct UX {
+        static let containerPadding: CGFloat = 18.0
         static let tableMargin: CGFloat = 0
         static let distanceBetweenHeaderAndTop: CGFloat = -10
         static let distanceBetweenButtonAndTable: CGFloat = 77
@@ -29,7 +30,7 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private var creditCard: CreditCard
+    private var viewModel: SingleCreditCardViewModel
 
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
@@ -43,13 +44,15 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
         cardTableView.allowsSelection = false
         cardTableView.separatorColor = .clear
         cardTableView.separatorStyle = .none
-        cardTableView.isScrollEnabled = false
+        cardTableView.isScrollEnabled = true
+        cardTableView.showsVerticalScrollIndicator = false
         cardTableView.rowHeight = UITableView.automaticDimension
         cardTableView.estimatedRowHeight = UX.estimatedRowHeight
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
         cardTableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                                forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
-        cardTableView.register(SaveCardTableHeaderView.self, forHeaderFooterViewReuseIdentifier: SaveCardTableHeaderView.cellIdentifier)
+        cardTableView.register(SingleCreditCardFooterView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardFooterView.cellIdentifier)
+        cardTableView.register(SingleCreditCardHeaderView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardHeaderView.cellIdentifier)
         return cardTableView
     }()
 
@@ -86,10 +89,10 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
     private var contentWidthConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
-    init(creditCard: CreditCard,
+    init(viewModel: SingleCreditCardViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.creditCard = creditCard
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -109,13 +112,12 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        setupView()
         applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view.setNeedsLayout()
+        setupView()
     }
 
     deinit {
@@ -138,10 +140,10 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
         let estimatedCellHeight = cardTableView.estimatedRowHeight
         let estimatedTableHeight = headerHeight + estimatedCellHeight + UX.distanceBetweenHeaderAndCells + UX.distanceBetweenButtonAndTable
 
-        tableViewHeightConstraint = cardTableView.heightAnchor.constraint(equalToConstant: estimatedTableHeight)
+        tableViewHeightConstraint = cardTableView.heightAnchor.constraint(equalToConstant: estimatedTableHeight * getHeightScaleBasedOnFontSize())
         tableViewHeightConstraint.priority = UILayoutPriority(999)
 
-        let contentViewWidth = UX.contentViewWidth > self.view.frame.width ? self.view.frame.width : UX.contentViewWidth
+        let contentViewWidth = UX.contentViewWidth > view.frame.width ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
         contentWidthConstraint.priority = UILayoutPriority(999)
 
@@ -166,21 +168,39 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
         ])
     }
 
+    // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        let contentViewWidth = UX.contentViewWidth > self.view.frame.width ? self.view.frame.width : UX.contentViewWidth
-        contentWidthConstraint.constant = contentViewWidth
-        contentView.setNeedsLayout()
-        contentView.layoutIfNeeded()
+        print("traitCollectionDidChange")
+        setupView()
+        applyTheme()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        print("viewWillTransition")
+        let contentViewWidth = UX.contentViewWidth > size.width ? size.width - UX.containerPadding : UX.contentViewWidth
+        contentWidthConstraint.constant = contentViewWidth
+    }
+
+    // MARK: Button Actions
     @objc
     private func didTapYes() {
-        self.dismissVC()
+        self.viewModel.didTapMainButton { error in
+            // error is logged in the view model, but maybe we want to show an error message
+            DispatchQueue.main.async { [weak self] in
+                self?.dismissVC()
+            }
+        }
     }
 
     @objc
     private func didTapNotNow() {
+        dismissVC()
+    }
+
+    @objc
+    private func didTapManageCards() {
         dismissVC()
     }
 
@@ -205,7 +225,7 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let creditCard = creditCard
+        let creditCard = viewModel.creditCard
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
@@ -215,15 +235,27 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SaveCardTableHeaderView.cellIdentifier) as? SaveCardTableHeaderView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SingleCreditCardHeaderView.cellIdentifier) as? SingleCreditCardHeaderView else { return nil }
         headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.viewModel = viewModel
         return headerView
     }
 
     // easier to handle the bottom table spacing as a footer
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let emptyView = UIView()
-        return emptyView
+        switch viewModel.state {
+        case .save:
+            let emptyView = UIView()
+            return emptyView
+        case .update:
+            guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SingleCreditCardFooterView.cellIdentifier) as? SingleCreditCardFooterView else { return nil }
+            footerView.applyTheme(theme: themeManager.currentTheme)
+            if !footerView.manageCardsButton.responds(to: #selector(SingleCreditCardViewController.didTapManageCards)) {
+                footerView.manageCardsButton.addTarget(self, action: #selector(SingleCreditCardViewController.didTapManageCards), for: .touchUpInside)
+            }
+
+            return footerView
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -234,7 +266,7 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
         return UITableView.automaticDimension
     }
 
-// MARK: Themable
+    // MARK: Themable
     func applyTheme() {
         let currentTheme = themeManager.currentTheme
         let labelsBackgroundColor = currentTheme.type == .dark ? currentTheme.colors.textInverted : currentTheme.colors.textPrimary
@@ -247,5 +279,28 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
         notNowButton.titleLabel?.textColor = labelsBackgroundColor
 
         cardTableView.reloadData()
+    }
+}
+
+extension UITraitEnvironment {
+    func getHeightScaleBasedOnFontSize() -> CGFloat {
+        switch traitCollection.preferredContentSizeCategory {
+        case .extraSmall, .small, .medium, .large:
+            return 1
+        case .extraLarge, .extraExtraLarge, .extraExtraExtraLarge:
+            return 1.1
+        case .accessibilityMedium:
+            return 1.2
+        case .accessibilityLarge:
+            return 1.4
+        case .accessibilityExtraLarge:
+            return 1.6
+        case .accessibilityExtraExtraLarge:
+            return 1.8
+        case .accessibilityExtraExtraExtraLarge:
+            return 2
+        default:
+            return 1
+        }
     }
 }
