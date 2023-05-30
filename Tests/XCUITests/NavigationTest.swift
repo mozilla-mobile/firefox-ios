@@ -21,46 +21,30 @@ class NavigationTest: BaseTestCase {
 
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
-        if iPad() {
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-            app.textFields["url"].tap()
-        } else {
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-        }
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
-        // Once an url has been open, the back button is enabled but not the forward button
         if iPad() {
+            app.textFields["url"].tap()
+            // Once an url has been open, the back button is enabled but not the forward button
             navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
-        if iPad() {
-            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-        } else {
-            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-        }
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
-        if iPad() {
-            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-            // Go back to previous visited web site
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        } else {
-            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
-            XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-            // Go back to previous visited web site
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        }
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+        // Go back to previous visited web site
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
 
