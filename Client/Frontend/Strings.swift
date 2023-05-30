@@ -905,9 +905,9 @@ extension String {
             value: "Learn more in our privacy notice",
             comment: "String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens.")
         public static let LaterAction = MZLocalizedString(
-            key: "Onboarding.LaterAction.v114",
+            key: "Onboarding.LaterAction.v115",
             tableName: "Onboarding",
-            value: "Not Now",
+            value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
 
         public struct Intro {
@@ -1039,9 +1039,9 @@ extension String {
                 value: "Turn On Notifications",
                 comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
-                key: "Onboarding.Notification.Skip.Action.v114",
+                key: "Onboarding.Notification.Skip.Action.v115",
                 tableName: "Onboarding",
-                value: "Not now",
+                value: "Skip",
                 comment: "String used to describe the option to skip the notification permission in Firefox Onboarding screens.")
         }
 
