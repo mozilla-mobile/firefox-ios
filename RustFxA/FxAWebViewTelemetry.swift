@@ -61,7 +61,6 @@ class FxAWebViewTelemetry {
     ///     - flow: A type of FxAFlow for which telemetry has
     func recordTelemetry(for flow: FxAFlow) {
         let eventObject: TelemetryWrapper.EventObject
-        
         switch flow {
         case .completed:
             switch validStartedFlow {
@@ -85,7 +84,6 @@ class FxAWebViewTelemetry {
                 eventObject = .fxaConfirmSignInToken
             }
         }
-        
         TelemetryWrapper.recordEvent(
             category: .firefoxAccount,
             method: .view,
