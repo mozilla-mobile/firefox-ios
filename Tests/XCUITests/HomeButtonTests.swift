@@ -25,7 +25,7 @@ class HomeButtonTests: BaseTestCase {
         if iPad() {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
         } else {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
         }
         if iPad() {
             navigator.nowAt(NewTabScreen)
