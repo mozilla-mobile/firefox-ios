@@ -3,80 +3,67 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 
-public enum PushConfigurationLabel: String {
-    case fennec = "Fennec"
-    case fennecEnterprise = "FennecEnterprise"
-    case firefoxBeta = "FirefoxBeta"
-    case firefoxNightlyEnterprise = "FirefoxNightly"
-    case firefox = "Firefox"
+let PUSH_PROD_HOST = "updates.push.services.mozilla.com"
+let PUSH_STAGE_HOST = "updates-autopush.stage.mozaws.net"
 
-    public func toConfiguration() -> PushConfiguration {
-        switch self {
-        case .fennec: return FennecPushConfiguration()
-        case .fennecEnterprise: return FennecEnterprisePushConfiguration()
-        case .firefoxBeta: return FirefoxBetaPushConfiguration()
-        case .firefoxNightlyEnterprise: return FirefoxNightlyEnterprisePushConfiguration()
-        case .firefox: return FirefoxPushConfiguration()
-        }
+class InvalidSchemeError: Error {
+   private let scheme: String
+    
+    init(scheme: String) {
+        self.scheme = scheme
     }
 }
 
-public protocol PushConfiguration {
-    var label: PushConfigurationLabel { get }
+public enum PushConfigurationLabel: String {
+    case fennec = "fennec"
+    case fennecEnterprise = "fennecenterprise"
+    case firefoxBeta = "firefoxbeta"
+    case firefoxNightlyEnterprise = "firefoxnightlyenterprise"
+    case firefox = "firefox"
 
-    /// The associated autopush server should speak the protocol documented at
-    /// http://autopush.readthedocs.io/en/latest/http.html#push-service-http-api
-    /// /v1/{type}/{app_id}
-    /// type == apns
-    /// app_id == the “platform” or “channel” of development (e.g. “firefox”, “beta”, “gecko”, etc.)
-    var endpointURL: NSURL { get }
-}
+    static func fromScheme(scheme: String) throws -> PushConfigurationLabel {
+        switch scheme {
+        case "Fennec": return .fennec
+        case "FennecEnterprise": return .fennecEnterprise
+        case "FirefoxBeta": return .firefoxBeta
+        case "FirefoxNightly": return .firefoxNightlyEnterprise
+        case "Firefox": return .firefox
+        default: throw InvalidSchemeError(scheme: scheme)
+        }
+    }
 
-public struct FennecPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.fennec
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennec")!
-}
+    public func toConfiguration(dbPath: String) -> PushConfiguration {
+        return PushConfiguration(
+            serverHost: PUSH_PROD_HOST,
+            httpProtocol: PushHttpProtocol.https,
+            bridgeType: BridgeType.apns,
+            senderId: self.rawValue,
+            databasePath: dbPath,
+            verifyConnectionRateLimiter: nil
+        )
+    }
 
-public struct FennecStagingPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.fennec
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/fennec")!
-}
+    public func toStagingConfiguration(dbPath: String) -> PushConfiguration {
+        return PushConfiguration(
+            serverHost: PUSH_STAGE_HOST,
+            httpProtocol: PushHttpProtocol.https,
+            bridgeType: BridgeType.apns,
+            senderId: self.rawValue,
+            databasePath: dbPath,
+            verifyConnectionRateLimiter: nil
+        )
+    }
 
-public struct FennecEnterprisePushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.fennecEnterprise
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennecenterprise")!
-}
-
-public struct FirefoxBetaPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.firefoxBeta
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefoxbeta")!
-}
-
-public struct FirefoxBetaStagingPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.firefoxBeta
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/firefoxbeta")!
-}
-
-public struct FirefoxNightlyEnterprisePushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.firefoxNightlyEnterprise
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefoxnightlyenterprise")!
-}
-
-public struct FirefoxPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.firefox
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefox")!
-}
-
-public struct FirefoxStagingPushConfiguration: PushConfiguration {
-    public init() {}
-    public let label = PushConfigurationLabel.firefox
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/firefox")!
+    public func toLocalConfiguration(host: String, dbPath: String) -> PushConfiguration {
+        return PushConfiguration(
+            serverHost: host,
+            httpProtocol: PushHttpProtocol.http,
+            bridgeType: BridgeType.apns,
+            senderId: self.rawValue,
+            databasePath: dbPath,
+            verifyConnectionRateLimiter: nil
+        )
+    }
 }

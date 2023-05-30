@@ -27,7 +27,7 @@ open class PushNotificationSetup {
             if let subscriptionEndpoint = subscriptionEndpoint, !subscriptionEndpoint.isEmpty, persistedApnsToken == apnsToken {
                 return
             }
-            let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
+            let config = LegacyPushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
             self.pushClient = PushClientImplementation(endpointURL: config.endpointURL,
                                                        experimentalMode: false)
 
@@ -37,7 +37,6 @@ open class PushNotificationSetup {
 
                 let subscription = pushRegistration.defaultSubscription
 
-                // send empty parameters for push subscription if no notifications should be send to device
                 let endpoint = subscription.endpoint.absoluteString
                 let publicKey = subscription.p256dhPublicKey
                 let authKey = subscription.authKey
