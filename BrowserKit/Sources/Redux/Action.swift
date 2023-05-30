@@ -4,4 +4,6 @@
 
 import Foundation
 
+/// Are a declarative way of describing a state change. Actions don’t contain any code,
+/// they are consumed by the store and forwarded to reducers. Are used to express intended state changes. 
 public protocol Action {}

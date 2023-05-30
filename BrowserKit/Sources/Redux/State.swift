@@ -4,4 +4,7 @@
 
 import Foundation
 
+/// Defines the entire application state including the UI state and any model state that you used in the app.
+/// This state is stored inside of the `Store`, then you have views and other subscribers that will get notified
+/// every single time that state updates into the entire app.
 public protocol StateType {}
