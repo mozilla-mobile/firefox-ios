@@ -82,7 +82,7 @@ export let FormLikeFactory = {
     // FormLikes, and computing the elements list becomes more and more
     // expensive. Making the elements list lazy means that it'll only
     // be computed when it's eventually needed (if ever).
-    XPCOMUtils.defineLazyGetter(formLike, "elements", function() {
+    XPCOMUtils.defineLazyGetter(formLike, "elements", function () {
       let elements = [];
       for (let el of this.rootElement.querySelectorAll("input, select")) {
         // Exclude elements inside the rootElement that are already in a <form> as

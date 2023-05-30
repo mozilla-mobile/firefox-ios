@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// prettier-ignore
 export const HeuristicsRegExp = {
   RULES: {
     email: undefined,
@@ -40,11 +41,26 @@ export const HeuristicsRegExp = {
       "address-line3": "addrline3|address_3",
       "address-level1": "land", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
-      "cc-name": "accountholdername" + "|titulaire", // fr-FR
-      "cc-number": "(cc|kk)nr", // de-DE
-      "cc-exp-month": "month" + "|(cc|kk)month", // de-DE
-      "cc-exp-year": "year" + "|(cc|kk)year", // de-DE
-      "cc-type": "type" + "|kartenmarke", // de-DE
+      "cc-name":
+        "accountholdername" +
+        "|titulaire", // fr-FR
+      "cc-number":
+        "(cc|kk)nr",    // de-DE
+      "cc-exp":
+        "ważna.*do" +        // pl-PL
+        "|data.*ważności",   // pl-PL
+      "cc-exp-month":
+        "month" +
+        "|(cc|kk)month" +    // de-DE
+        "|miesiąc",          // pl-PL
+      "cc-exp-year":
+        "year" +
+        "|(cc|kk)year" +     // de-DE
+        "|rok",              // pl-PL
+      "cc-type":
+        "type" +
+        "|kartenmarke" +     // de-DE
+        "|typ.*karty",       // pl-PL
     },
 
     //=========================================================================

@@ -19,15 +19,21 @@ export class FormAutofillSection {
   static SHOULD_FOCUS_ON_AUTOFILL = true;
   #focusedInput = null;
 
-  constructor(fieldDetails, handler) {
-    this.fieldDetails = fieldDetails;
+  #section = null;
+
+  constructor(section, handler) {
+    this.#section = section;
+
+    if (!this.isValidSection()) {
+      return;
+    }
+
     this.handler = handler;
     this.filledRecordGUID = null;
 
     XPCOMUtils.defineLazyGetter(this, "reauthPasswordPromptMessage", () => {
-      const brandShortName = FormAutofillUtils.brandBundle.GetStringFromName(
-        "brandShortName"
-      );
+      const brandShortName =
+        FormAutofillUtils.brandBundle.GetStringFromName("brandShortName");
       // The string name for Mac is changed because the value needed updating.
       const platform = AppConstants.platform.replace("macosx", "macos");
       return FormAutofillUtils.stringBundle.formatStringFromName(
@@ -40,13 +46,6 @@ export class FormAutofillSection {
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
     );
 
-    if (!this.isValidSection()) {
-      this.fieldDetails = [];
-      this.log.debug(
-        `Ignoring ${this.constructor.name} related fields since it is an invalid section`
-      );
-    }
-
     this._cacheValue = {
       allFieldNames: null,
       matchingSelectOption: null,
@@ -58,6 +57,10 @@ export class FormAutofillSection {
       "Creating new credit card section with flowId =",
       this.flowId
     );
+  }
+
+  get fieldDetails() {
+    return this.#section.fieldDetails;
   }
 
   /*
@@ -296,12 +299,8 @@ export class FormAutofillSection {
     }
   }
 
-  fillFieldValue(
-    element,
-    value,
-    shouldFocus = FormAutofillSection.SHOULD_FOCUS_ON_AUTOFILL
-  ) {
-    if (shouldFocus) {
+  fillFieldValue(element, value) {
+    if (FormAutofillUtils.focusOnAutofill) {
       element.focus({ preventScroll: true });
     }
     if (HTMLInputElement.isInstance(element)) {
@@ -672,6 +671,10 @@ export class FormAutofillAddressSection extends FormAutofillSection {
   constructor(fieldDetails, handler) {
     super(fieldDetails, handler);
 
+    if (!this.isValidSection()) {
+      return;
+    }
+
     this._cacheValue.oneLineStreetAddress = null;
 
     lazy.AutofillTelemetry.recordDetectedSectionCount(this);
@@ -679,9 +682,8 @@ export class FormAutofillAddressSection extends FormAutofillSection {
   }
 
   isValidSection() {
-    return (
-      this.fieldDetails.length >= FormAutofillUtils.AUTOFILL_FIELDS_THRESHOLD
-    );
+    const fields = new Set(this.fieldDetails.map(f => f.fieldName));
+    return fields.size >= FormAutofillUtils.AUTOFILL_FIELDS_THRESHOLD;
   }
 
   isEnabled() {
@@ -722,9 +724,8 @@ export class FormAutofillAddressSection extends FormAutofillSection {
       this._cacheValue.oneLineStreetAddress = {};
     }
     if (!this._cacheValue.oneLineStreetAddress[address]) {
-      this._cacheValue.oneLineStreetAddress[
-        address
-      ] = FormAutofillUtils.toOneLineAddress(address);
+      this._cacheValue.oneLineStreetAddress[address] =
+        FormAutofillUtils.toOneLineAddress(address);
     }
     return this._cacheValue.oneLineStreetAddress[address];
   }
@@ -999,11 +1000,11 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
     // Condition B. One of the field is identified by fathom, if this section also
     // contains another cc field found by our heuristic (Case 2, 3, or 4), we consider
     // this section a valid credit card seciton
-    if (ccNumberDetail?.confidence > 0) {
+    if (ccNumberDetail?.reason == "fathom") {
       if (ccNameDetail || ccExpiryDetail) {
         return true;
       }
-    } else if (ccNameDetail?.confidence > 0) {
+    } else if (ccNameDetail?.reason == "fathom") {
       if (ccNumberDetail || ccExpiryDetail) {
         return true;
       }
@@ -1097,8 +1098,8 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
 
       let yearFirstCheck = new RegExp(
         "(?:\\b|^)((?:[" +
-        yearChars +
-        "]{2}){1,2})\\s*([\\-/])\\s*((?:[" + // either one or two counts of 'yy' or 'aa' sequence
+          yearChars +
+          "]{2}){1,2})\\s*([\\-/])\\s*((?:[" + // either one or two counts of 'yy' or 'aa' sequence
           monthChars +
           "]){1,2})(?:\\b|$)",
         "i" // either one or two counts of a 'm' sequence
