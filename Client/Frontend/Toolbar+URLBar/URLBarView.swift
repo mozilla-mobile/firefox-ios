@@ -8,9 +8,6 @@ import SnapKit
 import UIKit
 
 private struct URLBarViewUX {
-    static let TextFieldBorderColor = UIColor.Photon.Grey40
-    static let TextFieldActiveBorderColor = UIColor.Photon.Blue40
-
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
     static let LocationHeight: CGFloat = 40
@@ -64,14 +61,14 @@ extension URLBarViewProtocol {
 
 class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable, SearchEngineDelegate {
     // Additional UIAppearance-configurable properties
-    @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
+    @objc lazy dynamic var locationBorderColor: UIColor = .clear {
         didSet {
             if !inOverlayMode {
                 locationContainer.layer.borderColor = locationBorderColor.cgColor
             }
         }
     }
-    @objc dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+    @objc lazy dynamic var locationActiveBorderColor: UIColor = .clear {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor
@@ -217,8 +214,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var profile: Profile
 
-    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                         backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate lazy var privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
+                                                              backdropCircleColor: themeManager.currentTheme.colors.layerAccentPrivate)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
                                                          imageMask: ImageIdentifiers.menuWarningMask)
