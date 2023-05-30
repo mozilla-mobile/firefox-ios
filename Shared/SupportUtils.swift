@@ -13,6 +13,11 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/en-US/firefox/ios/notes/")
     }
 
+    public static var URLForPocketLearnMore: URL? {
+        // Returns the predefined URL associated to homepage Pocket's Learn more action.
+        URL(string: "https://www.mozilla.org/firefox/pocket/?utm_source=ff_ios")
+    }
+
     public static func URLForTopic(_ topic: String) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.

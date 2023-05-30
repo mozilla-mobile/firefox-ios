@@ -11,6 +11,8 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         static let mainContainerSpacing: CGFloat = 8
     }
 
+    var onTapLearnMore: (() -> Void)?
+
     private let pocketImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: ImageIdentifiers.homepagePocket)
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -87,7 +89,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
 
     @objc
     func didTapLearnMore() {
-        // Will next be implemented
+        onTapLearnMore?()
     }
 
     func applyTheme(theme: Theme) {
