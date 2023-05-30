@@ -39,6 +39,7 @@ workflows:
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=16.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 600
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
@@ -81,6 +82,7 @@ workflows:
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
+        timeout: 180
         inputs:
         - content: |
             #!/usr/bin/env bash
@@ -169,6 +171,7 @@ workflows:
             exec unzip "$derived_data"
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -214,6 +217,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -259,6 +263,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -304,6 +309,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
