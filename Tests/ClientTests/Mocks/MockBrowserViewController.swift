@@ -80,11 +80,12 @@ class MockBrowserViewController: BrowserViewController {
         showLibraryCount += 1
     }
 
-    override func openURLInNewTab(_ url: URL?, isPrivate: Bool) {
+    override func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab {
         openURLInNewTabCalled = true
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
+        return Tab(profile: MockProfile(), configuration: .init())
     }
 
     override func handleQRCode() {
