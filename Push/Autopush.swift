@@ -56,86 +56,45 @@ open class Autopush {
         self.pushClient = nil
     }
 
-    /// Suspends execution and runs the given function in the global default dispatch queue against a native push client
-    ///
-    /// - Parameters:
-    ///   - fn:  A function that takes a `PushManagerProtocol` and returns the value `withClient` would return
-    ///
-    /// - Returns: The return value of `fn`
-    ///
-    /// - Throws:
-    ///     - if `withClient` could not get an opened push connection
-    ///     - An error was throwing from `fn`
-    ///
-    /// - Note:
-    ///     - `withClient` assumes that `fn` might need to do blocking IO and proactively schedules it on the global default dispatch queue
-    ///     - `withClient` will attempt to open the underlying native client if not open already - The openning is done using `getOpenedPushClient`
-    private func withClient<T>(_ fn: @escaping (PushManagerProtocol) throws -> T) async throws -> T {
-        let pushClient = try await getOpenedPushClient()
-        return try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global().async {
-                do {
-                    continuation.resume(returning: try fn(pushClient))
-                } catch let e {
-                    continuation.resume(throwing: e)
-                }
-            }
-        }
-    }
-
     /// Gets a native push client if available, would otherwise open a new native push client and return it
     ///
-    /// This function is called by `withClient` to prepare a client for execution.
+    /// This function is called to prepare a client for execution.
     ///
     /// - Returns: An opened `PushManagerProtocol` that is ready to be queried
     private func getOpenedPushClient() async throws -> PushManagerProtocol {
-        return try await withCheckedThrowingContinuation { continuation in
-            if let pushClient = self.pushClient {
-                continuation.resume(returning: pushClient)
-                return
-            }
-            DispatchQueue.global().async {
-                do {
-                    let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: self.dbPath)
-                    let pushClient = try PushManager(config: pushManagerConfig)
-                    self.pushClient = pushClient
-                    continuation.resume(returning: pushClient)
-                } catch let e {
-                    continuation.resume(throwing: e)
-                }
-            }
+        if let pushClient = self.pushClient {
+            return pushClient
         }
+        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: self.dbPath)
+        let pushClient = try PushManager(config: pushManagerConfig)
+        self.pushClient = pushClient
+        return pushClient
     }
 }
 
 extension Autopush: AutopushProtocol {
     public func updateToken(withDeviceToken deviceToken: Data) async throws {
-        try await withClient { pushClient in
-            try pushClient.update(registrationToken: deviceToken.hexEncodedString)
-        }
+        let pushClient = await getOpenedPushClient()
+        try pushClient.update(registrationToken: deviceToken.hexEncodedString)
     }
 
     public func subscribe(scope: String) async throws -> SubscriptionResponse {
-        try await withClient { pushClient in
-            return try pushClient.subscribe(scope: scope, appServerSey: nil)
-        }
+        let pushClient = await getOpenedPushClient()
+        return try pushClient.subscribe(scope: scope, appServerSey: nil)
     }
 
     public func unsubscribe(scope: String) async throws -> Bool {
-        return try await withClient { pushClient in
-            return try pushClient.unsubscribe(scope: scope)
-        }
+        let pushClient = await getOpenedPushClient()
+        return try pushClient.unsubscribe(scope: scope)
     }
 
     public func unsubscribeAll() async throws {
-        try await withClient { pushClient in
-            try pushClient.unsubscribeAll()
-        }
+        let pushClient = await getOpenedPushClient()
+        try pushClient.unsubscribeAll()
     }
 
     public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
-        return try await withClient { pushClient in
-            return try pushClient.decrypt(payload: payload)
-        }
+        let pushClient = await getOpenedPushClient()
+        return try pushClient.decrypt(payload: payload)
     }
 }
