@@ -13,7 +13,6 @@ const ModuleOverrides = {
   "Region.sys.mjs": "Helpers.ios.mjs",
   "OSKeyStore.sys.mjs": "Helpers.ios.mjs",
   "FormAutofill.sys.mjs": "FormAutofill.ios.sys.mjs",
-  "FormAutofillSection.sys.mjs": "FormAutofillSection.ios.sys.mjs",
   "EntryFile.sys.mjs": "FormAutofillChild.ios.sys.mjs",
 };
 

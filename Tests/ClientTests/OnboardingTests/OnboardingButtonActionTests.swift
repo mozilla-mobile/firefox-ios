@@ -112,11 +112,10 @@ class OnboardingButtonActionTests: XCTestCase {
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
             imageID: ImageIdentifiers.onboardingSyncv106)
-        let mockCardViewModel = OnboardingCardViewModel(infoModel: mockInfoModel)
 
         mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingCardViewController(
-            viewModel: mockCardViewModel,
+            viewModel: mockInfoModel,
             delegate: mockDelegate)
 
         trackForMemoryLeaks(subject, file: file, line: line)

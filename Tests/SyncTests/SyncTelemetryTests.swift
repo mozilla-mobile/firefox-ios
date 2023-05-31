@@ -29,9 +29,8 @@ extension SyncTelemetryTests {
     private func getMockedIndependentRecordSynchronizer() -> IndependentRecordSynchronizer {
         let prefs = MockProfilePrefs()
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
-        let delegate = MockSyncDelegate()
 
-        return IndependentRecordSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled, collection: "mockHistory")
+        return IndependentRecordSynchronizer(scratchpad: scratchpad, basePrefs: prefs, why: .scheduled, collection: "mockHistory")
     }
 
     func testApplyIncomingRecordsReportsDownloadStats() {

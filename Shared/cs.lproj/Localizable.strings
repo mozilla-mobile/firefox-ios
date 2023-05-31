@@ -1537,6 +1537,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, rozumím";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Pokud web nefunguje podle očekávání, klepněte na zámek v adresním řádku a vypněte pro danou stránku rozšířenou ochranu proti sledování.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Pozor!";
 
@@ -1548,6 +1551,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Omezuje množství cílených reklam a zabrání inzerentům sledovat vás na internetu.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Pokud web nefunguje podle očekávání, klepněte na zámek v adresním řádku a vypněte pro danou stránku rozšířenou ochranu proti sledování.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Pokud web nefunguje podle očekávání, klepněte na zámek v adresním řádku a vypněte pro danou stránku rozšířenou ochranu proti sledování.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Povoluje některé sledující reklamy pro správné fungování stránek.";

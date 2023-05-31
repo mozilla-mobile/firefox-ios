@@ -16,7 +16,10 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
                   messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        self.updateViewModel = UpdateViewModel(profile: profile, model: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        self.updateViewModel = UpdateViewModel(profile: profile,
+                                               model: onboardingModel,
+                                               telemetryUtility: telemetryUtility)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 

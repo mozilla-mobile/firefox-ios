@@ -17,7 +17,7 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
-    let actionButtons: [NotificationThemeable & UIButton]
+    let actionButtons: [ThemeApplicable & UIButton]
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
                                                      backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -137,15 +137,14 @@ extension TabToolbar: TabToolbarProtocol {
 extension TabToolbar: SearchBarLocationProvider {}
 
 // MARK: - Theme protocols
-
-extension TabToolbar: NotificationThemeable, PrivateModeUI {
-    func applyTheme() {
-        backgroundColor = UIColor.legacyTheme.browser.background
+extension TabToolbar: ThemeApplicable, PrivateModeUI {
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer1
         helper?.setTheme(forButtons: actionButtons)
 
-        privateModeBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
-        appMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
-        warningMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
+        appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
+        warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 
     func applyUIMode(isPrivate: Bool) {

@@ -611,6 +611,7 @@ key_commands:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+
 # Onboarding metrics
 onboarding:
   card_view:
@@ -621,15 +622,27 @@ onboarding:
       card_type:
         type: string
         description: |
-          Presented onboarding card (welcome / wallpapers / sign to sync)
+          The name of the presented card.
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   primary_button_tap:
     type: event
     description: |
@@ -639,14 +652,31 @@ onboarding:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
   secondary_button_tap:
     type: event
     description: |
@@ -656,14 +686,61 @@ onboarding:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
+    expires: "2024-01-01"
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-01-01"
   wallpaper_selected:
     type: event
     description: |
@@ -737,23 +814,6 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
-  close_tap:
-    type: event
-    description: |
-      Records when the user closes the onboarding.
-    extra_keys:
-      card_type:
-        type: string
-        description: |
-          The card presented when the onboarding was closed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
   notification_permission_prompt:
     type: event
     description: |
@@ -791,81 +851,6 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/13652
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
-
-# Upgrade onboarding metrics
-upgrade:
-  card_view:
-    type: event
-    description: |
-      Records when an upgrade card is shown
-    extra_keys:
-      card_type:
-        type: string
-        description: |
-          Presented upgrade card (welcome / sign to sync)
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
-  primary_button_tap:
-    type: event
-    description: |
-        Records when the primary button is tap during the upgrade onboarding
-    extra_keys:
-      card_type:
-        type: string
-        description: |
-          Presented upgrade card (welcome / sign to sync)
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
-  secondary_button_tap:
-    type: event
-    description: |
-        Records when the secondary button is tap during the upgrade onboarding
-    extra_keys:
-      card_type:
-        type: string
-        description: |
-          Presented upgrade card (welcome / sign to sync)
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-12-01"
-  close_tap:
-    type: event
-    description: |
-      Records when the user closes the upgrade onboarding.
-    extra_keys:
-      card_type:
-        type: string
-        description: |
-          The card presented when the upgrade was closed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11595
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com

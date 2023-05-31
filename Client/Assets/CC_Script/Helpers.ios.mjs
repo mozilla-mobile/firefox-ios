@@ -12,7 +12,7 @@ HTMLFormElement.isInstance = element => element instanceof HTMLFormElement;
 ShadowRoot.isInstance = element => element instanceof ShadowRoot;
 
 HTMLElement.prototype.ownerGlobal = window;
-HTMLInputElement.prototype.setUserInput = function(value) {
+HTMLInputElement.prototype.setUserInput = function (value) {
   this.value = value;
   this.dispatchEvent(new Event("input", { bubbles: true }));
 };
@@ -32,7 +32,7 @@ window.Cu = class {
 // It should return an object with a fieldName property matching the autocomplete attribute
 // only if it's a valid value from this list https://searchfox.org/mozilla-central/source/dom/base/AutocompleteFieldList.h#89-149
 // Also found here: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
-HTMLElement.prototype.getAutocompleteInfo = function() {
+HTMLElement.prototype.getAutocompleteInfo = function () {
   const autocomplete = this.getAttribute("autocomplete");
 
   return {
@@ -40,6 +40,12 @@ HTMLElement.prototype.getAutocompleteInfo = function() {
       ? autocomplete
       : "",
   };
+};
+
+// Bug 1835024. Webkit doesn't support `checkVisibility` API
+// https://drafts.csswg.org/cssom-view-1/#dom-element-checkvisibility
+HTMLElement.prototype.checkVisibility = function (options) {
+  throw new Error(`Not implemented: WebKit doesn't support checkVisibility `);
 };
 
 // This function  helps us debug better when an error occurs because a certain mock is missing

@@ -86,9 +86,9 @@ extension String {
     public struct Biometry {
         public struct Screen {
             public static let UniversalAuthenticationReason = MZLocalizedString(
-                key: "Biometry.Screen.UniversalAuthenticationReason.v113",
+                key: "Biometry.Screen.UniversalAuthenticationReason.v115",
                 tableName: "BiometricAuthentication",
-                value: "Enter your device passcode",
+                value: "Authenticate to access passwords.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
         }
     }
@@ -345,6 +345,54 @@ extension String {
                 tableName: "EditCard",
                 value: "Save",
                 comment: "Button title which, when tapped, will allow the user to save valid credit card details.")
+        }
+
+        // Remember Card
+        public struct RememberCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.MainTitle.v115",
+                tableName: "RememberCard",
+                value: "Remember this card?",
+                comment: "This value is used as the title for the remember credit card page")
+            public static let Header = MZLocalizedString(
+                key: "CreditCard.RememberCard.Header.v115",
+                tableName: "RememberCard",
+                value: "Save your card information securely with Firefox to check out faster next time.",
+                comment: "This value is used as the header for the remember card page")
+            public static let MainButtonTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.MainButtonTitle.v115",
+                tableName: "RememberCard",
+                value: "Yes",
+                comment: "This value is used as the title for the Yes button in the remember credit card page")
+            public static let SecondaryButtonTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.SecondaryButtonTitle.v115",
+                tableName: "RememberCard",
+                value: "Not Now",
+                comment: "This value is used as the title for the Not Now button in the remember credit card page")
+        }
+
+        // Update Card
+        public struct UpdateCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "CreditCard.UpdateCard.MainTitle.v115",
+                tableName: "UpdateCard",
+                value: "Update this card?",
+                comment: "This value is used as the title for the update card page")
+            public static let ManageCardsButtonTitle = MZLocalizedString(
+                key: "CreditCard.UpdateCard.ManageCardsButtonTitle.v115",
+                tableName: "UpdateCard",
+                value: "Manage cards",
+                comment: "This value is used as the title for the Manage Cards button from the update credit card page")
+            public static let YesButtonTitle = MZLocalizedString(
+                key: "CreditCard.UpdateCard.YesButtonTitle.v115",
+                tableName: "UpdateCard",
+                value: "Yes",
+                comment: "This value is used as the title for the button in the update credit card page")
+            public static let NotNowButtonTitle = MZLocalizedString(
+                key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
+                tableName: "UpdateCard",
+                value: "Not Now",
+                comment: "This value is used as the title for the Not Now button in the update credit card page")
         }
 
         // Error States for wrong input while editing credit card
@@ -874,9 +922,9 @@ extension String {
             value: "Learn more in our privacy notice",
             comment: "String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens.")
         public static let LaterAction = MZLocalizedString(
-            key: "Onboarding.LaterAction.v114",
+            key: "Onboarding.LaterAction.v115",
             tableName: "Onboarding",
-            value: "Not Now",
+            value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
 
         public struct Intro {
@@ -1008,9 +1056,9 @@ extension String {
                 value: "Turn On Notifications",
                 comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
-                key: "Onboarding.Notification.Skip.Action.v114",
+                key: "Onboarding.Notification.Skip.Action.v115",
                 tableName: "Onboarding",
-                value: "Not now",
+                value: "Skip",
                 comment: "String used to describe the option to skip the notification permission in Firefox Onboarding screens.")
         }
 
@@ -2767,21 +2815,6 @@ extension String {
         tableName: nil,
         value: "Tab received",
         comment: "Title of notification shown when the device is sent one or more tabs from an unnamed device.")
-    public static let SentTab_TabArrivingNotification_NoDevice_body = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_NoDevice_body",
-        tableName: nil,
-        value: "New tab arrived from another device.",
-        comment: "Body of notification shown when the device is sent one or more tabs from an unnamed device.")
-    public static let SentTab_TabArrivingNotification_WithDevice_title = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_WithDevice_title",
-        tableName: nil,
-        value: "Tab received from %@",
-        comment: "Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device.")
-    public static let SentTab_TabArrivingNotification_WithDevice_body = MZLocalizedString(
-        key: "SentTab_TabArrivingNotification_WithDevice_body",
-        tableName: nil,
-        value: "New tab arrived in %@",
-        comment: "Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name.")
 
     // Notification Actions
     public static let SentTabViewActionTitle = MZLocalizedString(

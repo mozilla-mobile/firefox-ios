@@ -37,9 +37,9 @@ class IntroViewModelTests: XCTestCase {
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.infoModel.name, cards.notifications)
-        XCTAssertEqual(subject.availableCards[2].viewModel.infoModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications)
+        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync)
     }
 
     func testModel_hasThreeAvailableCards_inExpectedOrder() {
@@ -50,9 +50,9 @@ class IntroViewModelTests: XCTestCase {
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.infoModel.name, cards.notifications)
-        XCTAssertEqual(subject.availableCards[2].viewModel.infoModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications)
+        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync)
     }
 
     func testModel_hasTwoAvailableCards_inExpectedOrder() {
@@ -63,8 +63,8 @@ class IntroViewModelTests: XCTestCase {
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.infoModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.sync)
     }
 
     // MARK: - Test index moving forward
@@ -139,10 +139,11 @@ class IntroViewModelTests: XCTestCase {
         line: UInt = #line
     ) -> IntroViewModel {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel)
         let subject = IntroViewModel(
             profile: MockProfile(databasePrefix: "introViewModelTests_"),
-            model: onboardingViewModel)
+            model: onboardingViewModel,
+            telemetryUtility: telemetryUtility)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

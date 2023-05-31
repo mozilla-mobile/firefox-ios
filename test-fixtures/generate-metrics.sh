@@ -4,10 +4,10 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=14
-THRESHOLD_XCUITEST=25
+THRESHOLD_UNIT_TEST=6
+THRESHOLD_XCUITEST=6
 
-WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|⚠️|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
+WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BUILD_LOG_FILE" | grep -E "(^|:)[0-9]+:[0-9]+:|warning:|ld: warning:|<unknown>:0: warning:|fatal|===" | uniq | wc -l)
 
 if  [ $2 == "unit-test" ]; then
     if [ $WARNING_COUNT -ge $THRESHOLD_UNIT_TEST ]; then

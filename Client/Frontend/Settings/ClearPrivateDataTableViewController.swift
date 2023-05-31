@@ -19,6 +19,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     var profile: Profile!
     var tabManager: TabManager!
+    private let logger: Logger
 
     fileprivate typealias DefaultCheckedState = Bool
 
@@ -60,6 +61,16 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         }
     }
 
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -95,6 +106,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             control.tag = indexPath.item
         } else {
             assert(indexPath.section == SectionButton)
+            logger.log("We had to fallback to this setup!", level: .warning, category: .unlabeled)
+
             cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
@@ -116,7 +129,14 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else if section == SectionToggles {
             return clearables.count
         }
+
         assert(section == SectionButton)
+        if section != SectionButton {
+            logger.log("We've hit a case where the section isn't supported.",
+                       level: .warning,
+                       category: .unlabeled)
+        }
+
         return 1
     }
 

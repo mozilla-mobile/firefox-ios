@@ -55,46 +55,38 @@ class FxAWebViewTelemetry {
 
         return flow
     }
-
+    /// Records telemetry for  a particular FxAFlow
+    ///
+    /// - Parameters:
+    ///     - flow: A type of FxAFlow for which telemetry has
     func recordTelemetry(for flow: FxAFlow) {
+        let eventObject: TelemetryWrapper.EventObject
         switch flow {
         case .completed:
-            if validStartedFlow == .signinStarted {
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaLoginCompleteWebpage)
-            } else if validStartedFlow == .signupStarted {
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaRegistrationCompletedWebpage)
+            switch validStartedFlow {
+            case .signinStarted:
+                eventObject = .fxaLoginCompleteWebpage
+            case .signupStarted:
+                eventObject = .fxaRegistrationCompletedWebpage
+            default: return
             }
         case .startedFlow(let type):
             switch type {
             case .signinStarted:
                 validStartedFlow = type
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaLoginWebpage)
+                eventObject = .fxaLoginWebpage
             case .signupStarted:
                 validStartedFlow = type
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaRegistrationWebpage)
+                eventObject = .fxaRegistrationWebpage
             case .confirmSignupCode:
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaConfirmSignUpCode)
+                eventObject = .fxaConfirmSignUpCode
             case .signinTokenCode:
-                TelemetryWrapper.recordEvent(
-                    category: .firefoxAccount,
-                    method: .view,
-                    object: .fxaConfirmSignInToken)
+                eventObject = .fxaConfirmSignInToken
             }
         }
+        TelemetryWrapper.recordEvent(
+            category: .firefoxAccount,
+            method: .view,
+            object: eventObject)
     }
 }
