@@ -891,7 +891,7 @@ class BrowserViewController: UIViewController {
         // need to account for inset and remove it when keyboard is showing
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
-        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
+        if !showToolBar, !isKeyboardShowing, isBottomSearchBar, zoomPageBar == nil {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
