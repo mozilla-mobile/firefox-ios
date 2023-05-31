@@ -20,7 +20,7 @@ class TabToolbar: UIView {
     let actionButtons: [ThemeApplicable & UIButton]
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                     backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+                                                     backdropCircleColor: UIColor.LegacyDefaults.MobilePrivatePurple)
     private let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     private let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
                                                      imageMask: ImageIdentifiers.menuWarningMask)
