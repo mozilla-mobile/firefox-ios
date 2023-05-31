@@ -282,9 +282,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     func focusTab(_ selectedTab: Tab) {
         if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
-            self.collectionView.scrollToItem(at: indexPath,
-                                             at: [.centeredVertically, .centeredHorizontally],
-                                             animated: false)
+            guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
+            if indexOfRegularTab >= self.tabDisplayManager.dataStore.count - 2 {
+                rect.origin.y += 10
+                self.collectionView.scrollRectToVisible(rect, animated: false)
+            } else {
+                self.collectionView.scrollToItem(at: indexPath,
+                                                 at: [.centeredVertically, .centeredHorizontally],
+                                                 animated: false)
+            }
         }
     }
 
