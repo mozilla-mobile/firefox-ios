@@ -23,7 +23,8 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         static let bottomSpacing: CGFloat = 32.0
         static let buttonsSpacing: CGFloat = 8.0
         static let contentViewWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 545 : 339
-        static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24 // 24 is the spacing needed between the header and the table cell, left in this form so it's not overlooked
+        // 24 is the spacing needed between the header and the table cell, left in this form so it's not overlooked
+        static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24
         static let estimatedRowHeight: CGFloat = 86
     }
 
@@ -246,7 +247,11 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SingleCreditCardHeaderView.cellIdentifier) as? SingleCreditCardHeaderView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: SingleCreditCardHeaderView.cellIdentifier
+        ) as? SingleCreditCardHeaderView else {
+            return nil
+        }
         headerView.applyTheme(theme: themeManager.currentTheme)
         headerView.viewModel = viewModel
         return headerView
@@ -258,7 +263,11 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             let emptyView = UIView()
             return emptyView
         case .update:
-            guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SingleCreditCardFooterView.cellIdentifier) as? SingleCreditCardFooterView else { return nil }
+            guard let footerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: SingleCreditCardFooterView.cellIdentifier
+            ) as? SingleCreditCardFooterView else {
+                return nil
+            }
             footerView.applyTheme(theme: themeManager.currentTheme)
             if !footerView.manageCardsButton.responds(to: #selector(SingleCreditCardViewController.didTapManageCards)) {
                 footerView.manageCardsButton.addTarget(self, action: #selector(SingleCreditCardViewController.didTapManageCards), for: .touchUpInside)
