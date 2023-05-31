@@ -38,11 +38,8 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
-        } else {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
-        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+
         navigator.openNewURL(urlString: thirdWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()

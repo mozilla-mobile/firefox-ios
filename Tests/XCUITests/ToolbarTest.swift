@@ -30,8 +30,8 @@ class ToolbarTests: BaseTestCase {
 
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssertTrue(urlPlaceholder == defaultValuePlaceholder, "The placeholder does not show the correct value")
-        XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["Forward"].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
@@ -39,8 +39,8 @@ class ToolbarTests: BaseTestCase {
         waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
-        XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["Forward"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
         if iPad() {
             XCTAssertTrue(app.buttons["Reload"].isEnabled)
         } else {
@@ -50,15 +50,15 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website2)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
-        XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["Forward"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
-        app.buttons["URLBarView.backButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         waitUntilPageLoad()
-        XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-        XCTAssertTrue(app.buttons["Forward"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Open new tab and then go back to previous tab to test navigation buttons.
         waitForTabsButton()
@@ -73,8 +73,8 @@ class ToolbarTests: BaseTestCase {
 
         // Test to see if all the buttons are enabled.
         waitUntilPageLoad()
-        XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-        XCTAssertTrue(app.buttons["Forward"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
     }
 
     func testClearURLTextUsingBackspace() {

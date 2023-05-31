@@ -56,7 +56,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private lazy var tabsButton: TabsButton = .build { button in
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.tabsButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
         button.inTopTabs = true
     }
 
@@ -64,7 +64,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.newTab), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.newTabButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
     }
 
     lazy var privateModeButton: PrivateModeButton = {

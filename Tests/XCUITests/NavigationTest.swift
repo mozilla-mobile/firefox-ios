@@ -21,55 +21,39 @@ class NavigationTest: BaseTestCase {
 
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
-        if iPad() {
-            XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["Forward"].isEnabled)
-            app.textFields["url"].tap()
-        } else {
-            XCTAssertFalse(app.buttons["TabToolbar.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
-        }
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
-        // Once an url has been open, the back button is enabled but not the forward button
         if iPad() {
+            app.textFields["url"].tap()
+            // Once an url has been open, the back button is enabled but not the forward button
             navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
-        if iPad() {
-            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        } else {
-            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
-        }
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
-        if iPad() {
-            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["Forward"].isEnabled)
-            // Go back to previous visited web site
-            app.buttons["URLBarView.backButton"].tap()
-        } else {
-            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
-            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
-            // Go back to previous visited web site
-            app.buttons["TabToolbar.backButton"].tap()
-        }
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+        // Go back to previous visited web site
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
 
         if iPad() {
-            app.buttons["Forward"].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
         } else {
             // Go forward to next visited web site
-            waitForExistence(app.buttons["TabToolbar.forwardButton"])
-            app.buttons["TabToolbar.forwardButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
         }
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-mozilla-org")
@@ -146,11 +130,7 @@ class NavigationTest: BaseTestCase {
         // Scroll to bottom
         bottomElement.tap()
         waitUntilPageLoad()
-        if iPad() {
-            app.buttons["URLBarView.backButton"].tap()
-        } else {
-            app.buttons["TabToolbar.backButton"].tap()
-        }
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         waitUntilPageLoad()
 
         // Scroll to top

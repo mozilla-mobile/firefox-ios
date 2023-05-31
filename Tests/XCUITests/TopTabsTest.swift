@@ -33,8 +33,8 @@ class TopTabsTest: BaseTestCase {
 
         // The tab tray shows the correct tabs
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
-            app.buttons["TopTabsViewController.tabsButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
         } else {
             navigator.goto(TabTray)
         }
@@ -125,13 +125,13 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
-            app.buttons["TopTabsViewController.tabsButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
         }
 
         if iPad() {
@@ -150,7 +150,7 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
         }
 
         if iPad() {
@@ -174,13 +174,13 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
 
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
-            app.buttons["TopTabsViewController.tabsButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
         }
 
         navigator.goto(URLBarOpen)
@@ -207,7 +207,7 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -215,7 +215,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -246,11 +246,11 @@ class TopTabsTest: BaseTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.newTabButton"])
-            app.buttons["TopTabsViewController.newTabButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         } else {
-            waitForExistence(app.buttons["TabToolbar.addNewTabButton"], timeout: 15)
-            app.buttons["TabToolbar.addNewTabButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton], timeout: 15)
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         }
         app.typeText("google.com\n")
         waitUntilPageLoad()
@@ -259,7 +259,7 @@ class TopTabsTest: BaseTestCase {
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is not displayed
         if !iPad() {
-            waitForNoExistence(app.buttons["TabToolbar.addNewTabButton"])
+            waitForNoExistence(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
         }
     }
 
@@ -452,9 +452,9 @@ class TopTabsTestIpad: IpadOnlyTestCase {
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button
-        app.buttons["TopTabsViewController.newTabButton"].tap()
-        app.buttons["TopTabsViewController.newTabButton"].tap()
-        waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button

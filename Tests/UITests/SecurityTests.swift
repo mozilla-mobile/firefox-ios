@@ -45,21 +45,14 @@ class SecurityTests: KIFTestCase {
     func testErrorExploit() {
         // We should only have one tab open.
         let tabcount:String?
-        if BrowserUtils.iPad() {
-            tabcount = tester().waitForView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")?.accessibilityValue
-        } else {
-            tabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
-        }
+        tabcount = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)?.accessibilityValue
 
         // make sure a new tab wasn't opened.
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
         tester().wait(forTimeInterval: 1.0)
         let newTabcount:String?
-        if BrowserUtils.iPad() {
-            newTabcount = tester().waitForView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")?.accessibilityValue
-        } else {
-            newTabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
-        }
+        newTabcount = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)?.accessibilityValue
+
         XCTAssert(tabcount != nil && tabcount == newTabcount)
         }
 
@@ -79,7 +72,7 @@ class SecurityTests: KIFTestCase {
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
 
         // Workaround number of tabs not updated
-        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
@@ -100,7 +93,7 @@ class SecurityTests: KIFTestCase {
         XCTAssertFalse(tester().viewExistsWithLabel("http://1.2.3.4:1234/"))
 
         // Workaround number of tabs not updated
-        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

@@ -42,11 +42,7 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(app.webViews.links["Download Now"].exists)
 
         // Go back to pdf view
-        if iPad() {
-            app.buttons["URLBarView.backButton"].tap()
-        } else {
-            app.buttons["TabToolbar.backButton"].tap()
-        }
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
     }
 

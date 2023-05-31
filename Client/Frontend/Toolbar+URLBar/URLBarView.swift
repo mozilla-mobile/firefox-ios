@@ -121,7 +121,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.tabsButton
+        tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
         tabsButton.inTopTabs = false
         return tabsButton
     }()
@@ -183,7 +183,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var backButton: ToolbarButton = {
         let backButton = ToolbarButton()
-        backButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.backButton
+        backButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.backButton
         return backButton
     }()
 

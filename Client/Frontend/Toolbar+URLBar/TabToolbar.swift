@@ -68,11 +68,10 @@ class TabToolbar: UIView {
     }
 
     private func setupAccessibility() {
-        backButton.accessibilityIdentifier = "TabToolbar.backButton"
-        forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
-        multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
-        tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
-        addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
+        backButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.backButton
+        forwardButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.forwardButton
+        tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
+        addNewTabButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
