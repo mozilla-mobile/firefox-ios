@@ -57,7 +57,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
     private func setUp() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
-            
+
             // Schedule a new refresh task.
             self.scheduleTaskOnAppBackground()
         }
