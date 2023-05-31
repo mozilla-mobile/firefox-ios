@@ -187,6 +187,7 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
     and bookmarks records have been reached.
 
     Args:
+    db_connection (sqlite3.Connect): Connection instance to database.
     db_cursor (sqlite3.Cursor): Database cursor to execute SQL commands.
     history_count (int): The number of history records to be created.
     bookmark_count (int): The number of bookmark records to be created.
