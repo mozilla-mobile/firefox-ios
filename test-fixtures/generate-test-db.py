@@ -2,7 +2,12 @@
 This script manages the process of creating and modifying a database in the context of a simulated iOS environment.
 It interacts with a SQLite database, and takes user input for the number of history and bookmark records to create,
 and for naming the new database file. The script uses the `websites.csv` file located in the same directory to
-generate records and insert them into the database.
+generate records and insert them into the database. The `websites.csv` file contains the top 1000 work-safe websites
+and is used by default.
+
+If you want to add your own custom websites, then create a csv file in this directory with those websites. You can use
+the `websites.csv` file as a template. You'll just need to change the constant `CSV_FILE` to the name of the csv file you
+want to use.
 
 PLEASE NOTE:
 In order for this script to work, you must have an iOS Simulator instance open with a build of firefox-ios installed.
@@ -27,6 +32,7 @@ import subprocess
 
 BUNDLE_ID = 'org.mozilla.ios.Fennec'
 APP_GROUP_ID = 'group.org.mozilla.ios.Fennec'
+CSV_FILE = 'websites.csv'
 
 def get_db_path(bundle_id, app_group):
     """
@@ -187,7 +193,7 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct the path to the websites.csv file
-    websites_file_path = os.path.join(script_dir, 'websites.csv')
+    websites_file_path = os.path.join(script_dir, CSV_FILE)
 
     # Read in websites.csv
     with open(websites_file_path, newline='') as csvfile:
