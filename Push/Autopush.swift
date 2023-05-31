@@ -6,8 +6,7 @@ import Common
 import Shared
 import MozillaAppServices
 
-
-protocol AutopushProtocol {
+public protocol AutopushProtocol {
     /// Updates the APNS token `Autopush` is using to send notifications to the device
     ///
     ///  - Parameter withDeviceToken: The APNS token the push servers should use to communicate with this device
@@ -47,54 +46,35 @@ protocol AutopushProtocol {
     func decrypt(payload: [String: String]) async throws -> DecryptResponse
 }
 
-open class Autopush {
-    private var pushClient: PushManagerProtocol?
+public actor Autopush {
+    private let pushClient: PushManagerProtocol
     private let dbPath: String
 
-    public init(dbPath: String) {
+    public init(dbPath: String) async throws {
         self.dbPath = dbPath
-        self.pushClient = nil
-    }
-
-    /// Gets a native push client if available, would otherwise open a new native push client and return it
-    ///
-    /// This function is called to prepare a client for execution.
-    ///
-    /// - Returns: An opened `PushManagerProtocol` that is ready to be queried
-    private func getOpenedPushClient() async throws -> PushManagerProtocol {
-        if let pushClient = self.pushClient {
-            return pushClient
-        }
         let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: self.dbPath)
-        let pushClient = try PushManager(config: pushManagerConfig)
-        self.pushClient = pushClient
-        return pushClient
+        self.pushClient = try PushManager(config: pushManagerConfig)
     }
 }
 
 extension Autopush: AutopushProtocol {
     public func updateToken(withDeviceToken deviceToken: Data) async throws {
-        let pushClient = await getOpenedPushClient()
         try pushClient.update(registrationToken: deviceToken.hexEncodedString)
     }
 
     public func subscribe(scope: String) async throws -> SubscriptionResponse {
-        let pushClient = await getOpenedPushClient()
         return try pushClient.subscribe(scope: scope, appServerSey: nil)
     }
 
     public func unsubscribe(scope: String) async throws -> Bool {
-        let pushClient = await getOpenedPushClient()
         return try pushClient.unsubscribe(scope: scope)
     }
 
     public func unsubscribeAll() async throws {
-        let pushClient = await getOpenedPushClient()
         try pushClient.unsubscribeAll()
     }
 
     public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
-        let pushClient = await getOpenedPushClient()
         return try pushClient.decrypt(payload: payload)
     }
 }
