@@ -186,7 +186,6 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateHeightConstraints()
-        applyTheme()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

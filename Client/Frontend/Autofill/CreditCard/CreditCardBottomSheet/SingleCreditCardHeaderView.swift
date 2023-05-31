@@ -70,10 +70,6 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, The
         view.backgroundColor = .clear
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.rememberCreditCardHeader
@@ -114,10 +110,9 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     }
 
     private func setupContent() {
-        if let viewModel = viewModel {
-            titleLabel.text = viewModel.state.title
-            headerLabel.text = viewModel.state.header
-        }
+        guard let viewModel = viewModel else { return }
+        titleLabel.text = viewModel.state.title
+        headerLabel.text = viewModel.state.header
     }
 
     func applyTheme(theme: Theme) {
