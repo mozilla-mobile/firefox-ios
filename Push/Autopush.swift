@@ -47,34 +47,37 @@ public protocol AutopushProtocol {
 }
 
 public actor Autopush {
-    private let pushClient: PushManagerProtocol
-    private let dbPath: String
+    private let pushManager: PushManagerProtocol
 
     public init(dbPath: String) async throws {
-        self.dbPath = dbPath
-        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: self.dbPath)
-        self.pushClient = try PushManager(config: pushManagerConfig)
+        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: dbPath)
+        self.pushManager = try PushManager(config: pushManagerConfig)
+    }
+
+    /// Initializer for tests that want to inject a mock push manager
+    public init(withPushManager pushManager: PushManagerProtocol) {
+        self.pushManager = pushManager
     }
 }
 
 extension Autopush: AutopushProtocol {
     public func updateToken(withDeviceToken deviceToken: Data) async throws {
-        try pushClient.update(registrationToken: deviceToken.hexEncodedString)
+        try pushManager.update(registrationToken: deviceToken.hexEncodedString)
     }
 
     public func subscribe(scope: String) async throws -> SubscriptionResponse {
-        return try pushClient.subscribe(scope: scope, appServerSey: nil)
+        return try pushManager.subscribe(scope: scope, appServerSey: nil)
     }
 
     public func unsubscribe(scope: String) async throws -> Bool {
-        return try pushClient.unsubscribe(scope: scope)
+        return try pushManager.unsubscribe(scope: scope)
     }
 
     public func unsubscribeAll() async throws {
-        try pushClient.unsubscribeAll()
+        try pushManager.unsubscribeAll()
     }
 
     public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
-        return try pushClient.decrypt(payload: payload)
+        return try pushManager.decrypt(payload: payload)
     }
 }

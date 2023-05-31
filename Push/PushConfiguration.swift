@@ -8,12 +8,8 @@ import MozillaAppServices
 let PUSH_PROD_HOST = "updates.push.services.mozilla.com"
 let PUSH_STAGE_HOST = "updates-autopush.stage.mozaws.net"
 
-class InvalidSchemeError: Error {
-   private let scheme: String
-    
-    init(scheme: String) {
-        self.scheme = scheme
-    }
+enum InvalidSchemeError: Error {
+    case InvalidScheme(String)
 }
 
 public enum PushConfigurationLabel: String {
@@ -30,7 +26,7 @@ public enum PushConfigurationLabel: String {
         case "FirefoxBeta": return .firefoxBeta
         case "FirefoxNightly": return .firefoxNightlyEnterprise
         case "Firefox": return .firefox
-        default: throw InvalidSchemeError(scheme: scheme)
+        default: throw InvalidSchemeError.InvalidScheme(scheme)
         }
     }
 
