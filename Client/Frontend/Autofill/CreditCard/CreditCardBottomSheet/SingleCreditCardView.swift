@@ -23,7 +23,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         static let bottomSpacing: CGFloat = 32.0
         static let buttonsSpacing: CGFloat = 8.0
         static let contentViewWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 545 : 339
-        static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24
+        static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24 // 24 is the spacing needed between the header and the table cell, left in this form so it's not overlooked
         static let estimatedRowHeight: CGFloat = 86
     }
 
@@ -218,6 +218,8 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
 
     // MARK: BottomSheet Delegate
     func willDismiss() {
+        // TODO: FXIOS-6111
+        // telemetry will be added
     }
 
     // MARK: UITableViewDelegate
@@ -281,7 +283,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         view.backgroundColor = currentTheme.colors.layer1
         contentView.backgroundColor = currentTheme.colors.layer1
         yesButton.backgroundColor = currentTheme.colors.actionPrimary
-        yesButton.titleLabel?.textColor = currentTheme.colors.layer5
+        yesButton.titleLabel?.textColor = currentTheme.colors.textInverted
 
         notNowButton.backgroundColor = currentTheme.colors.actionSecondary
         notNowButton.titleLabel?.textColor = currentTheme.colors.textPrimary

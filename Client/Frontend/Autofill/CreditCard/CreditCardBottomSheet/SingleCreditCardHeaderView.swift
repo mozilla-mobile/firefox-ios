@@ -8,7 +8,7 @@ import Common
 import Shared
 
 // MARK: Header View
-class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable {
+class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     // MARK: UX
     struct UX {
         static let titleLabelFontSize: CGFloat = 17
@@ -34,6 +34,7 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, Not
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
     }
+
     private var titleLabel: UILabel = .build { label in
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -44,6 +45,7 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, Not
             size: UX.titleLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
     }
+
     private var headerLabel: UILabel = .build { label in
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -118,11 +120,6 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, Not
         }
     }
 
-    func applyTheme() {
-    }
-}
-
-extension SingleCreditCardHeaderView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         headerLabel.textColor = theme.colors.textPrimary
