@@ -2890,11 +2890,6 @@ extension String {
         tableName: nil,
         value: "Sync Disconnected",
         comment: "Title of a notification displayed when named device has been disconnected from FxA.")
-    public static let FxAPush_DeviceDisconnected_body = MZLocalizedString(
-        key: "FxAPush_DeviceDisconnected_body",
-        tableName: nil,
-        value: "%@ has been successfully disconnected.",
-        comment: "Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device.")
 
     public static let FxAPush_DeviceDisconnected_UnknownDevice_body = MZLocalizedString(
         key: "FxAPush_DeviceDisconnected_UnknownDevice_body",
