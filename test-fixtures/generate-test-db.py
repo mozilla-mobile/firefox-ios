@@ -13,6 +13,9 @@ PLEASE NOTE:
 In order for this script to work, you must have an iOS Simulator instance open with a build of firefox-ios installed.
 This script looks for a booted Simulator device with an app loaded whose BUNDLE_ID is 'org.mozilla.ios.Fennec' and
 assumes you want to copy the 'places.db' database.
+
+This also assumes you ONLY HAVE ONE BOOTED SIMULATOR INSTANCE open as it will only return the first instance it finds.
+
 The script currently doesn't support modifications to:
     - autofill.db
     - browser.db
