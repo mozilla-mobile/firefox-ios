@@ -228,7 +228,7 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
                 place_id += 1
                 bookmarks_position += 1
                 
-            csvfile.seek(0)  # Go back to the start of the file
+            csvfile.seek(0)  # When adding over 1000 records, we need to go back to the start of the file
 
         # Commit the changes outside the loop
         db_connection.commit()
