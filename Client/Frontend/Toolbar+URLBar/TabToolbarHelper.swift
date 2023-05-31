@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import Common
 
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
@@ -16,7 +17,7 @@ protocol TabToolbarProtocol: AnyObject {
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
-    var actionButtons: [NotificationThemeable & UIButton] { get }
+    var actionButtons: [ThemeApplicable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -59,6 +60,7 @@ open class TabToolbarHelper: NSObject {
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
     let ImageHome = UIImage.templateImageNamed("menu-Home")
+    var themeManager: ThemeManager
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
@@ -85,12 +87,14 @@ open class TabToolbarHelper: NSObject {
     // Default state as reload
     var middleButtonState: MiddleButtonState = .home
 
-    func setTheme(forButtons buttons: [NotificationThemeable]) {
-        buttons.forEach { $0.applyTheme() }
+    func setTheme(forButtons buttons: [ThemeApplicable]) {
+        buttons.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
     }
 
-    init(toolbar: TabToolbarProtocol) {
+    init(toolbar: TabToolbarProtocol,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.toolbar = toolbar
+        self.themeManager = themeManager
         super.init()
 
         toolbar.backButton.setImage(UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)

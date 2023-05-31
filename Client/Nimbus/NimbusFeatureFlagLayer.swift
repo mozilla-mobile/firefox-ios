@@ -34,6 +34,12 @@ final class NimbusFeatureFlagLayer {
         case .coordinatorsRefactor:
             return checkCoordinatorRefactorFeature(from: nimbus)
 
+        case .libraryCoordinatorRefactor:
+            return checkLibraryCoordinatorRefactorFeature(from: nimbus)
+
+        case .settingsCoordinatorRefactor:
+            return checkSettingsCoordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -165,6 +171,16 @@ final class NimbusFeatureFlagLayer {
 
     private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.coordinatorsRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.libraryCoordinatorRefactor.value()
+        return config.enabled
+    }
+
+    private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.settingsCoordinatorRefactor.value()
         return config.enabled
     }
 

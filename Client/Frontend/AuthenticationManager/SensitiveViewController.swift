@@ -56,8 +56,12 @@ extension SensitiveViewController {
     private func installBlurredOverlay() {
         if blurredOverlay == nil {
             if let snapshot = view.screenshot() {
-                let blurredSnapshot = snapshot.applyBlur(withRadius: 10, blurType: BOXFILTER, tintColor: UIColor(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
-                let blurredOverlay = UIImageView(image: blurredSnapshot)
+                let blurredSnapshot = snapshot.applyBlur(withRadius: 10,
+                                                         blurType: BOXFILTER,
+                                                         tintColor: UIColor(white: 1, alpha: 0.3),
+                                                         saturationDeltaFactor: 1.8,
+                                                         maskImage: nil)
+                let blurredOverlay: UIImageView = .build { $0.image = blurredSnapshot }
                 self.blurredOverlay = blurredOverlay
                 view.addSubview(blurredOverlay)
 

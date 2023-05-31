@@ -47,6 +47,7 @@ final class RatingPromptManager {
     func showRatingPromptIfNeeded(at date: Date = Date()) {
         if shouldShowPrompt {
             requestRatingPrompt(at: date)
+            UserDefaults.standard.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
         }
     }
 
@@ -95,6 +96,10 @@ final class RatingPromptManager {
     // MARK: Private
 
     private var shouldShowPrompt: Bool {
+        if UserDefaults.standard.bool(forKey: PrefsKeys.ForceShowAppReviewPromptOverride) {
+            return true
+        }
+
         // Required: 5th launch or more
         let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
         guard currentSessionCount >= 5 else { return false }

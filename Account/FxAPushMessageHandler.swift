@@ -29,20 +29,23 @@ extension FxAPushMessageHandler {
     /// Accepts the raw Push message from Autopush.
     /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
     /// and then effects changes on the logged in account.
-    @discardableResult
-    func handle(userInfo: [AnyHashable: Any]) -> PushMessageResults {
+    func handle(userInfo: [AnyHashable: Any], completion: @escaping (Result<PushMessage, PushMessageError>) -> Void) {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration, ofClass: PushRegistration.self) else {
             // We've somehow lost our push registration, lets also reset our apnsToken so we trigger push registration
             keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            return deferMaybe(PushMessageError.accountError)
+            completion(.failure(PushMessageError.accountError))
+            return
         }
 
         let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
               let payload = userInfo["body"] as? String
-        else { return deferMaybe(PushMessageError.messageIncomplete("missing con or body")) }
+        else {
+            completion(.failure(PushMessageError.messageIncomplete("missing con or body")))
+            return
+        }
 
         let plaintext: String?
         if let cryptoKeyHeader = userInfo["cryptokey"] as? String,  // crypto-key
@@ -58,10 +61,10 @@ extension FxAPushMessageHandler {
         guard let string = plaintext else {
             // The app will detect this missing, and re-register. see AppDelegate+PushNotifications.swift.
             keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            return deferMaybe(PushMessageError.notDecrypted)
+            completion(.failure(PushMessageError.notDecrypted))
+            return
         }
 
-        let deferred = PushMessageResults()
         // Reconfig has to happen on the main thread, since it calls `startup`
         // and `startup` asserts that we are on the main thread. Otherwise the notification
         // service will crash.
@@ -84,7 +87,7 @@ extension FxAPushMessageHandler {
                                             description: "No events retrieved from fxa")
                             err = PushMessageError.messageIncomplete("empty message")
                         }
-                        deferred.fill(Maybe(failure: err))
+                        completion(.failure(err))
                         return
                     }
 
@@ -94,33 +97,33 @@ extension FxAPushMessageHandler {
                         case .tabReceived(_, let tabData):
                             let title = tabData.entries.last?.title ?? ""
                             let url = tabData.entries.last?.url ?? ""
-                            deferred.fill(Maybe(success: PushMessage.commandReceived(tab: ["title": title, "url": url])))
+                            completion(.success(PushMessage.commandReceived(tab: ["title": title, "url": url])))
                         }
                     case .deviceConnected(let deviceName):
-                        deferred.fill(Maybe(success: PushMessage.deviceConnected(deviceName)))
+                        completion(.success(PushMessage.deviceConnected(deviceName)))
                     case let .deviceDisconnected(deviceId, isLocalDevice):
                         if isLocalDevice {
                             // We can't disconnect the device from the account until we have access to the application, so we'll handle this properly in the AppDelegate (as this code in an extension),
                             // by calling the FxALoginHelper.applicationDidDisonnect(application).
                             self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
-                            deferred.fill(Maybe(success: PushMessage.thisDeviceDisconnected))
+                            completion(.success(PushMessage.thisDeviceDisconnected))
                         }
 
                         guard let profile = self.profile as? BrowserProfile else {
                             // We can't look up a name in testing, so this is the same as not knowing about it.
-                            deferred.fill(Maybe(success: PushMessage.deviceDisconnected(nil)))
+                            completion(.success(PushMessage.deviceDisconnected(nil)))
                             break
                         }
 
                         profile.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
                             guard let device = result.successValue else {
-                                deferred.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                                completion(.failure(PushMessageError.accountError))
                                 return
                             }
-                            deferred.fill(Maybe(success: PushMessage.deviceDisconnected(device?.name)))
                             if let id = device?.guid {
                                 profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in }
                             }
+                            completion(.success(PushMessage.deviceDisconnected(device?.name)))
                         }
                     default:
                         // There are other events, but we ignore them at this level.
@@ -129,7 +132,6 @@ extension FxAPushMessageHandler {
                 }
             }
         }
-        return deferred
     }
 }
 
@@ -187,8 +189,6 @@ enum PushMessage: Equatable {
         }
     }
 }
-
-typealias PushMessageResults = Deferred<Maybe<PushMessage>>
 
 enum PushMessageError: MaybeErrorType {
     case notDecrypted

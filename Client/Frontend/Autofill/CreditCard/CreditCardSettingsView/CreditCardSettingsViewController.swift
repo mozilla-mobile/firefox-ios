@@ -149,8 +149,10 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         viewModel.cardInputViewModel.updateState(state: editState)
         creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel)
         viewModel.cardInputViewModel.dismiss = {
-            [weak self] _, successVal in
+            [weak self] status, successVal in
             DispatchQueue.main.async {
+                self?.showToast(status: status)
+
                 if successVal {
                     self?.updateCreditCardList()
                 }
@@ -166,6 +168,12 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         creditCardAddEditView.view.backgroundColor = .clear
         creditCardAddEditView.modalPresentationStyle = .formSheet
         present(creditCardAddEditView, animated: true, completion: nil)
+    }
+
+    private func showToast(status: CreditCardModifiedStatus) {
+        SimpleToast().showAlertWithText(status.message,
+                                        bottomContainer: view,
+                                        theme: themeManager.currentTheme)
     }
 
     @objc

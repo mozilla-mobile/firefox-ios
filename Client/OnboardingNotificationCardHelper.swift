@@ -4,19 +4,22 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper: FeatureFlaggable {
-    var notificationCardIsInOnboarding: Bool {
-        return NimbusOnboardingFeatureLayer()
+struct OnboardingNotificationCardHelper {
+    private func notificationCardIsInOnboarding(
+        from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
+    ) -> Bool {
+        return featureLayer
             .getOnboardingModel(for: .freshInstall)
             .cards
-            .contains { $0.buttons.primary.action == .requestNotifications }
+            .contains {
+                return $0.buttons.primary.action == .requestNotifications
+                || $0.buttons.secondary?.action == .requestNotifications
+            }
     }
 
     func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
-        if notificationCardIsInOnboarding {
-            return !isOnboarding // we ask for permission on notification card instead
-        }
+        if notificationCardIsInOnboarding() { return false }
 
-        return true
+        return isOnboarding
     }
 }

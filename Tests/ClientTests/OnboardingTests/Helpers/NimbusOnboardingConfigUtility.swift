@@ -69,7 +69,7 @@ struct NimbusOnboardingConfigUtility {
                   "buttons": {
                     "primary": {
                       "title": "primary title",
-                      "action": "next-card"
+                      "action": "request-notifications"
                     },
                     "secondary": {
                       "title": "secondary title",

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 class LockButton: UIButton {
     // MARK: - Variables
@@ -33,7 +34,6 @@ class LockButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        applyTheme()
 
         clipsToBounds = false
         setImage(UIImage.templateImageNamed(ImageIdentifiers.lockVerifed), for: .normal)
@@ -47,13 +47,11 @@ class LockButton: UIButton {
 }
 
 // MARK: - Theme protocols
-
-extension LockButton: NotificationThemeable {
-    func applyTheme() {
-        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
-        disabledTintColor = UIColor.Photon.Grey50
-        unselectedTintColor = UIColor.legacyTheme.browser.tint
+extension LockButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        selectedTintColor = theme.colors.actionPrimary
+        disabledTintColor = theme.colors.actionSecondary
+        unselectedTintColor = theme.colors.textPrimary
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
-        imageView?.tintColor = tintColor
     }
 }

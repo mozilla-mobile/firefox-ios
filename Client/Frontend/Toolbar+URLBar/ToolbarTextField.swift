@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class ToolbarTextField: AutocompleteTextField {
     // MARK: - Variables
@@ -11,6 +12,12 @@ class ToolbarTextField: AutocompleteTextField {
             // Clear previous tinted image that's cache and ask for a relayout
             tintedClearImage = nil
             setNeedsLayout()
+        }
+    }
+
+    override var textColor: UIColor? {
+        didSet {
+            clearButtonTintColor = textColor
         }
     }
 
@@ -56,23 +63,6 @@ class ToolbarTextField: AutocompleteTextField {
                            width: rect.width + grow,
                            height: rect.height + grow)
         return rect2
-    }
-}
-
-// MARK: - Theme protocols
-
-extension ToolbarTextField: NotificationThemeable {
-    func applyTheme() {
-        backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
-        textColor = UIColor.legacyTheme.textField.textAndTint
-        clearButtonTintColor = textColor
-        tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
-        self.refreshAutocompleteLabelTheme()
-    }
-
-    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
-    static func applyUIMode(isPrivate: Bool) {
-       textSelectionColor = UIColor.legacyTheme.urlbar.textSelectionHighlight(isPrivate)
     }
 }
 

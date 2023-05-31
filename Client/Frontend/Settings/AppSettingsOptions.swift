@@ -497,6 +497,17 @@ class ForceCrashSetting: HiddenSetting {
     }
 }
 
+class AppReviewPromptSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "⭐️ Debug: App Review (needs tab switch)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
+        updateCell(navigationController)
+    }
+}
+
 class ChangeToChinaSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])

@@ -101,7 +101,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-
         topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
                                                  tabManager: self.tabManager,
                                                  tabDisplayer: self,
@@ -151,10 +150,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
 
-        tabsButton.applyTheme()
+        tabsButton.applyTheme(theme: themeManager.currentTheme)
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
+    }
+
+    func applyTheme() {
+        let currentTheme = themeManager.currentTheme
+        view.backgroundColor = currentTheme.colors.layer3
+        tabsButton.applyTheme(theme: currentTheme)
+        privateModeButton.applyTheme(theme: currentTheme)
+        newTab.tintColor = currentTheme.colors.iconPrimary
+        collectionView.backgroundColor = view.backgroundColor
+        collectionView.reloadData()
+        topTabDisplayManager.refreshStore()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -303,22 +313,12 @@ extension TopTabsViewController: TopTabCellDelegate {
     }
 }
 
-extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
+extension TopTabsViewController: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
         privateModeButton.applyTheme(theme: themeManager.currentTheme)
         privateModeButton.applyUIMode(isPrivate: topTabDisplayManager.isPrivate)
-    }
-
-    func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer3
-        tabsButton.applyTheme()
-        privateModeButton.applyTheme(theme: themeManager.currentTheme)
-        newTab.tintColor = themeManager.currentTheme.colors.iconPrimary
-        collectionView.backgroundColor = view.backgroundColor
-        collectionView.reloadData()
-        topTabDisplayManager.refreshStore()
     }
 }
 

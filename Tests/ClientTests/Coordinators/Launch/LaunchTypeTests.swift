@@ -55,10 +55,12 @@ final class LaunchTypeTests: XCTestCase {
 
     func testCanLaunch_updateFromBrowserCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
-                model: onboardingModel))
+                model: onboardingModel,
+                telemetryUtility: telemetryUtility))
 
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
@@ -66,10 +68,12 @@ final class LaunchTypeTests: XCTestCase {
 
     func testCanLaunch_updateFromSceneCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
-                model: onboardingModel))
+                model: onboardingModel,
+                telemetryUtility: telemetryUtility))
 
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
@@ -97,10 +101,12 @@ final class LaunchTypeTests: XCTestCase {
 
     func testIsFullScreen_updateFullScreenOnIphone() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
-                model: onboardingModel))
+                model: onboardingModel,
+                telemetryUtility: telemetryUtility))
 
         XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
         XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: false))
