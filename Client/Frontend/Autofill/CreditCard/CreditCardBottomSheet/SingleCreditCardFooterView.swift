@@ -40,7 +40,7 @@ class SingleCreditCardFooterView: UITableViewHeaderFooterView, ReusableCell, The
 
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1
-        manageCardsButton.titleLabel?.textColor = theme.colors.textAccent
+        manageCardsButton.setTitleColor(theme.colors.textAccent, for: .normal)
     }
 
     private func setupView() {

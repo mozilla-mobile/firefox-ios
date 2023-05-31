@@ -9,13 +9,13 @@ import Common
 import Foundation
 import UIKit
 
-class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themeable {
+class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
     // MARK: UX
     struct UX {
         static let containerPadding: CGFloat = 18.0
         static let tableMargin: CGFloat = 0
-        static let distanceBetweenHeaderAndTop: CGFloat = -10
-        static let distanceBetweenButtonAndTable: CGFloat = 77
+        static let distanceBetweenHeaderAndTop: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 0 : -10
+        static let distanceBetweenButtonAndTable: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 18 : 34
         static let distanceBetweenHeaderAndCells: CGFloat = 24
         static let yesButtonCornerRadius: CGFloat = 13
         static let yesButtonFontSize: CGFloat = 16.0
@@ -44,10 +44,11 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
         cardTableView.allowsSelection = false
         cardTableView.separatorColor = .clear
         cardTableView.separatorStyle = .none
-        cardTableView.isScrollEnabled = true
+        cardTableView.isScrollEnabled = false
         cardTableView.showsVerticalScrollIndicator = false
         cardTableView.rowHeight = UITableView.automaticDimension
         cardTableView.estimatedRowHeight = UX.estimatedRowHeight
+        cardTableView.estimatedSectionFooterHeight = UX.distanceBetweenButtonAndTable
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
         cardTableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                                forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
@@ -65,7 +66,7 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
 
     private lazy var yesButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .callout,
+            withTextStyle: .headline,
             size: UX.yesButtonFontSize)
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)
         button.setTitle(.CreditCard.RememberCreditCard.MainButtonTitle, for: .normal)
@@ -76,7 +77,7 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
 
     private lazy var notNowButton: ResizableButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .callout,
+            withTextStyle: .headline,
             size: UX.yesButtonFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.notNowButton
@@ -85,7 +86,7 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
         button.layer.cornerRadius = UX.yesButtonCornerRadius
     }
 
-    private var tableViewHeightConstraint: NSLayoutConstraint!
+    private var contentViewHeightConstraint: NSLayoutConstraint!
     private var contentWidthConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
@@ -117,7 +118,7 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupView()
+        updateHeightConstraints()
     }
 
     deinit {
@@ -136,12 +137,18 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
     }
 
     func setupView() {
-        let headerHeight = UX.headerPreferredHeight
+        let headerHeight = cardTableView.estimatedSectionHeaderHeight
+        let estimatedFooterHeight = cardTableView.estimatedSectionFooterHeight
         let estimatedCellHeight = cardTableView.estimatedRowHeight
-        let estimatedTableHeight = headerHeight + estimatedCellHeight + UX.distanceBetweenHeaderAndCells + UX.distanceBetweenButtonAndTable
 
-        tableViewHeightConstraint = cardTableView.heightAnchor.constraint(equalToConstant: estimatedTableHeight * getHeightScaleBasedOnFontSize())
-        tableViewHeightConstraint.priority = UILayoutPriority(999)
+        var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            estimatedContentHeight += UX.yesButtonHeight
+        }
+
+        contentViewHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: estimatedContentHeight)
+        contentViewHeightConstraint.priority = UILayoutPriority(999)
 
         let contentViewWidth = UX.contentViewWidth > view.frame.width ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
@@ -161,24 +168,29 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
             buttonsContainerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableMargin),
             buttonsContainerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.tableMargin),
 
-            yesButton.heightAnchor.constraint(equalToConstant: UX.yesButtonHeight),
-            notNowButton.heightAnchor.constraint(equalToConstant: UX.yesButtonHeight),
+            yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
+            notNowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
             contentWidthConstraint,
-            tableViewHeightConstraint
+            contentViewHeightConstraint
         ])
+    }
+
+    func updateHeightConstraints() {
+        let buttonsHeight = buttonsContainerStackView.frame.height
+        let estimatedContentHeight = cardTableView.contentSize.height + buttonsHeight + UX.bottomSpacing
+        let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
+        contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
     }
 
     // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        print("traitCollectionDidChange")
-        setupView()
+        updateHeightConstraints()
         applyTheme()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        print("viewWillTransition")
         let contentViewWidth = UX.contentViewWidth > size.width ? size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint.constant = contentViewWidth
     }
@@ -207,10 +219,8 @@ class SingleCreditCardViewController: UIViewController, BottomSheetChild, Themea
     // MARK: BottomSheet Delegate
     func willDismiss() {
     }
-}
 
-// MARK: UITableViewDelegate
-extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSource {
+    // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -241,7 +251,6 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
         return headerView
     }
 
-    // easier to handle the bottom table spacing as a footer
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         switch viewModel.state {
         case .save:
@@ -259,7 +268,7 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return UX.distanceBetweenButtonAndTable
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -269,38 +278,14 @@ extension SingleCreditCardViewController: UITableViewDelegate, UITableViewDataSo
     // MARK: Themable
     func applyTheme() {
         let currentTheme = themeManager.currentTheme
-        let labelsBackgroundColor = currentTheme.type == .dark ? currentTheme.colors.textInverted : currentTheme.colors.textPrimary
         view.backgroundColor = currentTheme.colors.layer1
         contentView.backgroundColor = currentTheme.colors.layer1
         yesButton.backgroundColor = currentTheme.colors.actionPrimary
-        yesButton.titleLabel?.textColor = labelsBackgroundColor
+        yesButton.titleLabel?.textColor = currentTheme.colors.layer5
 
         notNowButton.backgroundColor = currentTheme.colors.actionSecondary
-        notNowButton.titleLabel?.textColor = labelsBackgroundColor
+        notNowButton.titleLabel?.textColor = currentTheme.colors.textPrimary
 
         cardTableView.reloadData()
-    }
-}
-
-extension UITraitEnvironment {
-    func getHeightScaleBasedOnFontSize() -> CGFloat {
-        switch traitCollection.preferredContentSizeCategory {
-        case .extraSmall, .small, .medium, .large:
-            return 1
-        case .extraLarge, .extraExtraLarge, .extraExtraExtraLarge:
-            return 1.1
-        case .accessibilityMedium:
-            return 1.2
-        case .accessibilityLarge:
-            return 1.4
-        case .accessibilityExtraLarge:
-            return 1.6
-        case .accessibilityExtraExtraLarge:
-            return 1.8
-        case .accessibilityExtraExtraExtraLarge:
-            return 2
-        default:
-            return 1
-        }
     }
 }

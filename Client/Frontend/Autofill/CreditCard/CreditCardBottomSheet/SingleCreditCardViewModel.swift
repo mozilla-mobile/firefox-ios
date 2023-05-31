@@ -48,7 +48,7 @@ enum SingleCreditCardViewState: String, Equatable, CaseIterable {
 }
 
 struct SingleCreditCardViewModel {
-    var logger: Logger?
+    private var logger: Logger
     let profile: Profile
     let autofill: RustAutofill
     var creditCard: CreditCard
@@ -75,9 +75,9 @@ struct SingleCreditCardViewModel {
                         completion(nil)
                         return
                     }
-                    logger?.log("Unable to save credit card with error: \(error)",
-                                level: .fatal,
-                                category: .creditcard)
+                    logger.log("Unable to save credit card with error: \(error)",
+                               level: .fatal,
+                               category: .creditcard)
                     completion(error)
                 }
             }
@@ -88,9 +88,9 @@ struct SingleCreditCardViewModel {
                         completion(nil)
                         return
                     }
-                    logger?.log("Unable to save credit card with error: \(error)",
-                                level: .fatal,
-                                category: .creditcard)
+                    logger.log("Unable to save credit card with error: \(error)",
+                               level: .fatal,
+                               category: .creditcard)
                     completion(error)
                 }
             }
