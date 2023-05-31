@@ -112,10 +112,10 @@ def insert_into_moz_bookmarks(cursor, fk, bookmarks_type, parent, position, titl
 
     Args:
     cursor (sqlite3.Cursor): Database cursor object.
-    fk (int): The foreign key for the record.
+    fk (int): The foreign key for the record referencing the moz_places table.
     bookmarks_type (int): The type of bookmark.
     parent (int): The parent record id.
-    position (int): The position of the bookmark.
+    position (int): The position of the bookmark for display in Bookmarks.
     title (str): The title of the bookmark.
     date_added (int): The date the bookmark was added.
     last_modified (int): The last date the bookmark was modified.
@@ -274,8 +274,9 @@ def main():
     except Exception as e:
         print(f"Error occurred: {str(e)}")
     finally:
-        # Close connection to the database
-        if db_connection is not None:  # Only try to close it if it's not None
+        # Script errors cause db_connection to be lost, throwing UnboundLocalError
+        # check if db_connection has been lost already before trying to close connection
+        if db_connection is not None:
             db_connection.close()
 
 if __name__ == "__main__":
