@@ -761,6 +761,7 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
+		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
 		BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */; };
 		BD57D9A729D4C42B00039394 /* ZoomLevelStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */; };
@@ -4962,6 +4963,7 @@
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
+		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackButton.swift; sourceTree = "<group>"; };
 		BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSnackBar.swift; sourceTree = "<group>"; };
@@ -10085,6 +10087,7 @@
 				8AB8572F27D94CAD0075C173 /* HomepageViewModelProtocol.swift */,
 				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
 				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
+				BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8573527D950F30075C173 /* LogoHeader */,
 				8A0017BF28A3FED300FEFC8B /* MessageCard */,
@@ -12209,6 +12212,7 @@
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
 				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
+				BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */,
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				63306D432110B3CD00F25400 /* LegacyTabManagerStore.swift in Sources */,
