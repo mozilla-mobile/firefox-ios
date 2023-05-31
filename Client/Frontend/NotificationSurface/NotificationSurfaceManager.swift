@@ -50,9 +50,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     /// Checks whether a message exists, and is not expired, and schedules
     /// a notification to be presented.
     func showNotificationSurface() {
-        print("WT ### showNotificationSurface")
         guard let message = message, !message.isExpired else { return }
-        print("WT ### message not expired")
 
         let notificationId = Constant.notificationBaseId + ".\(message.id)"
 
@@ -61,7 +59,6 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
             // Don't schedule the notification again if it was already delivered
             guard notification == nil else { return }
 
-            print("WT ### schedule notification")
             self?.scheduleNotification(message: message, notificationId: notificationId)
         }
     }
@@ -110,10 +107,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         // Set the message to nil just to make sure we're not accidentally
         // showing an old message.
         message = nil
-        print("WT ### updateMessage")
         guard let newMessage = messagingManager.getNextMessage(for: notificationSurfaceID) else { return }
-        print("WT ### next message: \(newMessage)")
-        print("WT ### next message expired: \(newMessage.isExpired)")
         if !newMessage.isExpired { message = newMessage }
     }
 }
