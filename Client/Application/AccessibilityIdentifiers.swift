@@ -287,4 +287,10 @@ public struct AccessibilityIdentifiers {
     struct FindInPage {
         static let findInPageCloseButton = "FindInPage.closeButton"
     }
+
+    struct RememberCreditCard {
+        static let rememberCreditCardHeader = "RememberCreditCard.Header"
+        static let yesButton = "RememberCreditCard.yesButton"
+        static let notNowButton = "RememberCreditCard.notNowButton"
+    }
 }

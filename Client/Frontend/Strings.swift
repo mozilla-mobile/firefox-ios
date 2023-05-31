@@ -348,7 +348,7 @@ extension String {
         }
 
         // Remember Card
-        public struct RememberCard {
+        public struct RememberCreditCard {
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainTitle.v115",
                 tableName: "RememberCard",
@@ -372,7 +372,7 @@ extension String {
         }
 
         // Update Card
-        public struct UpdateCard {
+        public struct UpdateCreditCard {
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.MainTitle.v115",
                 tableName: "UpdateCard",
@@ -383,12 +383,12 @@ extension String {
                 tableName: "UpdateCard",
                 value: "Manage cards",
                 comment: "This value is used as the title for the Manage Cards button from the update credit card page")
-            public static let YesButtonTitle = MZLocalizedString(
+            public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.YesButtonTitle.v115",
                 tableName: "UpdateCard",
                 value: "Yes",
                 comment: "This value is used as the title for the button in the update credit card page")
-            public static let NotNowButtonTitle = MZLocalizedString(
+            public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
                 tableName: "UpdateCard",
                 value: "Not Now",
