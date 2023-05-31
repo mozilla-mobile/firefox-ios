@@ -165,16 +165,18 @@ struct RouteBuilder {
         return nil
     }
 
-    func makeRoute(shortcutItem: UIApplicationShortcutItem) -> Route? {
+    func makeRoute(shortcutItem: UIApplicationShortcutItem, tabSetting: NewTabPage) -> Route? {
         guard let shortcutTypeRaw = shortcutItem.type.components(separatedBy: ".").last,
               let shortcutType = DeeplinkInput.Shortcut(rawValue: shortcutTypeRaw)
         else { return nil }
 
+        let options: Set<Route.SearchOptions> = tabSetting != .homePage ? [.focusLocationField] : []
+
         switch shortcutType {
         case .newTab:
-            return .search(url: nil, isPrivate: false, options: [.focusLocationField])
+            return .search(url: nil, isPrivate: false, options: options)
         case .newPrivateTab:
-            return .search(url: nil, isPrivate: true, options: [.focusLocationField])
+            return .search(url: nil, isPrivate: true, options: options)
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {
                 return .search(url: urlToOpen, isPrivate: false, options: [.switchToNormalMode])
