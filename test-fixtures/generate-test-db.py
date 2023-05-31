@@ -237,6 +237,7 @@ def main():
     8. Inserts records into the moz_places, moz_historyvisits, and moz_bookmarks tables using data from the 'websites.csv'.
     9. Closes the connection to the database after all operations are done.
     """
+    db_connection = None  # Initialize db_connection here
     try:
         # User inputs for number of records to create for history and bookmarks
         history_count = int(input("Enter the number of records to create for history: "))
@@ -265,7 +266,8 @@ def main():
         print(f"Error occurred: {str(e)}")
     finally:
         # Close connection to the database
-        db_connection.close()
+        if db_connection is not None:  # Only try to close it if it's not None
+            db_connection.close()
 
 if __name__ == "__main__":
     main()
