@@ -70,7 +70,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
 
             if let shortcut = connectionOptions.shortcutItem,
-               let route = routeBuilder.makeRoute(shortcutItem: shortcut) {
+               let route = routeBuilder.makeRoute(shortcutItem: shortcut, tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
                 sceneCoordinator?.findAndHandle(route: route)
             }
         } else {
@@ -191,7 +191,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         completionHandler: @escaping (Bool) -> Void
     ) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
-            guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
+            guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) else { return }
             sceneCoordinator?.findAndHandle(route: route)
         } else {
             QuickActionsImplementation().handleShortCutItem(
