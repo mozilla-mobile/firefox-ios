@@ -210,9 +210,6 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
 
         while history_count > 0 or bookmark_count > 0:
             for row in reader:
-                if history_count <= 0 and bookmark_count <= 0:
-                    break
-
                 current_time_milliseconds = int(time.time() * 1000)
                 guid = generate_guid()
                 url = f"https://{row[1]}"
