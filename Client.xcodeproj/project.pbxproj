@@ -9348,6 +9348,15 @@
 			path = WebView;
 			sourceTree = "<group>";
 		};
+		E1CEC2002A28C3B600B177D5 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */,
+				E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
 			isa = PBXGroup;
 			children = (
@@ -9496,10 +9505,9 @@
 		E63ED8DF1BFD254E0097D08E /* LoginManagement */ = {
 			isa = PBXGroup;
 			children = (
+				E1CEC2002A28C3B600B177D5 /* Cells */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
-				CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
-				E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
 				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
 				CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */,
