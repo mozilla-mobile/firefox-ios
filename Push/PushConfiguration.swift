@@ -5,8 +5,10 @@
 import Foundation
 import MozillaAppServices
 
-let PUSH_PROD_HOST = "updates.push.services.mozilla.com"
-let PUSH_STAGE_HOST = "updates-autopush.stage.mozaws.net"
+public struct KnownPushHost {
+    public static let prod = "updates.push.services.mozilla.com"
+    public static let stage = "updates-autopush.stage.mozaws.net"
+}
 
 enum InvalidSchemeError: Error {
     case InvalidScheme(String)
@@ -32,7 +34,7 @@ public enum PushConfigurationLabel: String {
 
     public func toConfiguration(dbPath: String) -> PushConfiguration {
         return PushConfiguration(
-            serverHost: PUSH_PROD_HOST,
+            serverHost: KnownPushHost.prod,
             httpProtocol: PushHttpProtocol.https,
             bridgeType: BridgeType.apns,
             senderId: self.rawValue,
@@ -43,7 +45,7 @@ public enum PushConfigurationLabel: String {
 
     public func toStagingConfiguration(dbPath: String) -> PushConfiguration {
         return PushConfiguration(
-            serverHost: PUSH_STAGE_HOST,
+            serverHost: KnownPushHost.stage,
             httpProtocol: PushHttpProtocol.https,
             bridgeType: BridgeType.apns,
             senderId: self.rawValue,
