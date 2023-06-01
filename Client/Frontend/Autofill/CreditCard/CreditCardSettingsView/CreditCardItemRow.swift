@@ -44,7 +44,7 @@ struct CreditCardItemRow: View {
                         Text(item.ccType)
                             .font(.body)
                             .foregroundColor(titleTextColor)
-                        Text(item.ccNumberLast4)
+                        Text("••••\(item.ccNumberLast4)")
                             .font(.subheadline)
                             .foregroundColor(subTextColor)
                     }
@@ -59,7 +59,7 @@ struct CreditCardItemRow: View {
                         Text(String.CreditCard.DisplayCard.ExpiresLabel)
                             .font(.body)
                             .foregroundColor(subTextColor)
-                        Text(String(item.ccExpYear))
+                        Text("\(item.ccExpMonth)/\(item.ccExpYear)")
                             .font(.subheadline)
                             .foregroundColor(subTextColor)
                     }
