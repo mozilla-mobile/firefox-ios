@@ -7,19 +7,16 @@ import Foundation
 import Shared
 
 class SettingsCoordinator: BaseCoordinator {
-    private let browserViewController: BrowserViewController
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
 
     init(router: Router,
-         browserViewController: BrowserViewController,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.browserViewController = browserViewController
         self.wallpaperManager = wallpaperManager
         self.profile = profile
         self.tabManager = tabManager
@@ -32,22 +29,11 @@ class SettingsCoordinator: BaseCoordinator {
     }
 
     func start(with settingsSection: Route.SettingsSection) {
-        let baseSettingsVC = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager,
-            delegate: browserViewController
-        )
-
-        let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
-        controller.presentingModalViewControllerDelegate = browserViewController
-        controller.modalPresentationStyle = .formSheet
-        router.present(controller)
-
         guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
-        controller.pushViewController(viewController, animated: true)
+        router.push(viewController)
     }
 
-    func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
+    private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
@@ -79,7 +65,7 @@ class SettingsCoordinator: BaseCoordinator {
                 fxaParams,
                 flowType: .emailLoginFlow,
                 referringPage: .settings,
-                profile: browserViewController.profile
+                profile: profile
             )
             return viewController
 

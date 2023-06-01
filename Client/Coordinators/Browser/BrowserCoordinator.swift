@@ -143,14 +143,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return true
 
         case let .settings(section):
-            // Note: This will be handled in the settings coordinator when FXIOS-6274 is done
+            // 'Else' will be removed with FXIOS-6529
             if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                let settingsCoordinator = SettingsCoordinator(
-                    router: router,
-                    browserViewController: browserViewController
-                )
-                add(child: settingsCoordinator)
-                settingsCoordinator.start(with: section)
+                showSettings(with: section)
             } else {
                 handle(settingsSection: section)
             }
@@ -222,6 +217,23 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
+    }
+
+    private func showSettings(with section: Route.SettingsSection) {
+        // FXIOS-6556 - Avoid passing whole BVC to settings
+        let baseSettingsVC = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: browserViewController
+        )
+        let navigationController = ThemedNavigationController(rootViewController: baseSettingsVC)
+        navigationController.modalPresentationStyle = .formSheet
+        let settingsRouter = DefaultRouter(navigationController: navigationController)
+
+        let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        add(child: settingsCoordinator)
+        router.present(navigationController)
+        settingsCoordinator.start(with: section)
     }
 
     // Will be removed with FXIOS-6529
