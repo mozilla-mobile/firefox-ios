@@ -119,8 +119,8 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.tables["SiteTable"])
         waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.google"], timeout: 5)
         XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.google"].exists)
-        typeOnSearchBar(text: ".com")
-        typeOnSearchBar(text: "\r")
+        app.textFields["address"].typeText(".com")
+        app.textFields["address"].typeText("\r")
         navigator.nowAt(BrowserTab)
 
         // Clear text and enter new url
@@ -132,7 +132,7 @@ class BookmarkingTests: BaseTestCase {
         // Site table exists but is empty
         waitForExistence(app.tables["SiteTable"])
         XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
-        typeOnSearchBar(text: "\r")
+        app.textFields["address"].typeText("\r")
         navigator.nowAt(BrowserTab)
 
         // Add page to bookmarks
