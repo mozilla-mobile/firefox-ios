@@ -358,7 +358,7 @@ extension String {
                 key: "CreditCard.RememberCard.Header.v115",
                 tableName: "RememberCard",
                 value: "Save your card information securely with %@ to check out faster next time.",
-                comment: "This value is used as the header for the remember card page")
+                comment: "This value is used as the header for the remember card page. The placeholder is for the app name.")
             public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainButtonTitle.v115",
                 tableName: "RememberCard",
