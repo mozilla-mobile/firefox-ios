@@ -161,7 +161,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     /// Commits the completion by setting the text and removing the highlight.
-    fileprivate func applyCompletion() {
+    private func applyCompletion() {
         // Clear the current completion, then set the text without the attributed style.
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
@@ -176,7 +176,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     /// Removes the autocomplete-highlighted. Returns true if a completion was actually removed
     @objc
     @discardableResult
-    fileprivate func removeCompletion() -> Bool {
+    private func removeCompletion() -> Bool {
         let hasActiveCompletion = isSelectionActive
         autocompleteTextLabel?.removeFromSuperview()
         autocompleteTextLabel = nil
@@ -184,7 +184,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     @objc
-    fileprivate func clear() {
+    private func clear() {
         text = ""
         removeCompletion()
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")

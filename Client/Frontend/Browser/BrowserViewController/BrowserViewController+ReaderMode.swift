@@ -194,7 +194,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
                 let ySpacing = isBottomSearchBar ? -1 : UIConstants.ToolbarHeight
 
-                popoverPresentationController.backgroundColor = UIColor.Photon.White100
+                popoverPresentationController.backgroundColor = .white
                 popoverPresentationController.delegate = self
                 popoverPresentationController.sourceView = readerModeBar
                 popoverPresentationController.sourceRect = CGRect(

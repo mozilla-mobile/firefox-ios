@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-protocol HomePanel: NotificationThemeable {
+protocol HomePanel: LegacyNotificationThemeable {
     var homePanelDelegate: HomePanelDelegate? { get set }
 }
 

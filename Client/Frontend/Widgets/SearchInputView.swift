@@ -21,7 +21,7 @@ protocol SearchInputViewDelegate: AnyObject {
     func searchInputViewFinishedEditing(_ searchView: SearchInputView)
 }
 
-class SearchInputView: UIView, NotificationThemeable {
+class SearchInputView: UIView, LegacyNotificationThemeable {
     weak var delegate: SearchInputViewDelegate?
 
     var showBottomBorder = true {

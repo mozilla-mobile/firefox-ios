@@ -5,7 +5,7 @@
 import UIKit
 import SiteImageView
 
-class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell {
+class InactiveTabItemCell: UITableViewCell, LegacyNotificationThemeable, ReusableCell {
     private var viewModel: InactiveTabItemCellModel?
 
     private var selectedView: UIView = {

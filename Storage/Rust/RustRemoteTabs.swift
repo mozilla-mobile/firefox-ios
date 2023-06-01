@@ -160,8 +160,8 @@ public class RustRemoteTabs {
 
     public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
         return self.getAll().bind { result in
-            guard result.failureValue == nil else {
-                return deferMaybe(result.failureValue as! String)
+            if let failureValue = result.failureValue {
+                return deferMaybe(failureValue)
             }
 
             guard let records = result.successValue else {
@@ -175,8 +175,8 @@ public class RustRemoteTabs {
 
     public func getClientGUIDs(completion: @escaping (Set<GUID>?, Error?) -> Void) {
         self.getAll().upon { result in
-            guard result.failureValue == nil else {
-                completion(nil, result.failureValue as! String)
+            if let failureValue = result.failureValue {
+                completion(nil, failureValue)
                 return
             }
             guard let records = result.successValue else {
@@ -191,8 +191,8 @@ public class RustRemoteTabs {
 
     public func getRemoteClients(remoteDeviceIds: [String]) -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.getAll().bind { result in
-            guard result.failureValue == nil else {
-                return deferMaybe(result.failureValue!)
+            if let failureValue = result.failureValue {
+                return deferMaybe(failureValue)
             }
             guard let rustClientAndTabs = result.successValue else {
                 return deferMaybe([])

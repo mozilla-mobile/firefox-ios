@@ -348,7 +348,7 @@ extension String {
         }
 
         // Remember Card
-        public struct RememberCard {
+        public struct RememberCreditCard {
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainTitle.v115",
                 tableName: "RememberCard",
@@ -372,7 +372,7 @@ extension String {
         }
 
         // Update Card
-        public struct UpdateCard {
+        public struct UpdateCreditCard {
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.MainTitle.v115",
                 tableName: "UpdateCard",
@@ -383,12 +383,12 @@ extension String {
                 tableName: "UpdateCard",
                 value: "Manage cards",
                 comment: "This value is used as the title for the Manage Cards button from the update credit card page")
-            public static let YesButtonTitle = MZLocalizedString(
+            public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.YesButtonTitle.v115",
                 tableName: "UpdateCard",
                 value: "Yes",
                 comment: "This value is used as the title for the button in the update credit card page")
-            public static let NotNowButtonTitle = MZLocalizedString(
+            public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
                 tableName: "UpdateCard",
                 value: "Not Now",
@@ -2890,11 +2890,6 @@ extension String {
         tableName: nil,
         value: "Sync Disconnected",
         comment: "Title of a notification displayed when named device has been disconnected from FxA.")
-    public static let FxAPush_DeviceDisconnected_body = MZLocalizedString(
-        key: "FxAPush_DeviceDisconnected_body",
-        tableName: nil,
-        value: "%@ has been successfully disconnected.",
-        comment: "Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device.")
 
     public static let FxAPush_DeviceDisconnected_UnknownDevice_body = MZLocalizedString(
         key: "FxAPush_DeviceDisconnected_UnknownDevice_body",

@@ -200,7 +200,7 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
     }
 }
 
-extension SearchGroupedItemsViewController: NotificationThemeable {
+extension SearchGroupedItemsViewController: LegacyNotificationThemeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {

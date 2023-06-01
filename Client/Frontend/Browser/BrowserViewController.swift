@@ -2846,7 +2846,7 @@ extension BrowserViewController: TabTrayDelegate {
 }
 
 // MARK: Browser Chrome Theming
-extension BrowserViewController: NotificationThemeable {
+extension BrowserViewController: LegacyNotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
         // TODO: Clean up after FXIOS-5109
@@ -2862,7 +2862,7 @@ extension BrowserViewController: NotificationThemeable {
         keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
-        (presentedViewController as? NotificationThemeable)?.applyTheme()
+        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
