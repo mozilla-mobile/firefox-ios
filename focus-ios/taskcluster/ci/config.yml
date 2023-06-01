@@ -18,7 +18,7 @@ workers:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
             os: linux
-            worker-type: 'bitrise'
+            worker-type: 'bitrise-gcp'
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
