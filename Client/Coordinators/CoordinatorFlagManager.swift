@@ -24,5 +24,4 @@ struct CoordinatorFlagManager {
         return FeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
                                                            checking: .buildOnly)
     }
-
 }
