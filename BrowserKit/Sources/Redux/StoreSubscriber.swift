@@ -4,8 +4,22 @@
 
 import Foundation
 
+public protocol AnyStoreSubscriber {
+    func newState(state: Any)
+}
+
 /// Subscribers listen for state changes.
 ///  While all reducers will be called when a action gets dispatched, the subscriber will only be called when an actual state change happens.
-public protocol StoreSubscriber {
-    func newState(state: StateType)
+public protocol StoreSubscriber: AnyStoreSubscriber {
+    associatedtype SubscriberStateType
+
+    func newState(state: SubscriberStateType)
+}
+
+extension StoreSubscriber {
+    public func newState(state: Any) {
+        if let typedState = state as? SubscriberStateType {
+            newState(state: typedState)
+        }
+    }
 }
