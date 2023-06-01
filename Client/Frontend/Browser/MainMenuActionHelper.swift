@@ -222,8 +222,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
-            let zoomAction = getZoomAction()
-            append(to: &section, action: zoomAction)
+            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
+                let zoomSection = getZoomSection()
+                append(to: &section, action: zoomSection)
+            }
 
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
