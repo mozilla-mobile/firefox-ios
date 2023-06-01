@@ -227,7 +227,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 append(to: &section, action: zoomAction)
             }
 
-
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
