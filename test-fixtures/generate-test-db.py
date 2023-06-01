@@ -260,7 +260,7 @@ def main():
 
         # If the user didn't provide a new name, or if the name has forbidden characters, use a default name
         if not db_new_name or not all(char.isalnum() or char in '._-' for char in db_new_name):
-            db_new_name = 'places.copy.db'
+            db_new_name = 'places.copy'
 
         # Append .db to the database name
         db_new_name += '.db'
