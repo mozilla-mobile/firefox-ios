@@ -22,7 +22,9 @@ enum SingleCreditCardViewState: String, Equatable, CaseIterable {
     var header: String? {
         switch self {
         case .save:
-            return .CreditCard.RememberCreditCard.Header
+            return String(
+                format: String.CreditCard.RememberCreditCard.Header,
+                AppName.shortName.rawValue)
         case .update:
             return nil
         }

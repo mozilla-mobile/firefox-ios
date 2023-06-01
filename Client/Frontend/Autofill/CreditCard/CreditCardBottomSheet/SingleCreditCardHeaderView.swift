@@ -51,7 +51,8 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, The
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        label.text = .CreditCard.RememberCreditCard.Header
+        label.text = String(format: String.CreditCard.RememberCreditCard.Header, AppName.shortName.rawValue)
+
         label.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .body,
             size: UX.headerLabelFontSize)
