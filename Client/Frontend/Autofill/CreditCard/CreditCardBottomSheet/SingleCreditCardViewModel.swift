@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import Storage
+import Shared
 
 enum SingleCreditCardViewState: String, Equatable, CaseIterable {
     case save
