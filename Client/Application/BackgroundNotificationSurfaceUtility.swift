@@ -24,6 +24,13 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
     }
 
     func scheduleTaskOnAppBackground() {
+        guard !AppConstants.isRunningUITests else {
+            Task {
+                await triggerSurfaceManager()
+            }
+            return
+        }
+
         let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
 
         // Fetch no earlier than 4 hours from now.
@@ -38,13 +45,21 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
         }
     }
 
+    func triggerSurfaceManager() async {
+        let hasPermission = await notificationManager.hasPermission()
+
+        if hasPermission, surfaceManager.shouldShowSurface {
+            surfaceManager.showNotificationSurface()
+        }
+    }
+
     // MARK: Private
     private func setUp() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
+            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+
             // Schedule a new refresh task.
             self.scheduleTaskOnAppBackground()
-
-            self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
     }
 
@@ -56,11 +71,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
         let operation = BlockOperation { [weak self] in
             guard let self = self else { return }
             Task {
-                let hasPermission = await self.notificationManager.hasPermission()
-
-                if hasPermission, self.surfaceManager.shouldShowSurface {
-                    self.surfaceManager.showNotificationSurface()
-                }
+                await self.triggerSurfaceManager()
             }
         }
 

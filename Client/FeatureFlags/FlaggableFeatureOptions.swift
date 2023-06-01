@@ -9,12 +9,6 @@ import Foundation
 /// the FlaggableFeatureOptions protocol.
 protocol FlaggableFeatureOptions { }
 
-enum OnboardingNotificationCardPosition: String, FlaggableFeatureOptions {
-    case noCard
-    case beforeSync
-    case afterSync
-}
-
 enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case afterFourHours
     case always

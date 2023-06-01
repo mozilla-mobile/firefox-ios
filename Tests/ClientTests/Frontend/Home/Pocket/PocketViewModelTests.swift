@@ -64,7 +64,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     func testDimensioniPhoneLandscape() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .phone, isLandscape: true)
-        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhoneLanscape))
+        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhoneLandscape))
     }
 
     func testDimensioniPhonePortrait() {

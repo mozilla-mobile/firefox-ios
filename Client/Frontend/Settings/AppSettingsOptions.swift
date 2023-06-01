@@ -497,6 +497,17 @@ class ForceCrashSetting: HiddenSetting {
     }
 }
 
+class AppReviewPromptSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "⭐️ Debug: App Review (needs tab switch)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
+        updateCell(navigationController)
+    }
+}
+
 class ChangeToChinaSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -508,6 +519,20 @@ class ChangeToChinaSetting: HiddenSetting {
         } else {
             UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
         }
+    }
+}
+
+class FasterInactiveTabs: HiddenSetting {
+    override var title: NSAttributedString? {
+        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let buttonTitle = isFasterEnabled ? "Debug: Set Inactive Tab Timeout to Default" : "Debug: Set Inactive Tab Timeout to 10s"
+        return NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
+        updateCell(navigationController)
     }
 }
 

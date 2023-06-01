@@ -56,11 +56,7 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
-        if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")
-        } else {
-            tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        }
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         tester().tapView(withAccessibilityLabel: "smallPrivateMask")
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.newTabButton)
         tester().waitForAnimationsToFinish()

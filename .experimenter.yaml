@@ -62,6 +62,14 @@ homescreenFeature:
     sponsored-tiles:
       type: json
       description: "This property defines the sponsored tile feature on the homepage, which is not a section therein.\n"
+library-coordinator-refactor:
+  description: "This feature is for managing the roll out of the library coordinator code as part of the changes on the navigation in the app\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 messaging:
   description: "Configuration for the messaging system.\nIn practice this is a set of growable lookup tables for the message controller to piece together.\n"
   hasExposure: true
@@ -104,13 +112,6 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
-    notification-card-position:
-      type: string
-      description: "This provides the setting for how we show the notification card in onboarding.\n"
-      enum:
-        - after-sync
-        - before-sync
-        - no-card
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
@@ -125,6 +126,9 @@ onboarding-framework-feature:
     cards:
       type: json
       description: "The list of available cards for onboarding.\n"
+    conditions:
+      type: json
+      description: "A collection of out the box conditional expressions to be used in determining whether a card should show or not. Each entry maps to a valid JEXL expression.\n"
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
@@ -152,6 +156,14 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
+settings-coordinator-refactor:
+  description: "This feature is for managing the roll out of the settings coordinator code as part of the changes on the navigation in the app\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 share-sheet:
   description: This feature define the redesign of the share sheet
   hasExposure: true

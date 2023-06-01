@@ -149,7 +149,7 @@
 "Changes font type." = "更改字体。";
 
 /* The button to open a new tab with the copied link */
-"ClipboardToast.GoToCopiedLink.Button" = "转到";
+"ClipboardToast.GoToCopiedLink.Button" = "前往";
 
 /* Message displayed when the user has a copied link on the clipboard */
 "ClipboardToast.GoToCopiedLink.Title" = "转到复制的链接？";
@@ -224,7 +224,7 @@
 "CoverSheet.v24.ETP.Description" = "内置的增强型跟踪保护，能够阻止广告在网上跟踪您。开启“严格”模式则可拦截更多跟踪器和弹窗。";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "转至设置";
+"CoverSheet.v24.ETP.Settings.Button" = "前往设置";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "保护不受广告跟踪";

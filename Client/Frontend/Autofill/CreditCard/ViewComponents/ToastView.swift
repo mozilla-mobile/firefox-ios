@@ -6,23 +6,9 @@ import Foundation
 import SwiftUI
 
 struct ToastView: View {
-    enum MessageType {
-        case savedCard
-        case updatedCard
-        case removedCard
-
-        var message: String {
-            switch self {
-            case .savedCard: return String.CreditCard.SnackBar.SavedCardLabel
-            case .updatedCard: return String.CreditCard.SnackBar.UpdatedCardLabel
-            case .removedCard: return String.CreditCard.SnackBar.RemovedCardLabel
-            }
-        }
-    }
-
     var textColor: Color = .white
     var backgroundColor: Color = .blue
-    var messageType: MessageType
+    var messageType: CreditCardModifiedStatus
     @State var isShowing = false
 
     var toast: some View {

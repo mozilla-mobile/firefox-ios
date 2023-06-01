@@ -324,8 +324,8 @@ class HistoryTests: BaseTestCase {
     func testTabHistory() {
         navigator.nowAt(NewTabScreen)
         openBookOfMozilla()
-        let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.backButton]
-        let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Browser.UrlBar.forwardButton]
+        let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
         urlBarBackButton.press(forDuration: 1)
         XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
         app.tables.staticTexts["The Book of Mozilla"].tap()

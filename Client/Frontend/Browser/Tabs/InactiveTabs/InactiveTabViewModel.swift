@@ -122,14 +122,16 @@ class InactiveTabViewModel {
     // MARK: - Private functions
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
-        let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let defaultOldDay = day14Old
+        let defaultOldDay: Date
 
         // Debug for inactive tabs to easily test in code
-        // TODO: Add a switch in the debug menu to switch between debug or regular
-//        let min_Old = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date() // testing only
-//        let defaultOldDay = min_Old
+        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
+            defaultOldDay = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        } else {
+            let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
+            let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+            defaultOldDay = day14Old
+        }
 
         let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }

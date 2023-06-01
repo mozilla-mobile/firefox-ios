@@ -6,16 +6,6 @@ import Foundation
 import Common
 import Shared
 import Storage
-
-/**
- * This exists to pass in external context: e.g., the UIApplication can
- * expose notification functionality in this way.
- */
-public protocol SyncDelegate: AnyObject {
-    func displaySentTab(for url: URL, title: String, from deviceName: String?)
-    // TODO: storage.
-}
-
 /**
  * We sometimes want to make a synchronizer start from scratch: to throw away any
  * metadata and reset storage to match, allowing us to respond to significant server
@@ -55,7 +45,6 @@ public protocol ResettableSynchronizer {
  */
 public protocol Synchronizer {
     init(scratchpad: Scratchpad,
-         delegate: SyncDelegate,
          basePrefs: Prefs,
          why: OldSyncReason,
          logger: Logger)
@@ -172,7 +161,6 @@ open class BaseCollectionSynchronizer {
     let collection: String
 
     let scratchpad: Scratchpad
-    let delegate: SyncDelegate
     let basePrefs: Prefs
     let prefs: Prefs
     let why: OldSyncReason
@@ -185,13 +173,11 @@ open class BaseCollectionSynchronizer {
     }
 
     init(scratchpad: Scratchpad,
-         delegate: SyncDelegate,
          basePrefs: Prefs,
          why: OldSyncReason,
          collection: String,
          logger: Logger = DefaultLogger.shared) {
         self.scratchpad = scratchpad
-        self.delegate = delegate
         self.collection = collection
         self.basePrefs = basePrefs
         self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)

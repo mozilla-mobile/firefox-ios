@@ -15,7 +15,7 @@ public struct SupportUtils {
 
     public static var URLForPocketLearnMore: URL? {
         // Returns the predefined URL associated to homepage Pocket's Learn more action.
-        URL(string: "https://www.mozilla.org/firefox/pocket/?utm_source=ff_ios")
+        return URL(string: "https://www.mozilla.org/firefox/pocket/?utm_source=ff_ios")
     }
 
     public static func URLForTopic(_ topic: String) -> URL? {

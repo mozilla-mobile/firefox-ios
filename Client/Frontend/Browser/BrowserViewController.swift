@@ -314,7 +314,7 @@ class BrowserViewController: UIViewController {
             toolbar.isHidden = false
             toolbar.tabToolbarDelegate = self
             toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-            toolbar.applyTheme()
+            toolbar.applyTheme(theme: themeManager.currentTheme)
             toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         } else {
@@ -1607,7 +1607,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
+    @discardableResult
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) -> Tab {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
@@ -1619,7 +1620,9 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
+        let tab = tabManager.addTab(request, isPrivate: isPrivate)
+        tabManager.selectTab(tab)
+        return tab
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
@@ -1649,9 +1652,8 @@ class BrowserViewController: UIViewController {
         }
         openedUrlFromExternalSource = true
 
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        let freshTab = tabManager.selectedTab
-        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab?.isPrivate ?? false)
+        let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
+        freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -2483,7 +2485,10 @@ extension BrowserViewController {
 
     func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let viewModel = UpdateViewModel(profile: profile, model: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let viewModel = UpdateViewModel(profile: profile,
+                                        model: onboardingModel,
+                                        telemetryUtility: telemetryUtility)
         if viewModel.shouldShowUpdateSheet(force: force) && !hasPresentedUpgrade {
             viewModel.hasSyncableAccount {
                 self.buildUpdateVC(viewModel: viewModel, animated: animated)
@@ -2515,9 +2520,11 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: nil,
                                             profile: profile,
-                                            model: onboardingModel)
+                                            model: onboardingModel,
+                                            telemetryUtility: telemetryUtility)
         let introViewController = IntroViewController(viewModel: introViewModel)
 
         introViewController.didFinishFlow = {
@@ -2839,21 +2846,23 @@ extension BrowserViewController: TabTrayDelegate {
 }
 
 // MARK: Browser Chrome Theming
-extension BrowserViewController: NotificationThemeable {
+extension BrowserViewController: LegacyNotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
         // TODO: Clean up after FXIOS-5109
-        let ui: [NotificationThemeable?] = [urlBar,
-                                            toolbar,
-                                            readerModeBar,
-                                            topTabsViewController]
-        ui.forEach { $0?.applyTheme() }
+        let currentTheme = themeManager.currentTheme
+        let ui: [ThemeApplicable?] = [urlBar,
+                                      toolbar,
+                                      readerModeBar]
+        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        ui.forEach { $0?.applyTheme(theme: currentTheme) }
+        topTabsViewController?.applyTheme()
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
         keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
-        (presentedViewController as? NotificationThemeable)?.applyTheme()
+        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })

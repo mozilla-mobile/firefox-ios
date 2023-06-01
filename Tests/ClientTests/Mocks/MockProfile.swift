@@ -231,6 +231,10 @@ open class MockProfile: Client.Profile {
         return succeed()
     }
 
+    public func setCommandArrived() {
+        return
+    }
+
     public func pollCommands(forcePoll: Bool) {
         return
     }

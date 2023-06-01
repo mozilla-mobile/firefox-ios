@@ -5,19 +5,21 @@
 import Foundation
 import SnapKit
 import Shared
+import Common
 
 class TabsButton: UIButton {
     struct UX {
         static let cornerRadius: CGFloat = 2
         static let titleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     }
+    private let themeManager: ThemeManager
 
-    var textColor = UIColor.Photon.Blue40 {
+    lazy var textColor = themeManager.currentTheme.colors.textAccent {
         didSet {
             countLabel.textColor = textColor
         }
     }
-    var titleBackgroundColor = UIColor.Photon.Blue40 {
+    lazy var titleBackgroundColor = themeManager.currentTheme.colors.textAccent {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -64,7 +66,7 @@ class TabsButton: UIButton {
 
     fileprivate lazy var borderView: UIImageView = {
         let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
-        border.tintColor = UIColor.legacyTheme.browser.tint
+        border.tintColor = themeManager.currentTheme.colors.textPrimary
         return border
     }()
 
@@ -72,6 +74,7 @@ class TabsButton: UIButton {
     fileprivate weak var clonedTabsButton: TabsButton?
 
     override init(frame: CGRect) {
+        self.themeManager = AppContainer.shared.resolve()
         super.init(frame: frame)
         insideButton.addSubview(labelBackground)
         insideButton.addSubview(borderView)
@@ -204,13 +207,9 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: NotificationThemeable {
-    func applyTheme() {
-        borderView.tintColor = UIColor.legacyTheme.browser.tint
-        if inTopTabs {
-            textColor = UIColor.legacyTheme.topTabs.buttonTint
-        } else {
-            textColor = UIColor.legacyTheme.browser.tint
-        }
+extension TabsButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        borderView.tintColor = theme.colors.textPrimary
+        textColor = theme.colors.textPrimary
     }
 }

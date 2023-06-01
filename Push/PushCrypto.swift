@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Class to wrap ecec which does the encryption, decryption and key generation with OpenSSL.
 /// This supports aesgcm and the newer aes128gcm.
@@ -11,6 +12,11 @@ import Foundation
 class PushCrypto {
     // Stateless, we provide a singleton for convenience.
     public static var sharedInstance = PushCrypto()
+    private let logger: Logger
+
+    init(logger: DefaultLogger = DefaultLogger.shared) {
+        self.logger = logger
+    }
 }
 
 // AES128GCM
@@ -80,6 +86,10 @@ extension PushCrypto {
 
         // rs needs to be >= 18.
         assert(rsInt >= Int(ECE_AES128GCM_MIN_RS))
+        if rsInt < Int(ECE_AESGCM_MIN_RS) {
+            logger.log("rs needs to be >= 18", level: .warning, category: .sync)
+        }
+
         var payloadLen = ece_aes128gcm_payload_max_length(rs, padLen, plaintext.count) + 1
         var payload = [UInt8](repeating: 0, count: payloadLen)
 
@@ -196,6 +206,10 @@ extension PushCrypto {
 
         // rs needs to be >= 3.
         assert(rsInt >= Int(ECE_AESGCM_MIN_RS))
+        if rsInt < Int(ECE_AESGCM_MIN_RS) {
+            logger.log("rs needs to be >= 3", level: .warning, category: .sync)
+        }
+
         var ciphertextLength = ece_aesgcm_ciphertext_max_length(rs, padLen, plaintext.count) + 1
         var ciphertext = [UInt8](repeating: 0, count: ciphertextLength)
 

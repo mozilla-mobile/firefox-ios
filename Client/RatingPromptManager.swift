@@ -47,6 +47,7 @@ final class RatingPromptManager {
     func showRatingPromptIfNeeded(at date: Date = Date()) {
         if shouldShowPrompt {
             requestRatingPrompt(at: date)
+            UserDefaults.standard.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
         }
     }
 
@@ -95,6 +96,10 @@ final class RatingPromptManager {
     // MARK: Private
 
     private var shouldShowPrompt: Bool {
+        if UserDefaults.standard.bool(forKey: PrefsKeys.ForceShowAppReviewPromptOverride) {
+            return true
+        }
+
         // Required: 5th launch or more
         let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
         guard currentSessionCount >= 5 else { return false }
@@ -120,9 +125,7 @@ final class RatingPromptManager {
         // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
         // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
         // will be implemented later in the future.
-        guard requestCount < 1 else { return false }
-
-        return true
+        return requestCount < 1
     }
 
     private func requestRatingPrompt(at date: Date) {

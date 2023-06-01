@@ -18,7 +18,7 @@ enum ExpandButtonState {
     }
 }
 
-class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+class InactiveTabHeader: UITableViewHeaderFooterView, LegacyNotificationThemeable, ReusableCell {
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)

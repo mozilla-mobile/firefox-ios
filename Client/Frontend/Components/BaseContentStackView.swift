@@ -86,7 +86,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
         self.layoutIfNeeded()
     }
 
-    // MARK: - NotificationThemeable
+    // MARK: - LegacyNotificationThemeable
 
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
@@ -102,7 +102,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     }
 }
 
-extension BaseAlphaStackView: NotificationThemeable {
+extension BaseAlphaStackView: LegacyNotificationThemeable {
     func applyTheme() {
         let color = isClearBackground ? .clear : UIColor.legacyTheme.browser.background
         backgroundColor = color

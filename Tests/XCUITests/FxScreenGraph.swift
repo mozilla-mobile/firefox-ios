@@ -155,6 +155,7 @@ class Action {
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
     static let GoToHomePage = "GoToHomePage"
+    static let ClickSearchButton = "ClickSearchButton"
 
     static let OpenSiriFromSettings = "OpenSiriFromSettings"
 
@@ -298,14 +299,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
         if isTablet {
-            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+            screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if app.buttons["TabToolbar.tabsButton"].exists {
-                    app.buttons["TabToolbar.tabsButton"].tap()
-                } else {
-                    app.buttons["URLBarView.tabsButton"].tap()
-                }
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             }
         }
         makeURLBarAvailable(screenState)
@@ -436,15 +433,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         // Workaround to bug Bug 1417522
         if isTablet {
-            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+            screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                // iPhone sim tabs button is called differently when in portrait or landscape
-                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                    app.buttons["URLBarView.tabsButton"].tap()
-                } else {
-                    app.buttons["TabToolbar.tabsButton"].tap()
-                }
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             }
         }
 
@@ -566,6 +558,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.clearPrivatedata], to: ClearPrivateDataSettings)
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
+        screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
+            app.otherElements.tables.cells.switches["Block Images"].tap()
+        }
 
         screenState.backAction = navigationControllerBackAction
     }
@@ -844,14 +839,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
         if isTablet {
-            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+            screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if app.buttons["TabToolbar.tabsButton"].exists {
-                    app.buttons["TabToolbar.tabsButton"].tap()
-                } else {
-                    app.buttons["URLBarView.tabsButton"].tap()
-                }
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             }
         }
     }
@@ -862,7 +853,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], to: TrackingProtectionContextMenuDetails)
 
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) { userState in
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) {
+            userState in
+        }
+
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton], forAction: Action.ClickSearchButton) { userState in
         }
 
         makeToolBarAvailable(screenState)
@@ -883,19 +878,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         // For iPad there is no long press on tabs button
         if !isTablet {
-            let tabsButton = app.buttons["TabToolbar.tabsButton"]
+            let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             screenState.press(tabsButton, to: TabTrayLongPressMenu)
         }
 
         if isTablet {
-            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+            screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if app.buttons["TabToolbar.tabsButton"].exists {
-                    app.buttons["TabToolbar.tabsButton"].tap()
-                } else {
-                    app.buttons["URLBarView.tabsButton"].tap()
-                }
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             }
         }
 
@@ -1022,11 +1013,8 @@ extension MMNavigator where T == FxUserState {
     // Opens a URL in a new tab.
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
-        if isTablet {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
-        } else {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
-        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+
         self.goto(TabTray)
         createNewTab()
         self.openURL(urlString)
@@ -1044,11 +1032,7 @@ extension MMNavigator where T == FxUserState {
     func createSeveralTabsFromTabTray(numberTabs: Int) {
         let app = XCUIApplication()
         for _ in 1...numberTabs {
-            if isTablet {
-                waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
-            } else {
-                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
-            }
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
             self.goto(TabTray)
             self.goto(HomePanelsScreen)
         }

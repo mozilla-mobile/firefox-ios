@@ -6,7 +6,6 @@ import Common
 import Foundation
 import Adjust
 import Shared
-import Glean
 
 final class AdjustHelper: NSObject, FeatureFlaggable {
     private static let adjustAppTokenKey = "AdjustAppToken"

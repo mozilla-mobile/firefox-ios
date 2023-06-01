@@ -11,7 +11,7 @@ struct CellWithRoundedButtonUX {
     static let ButtonImagePadding: CGFloat = 11
 }
 
-class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
+class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, ReusableCell {
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
 

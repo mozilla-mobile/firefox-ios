@@ -13,7 +13,7 @@ class CredentialProviderPresenter {
     private let appAuthenticator: AppAuthenticator
 
     init(view: CredentialProviderViewProtocol,
-         profile: Profile = ExtensionProfile(localName: "profile"),
+         profile: Profile = BrowserProfile(localName: "profile"),
          appAuthenticator: AppAuthenticator = AppAuthenticator()) {
         self.view = view
         self.profile = profile

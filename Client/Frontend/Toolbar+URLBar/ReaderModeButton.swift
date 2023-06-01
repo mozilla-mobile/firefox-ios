@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class ReaderModeButton: UIButton {
     // MARK: - Initializers
@@ -13,7 +14,6 @@ class ReaderModeButton: UIButton {
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
         imageView?.contentMode = .scaleAspectFit
         contentHorizontalAlignment = .center
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,9 +66,9 @@ class ReaderModeButton: UIButton {
     }
 }
 
-extension ReaderModeButton: NotificationThemeable {
-    func applyTheme() {
-        selectedTintColor = UIColor.legacyTheme.urlbar.readerModeButtonSelected
-        unselectedTintColor = UIColor.legacyTheme.urlbar.readerModeButtonUnselected
+extension ReaderModeButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        selectedTintColor = theme.colors.iconAction
+        unselectedTintColor = theme.colors.iconSecondary
     }
 }

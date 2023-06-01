@@ -147,17 +147,20 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
             viewModel.cardInputViewModel.creditCard = creditCard
         }
         viewModel.cardInputViewModel.updateState(state: editState)
-        creditCardEditView = CreditCardInputView(
-            viewModel: self.viewModel.cardInputViewModel,
-            dismiss: { [weak self] successVal in
-                DispatchQueue.main.async {
-                    if successVal {
-                        self?.updateCreditCardList()
-                    }
-                    self?.creditCardAddEditView?.dismiss(animated: true)
-                    self?.viewModel.cardInputViewModel.clearValues()
+        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel)
+        viewModel.cardInputViewModel.dismiss = {
+            [weak self] status, successVal in
+            DispatchQueue.main.async {
+                self?.showToast(status: status)
+
+                if successVal {
+                    self?.updateCreditCardList()
                 }
-        })
+
+                self?.creditCardAddEditView?.dismiss(animated: true)
+                self?.viewModel.cardInputViewModel.clearValues()
+            }
+        }
 
         guard let creditCardEditView = creditCardEditView else { return }
         creditCardAddEditView = UIHostingController(rootView: creditCardEditView)
@@ -165,6 +168,12 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         creditCardAddEditView.view.backgroundColor = .clear
         creditCardAddEditView.modalPresentationStyle = .formSheet
         present(creditCardAddEditView, animated: true, completion: nil)
+    }
+
+    private func showToast(status: CreditCardModifiedStatus) {
+        SimpleToast().showAlertWithText(status.message,
+                                        bottomContainer: view,
+                                        theme: themeManager.currentTheme)
     }
 
     @objc

@@ -503,7 +503,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
 
         // When
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         let result = subject.handle(route: route!)
 
         // Then

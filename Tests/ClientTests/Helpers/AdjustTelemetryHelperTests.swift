@@ -3,125 +3,81 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Glean
 
 @testable import Client
 
 class AdjustTelemetryHelperTests: XCTestCase {
-    var telemetryHelper: AdjustTelemetryHelper!
+    var telemetryWrapper: MockAdjustWrapper!
+    var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
-
-        // Setup mock profile
-        telemetryHelper = AdjustTelemetryHelper()
+        telemetryWrapper = MockAdjustWrapper()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
         super.tearDown()
-        telemetryHelper = nil
+
+        telemetryWrapper = nil
+        gleanWrapper = nil
     }
 
     func testFailSetAttribution_WithAllNilData() {
-        // Submit the ping.
+        let subject = createSubject()
         let attribution = MockAdjustTelemetryData(campaign: nil,
                                                   adgroup: nil,
                                                   creative: nil,
                                                   network: nil)
-        let expectation = expectation(description: "The first session ping was sent")
+        subject.setAttributionData(attribution)
 
-        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
-            XCTAssertNil(GleanMetrics.Adjust.adGroup.testGetValue())
-            XCTAssertNil(GleanMetrics.Adjust.creative.testGetValue())
-            XCTAssertNil(GleanMetrics.Adjust.network.testGetValue())
-            expectation.fulfill()
-        }
-
-        telemetryHelper.setAttributionData(attribution)
-
-        waitForExpectations(timeout: 5.0)
+        XCTAssertEqual(telemetryWrapper.recordDeeplinkCalled, 0)
+        XCTAssertEqual(telemetryWrapper.recordCampaignCalled, 0)
+        XCTAssertEqual(telemetryWrapper.recordNetworkCalled, 0)
+        XCTAssertEqual(telemetryWrapper.recordCreativeCalled, 0)
+        XCTAssertEqual(telemetryWrapper.recordAdGroupCalled, 0)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
     }
 
     func testSetAttribution_WithSomeNilData() {
-        // Submit the ping.
+        let subject = createSubject()
         let attribution = MockAdjustTelemetryData(campaign: nil)
-        let expectation = expectation(description: "The first session ping was sent")
 
-        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
-            XCTAssertEqual("test_adgroup", GleanMetrics.Adjust.adGroup.testGetValue())
-            XCTAssertEqual("test_creative", GleanMetrics.Adjust.creative.testGetValue())
-            XCTAssertEqual("test_network", GleanMetrics.Adjust.network.testGetValue())
-            expectation.fulfill()
-        }
+        subject.setAttributionData(attribution)
 
-        telemetryHelper.setAttributionData(attribution)
-
-        waitForExpectations(timeout: 5.0)
-    }
-
-    func testFirstSessionPing() {
-        GleanMetrics.Adjust.campaign.set("campaign")
-        GleanMetrics.Adjust.adGroup.set("adGroup")
-        GleanMetrics.Adjust.creative.set("creative")
-        GleanMetrics.Adjust.network.set("network")
-
-        let expectation = expectation(description: "The first session ping was sent")
-
-        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            XCTAssertEqual("campaign", GleanMetrics.Adjust.campaign.testGetValue())
-            XCTAssertEqual("adGroup", GleanMetrics.Adjust.adGroup.testGetValue())
-            XCTAssertEqual("creative", GleanMetrics.Adjust.creative.testGetValue())
-            XCTAssertEqual("network", GleanMetrics.Adjust.network.testGetValue())
-            expectation.fulfill()
-        }
-
-        // Submit the ping.
-        GleanMetrics.Pings.shared.firstSession.submit()
-
-        waitForExpectations(timeout: 5.0)
+        XCTAssertEqual(telemetryWrapper.recordCampaignCalled, 0)
+        XCTAssertEqual(telemetryWrapper.savedNetwork, "test_network")
+        XCTAssertEqual(telemetryWrapper.recordNetworkCalled, 1)
+        XCTAssertEqual(telemetryWrapper.savedCreative, "test_creative")
+        XCTAssertEqual(telemetryWrapper.recordCreativeCalled, 1)
+        XCTAssertEqual(telemetryWrapper.savedAdGroup, "test_adgroup")
+        XCTAssertEqual(telemetryWrapper.recordAdGroupCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
     }
 
     func testDeeplinkHandleEvent_GleanCalled() {
-        guard let url = URL(string: "https://testurl.com") else {
-            XCTFail("Url should be build correctly")
-            return
-        }
-
+        let subject = createSubject()
+        let url = URL(string: "https://testurl.com")!
         let mockData = MockAdjustTelemetryData()
-        let campaign = mockData.campaign ?? ""
-        let adGroup = mockData.adgroup ?? ""
-        let creative = mockData.creative ?? ""
-        let network = mockData.network ?? ""
 
-        let expectation = expectation(description: "The first session ping was sent")
-        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.Adjust.deeplinkReceived)
+        subject.sendDeeplinkTelemetry(url: url, attribution: mockData)
 
-            self.testStringMetricSuccess(metric: GleanMetrics.Adjust.campaign,
-                                         expectedValue: campaign,
-                                         failureMessage: "Should have adjust campaign of \(campaign)")
+        XCTAssertEqual(telemetryWrapper.savedDeeplink, url)
+        XCTAssertEqual(telemetryWrapper.recordDeeplinkCalled, 1)
+        XCTAssertEqual(telemetryWrapper.savedCampaign, mockData.campaign!)
+        XCTAssertEqual(telemetryWrapper.savedNetwork, mockData.network!)
+        XCTAssertEqual(telemetryWrapper.savedCreative, mockData.creative!)
+        XCTAssertEqual(telemetryWrapper.savedAdGroup, mockData.adgroup!)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+    }
 
-            self.testStringMetricSuccess(metric: GleanMetrics.Adjust.adGroup,
-                                         expectedValue: adGroup,
-                                         failureMessage: "Should have adjust adGroup of \(adGroup)")
+    // MARK: - Helper
 
-            self.testStringMetricSuccess(metric: GleanMetrics.Adjust.creative,
-                                         expectedValue: creative,
-                                         failureMessage: "Should have adjust creative of \(creative)")
-
-            self.testStringMetricSuccess(metric: GleanMetrics.Adjust.network,
-                                         expectedValue: network,
-                                         failureMessage: "Should have adjust network of \(network)")
-
-            expectation.fulfill()
-        }
-
-        telemetryHelper.sendDeeplinkTelemetry(url: url, attribution: mockData)
-        waitForExpectations(timeout: 5.0)
+    func createSubject() -> AdjustTelemetryHelper {
+        let subject = AdjustTelemetryHelper(gleanWrapper: gleanWrapper,
+                                            telemetry: telemetryWrapper)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }

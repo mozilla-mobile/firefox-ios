@@ -89,14 +89,12 @@ class StorageClientTests: XCTestCase {
     }
 
     func testOverSizeRecords() {
-        let delegate = MockSyncDelegate()
-
         // We can use these useless values because we're directly injecting decrypted
         // payloads; no need for real keys etc.
         let prefs = MockProfilePrefs()
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
-        let synchronizer = IndependentRecordSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled, collection: "foo")
+        let synchronizer = IndependentRecordSynchronizer(scratchpad: scratchpad, basePrefs: prefs, why: .scheduled, collection: "foo")
         let jA = "{\"id\":\"aaaaaa\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
         let rA = Record<CleartextPayloadJSON>(id: "aaaaaa", payload: CleartextPayloadJSON(JSON(parseJSON: jA)), modified: 10000, sortindex: 123, ttl: 1000000)
 
@@ -110,10 +108,5 @@ class StorageClientTests: XCTestCase {
         let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _, _  in deferMaybe(Date.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
-    }
-}
-
-class MockSyncDelegate: SyncDelegate {
-    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
     }
 }

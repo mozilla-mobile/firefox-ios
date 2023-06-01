@@ -223,11 +223,7 @@ class BrowserUtils {
 
 
     class func resetToAboutHomeKIF(_ tester: KIFUITestActor) {
-        if iPad() {
-            tester.tapView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")
-        } else {
-            tester.tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        }
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         
         // if in private mode, close all tabs
         tester.tapView(withAccessibilityLabel: "smallPrivateMask")
@@ -364,7 +360,7 @@ class BrowserUtils {
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {
         if iPad() {
-            tester.tapView(withAccessibilityIdentifier: "TabToolbar.libraryButton")
+            tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.bookmarksButton)
         } else {
             // Workaround to be able to swipe the view and close the library panel
             tester.tapView(withAccessibilityLabel: "Done")

@@ -14,7 +14,8 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
     func addBookmark(url: String, title: String?)
 
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool)
+    @discardableResult
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
     func showLibrary(panel: LibraryPanelType?)
