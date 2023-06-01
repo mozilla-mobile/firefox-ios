@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import Storage
+import Shared
 
 enum SingleCreditCardViewState: String, Equatable, CaseIterable {
     case save
@@ -22,7 +23,9 @@ enum SingleCreditCardViewState: String, Equatable, CaseIterable {
     var header: String? {
         switch self {
         case .save:
-            return .CreditCard.RememberCreditCard.Header
+            return String(
+                format: String.CreditCard.RememberCreditCard.Header,
+                AppName.shortName.rawValue)
         case .update:
             return nil
         }
