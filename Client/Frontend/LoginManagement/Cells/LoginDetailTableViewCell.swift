@@ -102,12 +102,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     var displayDescriptionAsPassword = false {
         didSet {
             descriptionLabel.isSecureTextEntry = displayDescriptionAsPassword
-
-            if displayDescriptionAsPassword {
-                descriptionLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                                      size: 16,
-                                                                                      symbolicTraits: [.traitMonoSpace])
-            }
         }
     }
 
