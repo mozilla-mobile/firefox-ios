@@ -32,10 +32,17 @@ import shutil
 import os
 import re
 import subprocess
+import logging
 
 BUNDLE_ID = 'org.mozilla.ios.Fennec'
 APP_GROUP_ID = 'group.org.mozilla.ios.Fennec'
 CSV_FILE = 'websites.csv'
+
+def _init_logging():
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.ERROR,
+    )
 
 def get_db_path(bundle_id, app_group):
     """
@@ -66,8 +73,7 @@ def get_device_id():
                 device_id = match.group(1)
                 break
     if not device_id:
-        print('No booted simulator found.')
-        return None
+        raise Exception('No booted simulator found! Please launch an iOS Simulator device and try again.')
     return device_id
 
 def get_app_group_id(bundle_id):
@@ -81,8 +87,7 @@ def get_app_group_id(bundle_id):
     # Extract the app_group_id from the returned path
     app_group_id = os.path.basename(app_group_container_path)
     if not app_group_id:
-        print('No app group container found for the app.')
-        return None
+        raise Exception(f'Could not find app group ID for bundle ID {bundle_id}. Please verify you have the app installed and try again.')
     
     return app_group_id
 
@@ -160,9 +165,7 @@ def create_and_clean_database(db_new_name, db_path):
         # Copy the database file
         shutil.copyfile(db_path, db_new_path)
     except Exception as e:
-        print(f"Error occurred while copying the database: {str(e)}")
-        db_new_name = 'places.copy.db'
-        shutil.copyfile(db_path, db_new_path)
+        logging.error(f"Error occurred while copying the database: {str(e)}")
 
     # Connect to the new database file
     db_connection = sqlite3.connect(db_new_path)
@@ -247,6 +250,9 @@ def main():
     8. Inserts records into the moz_places, moz_historyvisits, and moz_bookmarks tables using data from the 'websites.csv'.
     9. Closes the connection to the database after all operations are done.
     """
+
+    _init_logging()
+
     db_connection = None  # Initialize db_connection here
     try:
         # User inputs for number of records to create for history and bookmarks
@@ -271,9 +277,9 @@ def main():
         read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count)
 
     except sqlite3.Error as e:
-        print(f"SQLite error occurred: {str(e)}")
+        logging.error(f"SQLite error occurred: {str(e)}")
     except Exception as e:
-        print(f"Error occurred: {str(e)}")
+        logging.error(f"Error occurred: {str(e)}")
     finally:
         # Script errors cause db_connection to be lost, throwing UnboundLocalError
         # check if db_connection has been lost already before trying to close connection
