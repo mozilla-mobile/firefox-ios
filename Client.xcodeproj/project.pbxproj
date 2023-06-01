@@ -1235,6 +1235,7 @@
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
+		E1E5BE252A28F7BE00248F77 /* LoginDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E5BE242A28F7BE00248F77 /* LoginDetailViewControllerModel.swift */; };
 		E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */; };
 		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */; };
@@ -6014,6 +6015,7 @@
 		E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
+		E1E5BE242A28F7BE00248F77 /* LoginDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
 		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetchAndProcessingUtility.swift; sourceTree = "<group>"; };
@@ -9531,6 +9533,7 @@
 				E1CEC2002A28C3B600B177D5 /* Cells */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
+				E1E5BE242A28F7BE00248F77 /* LoginDetailViewControllerModel.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
 				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
 				CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */,
@@ -11905,6 +11908,7 @@
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
+				E1E5BE252A28F7BE00248F77 /* LoginDetailViewControllerModel.swift in Sources */,
 				E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,

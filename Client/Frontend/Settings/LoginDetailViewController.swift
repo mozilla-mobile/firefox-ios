@@ -7,19 +7,6 @@ import Storage
 import Shared
 import Common
 
-enum InfoItem: Int {
-    case breachItem = 0
-    case websiteItem
-    case usernameItem
-    case passwordItem
-    case lastModifiedSeparator
-    case deleteItem
-
-    var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
-    }
-}
-
 struct LoginDetailUX {
     static let InfoRowHeight: CGFloat = 58
     static let DeleteRowHeight: CGFloat = 44
@@ -33,8 +20,6 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-
-    private let profile: Profile
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -51,14 +36,8 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     private weak var passwordField: UITextField?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-    private var breach: BreachRecord?
 
-    private var login: LoginRecord {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    var webpageNavigationHandler: ((_ url: URL?) -> Void)?
+    private var viewModel: LoginDetailViewControllerModel
 
     private var isEditingFieldData = false {
         didSet {
@@ -68,23 +47,18 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
         }
     }
 
-    init(profile: Profile,
-         login: LoginRecord,
-         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+    init(viewModel: LoginDetailViewControllerModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.login = login
-        self.profile = profile
-        self.webpageNavigationHandler = webpageNavigationHandler
+        self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
-    }
-
-    func setBreachRecord(breach: BreachRecord?) {
-        self.breach = breach
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dismissAlertController),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -138,7 +112,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
-            guard let breach = breach else { return breachCell }
+            guard let breach = viewModel.breachRecord else { return breachCell }
             breachCell.isHidden = false
             let breachDetailView: BreachAlertsDetailView = .build()
             breachCell.contentView.addSubview(breachDetailView)
@@ -172,7 +146,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             loginCell.highlightedLabelTitle = .LoginDetailUsername
-            loginCell.descriptionLabel.text = login.decryptedUsername
+            loginCell.descriptionLabel.text = viewModel.login.decryptedUsername
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.isEditingFieldData = isEditingFieldData
@@ -186,7 +160,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             loginCell.highlightedLabelTitle = .LoginDetailPassword
-            loginCell.descriptionLabel.text = login.decryptedPassword
+            loginCell.descriptionLabel.text = viewModel.login.decryptedPassword
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
@@ -201,7 +175,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             loginCell.highlightedLabelTitle = .LoginDetailWebsite
-            loginCell.descriptionLabel.text = login.hostname
+            loginCell.descriptionLabel.text = viewModel.login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
             loginCell.isEditingFieldData = false
@@ -221,8 +195,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             let created: String = .LoginDetailCreatedAt
             let lastModified: String = .LoginDetailModifiedAt
 
-            let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
-            let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
+            let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
+            let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(viewModel.login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
             // Setting only the detail text produces smaller text as desired, and it is centered.
             cell.centeredLabel.text = createdFormatted + "\n" + lastModifiedFormatted
             setCellSeparatorHidden(cell)
@@ -269,19 +243,17 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return viewModel.numberOfRows
     }
 }
 
 // MARK: - UITableViewDelegate
 extension LoginDetailViewController: UITableViewDelegate {
     private func showMenuOnSingleTap(forIndexPath indexPath: IndexPath) {
-        guard let item = InfoItem(rawValue: indexPath.row) else { return }
-        if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
-            return
-        }
-
-        guard let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell else { return }
+        guard let cellType = viewModel.cellType(atIndexPath: indexPath),
+            cellType.shouldShowMenu,
+            let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell
+        else { return }
 
         cell.becomeFirstResponder()
 
@@ -334,22 +306,22 @@ extension LoginDetailViewController {
 
     @objc
     func didTapBreachLearnMore() {
-        webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
+        viewModel.webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
     }
 
     @objc
     func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
-        guard let domain = breach?.domain else { return }
+        guard let domain = viewModel.breachRecord?.domain else { return }
         var urlComponents = URLComponents()
         urlComponents.host = domain
         urlComponents.scheme = "https"
-        webpageNavigationHandler?(urlComponents.url)
+        viewModel.webpageNavigationHandler?(urlComponents.url)
     }
 
     func deleteLogin() {
-        profile.hasSyncedLogins().uponQueue(.main) { yes in
+        viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.deleteLogin(id: self.login.id).uponQueue(.main) { _ in
+                self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -360,9 +332,9 @@ extension LoginDetailViewController {
 
     func onProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.getLogin(id: login.id).uponQueue(.main) { result in
+        viewModel.profile.logins.getLogin(id: viewModel.login.id).uponQueue(.main) { result in
             if let successValue = result.successValue, let syncedLogin = successValue {
-                self.login = syncedLogin
+                self.viewModel.login = syncedLogin
             }
         }
     }
@@ -383,23 +355,23 @@ extension LoginDetailViewController {
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
 
-        guard username != login.decryptedUsername || password != login.decryptedPassword else { return }
+        guard username != viewModel.login.decryptedUsername || password != viewModel.login.decryptedPassword else { return }
 
         let updatedLogin = LoginEntry(
             fromLoginEntryFlattened: LoginEntryFlattened(
-                id: login.id,
-                hostname: login.hostname,
+                id: viewModel.login.id,
+                hostname: viewModel.login.hostname,
                 password: password,
                 username: username,
-                httpRealm: login.httpRealm,
-                formSubmitUrl: login.formSubmitUrl,
-                usernameField: login.usernameField,
-                passwordField: login.passwordField
+                httpRealm: viewModel.login.httpRealm,
+                formSubmitUrl: viewModel.login.formSubmitUrl,
+                usernameField: viewModel.login.usernameField,
+                passwordField: viewModel.login.passwordField
             )
         )
 
         if updatedLogin.isValid.isSuccess {
-            profile.logins.updateLogin(id: login.id, login: updatedLogin).uponQueue(.main) { _ in
+            viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin).uponQueue(.main) { _ in
                 self.onProfileDidFinishSyncing()
                 // Required to get UI to reload with changed state
                 self.tableView.reloadData()
@@ -437,7 +409,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
-        guard let url = (login.formSubmitUrl?.asURL ?? login.hostname.asURL) else { return }
+        guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
 
         navigationController?.dismiss(animated: true, completion: {
             self.settingsDelegate?.settingsOpenURLInNewTab(url)
