@@ -75,16 +75,16 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
-
+                let outputDir = URL(fileURLWithPath: "\(dirForTestProfile)/window-data")
+                let outputFile = URL(fileURLWithPath: "\(dirForTestProfile)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
                 filePaths.filter { $0.contains("window-") }.forEach { item in
                     try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
-                try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-                try! FileManager.default.copyItem(at: input, to: output)
+                try? FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
+                try! FileManager.default.copyItem(at: input, to: outputFile)
             }
         }
 
