@@ -200,8 +200,9 @@ extension LoginDetailViewController: UITableViewDataSource {
 
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(viewModel.login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
-            cell.cellModel = LoginDetailCenteredTableViewCellModel(
+            let cellModel = LoginDetailCenteredTableViewCellModel(
                 label: createdFormatted + "\n" + lastModifiedFormatted)
+            cell.configure(viewModel: cellModel)
             setCellSeparatorHidden(cell)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
