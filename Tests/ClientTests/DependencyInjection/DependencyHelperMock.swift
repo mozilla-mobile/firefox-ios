@@ -40,4 +40,8 @@ class DependencyHelperMock {
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
+
+    func reset() {
+        AppContainer.shared.reset()
+    }
 }
