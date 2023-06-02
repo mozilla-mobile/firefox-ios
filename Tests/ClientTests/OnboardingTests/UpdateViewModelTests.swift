@@ -19,7 +19,7 @@ class UpdateViewModelTests: XCTestCase {
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {

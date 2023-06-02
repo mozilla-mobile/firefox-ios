@@ -9,21 +9,21 @@ import Shared
 struct CoordinatorFlagManager {
     /// This will be removed with FXIOS-6036
     static var isCoordinatorEnabled: Bool {
-        return FeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
+        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
                                                            checking: .buildOnly)
     }
 
     /// This will be removed with FXIOS-6529
     static var isSettingsCoordinatorEnabled: Bool {
         return CoordinatorFlagManager.isCoordinatorEnabled
-        && FeatureFlagsManager.shared.isFeatureEnabled(.settingsCoordinatorRefactor,
+        && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.settingsCoordinatorRefactor,
                                                        checking: .buildOnly)
     }
 
     /// This will be removed with FXIOS-6530
     static var isLibraryCoordinatorEnabled: Bool {
         return CoordinatorFlagManager.isCoordinatorEnabled
-        && FeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
+        && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
                                                        checking: .buildOnly)
     }
 }

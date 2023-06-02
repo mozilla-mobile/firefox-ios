@@ -18,7 +18,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         dataAdaptor = MockHistoryHighlightsDataAdaptor()
         delegate = MockHomepageDataModelDelegate()
         telemetry = MockTelemetryWrapper()

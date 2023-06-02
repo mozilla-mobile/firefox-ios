@@ -20,7 +20,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         profile.prefs.clearAll()
     }

@@ -31,7 +31,7 @@ class JumpBackInViewModelTests: XCTestCase {
             tabManager: LegacyTabManager(profile: mockProfile, imageStore: nil)
         )
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
