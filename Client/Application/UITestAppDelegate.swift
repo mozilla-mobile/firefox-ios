@@ -28,6 +28,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
+        let dirForTestProfile = self.dirForTestProfile
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
@@ -65,6 +66,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             }
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
+                let tabDirectory = "\(self.appRootDir())/profile.profile"
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
                     fatalError("Clearing profile and loading a \(LegacyTabManagerStoreImplementation.storePath) is not a supported combination.")
                 }
@@ -74,13 +76,13 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filenameArchive,
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
-                try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-                let outputDir = URL(fileURLWithPath: "\(dirForTestProfile)/window-data")
-                let outputFile = URL(fileURLWithPath: "\(dirForTestProfile)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
-                let enumerator = FileManager.default.enumerator(atPath: "\(dirForTestProfile)/window-data")
-                let filePaths = enumerator?.allObjects as! [String]
-                filePaths.filter { $0.contains("window-") }.forEach { item in
-                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/window-data/\(item)"))
+                try? FileManager.default.createDirectory(atPath: tabDirectory, withIntermediateDirectories: false, attributes: nil)
+                let outputDir = URL(fileURLWithPath: "\(tabDirectory)/window-data")
+                let outputFile = URL(fileURLWithPath: "\(tabDirectory)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
+                let enumerator = FileManager.default.enumerator(atPath: "\(tabDirectory)/window-data")
+                let filePaths = enumerator?.allObjects as? [String]
+                filePaths?.filter { $0.contains("window-") }.forEach { item in
+                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)"))
                 }
 
                 try? FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
