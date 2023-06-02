@@ -15,13 +15,15 @@ struct CoordinatorFlagManager {
 
     /// This will be removed with FXIOS-6529
     static var isSettingsCoordinatorEnabled: Bool {
-        return FeatureFlagsManager.shared.isFeatureEnabled(.settingsCoordinatorRefactor,
-                                                           checking: .buildOnly)
+        return CoordinatorFlagManager.isCoordinatorEnabled
+        && FeatureFlagsManager.shared.isFeatureEnabled(.settingsCoordinatorRefactor,
+                                                       checking: .buildOnly)
     }
 
     /// This will be removed with FXIOS-6530
     static var isLibraryCoordinatorEnabled: Bool {
-        return FeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
-                                                           checking: .buildOnly)
+        return CoordinatorFlagManager.isCoordinatorEnabled
+        && FeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
+                                                       checking: .buildOnly)
     }
 }
