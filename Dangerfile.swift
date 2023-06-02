@@ -99,8 +99,9 @@ func checkForCodeUsage() {
     let sourceSha = "\(danger.github.pullRequest.head.sha)"
     let diffBranches = "\(destinationSha)..\(sourceSha)"
 
-    // Iterate through each added and modified file
+    // Iterate through each added and modified file, running the checks on swift files only
     for file in editedFiles {
+        guard file.contains(".swift") else { return }
         let diff = danger.utils.diff(forFile: file, sourceBranch: diffBranches)
         // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
         switch diff {
