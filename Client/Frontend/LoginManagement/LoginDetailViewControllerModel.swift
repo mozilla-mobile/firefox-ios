@@ -5,23 +5,19 @@
 import Foundation
 import Storage
 
-enum InfoItem: Int {
-    case breachItem = 0
-    case websiteItem
-    case usernameItem
-    case passwordItem
+enum LoginDetailCellType: Int {
+    case breach = 0
+    case website
+    case username
+    case password
     case lastModifiedSeparator
-    case deleteItem
-
-    var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
-    }
+    case delete
 
     var shouldShowMenu: Bool {
         switch self {
-        case .breachItem, .lastModifiedSeparator, .deleteItem:
+        case .breach, .lastModifiedSeparator, .delete:
             return false
-        case .passwordItem, .usernameItem, .websiteItem:
+        case .password, .username, .website:
             return true
         }
     }
@@ -33,11 +29,11 @@ struct LoginDetailViewControllerModel {
     let webpageNavigationHandler: ((_ url: URL?) -> Void)?
     let breachRecord: BreachRecord?
 
-    private var cellTypes: [InfoItem] {
+    private var cellTypes: [LoginDetailCellType] {
         if let breachRecord = breachRecord {
-            return [.websiteItem, .usernameItem, .passwordItem, .lastModifiedSeparator, .deleteItem]
+            return [.breach, .website, .username, .password, .lastModifiedSeparator, .delete]
         } else {
-            return [.breachItem, .websiteItem, .usernameItem, .passwordItem, .lastModifiedSeparator, .deleteItem]
+            return [.website, .username, .password, .lastModifiedSeparator, .delete]
         }
     }
 
@@ -45,7 +41,12 @@ struct LoginDetailViewControllerModel {
         cellTypes.count
     }
 
-    func cellType(atIndexPath indexPath: IndexPath) -> InfoItem? {
+    func cellType(atIndexPath indexPath: IndexPath) -> LoginDetailCellType? {
         cellTypes[indexPath.row]
+    }
+
+    func indexPath(for cellType: LoginDetailCellType) -> IndexPath? {
+        guard let index = cellTypes.firstIndex(of: cellType) else { return nil }
+        return IndexPath(row: index, section: 0)
     }
 }

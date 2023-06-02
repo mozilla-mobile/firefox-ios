@@ -107,8 +107,10 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
 // MARK: - UITableViewDataSource
 extension LoginDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch InfoItem(rawValue: indexPath.row)! {
-        case .breachItem:
+        guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableViewCell() }
+
+        switch cellType {
+        case .breach:
             guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
@@ -141,7 +143,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
             return breachCell
 
-        case .usernameItem:
+        case .username:
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
@@ -155,7 +157,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
-        case .passwordItem:
+        case .password:
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
@@ -170,7 +172,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
-        case .websiteItem:
+        case .website:
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
@@ -203,7 +205,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
 
-        case .deleteItem:
+        case .delete:
             guard let deleteCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
@@ -262,7 +264,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath == InfoItem.deleteItem.indexPath {
+        if indexPath == viewModel.indexPath(for: LoginDetailCellType.delete) {
             deleteLogin()
         } else if !isEditingFieldData {
             showMenuOnSingleTap(forIndexPath: indexPath)
@@ -271,15 +273,15 @@ extension LoginDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch InfoItem(rawValue: indexPath.row)! {
-        case .breachItem:
-            guard breach != nil else { return 0 }
+        guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableView.automaticDimension }
+        switch cellType {
+        case .breach:
             return UITableView.automaticDimension
-        case .usernameItem, .passwordItem, .websiteItem:
+        case .username, .password, .website:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:
             return UITableView.automaticDimension
-        case .deleteItem:
+        case .delete:
             return LoginDetailUX.DeleteRowHeight
         }
     }
@@ -342,7 +344,8 @@ extension LoginDetailViewController {
     @objc
     func edit() {
         isEditingFieldData = true
-        guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginDetailTableViewCell else { return }
+        guard let indexPath = viewModel.indexPath(for: LoginDetailCellType.username),
+                let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
@@ -389,13 +392,13 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
         guard let item = infoItemForCell(cell) else { return false }
 
         switch item {
-        case .websiteItem:
+        case .website:
             // Menu actions for Website
             return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
-        case .usernameItem:
+        case .username:
             // Menu actions for Username
             return action == MenuHelper.SelectorCopy
-        case .passwordItem:
+        case .password:
             // Menu actions for password
             let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
             return action == MenuHelper.SelectorCopy || showRevealOption
@@ -404,8 +407,9 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
         }
     }
 
-    private func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
-        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+    private func cellForItem(_ cellType: LoginDetailCellType) -> LoginDetailTableViewCell? {
+        guard let indexPath = viewModel.indexPath(for: cellType) else { return nil }
+        return tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
@@ -417,8 +421,8 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     }
 
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {
-        let usernameCell = cellForItem(.usernameItem)
-        let passwordCell = cellForItem(.passwordItem)
+        let usernameCell = cellForItem(.username)
+        let passwordCell = cellForItem(.password)
 
         if cell == usernameCell {
             passwordCell?.descriptionLabel.becomeFirstResponder()
@@ -427,9 +431,9 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
         return false
     }
 
-    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem? {
-        if let index = tableView.indexPath(for: cell),
-            let item = InfoItem(rawValue: index.row) {
+    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> LoginDetailCellType? {
+        if let indexPath = tableView.indexPath(for: cell),
+           let item = viewModel.cellType(atIndexPath: indexPath) {
             return item
         }
         return nil
