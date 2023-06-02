@@ -497,6 +497,15 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
                 ofKind: kind,
                 withReuseIdentifier: PocketFooterView.cellIdentifier,
                 for: indexPath) as? PocketFooterView else { return reusableView }
+            footerView.onTapLearnMore = {
+                guard let learnMoreURL = SupportUtils.URLForPocketLearnMore else {
+                    self.logger.log("Failed to retrieve learn more URL from SupportUtils.URLForPocketLearnMore",
+                                    level: .debug,
+                                    category: .homepage)
+                    return
+                }
+                self.showSiteWithURLHandler(learnMoreURL)
+            }
             footerView.applyTheme(theme: themeManager.currentTheme)
             return footerView
         }
