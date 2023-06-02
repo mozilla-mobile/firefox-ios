@@ -14,12 +14,6 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
-enum LoginTableViewCellStyle {
-    case iconAndBothLabels
-    case noIconAndBothLabels
-    case iconAndDescriptionLabel
-}
-
 class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     private struct UX {
         static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
