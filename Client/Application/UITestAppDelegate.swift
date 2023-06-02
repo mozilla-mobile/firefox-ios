@@ -77,10 +77,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                 let outputDir = URL(fileURLWithPath: "\(dirForTestProfile)/window-data")
                 let outputFile = URL(fileURLWithPath: "\(dirForTestProfile)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
-                let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
+                let enumerator = FileManager.default.enumerator(atPath: "\(dirForTestProfile)/window-data")
                 let filePaths = enumerator?.allObjects as! [String]
                 filePaths.filter { $0.contains("window-") }.forEach { item in
-                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
+                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/window-data/\(item)"))
                 }
 
                 try? FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
