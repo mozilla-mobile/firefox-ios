@@ -28,7 +28,7 @@ struct CreditCardItemRow: View {
                 getImage(creditCard: item)
                     .renderingMode(.original)
                     .resizable()
-                    .frame(width: 24, height: 24)
+                    .frame(width: 48, height: 48)
                     .aspectRatio(contentMode: .fit)
 
                 VStack(spacing: 0) {
