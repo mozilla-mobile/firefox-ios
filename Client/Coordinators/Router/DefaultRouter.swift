@@ -30,6 +30,10 @@ class DefaultRouter: NSObject, Router {
     }
 
     func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        // Make sure we remove reference to presentedViewController completions
+        if let topController = navigationController.presentedViewController {
+            completions.removeValue(forKey: topController)
+        }
         navigationController.dismiss(animated: animated, completion: completion)
     }
 

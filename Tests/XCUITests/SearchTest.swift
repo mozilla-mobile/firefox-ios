@@ -25,7 +25,7 @@ class SearchTests: BaseTestCase {
         navigator.goto(SearchSettings)
         app.tables.switches["Show Search Suggestions"].tap()
         app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
     }
 
     func testPromptPresence() {

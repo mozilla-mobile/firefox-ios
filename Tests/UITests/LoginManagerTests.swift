@@ -31,9 +31,9 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Settings")
 
         let firstIndexPath = IndexPath(row: 0, section: 1)
-        let list = tester().waitForView(withAccessibilityIdentifier: "AppSettingsTableViewController.tableView") as? UITableView
+        let list = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Settings.tableViewController) as? UITableView
                
-        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "AppSettingsTableViewController.tableView")
+        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: AccessibilityIdentifiers.Settings.tableViewController)
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.down)
 
         tester().tapView(withAccessibilityIdentifier: "Logins")
@@ -43,7 +43,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().tapView(withAccessibilityLabel: "Settings")
 
-        tester().tapView(withAccessibilityIdentifier: "AppSettingsTableViewController.navigationItem.leftBarButtonItem")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Settings.navigationBarItem)
    }
 
     fileprivate func generateLogins() {

@@ -53,7 +53,7 @@ class SettingsTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
         let defaultBrowserButton = settingsTableView.cells["Set as Default Browser"]
         defaultBrowserButton.tap()
 

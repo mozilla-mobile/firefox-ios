@@ -150,9 +150,14 @@ final class SettingsCoordinatorTests: XCTestCase {
 class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
     var savedURL: URL?
     var openURLinNewTabCalled = 0
+    var didFinishSettingsCalled = 0
 
     func openURLinNewTab(_ url: URL) {
         savedURL = url
         openURLinNewTabCalled += 1
+    }
+
+    func didFinishSettings(from coordinator: SettingsCoordinator) {
+        didFinishSettingsCalled += 1
     }
 }
