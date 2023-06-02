@@ -16,9 +16,10 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
 
 class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     private struct UX {
-        static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
-        static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
+        static let highlightedFontSize: CGFloat = 12
+        static let descriptionFontSize: CGFloat = 16
         static let horizontalMargin: CGFloat = 14
+        static let verticalMargin: CGFloat = 11
     }
 
     fileprivate lazy var labelContainer: UIView = .build { _ in }
@@ -44,7 +45,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
 
-        label.font = UX.descriptionLabelFont
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.descriptionFontSize)
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -59,8 +60,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
     fileprivate lazy var highlightedLabel: UILabel = .build { label in
-        label.font = UX.highlightedLabelFont
-        label.numberOfLines = 1
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                   size: UX.highlightedFontSize)
+        label.numberOfLines = 0
     }
 
     /// Override the default accessibility label since it won't include the description by default
@@ -82,7 +84,8 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         guard let descriptionText = descriptionLabel.text else { return nil }
 
         let attributes = [
-            NSAttributedString.Key.font: UX.descriptionLabelFont
+            NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                                       size: UX.descriptionFontSize)
         ]
 
         return descriptionText.size(withAttributes: attributes)
@@ -124,7 +127,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         labelContainer.addSubview(descriptionLabel)
         contentView.addSubview(labelContainer)
 
-        configureLayout()
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -140,11 +143,16 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         descriptionLabel.isUserInteractionEnabled = false
     }
 
-    fileprivate func configureLayout() {
+    fileprivate func setupLayout() {
         NSLayoutConstraint.activate([
-            labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
-            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
+            labelContainer.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                constant: UX.verticalMargin),
+            labelContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                   constant: -UX.verticalMargin),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: UX.horizontalMargin),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                     constant: -UX.horizontalMargin),
 
             highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),

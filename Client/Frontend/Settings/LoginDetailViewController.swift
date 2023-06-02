@@ -275,11 +275,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableView.automaticDimension }
         switch cellType {
-        case .breach:
-            return UITableView.automaticDimension
-        case .username, .password, .website:
-            return LoginDetailUX.InfoRowHeight
-        case .lastModifiedSeparator:
+        case .breach, .username, .password, .website, .lastModifiedSeparator:
             return UITableView.automaticDimension
         case .delete:
             return LoginDetailUX.DeleteRowHeight
