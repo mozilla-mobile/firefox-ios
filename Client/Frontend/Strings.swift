@@ -590,8 +590,8 @@ extension String {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Title.v115",
                     tableName: "Footer",
-                    value: "Powered by Pocket.",
-                    comment: "This is the title of the Pocket footer on Firefox Homepage.")
+                    value: "Powered by %@.",
+                    comment: "This is the title of the Pocket footer on Firefox Homepage. placeholder will be for App Name")
                 public static let Subtitle = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Subtitle.v115",
                     tableName: "Footer",
