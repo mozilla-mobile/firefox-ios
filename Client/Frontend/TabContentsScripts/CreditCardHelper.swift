@@ -38,12 +38,17 @@ enum CreditCardHelperError: Error {
     case injectionInvalidJSON
 }
 
+enum CreditCardPayloadType: String {
+    case formSubmit = "capture-credit-card-form"
+    case formInput = "fill-credit-card-form"
+}
+
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
 
     // Closure to send the field values
-    var foundFieldValues: ((UnencryptedCreditCardFields) -> Void)?
+    var foundFieldValues: ((UnencryptedCreditCardFields, CreditCardPayloadType?) -> Void)?
 
     class func name() -> String {
         return "CreditCardHelper"
@@ -62,8 +67,15 @@ class CreditCardHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = getValidPayloadData(from: message) else { return }
-        guard let payload = parseFieldType(messageBody: data)?.creditCardPayload else { return }
-        foundFieldValues?(getFieldTypeValues(payload: payload))
+        guard let fieldValues = parseFieldType(messageBody: data) else { return }
+        guard let payloadType = CreditCardPayloadType(rawValue: fieldValues.type) else {
+            logger.log("Unable to find the payloadType for credit card js input",
+                       level: .warning,
+                       category: .webview)
+            return
+        }
+        let payloadData = fieldValues.creditCardPayload
+        foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType)
     }
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
@@ -79,8 +91,8 @@ class CreditCardHelper: TabContentScript {
             let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self,
                                                         from: jsonData)
             return fillCreditCardForm
-        } catch {
-            logger.log("Unable to parse field type for CC",
+        } catch let error {
+            logger.log("Unable to parse field type for CC, \(error)",
                        level: .warning,
                        category: .webview)
         }

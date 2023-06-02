@@ -1979,13 +1979,21 @@ extension BrowserViewController: LegacyTabDelegate {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
-            creditCardHelper.foundFieldValues = { fieldValues in
+            creditCardHelper.foundFieldValues = { fieldValues, type in
                 guard let tabWebView = tab.webView as? TabWebView else { return }
+                guard let type = type else { return }
 
-                tabWebView.accessoryView.reloadViewFor(.creditCard)
-                tabWebView.reloadInputViews()
+                switch type {
+                case .formInput:
+                    tabWebView.accessoryView.reloadViewFor(.creditCard)
+                    tabWebView.reloadInputViews()
+                case .formSubmit:
+                    // Ref: FXIOS-6111
+                    // Action will be added to present a half sheet
+                    // for remember or update the credit card
+                    break
+                }
 
-                // stub. Action will be to present a half sheet, ref: FXIOS-6111
                 tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
