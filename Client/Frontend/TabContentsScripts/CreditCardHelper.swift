@@ -38,12 +38,17 @@ enum CreditCardHelperError: Error {
     case injectionInvalidJSON
 }
 
+enum CreditCardPayloadType: String {
+    case formSubmit = "capture-credit-card-form"
+    case formInput = "fill-credit-card-form"
+}
+
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
 
     // Closure to send the field values
-    var foundFieldValues: ((UnencryptedCreditCardFields) -> Void)?
+    var foundFieldValues: ((UnencryptedCreditCardFields, CreditCardPayloadType?) -> Void)?
 
     class func name() -> String {
         return "CreditCardHelper"
@@ -62,8 +67,15 @@ class CreditCardHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = getValidPayloadData(from: message) else { return }
-        guard let payload = parseFieldType(messageBody: data)?.creditCardPayload else { return }
-        foundFieldValues?(getFieldTypeValues(payload: payload))
+        guard let fieldValues = parseFieldType(messageBody: data) else { return }
+        guard let payloadType = CreditCardPayloadType(rawValue: fieldValues.type) else {
+            logger.log("Unable to find the payloadType for credit card js input",
+                       level: .warning,
+                       category: .webview)
+            return
+        }
+        let payloadData = fieldValues.creditCardPayload
+        foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType)
     }
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
@@ -76,6 +88,7 @@ class CreditCardHelper: TabContentScript {
         do {
             let jsonData = try JSONSerialization.data(
                 withJSONObject: messageBody, options: .prettyPrinted)
+            prettyPrintJSONData(jsonData)
             let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self,
                                                         from: jsonData)
             return fillCreditCardForm
@@ -86,6 +99,18 @@ class CreditCardHelper: TabContentScript {
         }
 
         return nil
+    }
+
+    func prettyPrintJSONData(_ jsonData: Data) {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            let prettyPrintedData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+            if let prettyPrintedString = String(data: prettyPrintedData, encoding: .utf8) {
+                print(prettyPrintedString)
+            }
+        } catch {
+            print("Error: Failed to pretty print JSON data - \(error)")
+        }
     }
 
     func getFieldTypeValues(payload: CreditCardPayload) -> UnencryptedCreditCardFields {

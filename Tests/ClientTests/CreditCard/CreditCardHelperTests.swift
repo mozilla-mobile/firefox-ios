@@ -46,6 +46,21 @@ class CreditCardHelperTests: XCTestCase {
         }
     """
 
+    // We need the `capture-credit-card-form`
+    // to know when form submission happend
+    let validMockPayloadCaptureJson = """
+        {
+          "type" : "capture-credit-card-form",
+          "payload" : {
+            "cc-number" : "1234 4567 4567 6788",
+            "cc-name" : "Josh Moustache",
+            "cc-exp-month" : "03",
+            "cc-exp" : "02",
+            "cc-exp-year" : "2999"
+          }
+        }
+    """
+
     override func setUp() {
         super.setUp()
         profile = MockProfile(databasePrefix: "CreditCardHelper_tests")
