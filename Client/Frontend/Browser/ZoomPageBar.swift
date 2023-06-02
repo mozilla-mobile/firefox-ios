@@ -208,6 +208,12 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, SearchBarLocationProv
         gradient.frame = gradientView.bounds
     }
 
+    func updateGradientViewBottomConstraint(_ constant: CGFloat) {
+        if searchBarPosition == .bottom && traitCollection.userInterfaceIdiom == .phone {
+            gradientViewBottomConstraint.constant = constant - UIConstants.UrlBarHeight
+        }
+    }
+
     override func updateConstraints() {
         super.updateConstraints()
         if traitCollection.userInterfaceIdiom == .phone {

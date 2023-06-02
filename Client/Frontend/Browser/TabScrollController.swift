@@ -41,6 +41,16 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     weak var bottomContainer: BaseAlphaStackView?
     weak var delegate: TabScrollingControllerDelegate?
 
+    private var zoomPageBar: ZoomPageBar? {
+        var bar: ZoomPageBar?
+        bottomContainer?.subviews.forEach({
+            if $0 is ZoomPageBar {
+                bar = $0 as! ZoomPageBar
+            }
+        })
+        return bar
+    }
+
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
     var headerTopConstraint: Constraint?
@@ -374,12 +384,20 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        zoomPageBar?.updateGradientViewBottomConstraint(overKeyboardContainerOffset)
+    }
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
 
         if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
                 showToolbars(animated: true)
+                // Make sure that tool bar is visible to restore the constraint of the zoomBar's gradient view to 0.
+                if toolbarState == .visible {
+                    zoomPageBar?.updateGradientViewBottomConstraint(0)
+                }
             } else if scrollDirection == .down {
                 hideToolbars(animated: true)
             }
