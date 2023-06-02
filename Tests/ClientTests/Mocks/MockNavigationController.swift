@@ -9,7 +9,7 @@ class MockNavigationController: UIViewController, NavigationController {
     var viewControllers: [UIViewController] = []
     var delegate: UINavigationControllerDelegate?
     var isNavigationBarHidden = false
-    var topViewController: UIViewController?
+    var topPresentedViewController: UIViewController?
     var fromViewController: UIViewController?
 
     var presentCalled = 0
@@ -19,7 +19,7 @@ class MockNavigationController: UIViewController, NavigationController {
 
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         presentCalled += 1
-        topViewController = viewControllerToPresent
+        topPresentedViewController = viewControllerToPresent
     }
 
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -28,12 +28,12 @@ class MockNavigationController: UIViewController, NavigationController {
 
     func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushCalled += 1
-        topViewController = viewController
+        topPresentedViewController = viewController
     }
 
     func popViewController(animated: Bool) -> UIViewController? {
         popViewCalled += 1
-        return topViewController
+        return topPresentedViewController
     }
 
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {

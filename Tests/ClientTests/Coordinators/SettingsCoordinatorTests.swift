@@ -137,6 +137,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.savedURL, expectedURL)
     }
 
+    func testParentCoordinatorDelegate_calledDidFinish() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,

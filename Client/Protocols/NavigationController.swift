@@ -10,6 +10,7 @@ protocol NavigationController: UIViewController {
     var isNavigationBarHidden: Bool { get set }
     var transitionCoordinator: UIViewControllerTransitionCoordinator? { get }
     var fromViewController: UIViewController? { get }
+    var topPresentedViewController: UIViewController? { get }
 
     func pushViewController(_ viewController: UIViewController, animated: Bool)
     func popViewController(animated: Bool) -> UIViewController?
@@ -19,5 +20,9 @@ protocol NavigationController: UIViewController {
 extension UINavigationController: NavigationController {
     var fromViewController: UIViewController? {
         return transitionCoordinator?.viewController(forKey: .from)
+    }
+
+    var topPresentedViewController: UIViewController? {
+        return presentedViewController
     }
 }

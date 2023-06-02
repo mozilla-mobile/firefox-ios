@@ -378,6 +378,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - Settings route
 
     func testGeneralSettingsRoute_showsGeneralSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.settings(section: .general)
         let subject = createSubject()
 
@@ -390,6 +391,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testNewTabSettingsRoute_returnsNewTabSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.newTab
         let subject = createSubject()
 
@@ -399,6 +401,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHomepageSettingsRoute_returnsHomepageSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.homePage
         let subject = createSubject()
 
@@ -408,6 +411,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testMailtoSettingsRoute_returnsMailtoSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.mailto
         let subject = createSubject()
 
@@ -417,6 +421,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testSearchSettingsRoute_returnsSearchSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.search
         let subject = createSubject()
 
@@ -426,6 +431,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testClearPrivateDataSettingsRoute_returnsClearPrivateDataSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.clearPrivateData
         let subject = createSubject()
 
@@ -435,6 +441,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testFxaSettingsRoute_returnsFxaSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.fxa
         let subject = createSubject()
 
@@ -444,6 +451,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testThemeSettingsRoute_returnsThemeSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         let route = Route.SettingsSection.theme
         let subject = createSubject()
 
@@ -453,6 +461,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testWallpaperSettingsRoute_canShow_returnsWallpaperSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         wallpaperManager.canSettingsBeShown = true
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
@@ -463,6 +472,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testWallpaperSettingsRoute_cannotShow_returnsWallpaperSettingsPage() throws {
+        guard !CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
         wallpaperManager.canSettingsBeShown = false
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
@@ -470,6 +480,53 @@ final class BrowserCoordinatorTests: XCTestCase {
         let result = subject.getSettingsViewController(settingsSection: route)
 
         XCTAssertNil(result)
+    }
+
+    func testSettingsRoute_addSettingsCoordinator() {
+        guard CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
+        let subject = createSubject()
+
+        let result = subject.handle(route: .settings(section: .general))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+    }
+
+    func testPresentedCompletion_callsDidFinishSettings_removesChild() {
+        let subject = createSubject()
+
+        let result = subject.handle(route: .settings(section: .general))
+        mockRouter.savedCompletion?()
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testSettingsCoordinatorDelegate_openURLinNewTab() {
+        let expectedURL = URL(string: "www.mozilla.com")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.openURLinNewTab(expectedURL)
+
+        XCTAssertEqual(mbvc.openURLInNewTabCount, 1)
+        XCTAssertEqual(mbvc.openURLInNewTabURL, expectedURL)
+    }
+
+    func testSettingsCoordinatorDelegate_didFinishSettings_removesChild() {
+        guard CoordinatorFlagManager.isSettingsCoordinatorEnabled else { return }
+        let subject = createSubject()
+
+        let result = subject.handle(route: .settings(section: .general))
+        let settingsCoordinator = subject.childCoordinators[0] as! SettingsCoordinator
+        subject.didFinishSettings(from: settingsCoordinator)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
     // MARK: - Sign in route
