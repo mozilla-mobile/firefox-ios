@@ -14,7 +14,7 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
-class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
+class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell, UITextFieldDelegate, MenuHelperInterface {
     private struct UX {
         static let highlightedFontSize: CGFloat = 12
         static let descriptionFontSize: CGFloat = 16
@@ -22,7 +22,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         static let verticalMargin: CGFloat = 11
     }
 
-    fileprivate lazy var labelContainer: UIView = .build { _ in }
+    private lazy var labelContainer: UIView = .build { _ in }
 
     weak var delegate: LoginDetailTableViewCellDelegate?
 
@@ -59,7 +59,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
-    fileprivate lazy var highlightedLabel: UILabel = .build { label in
+    private lazy var highlightedLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                    size: UX.highlightedFontSize)
         label.numberOfLines = 0
@@ -143,7 +143,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         descriptionLabel.isUserInteractionEnabled = false
     }
 
-    fileprivate func setupLayout() {
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             labelContainer.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                 constant: UX.verticalMargin),
@@ -187,10 +187,8 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
 
         descriptionLabel.textColor = theme.colors.textPrimary
     }
-}
 
-// MARK: - Menu Selectors
-extension LoginDetailTableViewCell: MenuHelperInterface {
+    // MARK: - Menu Selectors
     func menuHelperReveal() {
         displayDescriptionAsPassword = false
     }
@@ -207,17 +205,14 @@ extension LoginDetailTableViewCell: MenuHelperInterface {
     func menuHelperOpenAndFill() {
         delegate?.didSelectOpenAndFillForCell(self)
     }
-}
 
-// MARK: - Cell Decorators
-extension LoginDetailTableViewCell {
+    // MARK: - Cell Decorators
     func updateCellWithLogin(_ login: LoginRecord) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.decryptedUsername
     }
-}
 
-extension LoginDetailTableViewCell: UITextFieldDelegate {
+    // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
