@@ -197,8 +197,8 @@ extension LoginDetailViewController: UITableViewDataSource {
 
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(viewModel.login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
-            // Setting only the detail text produces smaller text as desired, and it is centered.
-            cell.centeredLabel.text = createdFormatted + "\n" + lastModifiedFormatted
+            cell.cellModel = LoginDetailCenteredTableViewCellModel(
+                label: createdFormatted + "\n" + lastModifiedFormatted)
             setCellSeparatorHidden(cell)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell

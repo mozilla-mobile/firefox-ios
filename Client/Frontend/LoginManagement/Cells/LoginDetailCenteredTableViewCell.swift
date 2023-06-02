@@ -6,6 +6,10 @@ import UIKit
 import Shared
 import Common
 
+struct LoginDetailCenteredTableViewCellModel {
+    let label: String
+}
+
 class LoginDetailCenteredTableViewCell: ThemedTableViewCell, ReusableCell {
     struct UX {
         static let fontSize: CGFloat = 12
@@ -13,7 +17,13 @@ class LoginDetailCenteredTableViewCell: ThemedTableViewCell, ReusableCell {
         static let spacingLeadingTrailing: CGFloat = 16
     }
 
-    lazy var centeredLabel: UILabel = .build { label in
+    var cellModel: LoginDetailCenteredTableViewCellModel? {
+        didSet {
+            centeredLabel.text = cellModel?.label
+        }
+    }
+
+    private lazy var centeredLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
         label.textAlignment = .center
         label.numberOfLines = 0
