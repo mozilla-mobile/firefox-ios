@@ -9,6 +9,7 @@ import XCTest
 final class SettingsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var wallpaperManager: WallpaperManagerMock!
+    private var delegate: MockSettingsCoordinatorDelegate!
 
     override func setUp() {
         super.setUp()
@@ -16,12 +17,14 @@ final class SettingsCoordinatorTests: XCTestCase {
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.wallpaperManager = WallpaperManagerMock()
+        self.delegate = MockSettingsCoordinatorDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
         self.mockRouter = nil
         self.wallpaperManager = nil
+        self.delegate = nil
         DependencyHelperMock().reset()
     }
 
@@ -122,11 +125,34 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is WallpaperSettingsViewController)
     }
 
+    // MARK: - Delegate
+    func testParentCoordinatorDelegate_calledWithURL() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        let expectedURL = URL(string: "www.mozilla.com")!
+        subject.settingsOpenURLInNewTab(expectedURL)
+
+        XCTAssertEqual(delegate.openURLinNewTabCalled, 1)
+        XCTAssertEqual(delegate.savedURL, expectedURL)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
                                           wallpaperManager: wallpaperManager)
         trackForMemoryLeaks(subject)
         return subject
+    }
+}
+
+// MARK: - MockSettingsCoordinatorDelegate
+class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
+    var savedURL: URL?
+    var openURLinNewTabCalled = 0
+
+    func openURLinNewTab(_ url: URL) {
+        savedURL = url
+        openURLinNewTabCalled += 1
     }
 }
