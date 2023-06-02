@@ -74,6 +74,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
 
         tableView.register(cellType: LoginDetailTableViewCell.self)
         tableView.register(cellType: LoginDetailCenteredTableViewCell.self)
+        tableView.register(cellType: ThemedTableViewCell.self)
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -206,13 +207,16 @@ extension LoginDetailViewController: UITableViewDataSource {
             return cell
 
         case .delete:
-            guard let deleteCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
+                                                                 for: indexPath) as? ThemedTableViewCell else {
                 return UITableViewCell()
             }
             deleteCell.textLabel?.text = .LoginDetailDelete
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
-            deleteCell.configure(type: .delete)
+            deleteCell.selectionStyle = .none
+            deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: themeManager.currentTheme,
+                                                                         type: .destructive))
             deleteCell.applyTheme(theme: themeManager.currentTheme)
 
             setCellSeparatorFullWidth(deleteCell)

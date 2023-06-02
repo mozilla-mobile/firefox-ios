@@ -10,7 +10,7 @@ struct LoginDetailCenteredTableViewCellModel {
     let label: String
 }
 
-class LoginDetailCenteredTableViewCell: ThemedTableViewCell, ReusableCell {
+class LoginDetailCenteredTableViewCell: ThemedTableViewCell {
     struct UX {
         static let fontSize: CGFloat = 12
         static let spacingTopBottom: CGFloat = 26

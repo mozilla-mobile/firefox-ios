@@ -14,7 +14,7 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
-class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell, UITextFieldDelegate, MenuHelperInterface {
+class LoginDetailTableViewCell: ThemedTableViewCell, UITextFieldDelegate, MenuHelperInterface {
     private struct UX {
         static let highlightedFontSize: CGFloat = 12
         static let descriptionFontSize: CGFloat = 16
