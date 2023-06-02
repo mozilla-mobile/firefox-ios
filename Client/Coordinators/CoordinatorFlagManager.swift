@@ -10,20 +10,20 @@ struct CoordinatorFlagManager {
     /// This will be removed with FXIOS-6036
     static var isCoordinatorEnabled: Bool {
         return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.coordinatorsRefactor,
-                                                           checking: .buildOnly)
+                                                                 checking: .buildOnly)
     }
 
     /// This will be removed with FXIOS-6529
     static var isSettingsCoordinatorEnabled: Bool {
         return CoordinatorFlagManager.isCoordinatorEnabled
         && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.settingsCoordinatorRefactor,
-                                                       checking: .buildOnly)
+                                                             checking: .buildOnly)
     }
 
     /// This will be removed with FXIOS-6530
     static var isLibraryCoordinatorEnabled: Bool {
         return CoordinatorFlagManager.isCoordinatorEnabled
         && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
-                                                       checking: .buildOnly)
+                                                             checking: .buildOnly)
     }
 }

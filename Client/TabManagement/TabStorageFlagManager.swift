@@ -9,6 +9,6 @@ import Shared
 struct TabStorageFlagManager {
     static var isNewTabDataStoreEnabled: Bool {
         return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.tabStorageRefactor,
-                                                           checking: .buildOnly)
+                                                                 checking: .buildOnly)
     }
 }
