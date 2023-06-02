@@ -28,6 +28,18 @@ class SearchTests: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
+    private func validateSearchSuggestionText(typeText: String) {
+        // Open a new tab and start typing "text"
+        navigator.createNewTab()
+        navigator.nowAt(NewTabScreen)
+        typeOnSearchBar(text: typeText)
+
+        // In the search suggestion, "text" should be displayed
+        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "http://localhost:")
+        let elementQuery = app.staticTexts.containing(predicate)
+        XCTAssertTrue(elementQuery.element.exists)
+    }
+
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         navigator.goto(URLBarOpen)
@@ -254,5 +266,19 @@ class SearchTests: BaseTestCase {
             let keyboardsCount = app.keyboards.count
             XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
         }
+    }
+
+    // Smoketest
+    func testOpenTabsInSearchSuggestions() {
+        // Go to localhost website and check the page displays correctly
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        // Open new tab
+        validateSearchSuggestionText(typeText: "localhost")
+        restartInBackground()
+        // Open new tab
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
+        validateSearchSuggestionText(typeText: "localhost")
     }
 }
