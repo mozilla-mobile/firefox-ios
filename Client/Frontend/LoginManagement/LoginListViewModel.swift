@@ -28,6 +28,7 @@ final class LoginListViewModel {
             }
         }
     }
+    let listSelectionHelper = LoginListSelectionHelper()
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) lazy var breachAlertsManager: BreachAlertsManager = {
         return BreachAlertsManager(profile: self.profile)

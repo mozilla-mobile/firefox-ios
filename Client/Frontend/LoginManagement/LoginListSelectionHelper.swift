@@ -3,43 +3,42 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
-/// Helper that keeps track of selected indexes for LoginListViewController
-public class LoginListSelectionHelper {
-    private unowned let tableView: UITableView
-    private(set) var selectedIndexPaths = [IndexPath]()
+/// Helper that keeps track of selected login records cells for LoginListViewController
+class LoginListSelectionHelper {
+    /// The key represents a unique identifier for the cell, composed with the hostname interpolated with user name
+    private(set) var selectionCellsState: [String: Bool] = [:]
 
-    var selectedCount: Int {
-        return selectedIndexPaths.count
+    var numberOfSelectedCells: Int {
+        selectionCellsState.keys.count
     }
 
-    init(tableView: UITableView) {
-        self.tableView = tableView
+    func setCellSelected(with loginRecord: LoginRecord) {
+        let key = getKeyFromLoginRecord(loginRecord)
+        selectionCellsState[key] = true
     }
 
-    func selectIndexPath(_ indexPath: IndexPath) {
-        selectedIndexPaths.append(indexPath)
+    func setCellSelected(_ cell: LoginListTableViewCell) {
+        let key = "\(cell.hostnameLabel.text ?? "")\(cell.usernameLabel.text ?? "")"
+        selectionCellsState[key] = true
     }
 
-    func indexPathIsSelected(_ indexPath: IndexPath) -> Bool {
-        return selectedIndexPaths.contains(indexPath) { path1, path2 in
-            return path1.row == path2.row && path1.section == path2.section
-        }
+    func removeCell(with loginRecord: LoginRecord) {
+        let key = getKeyFromLoginRecord(loginRecord)
+        _ = selectionCellsState.removeValue(forKey: key)
     }
 
-    func deselectIndexPath(_ indexPath: IndexPath) {
-        guard let foundSelectedPath = selectedIndexPaths.first(where: { $0.row == indexPath.row && $0.section == indexPath.section }),
-              let indexToRemove = selectedIndexPaths.firstIndex(of: foundSelectedPath)
-        else { return }
-
-        selectedIndexPaths.remove(at: indexToRemove)
+    func removeAllCells() {
+        selectionCellsState.removeAll()
     }
 
-    func deselectAll() {
-        selectedIndexPaths.removeAll()
+    func isCellSelected(with loginRecord: LoginRecord) -> Bool {
+        let key = getKeyFromLoginRecord(loginRecord)
+        return selectionCellsState[key] ?? false
     }
 
-    func selectIndexPaths(_ indexPaths: [IndexPath]) {
-        selectedIndexPaths += indexPaths
+    private func getKeyFromLoginRecord(_ loginRecord: LoginRecord) -> String {
+        "\(loginRecord.hostname)\(loginRecord.decryptedUsername)"
     }
 }
