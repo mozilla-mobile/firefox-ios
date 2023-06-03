@@ -418,11 +418,7 @@ export const FormAutofillHeuristics = {
 
     const monthAndYearFieldNames = ["cc-exp-month", "cc-exp-year"];
     // Skip the uninteresting fields
-    if (
-      !["cc-exp", "cc-type", ...monthAndYearFieldNames].includes(
-        detail.fieldName
-      )
-    ) {
+    if (!["cc-exp", ...monthAndYearFieldNames].includes(detail.fieldName)) {
       return false;
     }
 
@@ -437,21 +433,6 @@ export const FormAutofillHeuristics = {
     }
 
     const element = detail.elementWeakRef.get();
-
-    // If we didn't auto-discover type field, check every select for options that
-    // match credit card network names in value or label.
-    if (HTMLSelectElement.isInstance(element)) {
-      for (let option of element.querySelectorAll("option")) {
-        if (
-          lazy.CreditCard.getNetworkFromName(option.value) ||
-          lazy.CreditCard.getNetworkFromName(option.text)
-        ) {
-          fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-type");
-          fieldScanner.parsingIndex++;
-          return true;
-        }
-      }
-    }
 
     // If the input type is a month picker, then assume it's cc-exp.
     if (element.type == "month") {
@@ -819,6 +800,19 @@ export const FormAutofillHeuristics = {
       // by fathom but is considered cc-name by regex-based heuristic, if the form
       // also contains a cc-number identified by fathom, we will treat the form as a
       // valid cc form; hence both cc-number & cc-name are identified.
+    }
+
+    // Check every select for options that
+    // match credit card network names in value or label.
+    if (HTMLSelectElement.isInstance(element)) {
+      for (let option of element.querySelectorAll("option")) {
+        if (
+          lazy.CreditCard.getNetworkFromName(option.value) ||
+          lazy.CreditCard.getNetworkFromName(option.text)
+        ) {
+          return ["cc-type", null, null];
+        }
+      }
     }
 
     if (fields.length) {
