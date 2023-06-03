@@ -23,7 +23,7 @@ extension BrowserViewController: TabScrollingControllerDelegate {
                 self.view.layoutIfNeeded()
             })
         } else {
-            bottomContainer.addArrangedViewToTop(zoomPageBar, completion: {
+            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, completion: {
                 self.view.layoutIfNeeded()
             })
         }
@@ -40,7 +40,7 @@ extension BrowserViewController: TabScrollingControllerDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad {
             header.removeArrangedView(zoomPageBar)
         } else {
-            bottomContainer.removeArrangedView(zoomPageBar)
+            overKeyboardContainer.removeArrangedView(zoomPageBar)
         }
         self.zoomPageBar = nil
         updateViewConstraints()
