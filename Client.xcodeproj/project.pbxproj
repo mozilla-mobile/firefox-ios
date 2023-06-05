@@ -381,6 +381,8 @@
 		45355B242A269E7100B1EA8E /* Autopush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45355B222A269E7100B1EA8E /* Autopush.swift */; };
 		45355B262A269EAC00B1EA8E /* PushConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45355B252A269EAC00B1EA8E /* PushConfiguration.swift */; };
 		45355B272A269EAC00B1EA8E /* PushConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45355B252A269EAC00B1EA8E /* PushConfiguration.swift */; };
+		4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4590912D2A2E4F7700061F0C /* AutopushTests.swift */; };
+		4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CC573E28AD8B9A006D55AA /* Metrics.swift */; };
 		45D5EDA729269F7500311934 /* DataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDA629269F7500311934 /* DataObserver.swift */; };
 		45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDBF292D619000311934 /* MockablePinnedSites.swift */; };
@@ -3860,6 +3862,7 @@
 		453F47E08C70126FD7288132 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		45524DDB8CC5BE8373DF589C /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		455880A027B42F720078DEBB /* FxNimbus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxNimbus.swift; sourceTree = "<group>"; };
+		4590912D2A2E4F7700061F0C /* AutopushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutopushTests.swift; sourceTree = "<group>"; };
 		459C47419B3E2BD1BF4393F2 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		45AD4685A96876B6D2682E0F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		45CB4750BCEF0741D15058B0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -6624,6 +6627,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7275,6 +7279,7 @@
 		39B0646D1E7ADA4B000BE173 /* Push */ = {
 			isa = PBXGroup;
 			children = (
+				4590912D2A2E4F7700061F0C /* AutopushTests.swift */,
 				39C22C2C1E897B9A000C0E56 /* PushClientTests.swift */,
 				39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */,
 			);
@@ -11705,6 +11710,7 @@
 				5FC276562894AF8200AF2721 /* PushClientTests.swift in Sources */,
 				2FA436421ABB8448008031D1 /* TokenServerClientTests.swift in Sources */,
 				2FA436401ABB8448008031D1 /* HawkHelperTests.swift in Sources */,
+				4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */,
 				BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
