@@ -94,10 +94,11 @@ class BrowserViewController: UIViewController {
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
 
-    // OverKeyboardContainer stack view contains the bottom reader mode and the bottom url bar
+    // OverKeyboardContainer stack view contains
+    // the bottom reader mode, the bottom url bar and the ZoomPageBar
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
 
-    // BottomContainer stack view contains toolbar, ZoomPageBar
+    // BottomContainer stack view contains toolbar
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
@@ -666,7 +667,6 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
-        adjustBottomContainerHeight()
         zoomPageBar?.changeGradientOpacity(alpha: 1)
         zoomPageBar?.layoutIfNeeded()
     }
@@ -798,7 +798,11 @@ class BrowserViewController: UIViewController {
 
         overKeyboardContainer.snp.remakeConstraints { make in
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-            if !isBottomSearchBar { make.height.equalTo(0) }
+            if !isBottomSearchBar, zoomPageBar != nil {
+                make.height.greaterThanOrEqualTo(0)
+            } else if !isBottomSearchBar {
+                make.height.equalTo(0)
+            }
             make.leading.trailing.equalTo(view)
         }
 
@@ -872,13 +876,6 @@ class BrowserViewController: UIViewController {
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
-    private func adjustBottomContainerHeight() {
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
-        if !showToolBar, zoomPageBar != nil {
-            bottomContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else { bottomContainer.removeBottomInsetSpacer() }
-    }
-
     /// Used for dynamic type height adjustment
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
@@ -891,6 +888,8 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
         if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else if !showToolBar, zoomPageBar != nil {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
