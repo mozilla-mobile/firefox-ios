@@ -25,10 +25,17 @@ const sendMessage =
       payload: transformer(payload),
     });
 
+// Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = sendMessage(
   messageTypes.CAPTURE_CREDIT_CARD_FORM,
-  // Note: We expect all values to be string based
-  (payload) => Object.entries(obj).reduce((acc, [key, val]) => ({...acc, [key]: String(val)}), {}))
+  (payload) => {
+    const modifiedPayload = Object.entries(payload?.[0]).reduce((acc, [key, val]) => ({
+      ...acc,
+      [key]: String(val)
+    }), {});
+    return modifiedPayload;
+  }
+);
 
 const sendFillCreditCardFormMessage = sendMessage(
   messageTypes.FILL_CREDIT_CARD_FORM
