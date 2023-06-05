@@ -30,7 +30,7 @@ struct LoginDetailViewControllerModel {
     let breachRecord: BreachRecord?
 
     private var cellTypes: [LoginDetailCellType] {
-        if let breachRecord = breachRecord {
+        if breachRecord != nil {
             return [.breach, .website, .username, .password, .lastModifiedSeparator, .delete]
         } else {
             return [.website, .username, .password, .lastModifiedSeparator, .delete]
