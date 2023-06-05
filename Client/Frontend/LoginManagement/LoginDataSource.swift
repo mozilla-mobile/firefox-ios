@@ -79,6 +79,11 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             }
             cell.applyTheme(theme: viewModel.theme)
             cell.configure(inset: tableView.separatorInset)
+            if viewModel.listSelectionHelper.isCellSelected(with: login) {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else {
+                tableView.deselectRow(at: indexPath, animated: false)
+            }
             return cell
         }
 

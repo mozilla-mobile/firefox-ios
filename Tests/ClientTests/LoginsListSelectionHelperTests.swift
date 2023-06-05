@@ -4,14 +4,15 @@
 
 @testable import Client
 import XCTest
+import MozillaAppServices
 
 class LoginsListSelectionHelperTests: XCTestCase {
-    var selectionHelper: LoginListSelectionHelper!
+    private var selectionHelper: LoginListSelectionHelper!
+    private let loginRecord = EncryptedLogin(credentials: URLCredential(user: "test", password: "doubletest", persistence: .permanent), protectionSpace: URLProtectionSpace.fromOrigin("https://test.com"))
 
     override func setUp() {
         super.setUp()
-        let tableView = UITableView()
-        selectionHelper = LoginListSelectionHelper(tableView: tableView)
+        selectionHelper = LoginListSelectionHelper()
     }
 
     override func tearDown() {
@@ -19,59 +20,52 @@ class LoginsListSelectionHelperTests: XCTestCase {
         selectionHelper = nil
     }
 
-    func testSelectIndexPath() {
-        XCTAssertEqual(selectionHelper.selectedCount, 0)
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
-        let selection = IndexPath(row: 1, section: 1)
-        self.selectionHelper.selectIndexPath(selection)
-        XCTAssertEqual(selectionHelper.selectedCount, 1)
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [selection])
+    func testSelectCellFromLoginRecord() {
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 0)
+
+        selectionHelper.setCellSelected(with: loginRecord)
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
     }
 
-    func testIndexPathIsSelected() {
-        let selection = IndexPath(row: 1, section: 1)
-        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
-        self.selectionHelper.selectIndexPath(selection)
-        XCTAssertTrue(self.selectionHelper.indexPathIsSelected(selection))
+    func testSelectCellFromLoginListTableViewCell() {
+        let cell = LoginListTableViewCell()
+        cell.hostnameLabel.text = "www.test.com"
+        cell.usernameLabel.text = "test"
+
+        selectionHelper.setCellSelected(cell)
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
     }
 
-    func testDeselectIndexPath() {
-        let selection = IndexPath(row: 1, section: 1)
-        XCTAssertEqual(selectionHelper.selectedCount, 0)
-        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
-        self.selectionHelper.deselectIndexPath(selection)
-        XCTAssertEqual(selectionHelper.selectedCount, 0)
-        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
-        self.selectionHelper.selectIndexPath(selection)
-        XCTAssertEqual(selectionHelper.selectedCount, 1)
-        XCTAssertTrue(self.selectionHelper.indexPathIsSelected(selection))
-        self.selectionHelper.deselectIndexPath(selection)
-        XCTAssertEqual(selectionHelper.selectedCount, 0)
-        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
+    func testAddTwoTimesTheSameLoginRecordGivesOneSelection() {
+        selectionHelper.setCellSelected(with: loginRecord)
+        selectionHelper.setCellSelected(with: loginRecord)
+
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
     }
 
-    func testDeselectAll() {
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
-        self.selectionHelper.deselectAll()
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
-        let selection1 = IndexPath(row: 1, section: 1)
-        let selection2 = IndexPath(row: 2, section: 2)
-        self.selectionHelper.selectIndexPath(selection1)
-        XCTAssertEqual(selectionHelper.selectedCount, 1)
-        self.selectionHelper.deselectAll()
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
-        self.selectionHelper.selectIndexPath(selection1)
-        self.selectionHelper.selectIndexPath(selection2)
-        XCTAssertEqual(selectionHelper.selectedCount, 2)
-        self.selectionHelper.deselectAll()
-        XCTAssertEqual(selectionHelper.selectedCount, 0)
-        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
+    func testCellSelectionStateIsTrueWhenLoginRecordIsAddedToSelcted() {
+        XCTAssertFalse(selectionHelper.isCellSelected(with: loginRecord))
+
+        selectionHelper.setCellSelected(with: loginRecord)
+        XCTAssertTrue(selectionHelper.isCellSelected(with: loginRecord))
     }
 
-    func testSelectIndexPaths() {
-        XCTAssertEqual(self.selectionHelper.selectedIndexPaths, [])
-        let selection = [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 2)]
-        self.selectionHelper.selectIndexPaths(selection)
-        XCTAssertEqual(self.selectionHelper.selectedIndexPaths, selection)
+    func testRemoveCell() {
+        selectionHelper.setCellSelected(with: loginRecord)
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
+
+        selectionHelper.removeCell(with: loginRecord)
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 0)
+    }
+
+    func testRemoveAllCell() {
+        let loginRecord2 = EncryptedLogin(credentials: URLCredential(user: "filippo", password: "testtest", persistence: .permanent), protectionSpace: URLProtectionSpace.fromOrigin("https://testtest.com"))
+
+        selectionHelper.setCellSelected(with: loginRecord)
+        selectionHelper.setCellSelected(with: loginRecord2)
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 2)
+
+        selectionHelper.removeAllCells()
+        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 0)
     }
 }
