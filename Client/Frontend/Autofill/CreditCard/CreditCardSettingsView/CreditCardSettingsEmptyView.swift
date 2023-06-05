@@ -51,6 +51,7 @@ struct CreditCardSettingsEmptyView: View {
                             .padding(.trailing, 10)
                             .padding([.top], -5)
                         Spacer()
+                        Spacer()
                     }
                     .frame(minHeight: proxy.size.height)
                 }

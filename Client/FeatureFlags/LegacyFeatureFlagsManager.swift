@@ -8,8 +8,8 @@ import Shared
 protocol FeatureFlaggable { }
 
 extension FeatureFlaggable {
-    var featureFlags: FeatureFlagsManager {
-        return FeatureFlagsManager.shared
+    var featureFlags: LegacyFeatureFlagsManager {
+        return LegacyFeatureFlagsManager.shared
     }
 }
 
@@ -26,12 +26,12 @@ enum FlaggableFeatureCheckOptions {
     case userOnly
 }
 
-class FeatureFlagsManager: HasNimbusFeatureFlags {
+class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
     /// `featureFlags` variable.
-    static let shared = FeatureFlagsManager()
+    static let shared = LegacyFeatureFlagsManager()
 
     // MARK: - Variables
     private var profile: Profile!

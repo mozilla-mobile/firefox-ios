@@ -201,7 +201,6 @@ extension LoginDetailViewController: UITableViewDataSource {
 
             let created: String = .LoginDetailCreatedAt
             let lastModified: String = .LoginDetailModifiedAt
-
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(viewModel.login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
             let cellModel = LoginDetailCenteredTableViewCellModel(

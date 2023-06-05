@@ -14,7 +14,7 @@ final class SceneDelegateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         self.logger = MockLogger()
         self.router = MockRouter(navigationController: MockNavigationController())
     }

@@ -13,7 +13,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         // Clean user defaults to avoid having flaky test changing the section count
         // because message card reach max amount of impressions
         if let bundleID = Bundle.main.bundleIdentifier {

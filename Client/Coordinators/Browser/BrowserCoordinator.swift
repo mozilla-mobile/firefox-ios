@@ -143,8 +143,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return true
 
         case let .settings(section):
-            // Note: This will be handled in the settings coordinator when FXIOS-6274 is done
-            handle(settingsSection: section)
+            // 'Else' will be removed with FXIOS-6529
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                showSettings(with: section)
+            } else {
+                handle(settingsSection: section)
+            }
             return true
 
         case let .action(routeAction):
@@ -211,6 +215,28 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.handle(url: searchURL, tabId: tabId)
     }
 
+    private func handle(fxaParams: FxALaunchParams) {
+        browserViewController.presentSignInViewController(fxaParams)
+    }
+
+    private func showSettings(with section: Route.SettingsSection) {
+        // FXIOS-6556 - Avoid passing whole BVC to settings
+        let baseSettingsVC = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: browserViewController
+        )
+        let navigationController = ThemedNavigationController(rootViewController: baseSettingsVC)
+        navigationController.modalPresentationStyle = .formSheet
+        let settingsRouter = DefaultRouter(navigationController: navigationController)
+
+        let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        add(child: settingsCoordinator)
+        router.present(navigationController)
+        settingsCoordinator.start(with: section)
+    }
+
+    // Will be removed with FXIOS-6529
     private func handle(settingsSection: Route.SettingsSection) {
         let baseSettingsVC = AppSettingsTableViewController(
             with: profile,
@@ -227,6 +253,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         controller.pushViewController(viewController, animated: true)
     }
 
+    // Will be removed with FXIOS-6529
     func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:
@@ -283,9 +310,5 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
             return nil
         }
-    }
-
-    private func handle(fxaParams: FxALaunchParams) {
-        browserViewController.presentSignInViewController(fxaParams)
     }
 }

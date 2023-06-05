@@ -14,7 +14,7 @@ final class ContentContainerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
     }

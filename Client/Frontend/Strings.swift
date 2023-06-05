@@ -357,8 +357,8 @@ extension String {
             public static let Header = MZLocalizedString(
                 key: "CreditCard.RememberCard.Header.v115",
                 tableName: "RememberCard",
-                value: "Save your card information securely with Firefox to check out faster next time.",
-                comment: "This value is used as the header for the remember card page")
+                value: "Save your card information securely with %@ to check out faster next time.",
+                comment: "This value is used as the header for the remember card page. The placeholder is for the app name.")
             public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainButtonTitle.v115",
                 tableName: "RememberCard",
@@ -590,8 +590,8 @@ extension String {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Title.v115",
                     tableName: "Footer",
-                    value: "Powered by Pocket.",
-                    comment: "This is the title of the Pocket footer on Firefox Homepage.")
+                    value: "Powered by %@.",
+                    comment: "This is the title of the Pocket footer on Firefox Homepage. placeholder will be for App Name")
                 public static let Subtitle = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Subtitle.v115",
                     tableName: "Footer",

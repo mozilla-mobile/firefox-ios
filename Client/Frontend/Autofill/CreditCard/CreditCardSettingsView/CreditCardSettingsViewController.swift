@@ -75,6 +75,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         addChild(creditCardTableViewController)
         view.addSubview(emptyCreditCardView)
         view.addSubview(creditCardTableView)
+        self.title = .SettingsAutofillCreditCard
 
         NSLayoutConstraint.activate([
             emptyCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

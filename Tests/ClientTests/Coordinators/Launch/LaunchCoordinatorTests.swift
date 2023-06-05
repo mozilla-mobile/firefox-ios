@@ -15,7 +15,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         delegate = MockLaunchCoordinatorDelegate()
     }

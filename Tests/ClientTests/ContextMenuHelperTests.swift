@@ -15,7 +15,7 @@ class ContextMenuHelperTests: XCTestCase {
         super.setUp()
         profile = MockProfile()
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
