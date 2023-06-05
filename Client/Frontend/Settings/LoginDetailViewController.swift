@@ -153,7 +153,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                 description: viewModel.login.decryptedUsername,
                 keyboardType: .emailAddress,
                 returnKeyType: .next,
-                a11yId: "usernameField",
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: isEditingFieldData)
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
@@ -168,7 +168,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                 title: .LoginDetailPassword,
                 description: viewModel.login.decryptedPassword,
                 displayDescriptionAsPassword: true,
-                a11yId: "passwordField",
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: isEditingFieldData)
             setCellSeparatorHidden(loginCell)
             loginCell.configure(viewModel: cellModel)
@@ -183,7 +183,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailWebsite,
                 description: viewModel.login.hostname,
-                a11yId: "websiteField")
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField)
             if isEditingFieldData {
                 loginCell.contentView.alpha = 0.5
             }
