@@ -86,7 +86,9 @@ class TabsPerformanceTest: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
             app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
         }
     }
