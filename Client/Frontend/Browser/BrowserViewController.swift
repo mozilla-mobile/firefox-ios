@@ -668,6 +668,11 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
+<<<<<<< HEAD
+=======
+        zoomPageBar?.changeGradientOpacity(alpha: 1)
+        zoomPageBar?.layoutIfNeeded()
+>>>>>>> 05fa02704 (Refactor FXIOS-6574 [v114.1] Add Zoom Page Bar on top of the url Bar (#14718))
     }
 
     override func viewDidLayoutSubviews() {
