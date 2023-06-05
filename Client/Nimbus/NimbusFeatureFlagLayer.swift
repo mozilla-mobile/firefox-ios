@@ -34,6 +34,12 @@ final class NimbusFeatureFlagLayer {
         case .coordinatorsRefactor:
             return checkCoordinatorRefactorFeature(from: nimbus)
 
+        case .libraryCoordinatorRefactor:
+            return checkLibraryCoordinatorRefactorFeature(from: nimbus)
+
+        case .settingsCoordinatorRefactor:
+            return checkSettingsCoordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -48,8 +54,7 @@ final class NimbusFeatureFlagLayer {
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
-                .onboardingFreshInstall,
-                .onboardingNotificationCard:
+                .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .shareSheetChanges,
@@ -94,18 +99,6 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
-        }
-    }
-
-    public func checkNimbusConfigForOnboardingNotificationCard(
-        using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
-        let config = nimbus.features.onboardingFeature.value()
-        let nimbusSetting = config.notificationCardPosition
-
-        switch nimbusSetting {
-        case .noCard: return .noCard
-        case .afterSync: return .afterSync
-        case .beforeSync: return .beforeSync
         }
     }
 
@@ -178,6 +171,16 @@ final class NimbusFeatureFlagLayer {
 
     private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.coordinatorsRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.libraryCoordinatorRefactor.value()
+        return config.enabled
+    }
+
+    private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.settingsCoordinatorRefactor.value()
         return config.enabled
     }
 

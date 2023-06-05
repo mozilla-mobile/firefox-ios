@@ -7,6 +7,7 @@ import Glean
 
 protocol GleanWrapper {
     func handleDeeplinkUrl(url: URL)
+    func submitPing()
 }
 
 /// Glean wrapper to abstract Glean from our application
@@ -15,5 +16,9 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func handleDeeplinkUrl(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
+    }
+
+    func submitPing() {
+        GleanMetrics.Pings.shared.firstSession.submit()
     }
 }

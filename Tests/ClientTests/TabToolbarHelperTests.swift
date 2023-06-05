@@ -7,6 +7,7 @@
 import Glean
 import XCTest
 import Common
+import Shared
 
 class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
@@ -113,12 +114,12 @@ class MockTabToolbar: TabToolbarProtocol {
 
     var _multiStateButton = MockToolbarButton()
     var multiStateButton: ToolbarButton { return _multiStateButton }
-    var actionButtons: [NotificationThemeable & UIButton] { return [] }
+    var actionButtons: [ThemeApplicable & UIButton] { return [] }
 
     init() {
         profile = MockProfile()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
     }
 

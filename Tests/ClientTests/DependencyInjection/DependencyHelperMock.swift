@@ -12,8 +12,7 @@ class DependencyHelperMock {
         AppContainer.shared.reset()
 
         let profile: Client.Profile = BrowserProfile(
-            localName: "profile",
-            syncDelegate: UIApplication.shared.syncDelegate
+            localName: "profile"
         )
         AppContainer.shared.register(service: profile)
 
@@ -40,5 +39,9 @@ class DependencyHelperMock {
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
+    }
+
+    func reset() {
+        AppContainer.shared.reset()
     }
 }

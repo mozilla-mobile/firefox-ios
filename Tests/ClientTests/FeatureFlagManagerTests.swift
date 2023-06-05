@@ -14,7 +14,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         super.setUp()
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
@@ -68,8 +68,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     }
 
     func testDefaultNimbusCustomFlags() {
-        XCTAssertEqual(featureFlags.getCustomState(for: .onboardingNotificationCard),
-                       OnboardingNotificationCardPosition.afterSync)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
         XCTAssertEqual(featureFlags.getCustomState(for: .wallpaperVersion), WallpaperVersion.v1)
@@ -80,7 +78,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testManagerRespectsProfileChangesForBoolSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
@@ -96,7 +94,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testManagerRespectsProfileChangesForCustomSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         // Search Bar position
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)

@@ -23,29 +23,6 @@ enum InfoItem: Int {
 struct LoginDetailUX {
     static let InfoRowHeight: CGFloat = 58
     static let DeleteRowHeight: CGFloat = 44
-    static let SeparatorHeight: CGFloat = 84
-}
-
-private class CenteredDetailCell: ThemedTableViewCell, ReusableCell {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        var f = detailTextLabel?.frame ?? CGRect()
-        f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
-        detailTextLabel?.frame = f
-    }
-
-    override func applyTheme(theme: Theme) {
-        super.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer1
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 class LoginDetailViewController: SensitiveViewController, Themeable {
@@ -117,10 +94,12 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                            target: self,
+                                                            action: #selector(edit))
 
         tableView.register(cellType: LoginDetailTableViewCell.self)
-        tableView.register(cellType: CenteredDetailCell.self)
+        tableView.register(cellType: LoginDetailCenteredTableViewCell.self)
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -233,8 +212,9 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .lastModifiedSeparator:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: CenteredDetailCell.cellIdentifier,
-                                                           for: indexPath) as? CenteredDetailCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
+                for: indexPath) as? LoginDetailCenteredTableViewCell else {
                 return UITableViewCell()
             }
 
@@ -244,9 +224,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
             // Setting only the detail text produces smaller text as desired, and it is centered.
-            cell.detailTextLabel?.text = createdFormatted + "\n" + lastModifiedFormatted
-            cell.detailTextLabel?.numberOfLines = 2
-            cell.detailTextLabel?.textAlignment = .center
+            cell.centeredLabel.text = createdFormatted + "\n" + lastModifiedFormatted
             setCellSeparatorHidden(cell)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
@@ -277,7 +255,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     private func setCellSeparatorHidden(_ cell: UITableViewCell) {
-        // Prevent seperator from showing by pushing it off screen by the width of the cell
+        // Prevent separator from showing by pushing it off screen by the width of the cell
         cell.separatorInset = UIEdgeInsets(top: 0,
                                            left: 0,
                                            bottom: 0,
@@ -328,7 +306,7 @@ extension LoginDetailViewController: UITableViewDelegate {
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:
-            return LoginDetailUX.SeparatorHeight
+            return UITableView.automaticDimension
         case .deleteItem:
             return LoginDetailUX.DeleteRowHeight
         }

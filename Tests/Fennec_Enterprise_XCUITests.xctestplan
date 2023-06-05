@@ -86,7 +86,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsShowYourHistory()",
         "NewTabSettingsTest\/testCheckNewTabSettingsByDefault()",
         "NewTabSettingsTest\/testToggleOffOnAdditionalContentBookmarks()",
-        "NoImageTests",
+        "NoImageTests\/testImageOnOff()",
         "PhotonActionSheetTest\/testPinToTop()",
         "PhotonActionSheetTest\/testSendToDeviceFromShareOption()",
         "PhotonActionSheetTest\/testShareOptionIsShownFromShortCut()",

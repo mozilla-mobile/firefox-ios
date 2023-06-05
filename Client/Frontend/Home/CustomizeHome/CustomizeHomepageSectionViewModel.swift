@@ -37,7 +37,7 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: HomepageViewModel.UX.spacingBetweenSections,
             leading: leadingInset,
             bottom: HomepageViewModel.UX.spacingBetweenSections,
             trailing: 0)

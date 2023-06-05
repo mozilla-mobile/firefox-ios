@@ -8,8 +8,8 @@ class LibraryTestsIpad: IpadOnlyTestCase {
     func testLibraryShortcut() {
         if skipPlatform {return}
         // Open Library from shortcut
-        waitForExistence(app.buttons["TabToolbar.libraryButton"])
-        let libraryShorcutButton = app.buttons["TabToolbar.libraryButton"]
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton])
+        let libraryShorcutButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
         libraryShorcutButton.tap()
         navigator.nowAt(HomePanel_Library)
         waitForExistence(app.tables["Bookmarks List"])

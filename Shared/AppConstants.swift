@@ -13,6 +13,14 @@ public enum AppName: String, CustomStringConvertible {
     }
 }
 
+public enum PocketAppName: String, CustomStringConvertible {
+    case shortName = "Pocket"
+
+    public var description: String {
+        return self.rawValue
+    }
+}
+
 public enum KVOConstants: String {
     case loading
     case estimatedProgress

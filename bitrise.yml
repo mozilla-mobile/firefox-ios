@@ -39,6 +39,7 @@ workflows:
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=16.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 600
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
@@ -81,6 +82,7 @@ workflows:
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
+        timeout: 180
         inputs:
         - content: |
             #!/usr/bin/env bash
@@ -169,6 +171,7 @@ workflows:
             exec unzip "$derived_data"
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -214,6 +217,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -259,6 +263,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -304,6 +309,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        timeout: 900
         title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -965,71 +971,6 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
         machine_type_id: g2-m1.8core
-
-  RunUnitTests:
-    steps:
-    - script@1.1:
-        title: Detect number of warnings
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-
-            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
-            envman add --key SHOW_WARNING_COUNT --value "$COUNT"
-            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
-
-            STR=$COUNT
-            SUB='greater'
-            if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure, the number of warnings increased"
-                exit 1
-            fi
-        is_always_run: true
-    - slack@3.1:
-        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
-        inputs:
-        - channel: "#firefox-ios"
-        - text: Build status using latest Rust-Component
-        - webhook_url: $WEBHOOK_SLACK_TOKEN_2
-    description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - 4_A_xcode_build_and_test_Fennec
-    after_run:
-    - RunSmokeXCUITests
-    - Detect_warnings
-    - 5_deploy_and_slack
-  RunSmokeXCUITests:
-    steps:
-    - cache-pull@2.1:
-        is_always_run: true
-    - xcode-test@4.5:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-        - simulator_device: iPhone 11
-        is_always_run: true
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
-    description: This Workflow is to run tests UI TESTS
-    meta:
-      bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -1155,7 +1096,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.8core
   SPM_Deploy_Beta_Only:
     steps:
     - activate-ssh-key@4.1:
@@ -1252,7 +1193,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.8core
   SPM_Nightly_Beta_Only:
     steps:
     - activate-ssh-key@4.1:
@@ -1350,7 +1291,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.8core
   perfherder-test:
     steps:
     - cache-pull@2.1:

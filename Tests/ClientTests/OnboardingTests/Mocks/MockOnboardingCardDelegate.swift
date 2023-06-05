@@ -14,7 +14,9 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
     var pageControl = UIPageControl()
     var viewModel: OnboardingViewModelProtocol = IntroViewModel(
         profile: MockProfile(),
-        model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall))
+        model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
+        telemetryUtility: OnboardingTelemetryUtility(
+            with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)))
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
     var themeObserver: NSObjectProtocol?
@@ -26,7 +28,8 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
 
     func handleButtonPress(
         for action: Client.OnboardingActions,
-        from cardName: String
+        from cardName: String,
+        isPrimaryButton: Bool
     ) {
         switch action {
         case .syncSignIn:
@@ -45,6 +48,8 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
                                  completion: {})
         }
     }
+
+    func sendCardViewTelemetry(from cardName: String) { }
 
     func presentPrivacyPolicy(
         from cardName: String,

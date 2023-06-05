@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Glean
 
 private var ignoredSchemes = ["about"]
 

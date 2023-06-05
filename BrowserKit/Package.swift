@@ -16,7 +16,10 @@ let package = Package(
             targets: ["Common"]),
         .library(
             name: "TabDataStore",
-            targets: ["TabDataStore"])
+            targets: ["TabDataStore"]),
+        .library(
+            name: "Redux",
+            targets: ["Redux"])
     ],
     dependencies: [
         .package(
@@ -58,6 +61,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"])
+            dependencies: ["TabDataStore"]),
+        .target(
+            name: "Redux",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "ReduxTests",
+            dependencies: ["Redux"])
     ]
 )

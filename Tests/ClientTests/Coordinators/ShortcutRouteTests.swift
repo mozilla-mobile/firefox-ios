@@ -20,39 +20,39 @@ final class ShortcutRouteTests: XCTestCase {
 
     func testNewTabShortcut() {
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.NewTab", localizedTitle: "New Tab")
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertEqual(route, .search(url: nil, isPrivate: false, options: [.focusLocationField]))
     }
 
     func testNewPrivateTabShortcut() {
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.NewPrivateTab", localizedTitle: "New Private Tab")
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertEqual(route, .search(url: nil, isPrivate: true, options: [.focusLocationField]))
     }
 
     func testOpenLastBookmarkShortcutWithValidUrl() {
         let userInfo = [QuickActionInfos.tabURLKey: "https://www.example.com" as NSSecureCoding]
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.OpenLastBookmark", localizedTitle: "Open Last Bookmark", localizedSubtitle: nil, icon: nil, userInfo: userInfo)
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false, options: [.switchToNormalMode]))
     }
 
     func testOpenLastBookmarkShortcutWithInvalidUrl() {
         let userInfo = [QuickActionInfos.tabURLKey: "not a url" as NSSecureCoding]
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.OpenLastBookmark", localizedTitle: "Open Last Bookmark", localizedSubtitle: nil, icon: nil, userInfo: userInfo)
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertNil(route)
     }
 
     func testQRCodeShortcut() {
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertEqual(route, .action(action: .showQRCode))
     }
 
     func testInvalidShortcut() {
         let shortcutItem = UIApplicationShortcutItem(type: "invalid shortcut", localizedTitle: "Invalid Shortcut")
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         XCTAssertNil(route)
     }
 }

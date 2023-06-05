@@ -10,7 +10,9 @@ class PocketViewModel {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
-        static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
+        static let fractionalWidthiPhoneLandscape: CGFloat = 0.46
+        static let sectionBottomSpacing: CGFloat = 16
+        static let headerFooterHeight: CGFloat = 34
     }
 
     // MARK: - Properties
@@ -45,7 +47,7 @@ class PocketViewModel {
         if device == .pad {
             return .absolute(PocketStandardCell.UX.cellWidth) // iPad
         } else if isLandscape {
-            return .fractionalWidth(UX.fractionalWidthiPhoneLanscape)
+            return .fractionalWidth(UX.fractionalWidthiPhoneLandscape)
         } else {
             return .fractionalWidth(UX.fractionalWidthiPhonePortrait)
         }
@@ -157,12 +159,15 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             trailing: PocketStandardCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                heightDimension: .estimated(34))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                      heightDimension: .estimated(UX.headerFooterHeight))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
-        section.boundarySupplementaryItems = [header]
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
+                                                                 elementKind: UICollectionView.elementKindSectionFooter,
+                                                                 alignment: .bottom)
+        section.boundarySupplementaryItems = [header, footer]
         section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
             self.onScroll?(visibleItems)
         }
@@ -170,7 +175,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: leadingInset,
-                                                        bottom: HomepageViewModel.UX.spacingBetweenSections,
+                                                        bottom: UX.sectionBottomSpacing,
                                                         trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         return section

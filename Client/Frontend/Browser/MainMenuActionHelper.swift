@@ -14,7 +14,8 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
     func addBookmark(url: String, title: String?)
 
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool)
+    @discardableResult
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
     func showLibrary(panel: LibraryPanelType?)
@@ -221,8 +222,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
-            let zoomAction = getZoomAction()
-            append(to: &section, action: zoomAction)
+            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
+                let zoomAction = getZoomAction()
+                append(to: &section, action: zoomAction)
+            }
 
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)

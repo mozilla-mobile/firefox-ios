@@ -12,6 +12,8 @@ import Foundation
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
+    /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
+    /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
@@ -19,22 +21,24 @@ public struct AccessibilityIdentifiers {
         static let readerModeButton = "TabLocationView.readerModeButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
+        static let backButton = "TabToolbar.backButton"
+        static let forwardButton = "TabToolbar.forwardButton"
+        static let tabsButton = "TabToolbar.tabsButton"
+        static let addNewTabButton = "TabToolbar.addNewTabButton"
+        static let searchButton = "TabToolbar.searchButton"
+        static let stopButton = "TabToolbar.stopButton"
+        static let bookmarksButton = "TabToolbar.libraryButton"
     }
 
     struct Browser {
         struct TopTabs {
             static let collectionView = "Top Tabs View"
-            static let tabsButton = "TopTabsViewController.tabsButton"
-            static let newTabButton = "TopTabsViewController.newTabButton"
             static let privateModeButton = "TopTabsViewController.privateModeButton"
         }
 
         struct UrlBar {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
-            static let tabsButton = "URLBarView.tabsButton"
-            static let backButton = "TabToolbar.backButton"
-            static let forwardButton = "TabToolbar.forwardButton"
             static let searchTextField = "address"
         }
     }
@@ -79,6 +83,7 @@ public struct AccessibilityIdentifiers {
 
         struct Pocket {
             static let itemCell = "PocketCell"
+            static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }
 
         struct HistoryHighlights {
@@ -237,6 +242,10 @@ public struct AccessibilityIdentifiers {
             static let topSetting = "TopSearchBar"
             static let bottomSetting = "BottomSearchBar"
         }
+
+        struct BlockImages {
+            static let blockImages = "Block Images"
+        }
     }
 
     struct ShareTo {
@@ -277,5 +286,11 @@ public struct AccessibilityIdentifiers {
 
     struct FindInPage {
         static let findInPageCloseButton = "FindInPage.closeButton"
+    }
+
+    struct RememberCreditCard {
+        static let rememberCreditCardHeader = "RememberCreditCard.Header"
+        static let yesButton = "RememberCreditCard.yesButton"
+        static let notNowButton = "RememberCreditCard.notNowButton"
     }
 }

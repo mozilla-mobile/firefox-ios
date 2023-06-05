@@ -224,7 +224,7 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")
 
         // Workaround
-        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
@@ -249,7 +249,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityValue("a0.com/")
 
         // Workaround
-        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

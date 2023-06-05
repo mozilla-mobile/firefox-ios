@@ -6,14 +6,11 @@ import UIKit
 import Shared
 
 extension UIColor {
-    // These are defaults from http://design.firefox.com/photon/visuals/color.html
-    struct Defaults {
-        static let MobileGreyF = UIColor(rgb: 0x636369)
+    // These are colors which we shouldn't use anymore - we'll migrate to use the new theming system
+    struct LegacyDefaults {
         static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded) // This color should exactly match the ios text highlight
-        static let Purple60A30 = UIColor(rgba: 0x8000d74c)
         static let MobilePrivatePurple = UIColor.Photon.Purple60
-        // Reader Mode Sepia
-        static let LightBeige = UIColor(rgb: 0xf0e6dc)
+        static let SystemBlueColor = UIColor.Photon.Blue40
     }
 }
 
@@ -24,8 +21,6 @@ public struct UIConstants {
     static let TopToolbarHeightMax: CGFloat = 75
     static var ToolbarHeight: CGFloat = 46
     static let ZoomPageBarHeight: CGFloat = 54
-
-    static let SystemBlueColor = UIColor.Photon.Blue40
 
     // Static fonts
     static let DefaultChromeSize: CGFloat = 16

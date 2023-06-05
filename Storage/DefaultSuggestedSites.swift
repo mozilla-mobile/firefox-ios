@@ -86,7 +86,7 @@ open class DefaultSuggestedSites {
                 title: "火狐社区"
             ),
             SuggestedSiteData(
-                url: "https://m.baidu.com/?from=1000969c",
+                url: "https://m.baidu.com/",
                 bgColor: "0x00479d",
                 imageUrl: "asset://suggestedsites_baidu",
                 faviconUrl: "asset://baiduLogo",

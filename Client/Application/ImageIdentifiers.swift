@@ -47,6 +47,7 @@ public struct ImageIdentifiers {
     public static let history = "menu-panel-History"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
+    public static let homepagePocket = "homepage-pocket"
     public static let key = "key"
     public static let largePrivateTabsMask = "largePrivateMask"
     public static let libraryBookmarks = "library-bookmark"

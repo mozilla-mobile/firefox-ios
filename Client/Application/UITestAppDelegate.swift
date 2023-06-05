@@ -50,7 +50,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/browser.db")
+                let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
@@ -89,9 +89,9 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
+            profile = BrowserProfile(localName: "testProfile", sendTabDelegate: application.sendTabDelegate, clear: true)
         } else {
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
+            profile = BrowserProfile(localName: "testProfile", sendTabDelegate: application.sendTabDelegate)
         }
 
         if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {

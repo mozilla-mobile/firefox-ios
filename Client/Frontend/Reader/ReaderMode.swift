@@ -176,9 +176,9 @@ struct ReaderModeStyle {
     mutating func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
-}
 
-let DefaultReaderModeStyle = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+    static let `default` = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+}
 
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
@@ -335,7 +335,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
-    var style: ReaderModeStyle = DefaultReaderModeStyle {
+    var style: ReaderModeStyle = .default {
         didSet {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).setStyle(\(style.encode()))") { object, error in

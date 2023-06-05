@@ -18,7 +18,7 @@ class NavigationRouterTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()

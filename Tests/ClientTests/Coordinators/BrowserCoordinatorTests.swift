@@ -21,7 +21,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.routeBuilder = RouteBuilder { false }
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
@@ -503,7 +503,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
 
         // When
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem)
+        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
         let result = subject.handle(route: route!)
 
         // Then

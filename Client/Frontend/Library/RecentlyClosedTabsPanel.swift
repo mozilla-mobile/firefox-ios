@@ -174,7 +174,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
     }
 }
 
-extension RecentlyClosedTabsPanel: NotificationThemeable {
+extension RecentlyClosedTabsPanel: LegacyNotificationThemeable {
     func applyTheme() {
         tableViewController.tableView.reloadData()
     }

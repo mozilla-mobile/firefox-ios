@@ -260,6 +260,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
+        if tab !== selectedTab {
+            logger.log("The expected tab wasn't selected!",
+                       level: .warning,
+                       category: .tabs)
+        }
+
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
 
@@ -642,6 +648,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
+        if count != prevCount - 1 {
+            logger.log("Make sure the tab count was actually removed",
+                       level: .warning,
+                       category: .tabs)
+        }
 
         if tab.isPrivate && privateTabs.count < 1 {
             privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
@@ -1004,11 +1015,23 @@ extension LegacyTabManager: WKNavigationDelegate {
 extension LegacyTabManager {
     func testRemoveAll() {
         assert(AppConstants.isRunningTest)
+        if !AppConstants.isRunningTest {
+            logger.log("This method was used outside of tests!",
+                       level: .warning,
+                       category: .tabs)
+        }
+
         removeTabs(self.tabs)
     }
 
     func testClearArchive() {
         assert(AppConstants.isRunningTest)
+        if !AppConstants.isRunningTest {
+            logger.log("This method was used outside of tests!",
+                       level: .warning,
+                       category: .tabs)
+        }
+
         store.clearArchive()
     }
 }

@@ -191,7 +191,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         collectionView.register(LabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: LabelButtonHeaderView.cellIdentifier)
-
+        collectionView.register(PocketFooterView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: PocketFooterView.cellIdentifier)
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
@@ -462,29 +464,52 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 // MARK: - CollectionView Data Source
 
 extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader,
-              let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionView.elementKindSectionHeader,
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        let reusableView = UICollectionReusableView()
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
                 withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
-                for: indexPath) as? LabelButtonHeaderView,
-              let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
-        else { return UICollectionReusableView() }
+                for: indexPath) as? LabelButtonHeaderView else { return reusableView }
+            guard let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
+            else { return reusableView }
 
-        // Configure header only if section is shown
-        let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
-        headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
+            // Configure header only if section is shown
+            let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
+            headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
 
-        // Jump back in header specific setup
-        if sectionViewModel.sectionType == .jumpBackIn {
-            self.viewModel.jumpBackInViewModel.sendImpressionTelemetry()
-            // Moving called after header view gets configured
-            // and delaying to wait for header view layout readjust
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                self?.prepareJumpBackInContextualHint(onView: headerView)
+            // Jump back in header specific setup
+            if sectionViewModel.sectionType == .jumpBackIn {
+                self.viewModel.jumpBackInViewModel.sendImpressionTelemetry()
+                // Moving called after header view gets configured
+                // and delaying to wait for header view layout readjust
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    self?.prepareJumpBackInContextualHint(onView: headerView)
+                }
             }
+            return headerView
         }
-        return headerView
+
+        if kind == UICollectionView.elementKindSectionFooter {
+            guard let footerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: PocketFooterView.cellIdentifier,
+                for: indexPath) as? PocketFooterView else { return reusableView }
+            footerView.onTapLearnMore = {
+                guard let learnMoreURL = SupportUtils.URLForPocketLearnMore else {
+                    self.logger.log("Failed to retrieve learn more URL from SupportUtils.URLForPocketLearnMore",
+                                    level: .debug,
+                                    category: .homepage)
+                    return
+                }
+                self.showSiteWithURLHandler(learnMoreURL)
+            }
+            footerView.applyTheme(theme: themeManager.currentTheme)
+            return footerView
+        }
+        return reusableView
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {

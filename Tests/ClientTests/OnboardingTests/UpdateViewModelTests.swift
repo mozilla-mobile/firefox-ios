@@ -19,7 +19,7 @@ class UpdateViewModelTests: XCTestCase {
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -42,7 +42,7 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 1)
-            XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.updateWelcome)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -57,8 +57,8 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 2)
-            XCTAssertEqual(subject.availableCards[0].viewModel.infoModel.name, cards.updateWelcome)
-            XCTAssertEqual(subject.availableCards[1].viewModel.infoModel.name, cards.updateSync)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
+            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -185,7 +185,10 @@ class UpdateViewModelTests: XCTestCase {
         line: UInt = #line
     ) -> UpdateViewModel {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let subject = UpdateViewModel(profile: profile, model: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let subject = UpdateViewModel(profile: profile,
+                                      model: onboardingModel,
+                                      telemetryUtility: telemetryUtility)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

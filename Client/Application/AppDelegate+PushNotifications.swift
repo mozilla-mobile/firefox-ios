@@ -18,10 +18,6 @@ import MozillaAppServices
 enum SentTabAction: String {
     case view = "TabSendViewAction"
 
-    static let TabSendURLKey = "TabSendURL"
-    static let TabSendTitleKey = "TabSendTitle"
-    static let TabSendCategory = "TabSendCategory"
-
     static var notificationCategory: UNNotificationCategory {
         let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue,
                                               title: .SentTabViewActionTitle,
@@ -74,27 +70,10 @@ extension AppDelegate {
             }
         }
     }
-
-    private func openURLsInNewTabs(_ notification: UNNotification) {
-        var receivedUrlsQueue: [URL] = []
-
-        guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
-        for sentURL in urls {
-            if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
-                receivedUrlsQueue.append(url)
-            }
-        }
-
-        // Check if the app is foregrounded
-        if UIApplication.shared.applicationState == .active {
-            let object = OpenTabNotificationObject(type: .loadQueuedTabs(receivedUrlsQueue))
-            NotificationCenter.default.post(name: .OpenTabNotification, object: object)
-        }
-    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    // Called when the user taps on a sent-tab notification from the background.
+    // Called when the user taps on a notification from the background.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -107,9 +86,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
            default:
                notificationSurfaceManager.didTapNotification(content.userInfo)
            }
-        } else {
-            openURLsInNewTabs(response.notification)
         }
+        // We don't poll for commands here because we do that once the application wakes up
+        // The notification service ensures that when the application wakes up, the application will check
+        // for commands
         completionHandler()
     }
 
@@ -125,7 +105,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             // show the notification
             completionHandler([.list, .banner, .sound])
         } else {
-            openURLsInNewTabs(notification)
+            profile.pollCommands(forcePoll: true)
         }
     }
 }
@@ -134,12 +114,15 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         var notificationAllowed = true
-        if FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
             notificationAllowed = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications)
         }
 
-        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken,
-                                                                 notificationAllowed: notificationAllowed)
+        if notificationAllowed {
+            RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
+        } else {
+            RustFirefoxAccounts.shared.pushNotifications.disableNotifications()
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
