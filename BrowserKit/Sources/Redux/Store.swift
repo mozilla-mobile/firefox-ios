@@ -4,17 +4,21 @@
 
 import Foundation
 
-public class Store<State: StateType>: StoreType {
+/// Stores your entire app state in the form of a single data structure.
+/// This state can only be modified by dispatching Actions to the store.
+/// Whenever the state of the store changes, the store will notify all store subscriber.
+public class Store<State: StateType>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
     public var state: State {
         didSet {
             subscriptions.forEach {
-                if $0.subscriber == nil {
+                guard $0.subscriber != nil else {
                     subscriptions.remove($0)
-                } else {
-                    $0.newValues(oldState: oldValue, newState: state)
+                    return
                 }
+
+                $0.newValues(oldState: oldValue, newState: state)
             }
         }
     }
