@@ -935,8 +935,6 @@
 		C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B3265E71FE0009B09E /* ItemListCell.swift */; };
 		C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */; };
 		C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */; };
-		C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */; };
-		C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */; };
 		C8DC90BD2A06699E0008832B /* MarkupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90BC2A06699E0008832B /* MarkupNode.swift */; };
 		C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90C22A066B4A0008832B /* MarkupToken.swift */; };
 		C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DC90C42A066B6A0008832B /* MarkupTokenizingUtility.swift */; };
@@ -5381,8 +5379,6 @@
 		C8CE38B3265E71FE0009B09E /* ItemListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListCell.swift; sourceTree = "<group>"; };
 		C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
-		C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagUserPrefsMigrationUtility.swift; sourceTree = "<group>"; };
-		C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsUserPrefsMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		C8D3475789EF0BC1B4457F1A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		C8D9497CA0DF70586C706A76 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C8DC90BC2A06699E0008832B /* MarkupNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupNode.swift; sourceTree = "<group>"; };
@@ -8343,7 +8339,6 @@
 				C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */,
 				C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */,
 				C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */,
-				C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */,
 			);
 			path = FeatureFlags;
 			sourceTree = "<group>";
@@ -9999,7 +9994,6 @@
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
-				C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
@@ -12035,7 +12029,6 @@
 				8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
-				C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
@@ -12772,7 +12765,6 @@
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
-				C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
 				43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */,
 				8A93F86829D373B0004159D9 /* MockNavigationController.swift in Sources */,

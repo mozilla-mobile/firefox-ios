@@ -9,8 +9,6 @@ import Shared
 @testable import Client
 
 class WallpaperMigrationUtilityTests: XCTestCase {
-    private let migrationKey = PrefsKeys.LegacyFeatureFlags.WallpaperDirectoryMigrationCheck
-
     override func setUp() {
         super.setUp()
         removeAllFolders()
@@ -44,11 +42,6 @@ class WallpaperMigrationUtilityTests: XCTestCase {
                                              isDirectory: &isDirectory))
         XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
                                              isDirectory: &isDirectory))
-    }
-
-    func testMigrationKeyDoesntExist() {
-        let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
-        XCTAssertNil(profile.prefs.boolForKey(migrationKey))
     }
 
     // MARK: - Helpers
