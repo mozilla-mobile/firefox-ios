@@ -88,29 +88,16 @@ class CreditCardHelper: TabContentScript {
         do {
             let jsonData = try JSONSerialization.data(
                 withJSONObject: messageBody, options: .prettyPrinted)
-            prettyPrintJSONData(jsonData)
             let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self,
                                                         from: jsonData)
             return fillCreditCardForm
-        } catch {
-            logger.log("Unable to parse field type for CC",
+        } catch let error {
+            logger.log("Unable to parse field type for CC, \(error)",
                        level: .warning,
                        category: .webview)
         }
 
         return nil
-    }
-
-    func prettyPrintJSONData(_ jsonData: Data) {
-        do {
-            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
-            let prettyPrintedData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-            if let prettyPrintedString = String(data: prettyPrintedData, encoding: .utf8) {
-                print(prettyPrintedString)
-            }
-        } catch {
-            print("Error: Failed to pretty print JSON data - \(error)")
-        }
     }
 
     func getFieldTypeValues(payload: CreditCardPayload) -> UnencryptedCreditCardFields {
