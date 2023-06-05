@@ -62,6 +62,7 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         app.launch()
         waitForTabsButton()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"])
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
@@ -78,6 +79,7 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_4_1280tabTray() {
         app.launch()
         waitForTabsButton()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"])
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
