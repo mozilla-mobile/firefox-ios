@@ -141,7 +141,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 title: .LoginDetailUsername,
                 keyboardType: .emailAddress,
                 returnKeyType: .next,
-                a11yId: "usernameField",
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
@@ -153,7 +153,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailPassword,
                 displayDescriptionAsPassword: true,
-                a11yId: "passwordField",
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
@@ -166,7 +166,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 title: .LoginDetailWebsite,
                 descriptionPlaceholder: "https://www.example.com",
                 keyboardType: .URL,
-                a11yId: "websiteField",
+                a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
