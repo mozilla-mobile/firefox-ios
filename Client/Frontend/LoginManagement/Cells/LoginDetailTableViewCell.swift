@@ -107,6 +107,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     override func prepareForReuse() {
         super.prepareForReuse()
         delegate = nil
+        contentView.alpha = 1
         descriptionLabel.isSecureTextEntry = false
         descriptionLabel.keyboardType = .default
         descriptionLabel.returnKeyType = .default

@@ -361,9 +361,15 @@ extension LoginDetailViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
         // Only update if user made changes
-        guard let username = usernameField?.text, let password = passwordField?.text else { return }
+        guard let username = usernameField?.text, let password = passwordField?.text else {
+            self.tableView.reloadData()
+            return
+        }
 
-        guard username != viewModel.login.decryptedUsername || password != viewModel.login.decryptedPassword else { return }
+        guard username != viewModel.login.decryptedUsername || password != viewModel.login.decryptedPassword else {
+            self.tableView.reloadData()
+            return
+        }
 
         let updatedLogin = LoginEntry(
             fromLoginEntryFlattened: LoginEntryFlattened(
