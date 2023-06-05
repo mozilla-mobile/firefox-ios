@@ -137,35 +137,40 @@ extension AddCredentialViewController: UITableViewDataSource {
         switch AddCredentialField(rawValue: indexPath.row)! {
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailUsername
-            loginCell.descriptionLabel.keyboardType = .emailAddress
-            loginCell.descriptionLabel.returnKeyType = .next
-            loginCell.isEditingFieldData = true
-            usernameField = loginCell.descriptionLabel
-            usernameField?.accessibilityIdentifier = "usernameField"
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailUsername,
+                keyboardType: .emailAddress,
+                returnKeyType: .next,
+                a11yId: "usernameField",
+                isEditingFieldData: true)
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            usernameField = loginCell.descriptionLabel
             return loginCell
 
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailPassword
-            loginCell.descriptionLabel.returnKeyType = .default
-            loginCell.displayDescriptionAsPassword = true
-            loginCell.isEditingFieldData = true
-            passwordField = loginCell.descriptionLabel
-            passwordField?.accessibilityIdentifier = "passwordField"
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailPassword,
+                displayDescriptionAsPassword: true,
+                a11yId: "passwordField",
+                isEditingFieldData: true)
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            passwordField = loginCell.descriptionLabel
             return loginCell
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
-            websiteField = loginCell.descriptionLabel
-            loginCell.placeholder = "https://www.example.com"
-            websiteField?.accessibilityIdentifier = "websiteField"
-            websiteField?.keyboardType = .URL
-            loginCell.isEditingFieldData = true
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailWebsite,
+                descriptionPlaceholder: "https://www.example.com",
+                keyboardType: .URL,
+                a11yId: "websiteField",
+                isEditingFieldData: true)
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            websiteField = loginCell.descriptionLabel
             return loginCell
         }
     }

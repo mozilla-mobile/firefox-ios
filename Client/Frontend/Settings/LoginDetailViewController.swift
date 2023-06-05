@@ -148,44 +148,48 @@ extension LoginDetailViewController: UITableViewDataSource {
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
-            loginCell.highlightedLabelTitle = .LoginDetailUsername
-            loginCell.descriptionLabel.text = viewModel.login.decryptedUsername
-            loginCell.descriptionLabel.keyboardType = .emailAddress
-            loginCell.descriptionLabel.returnKeyType = .next
-            loginCell.isEditingFieldData = isEditingFieldData
-            usernameField = loginCell.descriptionLabel
-            usernameField?.accessibilityIdentifier = "usernameField"
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailUsername,
+                description: viewModel.login.decryptedUsername,
+                keyboardType: .emailAddress,
+                returnKeyType: .next,
+                a11yId: "usernameField",
+                isEditingFieldData: isEditingFieldData)
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            usernameField = loginCell.descriptionLabel
             return loginCell
 
         case .password:
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
-            loginCell.highlightedLabelTitle = .LoginDetailPassword
-            loginCell.descriptionLabel.text = viewModel.login.decryptedPassword
-            loginCell.descriptionLabel.returnKeyType = .default
-            loginCell.displayDescriptionAsPassword = true
-            loginCell.isEditingFieldData = isEditingFieldData
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailPassword,
+                description: viewModel.login.decryptedPassword,
+                displayDescriptionAsPassword: true,
+                a11yId: "passwordField",
+                isEditingFieldData: isEditingFieldData)
             setCellSeparatorHidden(loginCell)
-            passwordField = loginCell.descriptionLabel
-            passwordField?.accessibilityIdentifier = "passwordField"
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            passwordField = loginCell.descriptionLabel
             return loginCell
 
         case .website:
             guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
                 return UITableViewCell()
             }
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
-            loginCell.descriptionLabel.text = viewModel.login.hostname
-            websiteField = loginCell.descriptionLabel
-            websiteField?.accessibilityIdentifier = "websiteField"
-            loginCell.isEditingFieldData = false
+            let cellModel = LoginDetailTableViewCellModel(
+                title: .LoginDetailWebsite,
+                description: viewModel.login.hostname,
+                a11yId: "websiteField")
             if isEditingFieldData {
                 loginCell.contentView.alpha = 0.5
             }
+            loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
+            websiteField = loginCell.descriptionLabel
             return loginCell
 
         case .lastModifiedSeparator:
