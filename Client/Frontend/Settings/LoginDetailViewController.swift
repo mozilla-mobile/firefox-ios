@@ -7,11 +7,6 @@ import Storage
 import Shared
 import Common
 
-struct LoginDetailUX {
-    static let InfoRowHeight: CGFloat = 58
-    static let DeleteRowHeight: CGFloat = 44
-}
-
 class LoginDetailViewController: SensitiveViewController, Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
@@ -282,12 +277,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableView.automaticDimension }
-        switch cellType {
-        case .breach, .username, .password, .website, .lastModifiedSeparator:
-            return UITableView.automaticDimension
-        case .delete:
-            return LoginDetailUX.DeleteRowHeight
-        }
+        return UITableView.automaticDimension
     }
 }
 

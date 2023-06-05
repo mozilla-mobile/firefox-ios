@@ -199,7 +199,7 @@ extension AddCredentialViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension AddCredentialViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return LoginDetailUX.InfoRowHeight
+        return UITableView.automaticDimension
     }
 }
 
