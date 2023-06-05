@@ -15,7 +15,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let profile = MockProfile(databasePrefix: "SearchBarSettingsTests")
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         prefs = profile.prefs
         prefs.clearAll()
         mockNotificationCenter = MockNotificationCenter()

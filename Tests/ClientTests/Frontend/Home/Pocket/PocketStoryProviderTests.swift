@@ -11,7 +11,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
 
     override func setUp() {
         super.setUp()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {

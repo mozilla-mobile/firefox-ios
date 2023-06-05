@@ -11,7 +11,7 @@ class PocketDataAdaptorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         mockNotificationCenter = MockNotificationCenter()
     }
 

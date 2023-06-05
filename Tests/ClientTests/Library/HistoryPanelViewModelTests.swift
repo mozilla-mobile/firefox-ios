@@ -17,7 +17,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         profile.reopen()
         subject = HistoryPanelViewModel(profile: profile)
     }

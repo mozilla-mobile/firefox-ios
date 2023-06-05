@@ -20,7 +20,7 @@ class StartAtHomeHelperTests: XCTestCase {
         profile.reopen()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
     }
 

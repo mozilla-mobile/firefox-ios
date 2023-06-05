@@ -50,7 +50,7 @@ class AppLaunchUtil {
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
         // i.e. this must be run before initializing those systems.
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
         // Migrate wallpaper folder

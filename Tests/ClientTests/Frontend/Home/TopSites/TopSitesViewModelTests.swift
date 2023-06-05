@@ -16,7 +16,7 @@ class TopSitesViewModelTests: XCTestCase {
         super.setUp()
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
