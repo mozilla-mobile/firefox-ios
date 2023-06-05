@@ -351,8 +351,8 @@ private extension LoginListViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
-                    let loginRecord = self.viewModel.loginAtIndexPath(index)
-                    if let loginRecord = loginRecord, self.viewModel.listSelectionHelper.isCellSelected(with: loginRecord) {
+                    if let loginRecord = self.viewModel.loginAtIndexPath(index),
+                       self.viewModel.listSelectionHelper.isCellSelected(with: loginRecord) {
                         return loginRecord.id
                     }
                     return nil
