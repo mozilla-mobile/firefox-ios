@@ -92,10 +92,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-
-        labelContainer.addSubview(highlightedLabel)
-        labelContainer.addSubview(descriptionLabel)
-        contentView.addSubview(labelContainer)
+        backgroundColor = .clear
 
         setupLayout()
     }
@@ -133,6 +130,10 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     }
 
     private func setupLayout() {
+        labelContainer.addSubview(highlightedLabel)
+        labelContainer.addSubview(descriptionLabel)
+        contentView.addSubview(labelContainer)
+
         NSLayoutConstraint.activate([
             labelContainer.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                 constant: UX.verticalMargin),
