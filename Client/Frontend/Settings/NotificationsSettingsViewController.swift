@@ -24,9 +24,6 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
                 self.syncNotifications.writeBool(self.syncNotifications.control)
 
                 // enable/disable sync notifications
-                MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
-                    forKey: KeychainKey.apnsToken,
-                    withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
         }
