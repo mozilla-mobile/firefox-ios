@@ -26,8 +26,14 @@ const sendMessage =
     });
 
 const sendCaptureCreditCardFormMessage = sendMessage(
-  messageTypes.CAPTURE_CREDIT_CARD_FORM
-);
+  messageTypes.CAPTURE_CREDIT_CARD_FORM,
+  (payload) => {
+    const modifiedPayload = Object.entries(payload?.[0]).reduce((acc, [key, val]) => ({
+      ...acc,
+      [key]: String(val)
+    }), {});
+    return modifiedPayload;
+  });
 
 const sendFillCreditCardFormMessage = sendMessage(
   messageTypes.FILL_CREDIT_CARD_FORM
