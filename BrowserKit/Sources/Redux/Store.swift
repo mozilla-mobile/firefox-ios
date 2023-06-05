@@ -7,7 +7,7 @@ import Foundation
 public class Store<State: StateType>: StoreType {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
-   public var state: State {
+    public var state: State {
         didSet {
             subscriptions.forEach {
                 if $0.subscriber == nil {
@@ -18,6 +18,7 @@ public class Store<State: StateType>: StoreType {
             }
         }
     }
+
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
 
