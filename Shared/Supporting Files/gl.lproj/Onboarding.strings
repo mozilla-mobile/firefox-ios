@@ -20,7 +20,7 @@
 "Onboarding.IntroDescriptionPart2.v114" = "Comprometidos coa promesa dunha Internet mellor para todos.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v114" = "Agora non";
+"Onboarding.LaterAction.v115" = "Saltar";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Continuar";
@@ -29,7 +29,7 @@
 "Onboarding.Notification.Description.v114" = "Envía lapelas entre os teus dispositivos e recibe consellos sobre como sacar o máximo proveito de %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v114" = "Agora non";
+"Onboarding.Notification.Skip.Action.v115" = "Saltar";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "As notificacións axúdanlle a facer máis con %@";

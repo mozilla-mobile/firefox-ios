@@ -114,12 +114,15 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         var notificationAllowed = true
-        if FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
             notificationAllowed = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications)
         }
 
-        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken,
-                                                                 notificationAllowed: notificationAllowed)
+        if notificationAllowed {
+            RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
+        } else {
+            RustFirefoxAccounts.shared.pushNotifications.disableNotifications()
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

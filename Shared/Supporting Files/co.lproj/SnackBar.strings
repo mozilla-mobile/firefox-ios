@@ -1,0 +1,3 @@
+/* Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed. */
+"CreditCard.SnackBar.RemovedCardLabel.v112" = "Carta cacciata";
+

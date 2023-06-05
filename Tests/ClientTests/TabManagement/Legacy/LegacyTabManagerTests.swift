@@ -114,7 +114,7 @@ class LegacyTabManagerTests: XCTestCase {
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {

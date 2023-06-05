@@ -799,7 +799,9 @@ class BrowserViewController: UIViewController {
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
-            } else if !isBottomSearchBar { make.height.equalTo(0) }
+            } else if !isBottomSearchBar {
+                make.height.equalTo(0)
+            }
             make.leading.trailing.equalTo(view)
         }
 

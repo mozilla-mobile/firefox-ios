@@ -17,7 +17,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         delegate = MockLaunchFinishedLoadingDelegate()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)

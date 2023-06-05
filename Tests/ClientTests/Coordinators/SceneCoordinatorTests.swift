@@ -13,7 +13,7 @@ final class SceneCoordinatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
