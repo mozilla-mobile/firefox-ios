@@ -1,0 +1,12 @@
+/* This value is used as the title for the update card page */
+"CreditCard.UpdateCard.MainTitle.v115" = "要更新這張卡片資訊嗎？";
+
+/* This value is used as the title for the Manage Cards button from the update credit card page */
+"CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "管理卡片";
+
+/* This value is used as the title for the Not Now button in the update credit card page */
+"CreditCard.UpdateCard.NotNowButtonTitle.v115" = "暫時不要";
+
+/* This value is used as the title for the button in the update credit card page */
+"CreditCard.UpdateCard.YesButtonTitle.v115" = "好的";
+

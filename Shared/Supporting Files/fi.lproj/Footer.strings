@@ -1,0 +1,9 @@
+/* This is the learn more text of the Pocket footer on Firefox Homepage. */
+"FirefoxHomepage.Pocket.Footer.LearnMore.v115" = "Lue lisää";
+
+/* This is the subtitle of the Pocket footer on Firefox Homepage. The placeholder is the app name. */
+"FirefoxHomepage.Pocket.Footer.Subtitle.v115" = "Osa %@-perhettä.";
+
+/* This is the title of the Pocket footer on Firefox Homepage. placeholder will be for App Name */
+"FirefoxHomepage.Pocket.Footer.Title.v115" = "Mahdollistajana %@.";
+

@@ -20,7 +20,7 @@
 "Onboarding.IntroDescriptionPart2.v114" = "ᱡᱚᱛᱚ ᱦᱚᱲ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫ ᱱᱟᱯᱟᱭ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱨᱮᱭᱟᱜ ᱩᱫᱩᱜ ᱞᱟ.ᱜᱤᱫ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱾";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v114" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱵᱟᱝᱟ";
+"Onboarding.LaterAction.v115" = "ᱟᱲᱟᱜ";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "ᱞᱮᱛᱟᱲ";
@@ -29,7 +29,7 @@
 "Onboarding.Notification.Description.v114" = "ᱟᱢᱟᱜ ᱰᱟᱴᱟ ᱠᱚ ᱛᱟᱞᱟᱨᱮ ᱴᱟᱵᱽ ᱠᱚ ᱩᱪᱟᱹᱲ ᱢᱮ ᱟᱨ %@ ᱠᱷᱚᱱ ᱡᱚᱛᱚ ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ ᱵᱮᱵᱚᱦᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱴᱤᱯᱥ ᱠᱚ ᱧᱟᱢ ᱢᱮ ᱾";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v114" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱵᱟᱝᱟ";
+"Onboarding.Notification.Skip.Action.v115" = "ᱟᱲᱟᱜ";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "%@ ᱮᱛᱞᱟᱤᱭᱟᱹ ᱥᱟᱞᱟᱜ ᱵᱟᱹᱲᱛᱤ ᱠᱟᱹᱢᱤ ᱠᱚᱨᱟᱣ ᱨᱮ ᱜᱚᱲᱚ ᱮᱢᱚᱜᱼᱟᱭ";
