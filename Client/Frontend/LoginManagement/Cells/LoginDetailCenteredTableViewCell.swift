@@ -34,6 +34,7 @@ class LoginDetailCenteredTableViewCell: UITableViewCell, ThemeApplicable, Reusab
     func configure(viewModel: LoginDetailCenteredTableViewCellModel) {
         self.viewModel = viewModel
         centeredLabel.text = viewModel.label
+        selectionStyle = .none
     }
 
     func applyTheme(theme: Theme) {
