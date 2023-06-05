@@ -13,6 +13,7 @@ channels:
   - beta
   - release
 include:
+  - nimbus-features/autopushFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/coordinatorsRefactorFeature.yaml
   - nimbus-features/creditCardAutofillFeature.yaml

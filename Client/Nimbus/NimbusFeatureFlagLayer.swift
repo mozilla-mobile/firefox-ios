@@ -11,6 +11,8 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
+        case .autopushFeature:
+            return checkAutopushFeature(from: nimbus)
         case .pullToRefresh,
                 .reportSiteIssue,
                 .shakeToRestore:
@@ -114,6 +116,11 @@ final class NimbusFeatureFlagLayer {
         case .shakeToRestore: return config.shakeToRestore.status
         default: return false
         }
+    }
+
+    private func checkAutopushFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.autopushFeature.value()
+        return config.useNewAutopushClient
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
