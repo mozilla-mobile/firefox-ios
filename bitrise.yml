@@ -569,10 +569,13 @@ workflows:
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
 
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
+                git checkout $BITRISEIO_GIT_BRANCH_DEST
                 FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
             else
                 FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
             fi
+
+            git checkout main
 
             echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
