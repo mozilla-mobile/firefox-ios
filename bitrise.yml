@@ -585,10 +585,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex
 
-            # We need to check both PRs and MERGE for release and epic branches so an error isn't
+            # We need to check both PRs and MERGEs for release and epic branches so an error isn't
             # created when trying to find a diff on a commit that doesn't exist on origin/main
             # First check destination branch for PRs and then check $BITRISE_GIT_BRANCH for
-            # merges to main since the destination branch changes back to origin/main
+            # merges to origin/main since the destination branch changes back to origin/main
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
             elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
