@@ -380,10 +380,30 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
+    - script@1:
+        title: Add default web browser entitlement for Fennec_Enterprise
+        inputs:
+        - content: |-
+            #/usr/bin/env bash
+            set -x
+
+            echo "Adding com.apple.developer.web-browser to entitlements"
+
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecEnterpriseApplication.entitlements
     - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+             #!/usr/bin/env bash
+             set -e
+             set -x
+             cd Client.xcodeproj
+             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
+             cd -
+        title: Set xcodeproj code_sign_identity to iPhone Developer
     - script@1:
         inputs:
         - content: |-
@@ -1348,6 +1368,66 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+  Archive_and_Run_Robo_Test:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-archive@4.7.2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
+    - cache-pull@2.7.2:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+    - script@1:
+        title: Install Google Cloud SDK
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+             
+            if [ -e $HOME/google-cloud-sdk ]; then
+              echo "Google Cloud SDK found, skipping installation..."
+            else
+              echo "Google Cloud SDK not found, installing..."
+              curl https://sdk.cloud.google.com > install.sh
+              bash install.sh --disable-prompts
+              source $HOME/google-cloud-sdk/path.bash.inc
+              gcloud components install beta
+            fi
+    - cache-push@2.7.1:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
+        - compress_archive: "true"
+    - script@1:
+        title: Firebase Test Lab Execution
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e 
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            $HOME/google-cloud-sdk/bin/gcloud version
+            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            $HOME/google-cloud-sdk/bin/gcloud config set project moz-firefox-ios-230118
+            $HOME/google-cloud-sdk/bin/gcloud beta firebase test ios run \
+            --type robo \
+            --app "$BITRISE_IPA_PATH" \
+            --device=model=iphone13pro,version=15.7 \
+            --results-bucket=firefox_ios_test_artifacts \
+            --no-record-video
+
 app:
   envs:
   - opts:
