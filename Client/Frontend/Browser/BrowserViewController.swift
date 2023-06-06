@@ -1980,8 +1980,9 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
             creditCardHelper.foundFieldValues = { fieldValues, type in
-                guard let tabWebView = tab.webView as? TabWebView else { return }
-                guard let type = type else { return }
+                guard let tabWebView = tab.webView as? TabWebView,
+                      let type = type
+                else { return }
 
                 switch type {
                 case .formInput:

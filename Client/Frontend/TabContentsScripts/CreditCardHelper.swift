@@ -66,9 +66,10 @@ class CreditCardHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
-        guard let data = getValidPayloadData(from: message) else { return }
-        guard let fieldValues = parseFieldType(messageBody: data) else { return }
-        guard let payloadType = CreditCardPayloadType(rawValue: fieldValues.type) else {
+        guard let data = getValidPayloadData(from: message),
+              let fieldValues = parseFieldType(messageBody: data),
+              let payloadType = CreditCardPayloadType(rawValue: fieldValues.type)
+        else {
             logger.log("Unable to find the payloadType for credit card js input",
                        level: .warning,
                        category: .webview)
