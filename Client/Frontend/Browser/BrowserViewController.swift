@@ -666,9 +666,12 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
+<<<<<<< HEAD
         adjustBottomContainerHeight()
         zoomPageBar?.changeGradientOpacity(alpha: 1)
         zoomPageBar?.layoutIfNeeded()
+=======
+>>>>>>> ac1fbbe83 (Bugfix FXIOS-6575 [v114.1] Shadow gradient gets stuck at the bottom of the screen (#14736))
     }
 
     override func viewDidLayoutSubviews() {
