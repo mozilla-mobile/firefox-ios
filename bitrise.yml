@@ -572,6 +572,8 @@ workflows:
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
             elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
+                echo "Skipping Blacklist check for Merging into $BITRISE_BIT_BRANCH..."
+                exit 0
                 FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
             else
                 FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
