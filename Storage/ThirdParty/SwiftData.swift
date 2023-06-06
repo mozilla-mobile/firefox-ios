@@ -189,10 +189,6 @@ open class SwiftData {
 
             deferred.connection = connection
 
-            if debugSimulateSlowDBOperations {
-                sleep(2)
-            }
-
             do {
                 let result = try callback(connection)
                 deferred.fill(Maybe(success: result))
