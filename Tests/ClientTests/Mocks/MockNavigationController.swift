@@ -5,11 +5,12 @@
 import UIKit
 @testable import Client
 
-class MockNavigationController: UIViewController, NavigationController {
+class MockNavigationController: NavigationController {
+    var transitionCoordinator: UIViewControllerTransitionCoordinator?
+    var presentedViewController: UIViewController?
     var viewControllers: [UIViewController] = []
     var delegate: UINavigationControllerDelegate?
     var isNavigationBarHidden = false
-    var topPresentedViewController: UIViewController?
     var fromViewController: UIViewController?
 
     var presentCalled = 0
@@ -17,23 +18,23 @@ class MockNavigationController: UIViewController, NavigationController {
     var pushCalled = 0
     var popViewCalled = 0
 
-    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         presentCalled += 1
-        topPresentedViewController = viewControllerToPresent
+        presentedViewController = viewControllerToPresent
     }
 
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+    func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         dismissCalled += 1
     }
 
     func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushCalled += 1
-        topPresentedViewController = viewController
+        presentedViewController = viewController
     }
 
     func popViewController(animated: Bool) -> UIViewController? {
         popViewCalled += 1
-        return topPresentedViewController
+        return presentedViewController
     }
 
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {

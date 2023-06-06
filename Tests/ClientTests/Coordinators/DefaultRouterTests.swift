@@ -22,7 +22,7 @@ final class DefaultRouterTests: XCTestCase {
         let subject = DefaultRouter(navigationController: navigationController)
 
         XCTAssertNil(subject.rootViewController)
-        XCTAssertEqual(subject.navigationController, navigationController)
+        XCTAssertEqual(subject.navigationController.viewControllers, navigationController.viewControllers)
         XCTAssertEqual(subject.completions.count, 0)
     }
 
@@ -32,7 +32,7 @@ final class DefaultRouterTests: XCTestCase {
         subject.present(viewController, completion: {})
 
         XCTAssertEqual(navigationController.presentCalled, 1)
-        XCTAssertEqual(navigationController.topPresentedViewController, viewController)
+        XCTAssertEqual(navigationController.presentedViewController, viewController)
         XCTAssertEqual(subject.completions.count, 1)
     }
 
@@ -82,7 +82,7 @@ final class DefaultRouterTests: XCTestCase {
         subject.push(viewController, completion: {})
 
         XCTAssertEqual(navigationController.pushCalled, 1)
-        XCTAssertEqual(navigationController.topPresentedViewController, viewController)
+        XCTAssertEqual(navigationController.presentedViewController, viewController)
         XCTAssertEqual(subject.completions.count, 1)
     }
 

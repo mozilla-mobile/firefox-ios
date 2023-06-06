@@ -11,7 +11,7 @@ class DefaultRouter: NSObject, Router {
         return navigationController.viewControllers.first
     }
 
-    let navigationController: NavigationController
+    var navigationController: NavigationController
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
@@ -30,8 +30,8 @@ class DefaultRouter: NSObject, Router {
     }
 
     func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
-        // Make sure we remove reference to the topViewController completions
-        if let topController = navigationController.topPresentedViewController {
+        // Make sure we remove reference to the presentedViewController completions
+        if let topController = navigationController.presentedViewController {
             completions.removeValue(forKey: topController)
         }
         navigationController.dismiss(animated: animated, completion: completion)
