@@ -666,9 +666,6 @@ class BrowserViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         adjustURLBarHeightBasedOnLocationViewHeight()
-        adjustBottomContainerHeight()
-        zoomPageBar?.changeGradientOpacity(alpha: 1)
-        zoomPageBar?.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
