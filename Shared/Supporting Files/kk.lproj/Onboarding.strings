@@ -20,7 +20,7 @@
 "Onboarding.IntroDescriptionPart2.v114" = "Барлығы үшін жақсырақ Интернет туралы уәдеге берік болады.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v114" = "Қазір емес";
+"Onboarding.LaterAction.v115" = "Аттап кету";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Жалғастыру";
@@ -29,7 +29,7 @@
 "Onboarding.Notification.Description.v114" = "Құрылғылар арасында беттерді жіберіп, %@ мүмкіндіктерін барынша пайдалану туралы кеңестер алыңыз.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v114" = "Қазір емес";
+"Onboarding.Notification.Skip.Action.v115" = "Аттап кету";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "Хабарландырулар %@ көмегімен көбірек жұмыс бітіруге көмектеседі";

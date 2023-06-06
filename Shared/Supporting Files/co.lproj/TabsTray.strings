@@ -1,3 +1,9 @@
+/* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
+"CloseTabsToast.SingleTabTitle.v113" = "Unghjetta chjosa";
+
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Chjode";
+
 /* Button label to sync tabs in your Firefox Account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Sincrunizà l’unghjette";
 

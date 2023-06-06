@@ -6,11 +6,16 @@ import Common
 import Foundation
 import Shared
 
-class SettingsCoordinator: BaseCoordinator {
+protocol SettingsCoordinatorDelegate: AnyObject {
+    func openURLinNewTab(_ url: URL)
+}
+
+class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    weak var parentCoordinator: SettingsCoordinatorDelegate?
 
     init(router: Router,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
@@ -89,5 +94,10 @@ class SettingsCoordinator: BaseCoordinator {
             // FXIOS-6483: For cases that are not yet handled we show the main settings page
             return nil
         }
+    }
+
+    // MARK: - SettingsDelegate
+    func settingsOpenURLInNewTab(_ url: URL) {
+        parentCoordinator?.openURLinNewTab(url)
     }
 }

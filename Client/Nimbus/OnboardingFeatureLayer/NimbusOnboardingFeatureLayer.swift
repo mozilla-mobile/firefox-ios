@@ -5,6 +5,12 @@
 import Shared
 import MozillaAppServices
 
+/// A translation layer for the `onboardingFrameworkFeature.fml`
+///
+/// Responsible for creating a model for onboarding from the information
+/// available in the fml, regardless of experiment. All updates to the
+/// structure of the fml will have to be reflected in this class, especially
+/// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
 
@@ -12,10 +18,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         self.helperUtility = helperUtility
     }
 
-    /// Fetches an ``OnboardingViewModel`` from ``FxNimbus`` configuration.
-    ///
-    /// - Parameter nimbus: The ``FxNimbus/shared`` instance.
-    /// - Returns: An ``OnboardingViewModel`` to be used in the onboarding.
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus = FxNimbus.shared
@@ -31,15 +33,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             isDismissable: framework.dismissable)
     }
 
-    /// Will sort onboarding cards according to specified order in the
-    /// Nimbus configuration. If the names of cards and the names in the card
-    /// order array don't match, these cards will simply not be shown in onboarding.
-    ///
-    /// - Parameters:
-    ///   - cardData: Card data from ``FxNimbus/shared``
-    ///   - cardOrder: Card order from ``FxNimbus/shared``
-    ///   - conditionTable: Condition table from ``FxNimbus/shared``
-    /// - Returns: Card data converted to ``OnboardingCardInfoModel`` and ordered.
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [NimbusOnboardingCardData],
@@ -60,9 +53,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 return nil
             }
             .filter { $0.type == onboardingType }
+            // We have to update the a11yIdRoot using the correct order of the cards
             .enumerated()
             .map { index, card in
-                // We have to update the a11yIdRoot using the correct order of the cards
                 return OnboardingCardInfoModel(
                     name: card.name,
                     title: card.title,
@@ -75,27 +68,20 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             }
     }
 
-    /// Converts ``NimbusOnboardingCardData`` to ``OnboardingCardInfoModel``
-    /// to be used in the onboarding process.
-    ///
-    /// All cards must have valid formats and data. For example, a card with no
-    /// buttons, will be omitted from the returned cards.
-    ///
-    /// For designer's flexibility, the `title` and `body` property are formatted
-    /// with the app's name, in case we need to use localized strings that include
-    /// the app name. Testing accounts for this, ensuring that the string, when
-    /// there is no placeholder, is as expected.
-    ///
-    /// - Parameters
-    ///   - cardData: Card data from ``FxNimbus/shared``
-    ///   - conditionTable: Condition table from ``FxNimbus/shared``
-    /// - Returns: An array of viable ``OnboardingCardInfoModel``
     private func getOnboardingCards(
         from cardData: [NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
+
+        // AppServices' Foreign Function Interface JEXL evaluator is an expensive
+        // function. Therefore, we create a JEXL cache at the top level, to
+        // be reused for each card, because the same conditions may have
+        // already been evaluated, increasing performance.
+        // However, this is unsing an `inout` operator, and that's poor practice.
+        // It will be removed in:
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6572
         var jexlCache = [String: Bool]()
 
         // If `NimbusMessagingHelper` creation fails, we cannot continue with
@@ -126,15 +112,18 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         jexlCache: inout [String: Bool],
         and helper: NimbusMessagingHelperProtocol
     ) -> Bool {
-        // Basically, check if prerequisites are met and if no disqualifers are met
-        return verifyConditionEligibility(from: card.prerequisites,
-                                          checkingAgainst: conditionTable,
-                                          using: &jexlCache,
-                                          and: helper)
-            && !verifyConditionEligibility(from: card.disqualifiers,
-                                           checkingAgainst: conditionTable,
-                                           using: &jexlCache,
-                                           and: helper)
+        let prerequisitesAreMet = verifyConditionEligibility(
+            from: card.prerequisites,
+            checkingAgainst: conditionTable,
+            using: &jexlCache,
+            and: helper)
+        let noDisqualifiersAreMet = !verifyConditionEligibility(
+            from: card.disqualifiers,
+            checkingAgainst: conditionTable,
+            using: &jexlCache,
+            and: helper)
+
+        return prerequisitesAreMet && noDisqualifiersAreMet
     }
 
     private func verifyConditionEligibility(
@@ -165,21 +154,15 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(from cardButtons: NimbusOnboardingButtons) -> OnboardingButtons {
-        var secondButton: OnboardingButtonInfoModel?
-        if let secondary = cardButtons.secondary {
-            secondButton = OnboardingButtonInfoModel(title: secondary.title,
-                                                     action: secondary.action)
-        }
-
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
                 title: cardButtons.primary.title,
                 action: cardButtons.primary.action),
-            secondary: secondButton)
+            secondary: cardButtons.secondary.map {
+                OnboardingButtonInfoModel(title: $0.title, action: $0.action)
+            })
     }
 
-    /// Returns an optional ``OnboardingLinkInfoModel``, if one is provided. This will be
-    /// used by the application in the privacy policy link.
     private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
@@ -188,15 +171,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    /// Translates a nimbus image ID for onboarding to an ``ImageIdentifiers`` based id
-    /// that corresponds to an app resource.
-    ///
-    /// In the case that an unknown image identifier is entered into experimenter, the
-    /// Nimbus will return the default image identifier, in this case,
-    /// ``NimbusOnboardingImages/welcomeGlobe``
-    ///
-    /// - Parameter identifier: The given identifier for an image from ``FxNimbus/shared``
-    /// - Returns: A string to be used as a proper identifier in the onboarding
     private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {
         switch identifier {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106

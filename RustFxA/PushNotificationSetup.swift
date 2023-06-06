@@ -14,16 +14,20 @@ open class PushNotificationSetup {
     /// be unsubscribed from receiving notifications.
     /// - Parameters:
     ///   - deviceToken: A token that identifies the device to Apple Push Notification Service (APNS).
-    ///   - notificationAllowed: Indicates if the user allowed sync push notification in the settings.
-    public func didRegister(withDeviceToken deviceToken: Data, notificationAllowed: Bool) {
-        // If we've already registered this push subscription, we don't need to do it again.
+    public func didRegister(withDeviceToken deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken
-        else { return }
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
-            let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
+            let subscriptionEndpoint = accountManager.deviceConstellation()?.state()?.localDevice?.pushSubscription?.endpoint
+            let persistedApnsToken = keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+            // The only reason we check the existing subscription endpoint is to recover any old devices
+            // that experienced https://github.com/mozilla-mobile/firefox-ios/issues/14467
+            // checking the APNS token is sufficient otherwise
+            if let subscriptionEndpoint = subscriptionEndpoint, !subscriptionEndpoint.isEmpty, persistedApnsToken == apnsToken {
+                return
+            }
+            let config = LegacyPushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
             self.pushClient = PushClientImplementation(endpointURL: config.endpointURL,
                                                        experimentalMode: false)
 
@@ -33,10 +37,9 @@ open class PushNotificationSetup {
 
                 let subscription = pushRegistration.defaultSubscription
 
-                // send empty parameters for push subscription if no notifications should be send to device
-                let endpoint = notificationAllowed ? subscription.endpoint.absoluteString : ""
-                let publicKey = notificationAllowed ? subscription.p256dhPublicKey : ""
-                let authKey = notificationAllowed ? subscription.authKey : ""
+                let endpoint = subscription.endpoint.absoluteString
+                let publicKey = subscription.p256dhPublicKey
+                let authKey = subscription.authKey
 
                 let devicePush = DevicePushSubscription(endpoint: endpoint,
                                                         publicKey: publicKey,
@@ -49,6 +52,22 @@ open class PushNotificationSetup {
                              forKey: KeychainKey.fxaPushRegistration,
                              withAccessibility: .afterFirstUnlock)
             }
+        }
+    }
+
+    /// Disables FxA push notifications for the user
+    public func disableNotifications() {
+        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            let subscriptionEndpoint = accountManager.deviceConstellation()?.state()?.localDevice?.pushSubscription?.endpoint
+            if let subscriptionEndpoint = subscriptionEndpoint, subscriptionEndpoint.isEmpty {
+                // Already disabled, lets quit early
+                return
+            }
+            let devicePush = DevicePushSubscription(endpoint: "",
+                                                    publicKey: "",
+                                                    authKey: "")
+            accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
         }
     }
 
