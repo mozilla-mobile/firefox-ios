@@ -7,6 +7,7 @@ import Glean
 
 protocol GleanWrapper {
     func handleDeeplinkUrl(url: URL)
+    func setUpload(isEnabled: Bool)
     func submitPing()
 }
 
@@ -16,6 +17,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func handleDeeplinkUrl(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
+    }
+    
+    func setUpload(isEnabled: Bool) {
+        Glean.shared.setUploadEnabled(isEnabled)
     }
 
     func submitPing() {
