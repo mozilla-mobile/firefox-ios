@@ -18,7 +18,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     private let titleLabel: UILabel = .build { label in
-        label.text = String(format: String.FirefoxHomepage.Pocket.Footer.Title, PocketAppName.shortName.rawValue)
+        label.text = .FirefoxHomepage.Pocket.Footer.Title
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
