@@ -110,3 +110,6 @@ export-strings.log
 nimbus-fml/
 
 *config.py
+
+# tmp files
+/test-fixtures/tmp/*
