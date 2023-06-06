@@ -108,6 +108,9 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
         descriptionLabel.keyboardType = .default
         descriptionLabel.returnKeyType = .default
         descriptionLabel.isUserInteractionEnabled = false
+        separatorInset = .zero
+        layoutMargins = .zero
+        preservesSuperviewLayoutMargins = false
     }
 
     func configure(viewModel: LoginDetailTableViewCellModel) {
