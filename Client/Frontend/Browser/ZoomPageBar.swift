@@ -238,22 +238,6 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         }
     }
 
-    private func animateGradientOpacity(alpha: Float, duration: TimeInterval) {
-        animation.fromValue = alpha == 1 ? 0 : 1
-        animation.toValue = alpha
-        animation.duration = duration
-        gradient.add(animation, forKey: "opacity")
-    }
-
-    func changeGradientOpacity(alpha: Float, duration: TimeInterval = 0, withAnimation: Bool = false) {
-        if withAnimation {
-            animateGradientOpacity(alpha: alpha, duration: duration)
-        } else {
-            gradient.removeAnimation(forKey: "opacity")
-            gradient.opacity = alpha
-        }
-    }
-
     @objc
     private func didPressZoomIn(_ sender: UIButton) {
         tab.zoomIn()
