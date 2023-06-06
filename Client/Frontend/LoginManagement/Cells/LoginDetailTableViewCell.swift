@@ -92,7 +92,6 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        backgroundColor = .clear
 
         setupLayout()
     }
@@ -169,6 +168,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
         }
 
         descriptionLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer5
     }
 
     // MARK: - Menu Selectors
