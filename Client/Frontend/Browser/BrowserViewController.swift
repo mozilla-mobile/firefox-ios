@@ -1908,6 +1908,11 @@ extension BrowserViewController: SettingsDelegate {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.openURLInNewTab(url, isPrivate: isPrivate)
     }
+
+    func didFinish() {
+        // Does nothing since this is used by Coordinators
+        // BVC will stop being a SettingsDelegate after FXIOS-6529
+    }
 }
 
 extension BrowserViewController: PresentingModalViewControllerDelegate {

@@ -472,6 +472,51 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    func testSettingsRoute_addSettingsCoordinator() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+
+        let result = subject.handle(route: .settings(section: .general))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+    }
+
+    func testPresentedCompletion_callsDidFinishSettings_removesChild() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+
+        let result = subject.handle(route: .settings(section: .general))
+        mockRouter.savedCompletion?()
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testSettingsCoordinatorDelegate_openURLinNewTab() {
+        let expectedURL = URL(string: "www.mozilla.com")!
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.openURLinNewTab(expectedURL)
+
+        XCTAssertEqual(mbvc.openURLInNewTabCount, 1)
+        XCTAssertEqual(mbvc.openURLInNewTabURL, expectedURL)
+    }
+
+    func testSettingsCoordinatorDelegate_didFinishSettings_removesChild() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+
+        let result = subject.handle(route: .settings(section: .general))
+        let settingsCoordinator = subject.childCoordinators[0] as! SettingsCoordinator
+        subject.didFinishSettings(from: settingsCoordinator)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     // MARK: - Sign in route
 
     func testHandleFxaSignIn_returnsTrue() {
@@ -528,14 +573,16 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
+                               file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         wallpaperManager: wallpaperManager)
+                                         wallpaperManager: wallpaperManager,
+                                         isSettingsCoordinatorEnabled: isSettingsCoordinatorEnabled)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

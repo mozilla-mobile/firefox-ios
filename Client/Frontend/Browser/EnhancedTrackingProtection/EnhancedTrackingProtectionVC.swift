@@ -421,13 +421,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 }
 
-// MARK: - PresentingModalViewControllerDelegate
-extension EnhancedTrackingProtectionMenuVC: PresentingModalViewControllerDelegate {
-    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
-        self.dismiss(animated: true, completion: nil)
-    }
-}
-
 // MARK: - Themable
 extension EnhancedTrackingProtectionMenuVC {
     func applyTheme() {

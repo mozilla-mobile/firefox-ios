@@ -93,7 +93,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(switchSettingsValue as! String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
         // Disable ETP from setting and check that it applies to the site
-        app.buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForNoExistence(app.switches.firstMatch)

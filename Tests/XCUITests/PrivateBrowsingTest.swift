@@ -201,7 +201,7 @@ fileprivate extension BaseTestCase {
 
     func enableClosePrivateBrowsingOptionWhenLeaving() {
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
             settingsTableView.swipeUp()
