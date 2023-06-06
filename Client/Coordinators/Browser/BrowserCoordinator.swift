@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 import Shared
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -220,20 +220,26 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func showSettings(with section: Route.SettingsSection) {
-        // FXIOS-6556 - Avoid passing whole BVC to settings
-        let baseSettingsVC = AppSettingsTableViewController(
+        let settingsVC = AppSettingsTableViewController(
             with: profile,
-            and: tabManager,
-            delegate: browserViewController
+            and: tabManager
         )
-        let navigationController = ThemedNavigationController(rootViewController: baseSettingsVC)
+        let navigationController = ThemedNavigationController(rootViewController: settingsVC)
         navigationController.modalPresentationStyle = .formSheet
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        settingsVC.settingsDelegate = settingsCoordinator
+        settingsCoordinator.parentCoordinator = self
+
         add(child: settingsCoordinator)
         router.present(navigationController)
         settingsCoordinator.start(with: section)
+    }
+
+    // MARK: - SettingsCoordinatorDelegate
+    func openURLinNewTab(_ url: URL) {
+        browserViewController.openURLInNewTab(url)
     }
 
     // Will be removed with FXIOS-6529

@@ -4,18 +4,21 @@
 # xcrun simctl get_app_container booted org.mozilla.ios.Fennec
 # - returns Client.app path
 
-SIM_NAME="iPhone-8Plus-tabsArchive" 
-SIM_DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-8"
+SIM_NAME="iPhone-14-tabsArchive" 
+SIM_DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+SIM_RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-16-4"
 URLS="../Client/Assets/topdomains.txt"
-DELAY="3s"
+DELAY="3"
 PATH_TEST_FIXTURES="."
 CMD="xcrun simctl openurl Booted firefox://open-url?url"
 BUILD_DIR="${PATH_TEST_FIXTURES}/tmp"
 BUILD_PATH="${BUILD_DIR}/Build/Products/Fennec-iphonesimulator/Client.app"
 
+TAB_COUNT=${1:-20}
+
 function create_sim() {
     echo "CREATING DEVICE"
-    SIM_DEVICE_ID=`xcrun simctl create ${SIM_NAME} ${SIM_DEVICE_TYPE}`
+    SIM_DEVICE_ID=`xcrun simctl create ${SIM_NAME} ${SIM_DEVICE_TYPE} ${SIM_RUNTIME}`
     echo "SIM_DEVICE_ID: ${SIM_DEVICE_ID}"
 }
 
@@ -35,8 +38,14 @@ function get_device_path () {
 }
 
 function shutdown_sim() {
-    echo "DESTROYING SIM"
+    echo "SHUTDOWN SIM"
+    echo "SIM_DEVICE_ID: ${SIM_DEVICE_ID}"
     xcrun simctl shutdown ${SIM_DEVICE_ID} 
+}
+
+function shutdown_all_sim() {
+   echo "SHUTDOWN ALL SIM" 
+   xcrun simctl shutdown all
 }
 
 function destroy_sim() {
@@ -50,7 +59,8 @@ function boot_sim() {
 }
 
 function build_app() {
-    xcodebuild -scheme Fennec -project ../Client.xcodeproj -sdk iphonesimulator -derivedDataPath ${BUILD_DIR} 
+    echo "BUILD APP"
+    xcodebuild -scheme Fennec_Enterprise_XCUITests -project ../Client.xcodeproj -sdk iphonesimulator -derivedDataPath ${BUILD_DIR} 
 }
 
 function install_app() {
@@ -58,9 +68,16 @@ function install_app() {
     xcrun simctl install ${SIM_DEVICE_ID} ${BUILD_PATH}
 }
 
+function launch_app() {
+    echo "LAUNCH APP"
+    xcrun simctl launch ${SIM_DEVICE_ID} org.mozilla.ios.Fennec "FIREFOX_SKIP_INTRO"
+    xcrun simctl openurl ${SIM_DEVICE_ID} "firefox://open-url?url=https://yahoo.ca"
+    read -p "Please close the dialog on the iOS simulator and all opened tabs *now* 😀. (Press Enter to continue.)" input
+}
+
 function copy_archive() {
     PATH_PROFILE=$(find ${SIM_DEVICE_PATH} . -type d -name "profile.profile")
-    CMD="cp ${PATH_PROFILE}/tabsState.archive ${PATH_TEST_FIXTURES}/tabsState${TAB_COUNT}.archive"
+    CMD="cp ${PATH_PROFILE}/window-data/window-* ${PATH_TEST_FIXTURES}/tabsState${TAB_COUNT}.archive"
     echo "COPY ARCHIVE FILE TO test-fixtures"
     echo "${CMD}"
     eval ${CMD}
@@ -68,8 +85,8 @@ function copy_archive() {
 }
 
 function kill_simulator() {
-    # TODO: kill simulator here
-    CMD="rm ${PATH_PROFILE}/tabsState.archive"
+    echo "KILL SIMULATOR"
+    CMD="rm ${PATH_PROFILE}/window-data/window-*"
     echo ${CMD}
     eval ${CMD}
 }
@@ -82,7 +99,7 @@ function open_tabs() {
     line_count=`wc -l < ${URLS}`
     while read url; do
 	echo "OPEN TAB #${count}: ${url}"
-	eval $(xcrun simctl openurl Booted firefox://open-url?url=https://${url})
+	eval $(xcrun simctl openurl ${SIM_DEVICE_ID} "firefox://open-url?url=https://${url}")
 	n=$((n+1))
         sleep ${DELAY} 
         # if we need to start from the beginning of file, then reset n
@@ -101,7 +118,7 @@ function open_tab_group() {
     # we want to be able to run the tabs on a sim instance, then kill it, reload
     # and run again
     # TODO: figure out how to kill the sim instance
-    read -p "Enter tabsState.archive tab counts (eparated by 'space'): Example: 10 20 30: " input
+    read -p "Enter tabsState.archive tab counts (separated by 'space'): Example: 10 20 30: " input
 
     for i in ${input[@]}
     do
@@ -115,15 +132,17 @@ function open_tab_group() {
     done
 }
 
+# If we have other iOS simulators running, there may be weird behaviours.
+shutdown_all_sim
 create_sim
 boot_sim
 get_device_path
 build_app
 install_app
+launch_app
 # TODO: need to figure out how to do a silent openurl (without prompt)
-#open_tab_group
+# Workaround: Prompt the user to close the dialog before proceeding
+open_tabs
+copy_archive
 shutdown_sim
 destroy_sim
-
-
-

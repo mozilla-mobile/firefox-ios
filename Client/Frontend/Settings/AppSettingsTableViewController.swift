@@ -23,7 +23,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
-         delegate: SettingsDelegate?,
+         delegate: SettingsDelegate? = nil,
          deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
         self.deeplinkTo = destination
 

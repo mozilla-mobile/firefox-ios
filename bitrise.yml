@@ -380,10 +380,30 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
+    - script@1:
+        title: Add default web browser entitlement for Fennec_Enterprise
+        inputs:
+        - content: |-
+            #/usr/bin/env bash
+            set -x
+
+            echo "Adding com.apple.developer.web-browser to entitlements"
+
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecEnterpriseApplication.entitlements
     - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+             #!/usr/bin/env bash
+             set -e
+             set -x
+             cd Client.xcodeproj
+             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
+             cd -
+        title: Set xcodeproj code_sign_identity to iPhone Developer
     - script@1:
         inputs:
         - content: |-
@@ -567,7 +587,13 @@ workflows:
 
             # Manual triggers leave empty commits. 
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
-            FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+
+            if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
+                FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
+            else
+                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+            fi
+
             echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit/PR. Skipping Blacklist check..."
@@ -1348,6 +1374,66 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+  Archive_and_Run_Robo_Test:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-archive@4.7.2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
+    - cache-pull@2.7.2:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+    - script@1:
+        title: Install Google Cloud SDK
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+             
+            if [ -e $HOME/google-cloud-sdk ]; then
+              echo "Google Cloud SDK found, skipping installation..."
+            else
+              echo "Google Cloud SDK not found, installing..."
+              curl https://sdk.cloud.google.com > install.sh
+              bash install.sh --disable-prompts
+              source $HOME/google-cloud-sdk/path.bash.inc
+              gcloud components install beta
+            fi
+    - cache-push@2.7.1:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
+        - compress_archive: "true"
+    - script@1:
+        title: Firebase Test Lab Execution
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e 
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            $HOME/google-cloud-sdk/bin/gcloud version
+            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            $HOME/google-cloud-sdk/bin/gcloud config set project moz-firefox-ios-230118
+            $HOME/google-cloud-sdk/bin/gcloud beta firebase test ios run \
+            --type robo \
+            --app "$BITRISE_IPA_PATH" \
+            --device=model=iphone13pro,version=15.7 \
+            --results-bucket=firefox_ios_test_artifacts \
+            --no-record-video
+
 app:
   envs:
   - opts:
@@ -1361,10 +1447,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '115.0'
+    BITRISE_RELEASE_VERSION: '116.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '115.0'
+    BITRISE_BETA_VERSION: '116.0'
 
 meta:
   bitrise.io:
@@ -1376,7 +1462,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v115
+- push_branch: release/v116
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards

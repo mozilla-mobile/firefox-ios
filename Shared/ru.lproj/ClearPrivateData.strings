@@ -2,7 +2,7 @@
 "Browsing History" = "Журнал посещений";
 
 /* Settings item for clearing the cache */
-"Cache" = "Кэш";
+"Cache" = "Кеш";
 
 /* Settings item for clearing cookies */
 "Cookies" = "Куки";

@@ -1,0 +1,12 @@
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v115" = "Tallenna korttitietosi turvallisesti %@illa, jotta voit maksaa seuraavan kerran aiempaa nopeammin.";
+
+/* This value is used as the title for the Yes button in the remember credit card page */
+"CreditCard.RememberCard.MainButtonTitle.v115" = "Kyllä";
+
+/* This value is used as the title for the remember credit card page */
+"CreditCard.RememberCard.MainTitle.v115" = "Muistetaanko tämä kortti?";
+
+/* This value is used as the title for the Not Now button in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Ei nyt";
+

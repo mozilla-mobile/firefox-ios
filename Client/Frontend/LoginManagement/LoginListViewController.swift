@@ -16,10 +16,6 @@ class LoginListViewController: SensitiveViewController, Themeable {
 
     private let viewModel: LoginListViewModel
 
-    fileprivate lazy var loginSelectionController: LoginListSelectionHelper = {
-        return LoginListSelectionHelper(tableView: self.tableView)
-    }()
-
     fileprivate var loginDataSource: LoginDataSource
     fileprivate let searchController = UISearchController(searchResultsController: nil)
     fileprivate let loadingView: SettingsLoadingView = .build()
@@ -250,7 +246,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
 
     fileprivate func toggleDeleteBarButton() {
         // Show delete bar button item if we have selected any items
-        if loginSelectionController.selectedCount > 0 {
+        if viewModel.listSelectionHelper.numberOfSelectedCells > 0 {
             if navigationItem.rightBarButtonItems == nil {
                 navigationItem.rightBarButtonItems = [deleteButton]
             }
@@ -260,7 +256,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     }
 
     fileprivate func toggleSelectionTitle() {
-        let areAllSelected = loginSelectionController.selectedCount == viewModel.count
+        let areAllSelected = viewModel.listSelectionHelper.numberOfSelectedCells == viewModel.count
         selectionButton.setTitle(areAllSelected ? .LoginListDeselctAll : .LoginListSelctAll, for: [])
     }
 }
@@ -268,6 +264,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
 extension LoginListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text else { return }
+        selectionButton.isHidden = !query.isEmpty
         loadLogins(query)
     }
 }
@@ -337,7 +334,7 @@ private extension LoginListViewController {
     @objc
     func cancelSelection() {
         // Update selection and select all button
-        loginSelectionController.deselectAll()
+        viewModel.listSelectionHelper.removeAllCells()
         toggleSelectionTitle()
         selectionButtonHeightConstraint?.constant = 0
         selectionButton.setTitle(nil, for: [])
@@ -353,8 +350,12 @@ private extension LoginListViewController {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
-                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
-                    self.viewModel.loginAtIndexPath(indexPath)?.id
+                let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
+                    if let loginRecord = self.viewModel.loginAtIndexPath(index),
+                       self.viewModel.listSelectionHelper.isCellSelected(with: loginRecord) {
+                        return loginRecord.id
+                    }
+                    return nil
                 }
 
                 self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
@@ -370,25 +371,18 @@ private extension LoginListViewController {
     @objc
     func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
-        if loginSelectionController.selectedCount < viewModel.count {
-            // Find all unselected indexPaths
-            let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
-                return !loginSelectionController.indexPathIsSelected(indexPath)
+        if viewModel.listSelectionHelper.numberOfSelectedCells < viewModel.count {
+            tableView.allLoginIndexPaths.forEach {
+                let cell = tableView.cellForRow(at: $0) as! LoginListTableViewCell
+                viewModel.listSelectionHelper.setCellSelected(cell)
+                tableView.selectRow(at: $0, animated: false, scrollPosition: .none)
             }
-            loginSelectionController.selectIndexPaths(unselectedPaths)
-            unselectedPaths.forEach { indexPath in
-                self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        } else {
+            tableView.allLoginIndexPaths.forEach {
+                tableView.deselectRow(at: $0, animated: false)
             }
+            viewModel.listSelectionHelper.removeAllCells()
         }
-
-        // If everything has been selected, deselect all
-        else {
-            loginSelectionController.deselectAll()
-            tableView.allLoginIndexPaths.forEach { indexPath in
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }
-        }
-
         toggleSelectionTitle()
         toggleDeleteBarButton()
     }
@@ -434,7 +428,9 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            loginSelectionController.selectIndexPath(indexPath)
+            if let loginRecord = viewModel.loginAtIndexPath(indexPath) {
+                viewModel.listSelectionHelper.setCellSelected(with: loginRecord)
+            }
             toggleSelectionTitle()
             toggleDeleteBarButton()
         } else if let login = viewModel.loginAtIndexPath(indexPath) {
@@ -452,7 +448,9 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            loginSelectionController.deselectIndexPath(indexPath)
+            if let loginRecord = viewModel.loginAtIndexPath(indexPath) {
+                viewModel.listSelectionHelper.removeCell(with: loginRecord)
+            }
             toggleSelectionTitle()
             toggleDeleteBarButton()
         }
@@ -508,13 +506,7 @@ extension LoginListViewController: LoginViewModelDelegate {
         loadingView.isHidden = true
         tableView.reloadData()
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.hasData
-        restoreSelectedRows()
-    }
-
-    func restoreSelectedRows() {
-        for path in self.loginSelectionController.selectedIndexPaths {
-            tableView.selectRow(at: path, animated: false, scrollPosition: .none)
-        }
+        toggleSelectionTitle()
     }
 }
 
