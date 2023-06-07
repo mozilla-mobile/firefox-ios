@@ -78,7 +78,6 @@ enum Route: Equatable {
         case mailto
         case newTab = "newtab"
         case search
-        case systemDefaultBrowser = "system-default-browser"
         case tabs
         case theme
         case toolbar
