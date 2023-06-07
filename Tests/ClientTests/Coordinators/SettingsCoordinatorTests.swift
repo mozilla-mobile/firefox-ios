@@ -125,6 +125,51 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is WallpaperSettingsViewController)
     }
 
+    func testContentBlockerSettingsRoute_showsContentBlockerSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .contentBlocker)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ContentBlockerSettingViewController)
+    }
+
+    func testTabsSettingsRoute_showsTabsSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .tabs)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
+    }
+
+    func testToolbarSettingsRoute_showsToolbarSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .toolbar)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchBarSettingsViewController)
+    }
+
+    func testTopSitesSettingsRoute_showsTopSitesSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .topSites)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TopSitesSettingsViewController)
+    }
+
+    func testCreditCardSettingsRoute_showsGeneralSettingsPageForNow() throws {
+        let subject = createSubject()
+
+        subject.start(with: .creditCard)
+
+        XCTAssertEqual(mockRouter.pushCalled, 0)
+        XCTAssertNil(mockRouter.pushedViewController)
+    }
+
     // MARK: - Delegate
     func testParentCoordinatorDelegate_calledWithURL() {
         let subject = createSubject()
