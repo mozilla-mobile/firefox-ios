@@ -178,7 +178,7 @@ open class SwiftData {
 
         let work = DispatchWorkItem { doWork() }
         deferred.dispatchWorkItem = work
-        queue.sync(execute: work)
+        queue.async(execute: work)
 
         return deferred
     }
@@ -197,7 +197,7 @@ open class SwiftData {
     /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
-        primaryConnectionQueue.sync {
+        primaryConnectionQueue.async {
             guard !self.closed else { return }
             self.closed = true
 
@@ -213,7 +213,7 @@ open class SwiftData {
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
-        primaryConnectionQueue.sync {
+        primaryConnectionQueue.async {
             guard self.closed else { return }
             self.closed = false
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
