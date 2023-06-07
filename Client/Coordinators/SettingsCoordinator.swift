@@ -87,9 +87,27 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
                 return nil
             }
 
-        default:
-            // FXIOS-6483: For cases that are not yet handled we show the main settings page
+        case .contentBlocker:
+            let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs)
+            contentBlockerVC.tabManager = tabManager
+            return contentBlockerVC
+
+        case .creditCard:
+            // FXIOS-6612 Handle credit card settings page in coordinator
             return nil
+
+        case .tabs:
+            return TabsSettingsViewController()
+
+        case .toolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            return SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .topSites:
+            return TopSitesSettingsViewController()
+
+        case .general:
+            return nil // Return nil since we're already at the general page
         }
     }
 
