@@ -327,7 +327,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             }
 
         default:
-            // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
             return nil
         }
     }
