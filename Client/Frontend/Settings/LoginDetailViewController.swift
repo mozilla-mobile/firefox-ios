@@ -276,7 +276,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableView.automaticDimension }
+        guard viewModel.cellType(atIndexPath: indexPath) != nil else { return UITableView.automaticDimension }
         return UITableView.automaticDimension
     }
 }
