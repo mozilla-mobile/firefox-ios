@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import Storage
 import MozillaAppServices
 
 public protocol AutopushProtocol {
@@ -49,8 +50,13 @@ public protocol AutopushProtocol {
 public actor Autopush {
     private let pushManager: PushManagerProtocol
 
-    public init(dbPath: String) async throws {
-        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: dbPath)
+    public init(files: FileAccessor) async throws {
+        let pushDB = URL(
+            fileURLWithPath: try files.getAndEnsureDirectory(),
+            isDirectory: true
+        ).appendingPathComponent("push.db").path
+
+        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: pushDB)
         self.pushManager = try PushManager(config: pushManagerConfig)
     }
 
