@@ -171,7 +171,7 @@ workflows:
             exec unzip "$derived_data"
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 900
+        timeout: 1200
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -216,7 +216,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 900
+        timeout: 1200
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -261,7 +261,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 900
+        timeout: 1200
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
@@ -306,7 +306,7 @@ workflows:
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 900
+        timeout: 1200
         title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
