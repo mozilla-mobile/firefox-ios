@@ -11,9 +11,6 @@ import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
-private var ShowDebugSettings = false
-private var DebugSettingsClickCount: Int = 0
-
 struct SettingDisclosureUtility {
     static func buildDisclosureIndicator(theme: Theme) -> UIImageView {
         let disclosureIndicator = UIImageView()
@@ -391,319 +388,17 @@ class AccountStatusSetting: WithAccountSetting {
     }
 }
 
-// MARK: - Hidden Settings
-/// Used for only for debugging purposes. These settings are hidden behind a
-/// 5-tap gesture on the Firefox version cell in the Settings Menu
-class HiddenSetting: Setting {
-    unowned let settings: SettingsTableViewController
-
-    init(settings: SettingsTableViewController) {
-        self.settings = settings
-        super.init(title: nil)
-    }
-
-    override var hidden: Bool {
-        return !ShowDebugSettings
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class DeleteExportedDataSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        // Not localized for now.
-        return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let fileManager = FileManager.default
-        do {
-            let files = try fileManager.contentsOfDirectory(atPath: documentsPath)
-            for file in files {
-                if file.hasPrefix("browser.") || file.hasPrefix("logins.") {
-                    try fileManager.removeItemInDirectory(documentsPath, named: file)
-                }
-            }
-        } catch {}
-    }
-}
-
-class ExportBrowserDataSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        // Not localized for now.
-        return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        do {
-            try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
-                return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
-            }
-        } catch {}
-    }
-}
-
-class ExportLogDataSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        // Not localized for now.
-        return NSAttributedString(string: "Debug: copy log files to app container", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        DefaultLogger.shared.copyLogsToDocuments()
-    }
-}
-
-/*
- FeatureSwitchSetting is a boolean switch for features that are enabled via a FeatureSwitch.
- These are usually features behind a partial release and not features released to the entire population.
- */
-class FeatureSwitchSetting: BoolSetting {
-    let featureSwitch: FeatureSwitch
-    let prefs: Prefs
-
-    init(prefs: Prefs, featureSwitch: FeatureSwitch, with title: NSAttributedString) {
-        self.featureSwitch = featureSwitch
-        self.prefs = prefs
-        super.init(prefs: prefs, defaultValue: featureSwitch.isMember(prefs), attributedTitleText: title)
-    }
-
-    override var hidden: Bool {
-        return !ShowDebugSettings
-    }
-
-    override func displayBool(_ control: UISwitch) {
-        control.isOn = featureSwitch.isMember(prefs)
-    }
-
-    override func writeBool(_ control: UISwitch) {
-        self.featureSwitch.setMembership(control.isOn, for: self.prefs)
-    }
-}
-
-class ForceCrashSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "💥 Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        fatalError("Force crash")
-    }
-}
-
-class AppReviewPromptSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "⭐️ Debug: App Review (needs tab switch)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        UserDefaults.standard.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
-        updateCell(navigationController)
-    }
-}
-
-class ChangeToChinaSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
-            UserDefaults.standard.removeObject(forKey: AppInfo.debugPrefIsChinaEdition)
-        } else {
-            UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
-        }
-    }
-}
-
-class FasterInactiveTabs: HiddenSetting {
-    override var title: NSAttributedString? {
-        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
-        let buttonTitle = isFasterEnabled ? "Debug: Set Inactive Tab Timeout to Default" : "Debug: Set Inactive Tab Timeout to 10s"
-        return NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
-        UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
-        updateCell(navigationController)
-    }
-}
-
-class SlowTheDatabase: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        debugSimulateSlowDBOperations = !debugSimulateSlowDBOperations
-    }
-}
-
-class ForgetSyncAuthStateDebugSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Debug: forget Sync auth state",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.rustFxA.syncAuthState.invalidate()
-        settings.tableView.reloadData()
-    }
-}
-
-class SentryIDSetting: HiddenSetting {
-    let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
-    override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Sentry ID: \(deviceAppHash)",
-            attributes: [
-                NSAttributedString.Key.foregroundColor: theme.colors.textPrimary,
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        copyAppDeviceIDAndPresentAlert(by: navigationController)
-    }
-
-    func copyAppDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
-        let alertTitle: String = .SettingsCopyAppVersionAlertTitle
-        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
-        getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
-        UIPasteboard.general.string = deviceAppHash
-        navigationController?.topViewController?.present(alert, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                alert.dismiss(animated: true)
-            }
-        }
-    }
-
-    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
-        return tableView?.cellForRow(at: indexPath)
-    }
-}
-
-class ExperimentsSettings: HiddenSetting {
-    override var title: NSAttributedString? { return NSAttributedString(string: "Experiments")}
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(ExperimentsViewController(), animated: true)
-    }
-}
-
-class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
-        featureFlags.set(feature: .pullToRefresh, to: newStatus)
-        updateCell(navigationController)
-    }
-}
-
-class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
-    override var title: NSAttributedString? {
-        let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "SEEN" : "UNSEEN"
-        return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
-                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        UserDefaults.standard.set(false, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        updateCell(navigationController)
-    }
-}
-
-class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
-        featureFlags.set(feature: .inactiveTabs, to: newStatus)
-        InactiveTabModel.hasRunInactiveTabFeatureBefore = false
-        updateCell(navigationController)
-    }
-}
-
-class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
-        return NSAttributedString(
-            string: "Toggle history groups \(toNewStatus)",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
-        featureFlags.set(feature: .historyGroups, to: newStatus)
-        updateCell(navigationController)
-    }
-}
-
-class ResetContextualHints: HiddenSetting {
-    let profile: Profile
-
-    override var accessibilityIdentifier: String? { return "ResetContextualHints.Setting" }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Reset all contextual hints",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(settings: settings)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        PrefsKeys.ContextualHints.allCases.forEach {
-            self.profile.prefs.removeObjectForKey($0.rawValue)
-        }
-    }
-}
-
-class OpenFiftyTabsDebugOption: HiddenSetting {
-    override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "⚠️ Open 50 `mozilla.org` tabs ⚠️", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        guard let url = URL(string: "https://www.mozilla.org") else { return }
-
-        let object = OpenTabNotificationObject(type: .debugOption(50, url))
-        NotificationCenter.default.post(name: .OpenTabNotification, object: object)
-    }
-}
-
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
     override var accessibilityIdentifier: String? { return "FxVersion" }
+    weak var appSettingsDelegate: AppSettingsDelegate?
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         appSettingsDelegate: AppSettingsDelegate) {
         self.settings = settings
+        self.appSettingsDelegate = appSettingsDelegate
         super.init(title: nil)
     }
 
@@ -716,12 +411,7 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        DebugSettingsClickCount += 1
-        if DebugSettingsClickCount >= 5 {
-            DebugSettingsClickCount = 0
-            ShowDebugSettings = !ShowDebugSettings
-            settings.tableView.reloadData()
-        }
+        appSettingsDelegate?.clickedVersion()
     }
 
     override func onLongPress(_ navigationController: UINavigationController?) {
@@ -1393,33 +1083,6 @@ class OpenWithSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
         navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-class AdvancedAccountSetting: HiddenSetting {
-    let profile: Profile
-
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
-
-    override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(settings: settings)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvancedAccountSettingViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-
-    override var hidden: Bool {
-        return !ShowDebugSettings || profile.hasAccount()
     }
 }
 

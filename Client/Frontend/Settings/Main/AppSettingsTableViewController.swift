@@ -15,10 +15,16 @@ enum AppSettingsDeeplinkOption {
     case wallpaper
 }
 
+protocol AppSettingsDelegate: AnyObject {
+    func clickedVersion()
+}
+
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?
+    private var showDebugSettings = false
+    private var debugSettingsClickCount: Int = 0
 
     // MARK: - Initializers
     init(with profile: Profile,
@@ -152,9 +158,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ChinaSyncServiceSetting(settings: self)
             ]
         }
-        // There is nothing to show in the Customize section if we don't include the compact tab layout
-        // setting on iPad. When more options are added that work on both device types, this logic can
-        // be changed.
 
         generalSettings += [
             BoolSetting(
@@ -180,7 +183,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvancedAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self, isHidden: showDebugSettings),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
@@ -216,38 +219,51 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             PrivacyPolicySetting()
         ]
 
+        let supportSettings = [
+            ShowIntroductionSetting(settings: self),
+            SendFeedbackSetting(),
+            SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
+            StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
+            OpenSupportPageSetting(delegate: settingsDelegate, theme: themeManager.currentTheme),
+        ]
+
+        let aboutSettings = [
+            AppStoreReviewSetting(),
+            VersionSetting(settings: self, appSettingsDelegate: self),
+            LicenseAndAcknowledgementsSetting(),
+            YourRightsSetting()
+        ]
+
         settings += [
             SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
-            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
-                ShowIntroductionSetting(settings: self),
-                SendFeedbackSetting(),
-                SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
-                StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
-                OpenSupportPageSetting(delegate: settingsDelegate, theme: themeManager.currentTheme),
-            ]),
-            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
-                AppStoreReviewSetting(),
-                VersionSetting(settings: self),
-                LicenseAndAcknowledgementsSetting(),
-                YourRightsSetting(),
-                ExportBrowserDataSetting(settings: self),
+            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: supportSettings),
+            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: aboutSettings)
+        ]
+
+        if showDebugSettings {
+            let hiddenDebugOptions = [
+                ExperimentsSettings(settings: self),
                 ExportLogDataSetting(settings: self),
+                ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 ForceCrashSetting(settings: self),
-                SlowTheDatabase(settings: self),
                 ForgetSyncAuthStateDebugSetting(settings: self),
-                SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
+                AppReviewPromptSetting(settings: self),
                 TogglePullToRefresh(settings: self),
-                ResetWallpaperOnboardingPage(settings: self),
-                ToggleInactiveTabs(settings: self),
                 ToggleHistoryGroups(settings: self),
+                ToggleInactiveTabs(settings: self),
                 ResetContextualHints(settings: self),
-                OpenFiftyTabsDebugOption(settings: self),
-                ExperimentsSettings(settings: self),
+                ResetWallpaperOnboardingPage(settings: self),
+                SentryIDSetting(settings: self),
                 FasterInactiveTabs(settings: self),
-                AppReviewPromptSetting(settings: self)
-            ])]
+                OpenFiftyTabsDebugOption(settings: self),
+            ]
+
+            settings += [
+                SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)
+            ]
+        }
 
         return settings
     }
@@ -255,6 +271,18 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
         return headerView
+    }
+
+    // MARK: AppSettingsDelegate
+
+    func clickedVersion() {
+        debugSettingsClickCount += 1
+        if debugSettingsClickCount >= 5 {
+            debugSettingsClickCount = 0
+            showDebugSettings = !showDebugSettings
+            settings = generateSettings()
+            tableView.reloadData()
+        }
     }
 }
 

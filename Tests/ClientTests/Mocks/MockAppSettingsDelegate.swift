@@ -3,5 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+@testable import Client
 
-public var debugSimulateSlowDBOperations = false
+class MockAppSettingsDelegate: AppSettingsDelegate {
+    var clickedVersionCalled = 0
+
+    func clickedVersion() {
+        clickedVersionCalled += 1
+    }
+}
