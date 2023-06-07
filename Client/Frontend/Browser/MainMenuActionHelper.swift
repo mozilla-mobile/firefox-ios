@@ -25,6 +25,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
+    func showCreditCardSettings()
 }
 
 enum MenuButtonToastAction {

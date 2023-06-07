@@ -238,6 +238,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         showSettingsWithDeeplink(to: .wallpaper)
     }
 
+    func showCreditCardSettings() {
+        showSettingsWithDeeplink(to: .creditCard)
+    }
+
     func showZoomPage(tab: Tab) {
         updateZoomPageBarVisibility(visible: true)
     }
