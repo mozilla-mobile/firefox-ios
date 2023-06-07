@@ -13,6 +13,7 @@ enum AppSettingsDeeplinkOption {
     case customizeToolbar
     case customizeTopSites
     case wallpaper
+    case creditCard
 }
 
 protocol AppSettingsDelegate: AnyObject {
@@ -25,13 +26,16 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     var deeplinkTo: AppSettingsDeeplinkOption?
     private var showDebugSettings = false
     private var debugSettingsClickCount: Int = 0
+    private var appAuthenticator: AppAuthenticationProtocol
 
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
          delegate: SettingsDelegate? = nil,
-         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.deeplinkTo = destination
+        self.appAuthenticator = appAuthenticator
 
         super.init()
         self.profile = profile
@@ -103,6 +107,28 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             }
             return
 
+        case .creditCard:
+            let viewModel = CreditCardSettingsViewModel(profile: profile)
+            let viewController = CreditCardSettingsViewController(
+                creditCardViewModel: viewModel)
+            guard let navController = navigationController else { return }
+            if appAuthenticator.canAuthenticateDeviceOwner() {
+                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
+                    switch result {
+                    case .success:
+                        navController.pushViewController(viewController,
+                                                         animated: true)
+                    case .failure:
+                        viewController.dismissVC()
+                    }
+                }
+            } else {
+                let passcodeViewController = DevicePasscodeRequiredViewController()
+                passcodeViewController.profile = profile
+                navController.pushViewController(passcodeViewController,
+                                                 animated: true)
+            }
+            return
         case .customizeTopSites:
             viewController = TopSitesSettingsViewController()
         }
