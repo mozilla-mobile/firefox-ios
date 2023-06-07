@@ -172,6 +172,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     }
 
     private func showToast(status: CreditCardModifiedStatus) {
+        guard status != .none else { return }
         SimpleToast().showAlertWithText(status.message,
                                         bottomContainer: view,
                                         theme: themeManager.currentTheme)

@@ -191,11 +191,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
-
         if autofillCreditCardStatus {
             privacySettings.append(AutofillCreditCardSettings(settings: self))
         }
+
+        privacySettings.append(ClearPrivateDataSetting(settings: self))
 
         privacySettings += [
             BoolSetting(prefs: prefs,
