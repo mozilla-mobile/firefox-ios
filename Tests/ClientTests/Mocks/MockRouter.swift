@@ -16,6 +16,7 @@ class MockRouter: NSObject, Router {
     var pushCalled = 0
     var popViewControllerCalled = 0
     var setRootViewControllerCalled = 0
+    var savedCompletion: (() -> Void)?
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
@@ -23,15 +24,18 @@ class MockRouter: NSObject, Router {
     }
 
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        savedCompletion = completion
         presentedViewController = viewController
         presentCalled += 1
     }
 
     func dismiss(animated: Bool, completion: (() -> Void)?) {
+        savedCompletion = completion
         dismissCalled += 1
     }
 
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        savedCompletion = completion
         pushedViewController = viewController
         pushCalled += 1
     }

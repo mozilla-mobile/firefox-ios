@@ -42,20 +42,29 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         super.viewDidLoad()
 
         navigationItem.title = String.AppSettingsTitle
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: .AppSettingsDone,
-            style: .done,
-            target: navigationController,
-            action: #selector((navigationController as! ThemedNavigationController).done))
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: self,
+                action: #selector(done))
+        } else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: navigationController,
+                action: #selector((navigationController as! ThemedNavigationController).done))
+        }
 
-        tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
-
-        // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
-        // display name, etc.
-        // profile.rustAccount.refreshProfile()
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = AccessibilityIdentifiers.Settings.navigationBarItem
+        tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.tableViewController
 
         checkForDeeplinkSetting()
+    }
+
+    @objc
+    private func done() {
+        settingsDelegate?.didFinish()
     }
 
     private func checkForDeeplinkSetting() {

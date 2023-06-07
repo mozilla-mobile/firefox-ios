@@ -49,9 +49,8 @@ jobs:
 
           ### PULL REQUESTS ###
           # Idle number of days before marking PRs stale
-          # We need to review PRs faster than 1 month. If there's no action on a PR for a month
-          # we should close it.
-          days-before-pr-stale: 30
+          # We need to review PRs faster than 2 weeks. If there's no action on a PR for this period of time we should close it.
+          days-before-pr-stale: 15
 
           # Idle number of days before closing stale PRs
           days-before-pr-close: 7

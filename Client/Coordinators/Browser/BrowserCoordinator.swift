@@ -19,6 +19,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
+    private let isSettingsCoordinatorEnabled: Bool
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -27,7 +28,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+         isSettingsCoordinatorEnabled: Bool = CoordinatorFlagManager.isSettingsCoordinatorEnabled) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -36,6 +38,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager
+        self.isSettingsCoordinatorEnabled = isSettingsCoordinatorEnabled
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -143,8 +146,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return true
 
         case let .settings(section):
-            // 'Else' will be removed with FXIOS-6529
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            // 'Else' case will be removed with FXIOS-6529
+            if isSettingsCoordinatorEnabled {
                 showSettings(with: section)
             } else {
                 handle(settingsSection: section)
@@ -233,7 +236,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         settingsCoordinator.parentCoordinator = self
 
         add(child: settingsCoordinator)
-        router.present(navigationController)
+        router.present(navigationController) { [weak self] in
+            self?.didFinishSettings(from: settingsCoordinator)
+        }
         settingsCoordinator.start(with: section)
     }
 
@@ -242,7 +247,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.openURLInNewTab(url)
     }
 
-    // Will be removed with FXIOS-6529
+    func didFinishSettings(from coordinator: SettingsCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
+
+    // MARK: - To be removed with FXIOS-6529
     private func handle(settingsSection: Route.SettingsSection) {
         let baseSettingsVC = AppSettingsTableViewController(
             with: profile,

@@ -179,6 +179,7 @@ public struct AccessibilityIdentifiers {
 
     struct Settings {
         static let tableViewController = "AppSettingsTableViewController.tableView"
+        static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
         struct Homepage {
             static let homeSettings = "Home"
