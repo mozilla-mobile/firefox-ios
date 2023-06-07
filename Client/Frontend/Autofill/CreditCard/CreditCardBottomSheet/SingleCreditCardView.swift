@@ -33,6 +33,10 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     var themeObserver: NSObjectProtocol?
     private var viewModel: SingleCreditCardViewModel
 
+    var didTapNotNowClosure: (() -> Void)?
+    var didTapYesClosure: ((Error?) -> Void)?
+    var didTapManageCardsClosure: (() -> Void)?
+
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
     private lazy var cardTableView: UITableView = {
@@ -202,6 +206,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             // error is logged in the view model, but maybe we want to show an error message
             DispatchQueue.main.async { [weak self] in
                 self?.dismissVC()
+                self?.didTapYesClosure?(error)
             }
         }
     }
@@ -209,11 +214,13 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     @objc
     private func didTapNotNow() {
         dismissVC()
+        didTapNotNowClosure?()
     }
 
     @objc
     private func didTapManageCards() {
         dismissVC()
+        didTapManageCardsClosure?()
     }
 
     // MARK: BottomSheet Delegate
@@ -233,11 +240,11 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
 
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
+              let creditCard = viewModel.state == .save ? viewModel.decryptedCreditCard?.toFakeCreditCard() : viewModel.creditCard else {
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let creditCard = viewModel.creditCard
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)

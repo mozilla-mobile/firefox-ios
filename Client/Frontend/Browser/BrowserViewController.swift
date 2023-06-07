@@ -1983,12 +1983,19 @@ extension BrowserViewController: LegacyTabDelegate {
 
             creditCardHelper.foundFieldValues = { fieldValues in
                 guard let tabWebView = tab.webView as? TabWebView else { return }
-
+                var viewType: SingleCreditCardViewState = .save
                 tabWebView.accessoryView.reloadViewFor(.creditCard)
                 tabWebView.reloadInputViews()
 
-                // stub. Action will be to present a half sheet, ref: FXIOS-6111
-                tabWebView.accessoryView.savedCardsClosure = { }
+                self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) { existingCard, error in
+                    if existingCard != nil {
+                        // should update if it's different
+                        if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
+                            viewType = .update
+                        }
+                    }
+                    tabWebView.accessoryView.savedCardsClosure = { self.showSingleCardViewController(creditCard: existingCard, decryptedCard: fieldValues, viewType: viewType) }
+                }
             }
         }
 
@@ -2563,6 +2570,29 @@ extension BrowserViewController {
     @objc
     func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    public func showSingleCardViewController(creditCard: CreditCard?, decryptedCard: UnencryptedCreditCardFields?, viewType state: SingleCreditCardViewState) {
+        let creditCardControllerViewModel = SingleCreditCardViewModel(profile: profile, creditCard: creditCard, decryptedCreditCard: decryptedCard, state: state)
+
+        let viewController = SingleCreditCardViewController(viewModel: creditCardControllerViewModel)
+        viewController.didTapYesClosure = { error in
+            // perform actions after didTapYes() is called
+            // handle error if needed
+        }
+        viewController.didTapNotNowClosure = {
+            // perform actions after didTapNotNow() is called
+        }
+        viewController.didTapManageCardsClosure = {
+            // perform actions after didTapManageCards() is called
+        }
+        var bottomSheetViewModel = BottomSheetViewModel()
+        bottomSheetViewModel.shouldDismissForTapOutside = false
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController
+        )
+        self.present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 
