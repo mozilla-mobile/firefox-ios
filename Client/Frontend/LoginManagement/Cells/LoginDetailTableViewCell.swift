@@ -132,8 +132,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     }
 
     private func setupLayout() {
-        labelContainer.addSubview(highlightedLabel)
-        labelContainer.addSubview(descriptionLabel)
+        labelContainer.addSubviews(highlightedLabel, descriptionLabel)
         contentView.addSubview(labelContainer)
 
         NSLayoutConstraint.activate([
