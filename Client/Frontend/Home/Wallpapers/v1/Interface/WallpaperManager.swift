@@ -22,7 +22,6 @@ protocol WallpaperManagerInterface {
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
     func checkForUpdates()
-    func migrateLegacyAssets()
 }
 
 /// The primary interface for the wallpaper feature.
@@ -194,11 +193,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
             // actually changed
             await thumbnailUtility.fetchAndVerifyThumbnails(for: getAvailableCollections(filtering: .none))
         }
-    }
-
-    public func migrateLegacyAssets() {
-        let migrationUtility = WallpaperMigrationUtility()
-        migrationUtility.migrateExistingAssetWithoutMetadata()
     }
 
     // MARK: - Helper functions

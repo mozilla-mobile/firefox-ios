@@ -88,25 +88,6 @@ public struct PrefsKeys {
         public static let TopSiteSection = "TopSitesUserPrefsKey"
     }
 
-    public struct LegacyFeatureFlags {
-        public static let ASPocketStories = "ASPocketStoriesVisible"
-        public static let CustomWallpaper = "customWallpaperPrefKey"
-        public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
-        public static let HistoryGroups = "historyGroupsEnabled"
-        public static let InactiveTabs = "KeyInactiveTabs"
-        public static let JumpBackInSection = "jumpBackInSectionEnabled"
-        public static let PullToRefresh = "pullToRefresh"
-        public static let RecentlySavedSection = "recentlySavedSectionEnabled"
-        public static let KeySearchBarPosition = "SearchBarPosition"
-        public static let StartAtHome = "startAtHome"
-        public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
-        public static let SponsoredShortcuts = "sponsoredShortcutsKey"
-        public static let TopSiteSection = "topSitesKey"
-
-        public static let MigrationCheck = "MigrationCheck"
-        public static let WallpaperDirectoryMigrationCheck = "WallpaperDirectoryMigrationCheck"
-    }
-
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
         case jumpBackinKey = "ContextualHintJumpBackin"
