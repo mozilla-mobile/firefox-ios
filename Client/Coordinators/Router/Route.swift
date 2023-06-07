@@ -69,20 +69,21 @@ enum Route: Equatable {
 
     /// An enumeration representing different sections of the settings menu.
     enum SettingsSection: String, CaseIterable, Equatable {
+        case contentBlocker
         case clearPrivateData = "clear-private-data"
-        case newTab = "newtab"
+        case creditCard
+        case fxa
+        case general
         case homePage = "homepage"
         case mailto
+        case newTab = "newtab"
         case search
-        case fxa
         case systemDefaultBrowser = "system-default-browser"
-        case wallpaper
-        case theme
-        case contentBlocker
-        case toolbar
         case tabs
+        case theme
+        case toolbar
         case topSites
-        case general
+        case wallpaper
     }
 
     /// An enumeration representing different actions that can be performed within the application.

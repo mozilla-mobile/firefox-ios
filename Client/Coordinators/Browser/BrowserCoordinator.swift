@@ -121,6 +121,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
+    func show(settings: Route.SettingsSection) {
+        showSettings(with: settings)
+    }
+
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
