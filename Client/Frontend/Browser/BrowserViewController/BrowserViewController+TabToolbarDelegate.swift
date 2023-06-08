@@ -231,15 +231,27 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showCustomizeHomePage() {
-        showSettingsWithDeeplink(to: .customizeHomepage)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            browserDelegate?.show(settings: .homePage)
+        } else {
+            showSettingsWithDeeplink(to: .customizeHomepage)
+        }
     }
 
     func showWallpaperSettings() {
-        showSettingsWithDeeplink(to: .wallpaper)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            browserDelegate?.show(settings: .wallpaper)
+        } else {
+            showSettingsWithDeeplink(to: .wallpaper)
+        }
     }
 
     func showCreditCardSettings() {
-        showSettingsWithDeeplink(to: .creditCard)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            browserDelegate?.show(settings: .creditCard)
+        } else {
+            showSettingsWithDeeplink(to: .creditCard)
+        }
     }
 
     func showZoomPage(tab: Tab) {

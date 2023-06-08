@@ -1842,6 +1842,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // Will be clean up with FXIOS-6529
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController(
             with: profile,
@@ -2195,7 +2196,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        showSettingsWithDeeplink(to: settingsPage)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            let route = settingsPage.getSettingsRoute()
+            browserDelegate?.show(settings: route)
+        } else {
+            showSettingsWithDeeplink(to: settingsPage)
+        }
     }
 }
 
@@ -2852,7 +2858,11 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidRequestTabsSettings() {
-        showSettingsWithDeeplink(to: .customizeTabs)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            browserDelegate?.show(settings: .tabs)
+        } else {
+            showSettingsWithDeeplink(to: .customizeTabs)
+        }
     }
 }
 
