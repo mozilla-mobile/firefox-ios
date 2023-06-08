@@ -1758,18 +1758,11 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider {
     @objc
     func openSettings() {
         ensureMainThread { [self] in
-            if let presentedViewController = self.presentedViewController {
-                presentedViewController.dismiss(animated: true, completion: nil)
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                self.navigationHandler?.show(settings: .general)
+            } else {
+                self.legacyShowSettings(deeplink: nil)
             }
-
-            let settingsTableViewController = AppSettingsTableViewController(
-                with: profile,
-                and: tabManager,
-                delegate: self)
-
-            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            controller.presentingModalViewControllerDelegate = self
-            self.present(controller, animated: true, completion: nil)
         }
     }
 
