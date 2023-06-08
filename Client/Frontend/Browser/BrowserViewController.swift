@@ -44,6 +44,8 @@ class BrowserViewController: UIViewController {
     ]
 
     weak var browserDelegate: BrowserDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
+
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -2198,7 +2200,7 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             let route = settingsPage.getSettingsRoute()
-            browserDelegate?.show(settings: route)
+            navigationHandler?.show(settings: route)
         } else {
             showSettingsWithDeeplink(to: settingsPage)
         }
@@ -2859,7 +2861,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidRequestTabsSettings() {
         if CoordinatorFlagManager.isCoordinatorEnabled {
-            browserDelegate?.show(settings: .tabs)
+            navigationHandler?.show(settings: .tabs)
         } else {
             showSettingsWithDeeplink(to: .customizeTabs)
         }

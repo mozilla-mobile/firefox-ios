@@ -22,8 +22,4 @@ protocol BrowserDelegate: AnyObject {
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
     func show(webView: WKWebView)
-
-    /// Asks to show a settings page, can be a general settings page or a child page
-    /// - Parameter settings: The settings route we're trying to get to
-    func show(settings: Route.SettingsSection)
 }
