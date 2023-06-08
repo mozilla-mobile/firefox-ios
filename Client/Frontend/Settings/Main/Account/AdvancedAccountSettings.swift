@@ -4,6 +4,7 @@
 
 import Foundation
 
+// Shown only when debug menu is active
 class AdvancedAccountSetting: HiddenSetting {
     let profile: Profile
     private let isHidden: Bool

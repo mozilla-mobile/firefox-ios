@@ -121,6 +121,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
+    func show(settings: Route.SettingsSection) {
+        showSettings(with: settings)
+    }
+
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
@@ -323,7 +327,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             }
 
         default:
-            // For cases that are not yet handled we show the main settings page, more to come with FXIOS-6274
             return nil
         }
     }

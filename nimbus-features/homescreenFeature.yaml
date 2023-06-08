@@ -51,9 +51,6 @@ features:
             "status": true,
             "max-number-of-tiles": 2
           },
-          "wallpaper-feature": {
-            "status": true
-          },
           "pocket-sponsored-stories": true,
           "jump-back-in-synced-tab": true
         }
@@ -69,9 +66,6 @@ features:
           "sponsored-tiles": {
             "status": true,
             "max-number-of-tiles": 1
-          },
-          "wallpaper-feature": {
-            "status": true
           },
           "pocket-sponsored-stories": false,
           "jump-back-in-synced-tab": true

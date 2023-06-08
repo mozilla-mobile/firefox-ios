@@ -161,6 +161,19 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
 
+    // MARK: - Show settings
+
+    func testShowSettings() throws {
+        let subject = createSubject()
+        subject.show(settings: .general)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? ThemedNavigationController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is AppSettingsTableViewController)
+    }
+
     // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {
