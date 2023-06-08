@@ -18,11 +18,9 @@ struct DefaultGleanWrapper: GleanWrapper {
     func handleDeeplinkUrl(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
     }
-    
     func setUpload(isEnabled: Bool) {
         Glean.shared.setUploadEnabled(isEnabled)
     }
-    
     func submitPing() {
         GleanMetrics.Pings.shared.firstSession.submit()
     }
