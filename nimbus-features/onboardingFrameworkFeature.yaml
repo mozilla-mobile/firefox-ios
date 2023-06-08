@@ -246,6 +246,15 @@ enums:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:
+      welcome-globe-cdt:
+        description: >
+          Corresponding to the fox world image for CTD
+      notifications-cdt:
+        description: >
+          Corresponding to the notifications image for CTD
+      sync-devices-cdt:
+        description: >
+          Corresponding to the sync image for CTD
       welcome-globe:
         description: >
           Corresponding to the fox world image

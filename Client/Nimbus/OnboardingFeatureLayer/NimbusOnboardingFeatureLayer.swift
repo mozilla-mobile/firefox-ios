@@ -176,6 +176,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
         case .syncDevices: return ImageIdentifiers.onboardingSyncv106
         case .notifications: return ImageIdentifiers.onboardingNotification
+//        case .notifications: return ImageIdentifiers.onboardingNotification
+//        case .notifications: return ImageIdentifiers.onboardingNotification
+//        case .notifications: return ImageIdentifiers.onboardingNotification
         }
     }
 }
