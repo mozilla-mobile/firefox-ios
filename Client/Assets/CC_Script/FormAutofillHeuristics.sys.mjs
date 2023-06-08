@@ -187,53 +187,58 @@ export const FormAutofillHeuristics = {
    *          otherwise false.
    */
   _parsePhoneFields(fieldScanner) {
-    let matchingResult;
+    if (fieldScanner.parsingFinished) {
+      return false;
+    }
 
+    let matchingResult;
     const GRAMMARS = this.PHONE_FIELD_GRAMMARS;
-    for (let i = 0; i < GRAMMARS.length; i++) {
-      let detailStart = fieldScanner.parsingIndex;
-      let ruleStart = i;
-      for (
-        ;
-        i < GRAMMARS.length &&
-        GRAMMARS[i][0] &&
-        fieldScanner.elementExisting(detailStart);
-        i++, detailStart++
-      ) {
-        let detail = fieldScanner.getFieldDetailByIndex(detailStart);
+
+    function isGrammarSeparator(index) {
+      return !GRAMMARS[index][0];
+    }
+
+    for (let ruleFrom = 0; ruleFrom < GRAMMARS.length; ) {
+      const detailStart = fieldScanner.parsingIndex;
+      let ruleTo = ruleFrom;
+      for (let count = 0; ruleTo < GRAMMARS.length; ruleTo++, count++) {
+        // Bail out when reaching the end of the current set of grammars
+        // or there are no more elements to parse
+        if (
+          isGrammarSeparator(ruleTo) ||
+          !fieldScanner.elementExisting(detailStart + count)
+        ) {
+          break;
+        }
+
+        const [category, , length] = GRAMMARS[ruleTo];
+        const detail = fieldScanner.getFieldDetailByIndex(detailStart + count);
+
+        // If the field is not what this grammar rule is interested in, skip processing.
         if (
           !detail ||
-          GRAMMARS[i][0] != detail.fieldName ||
-          detail?.reason == "autocomplete"
+          detail.fieldName != category ||
+          detail.reason == "autocomplete"
         ) {
           break;
         }
-        let element = detail.elementWeakRef.get();
-        if (!element) {
-          break;
-        }
-        if (
-          GRAMMARS[i][2] &&
-          (!element.maxLength || GRAMMARS[i][2] < element.maxLength)
-        ) {
+
+        const element = detail.element;
+        if (length && (!element.maxLength || length < element.maxLength)) {
           break;
         }
       }
-      if (i >= GRAMMARS.length) {
+
+      // if we reach the grammar separator, that means all the previous rules are matched.
+      // Set the matchingResult so we update field names accordingly.
+      if (isGrammarSeparator(ruleTo)) {
+        matchingResult = { ruleFrom, ruleTo };
         break;
       }
 
-      if (!GRAMMARS[i][0]) {
-        matchingResult = {
-          ruleFrom: ruleStart,
-          ruleTo: i,
-        };
-        break;
-      }
-
-      // Fast rewinding to the next rule.
-      for (; i < GRAMMARS.length; i++) {
-        if (!GRAMMARS[i][0]) {
+      // Fast forward to the next rule set.
+      for (; ruleFrom < GRAMMARS.length; ) {
+        if (isGrammarSeparator(ruleFrom++)) {
           break;
         }
       }
@@ -241,12 +246,10 @@ export const FormAutofillHeuristics = {
 
     let parsedField = false;
     if (matchingResult) {
-      let { ruleFrom, ruleTo } = matchingResult;
-      let detailStart = fieldScanner.parsingIndex;
+      const { ruleFrom, ruleTo } = matchingResult;
       for (let i = ruleFrom; i < ruleTo; i++) {
-        fieldScanner.updateFieldName(detailStart, GRAMMARS[i][1]);
+        fieldScanner.updateFieldName(fieldScanner.parsingIndex, GRAMMARS[i][1]);
         fieldScanner.parsingIndex++;
-        detailStart++;
         parsedField = true;
       }
     }
@@ -254,36 +257,30 @@ export const FormAutofillHeuristics = {
     if (fieldScanner.parsingFinished) {
       return parsedField;
     }
-
-    let nextField = fieldScanner.getFieldDetailByIndex(
-      fieldScanner.parsingIndex
-    );
-    if (
-      nextField &&
-      nextField.reason != "autocomplete" &&
-      fieldScanner.parsingIndex > 0
-    ) {
-      const regExpTelExtension = new RegExp(
-        "\\bext|ext\\b|extension|ramal", // pt-BR, pt-PT
-        "iu"
-      );
+    // Match tel extension.
+    const field = fieldScanner.getFieldDetailByIndex(fieldScanner.parsingIndex);
+    if (field?.reason != "autocomplete") {
       const previousField = fieldScanner.getFieldDetailByIndex(
         fieldScanner.parsingIndex - 1
       );
-      const previousFieldType = lazy.FormAutofillUtils.getCategoryFromFieldName(
-        previousField.fieldName
-      );
       if (
         previousField &&
-        previousFieldType == "tel" &&
-        this._matchRegexp(nextField.elementWeakRef.get(), regExpTelExtension)
+        lazy.FormAutofillUtils.getCategoryFromFieldName(
+          previousField.fieldName
+        ) == "tel"
       ) {
-        fieldScanner.updateFieldName(
-          fieldScanner.parsingIndex,
-          "tel-extension"
+        const regExpTelExtension = new RegExp(
+          "\\bext|ext\\b|extension|ramal", // pt-BR, pt-PT
+          "iu"
         );
-        fieldScanner.parsingIndex++;
-        parsedField = true;
+        if (this._matchRegexp(field.element, regExpTelExtension)) {
+          fieldScanner.updateFieldName(
+            fieldScanner.parsingIndex,
+            "tel-extension"
+          );
+          fieldScanner.parsingIndex++;
+          parsedField = true;
+        }
       }
     }
 
