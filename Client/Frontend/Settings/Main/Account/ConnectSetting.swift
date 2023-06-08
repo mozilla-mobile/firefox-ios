@@ -7,8 +7,8 @@ import Shared
 
 // Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
-    override var accessoryView: UIImageView? { 
-        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) 
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
     override var title: NSAttributedString? {
