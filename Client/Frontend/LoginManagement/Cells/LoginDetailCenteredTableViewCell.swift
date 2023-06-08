@@ -6,14 +6,20 @@ import UIKit
 import Shared
 import Common
 
-class LoginDetailCenteredTableViewCell: ThemedTableViewCell, ReusableCell {
+struct LoginDetailCenteredTableViewCellModel {
+    let label: String
+}
+
+class LoginDetailCenteredTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let fontSize: CGFloat = 12
         static let spacingTopBottom: CGFloat = 26
         static let spacingLeadingTrailing: CGFloat = 16
     }
 
-    lazy var centeredLabel: UILabel = .build { label in
+    private var viewModel: LoginDetailCenteredTableViewCellModel?
+
+    private lazy var centeredLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -25,8 +31,13 @@ class LoginDetailCenteredTableViewCell: ThemedTableViewCell, ReusableCell {
         setupLayout()
     }
 
-    override func applyTheme(theme: Theme) {
-        super.applyTheme(theme: theme)
+    func configure(viewModel: LoginDetailCenteredTableViewCellModel) {
+        self.viewModel = viewModel
+        centeredLabel.text = viewModel.label
+        selectionStyle = .none
+    }
+
+    func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
         centeredLabel.textColor = theme.colors.textSecondary
     }

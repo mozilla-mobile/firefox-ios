@@ -14,29 +14,37 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
-enum LoginTableViewCellStyle {
-    case iconAndBothLabels
-    case noIconAndBothLabels
-    case iconAndDescriptionLabel
+struct LoginDetailTableViewCellModel {
+    let title: String
+    var description: String?
+    var descriptionPlaceholder: String?
+    var keyboardType: UIKeyboardType = .default
+    var returnKeyType: UIReturnKeyType = .default
+    var displayDescriptionAsPassword = false
+    let a11yId: String
+    var isEditingFieldData = false
+    var cellType: LoginDetailTableViewCell.CellType {
+        isEditingFieldData ? .editingFieldData: .standard
+    }
 }
 
-class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
+class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, UITextFieldDelegate, MenuHelperInterface {
     private struct UX {
-        static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
-        static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
+        static let highlightedFontSize: CGFloat = 12
+        static let descriptionFontSize: CGFloat = 16
         static let horizontalMargin: CGFloat = 14
+        static let verticalMargin: CGFloat = 11
     }
 
-    fileprivate lazy var labelContainer: UIView = .build { _ in }
-
-    weak var delegate: LoginDetailTableViewCellDelegate?
-
-    var cellType: LoginDetailTableViewCellType = .standard
-    enum LoginDetailTableViewCellType {
+    enum CellType {
         case standard
-        case delete
         case editingFieldData
     }
+
+    private var viewModel: LoginDetailTableViewCellModel?
+    weak var delegate: LoginDetailTableViewCellDelegate?
+
+    private lazy var labelContainer: UIView = .build { _ in }
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {
@@ -50,23 +58,20 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
 
-        label.font = UX.descriptionLabelFont
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.descriptionFontSize)
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
         label.accessibilityElementsHidden = true
-        label.adjustsFontSizeToFitWidth = false
         label.delegate = self
         label.isAccessibilityElement = true
         label.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
     }
 
-    // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
-    // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
-    // and the text property is exposed using a get/set property below.
-    fileprivate lazy var highlightedLabel: UILabel = .build { label in
-        label.font = UX.highlightedLabelFont
-        label.numberOfLines = 1
+    private lazy var highlightedLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                   size: UX.highlightedFontSize)
+        label.numberOfLines = 0
     }
 
     /// Override the default accessibility label since it won't include the description by default
@@ -84,53 +89,11 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         // swiftlint:enable unused_setter_value
     }
 
-    var descriptionTextSize: CGSize? {
-        guard let descriptionText = descriptionLabel.text else { return nil }
-
-        let attributes = [
-            NSAttributedString.Key.font: UX.descriptionLabelFont
-        ]
-
-        return descriptionText.size(withAttributes: attributes)
-    }
-
-    var placeholder: String? {
-        get { descriptionLabel.placeholder }
-        set { descriptionLabel.placeholder = newValue }
-    }
-
-    var displayDescriptionAsPassword = false {
-        didSet {
-            descriptionLabel.isSecureTextEntry = displayDescriptionAsPassword
-        }
-    }
-
-    var isEditingFieldData = false {
-        didSet {
-            guard isEditingFieldData != oldValue else { return }
-            descriptionLabel.isUserInteractionEnabled = isEditingFieldData
-            cellType = isEditingFieldData ? .editingFieldData: .standard
-        }
-    }
-
-    var highlightedLabelTitle: String? {
-        get {
-            return highlightedLabel.text
-        }
-        set(newTitle) {
-            highlightedLabel.text = newTitle
-        }
-    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
 
-        labelContainer.addSubview(highlightedLabel)
-        labelContainer.addSubview(descriptionLabel)
-        contentView.addSubview(labelContainer)
-
-        configureLayout()
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -140,17 +103,47 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         delegate = nil
+        contentView.alpha = 1
         descriptionLabel.isSecureTextEntry = false
         descriptionLabel.keyboardType = .default
         descriptionLabel.returnKeyType = .default
         descriptionLabel.isUserInteractionEnabled = false
+        separatorInset = .zero
+        layoutMargins = .zero
+        preservesSuperviewLayoutMargins = false
     }
 
-    fileprivate func configureLayout() {
+    func configure(viewModel: LoginDetailTableViewCellModel) {
+        self.viewModel = viewModel
+        highlightedLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
+        descriptionLabel.placeholder = viewModel.descriptionPlaceholder
+        descriptionLabel.keyboardType = viewModel.keyboardType
+        descriptionLabel.returnKeyType = viewModel.returnKeyType
+        descriptionLabel.accessibilityIdentifier = viewModel.a11yId
+        descriptionLabel.isSecureTextEntry = viewModel.displayDescriptionAsPassword
+        descriptionLabel.isUserInteractionEnabled = viewModel.isEditingFieldData
+
+        if viewModel.displayDescriptionAsPassword {
+            descriptionLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                                  size: 16,
+                                                                                  symbolicTraits: [.traitMonoSpace])
+        }
+    }
+
+    private func setupLayout() {
+        labelContainer.addSubviews(highlightedLabel, descriptionLabel)
+        contentView.addSubview(labelContainer)
+
         NSLayoutConstraint.activate([
-            labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
-            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
+            labelContainer.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                constant: UX.verticalMargin),
+            labelContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                   constant: -UX.verticalMargin),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: UX.horizontalMargin),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                     constant: -UX.horizontalMargin),
 
             highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
@@ -166,35 +159,27 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         setNeedsUpdateConstraints()
     }
 
-    func configure(type: LoginDetailTableViewCellType) {
-        self.cellType = type
-    }
-
-    override func applyTheme(theme: Theme) {
-        super.applyTheme(theme: theme)
+    func applyTheme(theme: Theme) {
+        guard let cellType = viewModel?.cellType else { return }
 
         switch cellType {
         case .standard:
             highlightedLabel.textColor = theme.colors.actionPrimary
         case .editingFieldData:
             highlightedLabel.textColor = theme.colors.textSecondary
-        case .delete:
-            textLabel?.textColor = theme.colors.textWarning
-            backgroundColor = theme.colors.layer2
         }
 
         descriptionLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer5
     }
-}
 
-// MARK: - Menu Selectors
-extension LoginDetailTableViewCell: MenuHelperInterface {
+    // MARK: - Menu Selectors
     func menuHelperReveal() {
-        displayDescriptionAsPassword = false
+        descriptionLabel.isSecureTextEntry = false
     }
 
     func menuHelperSecure() {
-        displayDescriptionAsPassword = true
+        descriptionLabel.isSecureTextEntry = true
     }
 
     func menuHelperCopy() {
@@ -205,31 +190,22 @@ extension LoginDetailTableViewCell: MenuHelperInterface {
     func menuHelperOpenAndFill() {
         delegate?.didSelectOpenAndFillForCell(self)
     }
-}
 
-// MARK: - Cell Decorators
-extension LoginDetailTableViewCell {
-    func updateCellWithLogin(_ login: LoginRecord) {
-        descriptionLabel.text = login.hostname
-        highlightedLabel.text = login.decryptedUsername
-    }
-}
-
-extension LoginDetailTableViewCell: UITextFieldDelegate {
+    // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if descriptionLabel.isSecureTextEntry {
-            displayDescriptionAsPassword = false
+        if let viewModel = viewModel, viewModel.displayDescriptionAsPassword {
+            descriptionLabel.isSecureTextEntry = false
         }
         return true
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if descriptionLabel.isSecureTextEntry {
-            displayDescriptionAsPassword = true
+        if let viewModel = viewModel, viewModel.displayDescriptionAsPassword {
+            descriptionLabel.isSecureTextEntry = true
         }
         delegate?.textFieldDidEndEditing(self)
     }
