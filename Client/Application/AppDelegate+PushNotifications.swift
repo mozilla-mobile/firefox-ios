@@ -138,8 +138,11 @@ extension AppDelegate {
             notificationAllowed = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications)
         }
 
-        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken,
-                                                                 notificationAllowed: notificationAllowed)
+        if notificationAllowed {
+            RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
+        } else {
+            RustFirefoxAccounts.shared.pushNotifications.disableNotifications()
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
