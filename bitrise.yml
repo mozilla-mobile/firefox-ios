@@ -452,16 +452,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Add default web browser entitlement for Fennec_Enterprise
-        inputs:
-        - content: |-
-            #/usr/bin/env bash
-            set -x
-
-            echo "Adding com.apple.developer.web-browser to entitlements"
-
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecEnterpriseApplication.entitlements
   3_provisioning_and_npm_installation:
     steps:
     - script@1.1:
