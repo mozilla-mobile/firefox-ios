@@ -246,9 +246,9 @@ enums:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:
-      welcome-globe-cdt:
+      welcome-cdt:
         description: >
-          Corresponding to the fox world image for CTD
+          Corresponding to the welcome image for CTD
       notifications-cdt:
         description: >
           Corresponding to the notifications image for CTD
