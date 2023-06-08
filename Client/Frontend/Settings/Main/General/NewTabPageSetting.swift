@@ -7,7 +7,9 @@ import Foundation
 class NewTabPageSetting: Setting {
     let profile: Profile
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
     override var accessibilityIdentifier: String? { return "NewTab" }
 

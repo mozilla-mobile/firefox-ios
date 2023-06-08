@@ -7,7 +7,9 @@ import Foundation
 class SearchSetting: Setting {
     let profile: Profile
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
@@ -17,7 +19,8 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: .AppSettingsSearch, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(title: NSAttributedString(string: .AppSettingsSearch,
+                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

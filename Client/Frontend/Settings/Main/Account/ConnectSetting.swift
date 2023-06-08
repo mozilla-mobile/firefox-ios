@@ -12,7 +12,8 @@ class ConnectSetting: WithoutAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .Settings.Sync.ButtonTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(string: .Settings.Sync.ButtonTitle,
+                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override var accessibilityIdentifier: String? { return "SignInToSync" }

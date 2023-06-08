@@ -14,7 +14,9 @@ class DefaultBrowserSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .open,
+                                          object: .settingsMenuSetAsDefaultBrowser)
         DefaultApplicationHelper().openSettings()
     }
 }

@@ -8,7 +8,9 @@ import Shared
 class OpenWithSetting: Setting {
     let profile: Profile
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
@@ -16,7 +18,8 @@ class OpenWithSetting: Setting {
         guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
             return NSAttributedString(string: "")
         }
-        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
+        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"),
+            let dictRoot = NSArray(contentsOfFile: path) {
             let mailProvider = dictRoot.compactMap({$0 as? NSDictionary }).first { (dict) -> Bool in
                 return (dict["scheme"] as? String) == provider
             }

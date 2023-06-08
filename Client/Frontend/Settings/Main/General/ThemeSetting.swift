@@ -6,7 +6,9 @@ import Foundation
 
 class ThemeSetting: Setting {
     let profile: Profile
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
     override var style: UITableViewCell.CellStyle { return .value1 }
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
 
