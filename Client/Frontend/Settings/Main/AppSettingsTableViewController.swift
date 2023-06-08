@@ -161,86 +161,16 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     }
 
     override func generateSettings() -> [SettingSection] {
-        let footerTitle = NSAttributedString(
-            string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
-        var settings = [
-            SettingSection(footerTitle: footerTitle,
-                           children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
-        ]
+        var settings = [SettingSection]()
+        settings += getDefaultBrowserSetting()
+        settings += getAccountSetting()
+        settings += getGeneralSettings()
 
-        let prefs = profile.prefs
-        var generalSettings: [Setting] = [
-            SearchSetting(settings: self),
-            NewTabPageSetting(settings: self),
-            HomeSetting(settings: self),
-            OpenWithSetting(settings: self),
-            ThemeSetting(settings: self),
-            SiriPageSetting(settings: self),
-            BoolSetting(
-                prefs: prefs,
-                theme: themeManager.currentTheme,
-                prefKey: PrefsKeys.KeyBlockPopups,
-                defaultValue: true,
-                titleText: .AppSettingsBlockPopups),
-            NoImageModeSetting(settings: self)
-           ]
-
-        if isSearchBarLocationFeatureEnabled {
-            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
-        }
-
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
-        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
-        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
-        }
-
-        let accountChinaSyncSetting: [Setting]
-        if !AppInfo.isChinaEdition {
-            accountChinaSyncSetting = []
-        } else {
-            accountChinaSyncSetting = [
-                // Show China sync service setting:
-                ChinaSyncServiceSetting(settings: self)
-            ]
-        }
-
-        generalSettings += [
-            BoolSetting(
-                prefs: prefs,
-                theme: themeManager.currentTheme,
-                prefKey: "showClipboardBar",
-                defaultValue: false,
-                titleText: .SettingsOfferClipboardBarTitle,
-                statusText: .SettingsOfferClipboardBarStatus),
-            BoolSetting(
-                prefs: prefs,
-                theme: themeManager.currentTheme,
-                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-                defaultValue: true,
-                titleText: .SettingsShowLinkPreviewsTitle,
-                statusText: .SettingsShowLinkPreviewsStatus)
-        ]
-
-        let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
-
-        let footerText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
-        settings += [
-            SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
-                // Without a Firefox Account:
-                ConnectSetting(settings: self),
-                AdvancedAccountSetting(settings: self, isHidden: showDebugSettings),
-                // With a Firefox Account:
-                AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self)
-            ] + accountChinaSyncSetting )]
-
-        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
-
+        // FXIOS-6595 - reorganize privacy settings
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
             privacySettings.append(AutofillCreditCardSettings(settings: self))
         }
@@ -248,7 +178,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
         privacySettings += [
-            BoolSetting(prefs: prefs,
+            BoolSetting(prefs: profile.prefs,
                         theme: themeManager.currentTheme,
                         prefKey: "settings.closePrivateTabs",
                         defaultValue: false,
@@ -259,21 +189,28 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         privacySettings.append(ContentBlockerSetting(settings: self))
 
         if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: self.profile))
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
         }
 
         privacySettings += [
             PrivacyPolicySetting()
         ]
 
+        // FXIOS-6596 - reorganize support settings
         let supportSettings = [
             ShowIntroductionSetting(settings: self),
             SendFeedbackSetting(),
-            SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
-            StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
-            OpenSupportPageSetting(delegate: settingsDelegate, theme: themeManager.currentTheme),
+            SendAnonymousUsageDataSetting(prefs: profile.prefs,
+                                          delegate: settingsDelegate,
+                                          theme: themeManager.currentTheme),
+            StudiesToggleSetting(prefs: profile.prefs,
+                                 delegate: settingsDelegate,
+                                 theme: themeManager.currentTheme),
+            OpenSupportPageSetting(delegate: settingsDelegate,
+                                   theme: themeManager.currentTheme),
         ]
 
+        // FXIOS-6597 - reorganize about settings
         let aboutSettings = [
             AppStoreReviewSetting(),
             VersionSetting(settings: self, appSettingsDelegate: self),
@@ -288,31 +225,122 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         ]
 
         if showDebugSettings {
-            let hiddenDebugOptions = [
-                ExperimentsSettings(settings: self),
-                ExportLogDataSetting(settings: self),
-                ExportBrowserDataSetting(settings: self),
-                DeleteExportedDataSetting(settings: self),
-                ForceCrashSetting(settings: self),
-                ForgetSyncAuthStateDebugSetting(settings: self),
-                ChangeToChinaSetting(settings: self),
-                AppReviewPromptSetting(settings: self),
-                TogglePullToRefresh(settings: self),
-                ToggleHistoryGroups(settings: self),
-                ToggleInactiveTabs(settings: self),
-                ResetContextualHints(settings: self),
-                ResetWallpaperOnboardingPage(settings: self),
-                SentryIDSetting(settings: self),
-                FasterInactiveTabs(settings: self),
-                OpenFiftyTabsDebugOption(settings: self),
-            ]
-
-            settings += [
-                SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)
-            ]
+            settings += getDebugSettings()
         }
 
         return settings
+    }
+
+    func getDefaultBrowserSetting() -> [SettingSection] {
+        let footerTitle = NSAttributedString(
+            string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
+
+        return [SettingSection(footerTitle: footerTitle,
+                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])]
+    }
+
+    func getAccountSetting() -> [SettingSection] {
+        let accountChinaSyncSetting: [Setting]
+        if !AppInfo.isChinaEdition {
+            accountChinaSyncSetting = []
+        } else {
+            accountChinaSyncSetting = [
+                // Show China sync service setting:
+                ChinaSyncServiceSetting(settings: self)
+            ]
+        }
+
+        let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
+
+        let accountFooterText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
+        return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
+            // Without a Firefox Account:
+            ConnectSetting(settings: self),
+            AdvancedAccountSetting(settings: self, isHidden: showDebugSettings),
+            // With a Firefox Account:
+            AccountStatusSetting(settings: self),
+            SyncNowSetting(settings: self)
+        ] + accountChinaSyncSetting)]
+    }
+
+    func getGeneralSettings() -> [SettingSection] {
+        let blockpopUpSetting = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.KeyBlockPopups,
+            defaultValue: true,
+            titleText: .AppSettingsBlockPopups
+        )
+
+        var generalSettings: [Setting] = [
+            SearchSetting(settings: self),
+            NewTabPageSetting(settings: self),
+            HomeSetting(settings: self),
+            OpenWithSetting(settings: self),
+            ThemeSetting(settings: self),
+            SiriPageSetting(settings: self),
+            blockpopUpSetting,
+            NoImageModeSetting(settings: self)
+        ]
+
+        if isSearchBarLocationFeatureEnabled {
+            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+        }
+
+        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
+        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
+            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
+        }
+
+        let offerToOpenCopiedLinksSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: "showClipboardBar",
+            defaultValue: false,
+            titleText: .SettingsOfferClipboardBarTitle,
+            statusText: .SettingsOfferClipboardBarStatus
+        )
+
+        let showLinksPreviewSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
+            defaultValue: true,
+            titleText: .SettingsShowLinkPreviewsTitle,
+            statusText: .SettingsShowLinkPreviewsStatus
+        )
+
+        generalSettings += [
+            offerToOpenCopiedLinksSettings,
+            showLinksPreviewSettings
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
+                               children: generalSettings)]
+    }
+
+    func getDebugSettings() -> [SettingSection] {
+        let hiddenDebugOptions = [
+            ExperimentsSettings(settings: self),
+            ExportLogDataSetting(settings: self),
+            ExportBrowserDataSetting(settings: self),
+            DeleteExportedDataSetting(settings: self),
+            ForceCrashSetting(settings: self),
+            ForgetSyncAuthStateDebugSetting(settings: self),
+            ChangeToChinaSetting(settings: self),
+            AppReviewPromptSetting(settings: self),
+            TogglePullToRefresh(settings: self),
+            ToggleHistoryGroups(settings: self),
+            ToggleInactiveTabs(settings: self),
+            ResetContextualHints(settings: self),
+            ResetWallpaperOnboardingPage(settings: self),
+            SentryIDSetting(settings: self),
+            FasterInactiveTabs(settings: self),
+            OpenFiftyTabsDebugOption(settings: self),
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
