@@ -28,7 +28,7 @@ enum ReferringPage: Equatable {
     case tabTray
 }
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -163,6 +163,9 @@ class BrowserViewController: UIViewController {
     private var keyboardPressesHandlerValue: Any?
 
     var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+
     var logger: Logger
 
     var newTabSettings: NewTabPage {
@@ -182,6 +185,7 @@ class BrowserViewController: UIViewController {
         profile: Profile,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
@@ -189,6 +193,7 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
@@ -450,7 +455,7 @@ class BrowserViewController: UIViewController {
         trackTelemetry()
         setupNotifications()
         addSubviews()
-
+        listenForThemeChange(view)
         setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
@@ -2867,6 +2872,7 @@ extension BrowserViewController: LegacyNotificationThemeable {
                                       readerModeBar]
         urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         ui.forEach { $0?.applyTheme(theme: currentTheme) }
+        zoomPageBar?.applyTheme(theme: currentTheme)
         topTabsViewController?.applyTheme()
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
@@ -2887,7 +2893,6 @@ extension BrowserViewController: LegacyNotificationThemeable {
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
-        zoomPageBar?.applyTheme(theme: themeManager.currentTheme)
     }
 }
 
