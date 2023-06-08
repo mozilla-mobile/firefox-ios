@@ -59,6 +59,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
+            var themeManager: ThemeManager = AppContainer.shared.resolve()
+            if let scene = scene as? UIWindowScene {
+                themeManager.windows = scene.windows
+            }
+
             if let context = connectionOptions.urlContexts.first,
                let route = routeBuilder.makeRoute(url: context.url) {
                 sceneCoordinator?.findAndHandle(route: route)
@@ -83,7 +88,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
 
             var themeManager: ThemeManager = AppContainer.shared.resolve()
-            themeManager.window = window
+            themeManager.windows = [window]
 
             handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
         }

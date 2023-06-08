@@ -7,7 +7,7 @@ import Common
 
 public protocol ThemeManager {
     var currentTheme: Theme { get }
-    var window: UIWindow? { get set }
+    var windows: [UIWindow]? { get set }
 
     func getInterfaceStyle() -> UIUserInterfaceStyle
     func changeCurrentTheme(_ newTheme: ThemeType)
@@ -41,7 +41,7 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
 
-    public var window: UIWindow?
+    public var windows: [UIWindow]?
 
     // MARK: - Init
 
@@ -76,7 +76,7 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
 
         // overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
+        windows?.forEach { $0.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle() }
 
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)
