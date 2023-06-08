@@ -86,7 +86,7 @@ public struct ImageIdentifiers {
     public static let onboardingNotification = "onboardingNotification"
     public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
     public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
-    public static let onboardingSyncCTD = "onboardingSyncCDT"
+    public static let onboardingSyncCTD = "onboardingSyncCTD"
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
     public static let pinSmall = "pin_small"

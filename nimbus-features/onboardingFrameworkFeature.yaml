@@ -58,7 +58,7 @@ features:
                   title: Onboarding/Onboarding.Notification.Continue.Action.v114
                   action: request-notifications
                 secondary:
-                  title: Onboarding/Onboarding.Notification.Skip.Action.v114
+                  title: Onboarding/Onboarding.Notification.Skip.Action.v115
                   action: next-card
               type: fresh-install
             - name: "signToSync"
@@ -246,13 +246,13 @@ enums:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:
-      welcome-cdt:
+      welcome-ctd:
         description: >
           Corresponding to the welcome image for CTD
-      notifications-cdt:
+      notifications-ctd:
         description: >
           Corresponding to the notifications image for CTD
-      sync-devices-cdt:
+      sync-devices-ctd:
         description: >
           Corresponding to the sync image for CTD
       welcome-globe:

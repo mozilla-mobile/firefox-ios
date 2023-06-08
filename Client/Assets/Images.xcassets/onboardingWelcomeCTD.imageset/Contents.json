@@ -1,6 +1,15 @@
 {
   "images" : [
     {
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
       "filename" : "CTD_onboarding_1_light.pdf",
       "idiom" : "universal"
     },
