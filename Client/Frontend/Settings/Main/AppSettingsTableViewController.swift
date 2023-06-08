@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Shared
 
+// Will be clean up with FXIOS-6529
 enum AppSettingsDeeplinkOption {
     case contentBlocker
     case customizeHomepage
@@ -14,6 +15,25 @@ enum AppSettingsDeeplinkOption {
     case customizeTopSites
     case wallpaper
     case creditCard
+
+    func getSettingsRoute() -> Route.SettingsSection {
+        switch self {
+        case .contentBlocker:
+            return .contentBlocker
+        case .customizeHomepage:
+            return .homePage
+        case .customizeTabs:
+            return .tabs
+        case .customizeToolbar:
+            return .toolbar
+        case .customizeTopSites:
+            return .topSites
+        case .wallpaper:
+            return .wallpaper
+        case .creditCard:
+            return .creditCard
+        }
+    }
 }
 
 protocol AppSettingsDelegate: AnyObject {
@@ -23,7 +43,7 @@ protocol AppSettingsDelegate: AnyObject {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate {
     // MARK: - Properties
-    var deeplinkTo: AppSettingsDeeplinkOption?
+    var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
@@ -77,6 +97,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settingsDelegate?.didFinish()
     }
 
+    // Will be clean up with FXIOS-6529
     private func checkForDeeplinkSetting() {
         guard let deeplink = deeplinkTo else { return }
         var viewController: SettingsTableViewController
