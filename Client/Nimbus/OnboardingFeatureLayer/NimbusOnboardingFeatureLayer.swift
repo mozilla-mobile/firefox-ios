@@ -70,7 +70,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             return OnboardingCardInfoModel(
                 name: card.name,
                 title: String(format: card.title, AppName.shortName.rawValue),
-                body: String(format: card.body, AppName.shortName.rawValue),
+                body: String(format: card.body, AppName.shortName.rawValue, AppName.shortName.rawValue),
                 link: getOnboardingLink(from: card.link),
                 buttons: getOnboardingCardButtons(from: card.buttons),
                 type: card.type,
