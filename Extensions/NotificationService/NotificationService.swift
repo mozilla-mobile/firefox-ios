@@ -34,18 +34,54 @@ class NotificationService: UNNotificationServiceExtension {
 
         let display = SyncDataDisplay(content: content, contentHandler: contentHandler)
         self.display = display
-
-        let handler = FxAPushMessageHandler(with: profile)
-
-        handler.handle(userInfo: userInfo) { res in
-            guard case .success(let event) = res else {
-                if case .failure(let failure) = res {
+        let handlerCompletion = { (result: Result<PushMessage, PushMessageError>) in
+            guard case .success(let event) = result else {
+                if case .failure(let failure) = result {
                     self.didFinish(nil, with: failure)
                 }
                 return
             }
-
             self.didFinish(event)
+        }
+        let isUsingRustAutopushClient = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.AutopushFeature)
+        if let isUsingRustAutopushClient = isUsingRustAutopushClient, isUsingRustAutopushClient {
+            self.handleEncryptedPushMessage(userInfo: userInfo, profile: profile, completion: handlerCompletion)
+        } else {
+            let handler = FxAPushMessageHandler(with: profile)
+            handler.handle(userInfo: userInfo, completion: handlerCompletion)
+        }
+    }
+
+    func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],
+                                    profile: BrowserProfile,
+                                    completion: @escaping (Result<PushMessage, PushMessageError>) -> Void
+    ) {
+        Task {
+            do {
+                let autopush = try await Autopush(files: profile.files)
+                var payload = [String: String]()
+                for (key, value) in userInfo {
+                    if let key = key as? String, let value = value as? String {
+                        payload[key] = value
+                    }
+                }
+                let decryptResult = try await autopush.decrypt(payload: payload)
+                guard let decryptedString = String(
+                    bytes: decryptResult.result.map { byte in UInt8(byte) },
+                    encoding: .utf8
+                ) else {
+                    completion(.failure(.notDecrypted))
+                    return
+                }
+                if decryptResult.scope == RustFirefoxAccounts.pushScope {
+                    let handler = FxAPushMessageHandler(with: profile)
+                    handler.handleDecryptedMessage(message: decryptedString, completion: completion)
+                } else {
+                    completion(.failure(.messageIncomplete("Unknown sender")))
+                }
+            } catch {
+                completion(.failure(.accountError))
+            }
         }
     }
 
