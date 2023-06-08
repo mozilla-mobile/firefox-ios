@@ -122,7 +122,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         // FXIOS-6595 - reorganize privacy settings
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
