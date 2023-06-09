@@ -161,31 +161,15 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
     }
 
+    // MARK: - Generate Settings
+
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
         settings += getDefaultBrowserSetting()
         settings += getAccountSetting()
         settings += getGeneralSettings()
         settings += getPrivacySettings()
-
-        // FXIOS-6596 - reorganize support settings
-        let supportSettings = [
-            ShowIntroductionSetting(settings: self),
-            SendFeedbackSetting(),
-            SendAnonymousUsageDataSetting(prefs: profile.prefs,
-                                          delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme),
-            StudiesToggleSetting(prefs: profile.prefs,
-                                 delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme),
-            OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme),
-        ]
-
-        settings += [
-            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: supportSettings),
-        ]
-
+        settings += getSupportSettings()
         settings += getAboutSettings()
 
         if showDebugSettings {
@@ -195,7 +179,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         return settings
     }
 
-    func getDefaultBrowserSetting() -> [SettingSection] {
+    private func getDefaultBrowserSetting() -> [SettingSection] {
         let footerTitle = NSAttributedString(
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
@@ -203,7 +187,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])]
     }
 
-    func getAccountSetting() -> [SettingSection] {
+    private func getAccountSetting() -> [SettingSection] {
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
@@ -227,7 +211,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         ] + accountChinaSyncSetting)]
     }
 
-    func getGeneralSettings() -> [SettingSection] {
+    private func getGeneralSettings() -> [SettingSection] {
         let blockpopUpSetting = BoolSetting(
             prefs: profile.prefs,
             theme: themeManager.currentTheme,
@@ -284,7 +268,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: generalSettings)]
     }
 
-    func getPrivacySettings() -> [SettingSection] {
+    private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 
@@ -318,7 +302,25 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: privacySettings)]
     }
 
-    func getAboutSettings() -> [SettingSection] {
+    private func getSupportSettings() -> [SettingSection] {
+        let supportSettings = [
+            ShowIntroductionSetting(settings: self),
+            SendFeedbackSetting(),
+            SendAnonymousUsageDataSetting(prefs: profile.prefs,
+                                          delegate: settingsDelegate,
+                                          theme: themeManager.currentTheme),
+            StudiesToggleSetting(prefs: profile.prefs,
+                                 delegate: settingsDelegate,
+                                 theme: themeManager.currentTheme),
+            OpenSupportPageSetting(delegate: settingsDelegate,
+                                   theme: themeManager.currentTheme),
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
+                               children: supportSettings)]
+    }
+
+    private func getAboutSettings() -> [SettingSection] {
         let aboutSettings = [
             AppStoreReviewSetting(),
             VersionSetting(settings: self, appSettingsDelegate: self),
@@ -330,7 +332,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: aboutSettings)]
     }
 
-    func getDebugSettings() -> [SettingSection] {
+    private func getDebugSettings() -> [SettingSection] {
         let hiddenDebugOptions = [
             ExperimentsSettings(settings: self),
             ExportLogDataSetting(settings: self),
@@ -353,12 +355,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
-        return headerView
-    }
-
-    // MARK: AppSettingsDelegate
+    // MARK: - AppSettingsDelegate
 
     func clickedVersion() {
         debugSettingsClickCount += 1
@@ -368,5 +365,12 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             settings = generateSettings()
             tableView.reloadData()
         }
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
+        return headerView
     }
 }
