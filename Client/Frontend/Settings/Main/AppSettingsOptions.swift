@@ -7,7 +7,6 @@ import Foundation
 import Shared
 import Account
 import LocalAuthentication
-import Glean
 
 // Show the current version of Firefox
 class VersionSetting: Setting {
@@ -156,7 +155,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedStatusText: statusText,
             settingDidChange: {
                 AdjustHelper.setEnabled($0)
-                Glean.shared.setUploadEnabled($0)
+                DefaultGleanWrapper.shared.setUpload(isEnabled: $0)
                 Experiments.setTelemetrySetting($0)
             }
         )
