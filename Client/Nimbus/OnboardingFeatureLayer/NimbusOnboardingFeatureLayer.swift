@@ -37,14 +37,14 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from cardData: [NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
-        let cards = getOnboardingCards(from: cardData, withConditions: conditionTable)
-
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        return cards
-            .filter { $0.type == onboardingType }
-            .sorted(by: { $0.order < $1.order })
+        return getOnboardingCards(
+            from: cardData
+                .filter { $0.type == onboardingType }
+                .sorted(by: { $0.order < $1.order }),
+            withConditions: conditionTable)
             // We have to update the a11yIdRoot using the correct order of the cards
             .enumerated()
             .map { index, card in
