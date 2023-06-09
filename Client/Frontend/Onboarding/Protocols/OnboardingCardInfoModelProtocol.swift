@@ -19,6 +19,7 @@ protocol OnboardingCardInfoModelProtocol {
 
     init(
         name: String,
+        order: Int,
         title: String,
         body: String,
         link: OnboardingLinkInfoModel?,

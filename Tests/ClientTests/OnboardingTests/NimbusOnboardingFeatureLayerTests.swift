@@ -113,6 +113,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
         let expectedCard = OnboardingCardInfoModel(
             name: CardElementNames.name + " 1",
+            order: 10,
             title: CardElementNames.title + " 1",
             body: CardElementNames.body + " 1",
             link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle + " 1",
@@ -534,6 +535,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 "cards": [
     {
         "name": "test",
+        "order": 10,
         "title": "\(CardElementNames.placeholderString)",
         "body": "\(CardElementNames.noPlaceholderString)",
         "image": "\(NimbusOnboardingImages.welcomeGlobe.rawValue)",
@@ -550,7 +552,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         "type": "\(OnboardingType.freshInstall.rawValue)"
     }
 ],
-"card-ordering": ["test"],
 "dismissable": false
 }
 """
@@ -560,7 +561,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
     private func setupNimbusWith(
         cards numberOfCards: Int? = nil,
-        cardOrdering: [String]? = nil,
         image: String = NimbusOnboardingImages.welcomeGlobe.rawValue,
         type: String = OnboardingType.freshInstall.rawValue,
         dismissable: Bool? = nil,
@@ -572,7 +572,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     ) {
         var string = ""
 
-        if let numberOfCards = numberOfCards, let cardOrdering = cardOrdering {
+        if let numberOfCards = numberOfCards {
             string.append(contentsOf: createCards(
                 numbering: numberOfCards,
                 image: image,
@@ -582,7 +582,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 buttonActions: buttonActions,
                 prerequisites: prerequisites,
                 disqualifiers: disqualifiers))
-            string.append(contentsOf: "\"card-ordering\": \(cardOrdering),")
         }
 
         if let dismissable = dismissable {
@@ -668,12 +667,14 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     ) -> String {
         return """
   "name": "\(CardElementNames.name) \(number)",
+  "name": \(number),
   "title": "\(CardElementNames.title) \(number)",
   "body": "\(CardElementNames.body) \(number)",
   "image": "\(image)",
   "type": "\(type)",
 """
     }
+
     private func addPrerequisites(_ string: String) -> String {
         return """
   "prerequisites": ["\(string)"],

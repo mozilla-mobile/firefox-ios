@@ -50,6 +50,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             .map { index, card in
                 return OnboardingCardInfoModel(
                     name: card.name,
+                    order: card.order,
                     title: card.title,
                     body: card.body,
                     link: card.link,

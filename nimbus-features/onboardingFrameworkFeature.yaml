@@ -17,13 +17,6 @@ features:
           The list of available cards for onboarding.
         type: List<NimbusOnboardingCardData>
         default: []
-      card-ordering:
-        description: >
-          A list of card names in the order they should appear.
-          These names should match the names of the cards in the
-          "card" variable, otherwise, they will be excluded.
-        type: List<String>
-        default: []
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -99,12 +92,6 @@ features:
                   title: Onboarding/Onboarding.LaterAction.v114
                   action: next-card
               type: upgrade
-          card-ordering:
-            - "welcome"
-            - "signToSync"
-            - "notificationPermissions"
-            - "update.welcome"
-            - "update.signToSync"
           dismissable: true
 
 objects:
