@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
-class TabScrollingController: NSObject, FeatureFlaggable {
+class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
     enum ScrollDirection {
         case up
         case down
@@ -187,8 +187,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         self.lastZoomedScale = 0
     }
 }
-
-extension TabScrollingController: SearchBarLocationProvider {}
 
 // MARK: - Private
 private extension TabScrollingController {

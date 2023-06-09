@@ -41,7 +41,8 @@ protocol AppSettingsDelegate: AnyObject {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate,
+                                        SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -360,5 +361,3 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         }
     }
 }
-
-extension AppSettingsTableViewController: SearchBarLocationProvider {}

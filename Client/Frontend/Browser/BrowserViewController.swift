@@ -28,7 +28,7 @@ enum ReferringPage: Equatable {
     case tabTray
 }
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, SearchBarLocationProvider {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -1855,8 +1855,6 @@ class BrowserViewController: UIViewController {
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
-
-extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
