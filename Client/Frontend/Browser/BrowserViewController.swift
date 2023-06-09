@@ -1854,6 +1854,31 @@ class BrowserViewController: UIViewController {
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
+
+    // MARK: Autofill
+
+    func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
+        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
+            existingCard, error in
+            guard let existingCard = existingCard else {
+                DispatchQueue.main.async {
+                    self.showSingleCardViewController(creditCard: nil,
+                                                      decryptedCard: fieldValues,
+                                                      viewType: .save)
+                }
+                return
+            }
+
+            // card already saved should update if any of its other values are different
+            if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
+                DispatchQueue.main.async {
+                    self.showSingleCardViewController(creditCard: existingCard,
+                                                      decryptedCard: fieldValues,
+                                                      viewType: .update)
+                }
+            }
+        }
+    }
 }
 
 extension BrowserViewController: SearchBarLocationProvider {}
@@ -1981,7 +2006,7 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { fieldValues, type in
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
                 guard let tabWebView = tab.webView as? TabWebView,
                       let type = type
                 else { return }
@@ -1993,25 +2018,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 case .formSubmit:
                     tabWebView.accessoryView.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
-                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
-                        existingCard, error in
-                        if existingCard != nil {
-                            // card already saved should update if any of its other values are different
-                            if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
-                                DispatchQueue.main.async {
-                                    self.showSingleCardViewController(creditCard: existingCard,
-                                                                      decryptedCard: fieldValues,
-                                                                      viewType: .update)
-                                }
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.showSingleCardViewController(creditCard: nil,
-                                                                  decryptedCard: fieldValues,
-                                                                  viewType: .save)
-                            }
-                        }
-                    }
+                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
                 }
             }
@@ -2608,7 +2615,9 @@ extension BrowserViewController {
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             } else {
-                let toastMessage: String = state == .save ? .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage : .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+                let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
+                let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+                let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
                 SimpleToast().showAlertWithText(toastMessage,
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
@@ -2616,18 +2625,21 @@ extension BrowserViewController {
         }
 
         viewController.didTapNotNowClosure = {
+            viewController.dismissVC()
         }
 
-        // TODO: update the credit card that was selected by the user in the manage cards screen
         viewController.didTapManageCardsClosure = {
             self.showCreditCardSettings()
         }
+
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = false
+
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
             childViewController: viewController
         )
+
         self.present(bottomSheetVC, animated: true, completion: nil)
     }
 }

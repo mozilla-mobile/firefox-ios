@@ -370,11 +370,10 @@ extension String {
                 value: "Not Now",
                 comment: "This value is used as the title for the Not Now button in the remember credit card page")
             public static let CreditCardSaveSuccessToastMessage = MZLocalizedString(
-                key: "CreditCard.RememberCard.SecondaryButtonTitle.v115",
+                key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
                 tableName: "RememberCard",
                 value: "New Card Saved",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
-
         }
 
         // Update Card
@@ -400,7 +399,7 @@ extension String {
                 value: "Not Now",
                 comment: "This value is used as the title for the Not Now button in the update credit card page")
             public static let CreditCardUpdateSuccessToastMessage = MZLocalizedString(
-                key: "CreditCard.RememberCard.SecondaryButtonTitle.v115",
+                key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
                 tableName: "RememberCard",
                 value: "Credit Card Updated",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")

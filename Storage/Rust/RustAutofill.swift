@@ -80,7 +80,10 @@ public struct UnencryptedCreditCardFields {
     }
 
     public func isEqualToCreditCard(creditCard: CreditCard) -> Bool {
-        return creditCard.ccExpMonth == ccExpMonth && creditCard.ccExpYear == ccExpYear && creditCard.ccName == ccName && creditCard.ccNumberLast4 == ccNumberLast4
+        return creditCard.ccExpMonth == ccExpMonth &&
+        creditCard.ccExpYear == ccExpYear &&
+        creditCard.ccName == ccName &&
+        creditCard.ccNumberLast4 == ccNumberLast4
     }
 }
 

@@ -206,9 +206,12 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: Button Actions
     @objc
     private func didTapYes() {
-        self.viewModel.didTapMainButton { error in
+        let eventObject: TelemetryWrapper.EventObject = viewModel.state == .save ? .creditCardBottomSheetSave : .creditCardBottomSheetUpdate
+        self.viewModel.didTapMainButton { [weak self] error in
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: eventObject)
             DispatchQueue.main.async { [weak self] in
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: self?.viewModel.state == .save ? .creditCardBottomSheetSave : .creditCardBottomSheetUpdate)
                 self?.dismissVC()
                 self?.didTapYesClosure?(error)
             }
