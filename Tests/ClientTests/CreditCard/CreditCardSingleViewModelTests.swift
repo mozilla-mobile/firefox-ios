@@ -39,6 +39,18 @@ class CreditCardSingleViewModelTests: XCTestCase {
                                               timeLastModified: 123123,
                                               timesUsed: 123123)
 
+    private var invalidSampleCreditCard = CreditCard(guid: "1",
+                                                    ccName: "Allen Burges",
+                                                    ccNumberEnc: "",
+                                                    ccNumberLast4: "",
+                                                    ccExpMonth: 1,
+                                                    ccExpYear: 0,
+                                                    ccType: "",
+                                                    timeCreated: 0,
+                                                    timeLastUsed: nil,
+                                                    timeLastModified: 2,
+                                                    timesUsed: 0)
+
     override func setUp() {
         super.setUp()
         files = MockFiles()
@@ -142,5 +154,32 @@ class CreditCardSingleViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_didTapMainButton() {
+        viewModel.state = .save
+        viewModel.decryptedCreditCard = samplePlainTextCard
+        let expectation = expectation(description: "wait for credit card fields to be saved")
+
+        viewModel.didTapMainButton { error in
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func test_invalidCreditCardUpdateDidTapMainButton() {
+        viewModel.state = .update
+        viewModel.creditCard = invalidSampleCreditCard
+        viewModel.decryptedCreditCard = samplePlainTextCard
+        let expectation = expectation(description: "wait for credit card fields to be updated")
+
+        viewModel.didTapMainButton { error in
+            XCTAssertNotNil(error)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0)
     }
 }
