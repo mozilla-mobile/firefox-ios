@@ -993,6 +993,7 @@
 		C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EDDBEF29DD83FC003A4C07 /* RouteTests.swift */; };
 		C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EDDBF129DF1159003A4C07 /* URLScanner.swift */; };
 		C8EDDBF429DF119F003A4C07 /* DeeplinkInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EDDBF329DF119F003A4C07 /* DeeplinkInput.swift */; };
+		C8F3FAD22A32019300063E51 /* MenuActionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3FAD12A32019300063E51 /* MenuActionProvider.swift */; };
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */; };
@@ -5481,6 +5482,7 @@
 		C8EDDBEF29DD83FC003A4C07 /* RouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTests.swift; sourceTree = "<group>"; };
 		C8EDDBF129DF1159003A4C07 /* URLScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScanner.swift; sourceTree = "<group>"; };
 		C8EDDBF329DF119F003A4C07 /* DeeplinkInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkInput.swift; sourceTree = "<group>"; };
+		C8F3FAD12A32019300063E51 /* MenuActionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuActionProvider.swift; sourceTree = "<group>"; };
 		C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+WebViewDelegates.swift"; sourceTree = "<group>"; };
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		C93C44278F08256D907675AD /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -9381,6 +9383,7 @@
 				C4E3983C1D21F1E7004E89BA /* TopTabCell.swift */,
 				E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */,
 				8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */,
+				C8F3FAD12A32019300063E51 /* MenuActionProvider.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
@@ -12315,6 +12318,7 @@
 				8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */,
 				C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */,
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
+				C8F3FAD22A32019300063E51 /* MenuActionProvider.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift in Sources */,
 				74B420C92A1D0D7A00370E53 /* OnboardingDefaultBrowserInfoModel.swift in Sources */,
 				E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */,

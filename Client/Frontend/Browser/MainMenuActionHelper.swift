@@ -47,7 +47,9 @@ enum MenuButtonToastAction {
 class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
-                            AppVersionUpdateCheckerProtocol {
+                            AppVersionUpdateCheckerProtocol,
+                            MenuActionProvider,
+                            MenuActionable {
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
     // swiftlint: disable large_tuple
     typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
@@ -56,7 +58,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private let isHomePage: Bool
     private let buttonView: UIButton
-    private let selectedTab: Tab?
+    internal let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
     private let showFXASyncAction: (FXASyncClosure) -> Void
@@ -299,93 +301,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         section.append(settingsAction)
 
         return section
-    }
-
-    // MARK: - Actions
-
-    private func getNewTabAction() -> PhotonRowActions? {
-        guard let tab = selectedTab else { return nil }
-        return SingleActionViewModel(title: .AppMenu.NewTab,
-                                     iconString: ImageIdentifiers.newTab) { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
-            self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
-        }.items
-    }
-
-    private func getHistoryLibraryAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .AppMenu.AppMenuHistory,
-                                     iconString: ImageIdentifiers.history) { _ in
-            self.delegate?.showLibrary(panel: .history)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewHistoryPanel)
-        }.items
-    }
-
-    private func getDownloadsLibraryAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .AppMenu.AppMenuDownloads,
-                                     iconString: ImageIdentifiers.downloads) { _ in
-            self.delegate?.showLibrary(panel: .downloads)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewDownloadsPanel)
-        }.items
-    }
-
-    // MARK: Zoom
-
-    private func getZoomAction() -> PhotonRowActions? {
-        guard let tab = selectedTab else { return nil }
-        let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
-        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
-        let zoomAction = SingleActionViewModel(title: title,
-                                               iconString: ImageIdentifiers.zoomIn) { _ in
-            self.delegate?.showZoomPage(tab: tab)
-        }.items
-        return zoomAction
-    }
-
-    private func getFindInPageAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
-                                     iconString: ImageIdentifiers.findInPage) { _ in
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
-            self.delegate?.showFindInPage()
-        }.items
-    }
-
-    private func getRequestDesktopSiteAction() -> PhotonRowActions? {
-        guard let tab = selectedTab else { return nil }
-
-        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
-        let toggleActionTitle: String
-        let toggleActionIcon: String
-        let siteTypeTelemetryObject: TelemetryWrapper.EventObject
-        if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
-            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestDesktopSite : ImageIdentifiers.requestMobileSite
-            siteTypeTelemetryObject = .requestDesktopSite
-        } else {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
-            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestMobileSite : ImageIdentifiers.requestDesktopSite
-            siteTypeTelemetryObject = .requestMobileSite
-        }
-
-        return SingleActionViewModel(title: toggleActionTitle,
-                                     iconString: toggleActionIcon) { _ in
-            if let url = tab.url {
-                tab.toggleChangeUserAgent()
-                Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
-            }
-        }.items
-    }
-
-    private func getCopyAction() -> PhotonRowActions? {
-        return SingleActionViewModel(title: .AppMenu.AppMenuCopyLinkTitleString,
-                                     iconString: ImageIdentifiers.copyLink) { _ in
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
-            if let url = self.selectedTab?.canonicalURL?.displayURL {
-                UIPasteboard.general.url = url
-                self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl, url: nil)
-            }
-        }.items
     }
 
     private func getSendToDevice() -> PhotonRowActions {
