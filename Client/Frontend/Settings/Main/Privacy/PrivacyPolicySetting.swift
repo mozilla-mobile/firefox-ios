@@ -6,7 +6,8 @@ import Foundation
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(string: .AppSettingsPrivacyPolicy,
+                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override var url: URL? {
