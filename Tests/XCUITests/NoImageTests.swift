@@ -22,7 +22,7 @@ class NoImageTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Select hide images
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.blockImages]
+        let blockImagesSwitch = app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title]
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         waitForExistence(blockImagesSwitch)
