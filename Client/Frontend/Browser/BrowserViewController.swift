@@ -1993,8 +1993,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 case .formSubmit:
                     tabWebView.accessoryView.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
-
-                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) {
+                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
                         existingCard, error in
                         if existingCard != nil {
                             // card already saved should update if any of its other values are different

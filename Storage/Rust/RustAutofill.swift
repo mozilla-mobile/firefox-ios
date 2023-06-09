@@ -366,10 +366,7 @@ public class RustAutofill {
                     completion(nil, nil)
                     return
                 }
-
-                let rustKeys = RustAutofillEncryptionKeys()
-                let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: cardNumber)
-                if let foundCard = records.first(where: { $0.ccNumberEnc == ccNumberEnc }) {
+                if let foundCard = records.first(where: { $0.ccNumberLast4 == cardNumber }) {
                     completion(foundCard, nil)
                 }
 

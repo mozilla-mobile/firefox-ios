@@ -56,7 +56,10 @@ class CreditCardSingleViewModelTests: XCTestCase {
         profile = MockProfile()
         _ = profile.autofill.reopenIfClosed()
 
-        viewModel = SingleCreditCardViewModel(profile: profile, creditCard: nil, decryptedCreditCard: samplePlainTextCard, state: .save)
+        viewModel = SingleCreditCardViewModel(profile: profile,
+                                              creditCard: nil,
+                                              decryptedCreditCard: samplePlainTextCard,
+                                              state: .save)
     }
 
     override func tearDown() {
