@@ -279,7 +279,6 @@ class GroupedTabContainerCell: UITableViewCell,
     func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer3
         collectionView.backgroundColor = theme.colors.layer5
-        collectionView.reloadData()
     }
 
     override func prepareForReuse() {

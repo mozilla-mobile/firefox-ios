@@ -538,7 +538,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(displayThemeChanged),
-            name: .ThemeDidChange,
+            name: .DisplayThemeChanged,
             object: nil)
         NotificationCenter.default.addObserver(
             self,

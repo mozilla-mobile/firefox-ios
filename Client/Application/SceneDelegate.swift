@@ -59,11 +59,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-            var themeManager: ThemeManager = AppContainer.shared.resolve()
-            if let scene = scene as? UIWindowScene {
-                themeManager.windows = scene.windows
-            }
-
             if let context = connectionOptions.urlContexts.first,
                let route = routeBuilder.makeRoute(url: context.url) {
                 sceneCoordinator?.findAndHandle(route: route)
@@ -86,9 +81,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
 
             self.window = window
-
-            var themeManager: ThemeManager = AppContainer.shared.resolve()
-            themeManager.windows = [window]
 
             handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
         }
@@ -219,7 +211,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
 
         // Setting the initial theme correctly as we don't have a window attached yet to let ThemeManager set it
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        var themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager.window = window
         window.overrideUserInterfaceStyle = themeManager.currentTheme.type.getInterfaceStyle()
 
         return window
