@@ -265,6 +265,10 @@ public struct AccessibilityIdentifiers {
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
         }
+
+        struct Version {
+            static let title = "FxVersion"
+        }
     }
 
     struct ShareTo {

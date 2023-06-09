@@ -182,18 +182,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                    theme: themeManager.currentTheme),
         ]
 
-        // FXIOS-6597 - reorganize about settings
-        let aboutSettings = [
-            AppStoreReviewSetting(),
-            VersionSetting(settings: self, appSettingsDelegate: self),
-            LicenseAndAcknowledgementsSetting(),
-            YourRightsSetting()
-        ]
-
         settings += [
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: supportSettings),
-            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: aboutSettings)
         ]
+
+        settings += getAboutSettings()
 
         if showDebugSettings {
             settings += getDebugSettings()
@@ -323,6 +316,18 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
                                children: privacySettings)]
+    }
+
+    func getAboutSettings() -> [SettingSection] {
+        let aboutSettings = [
+            AppStoreReviewSetting(),
+            VersionSetting(settings: self, appSettingsDelegate: self),
+            LicenseAndAcknowledgementsSetting(),
+            YourRightsSetting()
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsAbout),
+                               children: aboutSettings)]
     }
 
     func getDebugSettings() -> [SettingSection] {

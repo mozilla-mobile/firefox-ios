@@ -720,6 +720,10 @@
 		8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD427BB1C1000672675 /* LockButton.swift */; };
 		8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */; };
 		8ADAFAC628AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */; };
+		8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */; };
+		8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1C2A33999800543DAA /* VersionSetting.swift */; };
+		8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1E2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift */; };
+		8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A202A3399DC00543DAA /* YourRightsSetting.swift */; };
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */; };
 		8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */; };
@@ -4688,6 +4692,10 @@
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
 		8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderViewModelTests.swift; sourceTree = "<group>"; };
+		8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewSetting.swift; sourceTree = "<group>"; };
+		8ADC2A1C2A33999800543DAA /* VersionSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSetting.swift; sourceTree = "<group>"; };
+		8ADC2A1E2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAndAcknowledgementsSetting.swift; sourceTree = "<group>"; };
+		8ADC2A202A3399DC00543DAA /* YourRightsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourRightsSetting.swift; sourceTree = "<group>"; };
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
 		8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounter.swift; sourceTree = "<group>"; };
 		8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounterTests.swift; sourceTree = "<group>"; };
@@ -7923,6 +7931,7 @@
 		8A3EF7ED2A2FCEC900796E3A /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				8ADC2A192A33997900543DAA /* About */,
 				8A5D1CB72A30DBCB005AD35C /* Account */,
 				E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */,
 				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
@@ -8226,6 +8235,17 @@
 				8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */,
 			);
 			path = LogoHeader;
+			sourceTree = "<group>";
+		};
+		8ADC2A192A33997900543DAA /* About */ = {
+			isa = PBXGroup;
+			children = (
+				8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */,
+				8ADC2A1E2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift */,
+				8ADC2A1C2A33999800543DAA /* VersionSetting.swift */,
+				8ADC2A202A3399DC00543DAA /* YourRightsSetting.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		8AE0BF4B2819B08D00F33EC4 /* TopSitesSettings */ = {
@@ -12150,6 +12170,7 @@
 				8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */,
+				8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */,
 				8A5D1CA82A30D6D3005AD35C /* HomeSetting.swift in Sources */,
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
@@ -12235,6 +12256,7 @@
 				C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */,
 				8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
+				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
@@ -12597,6 +12619,7 @@
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */,
+				8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */,
 				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
 				8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
@@ -12665,6 +12688,7 @@
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* SingleCreditCardHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
+				8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
