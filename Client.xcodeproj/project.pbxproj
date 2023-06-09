@@ -725,6 +725,11 @@
 		8ADAE4242A33A126007BF926 /* StudiesToggleSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE4232A33A126007BF926 /* StudiesToggleSetting.swift */; };
 		8ADAE4262A33A13B007BF926 /* OpenSupportPageSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE4252A33A13B007BF926 /* OpenSupportPageSetting.swift */; };
 		8ADAFAC628AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */; };
+		8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A0F2A33758E00543DAA /* FxALaunchParams.swift */; };
+		8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A112A3375B900543DAA /* FxAEntryPoint.swift */; };
+		8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A132A33762900543DAA /* ReferringPage.swift */; };
+		8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */; };
+		8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A172A33775F00543DAA /* FxASignInViewParameters.swift */; };
 		8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */; };
 		8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1C2A33999800543DAA /* VersionSetting.swift */; };
 		8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1E2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift */; };
@@ -4747,6 +4752,11 @@
 		8ADAE4232A33A126007BF926 /* StudiesToggleSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudiesToggleSetting.swift; sourceTree = "<group>"; };
 		8ADAE4252A33A13B007BF926 /* OpenSupportPageSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSupportPageSetting.swift; sourceTree = "<group>"; };
 		8ADAFAC528AEBF6300FFEBE3 /* HomeLogoHeaderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderViewModelTests.swift; sourceTree = "<group>"; };
+		8ADC2A0F2A33758E00543DAA /* FxALaunchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxALaunchParams.swift; sourceTree = "<group>"; };
+		8ADC2A112A3375B900543DAA /* FxAEntryPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAEntryPoint.swift; sourceTree = "<group>"; };
+		8ADC2A132A33762900543DAA /* ReferringPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferringPage.swift; sourceTree = "<group>"; };
+		8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlToOpenModel.swift; sourceTree = "<group>"; };
+		8ADC2A172A33775F00543DAA /* FxASignInViewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxASignInViewParameters.swift; sourceTree = "<group>"; };
 		8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewSetting.swift; sourceTree = "<group>"; };
 		8ADC2A1C2A33999800543DAA /* VersionSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSetting.swift; sourceTree = "<group>"; };
 		8ADC2A1E2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAndAcknowledgementsSetting.swift; sourceTree = "<group>"; };
@@ -9206,6 +9216,9 @@
 				C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */,
 				CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */,
 				437A857727E43FE100E42764 /* FxAWebViewTelemetry.swift */,
+				8ADC2A0F2A33758E00543DAA /* FxALaunchParams.swift */,
+				8ADC2A112A3375B900543DAA /* FxAEntryPoint.swift */,
+				8ADC2A172A33775F00543DAA /* FxASignInViewParameters.swift */,
 			);
 			path = RustFxA;
 			sourceTree = "<group>";
@@ -9497,6 +9510,7 @@
 				E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */,
 				8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
+				8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
 				DA4F826629AD221600189590 /* ZoomPageBar.swift */,
@@ -10013,6 +10027,7 @@
 				8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */,
 				8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
+				8ADC2A132A33762900543DAA /* ReferringPage.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -12304,6 +12319,7 @@
 				8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
+				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
@@ -12477,6 +12493,7 @@
 				D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				C8DC90BD2A06699E0008832B /* MarkupNode.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
+				8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
@@ -12502,6 +12519,7 @@
 				5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */,
 				964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */,
 				439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */,
+				8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */,
@@ -12581,6 +12599,7 @@
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */,
 				8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */,
+				8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */,
 				E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */,
 				96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */,
 				43DB9784292D6846002E0B9F /* ShareButton.swift in Sources */,
@@ -12815,6 +12834,7 @@
 				9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */,
+				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8AB5958828413F6C0090F4AE /* RecentlySavedCell.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
