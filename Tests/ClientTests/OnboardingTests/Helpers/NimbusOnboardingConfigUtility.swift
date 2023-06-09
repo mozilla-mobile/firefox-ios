@@ -12,7 +12,7 @@ struct NimbusOnboardingConfigUtility {
         case notifications = "notificationPermissions"
         case sync = "signToSync"
         case updateWelcome = "update.welcome"
-        case updateSync = "update.Sync"
+        case updateSync = "update.signToSync"
 
         static let allCards: [CardOrder] = [.welcome, .notifications, .sync, .updateWelcome, .updateSync]
         static let welcomeNotificationSync: [CardOrder] = [.welcome, .notifications, .sync]
@@ -60,7 +60,7 @@ struct NimbusOnboardingConfigUtility {
     private func addWelcome(order: Int) -> String {
         return """
 {
-  "name": "welcome",
+  "name": "\(CardOrder.welcome.rawValue)",
   "order": \(order),
   "title": "title",
   "body": "body text",
@@ -83,7 +83,7 @@ struct NimbusOnboardingConfigUtility {
     private func addNotifications(order: Int) -> String {
         return """
 {
-    "name": "notificationPermissions",
+    "name": "\(CardOrder.notifications.rawValue)",
     "order": \(order),
     "title": "title",
     "body": "body text",
@@ -106,7 +106,7 @@ struct NimbusOnboardingConfigUtility {
     private func addSync(order: Int) -> String {
         return """
 {
-    "name": "signToSync",
+    "name": "\(CardOrder.sync.rawValue)",
     "order": \(order),
     "title": "title",
     "body": "body text",
@@ -129,7 +129,7 @@ struct NimbusOnboardingConfigUtility {
     private func addUpdateWelcome(order: Int) -> String {
         return """
 {
-    "name": "update.welcome",
+    "name": "\(CardOrder.updateWelcome.rawValue)",
     "order": \(order),
     "title": "title",
     "body": "body text",
@@ -148,7 +148,7 @@ struct NimbusOnboardingConfigUtility {
     private func addUpdateSync(order: Int) -> String {
         return """
 {
-    "name": "update.signToSync",
+    "name": "\(CardOrder.updateSync.rawValue)",
     "order": \(order),
     "title": "title",
     "body": "body text",
