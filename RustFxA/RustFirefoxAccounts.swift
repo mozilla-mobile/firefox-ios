@@ -27,6 +27,8 @@ open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
     private static let clientID = "1b1a3e44c54fbb58"
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
+    // The value of the scope comes from https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
+    public static let pushScope = "chrome://fxa-device-update"
     public static var shared = RustFirefoxAccounts()
     public var accountManager = Deferred<FxAccountManager>()
     private static var isInitializingAccountManager = false

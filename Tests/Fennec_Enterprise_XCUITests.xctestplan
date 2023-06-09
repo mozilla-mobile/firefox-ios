@@ -104,6 +104,7 @@
         "SaveLoginTest\/testSavedLoginAutofilled()",
         "ScreenGraphTest\/testUserStateChanges()",
         "SearchTests\/testDismissPromptPresence()",
+        "SearchTests\/testOpenTabsInSearchSuggestions()",
         "SearchTests\/testSearchEngine()",
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SiteLoadTest",

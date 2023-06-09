@@ -28,7 +28,7 @@ enum ReferringPage: Equatable {
     case tabTray
 }
 
-class BrowserViewController: UIViewController, Themeable {
+class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -44,6 +44,8 @@ class BrowserViewController: UIViewController, Themeable {
     ]
 
     weak var browserDelegate: BrowserDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
+
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -1847,6 +1849,7 @@ class BrowserViewController: UIViewController, Themeable {
         }
     }
 
+    // Will be clean up with FXIOS-6529
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController(
             with: profile,
@@ -1859,8 +1862,6 @@ class BrowserViewController: UIViewController, Themeable {
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
-
-extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
@@ -2200,7 +2201,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        showSettingsWithDeeplink(to: settingsPage)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            let route = settingsPage.getSettingsRoute()
+            navigationHandler?.show(settings: route)
+        } else {
+            showSettingsWithDeeplink(to: settingsPage)
+        }
     }
 }
 
@@ -2857,7 +2863,11 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidRequestTabsSettings() {
-        showSettingsWithDeeplink(to: .customizeTabs)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            navigationHandler?.show(settings: .tabs)
+        } else {
+            showSettingsWithDeeplink(to: .customizeTabs)
+        }
     }
 }
 
