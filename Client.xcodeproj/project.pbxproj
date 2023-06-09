@@ -548,6 +548,12 @@
 		8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */; };
 		8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */; };
 		8A171A6329F82B0E0085770E /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A171A6129F82AE20085770E /* SceneDelegateTests.swift */; };
+		8A19ACAE2A329058001C2147 /* LoginsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAD2A329058001C2147 /* LoginsSetting.swift */; };
+		8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */; };
+		8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */; };
+		8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */; };
+		8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */; };
+		8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */; };
 		8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */; };
 		8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */; };
 		8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE128CBACD7003388C4 /* SponsoredContentFilterUtilityTests.swift */; };
@@ -4492,6 +4498,12 @@
 		8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeHomepageSectionViewModel.swift; sourceTree = "<group>"; };
 		8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSponsoredTileLayer.swift; sourceTree = "<group>"; };
 		8A171A6129F82AE20085770E /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
+		8A19ACAD2A329058001C2147 /* LoginsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsSetting.swift; sourceTree = "<group>"; };
+		8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillCreditCardSettings.swift; sourceTree = "<group>"; };
+		8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataSetting.swift; sourceTree = "<group>"; };
+		8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSetting.swift; sourceTree = "<group>"; };
+		8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSetting.swift; sourceTree = "<group>"; };
+		8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicySetting.swift; sourceTree = "<group>"; };
 		8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationHandler.swift; sourceTree = "<group>"; };
 		8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredContentFilterUtility.swift; sourceTree = "<group>"; };
 		8A1E3BE128CBACD7003388C4 /* SponsoredContentFilterUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredContentFilterUtilityTests.swift; sourceTree = "<group>"; };
@@ -7822,6 +7834,19 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
+		8A19ACAC2A329036001C2147 /* Privacy */ = {
+			isa = PBXGroup;
+			children = (
+				8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */,
+				8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */,
+				8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */,
+				8A19ACAD2A329058001C2147 /* LoginsSetting.swift */,
+				8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */,
+				8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */,
+			);
+			path = Privacy;
+			sourceTree = "<group>";
+		};
 		8A1E3BE028CBAC1F003388C4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -7902,8 +7927,9 @@
 				E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */,
 				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
 				8A3EF7EE2A2FCF0000796E3A /* Debug */,
-				8A5D1CA22A30D661005AD35C /* General */,
 				8A5D1CB52A30DBB0005AD35C /* DefaultBrowserSetting.swift */,
+				8A5D1CA22A30D661005AD35C /* General */,
+				8A19ACAC2A329036001C2147 /* Privacy */,
 				8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */,
 			);
 			path = Main;
@@ -12132,6 +12158,7 @@
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */,
 				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
+				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
 				E1E5BE252A28F7BE00248F77 /* LoginDetailViewControllerModel.swift in Sources */,
 				E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
@@ -12392,6 +12419,7 @@
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
 				965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
+				8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */,
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
@@ -12545,6 +12573,7 @@
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				5A8E7B6F29B8E5E500BF060F /* UIButton+Extensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
+				8A19ACAE2A329058001C2147 /* LoginsSetting.swift in Sources */,
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
@@ -12557,6 +12586,7 @@
 				EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
 				8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */,
 				0BA02DB22942605600C92603 /* CreditCardHelper.swift in Sources */,
+				8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
@@ -12666,6 +12696,7 @@
 				D5D237782640BBA600326204 /* ExperimentsSettingsViewController.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
+				8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */,
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
@@ -12673,6 +12704,7 @@
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
+				8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */,
 				E1463D022981DA190074E16E /* NotificationManager.swift in Sources */,
 				8A3EF8112A2FD06B00796E3A /* ToggleHistoryGroups.swift in Sources */,
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,

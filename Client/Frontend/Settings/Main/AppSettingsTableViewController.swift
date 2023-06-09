@@ -166,36 +166,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settings += getDefaultBrowserSetting()
         settings += getAccountSetting()
         settings += getGeneralSettings()
-
-        // FXIOS-6595 - reorganize privacy settings
-        var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self))
-        }
-
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
-
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme,
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
-        ]
-
-        privacySettings.append(ContentBlockerSetting(settings: self))
-
-        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
-        }
-
-        privacySettings += [
-            PrivacyPolicySetting()
-        ]
+        settings += getPrivacySettings()
 
         // FXIOS-6596 - reorganize support settings
         let supportSettings = [
@@ -220,7 +191,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         ]
 
         settings += [
-            SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: supportSettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: aboutSettings)
         ]
@@ -319,6 +289,40 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                children: generalSettings)]
+    }
+
+    func getPrivacySettings() -> [SettingSection] {
+        var privacySettings = [Setting]()
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            privacySettings.append(AutofillCreditCardSettings(settings: self))
+        }
+
+        privacySettings.append(ClearPrivateDataSetting(settings: self))
+
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.currentTheme,
+                        prefKey: "settings.closePrivateTabs",
+                        defaultValue: false,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
+        ]
+
+        privacySettings.append(ContentBlockerSetting(settings: self))
+
+        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
+        }
+
+        privacySettings += [
+            PrivacyPolicySetting()
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
+                               children: privacySettings)]
     }
 
     func getDebugSettings() -> [SettingSection] {
