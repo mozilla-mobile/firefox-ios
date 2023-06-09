@@ -1425,7 +1425,8 @@ workflows:
             --app "$BITRISE_IPA_PATH" \
             --device=model=iphone13pro,version=15.7 \
             --results-bucket=firefox_ios_test_artifacts \
-            --no-record-video
+            --no-record-video \
+            --client-details=matrixLabel="Bitrise"
 
 app:
   envs:
