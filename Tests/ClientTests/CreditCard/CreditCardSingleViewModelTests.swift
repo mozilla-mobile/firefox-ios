@@ -15,11 +15,18 @@ class CreditCardSingleViewModelTests: XCTestCase {
     private var autofill: RustAutofill!
     private var encryptionKey: String!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
-                                                                  ccNumber: "4539185806954013",
-                                                                  ccNumberLast4: "4013",
+                                                                  ccNumber: "4242424242424242",
+                                                                  ccNumberLast4: "4242",
                                                                   ccExpMonth: 08,
                                                                   ccExpYear: 2055,
                                                                   ccType: "VISA")
+
+    private var samplePlainTextUpdateCard = UnencryptedCreditCardFields(ccName: "Allen Burgers",
+                                                                        ccNumber: "4242424242424242",
+                                                                        ccNumberLast4: "4242",
+                                                                        ccExpMonth: 09,
+                                                                        ccExpYear: 2056,
+                                                                        ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
                                               ccNumberEnc: "1234567891234567",
@@ -126,5 +133,14 @@ class CreditCardSingleViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.yesButtonTitle == .CreditCard.UpdateCreditCard.MainButtonTitle)
         XCTAssertTrue(viewModel.state.notNowButtonTitle == .CreditCard.UpdateCreditCard.SecondaryButtonTitle)
         XCTAssertTrue(viewModel.state.title == .CreditCard.UpdateCreditCard.MainTitle)
+    }
+
+    func test_getPlainCreditCardValues() {
+        let value = viewModel.getPlainCreditCardValues()
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
     }
 }
