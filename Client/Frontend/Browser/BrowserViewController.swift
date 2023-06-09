@@ -1755,17 +1755,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider {
         showViewController(viewController: viewController)
     }
 
-    @objc
-    func openSettings() {
-        ensureMainThread { [self] in
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                self.navigationHandler?.show(settings: .general)
-            } else {
-                self.legacyShowSettings(deeplink: nil)
-            }
-        }
-    }
-
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
