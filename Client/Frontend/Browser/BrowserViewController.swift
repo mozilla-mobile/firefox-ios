@@ -1999,15 +1999,15 @@ extension BrowserViewController: LegacyTabDelegate {
                         if existingCard != nil {
                             // card already saved should update if any of its other values are different
                             if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
-                                tabWebView.accessoryView.savedCardsClosure = {
+                                DispatchQueue.main.async {
                                     self.showSingleCardViewController(creditCard: existingCard,
                                                                       decryptedCard: fieldValues,
                                                                       viewType: .update)
                                 }
                             }
                         } else {
-                            tabWebView.accessoryView.savedCardsClosure = {
-                                self.showSingleCardViewController(creditCard: existingCard,
+                            DispatchQueue.main.async {
+                                self.showSingleCardViewController(creditCard: nil,
                                                                   decryptedCard: fieldValues,
                                                                   viewType: .save)
                             }
@@ -2605,18 +2605,14 @@ extension BrowserViewController {
         let viewController = SingleCreditCardViewController(viewModel: creditCardControllerViewModel)
         viewController.didTapYesClosure = { error in
             if let error = error {
-                DispatchQueue.main.async {
-                    SimpleToast().showAlertWithText(error.localizedDescription,
-                                                    bottomContainer: self.alertContainer,
-                                                    theme: self.themeManager.currentTheme)
-                }
+                SimpleToast().showAlertWithText(error.localizedDescription,
+                                                bottomContainer: self.alertContainer,
+                                                theme: self.themeManager.currentTheme)
             } else {
-                DispatchQueue.main.async {
-                    let toastMessage: String = state == .save ? .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage : .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
-                    SimpleToast().showAlertWithText(toastMessage,
-                                                    bottomContainer: self.alertContainer,
-                                                    theme: self.themeManager.currentTheme)
-                }
+                let toastMessage: String = state == .save ? .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage : .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+                SimpleToast().showAlertWithText(toastMessage,
+                                                bottomContainer: self.alertContainer,
+                                                theme: self.themeManager.currentTheme)
             }
         }
 
