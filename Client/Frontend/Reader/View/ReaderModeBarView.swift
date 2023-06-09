@@ -43,7 +43,7 @@ protocol ReaderModeBarViewDelegate: AnyObject {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
+class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider {
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
@@ -161,5 +161,3 @@ extension ReaderModeBarView: ThemeApplicable {
         buttonTintColor = theme.colors.textPrimary
     }
 }
-
-extension ReaderModeBarView: SearchBarLocationProvider {}

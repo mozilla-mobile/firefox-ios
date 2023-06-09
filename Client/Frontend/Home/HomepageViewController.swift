@@ -9,7 +9,8 @@ import SyncTelemetry
 import MozillaAppServices
 import Common
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable {
+class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable,
+                                SearchBarLocationProvider {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -752,7 +753,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 }
 
 // MARK: - Status Bar Background
-extension HomepageViewController: SearchBarLocationProvider {}
 
 extension HomepageViewController {
     var statusBarFrame: CGRect? {
