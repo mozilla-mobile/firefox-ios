@@ -40,16 +40,16 @@ class CreditCardSingleViewModelTests: XCTestCase {
                                               timesUsed: 123123)
 
     private var invalidSampleCreditCard = CreditCard(guid: "1",
-                                                    ccName: "Allen Burges",
-                                                    ccNumberEnc: "",
-                                                    ccNumberLast4: "",
-                                                    ccExpMonth: 1,
-                                                    ccExpYear: 0,
-                                                    ccType: "",
-                                                    timeCreated: 0,
-                                                    timeLastUsed: nil,
-                                                    timeLastModified: 2,
-                                                    timesUsed: 0)
+                                                     ccName: "Allen Burges",
+                                                     ccNumberEnc: "",
+                                                     ccNumberLast4: "",
+                                                     ccExpMonth: 1,
+                                                     ccExpYear: 0,
+                                                     ccType: "",
+                                                     timeCreated: 0,
+                                                     timeLastUsed: nil,
+                                                     timeLastModified: 2,
+                                                     timesUsed: 0)
 
     override func setUp() {
         super.setUp()
