@@ -267,12 +267,14 @@ class BoolSetting: Setting, FeatureFlaggable {
     convenience init(
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
+        statusText: NSAttributedString? = nil,
         settingDidChange: ((Bool) -> Void)? = nil
     ) {
         self.init(
             prefs: nil,
             defaultValue: nil,
             attributedTitleText: titleText,
+            attributedStatusText: statusText,
             featureFlagName: featureFlagID,
             settingDidChange: settingDidChange)
     }
