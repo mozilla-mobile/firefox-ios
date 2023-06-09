@@ -98,7 +98,7 @@ class CreditCardSingleViewModelTests: XCTestCase {
             self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
 
-            self.viewModel.creditCard = self.samplePlainTextCard.toFakeCreditCard()
+            self.viewModel.creditCard = self.samplePlainTextCard.convertToTempCreditCard()
             self.viewModel.updateCreditCard { didUpdate, error in
                 XCTAssertTrue(didUpdate)
                 XCTAssertNil(error)

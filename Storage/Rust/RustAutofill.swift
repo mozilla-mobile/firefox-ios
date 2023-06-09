@@ -62,21 +62,21 @@ public struct UnencryptedCreditCardFields {
                                          ccType: self.ccType)
     }
 
-    public func toFakeCreditCard() -> CreditCard {
+    public func convertToTempCreditCard() -> CreditCard {
         let rustKeys = RustAutofillEncryptionKeys()
         let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
-        let fakeCreditCard = CreditCard(guid: "",
-                                        ccName: self.ccName,
-                                        ccNumberEnc: ccNumberEnc ?? "",
-                                        ccNumberLast4: self.ccNumberLast4,
-                                        ccExpMonth: self.ccExpMonth,
-                                        ccExpYear: self.ccExpYear,
-                                        ccType: self.ccType,
-                                        timeCreated: Int64(Date().timeIntervalSince1970),
-                                        timeLastUsed: nil,
-                                        timeLastModified: Int64(Date().timeIntervalSince1970),
-                                        timesUsed: 0)
-        return fakeCreditCard
+        let convertedCreditCard = CreditCard(guid: "",
+                                             ccName: self.ccName,
+                                             ccNumberEnc: ccNumberEnc ?? "",
+                                             ccNumberLast4: self.ccNumberLast4,
+                                             ccExpMonth: self.ccExpMonth,
+                                             ccExpYear: self.ccExpYear,
+                                             ccType: self.ccType,
+                                             timeCreated: Int64(Date().timeIntervalSince1970),
+                                             timeLastUsed: nil,
+                                             timeLastModified: Int64(Date().timeIntervalSince1970),
+                                             timesUsed: 0)
+        return convertedCreditCard
     }
 
     public func isEqualToCreditCard(creditCard: CreditCard) -> Bool {

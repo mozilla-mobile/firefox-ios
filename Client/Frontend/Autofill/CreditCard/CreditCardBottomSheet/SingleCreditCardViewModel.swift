@@ -54,7 +54,13 @@ struct SingleCreditCardViewModel {
     private var logger: Logger
     let profile: Profile
     let autofill: RustAutofill
-    var creditCard: CreditCard?
+    var creditCard: CreditCard? {
+        didSet {
+            didUpdateCreditCard?()
+        }
+    }
+
+    var didUpdateCreditCard: (() -> Void)?
     var decryptedCreditCard: UnencryptedCreditCardFields?
 
     var state: SingleCreditCardViewState
@@ -68,9 +74,10 @@ struct SingleCreditCardViewModel {
         self.autofill = profile.autofill
         if creditCard != nil {
             self.creditCard = creditCard
+            self.decryptedCreditCard = decryptedCreditCard
         } else {
             self.decryptedCreditCard = decryptedCreditCard
-            self.creditCard = decryptedCreditCard?.toFakeCreditCard()
+            self.creditCard = decryptedCreditCard?.convertToTempCreditCard()
         }
         self.state = state
         self.logger = logger

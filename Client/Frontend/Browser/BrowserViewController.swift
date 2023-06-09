@@ -1991,26 +1991,30 @@ extension BrowserViewController: LegacyTabDelegate {
                     tabWebView.accessoryView.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
                 case .formSubmit:
-                    // Ref: FXIOS-6111
-                    // Action will be added to present a half sheet
-                    // for remember or update the credit card
-                    var viewType: SingleCreditCardViewState = .save
                     tabWebView.accessoryView.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
 
-                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) { existingCard, error in
+                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) {
+                        existingCard, error in
                         if existingCard != nil {
-                            // should update if it's different
+                            // card already saved should update if any of its other values are different
                             if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
-                                viewType = .update
+                                tabWebView.accessoryView.savedCardsClosure = {
+                                    self.showSingleCardViewController(creditCard: existingCard,
+                                                                      decryptedCard: fieldValues,
+                                                                      viewType: .update)
+                                }
+                            }
+                        } else {
+                            tabWebView.accessoryView.savedCardsClosure = {
+                                self.showSingleCardViewController(creditCard: existingCard,
+                                                                  decryptedCard: fieldValues,
+                                                                  viewType: .save)
                             }
                         }
-                        tabWebView.accessoryView.savedCardsClosure = { self.showSingleCardViewController(creditCard: existingCard, decryptedCard: fieldValues, viewType: viewType) }
                     }
                     break
                 }
-
-                tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
 
@@ -2593,18 +2597,35 @@ extension BrowserViewController {
     }
 
     public func showSingleCardViewController(creditCard: CreditCard?, decryptedCard: UnencryptedCreditCardFields?, viewType state: SingleCreditCardViewState) {
-        let creditCardControllerViewModel = SingleCreditCardViewModel(profile: profile, creditCard: creditCard, decryptedCreditCard: decryptedCard, state: state)
+        let creditCardControllerViewModel = SingleCreditCardViewModel(profile: profile,
+                                                                      creditCard: creditCard,
+                                                                      decryptedCreditCard: decryptedCard,
+                                                                      state: state)
 
         let viewController = SingleCreditCardViewController(viewModel: creditCardControllerViewModel)
         viewController.didTapYesClosure = { error in
-            // perform actions after didTapYes() is called
-            // handle error if needed
+            if let error = error {
+                DispatchQueue.main.async {
+                    SimpleToast().showAlertWithText(error.localizedDescription,
+                                                    bottomContainer: self.alertContainer,
+                                                    theme: self.themeManager.currentTheme)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let toastMessage: String = state == .save ? .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage : .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+                    SimpleToast().showAlertWithText(toastMessage,
+                                                    bottomContainer: self.alertContainer,
+                                                    theme: self.themeManager.currentTheme)
+                }
+            }
         }
+
         viewController.didTapNotNowClosure = {
-            // perform actions after didTapNotNow() is called
         }
+
+        // TODO: update the credit card that was selected by the user in the manage cards screen
         viewController.didTapManageCardsClosure = {
-            // perform actions after didTapManageCards() is called
+            self.showCreditCardSettings()
         }
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = false
