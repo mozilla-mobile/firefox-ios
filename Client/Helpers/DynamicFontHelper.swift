@@ -177,9 +177,14 @@ class DynamicFontHelper: NSObject {
     /// - Returns: The UIFont with the specified font size and style
     func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
                        size: CGFloat,
-                       weight: UIFont.Weight? = nil) -> UIFont {
+                       weight: UIFont.Weight? = nil,
+                       symbolicTraits: UIFontDescriptor.SymbolicTraits? = nil) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
-        let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+        var fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+
+        if let symbolicTraits = symbolicTraits, let descriptor = fontDescriptor.withSymbolicTraits(symbolicTraits) {
+            fontDescriptor = descriptor
+        }
 
         var font: UIFont
         if let weight = weight {

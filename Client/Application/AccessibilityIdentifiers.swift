@@ -247,6 +247,12 @@ public struct AccessibilityIdentifiers {
         struct BlockImages {
             static let blockImages = "Block Images"
         }
+
+        struct Passwords {
+            static let usernameField = "usernameField"
+            static let passwordField = "passwordField"
+            static let websiteField = "websiteField"
+        }
     }
 
     struct ShareTo {

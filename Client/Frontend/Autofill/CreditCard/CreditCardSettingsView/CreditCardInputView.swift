@@ -17,6 +17,7 @@ struct CreditCardInputView: View {
     @State var backgroundColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
+    @State var barButtonColor: Color = .clear
 
     var body: some View {
         NavigationView {
@@ -82,9 +83,11 @@ struct CreditCardInputView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         rightBarButton()
                             .disabled(!viewModel.isRightBarButtonEnabled)
+                            .foregroundColor(barButtonColor)
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         leftBarButton()
+                            .foregroundColor(barButtonColor)
                     }
                 }
                 .padding(.top, 0)
@@ -114,6 +117,7 @@ struct CreditCardInputView: View {
         let color = theme.colors
         backgroundColor = Color(color.layer1)
         textFieldBackgroundColor = Color(color.layer2)
+        barButtonColor = Color(color.actionPrimary)
     }
 
     func rightBarButton() -> some View {

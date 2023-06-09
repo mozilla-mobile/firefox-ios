@@ -1842,6 +1842,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // Will be clean up with FXIOS-6529
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController(
             with: profile,
@@ -1980,22 +1981,36 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+            creditCardHelper.foundFieldValues = { fieldValues, type in
+                guard let tabWebView = tab.webView as? TabWebView,
+                      let type = type
+                else { return }
 
-            creditCardHelper.foundFieldValues = { fieldValues in
-                guard let tabWebView = tab.webView as? TabWebView else { return }
-                var viewType: SingleCreditCardViewState = .save
-                tabWebView.accessoryView.reloadViewFor(.creditCard)
-                tabWebView.reloadInputViews()
+                switch type {
+                case .formInput:
+                    tabWebView.accessoryView.reloadViewFor(.creditCard)
+                    tabWebView.reloadInputViews()
+                case .formSubmit:
+                    // Ref: FXIOS-6111
+                    // Action will be added to present a half sheet
+                    // for remember or update the credit card
+                    var viewType: SingleCreditCardViewState = .save
+                    tabWebView.accessoryView.reloadViewFor(.creditCard)
+                    tabWebView.reloadInputViews()
 
-                self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) { existingCard, error in
-                    if existingCard != nil {
-                        // should update if it's different
-                        if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
-                            viewType = .update
+                    self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumber) { existingCard, error in
+                        if existingCard != nil {
+                            // should update if it's different
+                            if !fieldValues.isEqualToCreditCard(creditCard: existingCard!) {
+                                viewType = .update
+                            }
                         }
+                        tabWebView.accessoryView.savedCardsClosure = { self.showSingleCardViewController(creditCard: existingCard, decryptedCard: fieldValues, viewType: viewType) }
                     }
-                    tabWebView.accessoryView.savedCardsClosure = { self.showSingleCardViewController(creditCard: existingCard, decryptedCard: fieldValues, viewType: viewType) }
+                    break
                 }
+
+                tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
 
@@ -2193,7 +2208,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        showSettingsWithDeeplink(to: settingsPage)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            let route = settingsPage.getSettingsRoute()
+            browserDelegate?.show(settings: route)
+        } else {
+            showSettingsWithDeeplink(to: settingsPage)
+        }
     }
 }
 
@@ -2873,7 +2893,11 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidRequestTabsSettings() {
-        showSettingsWithDeeplink(to: .customizeTabs)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            browserDelegate?.show(settings: .tabs)
+        } else {
+            showSettingsWithDeeplink(to: .customizeTabs)
+        }
     }
 }
 

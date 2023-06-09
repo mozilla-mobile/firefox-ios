@@ -38,6 +38,15 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.SkipContextualHints,
                            LaunchArguments.TurnOffTabGroupsInUserPreferences]
 
+    func restartInBackground() {
+        // Send app to background, and re-enter
+        XCUIDevice.shared.press(.home)
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        app.activate()
+    }
+
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState

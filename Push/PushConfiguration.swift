@@ -22,6 +22,14 @@ public enum PushConfigurationLabel: String {
     case firefox = "firefox"
 
     static func fromScheme(scheme: String) throws -> PushConfigurationLabel {
+        var scheme = scheme
+        // When running in the NotificationService, the scheme is in the form:
+        // scheme.NotificationService, we strip the suffix out so the scheme is the
+        // same regardless of where the configuration is being evaluated
+        let notificationServiceSuffix = ".NotificationService"
+        if scheme.hasSuffix(notificationServiceSuffix) {
+            scheme = String(scheme.dropLast(notificationServiceSuffix.count))
+        }
         switch scheme {
         case "Fennec": return .fennec
         case "FennecEnterprise": return .fennecEnterprise

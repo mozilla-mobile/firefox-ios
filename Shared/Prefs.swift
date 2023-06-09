@@ -74,6 +74,7 @@ public struct PrefsKeys {
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let ASSponsoredPocketStories = "ASSponsoredPocketStoriesUserPrefsKey"
+        public static let AutopushFeature = "AutopushFeatureUserPrefKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
