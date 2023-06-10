@@ -69,13 +69,7 @@ class AddCredentialViewController: UIViewController, Themeable {
         navigationItem.rightBarButtonItem = saveButton
         navigationItem.leftBarButtonItem = cancelButton
 
-        view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        setupTableView()
 
         applyTheme()
         listenForThemeChange(view)
@@ -87,6 +81,17 @@ class AddCredentialViewController: UIViewController, Themeable {
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
+    }
+
+    private func setupTableView() {
+        tableView.register(cellType: LoginDetailTableViewCell.self)
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     @objc
@@ -134,9 +139,9 @@ class AddCredentialViewController: UIViewController, Themeable {
 // MARK: - UITableViewDataSource
 extension AddCredentialViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let loginCell = cell(forIndexPath: indexPath)
         switch AddCredentialField(rawValue: indexPath.row)! {
         case .usernameItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailUsername,
                 keyboardType: .emailAddress,
@@ -149,7 +154,6 @@ extension AddCredentialViewController: UITableViewDataSource {
             return loginCell
 
         case .passwordItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailPassword,
                 displayDescriptionAsPassword: true,
@@ -161,7 +165,6 @@ extension AddCredentialViewController: UITableViewDataSource {
             return loginCell
 
         case .websiteItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailWebsite,
                 descriptionPlaceholder: "https://www.example.com",
@@ -176,7 +179,7 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
-        let loginCell = LoginDetailTableViewCell()
+        let loginCell = tableView.dequeueReusableCell(withIdentifier: LoginDetailTableViewCell.cellIdentifier, for: indexPath) as! LoginDetailTableViewCell
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell

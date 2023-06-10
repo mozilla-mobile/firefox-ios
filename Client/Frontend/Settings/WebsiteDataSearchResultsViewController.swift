@@ -48,7 +48,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         view.addSubview(tableView)
@@ -87,13 +87,14 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
         cell.applyTheme(theme: themeManager.currentTheme)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
             if let record = filteredSiteRecords[safe: indexPath.row] {
                 cell.textLabel?.text = record.displayName
+                cell.textLabel?.textAlignment = .natural
                 if viewModel.selectedRecords.contains(record) {
                     tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
                 } else {

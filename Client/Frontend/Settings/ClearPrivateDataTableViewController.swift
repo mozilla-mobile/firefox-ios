@@ -76,6 +76,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         title = .SettingsDataManagementTitle
 
+        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -86,16 +87,19 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
+        cell.restoreToInitialState()
         cell.applyTheme(theme: themeManager.currentTheme)
 
         if indexPath.section == SectionArrow {
             cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.textAlignment = .natural
             cell.textLabel?.text = .SettingsWebsiteDataTitle
             cell.accessibilityIdentifier = "WebsiteData"
             clearButton = cell
         } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
+            cell.textLabel?.textAlignment = .natural
             cell.textLabel?.numberOfLines = 0
             let control = UISwitch()
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary

@@ -20,9 +20,6 @@ class ThemeSettingsController: ThemedTableViewController {
         case lightDarkPicker
     }
 
-    // A non-interactable slider is underlaid to show the current screen brightness indicator
-    private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
-
     var isAutoBrightnessOn: Bool {
         return LegacyThemeManager.instance.automaticBrightnessIsOn
     }
@@ -48,6 +45,8 @@ class ThemeSettingsController: ThemedTableViewController {
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
+        tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
 
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
@@ -176,9 +175,11 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        var cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
+        cell.restoreToInitialState()
         cell.selectionStyle = .none
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
+        print(section)
         switch section {
         case .systemTheme:
             cell.textLabel?.text = .SystemThemeSectionSwitchTitle
@@ -193,6 +194,8 @@ class ThemeSettingsController: ThemedTableViewController {
 
             cell.accessoryView = control
         case .automaticBrightness:
+            cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as! ThemedSubtitleTableViewCell
+            cell.selectionStyle = .none
             if indexPath.row == 0 {
                 cell.textLabel?.text = .DisplayThemeManualSwitchTitle
                 cell.detailTextLabel?.text = .DisplayThemeManualSwitchSubtitle
@@ -210,7 +213,6 @@ class ThemeSettingsController: ThemedTableViewController {
             } else {
                 cell.accessoryType = .none
             }
-
         case .lightDarkPicker:
             if isAutoBrightnessOn {
                 let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
@@ -222,7 +224,6 @@ class ThemeSettingsController: ThemedTableViewController {
                 deviceBrightnessIndicator.minimumTrackTintColor = .clear
                 deviceBrightnessIndicator.maximumTrackTintColor = .clear
                 deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
-                self.slider = (slider, deviceBrightnessIndicator)
             } else {
                 if indexPath.row == 0 {
                     cell.textLabel?.text = .DisplayThemeOptionLight
@@ -241,7 +242,6 @@ class ThemeSettingsController: ThemedTableViewController {
             }
         }
         cell.applyTheme(theme: themeManager.currentTheme)
-
         return cell
     }
 

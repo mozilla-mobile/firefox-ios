@@ -31,6 +31,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         title = .SettingsOpenWithSectionName
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
+        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -100,7 +101,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
         let option = mailProviderSource[indexPath.row]
 
         cell.applyTheme(theme: themeManager.currentTheme)

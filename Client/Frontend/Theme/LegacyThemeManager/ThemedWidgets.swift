@@ -93,6 +93,45 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func configure(viewModel: ThemedTableViewCellViewModel) {
         self.viewModel = viewModel
     }
+
+    func restoreToInitialState() {
+        textLabel?.text = nil
+        textLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+        detailTextLabel?.text = nil
+        accessoryView = nil
+        accessoryType = .none
+        editingAccessoryView = nil
+        editingAccessoryType = .none
+        imageView?.image = nil
+        contentView.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+        subviews.forEach {
+            $0.alpha = 1.0
+        }
+    }
+}
+
+/// Themed Table View Cell with cell style type subtitle
+class ThemedSubtitleTableViewCell: ThemedTableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+/// Themed Table View Cell with cell style type value1
+class ThemedValue1TableViewCell: ThemedTableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .value1, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 class ThemedTableViewController: UITableViewController, Themeable {
@@ -113,11 +152,12 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         applyTheme()
         listenForThemeChange(view)
     }

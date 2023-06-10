@@ -55,7 +55,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         tableView.isEditing = true
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
-
+        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -86,7 +86,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
+        cell.restoreToInitialState()
         cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
 

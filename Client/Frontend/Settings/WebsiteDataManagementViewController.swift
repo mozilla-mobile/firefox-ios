@@ -138,7 +138,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.allowsSelectionDuringEditing = true
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
-
+        tableView.register(cellType: ThemedTableViewCell.self)
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
         footer.applyTheme(theme: themeManager.currentTheme)
@@ -198,17 +198,20 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
             if let record = viewModel.siteRecords[safe: indexPath.row] {
+                cell.textLabel?.textAlignment = .natural
                 cell.textLabel?.text = record.displayName
                 if viewModel.selectedRecords.contains(record) {
                     tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
                 } else {
                     tableView.deselectRow(at: indexPath, animated: false)
                 }
+                let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .standard)
+                cell.configure(viewModel: cellViewModel)
             }
         case .showMore:
             let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled

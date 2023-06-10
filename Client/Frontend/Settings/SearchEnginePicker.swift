@@ -12,6 +12,7 @@ class SearchEnginePicker: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.register(cellType: ThemedTableViewCell.self)
         navigationItem.title = .SearchEnginePickerTitle
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SearchEnginePickerCancel, style: .plain, target: self, action: #selector(cancel))
     }
@@ -22,7 +23,7 @@ class SearchEnginePicker: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let engine = engines[indexPath.item]
-        let cell = ThemedTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
         cell.applyTheme(theme: themeManager.currentTheme)
         cell.textLabel?.text = engine.shortName
         let size = CGSize(width: OpenSearchEngine.UX.preferredIconSize,

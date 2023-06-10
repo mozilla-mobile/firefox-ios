@@ -766,7 +766,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedValue1TableViewCell.self)
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
@@ -845,7 +847,14 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
+            var cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as! ThemedTableViewCell
+            if setting.style == .value1 {
+                cell = tableView.dequeueReusableCell(withIdentifier: ThemedValue1TableViewCell.cellIdentifier, for: indexPath) as! ThemedValue1TableViewCell
+            }
+            if setting.style == .subtitle {
+                cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as! ThemedSubtitleTableViewCell
+            }
+            cell.restoreToInitialState()
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
