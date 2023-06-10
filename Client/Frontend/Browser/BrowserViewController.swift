@@ -28,7 +28,7 @@ enum ReferringPage: Equatable {
     case tabTray
 }
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -44,6 +44,8 @@ class BrowserViewController: UIViewController {
     ]
 
     weak var browserDelegate: BrowserDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
+
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -163,6 +165,9 @@ class BrowserViewController: UIViewController {
     private var keyboardPressesHandlerValue: Any?
 
     var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+
     var logger: Logger
 
     var newTabSettings: NewTabPage {
@@ -182,6 +187,7 @@ class BrowserViewController: UIViewController {
         profile: Profile,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
@@ -189,6 +195,7 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
@@ -450,7 +457,7 @@ class BrowserViewController: UIViewController {
         trackTelemetry()
         setupNotifications()
         addSubviews()
-
+        listenForThemeChange(view)
         setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
@@ -1842,6 +1849,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // Will be clean up with FXIOS-6529
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController(
             with: profile,
@@ -1854,8 +1862,6 @@ class BrowserViewController: UIViewController {
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
-
-extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
@@ -2195,7 +2201,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        showSettingsWithDeeplink(to: settingsPage)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            let route = settingsPage.getSettingsRoute()
+            navigationHandler?.show(settings: route)
+        } else {
+            showSettingsWithDeeplink(to: settingsPage)
+        }
     }
 }
 
@@ -2852,7 +2863,11 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidRequestTabsSettings() {
-        showSettingsWithDeeplink(to: .customizeTabs)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            navigationHandler?.show(settings: .tabs)
+        } else {
+            showSettingsWithDeeplink(to: .customizeTabs)
+        }
     }
 }
 
@@ -2867,6 +2882,7 @@ extension BrowserViewController: LegacyNotificationThemeable {
                                       readerModeBar]
         urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         ui.forEach { $0?.applyTheme(theme: currentTheme) }
+        zoomPageBar?.applyTheme(theme: currentTheme)
         topTabsViewController?.applyTheme()
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
@@ -2887,7 +2903,6 @@ extension BrowserViewController: LegacyNotificationThemeable {
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
-        zoomPageBar?.applyTheme(theme: themeManager.currentTheme)
     }
 }
 

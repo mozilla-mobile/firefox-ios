@@ -8,15 +8,20 @@ import UIKit
 class MockGleanWrapper: GleanWrapper {
     var handleDeeplinkUrlCalled = 0
     var submitPingCalled = 0
+    var setUploadEnabledCalled = 0
 
     var savedHandleDeeplinkUrl: URL?
+    var savedSetUploadIsEnabled: Bool?
 
     func handleDeeplinkUrl(url: URL) {
         handleDeeplinkUrlCalled += 1
         savedHandleDeeplinkUrl = url
     }
-
     func submitPing() {
         submitPingCalled += 1
+    }
+    func setUpload(isEnabled: Bool) {
+        setUploadEnabledCalled += 1
+        savedSetUploadIsEnabled = isEnabled
     }
 }

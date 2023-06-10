@@ -71,6 +71,22 @@ open class PushNotificationSetup {
         }
     }
 
+    public func updatePushRegistration(subscriptionResponse: SubscriptionResponse) {
+        let endpoint = subscriptionResponse.subscriptionInfo.endpoint
+        let publicKey = subscriptionResponse.subscriptionInfo.keys.p256dh
+        let authKey = subscriptionResponse.subscriptionInfo.keys.auth
+        let devicePush = DevicePushSubscription(endpoint: endpoint,
+                                                publicKey: publicKey,
+                                                authKey: authKey)
+        RustFirefoxAccounts.shared.accountManager.upon { accountManager in
+            let currentSubscription = accountManager.deviceConstellation()?.state()?.localDevice?.pushSubscription
+            if currentSubscription == devicePush {
+                return
+            }
+            accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+        }
+    }
+
     public func unregister() {
         if let pushRegistration = pushRegistration {
             pushClient?.unregister(pushRegistration) {}
