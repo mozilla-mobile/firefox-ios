@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
+    func showSignInView(fxaParameters: FxASignInViewParameters)
 }
 
 enum MenuButtonToastAction {
@@ -48,10 +49,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol {
-    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
-    // swiftlint: disable large_tuple
-    typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
-    // swiftlint: enable large_tuple
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -59,7 +56,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private let showFXASyncAction: (FXASyncClosure) -> Void
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -70,6 +66,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
 
     /// MainMenuActionHelper init
     /// - Parameters:
@@ -80,7 +77,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
-         showFXASyncAction: @escaping (FXASyncClosure) -> Void,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
@@ -88,7 +84,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
-        self.showFXASyncAction = showFXASyncAction
         self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab
@@ -213,7 +208,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             append(to: &section, action: readingListSection)
         }
 
-        let syncAction = syncMenuButton(showFxA: showFXASyncAction)
+        let syncAction = syncMenuButton()
         append(to: &section, action: syncAction)
 
         return section
@@ -443,31 +438,42 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        let title = String.AppMenu.AppMenuSettingsTitleString
-        let icon = ImageIdentifiers.settings
+        let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
+                                                 iconString: ImageIdentifiers.settings) { _ in
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
-        let openSettings = SingleActionViewModel(title: title,
-                                                 iconString: icon) { _ in
-            let settingsTableViewController = AppSettingsTableViewController(
-                with: self.profile,
-                and: self.tabManager,
-                delegate: self.menuActionDelegate)
-
-            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                controller.modalPresentationStyle = .fullScreen
-            }
-            controller.presentingModalViewControllerDelegate = self.menuActionDelegate
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
-
-            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-            // of this popover on iPad seems to block the presentation of the modal VC.
-            DispatchQueue.main.async {
-                self.delegate?.showViewController(viewController: controller)
+                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+                DispatchQueue.main.async {
+                    self.navigationHandler?.show(settings: .general)
+                }
+            } else {
+                self.legacyShowSettings()
             }
         }.items
         return openSettings
+    }
+
+    // Will be removed with FXIOS-6529
+    private func legacyShowSettings() {
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: self.profile,
+            and: self.tabManager,
+            delegate: self.menuActionDelegate)
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            controller.modalPresentationStyle = .fullScreen
+        }
+        controller.presentingModalViewControllerDelegate = self.menuActionDelegate
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
+
+        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+        // of this popover on iPad seems to block the presentation of the modal VC.
+        DispatchQueue.main.async {
+            self.delegate?.showViewController(viewController: controller)
+        }
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {
@@ -505,11 +511,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return items
     }
 
-    private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
-        let action: (SingleActionViewModel) -> Void = { action in
+    private func syncMenuButton() -> PhotonRowActions? {
+        let action: (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
-            let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
-            showFxA(params)
+            let parameters = FxASignInViewParameters(launchParameters: fxaParams,
+                                                     flowType: .emailLoginFlow,
+                                                     referringPage: .appMenu)
+            self?.delegate?.showSignInView(fxaParameters: parameters)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         }
 

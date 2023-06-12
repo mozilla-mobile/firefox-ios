@@ -19,7 +19,7 @@ enum ContextualHintType: String {
     case toolbarLocation = "ToolbarLocation"
 }
 
-class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
+class ContextualHintViewModel: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
     typealias CFRStrings = String.ContextualHints
 
@@ -167,5 +167,3 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         presentFromTimer = nil
     }
 }
-
-extension ContextualHintViewModel: SearchBarLocationProvider {}

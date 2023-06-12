@@ -86,11 +86,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
-                                              buttonView: button,
-                                              showFXASyncAction: presentSignInViewController)
+                                              buttonView: button)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            menuHelper.navigationHandler = navigationHandler
+        }
 
         updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
@@ -232,7 +234,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showCustomizeHomePage() {
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            browserDelegate?.show(settings: .homePage)
+            navigationHandler?.show(settings: .homePage)
         } else {
             showSettingsWithDeeplink(to: .customizeHomepage)
         }
@@ -240,7 +242,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showWallpaperSettings() {
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            browserDelegate?.show(settings: .wallpaper)
+            navigationHandler?.show(settings: .wallpaper)
         } else {
             showSettingsWithDeeplink(to: .wallpaper)
         }
@@ -248,7 +250,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showCreditCardSettings() {
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            browserDelegate?.show(settings: .creditCard)
+            navigationHandler?.show(settings: .creditCard)
         } else {
             showSettingsWithDeeplink(to: .creditCard)
         }
@@ -256,5 +258,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showZoomPage(tab: Tab) {
         updateZoomPageBarVisibility(visible: true)
+    }
+
+    func showSignInView(fxaParameters: FxASignInViewParameters) {
+        presentSignInViewController(fxaParameters.launchParameters,
+                                    flowType: fxaParameters.flowType,
+                                    referringPage: fxaParameters.referringPage)
     }
 }

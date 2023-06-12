@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class TabToolbar: UIView {
+class TabToolbar: UIView, SearchBarLocationProvider {
     // MARK: - Variables
 
     weak var tabToolbarDelegate: TabToolbarDelegate?
@@ -131,9 +131,6 @@ extension TabToolbar: TabToolbarProtocol {
         tabsButton.updateTabCount(count, animated: animated)
     }
 }
-
-// MARK: - Search Bar location properties
-extension TabToolbar: SearchBarLocationProvider {}
 
 // MARK: - Theme protocols
 extension TabToolbar: ThemeApplicable, PrivateModeUI {

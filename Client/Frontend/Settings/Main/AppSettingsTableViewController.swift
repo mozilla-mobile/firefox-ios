@@ -41,7 +41,8 @@ protocol AppSettingsDelegate: AnyObject {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate,
+                                        SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -160,69 +161,16 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
     }
 
+    // MARK: - Generate Settings
+
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
         settings += getDefaultBrowserSetting()
         settings += getAccountSetting()
         settings += getGeneralSettings()
-
-        // FXIOS-6595 - reorganize privacy settings
-        var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self))
-        }
-
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
-
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme,
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
-        ]
-
-        privacySettings.append(ContentBlockerSetting(settings: self))
-
-        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
-        }
-
-        privacySettings += [
-            PrivacyPolicySetting()
-        ]
-
-        // FXIOS-6596 - reorganize support settings
-        let supportSettings = [
-            ShowIntroductionSetting(settings: self),
-            SendFeedbackSetting(),
-            SendAnonymousUsageDataSetting(prefs: profile.prefs,
-                                          delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme),
-            StudiesToggleSetting(prefs: profile.prefs,
-                                 delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme),
-            OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme),
-        ]
-
-        // FXIOS-6597 - reorganize about settings
-        let aboutSettings = [
-            AppStoreReviewSetting(),
-            VersionSetting(settings: self, appSettingsDelegate: self),
-            LicenseAndAcknowledgementsSetting(),
-            YourRightsSetting()
-        ]
-
-        settings += [
-            SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
-            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: supportSettings),
-            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: aboutSettings)
-        ]
+        settings += getPrivacySettings()
+        settings += getSupportSettings()
+        settings += getAboutSettings()
 
         if showDebugSettings {
             settings += getDebugSettings()
@@ -231,7 +179,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         return settings
     }
 
-    func getDefaultBrowserSetting() -> [SettingSection] {
+    private func getDefaultBrowserSetting() -> [SettingSection] {
         let footerTitle = NSAttributedString(
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
@@ -239,7 +187,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])]
     }
 
-    func getAccountSetting() -> [SettingSection] {
+    private func getAccountSetting() -> [SettingSection] {
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
@@ -263,7 +211,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         ] + accountChinaSyncSetting)]
     }
 
-    func getGeneralSettings() -> [SettingSection] {
+    private func getGeneralSettings() -> [SettingSection] {
         let blockpopUpSetting = BoolSetting(
             prefs: profile.prefs,
             theme: themeManager.currentTheme,
@@ -320,7 +268,71 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                                children: generalSettings)]
     }
 
-    func getDebugSettings() -> [SettingSection] {
+    private func getPrivacySettings() -> [SettingSection] {
+        var privacySettings = [Setting]()
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            privacySettings.append(AutofillCreditCardSettings(settings: self))
+        }
+
+        privacySettings.append(ClearPrivateDataSetting(settings: self))
+
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.currentTheme,
+                        prefKey: "settings.closePrivateTabs",
+                        defaultValue: false,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
+        ]
+
+        privacySettings.append(ContentBlockerSetting(settings: self))
+
+        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
+        }
+
+        privacySettings += [
+            PrivacyPolicySetting()
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
+                               children: privacySettings)]
+    }
+
+    private func getSupportSettings() -> [SettingSection] {
+        let supportSettings = [
+            ShowIntroductionSetting(settings: self),
+            SendFeedbackSetting(),
+            SendAnonymousUsageDataSetting(prefs: profile.prefs,
+                                          delegate: settingsDelegate,
+                                          theme: themeManager.currentTheme),
+            StudiesToggleSetting(prefs: profile.prefs,
+                                 delegate: settingsDelegate,
+                                 theme: themeManager.currentTheme),
+            OpenSupportPageSetting(delegate: settingsDelegate,
+                                   theme: themeManager.currentTheme),
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
+                               children: supportSettings)]
+    }
+
+    private func getAboutSettings() -> [SettingSection] {
+        let aboutSettings = [
+            AppStoreReviewSetting(),
+            VersionSetting(settings: self, appSettingsDelegate: self),
+            LicenseAndAcknowledgementsSetting(),
+            YourRightsSetting()
+        ]
+
+        return [SettingSection(title: NSAttributedString(string: .AppSettingsAbout),
+                               children: aboutSettings)]
+    }
+
+    private func getDebugSettings() -> [SettingSection] {
         let hiddenDebugOptions = [
             ExperimentsSettings(settings: self),
             ExportLogDataSetting(settings: self),
@@ -343,12 +355,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
-        return headerView
-    }
-
-    // MARK: AppSettingsDelegate
+    // MARK: - AppSettingsDelegate
 
     func clickedVersion() {
         debugSettingsClickCount += 1
@@ -359,6 +366,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             tableView.reloadData()
         }
     }
-}
 
-extension AppSettingsTableViewController: SearchBarLocationProvider {}
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
+        return headerView
+    }
+}

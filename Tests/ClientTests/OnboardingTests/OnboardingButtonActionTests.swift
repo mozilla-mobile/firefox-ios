@@ -105,6 +105,7 @@ class OnboardingButtonActionTests: XCTestCase {
 
         let mockInfoModel = OnboardingCardInfoModel(
             name: "signSync",
+            order: 10,
             title: String(format: .Onboarding.Sync.Title),
             body: String(format: .Onboarding.Sync.Description),
             link: nil,

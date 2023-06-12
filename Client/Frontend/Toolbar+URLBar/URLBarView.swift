@@ -59,7 +59,8 @@ extension URLBarViewProtocol {
     }
 }
 
-class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable, SearchEngineDelegate {
+class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
+                    SearchEngineDelegate, SearchBarLocationProvider {
     // Additional UIAppearance-configurable properties
     @objc lazy dynamic var locationBorderColor: UIColor = .clear {
         didSet {
@@ -883,5 +884,3 @@ extension URLBarView: PrivateModeUI {
         applyTheme(theme: currentTheme)
     }
 }
-
-extension URLBarView: SearchBarLocationProvider {}

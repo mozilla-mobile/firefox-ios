@@ -14,21 +14,7 @@ import MobileCoreServices
 import Telemetry
 import Common
 
-struct UrlToOpenModel {
-    var url: URL?
-    var isPrivate: Bool
-}
-
-/// Enum used to track flow for telemetry events
-enum ReferringPage: Equatable {
-    case onboarding
-    case appMenu
-    case settings
-    case none
-    case tabTray
-}
-
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -44,6 +30,8 @@ class BrowserViewController: UIViewController {
     ]
 
     weak var browserDelegate: BrowserDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
+
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -163,6 +151,9 @@ class BrowserViewController: UIViewController {
     private var keyboardPressesHandlerValue: Any?
 
     var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+
     var logger: Logger
 
     var newTabSettings: NewTabPage {
@@ -182,6 +173,7 @@ class BrowserViewController: UIViewController {
         profile: Profile,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
@@ -189,6 +181,7 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
@@ -450,7 +443,7 @@ class BrowserViewController: UIViewController {
         trackTelemetry()
         setupNotifications()
         addSubviews()
-
+        listenForThemeChange(view)
         setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
@@ -1881,8 +1874,6 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: SearchBarLocationProvider {}
-
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
@@ -2108,12 +2099,12 @@ extension BrowserViewController: LegacyTabDelegate {
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanelDidRequestToCreateAccount() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
@@ -2220,7 +2211,7 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         if CoordinatorFlagManager.isCoordinatorEnabled {
             let route = settingsPage.getSettingsRoute()
-            browserDelegate?.show(settings: route)
+            navigationHandler?.show(settings: route)
         } else {
             showSettingsWithDeeplink(to: settingsPage)
         }
@@ -2922,7 +2913,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidRequestTabsSettings() {
         if CoordinatorFlagManager.isCoordinatorEnabled {
-            browserDelegate?.show(settings: .tabs)
+            navigationHandler?.show(settings: .tabs)
         } else {
             showSettingsWithDeeplink(to: .customizeTabs)
         }
@@ -2940,6 +2931,7 @@ extension BrowserViewController: LegacyNotificationThemeable {
                                       readerModeBar]
         urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         ui.forEach { $0?.applyTheme(theme: currentTheme) }
+        zoomPageBar?.applyTheme(theme: currentTheme)
         topTabsViewController?.applyTheme()
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
@@ -2960,7 +2952,6 @@ extension BrowserViewController: LegacyNotificationThemeable {
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
-        zoomPageBar?.applyTheme(theme: themeManager.currentTheme)
     }
 }
 

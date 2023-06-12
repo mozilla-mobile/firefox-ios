@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 import Shared
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -40,7 +40,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         self.wallpaperManager = wallpaperManager
         self.isSettingsCoordinatorEnabled = isSettingsCoordinatorEnabled
         super.init(router: router)
-        self.browserViewController.browserDelegate = self
+
+        browserViewController.browserDelegate = self
+        browserViewController.navigationHandler = self
     }
 
     func start(with launchType: LaunchType?) {
@@ -119,10 +121,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             return homepageViewController
         }
-    }
-
-    func show(settings: Route.SettingsSection) {
-        showSettings(with: settings)
     }
 
     // MARK: - Route handling
@@ -254,6 +252,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+    }
+
+    // MARK: - BrowserNavigationHandler
+
+    func show(settings: Route.SettingsSection) {
+        showSettings(with: settings)
     }
 
     // MARK: - To be removed with FXIOS-6529

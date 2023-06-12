@@ -6,6 +6,7 @@ import Foundation
 
 protocol OnboardingCardInfoModelProtocol {
     var name: String { get set }
+    var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
     var link: OnboardingLinkInfoModel? { get set }
@@ -18,6 +19,7 @@ protocol OnboardingCardInfoModelProtocol {
 
     init(
         name: String,
+        order: Int,
         title: String,
         body: String,
         link: OnboardingLinkInfoModel?,

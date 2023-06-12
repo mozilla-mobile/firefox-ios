@@ -28,7 +28,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             cards: getOrderedOnboardingCards(
                 for: onboardingType,
                 from: framework.cards,
-                using: framework.cardOrdering,
                 withConditions: framework.conditions),
             isDismissable: framework.dismissable)
     }
@@ -36,28 +35,22 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [NimbusOnboardingCardData],
-        using cardOrder: [String],
         withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
-        let cards = getOnboardingCards(from: cardData, withConditions: conditionTable)
-
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        return cardOrder
-            .compactMap { cardName in
-                if let card = cards.first(where: { $0.name == cardName }) {
-                    return card
-                }
-
-                return nil
-            }
-            .filter { $0.type == onboardingType }
+        return getOnboardingCards(
+            from: cardData
+                .filter { $0.type == onboardingType }
+                .sorted(by: { $0.order < $1.order }),
+            withConditions: conditionTable)
             // We have to update the a11yIdRoot using the correct order of the cards
             .enumerated()
             .map { index, card in
                 return OnboardingCardInfoModel(
                     name: card.name,
+                    order: card.order,
                     title: card.title,
                     body: card.body,
                     link: card.link,
@@ -93,6 +86,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             if cardIsValid(with: card, using: conditionTable, jexlCache: &jexlCache, and: helper) {
                 return OnboardingCardInfoModel(
                     name: card.name,
+                    order: card.order,
                     title: String(format: card.title, AppName.shortName.rawValue),
                     body: String(format: card.body, AppName.shortName.rawValue, AppName.shortName.rawValue),
                     link: getOnboardingLink(from: card.link),

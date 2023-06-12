@@ -161,7 +161,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
 
-    // MARK: - Show settings
+    // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
         let subject = createSubject()

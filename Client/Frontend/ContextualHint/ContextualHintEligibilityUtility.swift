@@ -9,7 +9,9 @@ protocol ContextualHintEligibilityUtilityProtocol {
     func canPresent(_ hint: ContextualHintType) -> Bool
 }
 
-struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol, ContextualHintPrefsKeysProvider {
+struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol,
+                                            ContextualHintPrefsKeysProvider,
+                                            SearchBarLocationProvider {
     var profile: Profile
     var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
@@ -122,5 +124,3 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return hintConfigured
     }
 }
-
-extension ContextualHintEligibilityUtility: SearchBarLocationProvider {}

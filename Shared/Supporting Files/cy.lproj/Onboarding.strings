@@ -19,11 +19,17 @@
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
 "Onboarding.IntroDescriptionPart2.v114" = "Wedi ymrwymo i'r addewid o well Rhyngrwyd i bawb.";
 
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v115" = "Hepgor";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Parhau";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v114" = "Anfonwch dabiau rhwng eich dyfeisiau a chael awgrymiadau ar sut i gael y gorau o %@.";
+
+/* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.Skip.Action.v115" = "Hepgor";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "Mae hysbysiadau yn eich helpu i wneud mwy gyda %@";

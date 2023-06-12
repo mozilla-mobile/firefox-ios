@@ -554,12 +554,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.loginsSettings], to: LoginsSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.clearPrivatedata], to: ClearPrivateDataSettings)
-        screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
-        screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title], to: TrackingProtectionSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ShowIntroduction.title], to: ShowTourInSettings)
         screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
-            app.otherElements.tables.cells.switches["Block Images"].tap()
+            app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title].tap()
         }
 
         screenState.backAction = navigationControllerBackAction

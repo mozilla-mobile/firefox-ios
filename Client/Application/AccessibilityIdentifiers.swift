@@ -231,11 +231,23 @@ public struct AccessibilityIdentifiers {
         }
 
         struct Logins {
-            static let loginsSettings = "Logins"
+            static let title = "Logins"
         }
 
         struct ClearData {
-            static let clearPrivatedata = "ClearPrivateData"
+            static let title = "ClearPrivateData"
+        }
+
+        struct Notifications {
+            static let title = "NotificationsSetting"
+        }
+
+        struct CreditCard {
+            static let title = "AutofillCreditCard"
+        }
+
+        struct ContentBlocker {
+            static let title = "TrackingProtection"
         }
 
         struct SearchBar {
@@ -244,14 +256,30 @@ public struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
 
+        struct SendAnonymousUsageData {
+            static let title = "SendAnonymousUsageData"
+        }
+
+        struct ShowIntroduction {
+            static let title = "ShowTour"
+        }
+
+        struct StudiesToggle {
+            static let title = "StudiesToggle"
+        }
+
         struct BlockImages {
-            static let blockImages = "Block Images"
+            static let title = "Block Images"
         }
 
         struct Passwords {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+        }
+
+        struct Version {
+            static let title = "FxVersion"
         }
     }
 
@@ -279,10 +307,6 @@ public struct AccessibilityIdentifiers {
     struct Alert {
         static let cancelDownloadResume = "cancelDownloadAlert.resume"
         static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
-    }
-
-    struct Setting {
-        static let notifications = "NotificationsSetting"
     }
 
     struct ZoomPageBar {
