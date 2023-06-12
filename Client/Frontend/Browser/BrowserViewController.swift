@@ -1746,24 +1746,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         showViewController(viewController: viewController)
     }
 
-    @objc
-    func openSettings() {
-        ensureMainThread { [self] in
-            if let presentedViewController = self.presentedViewController {
-                presentedViewController.dismiss(animated: true, completion: nil)
-            }
-
-            let settingsTableViewController = AppSettingsTableViewController(
-                with: profile,
-                and: tabManager,
-                delegate: self)
-
-            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            controller.presentingModalViewControllerDelegate = self
-            self.present(controller, animated: true, completion: nil)
-        }
-    }
-
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
