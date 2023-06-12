@@ -177,7 +177,7 @@ class HistoryPanel: UIViewController,
         listenForThemeChange(view)
         handleRefreshControl()
         setupLayout()
-        configureDatasource()
+        configureDataSource()
         applyTheme()
     }
 
@@ -185,7 +185,9 @@ class HistoryPanel: UIViewController,
         super.viewWillAppear(animated)
 
         bottomStackView.isHidden = !viewModel.isSearchInProgress
-        fetchDataAndUpdateLayout()
+        if viewModel.shouldResetHistory {
+            fetchDataAndUpdateLayout()
+        }
         DispatchQueue.main.async {
             self.refreshRecentlyClosedCell()
         }
@@ -331,7 +333,7 @@ class HistoryPanel: UIViewController,
     // MARK: - UITableViewDataSource
 
     /// Handles dequeuing the appropriate type of cell when needed.
-    private func configureDatasource() {
+    private func configureDataSource() {
         diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
 
