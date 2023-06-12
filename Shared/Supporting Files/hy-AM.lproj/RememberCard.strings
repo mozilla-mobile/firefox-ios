@@ -1,5 +1,5 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "Ապահով պահեք ձեր քարտի տվյալները՝ հաջորդ անգամ ավելի արագ ստուգելու համար:";
+"CreditCard.RememberCard.Header.v115" = "Ապահով պահեք ձեր քարտի տվյալները %@-ով՝ հաջորդ անգամ ավելի արագ ստուգելու համար:";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Այո";
