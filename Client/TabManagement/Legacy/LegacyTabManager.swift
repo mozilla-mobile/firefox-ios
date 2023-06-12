@@ -178,7 +178,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Webview configuration
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
-        configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
