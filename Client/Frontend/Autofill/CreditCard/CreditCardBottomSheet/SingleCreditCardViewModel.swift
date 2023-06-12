@@ -128,7 +128,7 @@ struct SingleCreditCardViewModel {
     // MARK: Update Credit Card
     func updateCreditCard(completion: @escaping (Bool, Error?) -> Void) {
         guard let creditCard = creditCard, let decryptedCard = getPlainCreditCardValues() else {
-            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil card"))
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil card \(creditCard), val:\(getPlainCreditCardValues())"))
             return
         }
         autofill.updateCreditCard(id: creditCard.guid,
