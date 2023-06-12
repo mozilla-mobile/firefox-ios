@@ -18,21 +18,21 @@ class CreditCardSingleViewModelTests: XCTestCase {
                                                                   ccNumber: "4242424242424242",
                                                                   ccNumberLast4: "4242",
                                                                   ccExpMonth: 08,
-                                                                  ccExpYear: 2055,
+                                                                  ccExpYear: 55,
                                                                   ccType: "VISA")
 
     private var samplePlainTextUpdateCard = UnencryptedCreditCardFields(ccName: "Allen Burgers",
                                                                         ccNumber: "4242424242424242",
                                                                         ccNumberLast4: "4242",
                                                                         ccExpMonth: 09,
-                                                                        ccExpYear: 2056,
+                                                                        ccExpYear: 56,
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
                                               ccNumberEnc: "1234567891234567",
                                               ccNumberLast4: "4567",
                                               ccExpMonth: 1234567,
-                                              ccExpYear: 2023,
+                                              ccExpYear: 23,
                                               ccType: "VISA",
                                               timeCreated: 1234678,
                                               timeLastUsed: nil,
@@ -121,11 +121,15 @@ class CreditCardSingleViewModelTests: XCTestCase {
             XCTAssertEqual(creditCard.ccName, self.viewModel.decryptedCreditCard?.ccName)
             // Note: the number for credit card is encrypted so that part
             // will get added later and for now we will check the name only
-            self.samplePlainTextCard.ccExpYear = 2045
+            self.samplePlainTextCard.ccExpYear = 45
             self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
 
-            self.viewModel.creditCard = self.samplePlainTextCard.convertToTempCreditCard()
+            var convertedCard = self.samplePlainTextCard.convertToTempCreditCard()
+            convertedCard.guid = creditCard.guid
+            convertedCard.ccNumberEnc = creditCard.ccNumberEnc
+
+            self.viewModel.creditCard = convertedCard
             self.viewModel.updateCreditCard { didUpdate, error in
                 XCTAssertTrue(didUpdate)
                 XCTAssertNil(error)
