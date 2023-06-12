@@ -351,7 +351,7 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer3
         textColor = theme.colors.textPrimary
-        tintColor = theme.colors.actionPrimary
+        tintColor = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
         if autocompleteTextLabel?.attributedText != nil {
             autocompleteTextLabel?.backgroundColor = backgroundColor
             autocompleteTextLabel?.textColor = textColor
