@@ -93,6 +93,7 @@ class GroupedTabCell: UICollectionViewCell,
                                                  for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
         cell.theme = theme
+        cell.applyTheme(theme: theme)
         cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
         cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
@@ -266,8 +267,6 @@ class GroupedTabContainerCell: UITableViewCell,
             make.trailing.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()
         }
-
-        applyTheme(theme: theme)
     }
 
     func focusTab(tab: Tab) {
