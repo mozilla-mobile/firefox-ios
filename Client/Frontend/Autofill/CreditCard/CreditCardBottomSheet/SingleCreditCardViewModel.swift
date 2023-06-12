@@ -121,7 +121,7 @@ struct SingleCreditCardViewModel {
     public func saveCreditCard(with decryptedCard: UnencryptedCreditCardFields?,
                                completion: @escaping (CreditCard?, Error?) -> Void) {
         guard let decryptedCard = decryptedCard else {
-            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "nil decryptedCreditCard card \(decryptedCard)"))
+            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "SaveCreditCard: nil decryptedCreditCard card"))
             return
         }
         autofill.addCreditCard(creditCard: decryptedCard,
@@ -133,11 +133,11 @@ struct SingleCreditCardViewModel {
                           with decryptedCard: UnencryptedCreditCardFields?,
                           completion: @escaping (Bool, Error?) -> Void) {
         guard let creditCardGUID = creditCardGUID else {
-            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil credit card GUID \(creditCardGUID)"))
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil credit card GUID"))
             return
         }
         guard let decryptedCard = decryptedCard else {
-            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil decryptedCreditCard card \(decryptedCard)"))
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "UpdateCreditCard: nil decryptedCreditCard card"))
             return
         }
         autofill.updateCreditCard(id: creditCardGUID,

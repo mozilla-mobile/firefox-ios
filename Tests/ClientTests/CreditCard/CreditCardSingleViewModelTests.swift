@@ -123,15 +123,11 @@ class CreditCardSingleViewModelTests: XCTestCase {
             XCTAssertEqual(creditCard.ccName, self.viewModel.decryptedCreditCard?.ccName)
             // Note: the number for credit card is encrypted so that part
             // will get added later and for now we will check the name only
+
             self.samplePlainTextCard.ccExpYear = 45
             self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
 
-            var convertedCard = creditCard
-            convertedCard.guid = creditCard.guid
-            convertedCard.ccNumberEnc = creditCard.ccNumberEnc
-
-            self.viewModel.creditCard = convertedCard
             self.viewModel.updateCreditCard(for: creditCard.guid,
                                             with: self.samplePlainTextCard) { didUpdate, error in
                 XCTAssertTrue(didUpdate)
