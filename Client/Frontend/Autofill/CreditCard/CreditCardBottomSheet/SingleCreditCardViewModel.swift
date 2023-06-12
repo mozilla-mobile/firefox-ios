@@ -85,9 +85,10 @@ struct SingleCreditCardViewModel {
 
     // MARK: Main Button Action
     public func didTapMainButton(completion: @escaping (Error?) -> Void) {
+        let decryptedCard = getPlainCreditCardValues()
         switch state {
         case .save:
-            saveCreditCard { _, error in
+            saveCreditCard(with: decryptedCard) { _, error in
                 DispatchQueue.main.async {
                     guard let error = error else {
                         completion(nil)
@@ -100,7 +101,8 @@ struct SingleCreditCardViewModel {
                 }
             }
         case .update:
-            updateCreditCard { _, error in
+            updateCreditCard(for: creditCard?.guid,
+                             with: decryptedCard) { _, error in
                 DispatchQueue.main.async {
                     guard let error = error else {
                         completion(nil)
@@ -116,22 +118,29 @@ struct SingleCreditCardViewModel {
     }
 
     // MARK: Save Credit Card
-    public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
-        guard let plainCreditCard = getPlainCreditCardValues() else {
-            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "nil card"))
+    public func saveCreditCard(with decryptedCard: UnencryptedCreditCardFields?,
+                               completion: @escaping (CreditCard?, Error?) -> Void) {
+        guard let decryptedCard = decryptedCard else {
+            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "nil decryptedCreditCard card \(decryptedCard)"))
             return
         }
-        autofill.addCreditCard(creditCard: plainCreditCard,
+        autofill.addCreditCard(creditCard: decryptedCard,
                                completion: completion)
     }
 
     // MARK: Update Credit Card
-    func updateCreditCard(completion: @escaping (Bool, Error?) -> Void) {
-        guard let creditCard = creditCard, let decryptedCard = getPlainCreditCardValues() else {
-            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil card \(creditCard), val:\(getPlainCreditCardValues())"))
+    func updateCreditCard(for creditCardGUID: String?,
+                          with decryptedCard: UnencryptedCreditCardFields?,
+                          completion: @escaping (Bool, Error?) -> Void) {
+        guard let creditCardGUID = creditCardGUID else {
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil credit card GUID \(creditCardGUID)"))
             return
         }
-        autofill.updateCreditCard(id: creditCard.guid,
+        guard let decryptedCard = decryptedCard else {
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil decryptedCreditCard card \(decryptedCard)"))
+            return
+        }
+        autofill.updateCreditCard(id: creditCardGUID,
                                   creditCard: decryptedCard,
                                   completion: completion)
     }

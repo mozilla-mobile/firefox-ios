@@ -94,7 +94,8 @@ class CreditCardSingleViewModelTests: XCTestCase {
     func testSavingCard() {
         viewModel.creditCard = sampleCreditCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
-        viewModel.saveCreditCard { creditCard, error in
+        let decryptedCreditCard = viewModel.getPlainCreditCardValues()
+        viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
                 return
@@ -112,7 +113,8 @@ class CreditCardSingleViewModelTests: XCTestCase {
         viewModel.decryptedCreditCard = samplePlainTextCard
         let expectationSave = expectation(description: "wait for credit card fields to be saved")
         let expectationUpdate = expectation(description: "wait for credit card fields to be updated")
-        viewModel.saveCreditCard { creditCard, error in
+
+        viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
                 return
@@ -125,12 +127,13 @@ class CreditCardSingleViewModelTests: XCTestCase {
             self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
 
-            var convertedCard = self.samplePlainTextCard.convertToTempCreditCard()
+            var convertedCard = creditCard
             convertedCard.guid = creditCard.guid
             convertedCard.ccNumberEnc = creditCard.ccNumberEnc
 
             self.viewModel.creditCard = convertedCard
-            self.viewModel.updateCreditCard { didUpdate, error in
+            self.viewModel.updateCreditCard(for: creditCard.guid,
+                                            with: self.samplePlainTextCard) { didUpdate, error in
                 XCTAssertTrue(didUpdate)
                 XCTAssertNil(error)
                 expectationUpdate.fulfill()
@@ -157,6 +160,7 @@ class CreditCardSingleViewModelTests: XCTestCase {
     }
 
     func test_getPlainCreditCardValues() {
+        viewModel.state = .save
         let value = viewModel.getPlainCreditCardValues()
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
