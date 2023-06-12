@@ -63,6 +63,8 @@ class TabsPerformanceTest: BaseTestCase {
         app.launch()
         waitForTabsButton()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"])
+        waitUntilPageLoad()
+        sleep(5)
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
@@ -80,6 +82,8 @@ class TabsPerformanceTest: BaseTestCase {
         app.launch()
         waitForTabsButton()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"])
+        waitUntilPageLoad()
+        sleep(5)
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
