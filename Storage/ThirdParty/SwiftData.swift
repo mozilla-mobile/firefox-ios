@@ -95,14 +95,8 @@ open class SwiftData {
     /// For thread-safe access to the primary shared connection.
     fileprivate let primaryConnectionQueue: DispatchQueue
 
-    /// For thread-safe access to the secondary shared connection.
-    fileprivate let secondaryConnectionQueue: DispatchQueue
-
     /// Primary shared connection to this database.
     fileprivate var primaryConnection: ConcreteSQLiteDBConnection?
-
-    /// Secondary shared connection to this database.
-    fileprivate var secondaryConnection: ConcreteSQLiteDBConnection?
 
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
@@ -118,7 +112,6 @@ open class SwiftData {
         self.files = files
 
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
-        self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
 
         // Ensure that SQLite/SQLCipher has been compiled with
         // `SQLITE_THREADSAFE=1` or `SQLITE_THREADSAFE=2`.
@@ -137,23 +130,8 @@ open class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
-        objc_sync_enter(self)
-        defer { objc_sync_exit(self) }
 
-        // We can only use the secondary queue if we already have a primary
-        // connection and a read-only connection has been requested. This is
-        // because if we do not yet have a primary connection, we need to ensure
-        // we wait for any operations on the primary queue (such as schema prep).
-        let queue: DispatchQueue
-        let useSecondaryConnection: Bool
-        if  flags == .readOnly && primaryConnection != nil {
-            queue = secondaryConnectionQueue
-            useSecondaryConnection = true
-        } else {
-            queue = primaryConnectionQueue
-            useSecondaryConnection = false
-        }
-
+        let queue: DispatchQueue = primaryConnectionQueue
         let deferred = DeferredDBOperation<Maybe<T>>()
 
         func doWork() {
@@ -169,17 +147,14 @@ open class SwiftData {
             }
 
             if !self.closed {
-                if useSecondaryConnection && self.secondaryConnection == nil {
-                    self.secondaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readOnly, schema: self.schema, files: self.files)
-                } else if self.primaryConnection == nil {
+                if self.primaryConnection == nil {
                     self.primaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate, schema: self.schema, files: self.files)
                 }
             }
 
-            guard let connection = useSecondaryConnection ? self.secondaryConnection : self.primaryConnection else {
+            guard let connection = self.primaryConnection else {
                 do {
                     _ = try callback(FailedSQLiteDBConnection())
-
                     deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
                 } catch let err as NSError {
                     deferred.fill(Maybe(failure: DatabaseError(err: err)))
@@ -188,10 +163,6 @@ open class SwiftData {
             }
 
             deferred.connection = connection
-
-            if debugSimulateSlowDBOperations {
-                sleep(2)
-            }
 
             do {
                 let result = try callback(connection)
@@ -203,12 +174,7 @@ open class SwiftData {
 
         let work = DispatchWorkItem { doWork() }
         deferred.dispatchWorkItem = work
-
-        if synchronous {
-            queue.sync(execute: work)
-        } else {
-            queue.async(execute: work)
-        }
+        queue.async(execute: work)
 
         return deferred
     }
@@ -227,7 +193,7 @@ open class SwiftData {
     /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
-        primaryConnectionQueue.sync {
+        primaryConnectionQueue.async {
             guard !self.closed else { return }
             self.closed = true
 
@@ -235,7 +201,6 @@ open class SwiftData {
             self.primaryConnection?.optimize()
 
             self.primaryConnection = nil
-            self.secondaryConnection = nil
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
             NotificationCenter.default.post(name: .DatabaseWasClosed, object: baseFilename)
         }
@@ -244,7 +209,7 @@ open class SwiftData {
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
-        primaryConnectionQueue.sync {
+        primaryConnectionQueue.async {
             guard self.closed else { return }
             self.closed = false
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent

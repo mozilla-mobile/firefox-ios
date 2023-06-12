@@ -22,16 +22,18 @@ final class DefaultRouterTests: XCTestCase {
         let subject = DefaultRouter(navigationController: navigationController)
 
         XCTAssertNil(subject.rootViewController)
-        XCTAssertEqual(subject.navigationController, navigationController)
+        XCTAssertEqual(subject.navigationController.viewControllers, navigationController.viewControllers)
+        XCTAssertEqual(subject.completions.count, 0)
     }
 
     func testPresentViewController_presentCalled() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
-        subject.present(viewController)
+        subject.present(viewController, completion: {})
 
         XCTAssertEqual(navigationController.presentCalled, 1)
-        XCTAssertEqual(navigationController.topViewController, viewController)
+        XCTAssertEqual(navigationController.presentedViewController, viewController)
+        XCTAssertEqual(subject.completions.count, 1)
     }
 
     func testPresentViewController_dismissModalCompletionCalled() {
@@ -47,6 +49,15 @@ final class DefaultRouterTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testRunCompletion_DoesNotRunForNonExistingCompletion() {
+        let subject = DefaultRouter(navigationController: navigationController)
+
+        let viewController = UIViewController()
+        subject.presentationControllerDidDismiss(viewController.presentationController!)
+
+        XCTAssertEqual(subject.completions.count, 0)
+    }
+
     func testDismissModule() {
         let subject = DefaultRouter(navigationController: navigationController)
         subject.dismiss()
@@ -54,13 +65,25 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.dismissCalled, 1)
     }
 
+    func testPresentThenDismiss_removesCompletion() {
+        let subject = DefaultRouter(navigationController: navigationController)
+        let viewController = UIViewController()
+
+        subject.present(viewController, completion: {})
+        XCTAssertEqual(subject.completions.count, 1)
+
+        subject.dismiss()
+        XCTAssertEqual(subject.completions.count, 0)
+    }
+
     func testPushModule_pushViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
-        subject.push(viewController)
+        subject.push(viewController, completion: {})
 
         XCTAssertEqual(navigationController.pushCalled, 1)
-        XCTAssertEqual(navigationController.topViewController, viewController)
+        XCTAssertEqual(navigationController.presentedViewController, viewController)
+        XCTAssertEqual(subject.completions.count, 1)
     }
 
     func testPopViewController() {

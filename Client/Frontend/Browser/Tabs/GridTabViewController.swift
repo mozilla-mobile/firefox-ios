@@ -713,13 +713,6 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 }
 
-// MARK: - PresentingModalViewControllerDelegate
-extension GridTabViewController: PresentingModalViewControllerDelegate {
-    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
-        dismiss(animated: animated, completion: { self.collectionView.reloadData() })
-    }
-}
-
 // MARK: - Notifiable
 extension GridTabViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {

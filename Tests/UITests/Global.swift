@@ -287,7 +287,7 @@ class BrowserUtils {
 
     class func closeClearPrivateDataDialog(_ tester: KIFUITestActor) {
         tester.tapView(withAccessibilityLabel: "Settings")
-        tester.tapView(withAccessibilityIdentifier: "AppSettingsTableViewController.navigationItem.leftBarButtonItem")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Settings.navigationBarItem)
     }
 
     class func acceptClearPrivateData(_ tester: KIFUITestActor) {

@@ -16,7 +16,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         waitForExistence(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
         app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         // Perform a search using a custom search engine
         app.textFields["url"].tap()
@@ -73,7 +73,7 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForExistence(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
 
         app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
         app.textFields["url"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
         if processIsTranslatedStr() == m1Rosetta {
@@ -124,7 +124,7 @@ class ThirdPartySearchTest: BaseTestCase {
     private func dismissSearchScreen() {
         waitForExistence(app.navigationBars["Search"].buttons["Settings"])
         app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
     }
 
     func testCustomEngineFromIncorrectTemplate() {

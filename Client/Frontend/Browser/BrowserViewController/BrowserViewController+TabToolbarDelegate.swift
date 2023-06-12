@@ -91,7 +91,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            menuHelper.navigationHandler = navigationHandler
+        }
 
+        updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
             let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
             let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
@@ -230,11 +234,27 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showCustomizeHomePage() {
-        showSettingsWithDeeplink(to: .customizeHomepage)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationHandler?.show(settings: .homePage)
+        } else {
+            showSettingsWithDeeplink(to: .customizeHomepage)
+        }
     }
 
     func showWallpaperSettings() {
-        showSettingsWithDeeplink(to: .wallpaper)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationHandler?.show(settings: .wallpaper)
+        } else {
+            showSettingsWithDeeplink(to: .wallpaper)
+        }
+    }
+
+    func showCreditCardSettings() {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationHandler?.show(settings: .creditCard)
+        } else {
+            showSettingsWithDeeplink(to: .creditCard)
+        }
     }
 
     func showZoomPage(tab: Tab) {

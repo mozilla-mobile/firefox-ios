@@ -310,7 +310,7 @@ class NavigationTest: BaseTestCase {
 //        navigator.nowAt(BrowserTab)
 //        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
 //        navigator.goto(SettingsScreen)
-//        waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
+//        waitForExistence(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
 //        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
 //        let switchValue = switchBlockPopUps.value!
 //        XCTAssertEqual(switchValue as? String, "1")
@@ -358,7 +358,7 @@ class NavigationTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
+        waitForExistence(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
         let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!

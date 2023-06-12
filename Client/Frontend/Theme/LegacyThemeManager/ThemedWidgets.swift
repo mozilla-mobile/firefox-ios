@@ -41,7 +41,7 @@ class ThemedTableViewCellViewModel {
     }
 }
 
-class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
+class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     var viewModel: ThemedTableViewCellViewModel?
     var cellStyle: UITableViewCell.CellStyle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

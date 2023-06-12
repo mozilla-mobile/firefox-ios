@@ -25,6 +25,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
+    func showCreditCardSettings()
 }
 
 enum MenuButtonToastAction {
@@ -69,6 +70,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
 
     /// MainMenuActionHelper init
     /// - Parameters:
@@ -442,31 +444,42 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        let title = String.AppMenu.AppMenuSettingsTitleString
-        let icon = ImageIdentifiers.settings
+        let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
+                                                 iconString: ImageIdentifiers.settings) { _ in
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
-        let openSettings = SingleActionViewModel(title: title,
-                                                 iconString: icon) { _ in
-            let settingsTableViewController = AppSettingsTableViewController(
-                with: self.profile,
-                and: self.tabManager,
-                delegate: self.menuActionDelegate)
-
-            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                controller.modalPresentationStyle = .fullScreen
-            }
-            controller.presentingModalViewControllerDelegate = self.menuActionDelegate
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
-
-            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-            // of this popover on iPad seems to block the presentation of the modal VC.
-            DispatchQueue.main.async {
-                self.delegate?.showViewController(viewController: controller)
+                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+                DispatchQueue.main.async {
+                    self.navigationHandler?.show(settings: .general)
+                }
+            } else {
+                self.legacyShowSettings()
             }
         }.items
         return openSettings
+    }
+
+    // Will be removed with FXIOS-6529
+    private func legacyShowSettings() {
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: self.profile,
+            and: self.tabManager,
+            delegate: self.menuActionDelegate)
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            controller.modalPresentationStyle = .fullScreen
+        }
+        controller.presentingModalViewControllerDelegate = self.menuActionDelegate
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
+
+        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+        // of this popover on iPad seems to block the presentation of the modal VC.
+        DispatchQueue.main.async {
+            self.delegate?.showViewController(viewController: controller)
+        }
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {

@@ -8,6 +8,7 @@ import Shared
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
+    func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
 class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
@@ -27,10 +28,6 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
         self.tabManager = tabManager
         self.themeManager = themeManager
         super.init(router: router)
-    }
-
-    deinit {
-        // FXIOS-6534: Make sure SettingsCoordinator is deinit/removed as child once done with it
     }
 
     func start(with settingsSection: Route.SettingsSection) {
@@ -90,14 +87,36 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
                 return nil
             }
 
-        default:
-            // FXIOS-6483: For cases that are not yet handled we show the main settings page
+        case .contentBlocker:
+            let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs)
+            contentBlockerVC.tabManager = tabManager
+            return contentBlockerVC
+
+        case .creditCard:
+            // FXIOS-6612 Handle credit card settings page in coordinator
             return nil
+
+        case .tabs:
+            return TabsSettingsViewController()
+
+        case .toolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            return SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .topSites:
+            return TopSitesSettingsViewController()
+
+        case .general:
+            return nil // Return nil since we're already at the general page
         }
     }
 
     // MARK: - SettingsDelegate
     func settingsOpenURLInNewTab(_ url: URL) {
         parentCoordinator?.openURLinNewTab(url)
+    }
+
+    func didFinish() {
+        parentCoordinator?.didFinishSettings(from: self)
     }
 }

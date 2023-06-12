@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol AnyStoreSubscriber {
+public protocol AnyStoreSubscriber: AnyObject {
     func newState(state: Any)
 }
 

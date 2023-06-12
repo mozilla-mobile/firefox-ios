@@ -125,6 +125,51 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is WallpaperSettingsViewController)
     }
 
+    func testContentBlockerSettingsRoute_showsContentBlockerSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .contentBlocker)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ContentBlockerSettingViewController)
+    }
+
+    func testTabsSettingsRoute_showsTabsSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .tabs)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
+    }
+
+    func testToolbarSettingsRoute_showsToolbarSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .toolbar)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchBarSettingsViewController)
+    }
+
+    func testTopSitesSettingsRoute_showsTopSitesSettingsPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .topSites)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TopSitesSettingsViewController)
+    }
+
+    func testCreditCardSettingsRoute_showsGeneralSettingsPageForNow() throws {
+        let subject = createSubject()
+
+        subject.start(with: .creditCard)
+
+        XCTAssertEqual(mockRouter.pushCalled, 0)
+        XCTAssertNil(mockRouter.pushedViewController)
+    }
+
     // MARK: - Delegate
     func testParentCoordinatorDelegate_calledWithURL() {
         let subject = createSubject()
@@ -135,6 +180,15 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(delegate.openURLinNewTabCalled, 1)
         XCTAssertEqual(delegate.savedURL, expectedURL)
+    }
+
+    func testParentCoordinatorDelegate_calledDidFinish() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
     // MARK: - Helper
@@ -150,9 +204,14 @@ final class SettingsCoordinatorTests: XCTestCase {
 class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
     var savedURL: URL?
     var openURLinNewTabCalled = 0
+    var didFinishSettingsCalled = 0
 
     func openURLinNewTab(_ url: URL) {
         savedURL = url
         openURLinNewTabCalled += 1
+    }
+
+    func didFinishSettings(from coordinator: SettingsCoordinator) {
+        didFinishSettingsCalled += 1
     }
 }
