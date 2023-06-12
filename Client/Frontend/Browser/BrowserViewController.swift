@@ -28,11 +28,7 @@ enum ReferringPage: Equatable {
     case tabTray
 }
 
-<<<<<<< HEAD
-class BrowserViewController: UIViewController {
-=======
 class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
->>>>>>> 07099d3e7 (Bugfix FXIOS-6582 [v115] URL Bar and Toolbar do not follow the night mode setting (#14805))
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -1863,8 +1859,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
-
-extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
