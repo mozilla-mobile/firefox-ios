@@ -15,8 +15,8 @@ features:
       cards:
         description: >
           The list of available cards for onboarding.
-        type: List<NimbusOnboardingCardData>
-        default: []
+        type: Map<String, NimbusOnboardingCardData>
+        default: {}
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -30,7 +30,7 @@ features:
             ALWAYS:                   "true"
             NEVER:                    "false"
           cards:
-            - name: "welcome"
+            wecome:
               order: 10
               title: Onboarding/Onboarding.Welcome.Title.v114
               body: Onboarding/Onboarding.Welcome.Description.v114
@@ -43,7 +43,7 @@ features:
                   title: Onboarding/Onboarding.Welcome.Action.v114
                   action: next-card
               type: fresh-install
-            - name: "notificationPermissions"
+            notificationPermissions:
               order: 30
               title: Onboarding/Onboarding.Notification.Title.v114
               body: Onboarding/Onboarding.Notification.Description.v114
@@ -56,7 +56,7 @@ features:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115
                   action: next-card
               type: fresh-install
-            - name: "signToSync"
+            signToSync:
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v114
               body: Onboarding/Onboarding.Sync.Description.v114
@@ -69,7 +69,7 @@ features:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: next-card
               type: fresh-install
-            - name: "update.welcome"
+            update.welcome:
               order: 10
               title: Upgrade/Upgrade.Welcome.Title.v114
               body: Upgrade/Upgrade.Welcome.Description.v114
@@ -79,7 +79,7 @@ features:
                   title: Upgrade/Upgrade.Welcome.Action.v114
                   action: next-card
               type: upgrade
-            - name: "update.signToSync"
+            update.signToSync:
               order: 20
               title: Upgrade/Upgrade.SyncSign.Title.v114
               body: Upgrade/Upgrade.SyncSign.Description.v114
@@ -99,15 +99,6 @@ objects:
     description: >
       A group of properties describing the attributes of a card.
     fields:
-      name:
-        type: String
-        description: >
-          The name of the card. It should be unique in the current
-          roster of cards.
-          This should never be defaulted.
-          This is going to be used as the telemetry value for the
-          card in question.
-        default: ""
       order:
         type: Int
         description: >
