@@ -8,6 +8,8 @@ import Common
 @testable import Client
 
 class RemoteTabsPanelTests: XCTestCase {
+    let tabsEnabledPrefKey = "sync.engine.tabs.enabled"
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -25,6 +27,13 @@ class RemoteTabsPanelTests: XCTestCase {
 
         let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
         XCTAssertEqual(dataSource.error, .notLoggedIn)
+    }
+
+    func testHasNoSync() throws {
+        let panel = createPanel(hasAccount: false, hasSyncEnabled: false)
+
+        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
+        XCTAssertEqual(dataSource.error, .syncDisabledByUser)
     }
 
     func testHasNoClients() {
@@ -125,10 +134,12 @@ private extension RemoteTabsPanelTests {
     }
 
     func createPanel(hasAccount: Bool = true,
+                     hasSyncEnabled: Bool = true,
                      clientAndTabs: [ClientAndTabs] = [],
                      file: StaticString = #file,
                      line: UInt = #line) -> RemoteTabsPanel {
         let profile = MockProfile()
+        profile.prefs.setBool(hasSyncEnabled, forKey: tabsEnabledPrefKey)
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs
         let panel = RemoteTabsPanel(profile: profile)
