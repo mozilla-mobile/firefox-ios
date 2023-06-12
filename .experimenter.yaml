@@ -120,9 +120,6 @@ onboarding-framework-feature:
   hasExposure: true
   exposureDescription: ""
   variables:
-    card-ordering:
-      type: json
-      description: "A list of card names in the order they should appear. These names should match the names of the cards in the \"card\" variable, otherwise, they will be excluded.\n"
     cards:
       type: json
       description: "The list of available cards for onboarding.\n"
