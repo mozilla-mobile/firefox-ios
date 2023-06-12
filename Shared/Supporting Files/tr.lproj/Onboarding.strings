@@ -74,10 +74,10 @@
 "Onboarding.Welcome.ActionTreatementA.v114" = "Saptanmış tarayıcı yap";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ için paradan önce insanlık gelir. %@, siz gezinirken gizliliğinizi korur.";
+"Onboarding.Welcome.Description.TreatementA.v114" = "Siz internette gezinirken %@ gizliliğinizi korur.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v114" = "%@ için paradan önce insanlık gelir. %@, siz gezinirken gizliliğinizi korur.";
+"Onboarding.Welcome.Description.v114" = "Siz internette gezinirken %@ gizliliğinizi korur.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Gizlilik bildirimimizle ilgili daha fazla bilgi alın";
