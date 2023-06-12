@@ -777,11 +777,13 @@ open class BrowserProfile: Profile {
     }
 
     func removeAccount() {
-        RustFirefoxAccounts.shared.disconnect()
+        let useNewAutopush = prefs.boolForKey(PrefsKeys.FeatureFlags.AutopushFeature) ?? false
+
+        RustFirefoxAccounts.shared.disconnect(useNewAutopush: useNewAutopush)
 
         // Not available in extensions
         #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-        unregisterRemoteNotifiation()
+        unregisterRemoteNotifications(useNewAutopush: useNewAutopush)
         #endif
 
         // remove Account Metadata
@@ -829,7 +831,23 @@ open class BrowserProfile: Profile {
 
     // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
     @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
-    private func unregisterRemoteNotifiation() {
+    private func unregisterRemoteNotifications(useNewAutopush: Bool) {
+        if useNewAutopush {
+            Task {
+                do {
+                    let autopush = try await Autopush(files: files)
+                    // unsubscribe returns a boolean telling the caller if the subscription was already
+                    // unsubscribed, we ignore it because regardless the subscription is gone.
+                    _ = try await autopush.unsubscribe(scope: RustFirefoxAccounts.pushScope)
+                } catch let error {
+                    logger.log("Unable to unsubscribe account push subscription",
+                               level: .warning,
+                               category: .sync,
+                               description: error.localizedDescription
+                    )
+                }
+            }
+        }
         if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
             application.unregisterForRemoteNotifications()
         }
