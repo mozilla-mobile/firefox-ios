@@ -230,7 +230,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         var sectionTitle: String
         if section == SectionDefault {
