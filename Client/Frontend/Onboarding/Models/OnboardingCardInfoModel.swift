@@ -6,6 +6,7 @@ import Foundation
 
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var name: String
+    var order: Int
     var title: String
     var body: String
     var link: OnboardingLinkInfoModel?
@@ -21,6 +22,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
 
     init(
         name: String,
+        order: Int,
         title: String,
         body: String,
         link: OnboardingLinkInfoModel?,
@@ -30,6 +32,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         imageID: String
     ) {
         self.name = name
+        self.order = order
         self.title = title
         self.body = body
         self.imageID = imageID
