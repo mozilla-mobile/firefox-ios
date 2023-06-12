@@ -1319,6 +1319,7 @@ workflows:
         inputs:
         - test_plan: PerformanceTestPlan
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - simulator_device: "iPhone 14"
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@4.5:
         inputs:
