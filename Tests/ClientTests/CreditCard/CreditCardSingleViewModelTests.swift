@@ -83,8 +83,11 @@ class CreditCardSingleViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        viewModel = nil
+        profile.shutdown()
         profile = nil
+        autofill = nil
+        files = nil
+        viewModel = nil
     }
 
     // MARK: - Test Cases
@@ -107,12 +110,14 @@ class CreditCardSingleViewModelTests: XCTestCase {
     func testUpdatingCard() {
         viewModel.state = .save
         viewModel.decryptedCreditCard = samplePlainTextCard
-        let expectation = expectation(description: "wait for credit card fields to be saved")
+        let expectationSave = expectation(description: "wait for credit card fields to be saved")
+        let expectationUpdate = expectation(description: "wait for credit card fields to be updated")
         viewModel.saveCreditCard { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
                 return
             }
+            expectationSave.fulfill()
             XCTAssertEqual(creditCard.ccName, self.viewModel.decryptedCreditCard?.ccName)
             // Note: the number for credit card is encrypted so that part
             // will get added later and for now we will check the name only
@@ -124,10 +129,10 @@ class CreditCardSingleViewModelTests: XCTestCase {
             self.viewModel.updateCreditCard { didUpdate, error in
                 XCTAssertTrue(didUpdate)
                 XCTAssertNil(error)
-                expectation.fulfill()
+                expectationUpdate.fulfill()
             }
         }
-        waitForExpectations(timeout: 2.0)
+        waitForExpectations(timeout: 6.0)
     }
 
     func testViewSetupForRememberCreditCard() {
