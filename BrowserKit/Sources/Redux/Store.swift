@@ -31,7 +31,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
             .reversed()
             .reduce(
                 { [unowned self] action in
-                    self.dispatch(action)
+                    self.handleReducer(action)
                 },
                 { dispatchFunction, middleware in
                     let dispatch: (Action) -> Void = { [weak self] in self?.dispatch($0)
@@ -62,14 +62,11 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        dispatch(state, action)
+        dispatchFunction(action)
     }
 
-    private func dispatch(_ currentState: State, _ action: Action) {
-        let newState = reducer(currentState, action)
-
-        dispatchFunction(action)
-
+    private func handleReducer(_ action: Action) {
+        let newState = reducer(state, action)
         state = newState
     }
 
