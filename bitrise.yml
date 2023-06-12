@@ -1324,9 +1324,8 @@ workflows:
     - xcode-test@4.5:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan PerformanceTestPlan"
-        - simulator_device: "iPhone 14"
-        - test_plan: PerformanceTestPlan
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
+        - test_plan: PerformanceTestPlan    
     
     - script@1.1:
         title: Create perfherder data object
