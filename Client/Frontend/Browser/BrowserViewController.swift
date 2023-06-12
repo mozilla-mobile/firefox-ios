@@ -14,20 +14,6 @@ import MobileCoreServices
 import Telemetry
 import Common
 
-struct UrlToOpenModel {
-    var url: URL?
-    var isPrivate: Bool
-}
-
-/// Enum used to track flow for telemetry events
-enum ReferringPage: Equatable {
-    case onboarding
-    case appMenu
-    case settings
-    case none
-    case tabTray
-}
-
 class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -2091,12 +2077,12 @@ extension BrowserViewController: LegacyTabDelegate {
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanelDidRequestToCreateAccount() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {

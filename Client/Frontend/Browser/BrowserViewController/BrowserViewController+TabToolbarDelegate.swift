@@ -86,8 +86,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
-                                              buttonView: button,
-                                              showFXASyncAction: presentSignInViewController)
+                                              buttonView: button)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
@@ -259,5 +258,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showZoomPage(tab: Tab) {
         updateZoomPageBarVisibility(visible: true)
+    }
+
+    func showSignInView(fxaParameters: FxASignInViewParameters) {
+        presentSignInViewController(fxaParameters.launchParameters,
+                                    flowType: fxaParameters.flowType,
+                                    referringPage: fxaParameters.referringPage)
     }
 }
