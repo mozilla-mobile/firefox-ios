@@ -18,7 +18,8 @@ struct SceneSetupHelper {
         let window = UIWindow(windowScene: windowScene)
 
         // Setting the initial theme correctly as we don't have a window attached yet to let ThemeManager set it
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        var themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager.window = window
         window.overrideUserInterfaceStyle = themeManager.currentTheme.type.getInterfaceStyle()
 
         return window
