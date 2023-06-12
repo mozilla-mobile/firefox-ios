@@ -256,6 +256,18 @@ public struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
 
+        struct SendAnonymousUsageData {
+            static let title = "SendAnonymousUsageData"
+        }
+
+        struct ShowIntroduction {
+            static let title = "ShowTour"
+        }
+
+        struct StudiesToggle {
+            static let title = "StudiesToggle"
+        }
+
         struct BlockImages {
             static let title = "Block Images"
         }
@@ -264,6 +276,10 @@ public struct AccessibilityIdentifiers {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+        }
+
+        struct Version {
+            static let title = "FxVersion"
         }
     }
 
