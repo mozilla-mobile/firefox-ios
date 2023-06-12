@@ -136,7 +136,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     - slack@3.1:
         is_always_run: true
-        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
+        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version" | and .IsBuildFailed}}'
         inputs:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
