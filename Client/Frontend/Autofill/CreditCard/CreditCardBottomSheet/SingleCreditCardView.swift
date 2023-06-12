@@ -33,6 +33,10 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     var themeObserver: NSObjectProtocol?
     private var viewModel: SingleCreditCardViewModel
 
+    var didTapNotNowClosure: (() -> Void)?
+    var didTapYesClosure: ((Error?) -> Void)?
+    var didTapManageCardsClosure: (() -> Void)?
+
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
     private lazy var cardTableView: UITableView = {
@@ -98,6 +102,10 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+
+        self.viewModel.didUpdateCreditCard = { [weak self] in
+            self?.cardTableView.reloadData()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -198,28 +206,34 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: Button Actions
     @objc
     private func didTapYes() {
-        self.viewModel.didTapMainButton { error in
-            // error is logged in the view model, but maybe we want to show an error message
+        let eventObject: TelemetryWrapper.EventObject = viewModel.state == .save ? .creditCardBottomSheetSave : .creditCardBottomSheetUpdate
+        self.viewModel.didTapMainButton { [weak self] error in
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: eventObject)
             DispatchQueue.main.async { [weak self] in
                 self?.dismissVC()
+                self?.didTapYesClosure?(error)
             }
         }
     }
 
     @objc
     private func didTapNotNow() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
         dismissVC()
+        didTapNotNowClosure?()
     }
 
     @objc
     private func didTapManageCards() {
-        dismissVC()
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetManageCards)
+        didTapManageCardsClosure?()
     }
 
     // MARK: BottomSheet Delegate
     func willDismiss() {
-        // TODO: FXIOS-6111
-        // telemetry will be added
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
     }
 
     // MARK: UITableViewDelegate
@@ -233,15 +247,16 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
 
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
+              let creditCard = viewModel.state == .save ? viewModel.decryptedCreditCard?.convertToTempCreditCard() : viewModel.creditCard else {
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let creditCard = viewModel.creditCard
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
+
         hostingCell.isAccessibilityElement = true
         return hostingCell
     }

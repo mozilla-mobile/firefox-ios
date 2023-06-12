@@ -37,7 +37,7 @@ class CreditCardHelperTests: XCTestCase {
         {
           "type" : "fill-credit-card-form",
           "payload" : {
-            "cc-number" : "1234 4567 4567 6788",
+            "cc-number" : "4520 2991 2039 6788",
             "cc-name" : "Josh Moustache",
             "cc-exp-month" : "03",
             "cc-exp" : "02",
@@ -52,7 +52,7 @@ class CreditCardHelperTests: XCTestCase {
         {
           "type" : "capture-credit-card-form",
           "payload" : {
-            "cc-number" : "1234 4567 4567 6788",
+            "cc-number" : "4520 2991 2039 6788",
             "cc-name" : "Josh Moustache",
             "cc-exp-month" : "03",
             "cc-exp" : "02",
@@ -112,7 +112,7 @@ class CreditCardHelperTests: XCTestCase {
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
         XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "1234 4567 4567 6788")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
     func test_parseFieldCaptureJsonType_valid() {
@@ -123,6 +123,20 @@ class CreditCardHelperTests: XCTestCase {
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
         XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "1234 4567 4567 6788")
+        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "4520 2991 2039 6788")
+    }
+
+    // MARK: Retrieval
+
+    func test_getFieldTypeValues() {
+        let messageBodyDict = creditCardHelper.getValidPayloadData(from: validMockWKMessage)
+        let messageFields = creditCardHelper.parseFieldType(messageBody: messageBodyDict!)
+        XCTAssertNotNil(messageFields)
+        let fieldValues = creditCardHelper.getFieldTypeValues(payload: messageFields!.creditCardPayload)
+        XCTAssertEqual(fieldValues.ccExpMonth, 3)
+        XCTAssertEqual(fieldValues.ccExpYear, 99)
+        XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
+        XCTAssertEqual(fieldValues.ccNumberLast4, "6788")
+        XCTAssertEqual(fieldValues.ccType, "VISA")
     }
 }

@@ -54,25 +54,41 @@ struct SingleCreditCardViewModel {
     private var logger: Logger
     let profile: Profile
     let autofill: RustAutofill
-    var creditCard: CreditCard
+    var creditCard: CreditCard? {
+        didSet {
+            didUpdateCreditCard?()
+        }
+    }
+
+    var didUpdateCreditCard: (() -> Void)?
+    var decryptedCreditCard: UnencryptedCreditCardFields?
 
     var state: SingleCreditCardViewState
 
     init(profile: Profile,
-         creditCard: CreditCard,
+         creditCard: CreditCard?,
+         decryptedCreditCard: UnencryptedCreditCardFields?,
          logger: Logger = DefaultLogger.shared,
          state: SingleCreditCardViewState) {
         self.profile = profile
         self.autofill = profile.autofill
-        self.creditCard = creditCard
+        if creditCard != nil {
+            self.creditCard = creditCard
+            self.decryptedCreditCard = decryptedCreditCard
+        } else {
+            self.decryptedCreditCard = decryptedCreditCard
+            self.creditCard = decryptedCreditCard?.convertToTempCreditCard()
+        }
         self.state = state
         self.logger = logger
     }
 
+    // MARK: Main Button Action
     public func didTapMainButton(completion: @escaping (Error?) -> Void) {
+        let decryptedCard = getPlainCreditCardValues()
         switch state {
         case .save:
-            saveCreditCard { _, error in
+            saveCreditCard(with: decryptedCard) { _, error in
                 DispatchQueue.main.async {
                     guard let error = error else {
                         completion(nil)
@@ -85,7 +101,8 @@ struct SingleCreditCardViewModel {
                 }
             }
         case .update:
-            updateCreditCard { _, error in
+            updateCreditCard(for: creditCard?.guid,
+                             with: decryptedCard) { _, error in
                 DispatchQueue.main.async {
                     guard let error = error else {
                         completion(nil)
@@ -100,28 +117,55 @@ struct SingleCreditCardViewModel {
         }
     }
 
-    public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
-        let plainCreditCard = getCCValues()
-        autofill.addCreditCard(creditCard: plainCreditCard,
+    // MARK: Save Credit Card
+    public func saveCreditCard(with decryptedCard: UnencryptedCreditCardFields?,
+                               completion: @escaping (CreditCard?, Error?) -> Void) {
+        guard let decryptedCard = decryptedCard else {
+            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "SaveCreditCard: nil decryptedCreditCard card"))
+            return
+        }
+        autofill.addCreditCard(creditCard: decryptedCard,
                                completion: completion)
     }
 
-    func updateCreditCard(completion: @escaping (Bool, Error?) -> Void) {
-        let plainCreditCard = getCCValues()
-        autofill.updateCreditCard(id: creditCard.guid,
-                                  creditCard: plainCreditCard,
+    // MARK: Update Credit Card
+    func updateCreditCard(for creditCardGUID: String?,
+                          with decryptedCard: UnencryptedCreditCardFields?,
+                          completion: @escaping (Bool, Error?) -> Void) {
+        guard let creditCardGUID = creditCardGUID else {
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil credit card GUID"))
+            return
+        }
+        guard let decryptedCard = decryptedCard else {
+            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "UpdateCreditCard: nil decryptedCreditCard card"))
+            return
+        }
+        autofill.updateCreditCard(id: creditCardGUID,
+                                  creditCard: decryptedCard,
                                   completion: completion)
     }
 
-    func getCCValues() -> UnencryptedCreditCardFields {
-        let plainCreditCard = UnencryptedCreditCardFields(
-            ccName: creditCard.ccName,
-            ccNumber: creditCard.ccNumberEnc,
-            ccNumberLast4: creditCard.ccNumberLast4,
-            ccExpMonth: creditCard.ccExpMonth,
-            ccExpYear: creditCard.ccExpYear,
-            ccType: creditCard.ccType)
+    // MARK: Helper Methods
+    func getPlainCreditCardValues() -> UnencryptedCreditCardFields? {
+        switch state {
+        case .save:
+            guard let plainCard = decryptedCreditCard else { return nil }
+            return plainCard
+        case .update:
+            guard let creditCard = creditCard,
+                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc) else {
+                return nil
+            }
 
-        return plainCreditCard
+            let plainCard = UnencryptedCreditCardFields(
+                ccName: creditCard.ccName,
+                ccNumber: ccNumberDecrypted,
+                ccNumberLast4: creditCard.ccNumberLast4,
+                ccExpMonth: creditCard.ccExpMonth,
+                ccExpYear: creditCard.ccExpYear,
+                ccType: creditCard.ccType)
+
+            return plainCard
+        }
     }
 }

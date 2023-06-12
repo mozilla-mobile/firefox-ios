@@ -825,6 +825,7 @@
 		ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */; };
 		ABEF80D12A24D2BE003F52C4 /* SingleCreditCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D02A24D2BE003F52C4 /* SingleCreditCardViewModel.swift */; };
 		ABEF80D52A254185003F52C4 /* SingleCreditCardFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D42A254185003F52C4 /* SingleCreditCardFooterView.swift */; };
+		ABEF80D92A2F283E003F52C4 /* CreditCardSingleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D82A2F283D003F52C4 /* CreditCardSingleViewModelTests.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
@@ -5112,6 +5113,7 @@
 		ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConversionMetricsTests.swift; sourceTree = "<group>"; };
 		ABEF80D02A24D2BE003F52C4 /* SingleCreditCardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleCreditCardViewModel.swift; sourceTree = "<group>"; };
 		ABEF80D42A254185003F52C4 /* SingleCreditCardFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCreditCardFooterView.swift; sourceTree = "<group>"; };
+		ABEF80D82A2F283D003F52C4 /* CreditCardSingleViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardSingleViewModelTests.swift; sourceTree = "<group>"; };
 		AC1846BB804B44D52BA6F0F2 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		AC434095AC70313F20D9EEFE /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Shared.strings; sourceTree = "<group>"; };
 		AC65443AB444EAE083C479E5 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -7606,6 +7608,7 @@
 		43B658D729CE249D00C9EF08 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
+				ABEF80D82A2F283D003F52C4 /* CreditCardSingleViewModelTests.swift */,
 				43B658D829CE251C00C9EF08 /* CreditCardInputViewModelTests.swift */,
 				967EDABC29D705300089208D /* CreditCardValidatorTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
@@ -13080,6 +13083,7 @@
 				E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */,
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
+				ABEF80D92A2F283E003F52C4 /* CreditCardSingleViewModelTests.swift in Sources */,
 				6A5F591D28627C0100FABA92 /* TabManagerNavDelegateTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,

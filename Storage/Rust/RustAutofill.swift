@@ -61,6 +61,30 @@ public struct UnencryptedCreditCardFields {
                                          ccExpYear: self.ccExpYear,
                                          ccType: self.ccType)
     }
+
+    public func convertToTempCreditCard() -> CreditCard {
+        let rustKeys = RustAutofillEncryptionKeys()
+        let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
+        let convertedCreditCard = CreditCard(guid: "",
+                                             ccName: self.ccName,
+                                             ccNumberEnc: ccNumberEnc ?? "",
+                                             ccNumberLast4: self.ccNumberLast4,
+                                             ccExpMonth: self.ccExpMonth,
+                                             ccExpYear: self.ccExpYear,
+                                             ccType: self.ccType,
+                                             timeCreated: Int64(Date().timeIntervalSince1970),
+                                             timeLastUsed: nil,
+                                             timeLastModified: Int64(Date().timeIntervalSince1970),
+                                             timesUsed: 0)
+        return convertedCreditCard
+    }
+
+    public func isEqualToCreditCard(creditCard: CreditCard) -> Bool {
+        return creditCard.ccExpMonth == ccExpMonth &&
+        creditCard.ccExpYear == ccExpYear &&
+        creditCard.ccName == ccName &&
+        creditCard.ccNumberLast4 == ccNumberLast4
+    }
 }
 
 public class RustAutofillEncryptionKeys {
@@ -325,6 +349,31 @@ public class RustAutofill {
             do {
                 let records = try self.storage?.getAllCreditCards()
                 completion(records, nil)
+            } catch let err as NSError {
+                completion(nil, err)
+            }
+        }
+    }
+
+    public func checkForCreditCardExistance(cardNumber: String, completion: @escaping (CreditCard?, Error?) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = AutofillApiError.UnexpectedAutofillApiError(
+                    reason: "Database is closed")
+                completion(nil, error)
+                return
+            }
+
+            do {
+                guard let records = try self.storage?.getAllCreditCards() else {
+                    completion(nil, nil)
+                    return
+                }
+                if let foundCard = records.first(where: { $0.ccNumberLast4 == cardNumber }) {
+                    completion(foundCard, nil)
+                }
+
+                completion(nil, nil)
             } catch let err as NSError {
                 completion(nil, err)
             }
