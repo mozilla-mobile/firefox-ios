@@ -116,6 +116,20 @@ class ThemedTableViewController: UITableViewController, Themeable {
         return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
     }
 
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+        else { return nil }
+        headerView.applyTheme(theme: themeManager.currentTheme)
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+        else { return nil}
+        footerView.applyTheme(theme: themeManager.currentTheme)
+        return footerView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
