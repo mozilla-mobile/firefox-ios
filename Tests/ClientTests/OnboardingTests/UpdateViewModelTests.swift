@@ -42,7 +42,7 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 1)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -57,8 +57,8 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 2)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
-            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
+            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync.rawValue)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
