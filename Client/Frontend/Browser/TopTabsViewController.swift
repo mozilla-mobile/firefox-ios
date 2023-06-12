@@ -57,7 +57,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
-        button.inTopTabs = true
     }
 
     private lazy var newTab: UIButton = .build { button in
