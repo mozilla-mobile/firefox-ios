@@ -1315,17 +1315,11 @@ workflows:
     steps:
     - cache-pull@2.1:
         is_always_run: true
-    - xcode-build-for-simulator@0.12:
-        inputs:
-        - test_plan: PerformanceTestPlan
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@4.5:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan PerformanceTestPlan"
-        - simulator_device: "iPhone 14"
-        - test_plan: PerformanceTestPlan
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
+        - test_plan: PerformanceTestPlan   
     
     - script@1.1:
         title: Create perfherder data object
@@ -1459,7 +1453,7 @@ trigger_map:
 - push_branch: release/v116
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: perfherder-test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
