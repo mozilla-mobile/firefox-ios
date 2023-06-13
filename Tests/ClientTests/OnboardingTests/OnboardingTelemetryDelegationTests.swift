@@ -8,21 +8,20 @@ import Glean
 @testable import Client
 
 class OnboardingTelemetryDelegationTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
     override func tearDown() {
         super.tearDown()
         Glean.shared.resetGlean(clearStores: true)
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
     }
 

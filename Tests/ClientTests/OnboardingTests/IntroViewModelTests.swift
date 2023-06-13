@@ -7,13 +7,13 @@ import XCTest
 @testable import Client
 
 class IntroViewModelTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
     }
 
     override func tearDown() {
