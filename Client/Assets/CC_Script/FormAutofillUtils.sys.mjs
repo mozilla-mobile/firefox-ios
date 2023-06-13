@@ -326,7 +326,7 @@ FormAutofillUtils = {
       "address-level2", // City/Town
       "organization", // Company or organization name
       "address-level1", // Province/State (Standardized code if possible)
-      "country-name", // Country name
+      "country", // Country name
       "postal-code", // Postal code
       "tel", // Phone number
       "email", // Email address
