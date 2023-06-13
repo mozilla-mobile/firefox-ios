@@ -118,7 +118,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         return locationContainer
     }()
 
-    let line = UIView()
+    private let line = UIView()
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton()
@@ -205,11 +205,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         set(newURL) {
             locationView.url = newURL
-            if let url = newURL, InternalURL(url)?.isAboutHomeURL ?? false {
-                line.isHidden = true
-            } else {
-                line.isHidden = false
-            }
         }
     }
 
@@ -355,7 +350,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             }
 
             make.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
         }
 
         progressBar.snp.remakeConstraints { make in
@@ -594,7 +589,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationContainer.layer.borderColor = borderColor.cgColor
 
         if inOverlayMode {
-            line.isHidden = inOverlayMode
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView)
