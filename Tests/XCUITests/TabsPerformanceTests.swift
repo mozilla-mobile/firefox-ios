@@ -62,15 +62,16 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         app.launch()
         waitForTabsButton()
+        app.buttons["TabLocationView.reloadButton"].tap()
+        waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"], timeout: 30)
+
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            navigator.nowAt(NewTabScreen)
-            sleep(3)
             waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 30)
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
