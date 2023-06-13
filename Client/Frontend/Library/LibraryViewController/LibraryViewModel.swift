@@ -42,4 +42,12 @@ class LibraryViewModel {
 
         panelDescriptors[index].setupNavigationController()
     }
+
+    func resetHistoryPanelPagination() {
+        // Reset history panel pagination to get latest history visit
+        if let historyPanel = panelDescriptors.first(where: { $0.panelType == .history }),
+           let vcPanel = historyPanel.viewController as? HistoryPanel {
+            vcPanel.viewModel.shouldResetHistory = true
+        }
+    }
 }

@@ -8,4 +8,6 @@ protocol BrowserNavigationHandler: AnyObject {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
     func show(settings: Route.SettingsSection)
+
+    func show(homepanelSection: Route.HomepanelSection)
 }

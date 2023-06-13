@@ -319,6 +319,10 @@ class LibraryViewController: UIViewController, Themeable {
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
     }
+
+    func resetHistoryPanelPagination() {
+        viewModel.resetHistoryPanelPagination()
+    }
 }
 
 // MARK: Notifiable
