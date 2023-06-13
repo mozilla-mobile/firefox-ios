@@ -5,4 +5,4 @@ features:
       use-new-autopush-client:
         description: If true, the autopush client based on the Rust component will be used
         type: Boolean
-        default: false
+        default: true
