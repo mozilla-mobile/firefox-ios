@@ -9,13 +9,13 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
@@ -26,7 +26,6 @@ class UpdateViewModelTests: XCTestCase {
         super.tearDown()
         profile.shutdown()
         profile = nil
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
