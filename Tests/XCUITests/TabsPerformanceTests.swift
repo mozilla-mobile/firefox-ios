@@ -14,7 +14,7 @@ class TabsPerformanceTest: BaseTestCase {
         let archiveName = fixtures[functionName]
 
         // defaults
-        launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHints]
 
         // append specific load profiles to LaunchArguments
         if fixtures.keys.contains(functionName) {
@@ -62,8 +62,6 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         app.launch()
         waitForTabsButton()
-        app.buttons["TabLocationView.reloadButton"].tap()
-        waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"], timeout: 30)
 
         measure(metrics: [
