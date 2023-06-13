@@ -8,15 +8,20 @@ import XCTest
 
 final class LibraryCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var delegate: MockLibraryCoordinatorDelegate!
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        self.delegate = MockLibraryCoordinatorDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
-        mockRouter = nil
+        self.mockRouter = nil
+        self.delegate = nil
+        DependencyHelperMock().reset()
     }
 
     func testEmptyChilds_whenCreated() {
@@ -24,9 +29,40 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
+    func testStart_withBookmarksHomepanelSection_setsUpLibraryViewControllerWithBookmarksPanel() {
+        let subject = createSubject()
+        subject.start(with: .bookmarks)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+    }
+
+    func testStart_withHistoryHomepanelSection_setsUpLibraryViewControllerWithHistoryPanel() {
+        let subject = createSubject()
+        subject.start(with: .history)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+    }
+
+    func testStart_withDownloadsHomepanelSection_setsUpLibraryViewControllerWithDownloadsPanel() {
+        let subject = createSubject()
+        subject.start(with: .downloads)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+    }
+
+    func testStart_withReadingListHomepanelSection_setsUpLibraryViewControllerWithReadingListPanel() {
+        let subject = createSubject()
+        subject.start(with: .readingList)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+    }
+
+    // MARK: - Helper
     func createSubject() -> LibraryCoordinator {
         let subject = LibraryCoordinator(router: mockRouter)
         trackForMemoryLeaks(subject)
         return subject
     }
 }
+
+class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate {}
