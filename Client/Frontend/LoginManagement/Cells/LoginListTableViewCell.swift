@@ -40,14 +40,12 @@ class LoginListTableViewCell: ThemedTableViewCell {
 
     lazy var hostnameLabel: UILabel = .build { label in
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textAlignment = .left
         label.numberOfLines = 1
         label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     lazy var usernameLabel: UILabel = .build { label in
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
         label.numberOfLines = 1
     }
 
@@ -95,7 +93,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
             contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStack.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: inset.left),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset.left),
 
             breachAlertImageView.widthAnchor.constraint(equalToConstant: breachAlertSize),
             breachAlertImageView.heightAnchor.constraint(equalToConstant: breachAlertSize),
