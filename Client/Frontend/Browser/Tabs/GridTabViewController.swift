@@ -187,6 +187,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         ])
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.async {
+            self.focusItem()
+        }
+    }
+
     private func setupView() {
         // TODO: Remove SNAPKIT - this will require some work as the layouts
         // are using other snapkit constraints and this will require modification
@@ -219,15 +226,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         super.viewWillLayoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowlayout.invalidateLayout()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // Temporary solution using asyncAfter for fixing https://mozilla-hub.atlassian.net/browse/FXIOS-5711
-        // Will be changed once the TabTray logic will be reimplemented
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.focusItem()
-        }
     }
 
     private func tabManagerTeardown() {
