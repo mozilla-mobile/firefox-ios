@@ -99,7 +99,7 @@ class SnapshotTests: BaseTestCaseL10n {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("20HomeViewSettings")
-        app.collectionViews.buttons.element(boundBy: 2).tap()
+        app.collectionViews.buttons.element(boundBy: 1).tap()
         waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
         snapshot("SettingsSearchEngine")
@@ -129,9 +129,9 @@ class SnapshotTests: BaseTestCaseL10n {
         // Tap on shortcuts settings menu option
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 10)
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6), timeout: 10)
         snapshot("WebsiteBrowserMenu")
-        app.collectionViews.cells.buttons.element(boundBy: 7).tap()
+        app.collectionViews.cells.buttons.element(boundBy: 6).tap()
 
         // Tap on erase button to go to homepage and check the shortcut created
         waitForExistence(app.buttons["URLBar.deleteButton"])
@@ -143,7 +143,7 @@ class SnapshotTests: BaseTestCaseL10n {
         app.otherElements.staticTexts["Mozilla"].tap()
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 5)
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6), timeout: 5)
         snapshot("1-RemoveShortcutTabMenu")
 
         // Go back to homescreen

@@ -150,7 +150,7 @@ class BaseTestCaseL10n: XCTestCase {
 
     func openSettings() {
         app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 2).tap()
+        app.collectionViews.buttons.element(boundBy: 1).tap()
     }
 }
 

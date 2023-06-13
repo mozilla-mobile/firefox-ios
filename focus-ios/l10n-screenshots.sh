@@ -30,7 +30,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-DEVICE="iPhone 11"
+DEVICE="iPhone 14"
 
 for lang in $LOCALES; do
     # start simple with Focus only
@@ -38,6 +38,7 @@ for lang in $LOCALES; do
     mkdir -p "l10n-screenshots/$lang"
     fastlane snapshot --project Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
       --derived_data_path l10n-screenshots-dd \
+      --number_of_retries 0 \
       --skip_open_summary \
       --xcargs "-maximum-parallel-testing-workers 2" \
       --erase_simulator --localize_simulator \
