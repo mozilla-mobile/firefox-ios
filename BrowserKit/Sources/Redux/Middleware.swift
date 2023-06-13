@@ -8,5 +8,5 @@ import Foundation
 /// Middleware produces side effects or uses dependencies and
 /// is the best place to put logger, API calls or access storage.
 public typealias DispatchFunction = (Action) -> Void
-public typealias Middleware<State> = (@escaping DispatchFunction,
-                                      @escaping () -> State?) -> (@escaping DispatchFunction) -> DispatchFunction
+public typealias Middleware<State> = (_ dispatch: @escaping DispatchFunction,
+                                      _ getState: @escaping () -> State?) -> (@escaping DispatchFunction) -> DispatchFunction
