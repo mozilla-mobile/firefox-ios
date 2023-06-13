@@ -30,7 +30,7 @@ features:
             ALWAYS:                   "true"
             NEVER:                    "false"
           cards:
-            wecome:
+            welcome:
               order: 10
               title: Onboarding/Onboarding.Welcome.Title.v114
               body: Onboarding/Onboarding.Welcome.Description.v114
