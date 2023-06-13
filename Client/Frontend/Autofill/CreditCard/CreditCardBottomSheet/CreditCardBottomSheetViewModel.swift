@@ -152,26 +152,42 @@ struct CreditCardBottomSheetViewModel {
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard
         case .update:
-            return updateDecryptedCreditCard(from: creditCard, fieldValues: decryptedCreditCard)
+            guard let creditCard = creditCard,
+                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
+            else {
+                return nil
+            }
+            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
+                                                                       with: ccNumberDecrypted,
+                                                                       fieldValues: decryptedCreditCard)
+            return updatedDecryptedCreditCard
         }
     }
-    
+
     func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState) -> CreditCard? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard.convertToTempCreditCard()
         case .update:
-            let updatedCreditCard = updateDecryptedCreditCard(from: creditCard, fieldValues: decryptedCreditCard)
-            return updatedCreditCard?.convertToTempCreditCard()
+            guard let creditCard = creditCard,
+                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
+            else {
+                return nil
+            }
+            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
+                                                                       with: ccNumberDecrypted,
+                                                                       fieldValues: decryptedCreditCard)
+            return updatedDecryptedCreditCard?.convertToTempCreditCard()
         }
     }
 
-    func updateDecryptedCreditCard(from originalCreditCard: CreditCard?,
+    func updateDecryptedCreditCard(from originalCreditCard: CreditCard,
+                                   with ccNumberDecrypted: String,
                                    fieldValues decryptedCard: UnencryptedCreditCardFields?) -> UnencryptedCreditCardFields? {
-        guard let originalCreditCard = originalCreditCard,
-              let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: originalCreditCard.ccNumberEnc),
-              var decryptedCreditCardVal = decryptedCard else {
+        guard var decryptedCreditCardVal = decryptedCard,
+              !ccNumberDecrypted.isEmpty
+        else {
             return nil
         }
 
@@ -187,9 +203,8 @@ struct CreditCardBottomSheetViewModel {
 
         // Month
         let month = decryptedCreditCardVal.ccExpMonth
-        let currentMonth = Calendar.current.component(.month, from: Date())
-        let isValidMonth = (currentMonth...12).contains(Int(month))
-        decryptedCreditCardVal.ccExpMonth = isValidMonth ? month : Int64(currentMonth)
+        let isValidMonth = (1...12).contains(Int(month))
+        decryptedCreditCardVal.ccExpMonth = isValidMonth ? month : originalCreditCard.ccExpMonth
 
         // Year
         let yearVal = decryptedCreditCardVal.ccExpYear

@@ -29,10 +29,10 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
-                                              ccNumberEnc: "1234567891234567",
+                                              ccNumberEnc: "4111 1111 1111 1111",
                                               ccNumberLast4: "4567",
-                                              ccExpMonth: 1234567,
-                                              ccExpYear: 23,
+                                              ccExpMonth: 3,
+                                              ccExpYear: 43,
                                               ccType: "VISA",
                                               timeCreated: 1234678,
                                               timeLastUsed: nil,
@@ -155,7 +155,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.title == .CreditCard.UpdateCreditCard.MainTitle)
     }
 
-    func test_getPlainCreditCardValues() {
+    func test_save_getPlainCreditCardValues() {
         viewModel.state = .save
         let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         XCTAssertNotNil(value)
@@ -163,6 +163,27 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_updateDecryptedCreditCard() {
+        let sampleCreditCardVal = sampleCreditCard
+        let updatedName = "Red Dragon"
+        let updatedMonth: Int64 = 12
+        let updatedYear: Int64 = 48
+        let newUnencryptedCreditCard = UnencryptedCreditCardFields(ccName: updatedName,
+                                                                   ccNumber: sampleCreditCardVal.ccNumberEnc,
+                                                                   ccNumberLast4: sampleCreditCardVal.ccNumberLast4,
+                                                                   ccExpMonth: updatedMonth,
+                                                                   ccExpYear: updatedYear,
+                                                                   ccType: sampleCreditCardVal.ccType)
+        let value = viewModel.updateDecryptedCreditCard(from: sampleCreditCardVal,
+                                                        with: sampleCreditCardVal.ccNumberEnc,
+                                                        fieldValues: newUnencryptedCreditCard)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, updatedName)
+        XCTAssertEqual(value!.ccExpMonth, updatedMonth)
+        XCTAssertEqual(value!.ccExpYear, updatedYear)
+        XCTAssertEqual(value!.ccNumber, sampleCreditCardVal.ccNumberEnc)
     }
 
     func test_didTapMainButton() {

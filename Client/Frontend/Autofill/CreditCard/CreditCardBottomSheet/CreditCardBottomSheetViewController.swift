@@ -57,8 +57,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
         cardTableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                                forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
-        cardTableView.register(CreditCardBottomSheetFooterView.self, forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetFooterView.cellIdentifier)
-        cardTableView.register(CreditCardBottomSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetFooterView.self,
+                               forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetFooterView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetHeaderView.self,
+                               forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier)
         return cardTableView
     }()
 
@@ -285,7 +287,9 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             }
             footerView.applyTheme(theme: themeManager.currentTheme)
             if !footerView.manageCardsButton.responds(to: #selector(CreditCardBottomSheetViewController.didTapManageCards)) {
-                footerView.manageCardsButton.addTarget(self, action: #selector(CreditCardBottomSheetViewController.didTapManageCards), for: .touchUpInside)
+                footerView.manageCardsButton.addTarget(self,
+                                                       action: #selector(CreditCardBottomSheetViewController.didTapManageCards),
+                                                       for: .touchUpInside)
             }
 
             return footerView
