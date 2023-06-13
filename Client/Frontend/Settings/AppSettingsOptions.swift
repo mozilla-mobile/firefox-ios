@@ -791,16 +791,20 @@ class YourRightsSetting: Setting {
 }
 
 // Opens the on-boarding screen again
-class ShowIntroductionSetting: Setting {
+class ShowIntroductionSetting: HiddenSetting {
     let profile: Profile
 
     override var accessibilityIdentifier: String? { return "ShowTour" }
 
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
+    override var title: NSAttributedString? {
         let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
-        super.init(title: NSAttributedString(string: .AppSettingsShowTour,
-                                             attributes: attributes))
+        return NSAttributedString(string: .AppSettingsShowTour,
+                                  attributes: attributes)
+    }
+
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

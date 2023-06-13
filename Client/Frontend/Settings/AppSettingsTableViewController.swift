@@ -218,9 +218,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
                 AppStoreReviewSetting(),
                 VersionSetting(settings: self),
-                ShowIntroductionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
+                ShowIntroductionSetting(settings: self),
                 ExportBrowserDataSetting(settings: self),
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
