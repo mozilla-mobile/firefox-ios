@@ -766,7 +766,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
@@ -845,12 +847,31 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
+            let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
+    }
+
+    private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
+        if setting.style == .subtitle {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell else {
+                return ThemedSubtitleTableViewCell()
+            }
+            return cell
+        }
+        if setting.style == .value1 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedLeftAlignedTableViewCell.cellIdentifier, for: indexPath) as? ThemedLeftAlignedTableViewCell else {
+                return ThemedLeftAlignedTableViewCell()
+            }
+            return cell
+        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell else {
+            return ThemedTableViewCell()
+        }
+        return cell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
