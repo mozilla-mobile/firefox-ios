@@ -304,7 +304,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
-            ShowIntroductionSetting(settings: self),
             SendFeedbackSetting(),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
@@ -348,6 +347,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             ResetContextualHints(settings: self),
             ResetWallpaperOnboardingPage(settings: self),
             SentryIDSetting(settings: self),
+            ShowIntroductionSetting(settings: self),
             FasterInactiveTabs(settings: self),
             OpenFiftyTabsDebugOption(settings: self),
         ]
