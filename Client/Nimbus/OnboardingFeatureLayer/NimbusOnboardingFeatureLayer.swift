@@ -111,6 +111,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             checkingAgainst: conditionTable,
             using: &jexlCache,
             and: helper)
+
+        guard !card.disqualifiers.isEmpty else {
+            return prerequisitesAreMet
+        }
+
         let noDisqualifiersAreMet = !verifyConditionEligibility(
             from: card.disqualifiers,
             checkingAgainst: conditionTable,

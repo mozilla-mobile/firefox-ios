@@ -56,7 +56,7 @@ struct NimbusOnboardingTestingConfigUtility {
         withSecondaryButton: Bool = false,
         withPrimaryButtonAction: OnboardingActions = .nextCard,
         prerequisites: [String] = ["ALWAYS"],
-        disqualifiers: [String] = ["NEVER"]
+        disqualifiers: [String] = []
     ) {
         let cards = createCards(
             numbering: numberOfCards,
