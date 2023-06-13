@@ -37,7 +37,7 @@ features:
               image: welcome-globe
               link:
                 title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/en-US/privacy/firefox/"
+                url: "https://www.mozilla.org/privacy/firefox/"
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Welcome.Action.v114
