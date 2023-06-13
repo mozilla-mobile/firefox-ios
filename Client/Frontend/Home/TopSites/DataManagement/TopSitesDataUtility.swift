@@ -6,21 +6,20 @@ import Foundation
 import Storage
 
 protocol TopSitesDataUtilityInterface {
-    func removeSiteMatching(_ engine: OpenSearchEngine?, from sites: [Site]) -> [Site]
+    func removeSiteMatchingSites(in searchEngine: OpenSearchEngine?, from sites: [Site]) -> [Site]
 }
 
 struct TopSitesDataUtility: TopSitesDataUtilityInterface {
-    func removeSiteMatching(_ engine: OpenSearchEngine?, from sites: [Site]) -> [Site] {
-        if let defaultSearchEngine = engine {
-            let filteredSites = sites.filter {
-                guard let secondLevelDomain = $0.secondLevelDomain else { return false }
-                let hasMatchedEngine = defaultSearchEngine.shortName.localizedCaseInsensitiveContains(secondLevelDomain)
+    func removeSiteMatchingSites(in searchEngine: OpenSearchEngine?, from sites: [Site]) -> [Site] {
+        guard let defaultSearchEngine = searchEngine else { return sites }
 
-                return !hasMatchedEngine
-            }
-            return filteredSites
+        let filteredSites = sites.filter {
+            guard let secondLevelDomain = $0.secondLevelDomain else { return false }
+            let hasMatchedEngine = defaultSearchEngine.shortName.localizedCaseInsensitiveContains(secondLevelDomain)
+
+            return !hasMatchedEngine
         }
 
-        return sites
+        return filteredSites
     }
 }

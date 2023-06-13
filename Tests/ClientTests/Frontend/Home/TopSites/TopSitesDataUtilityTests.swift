@@ -30,7 +30,6 @@ class TopSitesDataAdapterTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
         topSitesDataUtility = TopSitesDataUtility()
     }
 
@@ -40,7 +39,6 @@ class TopSitesDataAdapterTests: XCTestCase {
     }
 
     // MARK: Tests
-
     func testSitesNotFiltered() {
         let sites = topSitesDataUtility.removeSiteMatching(searchEngine, from: nonFilterableSites)
         XCTAssertEqual(sites.count, 3)

@@ -40,7 +40,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
     private(set) var defaultSearchEngine: OpenSearchEngine?
-    private let topSitesDataUtility = TopSitesDataUtility()
 
     var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
@@ -107,8 +106,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
 
         sites.removeDuplicates()
 
-        // This will prevent any Sponsored tile from appearing if its SLD matches the default search engine.
-        sites = topSitesDataUtility.removeSiteMatching(defaultSearchEngine, from: sites)
+        sites = TopSitesDataUtility().removeSiteMatchingSites(in: defaultSearchEngine, from: sites)
 
         topSites = sites.map { TopSite(site: $0) }
     }
