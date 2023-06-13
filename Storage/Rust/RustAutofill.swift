@@ -63,11 +63,9 @@ public struct UnencryptedCreditCardFields {
     }
 
     public func convertToTempCreditCard() -> CreditCard {
-        let rustKeys = RustAutofillEncryptionKeys()
-        let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
         let convertedCreditCard = CreditCard(guid: "",
                                              ccName: self.ccName,
-                                             ccNumberEnc: ccNumberEnc ?? "",
+                                             ccNumberEnc: "",
                                              ccNumberLast4: self.ccNumberLast4,
                                              ccExpMonth: self.ccExpMonth,
                                              ccExpYear: self.ccExpYear,
@@ -365,15 +363,13 @@ public class RustAutofill {
             }
 
             do {
-                guard let records = try self.storage?.getAllCreditCards() else {
+                guard let records = try self.storage?.getAllCreditCards(),
+                      let foundCard = records.first(where: { $0.ccNumberLast4 == cardNumber })
+                else {
                     completion(nil, nil)
                     return
                 }
-                if let foundCard = records.first(where: { $0.ccNumberLast4 == cardNumber }) {
-                    completion(foundCard, nil)
-                }
-
-                completion(nil, nil)
+                completion(foundCard, nil)
             } catch let err as NSError {
                 completion(nil, err)
             }

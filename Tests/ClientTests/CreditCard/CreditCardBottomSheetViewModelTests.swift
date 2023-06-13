@@ -8,9 +8,9 @@ import Storage
 import Shared
 import XCTest
 
-class CreditCardSingleViewModelTests: XCTestCase {
+class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var profile: MockProfile!
-    private var viewModel: SingleCreditCardViewModel!
+    private var viewModel: CreditCardBottomSheetViewModel!
     private var files: FileAccessor!
     private var autofill: RustAutofill!
     private var encryptionKey: String!
@@ -75,10 +75,10 @@ class CreditCardSingleViewModelTests: XCTestCase {
         profile = MockProfile()
         _ = profile.autofill.reopenIfClosed()
 
-        viewModel = SingleCreditCardViewModel(profile: profile,
-                                              creditCard: nil,
-                                              decryptedCreditCard: samplePlainTextCard,
-                                              state: .save)
+        viewModel = CreditCardBottomSheetViewModel(profile: profile,
+                                                   creditCard: nil,
+                                                   decryptedCreditCard: samplePlainTextCard,
+                                                   state: .save)
     }
 
     override func tearDown() {
@@ -94,7 +94,7 @@ class CreditCardSingleViewModelTests: XCTestCase {
     func testSavingCard() {
         viewModel.creditCard = sampleCreditCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
-        let decryptedCreditCard = viewModel.getPlainCreditCardValues()
+        let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
@@ -157,7 +157,7 @@ class CreditCardSingleViewModelTests: XCTestCase {
 
     func test_getPlainCreditCardValues() {
         viewModel.state = .save
-        let value = viewModel.getPlainCreditCardValues()
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)

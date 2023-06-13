@@ -9,7 +9,7 @@ import Common
 import Foundation
 import UIKit
 
-class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
+class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
     // MARK: UX
     struct UX {
         static let containerPadding: CGFloat = 18.0
@@ -31,7 +31,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private var viewModel: SingleCreditCardViewModel
+    private var viewModel: CreditCardBottomSheetViewModel
 
     var didTapNotNowClosure: (() -> Void)?
     var didTapYesClosure: ((Error?) -> Void)?
@@ -57,8 +57,8 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
         cardTableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                                forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
-        cardTableView.register(SingleCreditCardFooterView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardFooterView.cellIdentifier)
-        cardTableView.register(SingleCreditCardHeaderView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardHeaderView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetFooterView.self, forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetFooterView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier)
         return cardTableView
     }()
 
@@ -86,7 +86,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             size: UX.yesButtonFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.notNowButton
-        button.addTarget(self, action: #selector(SingleCreditCardViewController.didTapNotNow), for: .touchUpInside)
+        button.addTarget(self, action: #selector(CreditCardBottomSheetViewController.didTapNotNow), for: .touchUpInside)
         button.setTitle(.CreditCard.RememberCreditCard.SecondaryButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.yesButtonCornerRadius
     }
@@ -95,7 +95,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     private var contentWidthConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
-    init(viewModel: SingleCreditCardViewModel,
+    init(viewModel: CreditCardBottomSheetViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
@@ -248,8 +248,8 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
-              let creditCard = viewModel.state == .save ? viewModel.decryptedCreditCard?.convertToTempCreditCard() : viewModel.creditCard else {
-            return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
+              let creditCard = viewModel.getConvertedCreditCardValues(bottomSheetState: viewModel.state) else {
+            return UITableViewCell()
         }
 
         let creditCardRow = CreditCardItemRow(
@@ -263,8 +263,8 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: SingleCreditCardHeaderView.cellIdentifier
-        ) as? SingleCreditCardHeaderView else {
+            withIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier
+        ) as? CreditCardBottomSheetHeaderView else {
             return nil
         }
         headerView.applyTheme(theme: themeManager.currentTheme)
@@ -279,13 +279,13 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             return emptyView
         case .update:
             guard let footerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: SingleCreditCardFooterView.cellIdentifier
-            ) as? SingleCreditCardFooterView else {
+                withIdentifier: CreditCardBottomSheetFooterView.cellIdentifier
+            ) as? CreditCardBottomSheetFooterView else {
                 return nil
             }
             footerView.applyTheme(theme: themeManager.currentTheme)
-            if !footerView.manageCardsButton.responds(to: #selector(SingleCreditCardViewController.didTapManageCards)) {
-                footerView.manageCardsButton.addTarget(self, action: #selector(SingleCreditCardViewController.didTapManageCards), for: .touchUpInside)
+            if !footerView.manageCardsButton.responds(to: #selector(CreditCardBottomSheetViewController.didTapManageCards)) {
+                footerView.manageCardsButton.addTarget(self, action: #selector(CreditCardBottomSheetViewController.didTapManageCards), for: .touchUpInside)
             }
 
             return footerView
