@@ -28,5 +28,3 @@ public struct Thunk<State>: Action {
         }
     }
 }
-
-

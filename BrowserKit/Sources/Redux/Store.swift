@@ -29,11 +29,9 @@ public class Store<State: StateType>: DefaultDispatchStore {
     lazy public var dispatchFunction: DispatchFunction = {
         let dispatchFunc = middlewares
             .reversed()
-            .reduce(
-                { [unowned self] action in
+            .reduce({ [unowned self] action in
                     self.handleReducer(action)
-                },
-                { dispatchFunction, middleware in
+                }, { dispatchFunction, middleware in
                     let dispatch: (Action) -> Void = { [weak self] in self?.dispatch($0)
                     }
                     let getState = { [weak self] in self?.state }
