@@ -40,12 +40,12 @@ class TopSitesDataAdapterTests: XCTestCase {
 
     // MARK: Tests
     func testSitesNotFiltered() {
-        let sites = topSitesDataUtility.removeSiteMatching(searchEngine, from: nonFilterableSites)
+        let sites = topSitesDataUtility.removeSiteMatchingSites(in: searchEngine, from: nonFilterableSites)
         XCTAssertEqual(sites.count, 3)
     }
 
     func testSitesAreFiltered() {
-        let sites = topSitesDataUtility.removeSiteMatching(searchEngine, from: filterableSites)
+        let sites = topSitesDataUtility.removeSiteMatchingSites(in: searchEngine, from: filterableSites)
         XCTAssertEqual(sites.count, 2)
     }
 }
