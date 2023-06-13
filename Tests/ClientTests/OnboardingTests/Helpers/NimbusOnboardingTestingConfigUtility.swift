@@ -7,6 +7,20 @@ import MozillaAppServices
 import Shared
 
 struct NimbusOnboardingTestingConfigUtility {
+    struct CardElementNames {
+        static let name = "Name"
+        static let title = "Title"
+        static let body = "Body"
+        static let a11yIDOnboarding = "onboarding."
+        static let a11yIDUpgrade = "upgrade."
+        static let linkTitle = "MacRumors"
+        static let linkURL = "https://www.mozilla.org/en-US/privacy/firefox/"
+        static let primaryButtonTitle = "Primary Button"
+        static let secondaryButtonTitle = "Secondary Button"
+        static let placeholderString = "A string inside %@ with a placeholder"
+        static let noPlaceholderString = "On Wednesday's, we wear pink"
+    }
+
     enum CardOrder: String {
         case welcome
         case notifications = "notificationPermissions"
@@ -19,6 +33,7 @@ struct NimbusOnboardingTestingConfigUtility {
         static let welcomeSync: [CardOrder] = [.welcome, .sync]
     }
 
+    // MARK: - Order-based setups
     func setupNimbus(withOrder order: [CardOrder]) {
         var dictionary = [String: NimbusOnboardingCardData]()
 
@@ -29,6 +44,64 @@ struct NimbusOnboardingTestingConfigUtility {
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(cards: dictionary, dismissable: true)
         })
+    }
+
+    // MARK: - Custom setups
+    func setupNimbusWith(
+        cards numberOfCards: Int = 1,
+        image: NimbusOnboardingImages = .welcomeGlobe,
+        type: OnboardingType = .freshInstall,
+        dismissable: Bool = true,
+        shouldAddLink: Bool = false,
+        withSecondaryButton: Bool = false,
+        withPrimaryButtonAction: OnboardingActions = .nextCard,
+        prerequisites: [String] = ["ALWAYS"],
+        disqualifiers: [String] = ["NEVER"]
+    ) {
+        let cards = createCards(
+            numbering: numberOfCards,
+            image: image,
+            type: type,
+            shouldAddLink: shouldAddLink,
+            withSecondaryButton: withSecondaryButton,
+            primaryButtonAction: withPrimaryButtonAction,
+            prerequisites: prerequisites,
+            disqualifiers: disqualifiers)
+
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
+            OnboardingFrameworkFeature(cards: cards, dismissable: dismissable)
+        })
+    }
+
+    // MARK: - Private helpers
+    private func createCards(
+        numbering numberOfCards: Int,
+        image: NimbusOnboardingImages,
+        type: OnboardingType,
+        shouldAddLink: Bool,
+        withSecondaryButton: Bool,
+        primaryButtonAction: OnboardingActions,
+        prerequisites: [String],
+        disqualifiers: [String]
+    ) -> [String: NimbusOnboardingCardData] {
+        var dictionary = [String: NimbusOnboardingCardData]()
+
+        for number in 1...numberOfCards {
+            dictionary["\(CardElementNames.name) \(number)"] = NimbusOnboardingCardData(
+                body: "\(CardElementNames.body) \(number)",
+                buttons: createButtons(
+                    withPrimaryAction: primaryButtonAction,
+                    andSecondaryButton: withSecondaryButton),
+                disqualifiers: disqualifiers,
+                image: image,
+                link: shouldAddLink ? buildLink() : nil,
+                order: number,
+                prerequisites: prerequisites,
+                title: "\(CardElementNames.title) \(number)",
+                type: type)
+        }
+
+        return dictionary
     }
 
     private func createCard(
@@ -57,10 +130,27 @@ struct NimbusOnboardingTestingConfigUtility {
             type: isUpdate.contains(where: { $0 == id }) ? .upgrade : .freshInstall)
     }
 
-    private func buildLink() -> NimbusOnboardingLink {
-        return NimbusOnboardingLink(
-            title: "Link title",
-            url: "https://www.mozilla.org/en-US/privacy/firefox/")
+    private func createButtons(
+        withPrimaryAction primaryAction: OnboardingActions,
+        andSecondaryButton withSecondaryButton: Bool
+    ) -> NimbusOnboardingButtons {
+        if withSecondaryButton {
+            return NimbusOnboardingButtons(
+                primary: NimbusOnboardingButton(
+                    action: primaryAction,
+                    title: "\(CardElementNames.primaryButtonTitle)"),
+                secondary: NimbusOnboardingButton(
+                    action: .nextCard,
+                    title: "\(CardElementNames.secondaryButtonTitle)")
+            )
+        }
+
+        return NimbusOnboardingButtons(
+            primary: NimbusOnboardingButton(
+                action: primaryAction,
+                title: "\(CardElementNames.primaryButtonTitle)"
+            )
+        )
     }
 
     private func createButtons(for id: CardOrder) -> NimbusOnboardingButtons {
@@ -69,27 +159,29 @@ struct NimbusOnboardingTestingConfigUtility {
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
                     action: .nextCard,
-                    title: "Primary title"
-                )
-            )
+                    title: "\(CardElementNames.primaryButtonTitle)"))
         case .notifications:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
                     action: .requestNotifications,
-                    title: "Primary title"),
+                    title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
                     action: .nextCard,
-                    title: "Secondary title")
-            )
+                    title: "\(CardElementNames.secondaryButtonTitle)"))
         case .sync, .updateSync:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
                     action: .syncSignIn,
-                    title: "Primary title"),
+                    title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
                     action: .nextCard,
-                    title: "Secondary title")
-            )
+                    title: "\(CardElementNames.secondaryButtonTitle)"))
         }
+    }
+
+    private func buildLink() -> NimbusOnboardingLink {
+        return NimbusOnboardingLink(
+            title: "\(CardElementNames.linkTitle)",
+            url: "\(CardElementNames.linkURL)")
     }
 }
