@@ -9,5 +9,8 @@ protocol BrowserNavigationHandler: AnyObject {
     /// - Parameter settings: The settings route we're trying to get to
     func show(settings: Route.SettingsSection)
 
+    /// Shows the specified section of the home panel.
+    ///
+    /// - Parameter homepanelSection: The section to be displayed.
     func show(homepanelSection: Route.HomepanelSection)
 }
