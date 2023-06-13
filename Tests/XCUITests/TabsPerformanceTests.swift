@@ -70,6 +70,7 @@ class TabsPerformanceTest: BaseTestCase {
             XCTMemoryMetric()]) {
             // go to tab tray
             navigator.nowAt(NewTabScreen)
+            sleep(3)
             waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 30)
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
