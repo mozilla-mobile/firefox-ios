@@ -210,7 +210,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settings += [
             SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
-                ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
                 StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
@@ -219,6 +218,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
                 AppStoreReviewSetting(),
                 VersionSetting(settings: self),
+                ShowIntroductionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
