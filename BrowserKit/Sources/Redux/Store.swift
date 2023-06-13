@@ -26,7 +26,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
-    public var dispatchFunction: DispatchFunction {
+    lazy public var dispatchFunction: DispatchFunction = {
         let dispatchFunc = middlewares
             .reversed()
             .reduce(
@@ -40,7 +40,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
                     return middleware(dispatch, getState)(dispatchFunction)
             })
         return dispatchFunc
-    }
+    }()
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
