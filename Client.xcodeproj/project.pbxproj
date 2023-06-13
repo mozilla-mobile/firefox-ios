@@ -930,7 +930,7 @@
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
 		C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CD80D32A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift */; };
 		C8CD80D72A1E2C6E0097C3AE /* NimbusMessagingHelperUtilityProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CD80D62A1E2C6E0097C3AE /* NimbusMessagingHelperUtilityProtocol.swift */; };
-		C8CD80D82A1E31C20097C3AE /* NimbusOnboardingConfigUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */; };
+		C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingTestingConfigUtility.swift */; };
 		C8CD80DA2A1E8C1D0097C3AE /* OnboardingTelemetryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CD80D92A1E8C1D0097C3AE /* OnboardingTelemetryProtocol.swift */; };
 		C8CD80DC2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CD80DB2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift */; };
 		C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE389A265E71E00009B09E /* CredentialListViewController.swift */; };
@@ -5406,7 +5406,7 @@
 		C8DC90C82A0675E70008832B /* MarkupParsingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupParsingUtility.swift; sourceTree = "<group>"; };
 		C8DC90CF2A067C5B0008832B /* MarkupParseUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupParseUtilityTests.swift; sourceTree = "<group>"; };
 		C8DC90D12A067C6D0008832B /* MarkupAttributionUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupAttributionUtilityTests.swift; sourceTree = "<group>"; };
-		C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingConfigUtility.swift; sourceTree = "<group>"; };
+		C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingTestingConfigUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingTestingConfigUtility.swift; sourceTree = "<group>"; };
 		C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocolTests.swift; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -8977,7 +8977,7 @@
 		C8DF92F22A14078F00AA7B05 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingConfigUtility.swift */,
+				C8DF92F32A1407BA00AA7B05 /* NimbusOnboardingTestingConfigUtility.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -12506,7 +12506,7 @@
 				CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */,
 				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
-				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingConfigUtility.swift in Sources */,
+				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				43D16B8029831DC5009F8279 /* CreditCardInputView.swift in Sources */,

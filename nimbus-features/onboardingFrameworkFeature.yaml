@@ -15,8 +15,8 @@ features:
       cards:
         description: >
           The list of available cards for onboarding.
-        type: List<NimbusOnboardingCardData>
-        default: []
+        type: Map<String, NimbusOnboardingCardData>
+        default: {}
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -30,7 +30,7 @@ features:
             ALWAYS:                   "true"
             NEVER:                    "false"
           cards:
-            - name: "welcome"
+            welcome:
               order: 10
               title: Onboarding/Onboarding.Welcome.Title.v114
               body: Onboarding/Onboarding.Welcome.Description.v114
@@ -43,7 +43,9 @@ features:
                   title: Onboarding/Onboarding.Welcome.Action.v114
                   action: next-card
               type: fresh-install
-            - name: "notificationPermissions"
+              prerequisites:
+                - ALWAYS
+            notification-permissions:
               order: 30
               title: Onboarding/Onboarding.Notification.Title.v114
               body: Onboarding/Onboarding.Notification.Description.v114
@@ -56,7 +58,9 @@ features:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115
                   action: next-card
               type: fresh-install
-            - name: "signToSync"
+              prerequisites:
+                - ALWAYS
+            sign-to-sync:
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v114
               body: Onboarding/Onboarding.Sync.Description.v114
@@ -69,7 +73,9 @@ features:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: next-card
               type: fresh-install
-            - name: "update.welcome"
+              prerequisites:
+                - ALWAYS
+            update-welcome:
               order: 10
               title: Upgrade/Upgrade.Welcome.Title.v114
               body: Upgrade/Upgrade.Welcome.Description.v114
@@ -79,7 +85,9 @@ features:
                   title: Upgrade/Upgrade.Welcome.Action.v114
                   action: next-card
               type: upgrade
-            - name: "update.signToSync"
+              prerequisites:
+                - ALWAYS
+            update-sign-to-sync:
               order: 20
               title: Upgrade/Upgrade.SyncSign.Title.v114
               body: Upgrade/Upgrade.SyncSign.Description.v114
@@ -92,6 +100,8 @@ features:
                   title: Onboarding/Onboarding.LaterAction.v114
                   action: next-card
               type: upgrade
+              prerequisites:
+                - ALWAYS
           dismissable: true
 
 objects:
@@ -99,15 +109,6 @@ objects:
     description: >
       A group of properties describing the attributes of a card.
     fields:
-      name:
-        type: String
-        description: >
-          The name of the card. It should be unique in the current
-          roster of cards.
-          This should never be defaulted.
-          This is going to be used as the telemetry value for the
-          card in question.
-        default: ""
       order:
         type: Int
         description: >
@@ -150,16 +151,16 @@ objects:
         type: List<String>
         description: >
           A list of strings corresponding to targeting expressions.
-          The card will be shown if all expressions `true`.
-        default:
-          - ALWAYS
+          The card will be shown if all expressions `true` and if
+          no expressions in the `disqualifiers` table are true, or
+          if the `disqualifiers` table is empty.
+        default: []
       disqualifiers:
         type: List<String>
         description: >
           A list of strings corresponding to targeting expressions.
           The card will not be shown if any expression is `true`.
-        default:
-          - NEVER
+        default: []
       type:
         type: OnboardingType
         description: >
