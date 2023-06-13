@@ -7,19 +7,18 @@ import XCTest
 @testable import Client
 
 class OnboardingViewControllerProtocolTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
     override func tearDown() {
         super.tearDown()
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
     }
 

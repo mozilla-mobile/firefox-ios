@@ -52,7 +52,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test Dismissable
     func testLayer_dismissable_isTrue() {
-        setupNimbusWith(cards: nil, dismissable: true)
+        setupNimbusWith(dismissable: true)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
@@ -81,7 +81,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_a11yroot_isUpgrade() {
         setupNimbusWith(
             cards: 2,
-            type: OnboardingType.upgrade.rawValue)
+            type: .upgrade)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .upgrade).cards
@@ -92,7 +92,10 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test card(s) being returned
     func testLayer_cardIsReturned_OneCard() {
-        setupNimbusWith(cards: 1)
+        setupNimbusWith(
+            shouldAddLink: true,
+            withSecondaryButton: true
+        )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -105,7 +108,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             order: 10,
             title: CardElementNames.title + " 1",
             body: CardElementNames.body + " 1",
-            link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle + " 1",
+            link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
                                           url: URL(string: CardElementNames.linkURL)!),
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
@@ -127,7 +130,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(subject.link?.url, expectedCard.link?.url)
         XCTAssertEqual(subject.buttons.primary.title, expectedCard.buttons.primary.title)
         XCTAssertEqual(subject.buttons.primary.action, expectedCard.buttons.primary.action)
-        // Make sure a second button exists
         XCTAssertNotNil(subject.buttons.secondary)
         XCTAssertEqual(subject.buttons.secondary!.title, expectedCard.buttons.secondary!.title)
         XCTAssertEqual(subject.buttons.secondary!.action, expectedCard.buttons.secondary!.action)
@@ -166,9 +168,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     //    - disqualifiers: false
     func testLayer_conditionPrerequisiteAlways_returnsCard() {
         let expectedNumberOfCards = 1
-        setupNimbusWith(
-            cards: expectedNumberOfCards,
-            prerequisites: "ALWAYS")
+        setupNimbusWith(prerequisites: ["ALWAYS"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -178,9 +178,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_conditionPrerequisiteNever_returnsNoCard() {
         let expectedNumberOfCards = 0
-        setupNimbusWith(
-            cards: 1,
-            prerequisites: "NEVER")
+        setupNimbusWith(prerequisites: ["NEVER"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -190,9 +188,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_conditionDisqualifierAlways_returnsNoCard() {
         let expectedNumberOfCards = 0
-        setupNimbusWith(
-            cards: 1,
-            disqualifiers: "ALWAYS")
+        setupNimbusWith(disqualifiers: ["ALWAYS"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -202,9 +198,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_conditionDesqualifierNever_returnsCard() {
         let expectedNumberOfCards = 1
-        setupNimbusWith(
-            cards: expectedNumberOfCards,
-            disqualifiers: "NEVER")
+        setupNimbusWith(disqualifiers: ["NEVER"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -215,9 +209,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_conditionPrerequisiteAlwaysDisqualifierNever_returnsCard() {
         let expectedNumberOfCards = 1
         setupNimbusWith(
-            cards: expectedNumberOfCards,
-            prerequisites: "ALWAYS",
-            disqualifiers: "NEVER")
+            prerequisites: ["ALWAYS"],
+            disqualifiers: ["NEVER"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -228,9 +221,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_conditionPrerequisiteNeverDisqualifierNever_returnsNoCard() {
         let expectedNumberOfCards = 0
         setupNimbusWith(
-            cards: 1,
-            prerequisites: "NEVER",
-            disqualifiers: "NEVER")
+            prerequisites: ["NEVER"],
+            disqualifiers: ["NEVER"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -241,9 +233,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_conditionPrerequisiteAlwaysDisqualifierAlways_returnsNoCard() {
         let expectedNumberOfCards = 0
         setupNimbusWith(
-            cards: 1,
-            prerequisites: "ALWAYS",
-            disqualifiers: "ALWAYS")
+            prerequisites: ["ALWAYS"],
+            disqualifiers: ["ALWAYS"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -254,9 +245,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_conditionPrerequisiteNeverDisqualifierAlways_returnsNoCard() {
         let expectedNumberOfCards = 0
         setupNimbusWith(
-            cards: 1,
-            prerequisites: "NEVER",
-            disqualifiers: "ALWAYS")
+            prerequisites: ["NEVER"],
+            disqualifiers: ["ALWAYS"])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -266,10 +256,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test image IDs
     func testLayer_cardIsReturned_WithGlobeImageIdenfier() {
-        setupNimbusWith(
-            cards: 1,
-            image: NimbusOnboardingImages.welcomeGlobe.rawValue
-        )
+        setupNimbusWith(image: .welcomeGlobe)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -281,10 +268,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardIsReturned_WithNotificationImageIdenfier() {
-        setupNimbusWith(
-            cards: 1,
-            image: NimbusOnboardingImages.notifications.rawValue
-        )
+        setupNimbusWith(image: .notifications)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -296,10 +280,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardIsReturned_WithSyncImageIdenfier() {
-        setupNimbusWith(
-            cards: 1,
-            image: NimbusOnboardingImages.syncDevices.rawValue
-        )
+        setupNimbusWith(image: .syncDevices)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -310,27 +291,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingSyncv106))
     }
 
-    func testLayer_cardIsReturnedWithDefaultIMageID_IfBadImageID() {
-        setupNimbusWith(
-            cards: 1,
-            image: "i am a bad image"
-        )
-        let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
-
-        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
-            XCTFail("Expected a card, and got none.")
-            return
-        }
-
-        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingWelcomev106))
-    }
-
     // MARK: - Test install types
     func testLayer_cardIsReturned_WithFreshInstallType() {
-        setupNimbusWith(
-            cards: 1,
-            type: OnboardingType.freshInstall.rawValue
-        )
+        setupNimbusWith(type: .freshInstall)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -342,10 +305,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardIsReturned_WithUpdateType() {
-        setupNimbusWith(
-            cards: 1,
-            type: OnboardingType.upgrade.rawValue
-        )
+        setupNimbusWith(type: .upgrade)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
@@ -358,10 +318,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test link
     func testLayer_cardIsReturned_WithNoLink() {
-        setupNimbusWith(
-            cards: 1,
-            shouldAddLink: false
-        )
+        setupNimbusWith(shouldAddLink: false)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -372,13 +329,23 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertNil(subject.link)
     }
 
+    func testLayer_cardIsReturned_WithLink() {
+        setupNimbusWith(shouldAddLink: true)
+        let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
+
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertNotNil(subject.link)
+        XCTAssertEqual(subject.link?.title, CardElementNames.linkTitle)
+        XCTAssertEqual(subject.link?.url, URL(string: CardElementNames.linkURL)!)
+    }
+
     // MARK: - Test buttons
     func testLayer_cardIsReturned_WithOneButton() {
-        let expectedNumberOfButtons = 1
-        setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: expectedNumberOfButtons
-        )
+        setupNimbusWith(withSecondaryButton: false)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -391,10 +358,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardIsReturned_WithTwoButtons() {
-        setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: true
-        )
+        setupNimbusWith(withSecondaryButton: true)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -406,21 +370,10 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertNotNil(subject.buttons.secondary)
     }
 
-    func testLayer_cardIsReturnedWithDefaultPrimaryButton_IfNoButtonsSpecified() {
-        setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: 0
-        )
-        let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
-
-        XCTAssertNotNil(layer.getOnboardingModel(for: .freshInstall).cards.first)
-    }
-
     // MARK: - Test button actions
     func testLayer_cardIsReturned_WithNextCardButton() {
         setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: 1,
+            withSecondaryButton: false,
             withPrimaryButtonAction: .nextCard
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
@@ -435,8 +388,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardIsReturned_WithDefaultBrowserButton() {
         setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: 1,
+            withSecondaryButton: true,
             withPrimaryButtonAction: .setDefaultBrowser
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
@@ -451,8 +403,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardIsReturned_WithSyncSignInButton() {
         setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: 1,
+            withSecondaryButton: true,
             withPrimaryButtonAction: .syncSignIn
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
@@ -467,8 +418,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardIsReturned_WithRequestNotificationsButton() {
         setupNimbusWith(
-            cards: 1,
-            withSecondaryButton: 1,
+            withSecondaryButton: true,
             withPrimaryButtonAction: .requestNotifications
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
@@ -483,34 +433,22 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Helpers
     private func setupNimbusForStringTesting() {
-        let features = HardcodedNimbusFeatures(with: [
-            "onboarding-framework-feature": """
-{
-"cards": {
-    "test": {
-        "order": 10,
-        "title": "\(CardElementNames.placeholderString)",
-        "body": "\(CardElementNames.noPlaceholderString)",
-        "image": "\(NimbusOnboardingImages.welcomeGlobe.rawValue)",
-        "link": {
-            "title": "Hello, senator",
-            "url": "https://macrumors.com"
-        },
-        "buttons": {
-            "primary": {
-                "title": "Primary Button 2",
-                "action": "sync-sign-in"
-            },
-        },
-        "type": "\(OnboardingType.freshInstall.rawValue)"
-    }
-},
-"dismissable": false
-}
-"""
-        ])
+        let dictionary = ["\(CardElementNames.name)": NimbusOnboardingCardData(
+            body: "\(CardElementNames.noPlaceholderString)",
+            buttons: createButtons(
+                withPrimaryAction: .nextCard,
+                andSecondaryButton: false),
+            disqualifiers: ["NEVER"],
+            image: .notifications,
+            link: nil,
+            order: 10,
+            prerequisites: ["ALWAYS"],
+            title: "\(CardElementNames.placeholderString)",
+            type: .freshInstall)]
 
-        features.connect(with: FxNimbus.shared)
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
+            OnboardingFrameworkFeature(cards: dictionary, dismissable: true)
+        })
     }
 
     private func setupNimbusWith(
@@ -518,13 +456,12 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         image: NimbusOnboardingImages = .welcomeGlobe,
         type: OnboardingType = .freshInstall,
         dismissable: Bool = true,
-        shouldAddLink: Bool = true,
-        withSecondaryButton: Bool = true,
+        shouldAddLink: Bool = false,
+        withSecondaryButton: Bool = false,
         withPrimaryButtonAction: OnboardingActions = .nextCard,
         prerequisites: [String] = ["ALWAYS"],
         disqualifiers: [String] = ["NEVER"]
     ) {
-
         let cards = createCards(
             numbering: numberOfCards,
             image: image,
@@ -548,13 +485,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         withSecondaryButton: Bool,
         primaryButtonAction: OnboardingActions,
         prerequisites: [String],
-        disqualifiers: [String],
+        disqualifiers: [String]
     ) -> [String: NimbusOnboardingCardData] {
         var dictionary = [String: NimbusOnboardingCardData]()
 
         for number in 1...numberOfCards {
             dictionary["\(CardElementNames.name) \(number)"] = NimbusOnboardingCardData(
-                body: "\(CardElementNames.title) \(number)",
+                body: "\(CardElementNames.body) \(number)",
                 buttons: createButtons(
                     withPrimaryAction: primaryButtonAction,
                     andSecondaryButton: withSecondaryButton),
@@ -563,9 +500,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                 link: shouldAddLink ? createLink() : nil,
                 order: number,
                 prerequisites: prerequisites,
-                title: "\(CardElementNames.body) \(number)",
+                title: "\(CardElementNames.title) \(number)",
                 type: type)
-            ]
         }
 
         return dictionary

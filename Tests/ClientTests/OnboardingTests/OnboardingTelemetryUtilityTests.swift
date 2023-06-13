@@ -8,7 +8,7 @@ import Glean
 @testable import Client
 
 class OnboardingTelemetryUtilityTests: XCTestCase {
-    typealias CardNames = NimbusOnboardingConfigUtility.CardOrder
+    typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
@@ -122,10 +122,8 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
-        let nimbusConfigUtility = NimbusOnboardingConfigUtility()
-        nimbusConfigUtility.clearNimbus()
-        nimbusConfigUtility.setupNimbus(
-            withOrder: NimbusOnboardingConfigUtility.CardOrder.allCards)
+        let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()
+        nimbusConfigUtility.setupNimbus(withOrder: NimbusOnboardingTestingConfigUtility.CardOrder.allCards)
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: onboardingType)
 
         let telemetryUtility = OnboardingTelemetryUtility(with: model)
