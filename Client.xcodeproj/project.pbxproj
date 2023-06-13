@@ -1330,8 +1330,6 @@
 		E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */; };
 		E571EE762875694C0051D9AA /* PocketSponsoredStoriesProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE732875694C0051D9AA /* PocketSponsoredStoriesProviding.swift */; };
 		E571EE772875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE742875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift */; };
-		E571EE782875694C0051D9AA /* PocketSponsoredStoriesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */; };
-		E571EE7D28756A130051D9AA /* PocketSponsoredStoriesProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE7A287569960051D9AA /* PocketSponsoredStoriesProviderTests.swift */; };
 		E571EE7E28756A130051D9AA /* PocketStoryProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E571EE79287569960051D9AA /* PocketStoryProviderTests.swift */; };
 		E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58368A9287D632F0087A449 /* StoryProvider.swift */; };
 		E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
@@ -6341,9 +6339,7 @@
 		E56B4867B0EFF2600F5DE8CC /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		E571EE732875694C0051D9AA /* PocketSponsoredStoriesProviding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStoriesProviding.swift; sourceTree = "<group>"; };
 		E571EE742875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPocketSponsoredStoriesProvider.swift; sourceTree = "<group>"; };
-		E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStoriesProvider.swift; sourceTree = "<group>"; };
 		E571EE79287569960051D9AA /* PocketStoryProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStoryProviderTests.swift; sourceTree = "<group>"; };
-		E571EE7A287569960051D9AA /* PocketSponsoredStoriesProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStoriesProviderTests.swift; sourceTree = "<group>"; };
 		E58368A9287D632F0087A449 /* StoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryProvider.swift; sourceTree = "<group>"; };
 		E59A418F9208400903902F07 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		E5C24864B9BA6790B352962E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Search.strings; sourceTree = "<group>"; };
@@ -8121,7 +8117,6 @@
 			children = (
 				8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */,
 				3B61CD581F2A750800D38DE1 /* PocketFeedTests.swift */,
-				E571EE7A287569960051D9AA /* PocketSponsoredStoriesProviderTests.swift */,
 				E571EE79287569960051D9AA /* PocketStoryProviderTests.swift */,
 				8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */,
 			);
@@ -9110,7 +9105,6 @@
 			isa = PBXGroup;
 			children = (
 				E571EE742875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift */,
-				E571EE752875694C0051D9AA /* PocketSponsoredStoriesProvider.swift */,
 				E571EE732875694C0051D9AA /* PocketSponsoredStoriesProviding.swift */,
 				C8B0F5F0283B7CCE007AE65D /* Model */,
 				C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */,
@@ -12461,7 +12455,6 @@
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				C84656012887A0F700861B4A /* WallpaperMetadataUtility.swift in Sources */,
-				E571EE782875694C0051D9AA /* PocketSponsoredStoriesProvider.swift in Sources */,
 				E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
@@ -13112,7 +13105,6 @@
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
-				E571EE7D28756A130051D9AA /* PocketSponsoredStoriesProviderTests.swift in Sources */,
 				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,
 				8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
