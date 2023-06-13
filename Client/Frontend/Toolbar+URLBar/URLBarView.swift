@@ -21,6 +21,7 @@ private struct URLBarViewUX {
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
+    static let urlBarLineHeight = 0.5
 }
 
 protocol URLBarDelegate: AnyObject {
@@ -344,13 +345,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         line.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.top.equalTo(self).offset(0)
+                make.top.equalTo(self)
             } else {
-                make.bottom.equalTo(self)
+                make.bottom.equalTo(self).offset(URLBarViewUX.urlBarLineHeight)
             }
 
             make.leading.trailing.equalTo(self)
-            make.height.equalTo(0.5)
+            make.height.equalTo(URLBarViewUX.urlBarLineHeight)
         }
 
         progressBar.snp.remakeConstraints { make in
