@@ -15,22 +15,22 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var autofill: RustAutofill!
     private var encryptionKey: String!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
-                                                                  ccNumber: "4242424242424242",
-                                                                  ccNumberLast4: "4242",
-                                                                  ccExpMonth: 08,
-                                                                  ccExpYear: 55,
+                                                                  ccNumber: "4111111111111111",
+                                                                  ccNumberLast4: "1111",
+                                                                  ccExpMonth: 3,
+                                                                  ccExpYear: 43,
                                                                   ccType: "VISA")
 
     private var samplePlainTextUpdateCard = UnencryptedCreditCardFields(ccName: "Allen Burgers",
-                                                                        ccNumber: "4242424242424242",
-                                                                        ccNumberLast4: "4242",
+                                                                        ccNumber: "4111111111111111",
+                                                                        ccNumberLast4: "1111",
                                                                         ccExpMonth: 09,
                                                                         ccExpYear: 56,
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
-                                              ccNumberEnc: "4111 1111 1111 1111",
-                                              ccNumberLast4: "4567",
+                                              ccNumberEnc: "4111111111111111",
+                                              ccNumberLast4: "1111",
                                               ccExpMonth: 3,
                                               ccExpYear: 43,
                                               ccType: "VISA",
@@ -163,6 +163,45 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_save_getConvertedCreditCardValues() {
+        viewModel.state = .save
+        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_update_getConvertedCreditCardValues() {
+        viewModel.creditCard = sampleCreditCard
+        viewModel.decryptedCreditCard = samplePlainTextCard
+        let expectation = expectation(description: "wait for credit card fields to be saved")
+        let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
+        // Note: we have to save card to test the update flow to make sure card is encrypted
+        // otherwise we won't be able to decrypt a random card number
+        self.viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
+            guard error == nil, let creditCard = creditCard else {
+                XCTFail()
+                return
+            }
+            // small check to make sure card got saved
+            XCTAssertEqual(creditCard.ccName, self.viewModel.creditCard?.ccName)
+
+            // convert the saved credit card and check values
+            self.viewModel.creditCard = creditCard
+            let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .update)
+            XCTAssertNotNil(value)
+            XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
+            XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
+            XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
+            XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
+
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 3.0)
     }
 
     func test_updateDecryptedCreditCard() {
