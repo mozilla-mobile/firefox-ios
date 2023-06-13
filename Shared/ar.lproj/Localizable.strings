@@ -1189,12 +1189,6 @@
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "اعرض في قائمة التطبيق";
 
-/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
-"Settings.Passwords.SavePasswords.v103" = "احفظ كلمات السر";
-
-/* Title for the passwords screen. */
-"Settings.Passwords.Title.v103" = "كلمات السر";
-
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "افتح لسانًا جديدًا";
 
