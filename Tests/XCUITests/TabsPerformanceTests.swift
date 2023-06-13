@@ -62,7 +62,7 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         app.launch()
         waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"], timeout: 30)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"], timeout: TIMEOUT_LONG)
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -70,7 +70,7 @@ class TabsPerformanceTest: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 30)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT_LONG)
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
             waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
             app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
@@ -80,7 +80,7 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_4_1280tabTray() {
         app.launch()
         waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"], timeout: 30)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"], timeout: TIMEOUT_LONG)
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
