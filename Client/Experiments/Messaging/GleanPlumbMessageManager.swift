@@ -205,7 +205,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         let feature = messagingFeature.value()
         guard let messageData = feature.messages[id] else { return nil }
 
-        switch createMessage(messageId: id, message: messageData, lookupTables: feature) {
+        switch createMessage(messageId: id,
+                             message: messageData,
+                             lookupTables: feature,
+                             ignoreExpiry: true) {
         case .success(let newMessage): return newMessage
         case .failure: return nil
         }
@@ -240,7 +243,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private func createMessage(
         messageId: String,
         message: MessageData,
-        lookupTables: Messaging
+        lookupTables: Messaging,
+        ignoreExpiry: Bool = false
     ) -> Result<GleanPlumbMessage, CreateMessageError> {
         // Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return .failure(.malformed) }
@@ -264,7 +268,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
 
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
-        if messageMetadata.impressions >= style.maxDisplayCount || messageMetadata.isExpired {
+        if !ignoreExpiry &&
+            (messageMetadata.impressions >= style.maxDisplayCount || messageMetadata.isExpired) {
             _ = messagingStore.onMessageExpired(
                 messageMetadata,
                 surface: message.surface,
