@@ -22,7 +22,6 @@ private struct URLBarViewUX {
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
     static let urlBarLineHeight = 0.5
-    static let overlayModePadding = 1.5
 }
 
 protocol URLBarDelegate: AnyObject {
@@ -97,7 +96,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var toolbarIsShowing = false
     var topTabsIsShowing = false
 
-    /// The URL bar text field, when in overlay mode (focused). Has autocomplete text support.
     var locationTextField: ToolbarTextField?
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
@@ -106,7 +104,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
     var inOverlayMode = false
 
-    /// The URL bar text field, when it's not in overlay mode (unfocused)
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView()
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
@@ -115,7 +112,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         return locationView
     }()
 
-    /// Enables the URL bar shadow
     lazy var locationContainer: UIView = {
         let locationContainer = TabLocationContainerView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -378,18 +374,14 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.height.greaterThanOrEqualTo(heightMin)
                 make.trailing.equalTo(self.showQRScannerButton.snp.leading)
                 make.leading.equalTo(self.cancelButton.snp.trailing)
-                make.top.equalTo(self).offset(URLBarViewUX.overlayModePadding)
-                make.bottom.equalTo(self).offset(-URLBarViewUX.overlayModePadding)
+                make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
                 make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
                 make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0,
-                                                                         left: URLBarViewUX.LocationLeftPadding,
-                                                                         bottom: 0,
-                                                                         right: URLBarViewUX.LocationLeftPadding))
+                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
             }
         } else {
             searchIconImageView.alpha = 0
@@ -404,10 +396,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                     }
                 } else {
                     // Otherwise, left align the location view
-                    make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0,
-                                                                           left: URLBarViewUX.LocationLeftPadding-1,
-                                                                           bottom: 0,
-                                                                           right: URLBarViewUX.LocationLeftPadding-1))
+                    make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
                 }
                 make.height.greaterThanOrEqualTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
