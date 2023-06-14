@@ -28,18 +28,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         super.init(router: router)
     }
 
-    private func toLibraryPanel(_ homepanelSection: Route.HomepanelSection) -> LibraryPanelType {
-        switch homepanelSection {
-        case .bookmarks: return .bookmarks
-        case .history: return .history
-        case .readingList: return .readingList
-        case .downloads: return .downloads
-        default: return . bookmarks
-        }
-    }
-
     func start(with homepanelSection: Route.HomepanelSection) {
-        libraryViewController.setupOpenPanel(panelType: toLibraryPanel(homepanelSection))
+        libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.delegate = self
 
         router.setRootViewController(libraryViewController, hideBar: false, animated: false)
