@@ -9,7 +9,7 @@ import SyncTelemetry
 import MozillaAppServices
 import Common
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable,
+class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
                                 SearchBarLocationProvider {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
