@@ -180,17 +180,13 @@ export const FormAutofillHeuristics = {
    * list to see if there is any valid telephone set and correct their
    * field names.
    *
-   * @param {FieldScanner} fieldScanner
+   * @param {FieldScanner} scanner
    *        The current parsing status for all elements
    * @returns {boolean}
    *          Return true if there is any field can be recognized in the parser,
    *          otherwise false.
    */
-  _parsePhoneFields(fieldScanner) {
-    if (fieldScanner.parsingFinished) {
-      return false;
-    }
-
+  _parsePhoneFields(scanner, detail) {
     let matchingResult;
     const GRAMMARS = this.PHONE_FIELD_GRAMMARS;
 
@@ -198,21 +194,22 @@ export const FormAutofillHeuristics = {
       return !GRAMMARS[index][0];
     }
 
+    const savedIndex = scanner.parsingIndex;
     for (let ruleFrom = 0; ruleFrom < GRAMMARS.length; ) {
-      const detailStart = fieldScanner.parsingIndex;
+      const detailStart = scanner.parsingIndex;
       let ruleTo = ruleFrom;
       for (let count = 0; ruleTo < GRAMMARS.length; ruleTo++, count++) {
         // Bail out when reaching the end of the current set of grammars
         // or there are no more elements to parse
         if (
           isGrammarSeparator(ruleTo) ||
-          !fieldScanner.elementExisting(detailStart + count)
+          !scanner.elementExisting(detailStart + count)
         ) {
           break;
         }
 
         const [category, , length] = GRAMMARS[ruleTo];
-        const detail = fieldScanner.getFieldDetailByIndex(detailStart + count);
+        const detail = scanner.getFieldDetailByIndex(detailStart + count);
 
         // If the field is not what this grammar rule is interested in, skip processing.
         if (
@@ -244,146 +241,155 @@ export const FormAutofillHeuristics = {
       }
     }
 
-    let parsedField = false;
     if (matchingResult) {
       const { ruleFrom, ruleTo } = matchingResult;
       for (let i = ruleFrom; i < ruleTo; i++) {
-        fieldScanner.updateFieldName(fieldScanner.parsingIndex, GRAMMARS[i][1]);
-        fieldScanner.parsingIndex++;
-        parsedField = true;
+        scanner.updateFieldName(scanner.parsingIndex, GRAMMARS[i][1]);
+        scanner.parsingIndex++;
       }
     }
 
-    if (fieldScanner.parsingFinished) {
-      return parsedField;
-    }
-    // Match tel extension.
-    const field = fieldScanner.getFieldDetailByIndex(fieldScanner.parsingIndex);
-    if (field?.reason != "autocomplete") {
-      const previousField = fieldScanner.getFieldDetailByIndex(
-        fieldScanner.parsingIndex - 1
-      );
+    // If the previous parsed field is a "tel" field, run heuristic to see
+    // if the current field is a "tel-extension" field
+    const field = scanner.getFieldDetailByIndex(scanner.parsingIndex);
+    if (field && field.reason != "autocomplete") {
+      const prev = scanner.getFieldDetailByIndex(scanner.parsingIndex - 1);
       if (
-        previousField &&
-        lazy.FormAutofillUtils.getCategoryFromFieldName(
-          previousField.fieldName
-        ) == "tel"
+        prev &&
+        lazy.FormAutofillUtils.getCategoryFromFieldName(prev.fieldName) == "tel"
       ) {
         const regExpTelExtension = new RegExp(
           "\\bext|ext\\b|extension|ramal", // pt-BR, pt-PT
           "iu"
         );
         if (this._matchRegexp(field.element, regExpTelExtension)) {
-          fieldScanner.updateFieldName(
-            fieldScanner.parsingIndex,
-            "tel-extension"
-          );
-          fieldScanner.parsingIndex++;
-          parsedField = true;
+          scanner.updateFieldName(scanner.parsingIndex, "tel-extension");
+          scanner.parsingIndex++;
         }
       }
     }
-
-    return parsedField;
+    return savedIndex != scanner.parsingIndex;
   },
 
   /**
    * Try to find the correct address-line[1-3] sequence and correct their field
    * names.
    *
-   * @param {FieldScanner} fieldScanner
+   * @param {FieldScanner} scanner
    *        The current parsing status for all elements
    * @returns {boolean}
    *          Return true if there is any field can be recognized in the parser,
    *          otherwise false.
    */
-  _parseAddressFields(fieldScanner) {
-    if (fieldScanner.parsingFinished) {
+  _parseStreetAddressFields(scanner, fieldDetail) {
+    const INTERESTED_FIELDS = [
+      "street-address",
+      "address-line1",
+      "address-line2",
+      "address-line3",
+    ];
+
+    const fields = [];
+    for (let idx = scanner.parsingIndex; !scanner.parsingFinished; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
+        break;
+      }
+      fields.push(detail);
+    }
+
+    if (!fields.length) {
       return false;
     }
 
-    // TODO: These address-line* regexps are for the lines with numbers, and
-    // they are the subset of the regexps in `heuristicsRegexp.js`. We have to
-    // find a better way to make them consistent.
-    const addressLines = ["address-line1", "address-line2", "address-line3"];
-    const addressLineRegexps = {
-      "address-line1": new RegExp(
-        "address[_-]?line(1|one)|address1|addr1" +
-          "|addrline1|address_1" + // Extra rules by Firefox
-          "|indirizzo1" + // it-IT
-          "|住所1" + // ja-JP
-          "|地址1" + // zh-CN
-          "|주소.?1", // ko-KR
-        "iu"
-      ),
-      "address-line2": new RegExp(
-        "address[_-]?line(2|two)|address2|addr2" +
-          "|addrline2|address_2" + // Extra rules by Firefox
-          "|indirizzo2" + // it-IT
-          "|住所2" + // ja-JP
-          "|地址2" + // zh-CN
-          "|주소.?2", // ko-KR
-        "iu"
-      ),
-      "address-line3": new RegExp(
-        "address[_-]?line(3|three)|address3|addr3" +
-          "|addrline3|address_3" + // Extra rules by Firefox
-          "|indirizzo3" + // it-IT
-          "|住所3" + // ja-JP
-          "|地址3" + // zh-CN
-          "|주소.?3", // ko-KR
-        "iu"
-      ),
-    };
+    switch (fields.length) {
+      case 1:
+        if (
+          fields[0].reason != "autocomplete" &&
+          ["address-line2", "address-line3"].includes(fields[0].fieldName)
+        ) {
+          scanner.updateFieldName(scanner.parsingIndex, "address-line1");
+        }
+        break;
+      case 2:
+        if (fields[0].reason == "autocomplete") {
+          if (
+            fields[0].fieldName == "street-address" &&
+            (fields[1].fieldName == "address-line2" ||
+              fields[1].reason != "autocomplete")
+          ) {
+            scanner.updateFieldName(
+              scanner.parsingIndex,
+              "address-line1",
+              true
+            );
+          }
+        } else {
+          scanner.updateFieldName(scanner.parsingIndex, "address-line1");
+        }
 
-    let parsedFields = false;
-    const startIndex = fieldScanner.parsingIndex;
-    while (!fieldScanner.parsingFinished) {
-      let detail = fieldScanner.getFieldDetailByIndex(
-        fieldScanner.parsingIndex
-      );
-      if (
-        !detail ||
-        !addressLines.includes(detail.fieldName) ||
-        detail.reason == "autocomplete"
-      ) {
-        // When the field is not related to any address-line[1-3] fields or
-        // determined by autocomplete attr, it means the parsing process can be
-        // terminated.
+        scanner.updateFieldName(scanner.parsingIndex + 1, "address-line2");
+        break;
+      case 3:
+      default:
+        scanner.updateFieldName(scanner.parsingIndex, "address-line1");
+        scanner.updateFieldName(scanner.parsingIndex + 1, "address-line2");
+        scanner.updateFieldName(scanner.parsingIndex + 2, "address-line3");
+        break;
+    }
+
+    scanner.parsingIndex += fields.length;
+    return true;
+  },
+
+  _parseAddressFields(scanner, fieldDetail) {
+    const INTERESTED_FIELDS = ["address-level1", "address-level2"];
+
+    if (!INTERESTED_FIELDS.includes(fieldDetail.fieldName)) {
+      return false;
+    }
+
+    const fields = [];
+    for (let idx = scanner.parsingIndex; !scanner.parsingFinished; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
         break;
       }
-      parsedFields = false;
-      const elem = detail.elementWeakRef.get();
-      for (let regexp of Object.keys(addressLineRegexps)) {
-        if (this._matchRegexp(elem, addressLineRegexps[regexp])) {
-          fieldScanner.updateFieldName(fieldScanner.parsingIndex, regexp);
-          parsedFields = true;
+      fields.push(detail);
+    }
+
+    if (!fields.length) {
+      return false;
+    }
+
+    // State & City(address-level2)
+    if (fields.length == 1) {
+      if (fields[0].fieldName == "address-level2") {
+        const prev = scanner.getFieldDetailByIndex(scanner.parsingIndex - 1);
+        if (
+          prev &&
+          !prev.fieldName &&
+          HTMLSelectElement.isInstance(prev.element)
+        ) {
+          scanner.updateFieldName(scanner.parsingIndex - 1, "address-level1");
+          scanner.parsingIndex += 1;
+          return true;
+        }
+        const next = scanner.getFieldDetailByIndex(scanner.parsingIndex + 1);
+        if (
+          next &&
+          !next.fieldName &&
+          HTMLSelectElement.isInstance(next.element)
+        ) {
+          scanner.updateFieldName(scanner.parsingIndex + 1, "address-level1");
+          scanner.parsingIndex += 2;
+          return true;
         }
       }
-      if (!parsedFields) {
-        break;
-      }
-      fieldScanner.parsingIndex++;
     }
 
-    // If "address-line2" is found but the previous field is "street-address",
-    // then we assume what the website actually wants is "address-line1" instead
-    // of "street-address".
-    if (
-      startIndex > 0 &&
-      fieldScanner.getFieldDetailByIndex(startIndex)?.fieldName ==
-        "address-line2" &&
-      fieldScanner.getFieldDetailByIndex(startIndex - 1)?.fieldName ==
-        "street-address"
-    ) {
-      fieldScanner.updateFieldName(
-        startIndex - 1,
-        "address-line1",
-        "regexp-heuristic"
-      );
-    }
-
-    return parsedFields;
+    scanner.parsingIndex += fields.length;
+    return true;
   },
 
   // The old heuristics can be removed when we fully adopt fathom, so disable the
@@ -392,161 +398,61 @@ export const FormAutofillHeuristics = {
   /**
    * Try to look for expiration date fields and revise the field names if needed.
    *
-   * @param {FieldScanner} fieldScanner
+   * @param {FieldScanner} scanner
    *        The current parsing status for all elements
    * @returns {boolean}
    *          Return true if there is any field can be recognized in the parser,
    *          otherwise false.
    */
-  _parseCreditCardFields(fieldScanner) {
-    if (fieldScanner.parsingFinished) {
+  _parseCreditCardExpiryFields(scanner, fieldDetail) {
+    const INTERESTED_FIELDS = ["cc-exp", "cc-exp-month", "cc-exp-year"];
+
+    if (!INTERESTED_FIELDS.includes(fieldDetail.fieldName)) {
       return false;
     }
 
-    const savedIndex = fieldScanner.parsingIndex;
-    const detail = fieldScanner.getFieldDetailByIndex(
-      fieldScanner.parsingIndex
-    );
-
-    // Respect to autocomplete attr
-    if (!detail || detail?.reason == "autocomplete") {
-      return false;
-    }
-
-    const monthAndYearFieldNames = ["cc-exp-month", "cc-exp-year"];
-    // Skip the uninteresting fields
-    if (!["cc-exp", ...monthAndYearFieldNames].includes(detail.fieldName)) {
-      return false;
-    }
-
-    // The heuristic below should be covered by fathom rules, so we can skip doing
-    // it.
-    if (
-      lazy.FormAutofillUtils.isFathomCreditCardsEnabled() &&
-      lazy.CreditCardRulesets.types.includes(detail.fieldName)
-    ) {
-      fieldScanner.parsingIndex++;
-      return true;
-    }
-
-    const element = detail.elementWeakRef.get();
-
-    // If the input type is a month picker, then assume it's cc-exp.
-    if (element.type == "month") {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp");
-      fieldScanner.parsingIndex++;
-
-      return true;
+    const fields = [];
+    for (let idx = scanner.parsingIndex; !scanner.parsingFinished; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
+        break;
+      }
+      fields.push(detail);
     }
 
     // Don't process the fields if expiration month and expiration year are already
     // matched by regex in correct order.
     if (
-      fieldScanner.getFieldDetailByIndex(fieldScanner.parsingIndex++)
-        .fieldName == "cc-exp-month" &&
-      !fieldScanner.parsingFinished &&
-      fieldScanner.getFieldDetailByIndex(fieldScanner.parsingIndex++)
-        .fieldName == "cc-exp-year"
+      (fields.length == 1 && fields[0].fieldName == "cc-exp") ||
+      (fields.length == 2 &&
+        fields[0].fieldName == "cc-exp-month" &&
+        fields[1].fieldName == "cc-exp-year")
     ) {
+      scanner.parsingIndex += fields.length;
       return true;
     }
-    fieldScanner.parsingIndex = savedIndex;
 
-    // Determine the field name by checking if the fields are month select and year select
-    // likely.
-    if (this._isExpirationMonthLikely(element)) {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp-month");
-      fieldScanner.parsingIndex++;
-      if (!fieldScanner.parsingFinished) {
-        const nextDetail = fieldScanner.getFieldDetailByIndex(
-          fieldScanner.parsingIndex
-        );
-        const nextElement = nextDetail.elementWeakRef.get();
-        if (this._isExpirationYearLikely(nextElement)) {
-          fieldScanner.updateFieldName(
-            fieldScanner.parsingIndex,
-            "cc-exp-year"
-          );
-          fieldScanner.parsingIndex++;
-          return true;
-        }
-      }
-    }
-    fieldScanner.parsingIndex = savedIndex;
-
-    // Verify that the following consecutive two fields can match cc-exp-month and cc-exp-year
-    // respectively.
-    if (this._findMatchedFieldName(element, ["cc-exp-month"])) {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp-month");
-      fieldScanner.parsingIndex++;
-      if (!fieldScanner.parsingFinished) {
-        const nextDetail = fieldScanner.getFieldDetailByIndex(
-          fieldScanner.parsingIndex
-        );
-        const nextElement = nextDetail.elementWeakRef.get();
-        if (this._findMatchedFieldName(nextElement, ["cc-exp-year"])) {
-          fieldScanner.updateFieldName(
-            fieldScanner.parsingIndex,
-            "cc-exp-year"
-          );
-          fieldScanner.parsingIndex++;
-          return true;
-        }
-      }
-    }
-    fieldScanner.parsingIndex = savedIndex;
-
-    // Look for MM and/or YY(YY).
-    if (this._matchRegexp(element, /^mm$/gi)) {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp-month");
-      fieldScanner.parsingIndex++;
-      if (!fieldScanner.parsingFinished) {
-        const nextDetail = fieldScanner.getFieldDetailByIndex(
-          fieldScanner.parsingIndex
-        );
-        const nextElement = nextDetail.elementWeakRef.get();
-        if (this._matchRegexp(nextElement, /^(yy|yyyy)$/)) {
-          fieldScanner.updateFieldName(
-            fieldScanner.parsingIndex,
-            "cc-exp-year"
-          );
-          fieldScanner.parsingIndex++;
-
-          return true;
-        }
-      }
-    }
-    fieldScanner.parsingIndex = savedIndex;
-
-    // Look for a cc-exp with 2-digit or 4-digit year.
+    // If the previous element is a cc field, these fields is very likely cc expiry fields
     if (
-      this._matchRegexp(
-        element,
-        /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yy(?:[^y]|$)/gi
-      ) ||
-      this._matchRegexp(
-        element,
-        /(?:exp.*date[^y\\n\\r]*|mm\\s*[-/]?\\s*)yyyy(?:[^y]|$)/gi
+      ["cc-number", "cc-name", "cc-type"].includes(
+        scanner.getFieldDetailByIndex(scanner.parsingIndex - 1)?.fieldName
       )
     ) {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp");
-      fieldScanner.parsingIndex++;
+      if (fields.length == 1) {
+        scanner.updateFieldName(scanner.parsingIndex, "cc-exp");
+      } else if (fields.length == 2) {
+        scanner.updateFieldName(scanner.parsingIndex, "cc-exp-month");
+        scanner.updateFieldName(scanner.parsingIndex + 1, "cc-exp-year");
+      }
+      scanner.parsingIndex += fields.length;
       return true;
     }
-    fieldScanner.parsingIndex = savedIndex;
 
-    // Match general cc-exp regexp at last.
-    if (this._findMatchedFieldName(element, ["cc-exp"])) {
-      fieldScanner.updateFieldName(fieldScanner.parsingIndex, "cc-exp");
-      fieldScanner.parsingIndex++;
-      return true;
+    // Set field name to null as it failed to match any patterns.
+    for (let idx = 0; idx < fields.length; idx++) {
+      scanner.updateFieldName(scanner.parsingIndex + idx, null);
     }
-    fieldScanner.parsingIndex = savedIndex;
-
-    // Set current field name to null as it failed to match any patterns.
-    fieldScanner.updateFieldName(fieldScanner.parsingIndex, null);
-    fieldScanner.parsingIndex++;
-    return true;
+    return false;
   },
 
   /**
@@ -580,30 +486,35 @@ export const FormAutofillHeuristics = {
       lazy.FormAutofillUtils.isFieldVisible(element, runVisiblityCheck)
     );
 
-    const fieldScanner = new lazy.FieldScanner(elements, element =>
+    const scanner = new lazy.FieldScanner(elements, element =>
       this.inferFieldInfo(element, elements)
     );
 
-    while (!fieldScanner.parsingFinished) {
-      let parsedPhoneFields = this._parsePhoneFields(fieldScanner);
-      let parsedAddressFields = this._parseAddressFields(fieldScanner);
-      let parsedExpirationDateFields =
-        this._parseCreditCardFields(fieldScanner);
+    while (!scanner.parsingFinished) {
+      const savedIndex = scanner.parsingIndex;
+
+      // First, we get the inferred field info
+      const fieldDetail = scanner.getFieldDetailByIndex(scanner.parsingIndex);
+
+      if (
+        this._parsePhoneFields(scanner, fieldDetail) ||
+        this._parseStreetAddressFields(scanner, fieldDetail) ||
+        this._parseAddressFields(scanner, fieldDetail) ||
+        this._parseCreditCardExpiryFields(scanner, fieldDetail)
+      ) {
+        continue;
+      }
 
       // If there is no field parsed, the parsing cursor can be moved
       // forward to the next one.
-      if (
-        !parsedPhoneFields &&
-        !parsedAddressFields &&
-        !parsedExpirationDateFields
-      ) {
-        fieldScanner.parsingIndex++;
+      if (savedIndex == scanner.parsingIndex) {
+        scanner.parsingIndex++;
       }
     }
 
     lazy.LabelUtils.clearLabelMap();
 
-    const fields = fieldScanner.fieldDetails;
+    const fields = scanner.fieldDetails;
     const sections = [
       ...this._classifySections(
         fields.filter(f => lazy.FormAutofillUtils.isAddressField(f.fieldName))
@@ -802,13 +713,37 @@ export const FormAutofillHeuristics = {
     // Check every select for options that
     // match credit card network names in value or label.
     if (HTMLSelectElement.isInstance(element)) {
-      for (let option of element.querySelectorAll("option")) {
-        if (
-          lazy.CreditCard.getNetworkFromName(option.value) ||
-          lazy.CreditCard.getNetworkFromName(option.text)
-        ) {
-          return ["cc-type", null, null];
-        }
+      if (this._isExpirationMonthLikely(element)) {
+        return ["cc-exp-month", null, null];
+      } else if (this._isExpirationYearLikely(element)) {
+        return ["cc-exp-year", null, null];
+      }
+
+      const options = Array.from(element.querySelectorAll("option"));
+      if (
+        options.find(
+          option =>
+            lazy.CreditCard.getNetworkFromName(option.value) ||
+            lazy.CreditCard.getNetworkFromName(option.text)
+        )
+      ) {
+        return ["cc-type", null, null];
+      }
+
+      // At least two options match the country name, otherwise some state name might
+      // also match a country name, ex, Georgia
+      const countryDisplayNames = Array.from(FormAutofill.countries.values());
+      if (
+        options.length >= 2 &&
+        options
+          .slice(0, 2)
+          .every(
+            option =>
+              countryDisplayNames.includes(option.value) ||
+              countryDisplayNames.includes(option.text)
+          )
+      ) {
+        return ["country", null, null];
       }
     }
 
