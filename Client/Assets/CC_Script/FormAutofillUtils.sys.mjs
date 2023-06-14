@@ -265,7 +265,7 @@ FormAutofillUtils = {
   },
 
   isCreditCardField(fieldName) {
-    return this._fieldNameInfo[fieldName] == "creditCard";
+    return this._fieldNameInfo?.[fieldName] == "creditCard";
   },
 
   isCCNumber(ccNumber) {
