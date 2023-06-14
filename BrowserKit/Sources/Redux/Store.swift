@@ -48,9 +48,17 @@ public class Store<State: StateType>: DefaultDispatchStore {
         self.middlewares = middlewares
     }
 
+    /// General subscription to app main state
     public func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
-        let subscription = Subscription<State>()
-        subscribe(subscriber, subscription: subscription)
+        subscribe(subscriber, transform: nil)
+    }
+
+    /// Adds support to subscribe to subState parts of the store's state
+    public func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
+                                                        transform: ((Subscription<State>) -> Subscription<SubState>)?) where S.SubscriberStateType == SubState {
+        let originalSubscription = Subscription<State>()
+        let transformedSubscription = transform?(originalSubscription)
+        subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
     }
 
     public func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
@@ -68,10 +76,12 @@ public class Store<State: StateType>: DefaultDispatchStore {
         state = newState
     }
 
-    private func subscribe<S: StoreSubscriber>(_ subscriber: S, subscription: Subscription<State>) {
-        let subscriptionWrapper = SubscriptionWrapper(subscription: subscription,
+    private func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
+                                                         mainSubscription: Subscription<State>,
+                                                         transformedSubscription: Subscription<SubState>?) {
+        let subscriptionWrapper = SubscriptionWrapper(subscription: mainSubscription,
                                                       subscriber: subscriber)
         subscriptions.update(with: subscriptionWrapper)
-        subscription.newValues(oldState: nil, newState: state)
+        mainSubscription.newValues(oldState: nil, newState: state)
     }
 }
