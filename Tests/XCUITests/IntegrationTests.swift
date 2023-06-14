@@ -63,6 +63,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         sleep(3)
+        waitForTabsButton()
         allowNotifications()
     }
 
@@ -71,6 +72,9 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
+        sleep(5)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        app.tables.staticTexts["Sync Now"].tap()
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         sleep(3)
@@ -137,7 +141,7 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (cso) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
