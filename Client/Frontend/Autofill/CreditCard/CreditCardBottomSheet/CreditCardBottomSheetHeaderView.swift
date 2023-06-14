@@ -8,7 +8,7 @@ import Common
 import Shared
 
 // MARK: Header View
-class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
+class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     // MARK: UX
     struct UX {
         static let titleLabelFontSize: CGFloat = 17
@@ -20,7 +20,7 @@ class SingleCreditCardHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     }
 
     // MARK: Views
-    public var viewModel: SingleCreditCardViewModel? {
+    public var viewModel: CreditCardBottomSheetViewModel? {
         didSet {
             setupContent()
         }
