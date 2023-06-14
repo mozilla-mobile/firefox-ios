@@ -9,7 +9,7 @@ import Shared
 struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
-    let collapsibleState: ExpandButtonState?
+    var collapsibleState: ExpandButtonState?
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
