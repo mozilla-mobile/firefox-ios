@@ -28,7 +28,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private let copyShortcutKey = "c"
     private var isPrivateMode = false
-    private var themeManager: ThemeManager
+    var theme: Theme?
 
     var isSelectionActive: Bool {
         return autocompleteTextLabel != nil
@@ -40,7 +40,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // Thus, we update shouldApplyCompletion in touchesBegin() to reflect whether
     // the highlight is active and then the text field is updated accordingly
     // in touchesEnd() (eg. applyCompletion() is called or not)
-    fileprivate var notifyTextChanged: (() -> Void)?
+    private var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
     override var text: String? {
@@ -60,18 +60,16 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override init(frame: CGRect) {
-        self.themeManager = AppContainer.shared.resolve()
         super.init(frame: frame)
         commonInit()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.themeManager = AppContainer.shared.resolve()
         super.init(coder: aDecoder)
         commonInit()
     }
 
-    fileprivate func commonInit() {
+    private func commonInit() {
         super.delegate = self
         super.addTarget(self, action: #selector(AutocompleteTextField.textDidChange), for: .editingChanged)
         notifyTextChanged = debounce(0.1, action: {
@@ -79,6 +77,17 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
             }
         })
+
+        font = UIFont.preferredFont(forTextStyle: .body)
+        adjustsFontForContentSizeCategory = true
+        clipsToBounds = true
+        translatesAutoresizingMaskIntoConstraints = false
+        keyboardType = .webSearch
+        autocorrectionType = .no
+        autocapitalizationType = .none
+        returnKeyType = .go
+        clearButtonMode = .whileEditing
+        textAlignment = .left
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -156,7 +165,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    fileprivate func normalizeString(_ string: String) -> String {
+    private func normalizeString(_ string: String) -> String {
         return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
     }
 
@@ -224,11 +233,16 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
-        let color = isPrivateMode ? themeManager.currentTheme.colors.layerAccentPrivateNonOpaque : themeManager.currentTheme.colors.layerAccentNonOpaque
-        autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
+        if let theme {
+            let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
+            autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
+                                          value: color,
+                                          range: NSRange(location: 0, length: suggestionText.count))
+            autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
+        }
 
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
-        autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
+
         if let label = autocompleteTextLabel {
             addSubview(label)
             // Only call forceResetCursor() if `hideCursor` changes.
@@ -344,11 +358,17 @@ extension AutocompleteTextField: MenuHelperInterface {
 }
 
 extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
-    func applyUIMode(isPrivate: Bool) {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
         isPrivateMode = isPrivate
+        applyTheme(theme: theme)
     }
 
     func applyTheme(theme: Theme) {
+        self.theme = theme
+        let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
+        attributedPlaceholder = NSAttributedString(string: .TabLocationURLPlaceholder,
+                                                   attributes: attributes)
+
         backgroundColor = theme.colors.layer3
         textColor = theme.colors.textPrimary
         tintColor = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque

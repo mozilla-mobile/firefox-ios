@@ -421,31 +421,21 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         guard locationTextField == nil else { return }
 
         locationTextField = ToolbarTextField()
-
         guard let locationTextField = locationTextField else { return }
 
-        locationTextField.font = UIFont.preferredFont(forTextStyle: .body)
-        locationTextField.adjustsFontForContentSizeCategory = true
-        locationTextField.clipsToBounds = true
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
-        locationTextField.keyboardType = .webSearch
-        locationTextField.autocorrectionType = .no
-        locationTextField.autocapitalizationType = .none
-        locationTextField.returnKeyType = .go
-        locationTextField.clearButtonMode = .whileEditing
-        locationTextField.textAlignment = .left
         locationTextField.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.searchTextField
         locationTextField.accessibilityLabel = .URLBarLocationAccessibilityLabel
-        locationTextField.attributedPlaceholder = self.locationView.placeholder
         locationContainer.addSubview(locationTextField)
+
         // Disable dragging urls on iPhones because it conflicts with editing the text
         if UIDevice.current.userInterfaceIdiom != .pad {
             locationTextField.textDragInteraction?.isEnabled = false
         }
-        let isPrivateMode = locationActiveBorderColor == themeManager.currentTheme.colors.layerAccentPrivateNonOpaque
-        locationTextField.applyUIMode(isPrivate: isPrivateMode)
-        locationTextField.applyTheme(theme: themeManager.currentTheme)
+        let theme = themeManager.currentTheme
+        let isPrivateMode = locationActiveBorderColor == theme.colors.layerAccentPrivateNonOpaque
+        locationTextField.applyUIMode(isPrivate: isPrivateMode, theme: theme)
+        locationTextField.applyTheme(theme: theme)
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -867,20 +857,20 @@ extension URLBarView: ThemeApplicable {
 
 // MARK: - PrivateModeUI
 extension URLBarView: PrivateModeUI {
-    func applyUIMode(isPrivate: Bool) {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(isPrivate)
         }
-        let currentTheme = themeManager.currentTheme
-        let gradientStartColor = isPrivate ? currentTheme.colors.borderAccentPrivate : currentTheme.colors.borderAccent
-        let gradientMiddleColor = isPrivate ? nil : currentTheme.colors.iconAccentPink
-        let gradientEndColor = isPrivate ? currentTheme.colors.borderAccentPrivate : currentTheme.colors.iconAccentYellow
-        locationActiveBorderColor = isPrivate ? currentTheme.colors.layerAccentPrivateNonOpaque : currentTheme.colors.layerAccentNonOpaque
+
+        let gradientStartColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivate ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+        locationActiveBorderColor = isPrivate ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
         progressBar.setGradientColors(startColor: gradientStartColor,
                                       middleColor: gradientMiddleColor,
                                       endColor: gradientEndColor)
-        locationTextField?.applyUIMode(isPrivate: isPrivate)
-        locationTextField?.applyTheme(theme: currentTheme)
-        applyTheme(theme: currentTheme)
+        locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
+        locationTextField?.applyTheme(theme: theme)
+        applyTheme(theme: theme)
     }
 }
