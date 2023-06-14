@@ -14,7 +14,7 @@ protocol LibraryCoordinatorDelegate: AnyObject {
 class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     private let profile: Profile
     private let tabManager: TabManager
-    private var libraryViewController: LibraryViewController!
+    private let libraryViewController: LibraryViewController
     weak var parentCoordinator: LibraryCoordinatorDelegate?
 
     init(
@@ -22,6 +22,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager = AppContainer.shared.resolve()
     ) {
+        self.libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
@@ -38,7 +39,6 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
-        libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
         libraryViewController.setupOpenPanel(panelType: toLibraryPanel(homepanelSection))
         libraryViewController.resetHistoryPanelPagination()
         libraryViewController.delegate = self
