@@ -76,6 +76,10 @@ class LibraryViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.logger = logger
 
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            viewModel.resetHistoryPanelPagination()
+        }
+
         super.init(nibName: nil, bundle: nil)
     }
 

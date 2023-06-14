@@ -1193,7 +1193,17 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
     }
 
-    func showLibrary(panel: LibraryPanelType? = nil) {
+    func showLibrary(panel: LibraryPanelType) {
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            DispatchQueue.main.async {
+                self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
+            }
+        } else {
+            self.showLegacyLibrary(panel: panel)
+        }
+    }
+
+    func showLegacyLibrary(panel: LibraryPanelType? = nil) {
         if let presentedViewController = self.presentedViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
