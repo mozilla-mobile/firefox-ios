@@ -711,7 +711,6 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                      extras: nil)
     }
 
-    // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
         tabManager.removeTabs(tabs)
