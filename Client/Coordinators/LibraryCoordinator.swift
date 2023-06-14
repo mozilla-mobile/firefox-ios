@@ -9,7 +9,7 @@ import Storage
 
 protocol LibraryCoordinatorDelegate: AnyObject {}
 
-class LibraryCoordinator: BaseCoordinator {
+class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController!
@@ -43,9 +43,7 @@ class LibraryCoordinator: BaseCoordinator {
 
         router.setRootViewController(libraryViewController, hideBar: false, animated: false)
     }
-}
 
-extension LibraryCoordinator: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         // TODO: Will be handled by FXIOS-6604
     }
