@@ -63,7 +63,7 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.navAdd),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomLeftButtonAction))

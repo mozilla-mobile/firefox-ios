@@ -52,7 +52,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
+        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
@@ -66,7 +66,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
+        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)

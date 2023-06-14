@@ -58,7 +58,7 @@ open class TabToolbarHelper: NSObject {
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
-    let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    let ImageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed("menu-Home")
     var themeManager: ThemeManager
 
@@ -132,7 +132,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
         toolbar.tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
 
-        toolbar.addNewTabButton.setImage(UIImage.templateImageNamed("menu-NewTab"), for: .normal)
+        toolbar.addNewTabButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.plus), for: .normal)
         toolbar.addNewTabButton.accessibilityLabel = .AddTabAccessibilityLabel
         toolbar.addNewTabButton.addTarget(self, action: #selector(didClickAddNewTab), for: .touchUpInside)
         toolbar.addNewTabButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton

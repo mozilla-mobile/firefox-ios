@@ -78,7 +78,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private let zoomInButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.plus), for: [])
         button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)

@@ -139,7 +139,7 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_tab</string>
+			<string>plusLarge</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>New Tab</string>
 			<key>UIApplicationShortcutItemType</key>

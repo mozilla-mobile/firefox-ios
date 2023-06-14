@@ -301,7 +301,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
         return SingleActionViewModel(title: .AppMenu.NewTab,
-                                     iconString: ImageIdentifiers.newTab) { _ in
+                                     iconString: ImageIdentifiers.Large.plus) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)

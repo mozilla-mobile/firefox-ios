@@ -210,7 +210,7 @@ extension BrowserViewController: WKUIDelegate {
                     actions.append(
                         UIAction(
                             title: .ContextMenuOpenInNewTab,
-                            image: UIImage.templateImageNamed("menu-NewTab"),
+                            image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
                             identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
                         ) { _ in
                             addTab(url, false)

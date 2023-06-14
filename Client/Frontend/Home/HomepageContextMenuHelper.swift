@@ -109,7 +109,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
+        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.Large.plus) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {

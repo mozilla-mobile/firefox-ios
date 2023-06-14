@@ -218,7 +218,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newTab].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.plus].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
     }
 
@@ -235,7 +235,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.newTab].tap()
+        app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
 
         // The page is opened on the new tab
         navigator.goto(TabTray)

@@ -12,10 +12,13 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct ImageIdentifiers {
+    public struct Large {
+        public static let plus = "plusLarge"
+    }
+
     public static let actionAddBookmark = "action_bookmark"
     public static let actionRemove = "action_remove"
     public static let actionRemoveBookmark = "action_bookmark_remove"
-    public static let add = "add"
     public static let addShortcut = "action_pin"
     public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"
@@ -74,11 +77,9 @@ public struct ImageIdentifiers {
     public static let menuScanQRCode = "menu-ScanQRCode"
     public static let menuWarning = "menuWarning"
     public static let menuWarningMask = "warning-mask"
-    public static let navAdd = "nav-add"
     public static let navTabCounter = "nav-tabcounter"
     public static let navMenu = "nav-menu"
     public static let newPrivateTab = "quick_action_new_private_tab"
-    public static let newTab = "quick_action_new_tab"
     public static let nightMode = "menu-NightMode"
     public static let noImageMode = "menu-NoImageMode"
     public static let onboardingWelcomev106 = "onboardingWelcome"
@@ -116,7 +117,6 @@ public struct ImageIdentifiers {
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
     public static let tabTrayDelete = "action_delete"
-    public static let tabTrayNewTab = "menu-NewTab"
     public static let trashIcon = "forget"
     public static let trashIconMonochrome = "trash-icon"
     public static let upgradeBackground = "onboardingBackground"
