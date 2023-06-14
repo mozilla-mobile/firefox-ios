@@ -32,7 +32,7 @@ class DownloadsPanel: UIViewController,
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
-    var tableView: UITableView = .build { tableView in
+    private lazy var tableView: UITableView = .build { tableView in
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
         tableView.register(SiteTableViewHeader.self,
