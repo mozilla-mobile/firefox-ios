@@ -250,7 +250,11 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
-              let creditCard = viewModel.getConvertedCreditCardValues(bottomSheetState: viewModel.state) else {
+              let creditCard = viewModel.getConvertedCreditCardValues(
+                bottomSheetState: viewModel.state,
+                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard)
+              )
+        else {
             return UITableViewCell()
         }
 

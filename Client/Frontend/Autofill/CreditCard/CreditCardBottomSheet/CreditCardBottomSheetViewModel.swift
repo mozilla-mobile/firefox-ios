@@ -164,14 +164,14 @@ struct CreditCardBottomSheetViewModel {
         }
     }
 
-    func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState) -> CreditCard? {
+    func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
+                                      ccNumberDecrypted: String) -> CreditCard? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard.convertToTempCreditCard()
         case .update:
-            guard let creditCard = creditCard,
-                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
+            guard let creditCard = creditCard, !ccNumberDecrypted.isEmpty
             else {
                 return nil
             }
@@ -213,5 +213,11 @@ struct CreditCardBottomSheetViewModel {
         decryptedCreditCardVal.ccExpYear = isValidYear ? yearVal : originalCreditCard.ccExpYear
 
         return decryptedCreditCardVal
+    }
+
+    func decryptCreditCardNumber(card: CreditCard?) -> String {
+        guard let card = card else { return "" }
+        let decryptedCardNum = autofill.decryptCreditCardNumber(encryptedCCNum: card.ccNumberEnc)
+        return decryptedCardNum ?? ""
     }
 }

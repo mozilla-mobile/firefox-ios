@@ -167,7 +167,8 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
     func test_save_getConvertedCreditCardValues() {
         viewModel.state = .save
-        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save)
+        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save,
+                                                           ccNumberDecrypted: "")
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
@@ -178,30 +179,16 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     func test_update_getConvertedCreditCardValues() {
         viewModel.creditCard = sampleCreditCard
         viewModel.decryptedCreditCard = samplePlainTextCard
-        let expectation = expectation(description: "wait for credit card fields to be saved")
-        let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
-        // Note: we have to save card to test the update flow to make sure card is encrypted
-        // otherwise we won't be able to decrypt a random card number
-        self.viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
-            guard error == nil, let creditCard = creditCard else {
-                XCTFail()
-                return
-            }
-            // small check to make sure card got saved
-            XCTAssertEqual(creditCard.ccName, self.viewModel.creditCard?.ccName)
 
-            // convert the saved credit card and check values
-            self.viewModel.creditCard = creditCard
-            let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .update)
-            XCTAssertNotNil(value)
-            XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
-            XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
-            XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
-            XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
-
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 3.0)
+        // convert the saved credit card and check values
+        let decryptedCCNumber = "4111111111111111"
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .update,
+                                                                ccNumberDecrypted: decryptedCCNumber)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
     }
 
     func test_updateDecryptedCreditCard() {
