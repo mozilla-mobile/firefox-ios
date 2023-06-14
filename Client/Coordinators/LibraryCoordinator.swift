@@ -40,7 +40,6 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
 
     func start(with homepanelSection: Route.HomepanelSection) {
         libraryViewController.setupOpenPanel(panelType: toLibraryPanel(homepanelSection))
-        libraryViewController.resetHistoryPanelPagination()
         libraryViewController.delegate = self
 
         router.setRootViewController(libraryViewController, hideBar: false, animated: false)
