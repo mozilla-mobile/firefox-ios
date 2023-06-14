@@ -244,7 +244,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         settingsCoordinator.start(with: section)
     }
 
-    private func showLibary(with homepanelSection: Route.HomepanelSection) {
+    private func showLibrary(with homepanelSection: Route.HomepanelSection) {
         let navigationController = DismissableNavigationViewController()
         navigationController.modalPresentationStyle = .formSheet
         let libraryRouter = DefaultRouter(navigationController: navigationController)
