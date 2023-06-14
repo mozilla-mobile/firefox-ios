@@ -7,7 +7,9 @@ import Foundation
 import Shared
 import Storage
 
-protocol LibraryCoordinatorDelegate: AnyObject {}
+protocol LibraryCoordinatorDelegate: AnyObject {
+    func didFinishLibrary(from coordinator: LibraryCoordinator)
+}
 
 class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     private let profile: Profile
@@ -62,5 +64,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         // TODO: Will be handled by FXIOS-6604
+    }
+
+    func didFinish() {
+        parentCoordinator?.didFinishLibrary(from: self)
     }
 }

@@ -57,6 +57,15 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
     }
 
+    func testParentCoordinatorDelegate_calledDidFinish() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
+    }
+
     // MARK: - Helper
     func createSubject() -> LibraryCoordinator {
         let subject = LibraryCoordinator(router: mockRouter)
@@ -65,4 +74,10 @@ final class LibraryCoordinatorTests: XCTestCase {
     }
 }
 
-class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate {}
+class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate {
+    var didFinishSettingsCalled = 0
+
+    func didFinishLibrary(from coordinator: LibraryCoordinator) {
+        didFinishSettingsCalled += 1
+    }
+}
