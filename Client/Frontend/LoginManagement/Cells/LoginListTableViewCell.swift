@@ -108,6 +108,11 @@ class LoginListTableViewCell: ThemedTableViewCell {
         setConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.addSubview(contentStack)
+    }
+
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary

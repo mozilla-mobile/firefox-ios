@@ -20,7 +20,6 @@ class LoginListViewController: SensitiveViewController, Themeable {
     fileprivate let searchController = UISearchController(searchResultsController: nil)
     fileprivate let loadingView: SettingsLoadingView = .build()
     fileprivate var deleteAlert: UIAlertController?
-    fileprivate var selectionButtonHeightConstraint: NSLayoutConstraint?
     fileprivate var selectedIndexPaths = [IndexPath]()
     fileprivate let tableView: UITableView = .build()
 
@@ -142,6 +141,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
             selectionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             selectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             selectionButton.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            selectionButton.heightAnchor.constraint(equalToConstant: UIConstants.ToolbarHeight),
 
             loadingView.topAnchor.constraint(equalTo: tableView.topAnchor),
             loadingView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
@@ -149,8 +149,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
             loadingView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
         ])
 
-        selectionButtonHeightConstraint = selectionButton.heightAnchor.constraint(equalToConstant: 0)
-        selectionButtonHeightConstraint?.isActive = true
+        selectionButton.isHidden = true
 
         applyTheme()
 
@@ -304,7 +303,7 @@ private extension LoginListViewController {
     func beginEditing() {
         navigationItem.rightBarButtonItems = nil
         navigationItem.leftBarButtonItems = [cancelSelectionButton]
-        selectionButtonHeightConstraint?.constant = UIConstants.ToolbarHeight
+        selectionButton.isHidden = false
         selectionButton.setTitle(.LoginListSelctAll, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
@@ -336,8 +335,7 @@ private extension LoginListViewController {
         // Update selection and select all button
         viewModel.listSelectionHelper.removeAllCells()
         toggleSelectionTitle()
-        selectionButtonHeightConstraint?.constant = 0
-        selectionButton.setTitle(nil, for: [])
+        selectionButton.isHidden = true
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)
