@@ -283,7 +283,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func show(homepanelSection: Route.HomepanelSection) {
-        showLibary(with: homepanelSection)
+        showLibrary(with: homepanelSection)
     }
 
     // MARK: - To be removed with FXIOS-6529
