@@ -7,7 +7,7 @@ import XCTest
 import Storage
 @testable import Client
 
-class TopSitesDataAdapterTests: XCTestCase {
+class TopSitesDataUtilityTests: XCTestCase {
     var topSitesDataUtility: TopSitesDataUtilityInterface!
 
     // MARK: Stubs

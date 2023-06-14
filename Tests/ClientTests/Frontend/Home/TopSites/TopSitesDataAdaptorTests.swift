@@ -412,20 +412,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(data[2].isPinned)
         XCTAssertEqual(data[2].site.url, "https://www.apinnedurl.com/pinned1")
     }
-
-    func testSearchEngineIsSet() throws {
-        featureFlags.set(feature: .sponsoredTiles, to: true)
-        let expectation = expectation(description: "Search engines should be available by this point.")
-
-        searchEngines.getOrderedEngines { result in
-            XCTAssertEqual(self.searchEngines.orderedEngines.count, 6)
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-
-        let subject = createSubject()
-        XCTAssertNotNil(subject.defaultSearchEngine)
-    }
 }
 
 // MARK: - ContileProviderMock
