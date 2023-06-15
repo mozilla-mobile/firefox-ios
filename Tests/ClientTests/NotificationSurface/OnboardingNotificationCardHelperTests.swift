@@ -10,19 +10,18 @@ import Common
 @testable import Client
 
 class OnboardingNotificationCardHelperTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
     }
 
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
     }
 
@@ -47,7 +46,7 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
     }
 
     func testHelper_fromOnboarding_withNotificationCard_returnsFalse() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let expectedResult = false
         let subject = createSubject()
 

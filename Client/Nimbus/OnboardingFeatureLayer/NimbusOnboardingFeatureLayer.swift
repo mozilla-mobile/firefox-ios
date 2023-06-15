@@ -28,48 +28,41 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             cards: getOrderedOnboardingCards(
                 for: onboardingType,
                 from: framework.cards,
-                using: framework.cardOrdering,
                 withConditions: framework.conditions),
             isDismissable: framework.dismissable)
     }
 
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
-        from cardData: [NimbusOnboardingCardData],
-        using cardOrder: [String],
+        from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
-        let cards = getOnboardingCards(from: cardData, withConditions: conditionTable)
-
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
-        return cardOrder
-            .compactMap { cardName in
-                if let card = cards.first(where: { $0.name == cardName }) {
-                    return card
-                }
-
-                return nil
-            }
-            .filter { $0.type == onboardingType }
-            // We have to update the a11yIdRoot using the correct order of the cards
-            .enumerated()
-            .map { index, card in
-                return OnboardingCardInfoModel(
-                    name: card.name,
-                    title: card.title,
-                    body: card.body,
-                    link: card.link,
-                    buttons: card.buttons,
-                    type: card.type,
-                    a11yIdRoot: "\(card.a11yIdRoot)\(index)",
-                    imageID: card.imageID)
-            }
+        return getOnboardingCards(
+            from: cardData.filter { $0.value.type == onboardingType },
+            withConditions: conditionTable
+        )
+        .sorted(by: { $0.order < $1.order })
+        // We have to update the a11yIdRoot using the correct order of the cards
+        .enumerated()
+        .map { index, card in
+            return OnboardingCardInfoModel(
+                name: card.name,
+                order: card.order,
+                title: card.title,
+                body: card.body,
+                link: card.link,
+                buttons: card.buttons,
+                type: card.type,
+                a11yIdRoot: "\(card.a11yIdRoot)\(index)",
+                imageID: card.imageID)
+        }
     }
 
     private func getOnboardingCards(
-        from cardData: [NimbusOnboardingCardData],
+        from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
     ) -> [OnboardingCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
@@ -89,17 +82,18 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // Therefore, we return an empty array.
         guard let helper = helperUtility.createNimbusMessagingHelper() else { return [] }
 
-        return cardData.compactMap { card in
-            if cardIsValid(with: card, using: conditionTable, jexlCache: &jexlCache, and: helper) {
+        return cardData.compactMap { cardName, cardData in
+            if cardIsValid(with: cardData, using: conditionTable, jexlCache: &jexlCache, and: helper) {
                 return OnboardingCardInfoModel(
-                    name: card.name,
-                    title: String(format: card.title, AppName.shortName.rawValue),
-                    body: String(format: card.body, AppName.shortName.rawValue, AppName.shortName.rawValue),
-                    link: getOnboardingLink(from: card.link),
-                    buttons: getOnboardingCardButtons(from: card.buttons),
-                    type: card.type,
-                    a11yIdRoot: card.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                    imageID: getOnboardingImageID(from: card.image))
+                    name: cardName,
+                    order: cardData.order,
+                    title: String(format: cardData.title, AppName.shortName.rawValue),
+                    body: String(format: cardData.body, AppName.shortName.rawValue, AppName.shortName.rawValue),
+                    link: getOnboardingLink(from: cardData.link),
+                    buttons: getOnboardingCardButtons(from: cardData.buttons),
+                    type: cardData.type,
+                    a11yIdRoot: cardData.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
+                    imageID: getOnboardingImageID(from: cardData.image))
             }
 
             return nil
@@ -117,6 +111,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             checkingAgainst: conditionTable,
             using: &jexlCache,
             and: helper)
+
+        guard !card.disqualifiers.isEmpty else {
+            return prerequisitesAreMet
+        }
+
         let noDisqualifiersAreMet = !verifyConditionEligibility(
             from: card.disqualifiers,
             checkingAgainst: conditionTable,

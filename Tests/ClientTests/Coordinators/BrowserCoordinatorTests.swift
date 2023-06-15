@@ -174,6 +174,17 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedVC.topViewController is AppSettingsTableViewController)
     }
 
+    func testShowLibrary() throws {
+        let subject = createSubject()
+        subject.show(homepanelSection: .bookmarks)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LibraryCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is LibraryViewController)
+    }
+
     // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {

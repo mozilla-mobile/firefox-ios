@@ -9,13 +9,13 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     var profile: MockProfile!
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
@@ -26,7 +26,6 @@ class UpdateViewModelTests: XCTestCase {
         super.tearDown()
         profile.shutdown()
         profile = nil
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
@@ -42,7 +41,7 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 1)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -57,8 +56,8 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 2)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome)
-            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
+            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync.rawValue)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)

@@ -9,7 +9,7 @@ import Common
 import Foundation
 import UIKit
 
-class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
+class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
     // MARK: UX
     struct UX {
         static let containerPadding: CGFloat = 18.0
@@ -31,7 +31,11 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private var viewModel: SingleCreditCardViewModel
+    private var viewModel: CreditCardBottomSheetViewModel
+
+    var didTapNotNowClosure: (() -> Void)?
+    var didTapYesClosure: ((Error?) -> Void)?
+    var didTapManageCardsClosure: (() -> Void)?
 
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
@@ -53,8 +57,10 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
         cardTableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                                forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
-        cardTableView.register(SingleCreditCardFooterView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardFooterView.cellIdentifier)
-        cardTableView.register(SingleCreditCardHeaderView.self, forHeaderFooterViewReuseIdentifier: SingleCreditCardHeaderView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetFooterView.self,
+                               forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetFooterView.cellIdentifier)
+        cardTableView.register(CreditCardBottomSheetHeaderView.self,
+                               forHeaderFooterViewReuseIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier)
         return cardTableView
     }()
 
@@ -82,7 +88,7 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             size: UX.yesButtonFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.notNowButton
-        button.addTarget(self, action: #selector(SingleCreditCardViewController.didTapNotNow), for: .touchUpInside)
+        button.addTarget(self, action: #selector(CreditCardBottomSheetViewController.didTapNotNow), for: .touchUpInside)
         button.setTitle(.CreditCard.RememberCreditCard.SecondaryButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.yesButtonCornerRadius
     }
@@ -91,13 +97,17 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     private var contentWidthConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
-    init(viewModel: SingleCreditCardViewModel,
+    init(viewModel: CreditCardBottomSheetViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+
+        self.viewModel.didUpdateCreditCard = { [weak self] in
+            self?.cardTableView.reloadData()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -198,28 +208,34 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
     // MARK: Button Actions
     @objc
     private func didTapYes() {
-        self.viewModel.didTapMainButton { error in
-            // error is logged in the view model, but maybe we want to show an error message
+        let eventObject: TelemetryWrapper.EventObject = viewModel.state == .save ? .creditCardBottomSheetSave : .creditCardBottomSheetUpdate
+        self.viewModel.didTapMainButton { [weak self] error in
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: eventObject)
             DispatchQueue.main.async { [weak self] in
                 self?.dismissVC()
+                self?.didTapYesClosure?(error)
             }
         }
     }
 
     @objc
     private func didTapNotNow() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
         dismissVC()
+        didTapNotNowClosure?()
     }
 
     @objc
     private func didTapManageCards() {
-        dismissVC()
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetManageCards)
+        didTapManageCardsClosure?()
     }
 
     // MARK: BottomSheet Delegate
     func willDismiss() {
-        // TODO: FXIOS-6111
-        // telemetry will be added
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
     }
 
     // MARK: UITableViewDelegate
@@ -233,23 +249,28 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
 
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
-            return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
+              let creditCard = viewModel.getConvertedCreditCardValues(
+                bottomSheetState: viewModel.state,
+                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard)
+              )
+        else {
+            return UITableViewCell()
         }
 
-        let creditCard = viewModel.creditCard
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
+
         hostingCell.isAccessibilityElement = true
         return hostingCell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: SingleCreditCardHeaderView.cellIdentifier
-        ) as? SingleCreditCardHeaderView else {
+            withIdentifier: CreditCardBottomSheetHeaderView.cellIdentifier
+        ) as? CreditCardBottomSheetHeaderView else {
             return nil
         }
         headerView.applyTheme(theme: themeManager.currentTheme)
@@ -264,13 +285,15 @@ class SingleCreditCardViewController: UIViewController, UITableViewDelegate, UIT
             return emptyView
         case .update:
             guard let footerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: SingleCreditCardFooterView.cellIdentifier
-            ) as? SingleCreditCardFooterView else {
+                withIdentifier: CreditCardBottomSheetFooterView.cellIdentifier
+            ) as? CreditCardBottomSheetFooterView else {
                 return nil
             }
             footerView.applyTheme(theme: themeManager.currentTheme)
-            if !footerView.manageCardsButton.responds(to: #selector(SingleCreditCardViewController.didTapManageCards)) {
-                footerView.manageCardsButton.addTarget(self, action: #selector(SingleCreditCardViewController.didTapManageCards), for: .touchUpInside)
+            if !footerView.manageCardsButton.responds(to: #selector(CreditCardBottomSheetViewController.didTapManageCards)) {
+                footerView.manageCardsButton.addTarget(self,
+                                                       action: #selector(CreditCardBottomSheetViewController.didTapManageCards),
+                                                       for: .touchUpInside)
             }
 
             return footerView

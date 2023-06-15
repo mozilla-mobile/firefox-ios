@@ -32,10 +32,7 @@ class DownloadsPanel: UIViewController,
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
-    lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
-        tableView.delegate = self
-        tableView.dataSource = self
+    private lazy var tableView: UITableView = .build { tableView in
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
         tableView.register(SiteTableViewHeader.self,
@@ -74,6 +71,9 @@ class DownloadsPanel: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.delegate = self
+        tableView.dataSource = self
 
         view.addSubview(tableView)
 

@@ -37,21 +37,3 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         imageView?.tintColor = tintColor
     }
 }
-
-extension UIButton {
-    static func newTabButton() -> UIButton {
-        let newTab = UIButton()
-        newTab.setImage(UIImage.templateImageNamed(ImageIdentifiers.newTab), for: .normal)
-        newTab.accessibilityLabel = .TabTrayButtonNewTabAccessibilityLabel
-        return newTab
-    }
-}
-
-extension TabsButton {
-    static func tabTrayButton() -> TabsButton {
-        let tabsButton = TabsButton()
-        tabsButton.countLabel.text = "0"
-        tabsButton.accessibilityLabel = .TabTrayButtonShowTabsAccessibilityLabel
-        return tabsButton
-    }
-}

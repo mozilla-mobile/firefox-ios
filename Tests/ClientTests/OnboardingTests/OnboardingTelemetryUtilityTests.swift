@@ -8,7 +8,7 @@ import Glean
 @testable import Client
 
 class OnboardingTelemetryUtilityTests: XCTestCase {
-    typealias CardNames = NimbusOnboardingConfigUtility.CardOrder
+    typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
@@ -24,7 +24,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingCardView_WelcomeCard_Success() {
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendCardViewTelemetry(from: CardNames.welcome)
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
@@ -32,7 +32,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingCardView_SyncCard_Success() {
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendCardViewTelemetry(from: CardNames.sync)
+        subject.sendCardViewTelemetry(from: CardNames.sync.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
@@ -40,7 +40,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingCardView_NotificationsCard_Success() {
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendCardViewTelemetry(from: CardNames.notifications)
+        subject.sendCardViewTelemetry(from: CardNames.notifications.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
@@ -48,7 +48,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingCardView_UpgradeSyncCard_Success() {
         let subject = createTelemetryUtility(for: .upgrade)
 
-        subject.sendCardViewTelemetry(from: CardNames.updateSync)
+        subject.sendCardViewTelemetry(from: CardNames.updateSync.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
@@ -56,7 +56,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingCardView_UpgradeWelcomeCard_Success() {
         let subject = createTelemetryUtility(for: .upgrade)
 
-        subject.sendCardViewTelemetry(from: CardNames.updateWelcome)
+        subject.sendCardViewTelemetry(from: CardNames.updateWelcome.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
@@ -66,7 +66,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let isPrimaryButton = true
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendButtonActionTelemetry(from: CardNames.welcome,
+        subject.sendButtonActionTelemetry(from: CardNames.welcome.rawValue,
                                           with: .nextCard,
                                           and: isPrimaryButton)
 
@@ -77,7 +77,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let isPrimaryButton = true
         let subject = createTelemetryUtility(for: .upgrade)
 
-        subject.sendButtonActionTelemetry(from: CardNames.updateWelcome,
+        subject.sendButtonActionTelemetry(from: CardNames.updateWelcome.rawValue,
                                           with: .setDefaultBrowser,
                                           and: isPrimaryButton)
 
@@ -89,7 +89,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let isPrimaryButton = false
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendButtonActionTelemetry(from: CardNames.sync,
+        subject.sendButtonActionTelemetry(from: CardNames.sync.rawValue,
                                           with: .nextCard,
                                           and: isPrimaryButton)
 
@@ -100,7 +100,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let isPrimaryButton = false
         let subject = createTelemetryUtility(for: .upgrade)
 
-        subject.sendButtonActionTelemetry(from: CardNames.updateSync,
+        subject.sendButtonActionTelemetry(from: CardNames.updateSync.rawValue,
                                           with: .nextCard,
                                           and: isPrimaryButton)
 
@@ -111,7 +111,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     func testSendOnboardingClose_NotificationsCard() {
         let subject = createTelemetryUtility(for: .freshInstall)
 
-        subject.sendDismissOnboardingTelemetry(from: CardNames.notifications)
+        subject.sendDismissOnboardingTelemetry(from: CardNames.notifications.rawValue)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
@@ -122,10 +122,8 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
-        let nimbusConfigUtility = NimbusOnboardingConfigUtility()
-        nimbusConfigUtility.clearNimbus()
-        nimbusConfigUtility.setupNimbus(
-            withOrder: NimbusOnboardingConfigUtility.CardOrder.allCards)
+        let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()
+        nimbusConfigUtility.setupNimbus(withOrder: NimbusOnboardingTestingConfigUtility.CardOrder.allCards)
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: onboardingType)
 
         let telemetryUtility = OnboardingTelemetryUtility(with: model)

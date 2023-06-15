@@ -205,7 +205,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         let feature = messagingFeature.value()
         guard let messageData = feature.messages[id] else { return nil }
 
-        switch createMessage(messageId: id, message: messageData, lookupTables: feature) {
+        switch createMessage(messageId: id,
+                             message: messageData,
+                             lookupTables: feature) {
         case .success(let newMessage): return newMessage
         case .failure: return nil
         }
@@ -264,14 +266,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
 
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
-        if messageMetadata.impressions >= style.maxDisplayCount || messageMetadata.isExpired {
-            _ = messagingStore.onMessageExpired(
-                messageMetadata,
-                surface: message.surface,
-                shouldReport: true)
-            return .failure(.expired)
-        }
-
         return .success(
             GleanPlumbMessage(id: messageId,
                               data: message,

@@ -169,7 +169,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
         guard let hostingCell = tableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier) as? HostingTableViewCell<CreditCardAutofillToggle>,
               let model = viewModel.toggleModel else {
-            return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
+            return UITableViewCell()
         }
 
         let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme.colors.textPrimary.color,
@@ -181,7 +181,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
-            return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
+            return UITableViewCell()
         }
 
         let creditCard = viewModel.creditCards[indexPath.row]

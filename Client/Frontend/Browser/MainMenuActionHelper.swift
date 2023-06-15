@@ -18,7 +18,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
-    func showLibrary(panel: LibraryPanelType?)
+    func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?)
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
+    func showSignInView(fxaParameters: FxASignInViewParameters)
 }
 
 enum MenuButtonToastAction {
@@ -48,10 +49,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol {
-    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
-    // swiftlint: disable large_tuple
-    typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
-    // swiftlint: enable large_tuple
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -59,7 +56,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private let showFXASyncAction: (FXASyncClosure) -> Void
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -81,7 +77,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
-         showFXASyncAction: @escaping (FXASyncClosure) -> Void,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
@@ -89,7 +84,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
-        self.showFXASyncAction = showFXASyncAction
         self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab
@@ -214,7 +208,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             append(to: &section, action: readingListSection)
         }
 
-        let syncAction = syncMenuButton(showFxA: showFXASyncAction)
+        let syncAction = syncMenuButton()
         append(to: &section, action: syncAction)
 
         return section
@@ -517,11 +511,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return items
     }
 
-    private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
-        let action: (SingleActionViewModel) -> Void = { action in
+    private func syncMenuButton() -> PhotonRowActions? {
+        let action: (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
-            let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
-            showFxA(params)
+            let parameters = FxASignInViewParameters(launchParameters: fxaParams,
+                                                     flowType: .emailLoginFlow,
+                                                     referringPage: .appMenu)
+            self?.delegate?.showSignInView(fxaParameters: parameters)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         }
 

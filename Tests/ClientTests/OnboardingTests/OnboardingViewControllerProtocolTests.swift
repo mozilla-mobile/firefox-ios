@@ -7,19 +7,18 @@ import XCTest
 @testable import Client
 
 class OnboardingViewControllerProtocolTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
     override func tearDown() {
         super.tearDown()
-        nimbusUtility.clearNimbus()
         nimbusUtility = nil
     }
 
@@ -32,7 +31,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome.rawValue)
     }
 
     func testProtocol_getsCorrectViewController_notifications() {
@@ -43,7 +42,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications.rawValue)
     }
 
     func testProtocol_getsCorrectViewController_sync() {
@@ -54,7 +53,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.name, cards.sync)
+        XCTAssertEqual(result.viewModel.name, cards.sync.rawValue)
     }
 
     func testProtocol_getsNoViewContoller_afterLastCard() {
@@ -82,7 +81,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome.rawValue)
     }
 
     func testProtocol_getsCorrectViewController_fromThirdCard_isNotifications() {
@@ -93,7 +92,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(result.viewModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications.rawValue)
     }
 
     // MARK: - Test `moveToNextPage`
@@ -106,33 +105,33 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
-        XCTAssertEqual(result.viewModel.name, cards.welcome)
+        XCTAssertEqual(result.viewModel.name, cards.welcome.rawValue)
     }
 
     func testProtocol_moveToNextPage_FromFirstCard() {
         let subject = createSubject()
 
-        subject.moveToNextPage(from: cards.welcome)
+        subject.moveToNextPage(from: cards.welcome.rawValue)
         guard let result = subject.pageController.viewControllers?.first as? OnboardingCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 1)
-        XCTAssertEqual(result.viewModel.name, cards.notifications)
+        XCTAssertEqual(result.viewModel.name, cards.notifications.rawValue)
     }
 
     func testProtocol_moveToNextPage_FromSecondCard() {
         let subject = createSubject()
 
-        subject.moveToNextPage(from: cards.notifications)
+        subject.moveToNextPage(from: cards.notifications.rawValue)
         guard let result = subject.pageController.viewControllers?.first as? OnboardingCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
 
         XCTAssertEqual(subject.pageControl.currentPage, 2)
-        XCTAssertEqual(result.viewModel.name, cards.sync)
+        XCTAssertEqual(result.viewModel.name, cards.sync.rawValue)
     }
 
     // MARK: - Test `getCardIndex`

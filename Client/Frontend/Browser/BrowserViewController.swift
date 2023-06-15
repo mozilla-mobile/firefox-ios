@@ -14,20 +14,6 @@ import MobileCoreServices
 import Telemetry
 import Common
 
-struct UrlToOpenModel {
-    var url: URL?
-    var isPrivate: Bool
-}
-
-/// Enum used to track flow for telemetry events
-enum ReferringPage: Equatable {
-    case onboarding
-    case appMenu
-    case settings
-    case none
-    case tabTray
-}
-
 class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -1207,7 +1193,17 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
     }
 
-    func showLibrary(panel: LibraryPanelType? = nil) {
+    func showLibrary(panel: LibraryPanelType) {
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            DispatchQueue.main.async {
+                self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
+            }
+        } else {
+            self.showLegacyLibrary(panel: panel)
+        }
+    }
+
+    func showLegacyLibrary(panel: LibraryPanelType? = nil) {
         if let presentedViewController = self.presentedViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
@@ -1760,24 +1756,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         showViewController(viewController: viewController)
     }
 
-    @objc
-    func openSettings() {
-        ensureMainThread { [self] in
-            if let presentedViewController = self.presentedViewController {
-                presentedViewController.dismiss(animated: true, completion: nil)
-            }
-
-            let settingsTableViewController = AppSettingsTableViewController(
-                with: profile,
-                and: tabManager,
-                delegate: self)
-
-            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            controller.presentingModalViewControllerDelegate = self
-            self.present(controller, animated: true, completion: nil)
-        }
-    }
-
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
@@ -1860,6 +1838,31 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)
+    }
+
+    // MARK: Autofill
+
+    func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
+        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
+            existingCard, error in
+            guard let existingCard = existingCard else {
+                DispatchQueue.main.async {
+                    self.showBottomSheetCardViewController(creditCard: nil,
+                                                           decryptedCard: fieldValues,
+                                                           viewType: .save)
+                }
+                return
+            }
+
+            // card already saved should update if any of its other values are different
+            if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
+                DispatchQueue.main.async {
+                    self.showBottomSheetCardViewController(creditCard: existingCard,
+                                                           decryptedCard: fieldValues,
+                                                           viewType: .update)
+                }
+            }
+        }
     }
 }
 
@@ -1986,8 +1989,7 @@ extension BrowserViewController: LegacyTabDelegate {
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-
-            creditCardHelper.foundFieldValues = { fieldValues, type in
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
                 guard let tabWebView = tab.webView as? TabWebView,
                       let type = type
                 else { return }
@@ -1997,13 +1999,11 @@ extension BrowserViewController: LegacyTabDelegate {
                     tabWebView.accessoryView.reloadViewFor(.creditCard)
                     tabWebView.reloadInputViews()
                 case .formSubmit:
-                    // Ref: FXIOS-6111
-                    // Action will be added to present a half sheet
-                    // for remember or update the credit card
+                    tabWebView.accessoryView.reloadViewFor(.creditCard)
+                    tabWebView.reloadInputViews()
+                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
                 }
-
-                tabWebView.accessoryView.savedCardsClosure = { }
             }
         }
 
@@ -2091,12 +2091,12 @@ extension BrowserViewController: LegacyTabDelegate {
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanelDidRequestToCreateAccount() {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController(fxaParams)
     }
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
@@ -2583,6 +2583,49 @@ extension BrowserViewController {
     @objc
     func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    public func showBottomSheetCardViewController(creditCard: CreditCard?,
+                                                  decryptedCard: UnencryptedCreditCardFields?,
+                                                  viewType state: CreditCardBottomSheetState) {
+        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
+                                                                           creditCard: creditCard,
+                                                                           decryptedCreditCard: decryptedCard,
+                                                                           state: state)
+
+        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
+        viewController.didTapYesClosure = { error in
+            if let error = error {
+                SimpleToast().showAlertWithText(error.localizedDescription,
+                                                bottomContainer: self.alertContainer,
+                                                theme: self.themeManager.currentTheme)
+            } else {
+                let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
+                let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+                let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
+                SimpleToast().showAlertWithText(toastMessage,
+                                                bottomContainer: self.alertContainer,
+                                                theme: self.themeManager.currentTheme)
+            }
+        }
+
+        viewController.didTapNotNowClosure = {
+            viewController.dismissVC()
+        }
+
+        viewController.didTapManageCardsClosure = {
+            self.showCreditCardSettings()
+        }
+
+        var bottomSheetViewModel = BottomSheetViewModel()
+        bottomSheetViewModel.shouldDismissForTapOutside = false
+
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController
+        )
+
+        self.present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 

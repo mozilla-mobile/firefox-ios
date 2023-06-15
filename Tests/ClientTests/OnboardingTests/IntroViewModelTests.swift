@@ -7,13 +7,13 @@ import XCTest
 @testable import Client
 
 class IntroViewModelTests: XCTestCase {
-    var nimbusUtility: NimbusOnboardingConfigUtility!
-    typealias cards = NimbusOnboardingConfigUtility.CardOrder
+    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
+    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingConfigUtility()
+        nimbusUtility = NimbusOnboardingTestingConfigUtility()
     }
 
     override func tearDown() {
@@ -22,7 +22,7 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testModel_whenInitialized_hasNoViewControllers() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedNumberOfViewControllers = 0
 
@@ -37,22 +37,22 @@ class IntroViewModelTests: XCTestCase {
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications)
-        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications.rawValue)
+        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync.rawValue)
     }
 
     func testModel_hasThreeAvailableCards_inExpectedOrder() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedNumberOfViewControllers = 3
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications)
-        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.notifications.rawValue)
+        XCTAssertEqual(subject.availableCards[2].viewModel.name, cards.sync.rawValue)
     }
 
     func testModel_hasTwoAvailableCards_inExpectedOrder() {
@@ -63,13 +63,13 @@ class IntroViewModelTests: XCTestCase {
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
-        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome)
-        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.sync)
+        XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
+        XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.sync.rawValue)
     }
 
     // MARK: - Test index moving forward
     func testIndexAfterFirstCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedIndex = 1
 
@@ -80,7 +80,7 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testIndexAfterSecondCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedIndex = 2
 
@@ -91,7 +91,7 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testNextIndexAfterLastCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
@@ -102,7 +102,7 @@ class IntroViewModelTests: XCTestCase {
 
     // MARK: - Test index moving backwards
     func testIndexBeforeLastCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedIndex = 1
 
@@ -113,7 +113,7 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testIndexBeforeSecondCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
         let expectedIndex = 0
 
@@ -124,7 +124,7 @@ class IntroViewModelTests: XCTestCase {
     }
 
     func testNextIndexBeforeFirstCard() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationsSync)
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())

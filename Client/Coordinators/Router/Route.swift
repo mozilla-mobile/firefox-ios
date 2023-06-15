@@ -65,6 +65,16 @@ enum Route: Equatable {
         case downloads
         case newPrivateTab = "new-private-tab"
         case newTab = "new-tab"
+
+        var libraryPanel: LibraryPanelType {
+            switch self {
+            case .bookmarks: return .bookmarks
+            case .history: return .history
+            case .readingList: return .readingList
+            case .downloads: return .downloads
+            default: return . bookmarks
+            }
+        }
     }
 
     /// An enumeration representing different sections of the settings menu.

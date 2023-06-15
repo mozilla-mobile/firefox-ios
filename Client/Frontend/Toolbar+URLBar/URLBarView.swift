@@ -121,9 +121,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     let line = UIView()
 
     lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton.tabTrayButton()
+        let tabsButton = TabsButton()
+        tabsButton.accessibilityLabel = .TabTrayButtonShowTabsAccessibilityLabel
         tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
-        tabsButton.inTopTabs = false
         return tabsButton
     }()
 

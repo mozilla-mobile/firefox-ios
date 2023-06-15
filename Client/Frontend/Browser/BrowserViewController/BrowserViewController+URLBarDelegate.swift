@@ -112,19 +112,13 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = self.tabManager.selectedTab {
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
             etpViewModel.onOpenSettingsTapped = {
-                let settingsTableViewController = AppSettingsTableViewController(
-                    with: self.profile,
-                    and: self.tabManager,
-                    delegate: self,
-                    deeplinkingTo: .contentBlocker)
-
-                let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-                controller.presentingModalViewControllerDelegate = self
-
-                // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-                // of this popover on iPad seems to block the presentation of the modal VC.
-                DispatchQueue.main.async {
-                    self.present(controller, animated: true, completion: nil)
+                if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                    // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+                    DispatchQueue.main.async {
+                        self.navigationHandler?.show(settings: .contentBlocker)
+                    }
+                } else {
+                    self.legacyShowSettings(deeplink: .contentBlocker)
                 }
             }
 
@@ -142,6 +136,24 @@ extension BrowserViewController: URLBarDelegate {
 
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             self.present(etpVC, animated: true, completion: nil)
+        }
+    }
+
+    // Will be removed with FXIOS-6529
+    func legacyShowSettings(deeplink: AppSettingsDeeplinkOption?) {
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: self.profile,
+            and: self.tabManager,
+            delegate: self,
+            deeplinkingTo: deeplink)
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        controller.presentingModalViewControllerDelegate = self
+
+        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+        // of this popover on iPad seems to block the presentation of the modal VC.
+        DispatchQueue.main.async {
+            self.present(controller, animated: true, completion: nil)
         }
     }
 
