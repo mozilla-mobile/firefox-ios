@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import Kingfisher
+import MozillaAppServices
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
@@ -186,6 +187,8 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         // Speed up the animations to 100 times as fast.
         defer { UIWindow.keyWindow?.layer.speed = 100.0 }
 
+        loadExperiment()
+
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
@@ -198,5 +201,26 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
         return rootPath
+    }
+
+    // MARK: - Private
+    private func loadExperiment() {
+        let argument = ProcessInfo.processInfo.arguments.first { string in
+            string.starts(with: LaunchArguments.LoadExperiment)
+        }
+
+        guard let arg = argument else { return }
+
+        let experimentName = arg.replacingOccurrences(of: LaunchArguments.LoadExperiment, with: "")
+        let fileURL = Bundle.main.url(forResource: experimentName, withExtension: "json")
+        if let fileURL = fileURL {
+            do {
+                let fileContent = try String(contentsOf: fileURL)
+                let features = HardcodedNimbusFeatures(with: ["messaging": fileContent])
+                features.connect(with: FxNimbus.shared)
+                UserDefaults.standard.set(experimentName, forKey: LaunchArguments.LoadExperiment)
+            } catch {
+            }
+        }
     }
 }
