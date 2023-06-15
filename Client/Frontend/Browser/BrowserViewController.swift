@@ -2615,6 +2615,20 @@ extension BrowserViewController {
             self.showCreditCardSettings()
         }
 
+        viewController.didSelectCreditCardToFill = { [unowned self] plainTextCard in
+            guard let currentTab = self.tabManager.selectedTab else {
+                return
+            }
+            CreditCardHelper.injectCardInfo(card: plainTextCard, tab: currentTab) { error in
+                guard let error = error else {
+                    return
+                }
+                self.logger.log("Credit card bottom sheet injection \(error)",
+                                level: .debug,
+                                category: .webview)
+            }
+        }
+
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = false
 

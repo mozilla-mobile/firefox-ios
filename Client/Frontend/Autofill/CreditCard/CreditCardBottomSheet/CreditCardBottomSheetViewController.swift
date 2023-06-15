@@ -36,6 +36,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     var didTapNotNowClosure: (() -> Void)?
     var didTapYesClosure: ((Error?) -> Void)?
     var didTapManageCardsClosure: (() -> Void)?
+    var didSelectCreditCardToFill: ((UnencryptedCreditCardFields) -> Void)?
 
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
@@ -315,7 +316,13 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row: \(indexPath.row)")
+        guard let plainTextCreditCard = viewModel.getPlainCreditCardValues(
+            bottomSheetState: .selectSavedCard,
+            row: indexPath.row
+        ) else {
+            return
+        }
+        didSelectCreditCardToFill?(plainTextCreditCard)
     }
 
     // MARK: Themable

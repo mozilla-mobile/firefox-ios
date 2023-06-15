@@ -163,7 +163,8 @@ class CreditCardBottomSheetViewModel {
     }
 
     // MARK: Helper Methods
-    func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState) -> UnencryptedCreditCardFields? {
+    func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
+                                  row: Int? = nil) -> UnencryptedCreditCardFields? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
@@ -179,13 +180,31 @@ class CreditCardBottomSheetViewModel {
                                                                        fieldValues: decryptedCreditCard)
             return updatedDecryptedCreditCard
         case .selectSavedCard:
-            return nil
+            guard let row = row,
+                  let selectedCreditCard = getSavedCreditCard(for: row)
+            else {
+                return nil
+            }
+
+            let decryptedCreditCardNum = decryptCreditCardNumber(card: selectedCreditCard)
+
+            guard !decryptedCreditCardNum.isEmpty else {
+                return nil
+            }
+
+            let plainTextCard = UnencryptedCreditCardFields(ccName: selectedCreditCard.ccName,
+                                                            ccNumber: decryptedCreditCardNum,
+                                                            ccNumberLast4: selectedCreditCard.ccNumberLast4,
+                                                            ccExpMonth: selectedCreditCard.ccExpMonth,
+                                                            ccExpYear: selectedCreditCard.ccExpYear,
+                                                            ccType: selectedCreditCard.ccType)
+            return plainTextCard
         }
     }
 
     func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
                                       ccNumberDecrypted: String,
-                                      row: Int = -1) -> CreditCard? {
+                                      row: Int? = nil) -> CreditCard? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
@@ -201,6 +220,7 @@ class CreditCardBottomSheetViewModel {
             }
             return updatedDecryptedCreditCard.convertToTempCreditCard()
         case .selectSavedCard:
+            guard let row = row else { return nil }
             return getSavedCreditCard(for: row)
         }
     }
