@@ -1239,7 +1239,7 @@ extension String {
                     tableName: "CustomizeFirefoxHome",
                     value: "Thought-Provoking Stories",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-                public static let PoweredByPocket = MZLocalizedString(
+                public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
                     key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
                     tableName: "CustomizeFirefoxHome",
                     value: "Articles powered by Pocket",
