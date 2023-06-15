@@ -165,6 +165,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
     }
 
+    func test_select_PlainCreditCard_WithNegativeRow() {
+        viewModel.state = .selectSavedCard
+        viewModel.creditCards = [sampleCreditCard]
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: -1)
+        XCTAssertNil(value)
+    }
+
     func test_save_getConvertedCreditCardValues() {
         viewModel.state = .save
         let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save,
