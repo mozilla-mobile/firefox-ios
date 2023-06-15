@@ -12,7 +12,7 @@ class EngagementNotificationTests: BaseTestCase {
 
     override func setUp() {
         launchArguments = [LaunchArguments.ClearProfile,
-                           LaunchArguments.LoadExperiment, "engagementNotificationWithoutConditions"]
+                           "\(LaunchArguments.LoadExperiment)engagementNotificationWithoutConditions"]
         super.setUp()
     }
 
@@ -27,9 +27,9 @@ class EngagementNotificationTests: BaseTestCase {
         XCTAssertTrue(notification.waitForExistence(timeout: 150)) // implicit wait
         notification.tap()
 
-        let urlField = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
-        waitForExistence(urlField)
-        sleep(1)
+        waitForExistence(app.textFields["url"])
+        let url = app.textFields["url"].value as! String
+        XCTAssertEqual(url, "mozilla.com", "Wrong url loaded")
     }
 
     // MARK: Helper
