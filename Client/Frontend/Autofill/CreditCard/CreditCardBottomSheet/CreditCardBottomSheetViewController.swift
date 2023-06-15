@@ -257,7 +257,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
               let creditCard = viewModel.getConvertedCreditCardValues(
                 bottomSheetState: viewModel.state,
-                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard)
+                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard),
+                row: indexPath.row
               )
         else {
             return UITableViewCell()
