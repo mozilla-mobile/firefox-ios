@@ -225,7 +225,7 @@ class CreditCardBottomSheetViewModel {
         }
     }
 
-    func getSavedCreditCard(for row: Int) -> CreditCard? {
+    private func getSavedCreditCard(for row: Int) -> CreditCard? {
         guard row > -1,
               let creditCards = creditCards,
               !creditCards.isEmpty,

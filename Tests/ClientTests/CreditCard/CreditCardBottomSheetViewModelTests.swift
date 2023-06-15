@@ -191,6 +191,45 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
     }
 
+    func test_update_selectConvertedCreditCardValues_ForSpecificRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: 0)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForInvalidRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "")
+        XCTAssertNil(value)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForMinusRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: -1)
+        XCTAssertNil(value)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForEmptyCreditCards() {
+        viewModel.creditCards = []
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: 1)
+        XCTAssertNil(value)
+    }
+
     func test_updateDecryptedCreditCard() {
         let sampleCreditCardVal = sampleCreditCard
         let updatedName = "Red Dragon"
