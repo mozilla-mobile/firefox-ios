@@ -51,6 +51,12 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         message.metadata.impressions += 1
 
+        if message.isExpired {
+            onMessageExpired(message.metadata,
+                             surface: message.data.surface,
+                             shouldReport: true)
+        }
+
         set(key: message.id, metadata: message.metadata)
     }
 
