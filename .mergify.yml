@@ -24,6 +24,20 @@ pull_request_rules:
       queue:
         method: rebase
         name: default
+  - name: Rust Component Upgrade - Auto Merge
+    conditions:
+      - author=github-actions[bot]
+      - check-success=Bitrise
+      - -files~=^Client.xcodeproj/project.pbxproj
+      - -files~=^Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+      - head=update-rust-component-version
+    actions:
+      review:
+        type: APPROVE
+        message: Github-action[bot] 💪
+      queue:
+        method: rebase
+        name: default
   - name: L10N - Auto Merge
     conditions:
       - author=github-actions[bot]
