@@ -73,8 +73,6 @@ class TabCell: UICollectionViewCell,
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
-    private var initialFrame = CGRect()
-
     weak var delegate: TabCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
@@ -83,7 +81,6 @@ class TabCell: UICollectionViewCell,
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initialFrame = frame
         self.animator = SwipeAnimator(animatingView: self)
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
@@ -175,8 +172,6 @@ class TabCell: UICollectionViewCell,
         if selected {
             setTabSelected(tab.isPrivate, theme: theme)
         } else {
-            frame.size.width = initialFrame.width
-            frame.size.height = initialFrame.height
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
@@ -251,9 +246,6 @@ class TabCell: UICollectionViewCell,
     }
 
     private func setTabSelected(_ isPrivate: Bool, theme: Theme) {
-        // This creates a border around a tabcell. Using edge insets is created a border _outside_ of the tab frame.
-        frame.size.height = initialFrame.height + TabCell.borderWidth
-        frame.size.width = initialFrame.width + TabCell.borderWidth
         layoutMargins = UIEdgeInsets(top: TabCell.borderWidth, left: TabCell.borderWidth, bottom: TabCell.borderWidth, right: TabCell.borderWidth)
         layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
         layer.borderWidth = TabCell.borderWidth
