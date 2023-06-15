@@ -218,7 +218,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let fileContent = try String(contentsOf: fileURL)
                 let features = HardcodedNimbusFeatures(with: ["messaging": fileContent])
                 features.connect(with: FxNimbus.shared)
-                UserDefaults.standard.set(experimentName, forKey: LaunchArguments.LoadExperiment)
             } catch {
             }
         }
