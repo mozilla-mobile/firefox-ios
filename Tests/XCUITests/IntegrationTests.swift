@@ -63,6 +63,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         sleep(3)
+        waitForTabsButton()
         allowNotifications()
     }
 
@@ -71,6 +72,9 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
+        sleep(5)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        app.tables.staticTexts["Sync Now"].tap()
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         sleep(3)

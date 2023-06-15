@@ -64,6 +64,15 @@ enum LibraryPanelType: Int, CaseIterable {
             return .AppMenu.AppMenuReadingListTitleString
         }
     }
+
+    var homepanelSection: Route.HomepanelSection {
+        switch self {
+        case .bookmarks: return .bookmarks
+        case .history: return .history
+        case .readingList: return .readingList
+        case .downloads: return .downloads
+        }
+    }
 }
 
 class LibraryPanelHelper {

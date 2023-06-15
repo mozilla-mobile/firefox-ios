@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class SingleCreditCardFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
+class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
         static let manageCardsButtonFontSize: CGFloat = 16
         static let manageCardsButtonLeadingSpace: CGFloat = 0

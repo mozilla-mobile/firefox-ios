@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 import Shared
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -244,6 +244,21 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         settingsCoordinator.start(with: section)
     }
 
+    private func showLibrary(with homepanelSection: Route.HomepanelSection) {
+        let navigationController = DismissableNavigationViewController()
+        navigationController.modalPresentationStyle = .formSheet
+        let libraryRouter = DefaultRouter(navigationController: navigationController)
+
+        let libraryCoordinator = LibraryCoordinator(router: libraryRouter)
+        libraryCoordinator.parentCoordinator = self
+        add(child: libraryCoordinator)
+        libraryCoordinator.start(with: homepanelSection)
+
+        router.present(navigationController) { [weak self] in
+            self?.didFinishLibrary(from: libraryCoordinator)
+        }
+    }
+
     // MARK: - SettingsCoordinatorDelegate
     func openURLinNewTab(_ url: URL) {
         browserViewController.openURLInNewTab(url)
@@ -254,10 +269,21 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
 
+    // MARK: - LibraryCoordinatorDelegate
+
+    func didFinishLibrary(from coordinator: LibraryCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
+
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
         showSettings(with: settings)
+    }
+
+    func show(homepanelSection: Route.HomepanelSection) {
+        showLibrary(with: homepanelSection)
     }
 
     // MARK: - To be removed with FXIOS-6529

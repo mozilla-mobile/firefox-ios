@@ -7,7 +7,7 @@ import Common
 import Storage
 import Shared
 
-enum SingleCreditCardViewState: String, Equatable, CaseIterable {
+enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
     case save
     case update
 
@@ -50,7 +50,7 @@ enum SingleCreditCardViewState: String, Equatable, CaseIterable {
     }
 }
 
-struct SingleCreditCardViewModel {
+struct CreditCardBottomSheetViewModel {
     private var logger: Logger
     let profile: Profile
     let autofill: RustAutofill
@@ -63,13 +63,13 @@ struct SingleCreditCardViewModel {
     var didUpdateCreditCard: (() -> Void)?
     var decryptedCreditCard: UnencryptedCreditCardFields?
 
-    var state: SingleCreditCardViewState
+    var state: CreditCardBottomSheetState
 
     init(profile: Profile,
          creditCard: CreditCard?,
          decryptedCreditCard: UnencryptedCreditCardFields?,
          logger: Logger = DefaultLogger.shared,
-         state: SingleCreditCardViewState) {
+         state: CreditCardBottomSheetState) {
         self.profile = profile
         self.autofill = profile.autofill
         if creditCard != nil {
@@ -85,7 +85,7 @@ struct SingleCreditCardViewModel {
 
     // MARK: Main Button Action
     public func didTapMainButton(completion: @escaping (Error?) -> Void) {
-        let decryptedCard = getPlainCreditCardValues()
+        let decryptedCard = getPlainCreditCardValues(bottomSheetState: state)
         switch state {
         case .save:
             saveCreditCard(with: decryptedCard) { _, error in
@@ -146,26 +146,78 @@ struct SingleCreditCardViewModel {
     }
 
     // MARK: Helper Methods
-    func getPlainCreditCardValues() -> UnencryptedCreditCardFields? {
-        switch state {
+    func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState) -> UnencryptedCreditCardFields? {
+        switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard
         case .update:
             guard let creditCard = creditCard,
-                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc) else {
+                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
+            else {
                 return nil
             }
-
-            let plainCard = UnencryptedCreditCardFields(
-                ccName: creditCard.ccName,
-                ccNumber: ccNumberDecrypted,
-                ccNumberLast4: creditCard.ccNumberLast4,
-                ccExpMonth: creditCard.ccExpMonth,
-                ccExpYear: creditCard.ccExpYear,
-                ccType: creditCard.ccType)
-
-            return plainCard
+            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
+                                                                       with: ccNumberDecrypted,
+                                                                       fieldValues: decryptedCreditCard)
+            return updatedDecryptedCreditCard
         }
+    }
+
+    func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
+                                      ccNumberDecrypted: String) -> CreditCard? {
+        switch bottomSheetState {
+        case .save:
+            guard let plainCard = decryptedCreditCard else { return nil }
+            return plainCard.convertToTempCreditCard()
+        case .update:
+            guard let creditCard = creditCard, !ccNumberDecrypted.isEmpty
+            else {
+                return nil
+            }
+            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
+                                                                       with: ccNumberDecrypted,
+                                                                       fieldValues: decryptedCreditCard)
+            return updatedDecryptedCreditCard?.convertToTempCreditCard()
+        }
+    }
+
+    func updateDecryptedCreditCard(from originalCreditCard: CreditCard,
+                                   with ccNumberDecrypted: String,
+                                   fieldValues decryptedCard: UnencryptedCreditCardFields?) -> UnencryptedCreditCardFields? {
+        guard var decryptedCreditCardVal = decryptedCard,
+              !ccNumberDecrypted.isEmpty
+        else {
+            return nil
+        }
+
+        // Note: For updation we keep the same credit card number, type and last 4 digits
+        decryptedCreditCardVal.ccNumber = ccNumberDecrypted
+        decryptedCreditCardVal.ccType = originalCreditCard.ccType
+        decryptedCreditCardVal.ccNumberLast4 = originalCreditCard.ccNumberLast4
+
+        // Update name, expiry month and expiry year if they are valid
+        // Name
+        let name = decryptedCreditCardVal.ccName
+        decryptedCreditCardVal.ccName = !name.isEmpty ? name : originalCreditCard.ccName
+
+        // Month
+        let month = decryptedCreditCardVal.ccExpMonth
+        let isValidMonth = (1...12).contains(Int(month))
+        decryptedCreditCardVal.ccExpMonth = isValidMonth ? month : originalCreditCard.ccExpMonth
+
+        // Year
+        let yearVal = decryptedCreditCardVal.ccExpYear
+        let currentYear = Calendar.current.component(.year, from: Date()) % 100
+        let isValidYear = (currentYear...99).contains(Int(yearVal) % 100)
+        decryptedCreditCardVal.ccExpYear = isValidYear ? yearVal : originalCreditCard.ccExpYear
+
+        return decryptedCreditCardVal
+    }
+
+    func decryptCreditCardNumber(card: CreditCard?) -> String {
+        guard let card = card else { return "" }
+        let decryptedCardNum = autofill.decryptCreditCardNumber(encryptedCCNum: card.ccNumberEnc)
+        return decryptedCardNum ?? ""
     }
 }

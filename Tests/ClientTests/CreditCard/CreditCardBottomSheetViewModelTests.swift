@@ -8,31 +8,31 @@ import Storage
 import Shared
 import XCTest
 
-class CreditCardSingleViewModelTests: XCTestCase {
+class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var profile: MockProfile!
-    private var viewModel: SingleCreditCardViewModel!
+    private var viewModel: CreditCardBottomSheetViewModel!
     private var files: FileAccessor!
     private var autofill: RustAutofill!
     private var encryptionKey: String!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
-                                                                  ccNumber: "4242424242424242",
-                                                                  ccNumberLast4: "4242",
-                                                                  ccExpMonth: 08,
-                                                                  ccExpYear: 55,
+                                                                  ccNumber: "4111111111111111",
+                                                                  ccNumberLast4: "1111",
+                                                                  ccExpMonth: 3,
+                                                                  ccExpYear: 43,
                                                                   ccType: "VISA")
 
     private var samplePlainTextUpdateCard = UnencryptedCreditCardFields(ccName: "Allen Burgers",
-                                                                        ccNumber: "4242424242424242",
-                                                                        ccNumberLast4: "4242",
+                                                                        ccNumber: "4111111111111111",
+                                                                        ccNumberLast4: "1111",
                                                                         ccExpMonth: 09,
                                                                         ccExpYear: 56,
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
-                                              ccNumberEnc: "1234567891234567",
-                                              ccNumberLast4: "4567",
-                                              ccExpMonth: 1234567,
-                                              ccExpYear: 23,
+                                              ccNumberEnc: "4111111111111111",
+                                              ccNumberLast4: "1111",
+                                              ccExpMonth: 3,
+                                              ccExpYear: 43,
                                               ccType: "VISA",
                                               timeCreated: 1234678,
                                               timeLastUsed: nil,
@@ -75,10 +75,10 @@ class CreditCardSingleViewModelTests: XCTestCase {
         profile = MockProfile()
         _ = profile.autofill.reopenIfClosed()
 
-        viewModel = SingleCreditCardViewModel(profile: profile,
-                                              creditCard: nil,
-                                              decryptedCreditCard: samplePlainTextCard,
-                                              state: .save)
+        viewModel = CreditCardBottomSheetViewModel(profile: profile,
+                                                   creditCard: nil,
+                                                   decryptedCreditCard: samplePlainTextCard,
+                                                   state: .save)
     }
 
     override func tearDown() {
@@ -94,7 +94,7 @@ class CreditCardSingleViewModelTests: XCTestCase {
     func testSavingCard() {
         viewModel.creditCard = sampleCreditCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
-        let decryptedCreditCard = viewModel.getPlainCreditCardValues()
+        let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
@@ -155,14 +155,61 @@ class CreditCardSingleViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.title == .CreditCard.UpdateCreditCard.MainTitle)
     }
 
-    func test_getPlainCreditCardValues() {
+    func test_save_getPlainCreditCardValues() {
         viewModel.state = .save
-        let value = viewModel.getPlainCreditCardValues()
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_save_getConvertedCreditCardValues() {
+        viewModel.state = .save
+        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save,
+                                                           ccNumberDecrypted: "")
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_update_getConvertedCreditCardValues() {
+        viewModel.creditCard = sampleCreditCard
+        viewModel.decryptedCreditCard = samplePlainTextCard
+
+        // convert the saved credit card and check values
+        let decryptedCCNumber = "4111111111111111"
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .update,
+                                                                ccNumberDecrypted: decryptedCCNumber)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
+    }
+
+    func test_updateDecryptedCreditCard() {
+        let sampleCreditCardVal = sampleCreditCard
+        let updatedName = "Red Dragon"
+        let updatedMonth: Int64 = 12
+        let updatedYear: Int64 = 48
+        let newUnencryptedCreditCard = UnencryptedCreditCardFields(ccName: updatedName,
+                                                                   ccNumber: sampleCreditCardVal.ccNumberEnc,
+                                                                   ccNumberLast4: sampleCreditCardVal.ccNumberLast4,
+                                                                   ccExpMonth: updatedMonth,
+                                                                   ccExpYear: updatedYear,
+                                                                   ccType: sampleCreditCardVal.ccType)
+        let value = viewModel.updateDecryptedCreditCard(from: sampleCreditCardVal,
+                                                        with: sampleCreditCardVal.ccNumberEnc,
+                                                        fieldValues: newUnencryptedCreditCard)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, updatedName)
+        XCTAssertEqual(value!.ccExpMonth, updatedMonth)
+        XCTAssertEqual(value!.ccExpYear, updatedYear)
+        XCTAssertEqual(value!.ccNumber, sampleCreditCardVal.ccNumberEnc)
     }
 
     func test_didTapMainButton() {

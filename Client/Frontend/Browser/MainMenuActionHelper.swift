@@ -18,7 +18,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
-    func showLibrary(panel: LibraryPanelType?)
+    func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?)
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
