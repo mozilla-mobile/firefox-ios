@@ -13,7 +13,7 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let backButtonImage = UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection()
+    let backButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection()
     let forwardButtonImage = UIImage.templateImageNamed("nav-forward")?.imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.appMenu)
     let searchButtonImage = UIImage.templateImageNamed("search")

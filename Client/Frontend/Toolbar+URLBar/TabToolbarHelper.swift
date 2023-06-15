@@ -101,7 +101,7 @@ open class TabToolbarHelper: NSObject {
         self.themeManager = themeManager
         super.init()
 
-        toolbar.backButton.setImage(UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
+        toolbar.backButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         toolbar.backButton.accessibilityLabel = .TabToolbarBackAccessibilityLabel
         toolbar.backButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.backButton
         let longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBack))
