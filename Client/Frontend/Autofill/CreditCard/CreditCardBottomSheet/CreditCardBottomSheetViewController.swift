@@ -144,7 +144,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     // MARK: View Setup
     func addSubviews() {
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-        buttonsContainerStackView.addArrangedSubview(yesButton)
+
+        if viewModel.state != .selectSavedCard {
+            buttonsContainerStackView.addArrangedSubview(yesButton)
+        }
         if isIpad {
             buttonsContainerStackView.addArrangedSubview(notNowButton)
         }
