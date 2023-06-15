@@ -179,7 +179,7 @@ class BookmarksPanel: SiteTableViewController,
 
     private func getNewSeparatorAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewSeparator,
-                                     iconString: ImageIdentifiers.navMenu,
+                                     iconString: ImageIdentifiers.Large.appMenu,
                                      tapHandler: { _ in
             let centerVisibleRow = self.centerVisibleRow()
 
