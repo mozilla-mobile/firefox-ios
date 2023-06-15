@@ -1994,6 +1994,14 @@ extension BrowserViewController: LegacyTabDelegate {
                     self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
                 }
+
+                tabWebView.accessoryView.savedCardsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showBottomSheetCardViewController(creditCard: nil,
+                                                                decryptedCard: nil,
+                                                                viewType: .selectSavedCard)
+                    }
+                }
             }
         }
 

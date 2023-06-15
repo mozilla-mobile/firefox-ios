@@ -240,7 +240,12 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch viewModel.state {
+        case .save, .update:
+            return 1
+        case .selectSavedCard:
+            return viewModel.creditCards?.count ?? 1
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -283,7 +288,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         case .save:
             let emptyView = UIView()
             return emptyView
-        case .update:
+        case .update, .selectSavedCard:
             guard let footerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: CreditCardBottomSheetFooterView.cellIdentifier
             ) as? CreditCardBottomSheetFooterView else {
@@ -306,6 +311,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected row: \(indexPath.row)")
     }
 
     // MARK: Themable

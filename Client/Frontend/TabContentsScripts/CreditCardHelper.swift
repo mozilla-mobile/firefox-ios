@@ -117,9 +117,10 @@ class CreditCardHelper: TabContentScript {
 
     // MARK: Injection
 
-    func injectCardInfo(card: UnencryptedCreditCardFields,
-                        tab: Tab,
-                        completion: @escaping (Error?) -> Void) {
+    static func injectCardInfo(logger: Logger = DefaultLogger.shared,
+                               card: UnencryptedCreditCardFields,
+                               tab: Tab,
+                               completion: @escaping (Error?) -> Void) {
         guard !card.ccNumber.isEmpty,
               card.ccExpYear > 0,
               !card.ccName.isEmpty
@@ -129,8 +130,8 @@ class CreditCardHelper: TabContentScript {
         }
 
         do {
-            let jsonData = try JSONSerialization.data(
-                withJSONObject: injectionJSONBuilder(card: card))
+            let jsonBuilder = CreditCardHelper.injectionJSONBuilder(card: card)
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBuilder)
             guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else {
                 completion(CreditCardHelperError.injectionInvalidJSON)
                 return
@@ -147,7 +148,7 @@ class CreditCardHelper: TabContentScript {
                     return
                 }
                 completion(err)
-                self.logger.log("Credit card script error \(err)",
+                logger.log("Credit card script error \(err)",
                                 level: .debug,
                                 category: .webview)
             }
@@ -158,7 +159,7 @@ class CreditCardHelper: TabContentScript {
         }
     }
 
-    private func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
+    static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
         let injectionJSON: [String: Any] = [
                 "cc-name": card.ccName,
                 "cc-number": card.ccNumber,

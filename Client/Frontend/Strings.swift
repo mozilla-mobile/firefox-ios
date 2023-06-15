@@ -405,6 +405,15 @@ extension String {
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
         }
 
+        // Select Credit Card
+        public struct SelectCreditCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "CreditCard.SelectCreditCard.MainTitle.v116",
+                tableName: "UpdateCard",
+                value: "Use a saved card?",
+                comment: "This value is used as the title for the select a credit card from list of available cards.")
+        }
+
         // Error States for wrong input while editing credit card
         public struct ErrorState {
             public static let NameOnCardSublabel = MZLocalizedString(
