@@ -6,9 +6,6 @@ import UIKit
 import Shared
 
 class PrivateModeButton: ToggleButton, PrivateModeUI {
-    var offTint = UIColor.black
-    var onTint = UIColor.black
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = .TabTrayToggleAccessibilityLabel
@@ -21,19 +18,17 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyUIMode(isPrivate: Bool) {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
         isSelected = isPrivate
 
-        tintColor = isPrivate ? onTint : offTint
+        tintColor = isPrivate ? theme.colors.iconOnColor : theme.colors.iconPrimary
         imageView?.tintColor = tintColor
 
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }
 
     func applyTheme(theme: Theme) {
-        onTint = theme.colors.iconOnColor
-        offTint = theme.colors.iconPrimary
-        tintColor = isSelected ? onTint : offTint
+        tintColor = isSelected ? theme.colors.iconOnColor : theme.colors.iconPrimary
         imageView?.tintColor = tintColor
     }
 }
