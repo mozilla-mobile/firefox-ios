@@ -17,6 +17,7 @@ public struct ImageIdentifiers {
         public static let tabTray = "tabTrayLarge"
         public static let appMenu = "appMenuLarge"
         public static let appendUp = "appendUpLarge"
+        public static let avatarCircle = "avatarCircleLarge"
     }
 
     public static let actionAddBookmark = "action_bookmark"
@@ -93,7 +94,6 @@ public struct ImageIdentifiers {
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
     public static let pinSmall = "pin_small"
-    public static let placeholderAvatar = "placeholder-avatar"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
     public static let qrCodeGoBack = "qrcode-goBack"

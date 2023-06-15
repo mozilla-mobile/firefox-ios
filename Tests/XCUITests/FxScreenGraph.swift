@@ -955,7 +955,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.history], to: LibraryPanel_History)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.placeholderAvatar], to: FxAccountManagementPage)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.avatarCircle], to: FxAccountManagementPage)
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.nightMode], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode

@@ -14,7 +14,7 @@ open class Avatar {
 
         downloadAvatar(url: url) { image in
             guard let avatarImage = image else {
-                self.image = UIImage(named: ImageIdentifiers.placeholderAvatar)
+                self.image = UIImage(named: ImageIdentifiers.Large.avatarCircle)
                 NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
                 return
             }

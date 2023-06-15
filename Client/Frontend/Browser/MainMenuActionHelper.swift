@@ -537,7 +537,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             return userProfile.displayName ?? userProfile.email
         }()
 
-        let iconString = needsReAuth ? ImageIdentifiers.warning : ImageIdentifiers.placeholderAvatar
+        let iconString = needsReAuth ? ImageIdentifiers.warning : ImageIdentifiers.Large.avatarCircle
 
         var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
