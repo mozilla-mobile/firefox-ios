@@ -87,7 +87,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             let faviconViewModel = FaviconImageViewModel(siteURLString: url)
             imageView.setFavicon(faviconViewModel)
         } else {
-            imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+            imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.tabTray)
         }
 
         applyTheme(theme: theme)

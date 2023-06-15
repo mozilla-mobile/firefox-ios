@@ -14,6 +14,7 @@ import Foundation
 public struct ImageIdentifiers {
     public struct Large {
         public static let plus = "plusLarge"
+        public static let tabTray = "tabTrayLarge"
     }
 
     public static let actionAddBookmark = "action_bookmark"
@@ -112,7 +113,6 @@ public struct ImageIdentifiers {
     public static let signinSync = "signin-sync"
     public static let signinSyncQRButton = "qr-code-icon-white"
     public static let sponsoredStar = "sponsored-star"
-    public static let stackedTabsIcon = "recently_closed"
     public static let subtract = "subtract"
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
