@@ -34,14 +34,6 @@ class EngagementNotificationTests: BaseTestCase {
 
     // MARK: Helper
 
-    private func allowNotifications () {
-        addUIInterruptionMonitor(withDescription: "notifications") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
-            return true
-        }
-        app.swipeDown()
-    }
-
     private func goThroughOnboarding() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
@@ -59,10 +51,7 @@ class EngagementNotificationTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Go to the third screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        sleep(3)
-        allowNotifications()
-
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
@@ -70,6 +59,18 @@ class EngagementNotificationTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+
+        sleep(1)
+
+        // Allow notifications
+        if springboard.alerts.buttons["Allow"].exists {
+            springboard.alerts.buttons["Allow"].tap()
+        }
+
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        waitForExistence(topSites)
     }
 }
