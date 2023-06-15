@@ -47,7 +47,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         cardTableView.backgroundColor = .clear
         cardTableView.dataSource = self
         cardTableView.delegate = self
-        cardTableView.allowsSelection = false
+        cardTableView.allowsSelection = true
         cardTableView.separatorColor = .clear
         cardTableView.separatorStyle = .none
         cardTableView.isScrollEnabled = false
@@ -323,6 +323,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             return
         }
         didSelectCreditCardToFill?(plainTextCreditCard)
+        dismissVC()
     }
 
     // MARK: Themable
