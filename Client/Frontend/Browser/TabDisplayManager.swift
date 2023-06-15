@@ -679,7 +679,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                              extras: nil)
                 return
             }
-            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition!)
+            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition ?? 0)
         }
     }
 
@@ -689,7 +689,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
         generator.impactOccurred()
 
         // Reload Inactive Tabs section for user feedback
-        _ = reloadInactiveTabsSection()
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
                                       completion: { undoButtonPressed in
@@ -733,18 +733,17 @@ extension TabDisplayManager: InactiveTabsDelegate {
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
         tabManager.undoCloseTab(tab: tab, position: index)
         inactiveViewModel?.inactiveTabs.insert(tab, at: index)
-        _ = reloadInactiveTabsSection()
+
+        if inactiveViewModel?.inactiveTabs.count == 1 {
+            toggleInactiveTabSection(hasExpanded: true)
+        } else {
+            collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
+        }
     }
 
     private func undoInactiveTabsClose() {
         inactiveViewModel?.shouldHideInactiveTabs = false
-        _ = reloadInactiveTabsSection()
-    }
-
-    private func reloadInactiveTabsSection() -> IndexPath {
-        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-        collectionView.reloadItems(at: [indexPath])
-        return indexPath
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
     }
 
     func didSelectInactiveTab(tab: Tab?) {
@@ -760,7 +759,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
 
         isInactiveViewExpanded = hasExpanded
-        let indexPath = reloadInactiveTabsSection()
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
 
@@ -1101,16 +1101,21 @@ extension TabDisplayManager: TabManagerDelegate {
         /// collectionView is not visible the dataSource section/items differs from the actions to be perform
         /// which causes the crash
         collectionView.numberOfItems(inSection: 0)
-        collectionView.performBatchUpdates({
-            operation()
-        }, completion: { [weak self] (done) in
-            self?.performingChainedOperations = false
-            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-            self?.performChainedOperations()
-        })
+        /// Add temporary hack to delay the `collectionView.performBatchUpdates`
+        /// to fix crash caused by race condition where the dataSource hasn't finish loading causing Internal inconsistency crash
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+            self.collectionView.performBatchUpdates({
+                operation()
+            }, completion: { [weak self] (done) in
+                self?.performingChainedOperations = false
+                self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+                self?.performChainedOperations()
+            })
+        }
     }
 
-    private func updateWith(animationType: TabAnimationType, operation: (() -> Void)?) {
+    private func updateWith(animationType: TabAnimationType,
+                            operation: (() -> Void)?) {
         if let op = operation {
             operations.insert((animationType, op), at: 0)
         }
