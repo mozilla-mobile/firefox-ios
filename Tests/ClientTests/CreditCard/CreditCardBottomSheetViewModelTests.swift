@@ -155,6 +155,8 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.title == .CreditCard.UpdateCreditCard.MainTitle)
     }
 
+    // Update the test to also account for save and selected card flow
+    // Ticket: FXIOS-6719
     func test_save_getPlainCreditCardValues() {
         viewModel.state = .save
         let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)

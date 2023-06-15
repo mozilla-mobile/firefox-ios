@@ -141,7 +141,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                         navController.pushViewController(viewController,
                                                          animated: true)
                     case .failure:
-                        viewController.dismissVC()
+                        break
                     }
                 }
             } else {
