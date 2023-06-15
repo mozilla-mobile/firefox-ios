@@ -123,7 +123,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let pocketSponsoredSetting = BoolSetting(
             with: .sponsoredPocket,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories),
-            statusText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.PoweredByPocket))
+            statusText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle))
         // This sets whether the cell is enabled or not, and not the setting itself.
         pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
             .pocket,
