@@ -35,7 +35,7 @@ class TabCell: UICollectionViewCell,
 
     // MARK: - UI Vars
     lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius = GridTabViewController.UX.cornerRadius
+        view.layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
         view.clipsToBounds = true
     }
 
