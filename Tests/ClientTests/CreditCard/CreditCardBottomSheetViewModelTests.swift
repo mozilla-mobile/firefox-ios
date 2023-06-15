@@ -286,4 +286,28 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         waitForExpectations(timeout: 1.0)
     }
+
+    func test_updateCreditCardList() {
+        let expectation = expectation(description: "wait for credit card to be added")
+        viewModel.creditCard = nil
+        viewModel.decryptedCreditCard = nil
+        // Add a sample card to the storage
+        viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
+            guard error == nil, let creditCard = creditCard else {
+                XCTFail()
+                return
+            }
+            // Make the view model state selected card
+            self.viewModel.state = .selectSavedCard
+            // Perform update
+            self.viewModel.updateCreditCardList({ cards in
+                // Check if the view model updated the list
+                let cards = self.viewModel.creditCards
+                XCTAssertNotNil(cards)
+                XCTAssert(!cards!.isEmpty)
+                expectation.fulfill()
+            })
+        }
+        waitForExpectations(timeout: 3.0)
+    }
 }

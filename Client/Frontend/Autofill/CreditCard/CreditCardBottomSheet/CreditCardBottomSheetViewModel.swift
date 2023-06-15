@@ -88,7 +88,7 @@ class CreditCardBottomSheetViewModel {
         self.state = state
         self.logger = logger
         creditCards = [CreditCard]()
-        updateCreditCardList()
+        updateCreditCardList({ _ in })
         if creditCard != nil {
             self.creditCard = creditCard
             self.decryptedCreditCard = decryptedCreditCard
@@ -275,7 +275,7 @@ class CreditCardBottomSheetViewModel {
         return decryptedCardNum ?? ""
     }
 
-    func listStoredCreditCards(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+    private func listStoredCreditCards(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
         autofill.listCreditCards(completion: { creditCards, error in
             guard let cards = creditCards,
                   error == nil else {
@@ -286,11 +286,12 @@ class CreditCardBottomSheetViewModel {
         })
     }
 
-    func updateCreditCardList() {
+    func updateCreditCardList(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
         if state == .selectSavedCard {
             listStoredCreditCards { [weak self] cards in
                 DispatchQueue.main.async {
                     self?.creditCards = cards
+                    completionHandler(cards)
                 }
             }
         }
