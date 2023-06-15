@@ -5,10 +5,6 @@
 import Foundation
 import Shared
 
-protocol HomePanel: LegacyNotificationThemeable {
-    var homePanelDelegate: HomePanelDelegate? { get set }
-}
-
 enum HomePanelType: Int {
     case topSites = 0
 
