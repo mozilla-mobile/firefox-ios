@@ -13,11 +13,11 @@ import Foundation
 /// Sing the song if you must.
 public struct ImageIdentifiers {
     public struct Large {
+        public static let appendUp = "appendUpLarge"
+        public static let appMenu = "appMenuLarge"
+        public static let avatarCircle = "avatarCircleLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
-        public static let appMenu = "appMenuLarge"
-        public static let appendUp = "appendUpLarge"
-        public static let avatarCircle = "avatarCircleLarge"
     }
 
     public static let actionAddBookmark = "action_bookmark"
