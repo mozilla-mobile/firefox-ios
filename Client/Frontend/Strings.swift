@@ -409,7 +409,7 @@ extension String {
         public struct SelectCreditCard {
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.SelectCreditCard.MainTitle.v116",
-                tableName: "UpdateCard",
+                tableName: "SelectCreditCard",
                 value: "Use a saved card?",
                 comment: "This value is used as the title for the select a credit card from list of available cards.")
         }
