@@ -17550,6 +17550,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				EXCLUDED_SOURCE_FILE_NAMES = "Client/Nimbus/TestData/*";
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -17854,7 +17855,10 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				EXCLUDED_SOURCE_FILE_NAMES = CredentialProvider.appex;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					CredentialProvider.appex,
+					"Client/Nimbus/TestData/*",
+				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -18123,6 +18127,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				EXCLUDED_SOURCE_FILE_NAMES = "Client/Nimbus/TestData/*";
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
