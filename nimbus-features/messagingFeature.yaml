@@ -134,16 +134,6 @@ features:
               text: ResearchSurface/Body.Text.v112
               button-label: ResearchSurface/PrimaryButton.Label.v112
               action: https://www.macrumors.com
-            engagement-notification:
-              surface: notification
-              style: NOTIFICATION
-              trigger:
-                - NEVER
-                - INACTIVE_NEW_USER
-                - ALLOWED_TIPS_NOTIFICATIONS
-              title: EngagementNotification/Engagement.Notification.Title.v112
-              text: EngagementNotification/Engagement.Notification.Body.v112
-              action: OPEN_NEW_TAB
 
 objects:
   MessageData:
