@@ -22,9 +22,8 @@ class EngagementNotificationTests: BaseTestCase {
         // As we cannot trigger the background refresh 
         XCUIDevice.shared.press(XCUIDevice.Button.home)
 
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let notification = springboard.otherElements["Notification"]
-        XCTAssertTrue(notification.waitForExistence(timeout: 150)) // implicit wait
+        XCTAssertTrue(notification.waitForExistence(timeout: TIMEOUT_LONG)) // implicit wait
         notification.tap()
 
         waitForExistence(app.textFields["url"])
@@ -37,7 +36,7 @@ class EngagementNotificationTests: BaseTestCase {
     private func goThroughOnboarding() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
@@ -45,7 +44,7 @@ class EngagementNotificationTests: BaseTestCase {
         // Go to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
@@ -53,15 +52,13 @@ class EngagementNotificationTests: BaseTestCase {
         // Go to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
-
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
         sleep(1)
 
