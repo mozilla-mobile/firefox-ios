@@ -36,8 +36,15 @@ enum AppSettingsDeeplinkOption {
     }
 }
 
+/// Child settings pages action
 protocol AppSettingsDelegate: AnyObject {
     func clickedVersion()
+}
+
+/// Supports decision making from VC to parent coordinator
+protocol SettingsFlowDelegate: AnyObject {
+    func showDevicePassCode()
+    func showCreditCardSettings()
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
@@ -48,6 +55,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     private var showDebugSettings = false
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
+    weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Initializers
     init(with profile: Profile,
@@ -98,7 +106,32 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settingsDelegate?.didFinish()
     }
 
-    // Will be clean up with FXIOS-6529
+    // MARK: Handle Route decisions
+
+    func handle(route: Route.SettingsSection) {
+        switch route {
+        case .creditCard:
+            handleCreditCardAuthenticatinFlow()
+        default:
+            break
+        }
+    }
+
+    // TODO Laurie - to test this
+    private func handleCreditCardAuthenticatinFlow() {
+        appAuthenticator.getAuthenticationState { state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.parentCoordinator?.showCreditCardSettings()
+            case .deviceOwnerFailed:
+                break // Keep showing the main settings page
+            case .passCodeRequired:
+                self.parentCoordinator?.showDevicePassCode()
+            }
+        }
+    }
+
+    // Will be removed with FXIOS-6529
     private func checkForDeeplinkSetting() {
         guard let deeplink = deeplinkTo else { return }
         var viewController: SettingsTableViewController
@@ -134,8 +167,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             let viewController = CreditCardSettingsViewController(
                 creditCardViewModel: viewModel)
             guard let navController = navigationController else { return }
-            if appAuthenticator.canAuthenticateDeviceOwner() {
-                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
+            if appAuthenticator.canAuthenticateDeviceOwner {
+                appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                     switch result {
                     case .success:
                         navController.pushViewController(viewController,
