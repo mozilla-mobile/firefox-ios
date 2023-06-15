@@ -11,32 +11,21 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages", "testTopSites2Add"]
+    let testWithDB = ["testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
-    let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
-    let pagesVisitediPhone = "browserActivityStreamPagesiPhone.db"
+    let pagesVisited = "browserActivityStreamPages-places.db"
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
         if testWithDB.contains(key) {
-            // for the current test name, add the db fixture used
-            if iPad() {
-                launchArguments = [LaunchArguments.SkipIntro,
-                                   LaunchArguments.SkipWhatsNew,
-                                   LaunchArguments.SkipETPCoverSheet,
-                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPad,
-                                   LaunchArguments.SkipContextualHints]
-            } else {
-                launchArguments = [LaunchArguments.SkipIntro,
-                                   LaunchArguments.SkipWhatsNew,
-                                   LaunchArguments.SkipETPCoverSheet,
-                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
-                                   LaunchArguments.SkipContextualHints,
-                                   LaunchArguments.TurnOffTabGroupsInUserPreferences]
-            }
+            launchArguments = [LaunchArguments.SkipIntro,
+                LaunchArguments.SkipWhatsNew,
+                LaunchArguments.SkipETPCoverSheet,
+                LaunchArguments.LoadDatabasePrefix + pagesVisited,
+                LaunchArguments.SkipContextualHints]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
@@ -64,17 +53,12 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells.staticTexts["Facebook"].exists)
     }
 
-    func testTopSites2Add() throws {
-        throw XCTSkip("MTE-514 Database may not be loaded")
-        /*
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
-        navigator.performAction(Action.CloseURLBarOpen)
+    func testTopSites2Add() {
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
-        */
     }
 
     func testTopSites3RemoveDefaultTopSite() {
@@ -85,9 +69,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
-    func testTopSitesRemoveAllExceptDefaultClearPrivateData() throws {
-        throw XCTSkip("MTE-514 Database may not be loaded")
-        /*
+    func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         // A new site has been added to the top sites
@@ -97,8 +79,6 @@ class ActivityStreamTest: BaseTestCase {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
 
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
@@ -109,7 +89,6 @@ class ActivityStreamTest: BaseTestCase {
         }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         XCTAssertFalse(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
-        */
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
