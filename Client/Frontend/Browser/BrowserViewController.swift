@@ -1254,7 +1254,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         // No content is showing in between the bottom search bar and the searchViewController
         if isBottomSearchBar, keyboardBackdrop == nil {
             keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+            keyboardBackdrop?.backgroundColor = themeManager.currentTheme.colors.layer1
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
             keyboardBackdrop?.snp.makeConstraints { make in
                 make.edges.equalTo(view)
@@ -1886,7 +1886,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         let tabs = tabManager.tabs
         tabs.forEach {
             $0.applyTheme()
-            urlBar.locationView.tabDidChangeContentBlocking($0)
         }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
