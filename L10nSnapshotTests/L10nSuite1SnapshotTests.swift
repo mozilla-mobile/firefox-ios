@@ -28,22 +28,35 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testIntro() {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6433
-//        sleep(3)
-//        waitForExistence(app.scrollViews.staticTexts["WelcomeCardTitleLabel"], timeout: 15)
-//        snapshot("Onboarding-1")
-//
-//        // Swipe to the second screen
-//        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-//        currentScreen += 1
-//        waitForExistence(app.buttons["SignSyncCardPrimaryButton"])
-//        waitForExistence(app.buttons["SignSyncCardSecondaryButton"])
-//        snapshot("Onboarding-2")
-//
-//        // Swipe to the Homescreen
-//        app.buttons["SignSyncCardSecondaryButton"].tap()
-//        currentScreen += 1
-//        snapshot("Homescreen-first-visit")
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
+        snapshot("Onboarding-1")
+
+        // Swipe to the second screen
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
+        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForExistence(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-2")
+
+        // Swipe to the third screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
+        waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
+        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForExistence(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-3")
+
+        // Swipe to the Homescreen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        waitForExistence(app.textFields["url"])
+        waitForExistence(app.webViews["contentView"])
+        print(app.debugDescription)
+        snapshot("Homescreen-first-visit")
     }
 
     func testWebViewContextMenu () throws {
