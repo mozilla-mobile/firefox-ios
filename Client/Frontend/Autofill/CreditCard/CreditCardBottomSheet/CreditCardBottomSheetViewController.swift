@@ -109,6 +109,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         self.viewModel.didUpdateCreditCard = { [weak self] in
             self?.cardTableView.reloadData()
         }
+
+        // Only allow selection when we are in selectSavedCard state
+        // No selection is allowed for save / update states
+        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard ? true : false
     }
 
     required init?(coder: NSCoder) {
