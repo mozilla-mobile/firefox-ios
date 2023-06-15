@@ -21,17 +21,9 @@ private class DarkTabTrayColor: TabTrayColor {
     override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
 }
 
-private class DarkTopTabsColor: TopTabsColor {
-    override var background: UIColor { UIColor.Photon.DarkGrey80 }
-}
-
 private class DarkHomePanelColor: HomePanelColor {
     override var panelBackground: UIColor { return UIColor.Photon.Grey80 }
     override var activityStreamHeaderText: UIColor { return UIColor.Photon.LightGrey05 }
-}
-
-private class DarkSnackBarColor: SnackBarColor {
-// Use defaults
 }
 
 class LegacyDarkTheme: LegacyNormalTheme {
@@ -39,7 +31,7 @@ class LegacyDarkTheme: LegacyNormalTheme {
     override var tableView: TableViewColor { return DarkTableViewColor() }
     override var browser: BrowserColor { return DarkBrowserColor() }
     override var tabTray: TabTrayColor { return DarkTabTrayColor() }
-    override var topTabs: TopTabsColor { return DarkTopTabsColor() }
+    override var topTabs: TopTabsColor { return TopTabsColor() }
     override var homePanel: HomePanelColor { return DarkHomePanelColor() }
-    override var snackbar: SnackBarColor { return DarkSnackBarColor() }
+    override var snackbar: SnackBarColor { return SnackBarColor() }
 }

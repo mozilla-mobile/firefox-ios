@@ -212,15 +212,12 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var profile: Profile
 
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                              backdropCircleColor: themeManager.currentTheme.colors.layerAccentPrivate)
+                                                              isPrivateBadge: true)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
                                                          imageMask: ImageIdentifiers.menuWarningMask)
-    var themeManager: ThemeManager
 
-    init(profile: Profile,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.themeManager = themeManager
+    init(profile: Profile) {
         self.profile = profile
         self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
@@ -428,10 +425,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         if UIDevice.current.userInterfaceIdiom != .pad {
             locationTextField.textDragInteraction?.isEnabled = false
         }
-        let theme = themeManager.currentTheme
-        let isPrivateMode = locationActiveBorderColor == theme.colors.layerAccentPrivateNonOpaque
-        locationTextField.applyUIMode(isPrivate: isPrivateMode, theme: theme)
-        locationTextField.applyTheme(theme: theme)
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -513,8 +506,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         delegate?.urlBarDidEnterOverlayMode(self)
 
-        applyTheme(theme: themeManager.currentTheme)
-
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
         // look squished at the start of the animation and expand to be correct. As a workaround,
@@ -542,7 +533,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
-        applyTheme(theme: themeManager.currentTheme)
     }
 
     func prepareOverlayAnimation() {

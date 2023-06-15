@@ -20,7 +20,7 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     let actionButtons: [ThemeApplicable & UIButton]
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                     backdropCircleColor: UIColor.LegacyDefaults.MobilePrivatePurple)
+                                                     isPrivateBadge: true)
     private let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     private let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
                                                      imageMask: ImageIdentifiers.menuWarningMask)
@@ -136,7 +136,7 @@ extension TabToolbar: TabToolbarProtocol {
 extension TabToolbar: ThemeApplicable, PrivateModeUI {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
-        helper?.setTheme(forButtons: actionButtons)
+        actionButtons.forEach { $0.applyTheme(theme: theme) }
 
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
         appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
