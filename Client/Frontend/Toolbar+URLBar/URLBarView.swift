@@ -21,6 +21,7 @@ private struct URLBarViewUX {
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
+    static let urlBarLineHeight = 0.5
 }
 
 protocol URLBarDelegate: AnyObject {
@@ -118,7 +119,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         return locationContainer
     }()
 
-    let line = UIView()
+    private let line = UIView()
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton()
@@ -205,11 +206,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         set(newURL) {
             locationView.url = newURL
-            if let url = newURL, InternalURL(url)?.isAboutHomeURL ?? false {
-                line.isHidden = true
-            } else {
-                line.isHidden = false
-            }
         }
     }
 
@@ -349,13 +345,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         line.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.top.equalTo(self).offset(0)
+                make.top.equalTo(self)
             } else {
-                make.bottom.equalTo(self)
+                make.bottom.equalTo(self).offset(URLBarViewUX.urlBarLineHeight)
             }
 
             make.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
+            make.height.equalTo(URLBarViewUX.urlBarLineHeight)
         }
 
         progressBar.snp.remakeConstraints { make in
@@ -594,7 +590,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationContainer.layer.borderColor = borderColor.cgColor
 
         if inOverlayMode {
-            line.isHidden = inOverlayMode
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView)
