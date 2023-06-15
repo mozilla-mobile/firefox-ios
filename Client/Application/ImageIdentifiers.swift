@@ -16,6 +16,7 @@ public struct ImageIdentifiers {
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
         public static let appMenu = "appMenuLarge"
+        public static let appendUp = "appendUpLarge"
     }
 
     public static let actionAddBookmark = "action_bookmark"
