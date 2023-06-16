@@ -16,7 +16,7 @@ class IntegrationTests: BaseTestCase {
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
-    let historyDB = "exampleURLHistoryBookmark.db"
+    let historyDB = "exampleURLHistoryBookmark-places.db"
 
     override func setUp() {
      // Test name looks like: "[Class testFunc]", parse out the function name
@@ -81,9 +81,12 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistory () {
-        // History is generated using the DB so go directly to Sign in
+        // navigator.openURL("example.com")
+        navigator.goto(LibraryPanel_History)
+        waitForExistence(app.tables.cells.staticTexts["http://example.com/"])
         // Sign into Firefox Accounts
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -141,7 +144,7 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (cso) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
