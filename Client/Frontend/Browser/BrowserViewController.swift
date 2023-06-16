@@ -1986,11 +1986,17 @@ extension BrowserViewController: LegacyTabDelegate {
 
                 switch type {
                 case .formInput:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
+                    self?.profile.autofill.listCreditCards(completion: { cards, error in
+                        guard let cards = cards, !cards.isEmpty, error == nil
+                        else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            tabWebView.accessoryView.reloadViewFor(.creditCard)
+                            tabWebView.reloadInputViews()
+                        }
+                    })
                 case .formSubmit:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
                     self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
                 }
