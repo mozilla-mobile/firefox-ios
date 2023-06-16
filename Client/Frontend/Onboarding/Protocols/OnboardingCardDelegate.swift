@@ -25,7 +25,7 @@ protocol OnboardingCardDelegate: AnyObject {
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
-    func presentDefaultBrowserPopup()
+    func presentDefaultBrowserPopup(from name: String)
 
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
@@ -34,7 +34,7 @@ protocol OnboardingCardDelegate: AnyObject {
         flowType: FxAPageType,
         referringPage: ReferringPage)
 
-    func showNextPage(from cardNamed: String, completionIfLastCard completion: () -> Void)
+    func showNextPage(from cardNamed: String, completionIfLastCard completion: (() -> Void)?)
     func pageChanged(from cardName: String)
 }
 
@@ -69,11 +69,13 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Default Browser Popup
-    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6359
-    func presentDefaultBrowserPopup() {
+    func presentDefaultBrowserPopup(from name: String) {
         guard let a11yIdRoot = viewModel.availableCards.first?.viewModel.a11yIdRoot else { return }
         let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
-        let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel)
+        let viewController = OnboardingDefaultSettingsViewController(
+            viewModel: infoModel,
+            buttonTappedFinishFlow: { self.showNextPage(from: name, completionIfLastCard: nil) }
+        )
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
@@ -113,10 +115,10 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     // MARK: - Page helpers
     func showNextPage(
         from cardName: String,
-        completionIfLastCard completion: () -> Void
+        completionIfLastCard completion: (() -> Void)?
     ) {
         guard cardName != viewModel.availableCards.last?.viewModel.name else {
-            completion()
+            completion?()
             return
         }
 

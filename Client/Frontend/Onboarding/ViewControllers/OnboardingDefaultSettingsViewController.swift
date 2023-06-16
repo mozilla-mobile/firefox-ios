@@ -32,6 +32,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         static let bottomPaddingPad: CGFloat = 60
     }
 
+    // MARK: - Properties
     lazy var contentContainerView: UIView = .build { stack in
         stack.backgroundColor = .clear
     }
@@ -82,11 +83,16 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var contentViewHeightConstraint: NSLayoutConstraint!
+    var didTapButton = false
+    var buttonTappedFinishFlow: (() -> Void)?
 
+    // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
+         buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.buttonTappedFinishFlow = buttonTappedFinishFlow
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -97,18 +103,24 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        listenForThemeChange(view)
+        setupNotifications()
+        setupView()
+        updateLayout()
+        applyTheme()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        listenForThemeChange(view)
-        setupView()
-        updateLayout()
-        applyTheme()
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     func setupView() {
@@ -158,6 +170,14 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         ])
     }
 
+    private func setupNotifications() {
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(appDidEnterBackgroundNotification),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+    }
+
     private func updateLayout() {
         titleLabel.text = viewModel.title
         primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
@@ -177,6 +197,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         view.backgroundColor = .white
     }
 
+    // MARK: - Helper methods
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
         let attributedStrings = viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize))
@@ -195,10 +216,21 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 
     @objc
+    func appDidEnterBackgroundNotification() {
+        if didTapButton {
+            dismiss(animated: false)
+            buttonTappedFinishFlow?()
+        }
+    }
+
+    // MARK: - Button actions
+    @objc
     func primaryAction() {
+        didTapButton = true
         DefaultApplicationHelper().openSettings()
     }
 
+    // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
