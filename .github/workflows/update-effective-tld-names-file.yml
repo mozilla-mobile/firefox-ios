@@ -36,13 +36,14 @@ jobs:
         files_diff=$(cmp --silent tmp.dat $file_in_repo && echo '### SUCCESS: Files Are Identical! ###' || echo '### WARNING: Files Are Different! ###')
 
         echo $files_diff
+        echo "current_date=$current_date" >> $GITHUB_ENV
 
         if [[ "$files_diff" == *"Different"* ]]; then
           echo "Files are different"
           cp tmp.dat Shared/effective_tld_names.dat
           echo "branch_name=refactor-update-effective-tld-names" >> $GITHUB_ENV
           echo "pr_title=Refactor [vXXX] Update effective_tld_names file $current_date" >> $GITHUB_ENV
-          echo "pr_body=This automated PR updates the effective_tld_names file"
+          echo "pr_body=This automated PR updates the effective_tld_names file" >> $GITHUB_ENV
           rm tmp.dat
         fi
     - name: Update Existing File
