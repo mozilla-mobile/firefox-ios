@@ -10,6 +10,7 @@ import Shared
 enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
     case save
     case update
+    case selectSavedCard
 
     var title: String {
         switch self {
@@ -17,6 +18,8 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
             return .CreditCard.RememberCreditCard.MainTitle
         case .update:
             return .CreditCard.UpdateCreditCard.MainTitle
+        case .selectSavedCard:
+            return .CreditCard.SelectCreditCard.MainTitle
         }
     }
 
@@ -26,7 +29,7 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
             return String(
                 format: String.CreditCard.RememberCreditCard.Header,
                 AppName.shortName.rawValue)
-        case .update:
+        case .selectSavedCard, .update:
             return nil
         }
     }
@@ -37,6 +40,8 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
             return .CreditCard.RememberCreditCard.MainButtonTitle
         case .update:
             return .CreditCard.UpdateCreditCard.MainButtonTitle
+        case .selectSavedCard:
+            return ""
         }
     }
 
@@ -46,11 +51,13 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
             return .CreditCard.RememberCreditCard.SecondaryButtonTitle
         case .update:
             return .CreditCard.UpdateCreditCard.SecondaryButtonTitle
+        case .selectSavedCard:
+            return ""
         }
     }
 }
 
-struct CreditCardBottomSheetViewModel {
+class CreditCardBottomSheetViewModel {
     private var logger: Logger
     let profile: Profile
     let autofill: RustAutofill
@@ -60,9 +67,15 @@ struct CreditCardBottomSheetViewModel {
         }
     }
 
+    var creditCards: [CreditCard]? {
+        didSet {
+            didUpdateCreditCard?()
+        }
+    }
+
     var didUpdateCreditCard: (() -> Void)?
     var decryptedCreditCard: UnencryptedCreditCardFields?
-
+    var storedCreditCards: [CreditCard] = [CreditCard]()
     var state: CreditCardBottomSheetState
 
     init(profile: Profile,
@@ -72,6 +85,10 @@ struct CreditCardBottomSheetViewModel {
          state: CreditCardBottomSheetState) {
         self.profile = profile
         self.autofill = profile.autofill
+        self.state = state
+        self.logger = logger
+        creditCards = [CreditCard]()
+        updateCreditCardList({ _ in })
         if creditCard != nil {
             self.creditCard = creditCard
             self.decryptedCreditCard = decryptedCreditCard
@@ -79,8 +96,6 @@ struct CreditCardBottomSheetViewModel {
             self.decryptedCreditCard = decryptedCreditCard
             self.creditCard = decryptedCreditCard?.convertToTempCreditCard()
         }
-        self.state = state
-        self.logger = logger
     }
 
     // MARK: Main Button Action
@@ -94,9 +109,9 @@ struct CreditCardBottomSheetViewModel {
                         completion(nil)
                         return
                     }
-                    logger.log("Unable to save credit card with error: \(error)",
-                               level: .fatal,
-                               category: .creditcard)
+                    self.logger.log("Unable to save credit card with error: \(error)",
+                                    level: .fatal,
+                                    category: .creditcard)
                     completion(error)
                 }
             }
@@ -108,12 +123,14 @@ struct CreditCardBottomSheetViewModel {
                         completion(nil)
                         return
                     }
-                    logger.log("Unable to save credit card with error: \(error)",
-                               level: .fatal,
-                               category: .creditcard)
+                    self.logger.log("Unable to save credit card with error: \(error)",
+                                    level: .fatal,
+                                    category: .creditcard)
                     completion(error)
                 }
             }
+        case .selectSavedCard:
+            break
         }
     }
 
@@ -146,7 +163,8 @@ struct CreditCardBottomSheetViewModel {
     }
 
     // MARK: Helper Methods
-    func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState) -> UnencryptedCreditCardFields? {
+    func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
+                                  row: Int? = nil) -> UnencryptedCreditCardFields? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
@@ -161,25 +179,61 @@ struct CreditCardBottomSheetViewModel {
                                                                        with: ccNumberDecrypted,
                                                                        fieldValues: decryptedCreditCard)
             return updatedDecryptedCreditCard
+        case .selectSavedCard:
+            guard let row = row,
+                  let selectedCreditCard = getSavedCreditCard(for: row)
+            else {
+                return nil
+            }
+
+            let decryptedCreditCardNum = decryptCreditCardNumber(card: selectedCreditCard)
+
+            guard !decryptedCreditCardNum.isEmpty else {
+                return nil
+            }
+
+            let plainTextCard = UnencryptedCreditCardFields(ccName: selectedCreditCard.ccName,
+                                                            ccNumber: decryptedCreditCardNum,
+                                                            ccNumberLast4: selectedCreditCard.ccNumberLast4,
+                                                            ccExpMonth: selectedCreditCard.ccExpMonth,
+                                                            ccExpYear: selectedCreditCard.ccExpYear,
+                                                            ccType: selectedCreditCard.ccType)
+            return plainTextCard
         }
     }
 
     func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
-                                      ccNumberDecrypted: String) -> CreditCard? {
+                                      ccNumberDecrypted: String,
+                                      row: Int? = nil) -> CreditCard? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard.convertToTempCreditCard()
         case .update:
-            guard let creditCard = creditCard, !ccNumberDecrypted.isEmpty
+            guard let creditCard = creditCard, !ccNumberDecrypted.isEmpty,
+                  let updatedDecryptedCreditCard = updateDecryptedCreditCard(
+                    from: creditCard,
+                    with: ccNumberDecrypted,
+                    fieldValues: decryptedCreditCard)
             else {
                 return nil
             }
-            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
-                                                                       with: ccNumberDecrypted,
-                                                                       fieldValues: decryptedCreditCard)
-            return updatedDecryptedCreditCard?.convertToTempCreditCard()
+            return updatedDecryptedCreditCard.convertToTempCreditCard()
+        case .selectSavedCard:
+            guard let row = row else { return nil }
+            return getSavedCreditCard(for: row)
         }
+    }
+
+    private func getSavedCreditCard(for row: Int) -> CreditCard? {
+        guard row > -1,
+              let creditCards = creditCards,
+              !creditCards.isEmpty,
+              row < creditCards.count
+        else {
+            return nil
+        }
+        return creditCards[row]
     }
 
     func updateDecryptedCreditCard(from originalCreditCard: CreditCard,
@@ -219,5 +273,27 @@ struct CreditCardBottomSheetViewModel {
         guard let card = card else { return "" }
         let decryptedCardNum = autofill.decryptCreditCardNumber(encryptedCCNum: card.ccNumberEnc)
         return decryptedCardNum ?? ""
+    }
+
+    private func listStoredCreditCards(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+        autofill.listCreditCards(completion: { creditCards, error in
+            guard let creditCards = creditCards,
+                  error == nil else {
+                completionHandler(nil)
+                return
+            }
+            completionHandler(creditCards)
+        })
+    }
+
+    func updateCreditCardList(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+        if state == .selectSavedCard {
+            listStoredCreditCards { [weak self] cards in
+                DispatchQueue.main.async {
+                    self?.creditCards = cards
+                    completionHandler(cards)
+                }
+            }
+        }
     }
 }

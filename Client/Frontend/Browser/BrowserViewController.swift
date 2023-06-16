@@ -2023,13 +2023,27 @@ extension BrowserViewController: LegacyTabDelegate {
 
                 switch type {
                 case .formInput:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
+                    self?.profile.autofill.listCreditCards(completion: { cards, error in
+                        guard let cards = cards, !cards.isEmpty, error == nil
+                        else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            tabWebView.accessoryView.reloadViewFor(.creditCard)
+                            tabWebView.reloadInputViews()
+                        }
+                    })
                 case .formSubmit:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
                     self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
+                }
+
+                tabWebView.accessoryView.savedCardsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showBottomSheetCardViewController(creditCard: nil,
+                                                                decryptedCard: nil,
+                                                                viewType: .selectSavedCard)
+                    }
                 }
             }
         }
@@ -2642,6 +2656,22 @@ extension BrowserViewController {
 
         viewController.didTapManageCardsClosure = {
             self.showCreditCardSettings()
+        }
+
+        viewController.didSelectCreditCardToFill = { [unowned self] plainTextCard in
+            guard let currentTab = self.tabManager.selectedTab else {
+                return
+            }
+            CreditCardHelper.injectCardInfo(logger: self.logger,
+                                            card: plainTextCard,
+                                            tab: currentTab) { error in
+                guard let error = error else {
+                    return
+                }
+                self.logger.log("Credit card bottom sheet injection \(error)",
+                                level: .debug,
+                                category: .webview)
+            }
         }
 
         var bottomSheetViewModel = BottomSheetViewModel()

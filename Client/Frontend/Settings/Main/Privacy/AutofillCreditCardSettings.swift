@@ -43,7 +43,7 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
                     navController.pushViewController(viewController,
                                                      animated: true)
                 case .failure:
-                    viewController.dismissVC()
+                    break
                 }
             }
         } else {

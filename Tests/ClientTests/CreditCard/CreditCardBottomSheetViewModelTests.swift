@@ -155,6 +155,8 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.title == .CreditCard.UpdateCreditCard.MainTitle)
     }
 
+    // Update the test to also account for save and selected card flow
+    // Ticket: FXIOS-6719
     func test_save_getPlainCreditCardValues() {
         viewModel.state = .save
         let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
@@ -163,6 +165,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+    }
+
+    func test_select_PlainCreditCard_WithNegativeRow() {
+        viewModel.state = .selectSavedCard
+        viewModel.creditCards = [sampleCreditCard]
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: -1)
+        XCTAssertNil(value)
     }
 
     func test_save_getConvertedCreditCardValues() {
@@ -189,6 +198,45 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForSpecificRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: 0)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccName, self.samplePlainTextCard.ccName)
+        XCTAssertEqual(value!.ccExpMonth, self.samplePlainTextCard.ccExpMonth)
+        XCTAssertEqual(value!.ccNumberLast4, self.samplePlainTextCard.ccNumberLast4)
+        XCTAssertEqual(value!.ccType, self.samplePlainTextCard.ccType)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForInvalidRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "")
+        XCTAssertNil(value)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForMinusRow() {
+        viewModel.creditCards = [sampleCreditCard]
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: -1)
+        XCTAssertNil(value)
+    }
+
+    func test_update_selectConvertedCreditCardValues_ForEmptyCreditCards() {
+        viewModel.creditCards = []
+
+        let value = self.viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                                ccNumberDecrypted: "",
+                                                                row: 1)
+        XCTAssertNil(value)
     }
 
     func test_updateDecryptedCreditCard() {
@@ -237,5 +285,29 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 1.0)
+    }
+
+    func test_updateCreditCardList() {
+        let expectation = expectation(description: "wait for credit card to be added")
+        viewModel.creditCard = nil
+        viewModel.decryptedCreditCard = nil
+        // Add a sample card to the storage
+        viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
+            guard error == nil, let creditCard = creditCard else {
+                XCTFail()
+                return
+            }
+            // Make the view model state selected card
+            self.viewModel.state = .selectSavedCard
+            // Perform update
+            self.viewModel.updateCreditCardList({ cards in
+                // Check if the view model updated the list
+                let cards = self.viewModel.creditCards
+                XCTAssertNotNil(cards)
+                XCTAssert(!cards!.isEmpty)
+                expectation.fulfill()
+            })
+        }
+        waitForExpectations(timeout: 3.0)
     }
 }

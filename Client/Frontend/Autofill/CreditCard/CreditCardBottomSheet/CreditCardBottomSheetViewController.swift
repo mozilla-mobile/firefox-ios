@@ -36,6 +36,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     var didTapNotNowClosure: (() -> Void)?
     var didTapYesClosure: ((Error?) -> Void)?
     var didTapManageCardsClosure: (() -> Void)?
+    var didSelectCreditCardToFill: ((UnencryptedCreditCardFields) -> Void)?
 
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
@@ -46,7 +47,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         cardTableView.backgroundColor = .clear
         cardTableView.dataSource = self
         cardTableView.delegate = self
-        cardTableView.allowsSelection = false
+        cardTableView.allowsSelection = true
         cardTableView.separatorColor = .clear
         cardTableView.separatorStyle = .none
         cardTableView.isScrollEnabled = false
@@ -108,6 +109,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         self.viewModel.didUpdateCreditCard = { [weak self] in
             self?.cardTableView.reloadData()
         }
+
+        // Only allow selection when we are in selectSavedCard state
+        // No selection is allowed for save / update states
+        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard ? true : false
     }
 
     required init?(coder: NSCoder) {
@@ -139,7 +144,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     // MARK: View Setup
     func addSubviews() {
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-        buttonsContainerStackView.addArrangedSubview(yesButton)
+
+        if viewModel.state != .selectSavedCard {
+            buttonsContainerStackView.addArrangedSubview(yesButton)
+        }
         if isIpad {
             buttonsContainerStackView.addArrangedSubview(notNowButton)
         }
@@ -240,7 +248,12 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch viewModel.state {
+        case .save, .update:
+            return 1
+        case .selectSavedCard:
+            return viewModel.creditCards?.count ?? 1
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,7 +265,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
               let creditCard = viewModel.getConvertedCreditCardValues(
                 bottomSheetState: viewModel.state,
-                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard)
+                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard),
+                row: indexPath.row
               )
         else {
             return UITableViewCell()
@@ -283,7 +297,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         case .save:
             let emptyView = UIView()
             return emptyView
-        case .update:
+        case .update, .selectSavedCard:
             guard let footerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: CreditCardBottomSheetFooterView.cellIdentifier
             ) as? CreditCardBottomSheetFooterView else {
@@ -306,6 +320,17 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let plainTextCreditCard = viewModel.getPlainCreditCardValues(
+            bottomSheetState: .selectSavedCard,
+            row: indexPath.row
+        ) else {
+            return
+        }
+        didSelectCreditCardToFill?(plainTextCreditCard)
+        dismissVC()
     }
 
     // MARK: Themable
