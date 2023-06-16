@@ -167,7 +167,7 @@ class TabCell: UICollectionViewCell,
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
-        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)
         if !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
         }
@@ -193,7 +193,7 @@ class TabCell: UICollectionViewCell,
         // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
-            smallFaviconView.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+            smallFaviconView.image = UIImage(named: ImageIdentifiers.Large.globe)
             faviconBG.isHidden = false
             screenshotView.image = nil
 
