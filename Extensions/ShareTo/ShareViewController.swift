@@ -227,7 +227,7 @@ class ShareViewController: UIViewController {
         icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
 
         if hasNavigation {
-            let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
+            let navButton = UIImageView(image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = themeManager.currentTheme.colors.textPrimary
             navButton.translatesAutoresizingMaskIntoConstraints = false

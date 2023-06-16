@@ -75,7 +75,7 @@ extension FxBookmarkNode {
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: ImageIdentifiers.menuChevron)
+        return UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     }
 
     private var bookmarkFolderIconNormal: UIImage? {

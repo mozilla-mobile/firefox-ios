@@ -38,7 +38,7 @@ class HistoryPanel: UIViewController,
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistorySheetProvider
     var keyboardState: KeyboardState?
-    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
+    var chevronImage = UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

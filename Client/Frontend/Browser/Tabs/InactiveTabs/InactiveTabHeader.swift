@@ -11,7 +11,7 @@ enum ExpandButtonState {
     var image: UIImage? {
         switch self {
         case .right:
-            return UIImage(named: ImageIdentifiers.menuChevron)?.imageFlippedForRightToLeftLayoutDirection()
+            return UIImage(named: ImageIdentifiers.Large.chevronRight)?.imageFlippedForRightToLeftLayoutDirection()
         case .down:
             return UIImage(named: ImageIdentifiers.findNext)
         }
