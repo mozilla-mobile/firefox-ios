@@ -32,6 +32,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         static let bottomPaddingPad: CGFloat = 60
     }
 
+    // MARK: - Properties
     lazy var contentContainerView: UIView = .build { stack in
         stack.backgroundColor = .clear
     }
@@ -83,6 +84,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     private var contentViewHeightConstraint: NSLayoutConstraint!
 
+    // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -97,17 +99,18 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        applyTheme()
-    }
-
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         listenForThemeChange(view)
         setupView()
         updateLayout()
+        applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         applyTheme()
     }
 
@@ -177,6 +180,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         view.backgroundColor = .white
     }
 
+    // MARK: - Helper methods
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
         let attributedStrings = viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize))
@@ -194,11 +198,13 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         }
     }
 
+    // MARK: - Button actions
     @objc
     func primaryAction() {
         DefaultApplicationHelper().openSettings()
     }
 
+    // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
