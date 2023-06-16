@@ -378,7 +378,7 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.tables["Context Menu"])
 
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.history].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.history].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.downloads].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)

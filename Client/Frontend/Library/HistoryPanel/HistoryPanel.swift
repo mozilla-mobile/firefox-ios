@@ -549,7 +549,9 @@ class HistoryPanel: UIViewController,
         tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
         let tintColor = themeManager.currentTheme.colors.textPrimary
-        let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
+        let searchBarImage = UIImage(named: ImageIdentifiers.Large.history)?
+            .withRenderingMode(.alwaysTemplate)
+            .tinted(withColor: tintColor)
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
         searchbar.tintColor = themeManager.currentTheme.colors.textPrimary
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary]
