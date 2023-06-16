@@ -575,6 +575,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
+        urlBar.applyTheme(theme: themeManager.currentTheme)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
 
         urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         view.addSubview(header)
@@ -2917,21 +2920,18 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: LegacyNotificationThemeable {
     func applyTheme() {
-        guard self.isViewLoaded else { return }
-        // TODO: Clean up after FXIOS-5109
+        // Clean up with FXIOS-6708
         let currentTheme = themeManager.currentTheme
-        let ui: [ThemeApplicable?] = [urlBar,
-                                      toolbar,
-                                      readerModeBar]
-        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: currentTheme)
-        ui.forEach { $0?.applyTheme(theme: currentTheme) }
+        readerModeBar?.applyTheme(theme: currentTheme)
         zoomPageBar?.applyTheme(theme: currentTheme)
         topTabsViewController?.applyTheme()
 
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
-        keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
+        let hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.backgroundColor = hasTopTabs ? currentTheme.colors.layer3 : currentTheme.colors.layer1
+        keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         setNeedsStatusBarAppearanceUpdate()
 
+        // Remove as part of FXIOS-5109
         (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
