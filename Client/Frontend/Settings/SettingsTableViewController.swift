@@ -267,12 +267,14 @@ class BoolSetting: Setting, FeatureFlaggable {
     convenience init(
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
+        statusText: NSAttributedString? = nil,
         settingDidChange: ((Bool) -> Void)? = nil
     ) {
         self.init(
             prefs: nil,
             defaultValue: nil,
             attributedTitleText: titleText,
+            attributedStatusText: statusText,
             featureFlagName: featureFlagID,
             settingDidChange: settingDidChange)
     }
@@ -766,7 +768,6 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
@@ -868,10 +869,7 @@ class SettingsTableViewController: ThemedTableViewController {
             }
             return cell
         }
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell else {
-            return ThemedTableViewCell()
-        }
-        return cell
+        return dequeueCellFor(indexPath: indexPath)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

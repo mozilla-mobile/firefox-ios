@@ -307,7 +307,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         if showToolbar {
             toolbar.isHidden = false
             toolbar.tabToolbarDelegate = self
-            toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme)
             toolbar.applyTheme(theme: themeManager.currentTheme)
             toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
@@ -1583,7 +1583,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)
         }
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate)
+        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
     }
 
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
@@ -2310,7 +2310,7 @@ extension BrowserViewController: TabManagerDelegate {
                 applyTheme()
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate) }
+                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
@@ -2923,7 +2923,7 @@ extension BrowserViewController: LegacyNotificationThemeable {
         let ui: [ThemeApplicable?] = [urlBar,
                                       toolbar,
                                       readerModeBar]
-        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: currentTheme)
         ui.forEach { $0?.applyTheme(theme: currentTheme) }
         zoomPageBar?.applyTheme(theme: currentTheme)
         topTabsViewController?.applyTheme()

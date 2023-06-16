@@ -38,12 +38,11 @@ class TabLocationView: UIView, FeatureFlaggable {
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
 
-    private let themeManager: ThemeManager
-    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
+    /// Tracking protection button, gets updated from tabDidChangeContentBlocking
+    private var blockerStatus: BlockerStatus = .noBlockedURLs
+    private var hasSecureContent = false
 
-   lazy var baseURLFontColor: UIColor = themeManager.currentTheme.colors.textPrimary {
-        didSet { updateTextWithURL() }
-    }
+    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     var url: URL? {
         didSet {
@@ -71,14 +70,9 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    lazy var placeholder: NSAttributedString = {
-        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textSecondary])
-    }()
-
     lazy var urlTextField: URLTextField = .build { urlTextField in
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
-        urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultChromeFont
@@ -94,6 +88,12 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
+    private func setURLTextfieldPlaceholder(theme: Theme) {
+        let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
+        urlTextField.attributedPlaceholder = NSAttributedString(string: .TabLocationURLPlaceholder,
+                                                                attributes: attributes)
+    }
+
     lazy var trackingProtectionButton: LockButton = .build { trackingProtectionButton in
         trackingProtectionButton.addTarget(self, action: #selector(self.didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.clipsToBounds = false
@@ -103,7 +103,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     lazy var shareButton: ShareButton = .build { shareButton in
         shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
         shareButton.clipsToBounds = false
-        shareButton.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
     }
@@ -129,7 +128,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
         reloadButton.addGestureRecognizer(
             UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
-        reloadButton.tintColor = themeManager.currentTheme.colors.iconPrimary
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
@@ -140,7 +138,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     }()
 
     override init(frame: CGRect) {
-        self.themeManager = AppContainer.shared.resolve()
         super.init(frame: frame)
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
@@ -272,6 +269,28 @@ class TabLocationView: UIView, FeatureFlaggable {
             urlTextField.text = url?.absoluteString.replacingCharacters(in: range, with: "")
         }
     }
+
+    private func setTrackingProtection(theme: Theme) {
+        var lockImage: UIImage?
+        if hasSecureContent {
+            let imageID = theme.type.getThemedImageName(name: ImageIdentifiers.lockBlocked)
+            lockImage = UIImage(imageLiteralResourceName: imageID)
+        } else if let tintColor = trackingProtectionButton.tintColor {
+            lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
+                .withTintColor(tintColor, renderingMode: .alwaysTemplate)
+        }
+
+        switch blockerStatus {
+        case .blocking, .noBlockedURLs:
+            trackingProtectionButton.setImage(lockImage, for: .normal)
+        case .safelisted:
+            if let smallDotImage = UIImage(systemName: ImageIdentifiers.circleFill)?.withTintColor(theme.colors.iconAccentBlue) {
+                trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+            }
+        case .disabled:
+            trackingProtectionButton.setImage(lockImage, for: .normal)
+        }
+    }
 }
 
 // MARK: - Private
@@ -342,13 +361,14 @@ extension TabLocationView: AccessibilityActionsSource {
 // MARK: ThemeApplicable
 extension TabLocationView: ThemeApplicable {
     func applyTheme(theme: Theme) {
+        setURLTextfieldPlaceholder(theme: theme)
         urlTextField.textColor = theme.colors.textPrimary
-        baseURLFontColor = theme.colors.textPrimary
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
         menuBadge.badge.tintBackground(color: theme.colors.layer3)
+        setTrackingProtection(theme: theme)
     }
 }
 
@@ -362,26 +382,10 @@ extension TabLocationView: TabEventHandler {
 
         ensureMainThread { [self] in
             trackingProtectionButton.alpha = 1.0
-
-            var lockImage: UIImage?
-            let imageID = themeManager.currentTheme.type.getThemedImageName(name: "lock_blocked")
-            if !(tab.webView?.hasOnlySecureContent ?? false) {
-                lockImage = UIImage(imageLiteralResourceName: imageID)
-            } else if let tintColor = trackingProtectionButton.tintColor {
-                lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
-                    .withTintColor(tintColor, renderingMode: .alwaysTemplate)
-            }
-
-            switch blocker.status {
-            case .blocking, .noBlockedURLs:
-                trackingProtectionButton.setImage(lockImage, for: .normal)
-            case .safelisted:
-                if let smallDotImage = UIImage(systemName: "circle.fill")?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
-                    trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
-                }
-            case .disabled:
-                trackingProtectionButton.setImage(lockImage, for: .normal)
-            }
+            let themeManager: ThemeManager = AppContainer.shared.resolve()
+            self.blockerStatus = blocker.status
+            self.hasSecureContent = !(tab.webView?.hasOnlySecureContent ?? false)
+            setTrackingProtection(theme: themeManager.currentTheme)
         }
     }
 

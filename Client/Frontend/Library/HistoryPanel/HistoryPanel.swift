@@ -46,7 +46,7 @@ class HistoryPanel: UIViewController,
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
-    var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
+    var diffableDataSource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
 
     var shouldShowToolBar: Bool {
         return state == .history(state: .mainView) || state == .history(state: .search)
@@ -107,7 +107,7 @@ class HistoryPanel: UIViewController,
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
-        tableView.dataSource = self.diffableDatasource
+        tableView.dataSource = self.diffableDataSource
         tableView.addGestureRecognizer(self.longPressRecognizer)
         tableView.accessibilityIdentifier = a11yIds.tableView
         tableView.prefetchDataSource = self
@@ -177,7 +177,7 @@ class HistoryPanel: UIViewController,
         listenForThemeChange(view)
         handleRefreshControl()
         setupLayout()
-        configureDatasource()
+        configureDataSource()
         applyTheme()
     }
 
@@ -185,7 +185,9 @@ class HistoryPanel: UIViewController,
         super.viewWillAppear(animated)
 
         bottomStackView.isHidden = !viewModel.isSearchInProgress
-        fetchDataAndUpdateLayout()
+        if viewModel.shouldResetHistory {
+            fetchDataAndUpdateLayout()
+        }
         DispatchQueue.main.async {
             self.refreshRecentlyClosedCell()
         }
@@ -264,7 +266,7 @@ class HistoryPanel: UIViewController,
     // MARK: - Datasource helpers
 
     func siteAt(indexPath: IndexPath) -> Site? {
-        guard let siteItem = diffableDatasource?.itemIdentifier(for: indexPath) as? Site else { return nil }
+        guard let siteItem = diffableDataSource?.itemIdentifier(for: indexPath) as? Site else { return nil }
 
         return siteItem
     }
@@ -331,8 +333,8 @@ class HistoryPanel: UIViewController,
     // MARK: - UITableViewDataSource
 
     /// Handles dequeuing the appropriate type of cell when needed.
-    private func configureDatasource() {
-        diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+    private func configureDataSource() {
+        diffableDataSource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
 
             if let historyActionable = item as? HistoryActionablesModel {
@@ -461,14 +463,14 @@ class HistoryPanel: UIViewController,
         }
         snapshot.appendItems(viewModel.historyActionables, toSection: .additionalHistoryActions)
 
-        diffableDatasource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
+        diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
         updateEmptyPanelState()
     }
 
     // MARK: - Swipe Action helpers
 
     func removeHistoryItem(at indexPath: IndexPath) {
-        guard let historyItem = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
+        guard let historyItem = diffableDataSource?.itemIdentifier(for: indexPath) else { return }
 
         viewModel.removeHistoryItems(item: [historyItem], at: indexPath.section)
 
@@ -480,7 +482,7 @@ class HistoryPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if let item = diffableDatasource?.itemIdentifier(for: indexPath),
+        if let item = diffableDataSource?.itemIdentifier(for: indexPath),
            item as? HistoryActionablesModel != nil {
             return nil
         }
@@ -565,7 +567,7 @@ extension HistoryPanel: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
+        guard let item = diffableDataSource?.itemIdentifier(for: indexPath) else { return }
 
         if let site = item as? Site {
             handleSiteItemTapped(site: site)
@@ -767,7 +769,7 @@ extension HistoryPanel {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint),
-              diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel == nil
+              diffableDataSource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel == nil
         else { return }
 
         presentContextMenu(for: indexPath)
@@ -785,7 +787,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
 
-        fetchDataAndUpdateLayout(animating: false)
+        fetchDataAndUpdateLayout()
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {

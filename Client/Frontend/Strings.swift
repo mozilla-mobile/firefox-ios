@@ -1244,11 +1244,16 @@ extension String {
                     tableName: nil,
                     value: "Recommended by Pocket",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-                public static let SponsoredPocket = MZLocalizedString(
-                    key: "Settings.Home.Option.SponsoredPocket.v103",
-                    tableName: nil,
-                    value: "Sponsored stories",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off")
+                public static let ThoughtProvokingStories = MZLocalizedString(
+                    key: "Settings.Home.Option.ThoughtProvokingStories.v116",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Thought-Provoking Stories",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
+                public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
+                    key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Articles powered by Pocket",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,

@@ -24,7 +24,19 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        dequeueCellFor(indexPath: indexPath)
+    }
+
+    /// Dequeues a ThemedTableViewCell for the provided IndexPath.
+    /// 
+    /// This method could be overridden by subclasses, if subclasses of ThemedTableViewCell are needed to be dequeued.
+    /// In order to deque subclasses of ThemedTableViewCell they must be registered in the table view.
+    func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell
+        else {
+            return ThemedTableViewCell()
+        }
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -43,6 +55,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(cellType: ThemedTableViewCell.self)
         applyTheme()
         listenForThemeChange(view)
     }
