@@ -97,7 +97,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.requestDesktopSite])
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.deviceDesktop])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)

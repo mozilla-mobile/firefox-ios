@@ -354,11 +354,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let siteTypeTelemetryObject: TelemetryWrapper.EventObject
         if defaultUAisDesktop {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
-            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestDesktopSite : ImageIdentifiers.Large.deviceMobile
+            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.Large.deviceDesktop : ImageIdentifiers.Large.deviceMobile
             siteTypeTelemetryObject = .requestDesktopSite
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
-            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.Large.deviceMobile : ImageIdentifiers.requestDesktopSite
+            toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.Large.deviceMobile : ImageIdentifiers.Large.deviceDesktop
             siteTypeTelemetryObject = .requestMobileSite
         }
 

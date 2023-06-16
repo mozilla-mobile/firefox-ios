@@ -970,7 +970,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState in
         }
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceDesktop], to: RequestDesktopSite)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceMobile], to: RequestMobileSite)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.findInPage], to: FindInPage)
         // TODO: Add new state
