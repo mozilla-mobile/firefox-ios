@@ -83,12 +83,16 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var contentViewHeightConstraint: NSLayoutConstraint!
+    var didTapButton: Bool = false
+    var buttonTappedFinishFlow: (() -> Void)?
 
     // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
+         buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.buttonTappedFinishFlow = buttonTappedFinishFlow
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -104,6 +108,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         super.viewDidLoad()
 
         listenForThemeChange(view)
+        setupNotifications()
         setupView()
         updateLayout()
         applyTheme()
@@ -112,6 +117,10 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     func setupView() {
@@ -161,6 +170,14 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         ])
     }
 
+    private func setupNotifications() {
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(appDidBecomeActiveNotification),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+    }
+
     private func updateLayout() {
         titleLabel.text = viewModel.title
         primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
@@ -198,9 +215,17 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         }
     }
 
+    @objc
+    func appDidBecomeActiveNotification() {
+        if didTapButton {
+            dismiss(animated: false)
+        }
+    }
+
     // MARK: - Button actions
     @objc
     func primaryAction() {
+        didTapButton = true
         DefaultApplicationHelper().openSettings()
     }
 

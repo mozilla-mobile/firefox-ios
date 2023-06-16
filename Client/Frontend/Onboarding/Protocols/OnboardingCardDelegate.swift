@@ -73,7 +73,11 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     func presentDefaultBrowserPopup() {
         guard let a11yIdRoot = viewModel.availableCards.first?.viewModel.a11yIdRoot else { return }
         let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
-        let viewController = OnboardingDefaultSettingsViewController(viewModel: infoModel)
+        let viewController = OnboardingDefaultSettingsViewController(
+            viewModel: infoModel,
+            buttonTappedFinishFlow: { showNextPage(from: <#T##String#>, completionIfLastCard: <#T##() -> Void#>)
+            }
+        )
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
