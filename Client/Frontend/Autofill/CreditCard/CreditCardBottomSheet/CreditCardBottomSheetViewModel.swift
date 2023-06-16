@@ -277,7 +277,7 @@ class CreditCardBottomSheetViewModel {
 
     private func listStoredCreditCards(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
         autofill.listCreditCards(completion: { creditCards, error in
-            guard let cards = creditCards,
+            guard let creditCards = creditCards,
                   error == nil else {
                 completionHandler(nil)
                 return
