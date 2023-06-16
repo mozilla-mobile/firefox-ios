@@ -401,7 +401,7 @@ extension String {
             public static let CreditCardUpdateSuccessToastMessage = MZLocalizedString(
                 key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
                 tableName: "RememberCard",
-                value: "Credit Card Updated",
+                value: "Card Information Updated",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
         }
 
