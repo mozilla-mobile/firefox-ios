@@ -20,6 +20,7 @@ public struct ImageIdentifiers {
         public static let checkmark = "checkmarkLarge"
         public static let chevronLeft = "chevronLeftLarge"
         public static let chevronRight = "chevronRightLarge"
+        public static let home = "homeLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
     }

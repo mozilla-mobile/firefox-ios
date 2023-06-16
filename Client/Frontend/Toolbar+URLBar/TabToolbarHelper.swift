@@ -59,7 +59,7 @@ open class TabToolbarHelper: NSObject {
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
-    let ImageHome = UIImage.templateImageNamed("menu-Home")
+    let ImageHome = UIImage.templateImageNamed(ImageIdentifiers.Large.home)
     var themeManager: ThemeManager
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
@@ -116,7 +116,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
         if UIDevice.current.userInterfaceIdiom == .phone {
-            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.home), for: .normal)
         } else {
             toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
         }
@@ -144,7 +144,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
 
         toolbar.homeButton.contentMode = .center
-        toolbar.homeButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        toolbar.homeButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.home), for: .normal)
         toolbar.homeButton.accessibilityLabel = .AppMenu.Toolbar.HomeMenuButtonAccessibilityLabel
         toolbar.homeButton.addTarget(self, action: #selector(didClickHome), for: .touchUpInside)
         toolbar.homeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.homeButton

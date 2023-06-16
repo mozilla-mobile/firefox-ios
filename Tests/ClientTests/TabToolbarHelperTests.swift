@@ -18,7 +18,7 @@ class TabToolbarHelperTests: XCTestCase {
     let menuButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.appMenu)
     let searchButtonImage = UIImage.templateImageNamed("search")
     let imageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
-    let imageHome = UIImage.templateImageNamed("menu-Home")
+    let imageHome = UIImage.templateImageNamed(ImageIdentifiers.Large.home)
 
     override func setUp() {
         super.setUp()
