@@ -668,7 +668,7 @@ extension TabDisplayManager: GroupedTabDelegate {
 extension TabDisplayManager: InactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
-        removeInactiveTabAndReloadView(tabs: [tab])
+        removeSingleInactiveTab(tab)
 
         cfrDelegate?.presentUndoSingleToast { undoButtonPressed in
             guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else {
@@ -695,11 +695,11 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                       completion: { undoButtonPressed in
             undoButtonPressed ?
             self.undoInactiveTabsClose() :
-            self.closeInactiveTabs()
+            self.closeAllInactiveTabs()
         })
     }
 
-    private func closeInactiveTabs() {
+    private func closeAllInactiveTabs() {
         guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
               !inactiveTabs.isEmpty else { return }
 
@@ -732,6 +732,11 @@ extension TabDisplayManager: InactiveTabsDelegate {
         }
 
         collectionView.reloadItems(at: [indexPath])
+    }
+
+    private func removeSingleInactiveTab(_ tab: Tab) {
+        tabManager.removeTab(tab)
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
     }
 
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
