@@ -165,7 +165,7 @@ class BookmarksPanel: SiteTableViewController,
 
     private func getNewFolderAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewFolder,
-                                     iconString: ImageIdentifiers.bookmarkFolder,
+                                     iconString: ImageIdentifiers.Large.folder,
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 

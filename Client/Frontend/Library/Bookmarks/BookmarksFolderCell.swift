@@ -79,14 +79,12 @@ extension FxBookmarkNode {
     }
 
     private var bookmarkFolderIconNormal: UIImage? {
-        return UIImage(named: ImageIdentifiers.bookmarkFolder)?
-            .createScaled(BookmarksPanel.UX.FolderIconSize)
+        return UIImage(named: ImageIdentifiers.Large.folder)?
             .tinted(withColor: UIColor.Photon.Grey90)
     }
 
     private var bookmarkFolderIconDark: UIImage? {
-        return UIImage(named: ImageIdentifiers.bookmarkFolder)?
-            .createScaled(BookmarksPanel.UX.FolderIconSize)
+        return UIImage(named: ImageIdentifiers.Large.folder)?
             .tinted(withColor: UIColor.Photon.Grey10)
     }
 }
