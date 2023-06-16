@@ -104,7 +104,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.requestMobileSite])
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.deviceMobile])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()

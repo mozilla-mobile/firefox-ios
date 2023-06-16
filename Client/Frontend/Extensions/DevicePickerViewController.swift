@@ -21,7 +21,7 @@ private enum LoadingState {
 
 public enum ClientType: String {
     case Desktop = "deviceTypeDesktop"
-    case Mobile = "deviceTypeMobile"
+    case Mobile = "deviceMobileLarge"
     case Tablet = "deviceTypeTablet"
     case VR = "deviceTypeVR"
     case TV = "deviceTypeTV"
