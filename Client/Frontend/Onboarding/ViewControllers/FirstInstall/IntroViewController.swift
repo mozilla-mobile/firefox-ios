@@ -195,7 +195,7 @@ extension IntroViewController: OnboardingCardDelegate {
             askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName) {
-                showNextPageCompletionForLastCard()
+                self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
@@ -210,8 +210,7 @@ extension IntroViewController: OnboardingCardDelegate {
         case .setDefaultBrowser:
             DefaultApplicationHelper().openSettings()
         case .openDefaultBrowserPopup:
-            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5922
-            presentDefaultBrowserPopup()
+            presentDefaultBrowserPopup(from: cardName)
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
                 from: cardName,
