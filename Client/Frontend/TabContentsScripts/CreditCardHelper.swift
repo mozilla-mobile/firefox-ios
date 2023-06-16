@@ -149,8 +149,8 @@ class CreditCardHelper: TabContentScript {
                 }
                 completion(err)
                 logger.log("Credit card script error \(err)",
-                            level: .debug,
-                            category: .webview)
+                           level: .debug,
+                           category: .webview)
             }
         } catch let error as NSError {
             logger.log("Credit card script error \(error)",
