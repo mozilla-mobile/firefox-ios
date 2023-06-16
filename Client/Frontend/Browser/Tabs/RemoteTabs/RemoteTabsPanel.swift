@@ -125,7 +125,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
     }()
 
     var isTabSyncEnabled: Bool {
-        guard let isEnabled = profile.prefs.boolForKey(PrefsKeys.tabSyncEnabled) else {
+        guard let isEnabled = profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) else {
             return false
         }
 

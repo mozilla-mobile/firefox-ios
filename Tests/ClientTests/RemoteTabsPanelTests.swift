@@ -4,12 +4,11 @@
 
 import XCTest
 import Storage
+import Shared
 import Common
 @testable import Client
 
 class RemoteTabsPanelTests: XCTestCase {
-    let tabsEnabledPrefKey = "sync.engine.tabs.enabled"
-
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -139,7 +138,7 @@ private extension RemoteTabsPanelTests {
                      file: StaticString = #file,
                      line: UInt = #line) -> RemoteTabsPanel {
         let profile = MockProfile()
-        profile.prefs.setBool(hasSyncEnabled, forKey: tabsEnabledPrefKey)
+        profile.prefs.setBool(hasSyncEnabled, forKey: PrefsKeys.TabSyncEnabled)
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs
         let panel = RemoteTabsPanel(profile: profile)
