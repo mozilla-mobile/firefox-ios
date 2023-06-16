@@ -22,9 +22,9 @@ final class BrowserCoordinatorTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
-        self.routeBuilder = RouteBuilder { false }
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
+        self.routeBuilder = RouteBuilder()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
@@ -678,6 +678,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
                                file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
+        routeBuilder.configure(isPrivate: false, prefs: profile.prefs)
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
