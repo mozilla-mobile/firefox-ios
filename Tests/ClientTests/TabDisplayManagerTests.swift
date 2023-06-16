@@ -320,18 +320,14 @@ class TabDisplayManagerTests: XCTestCase {
                                                              inactiveTab2]
 
         // Force collectionView reload section to avoid crash
-        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.isUndoButtonPressed = false
         // Force collectionView reload to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
-        let expectation = self.expectation(description: "TabDisplayManagerTests")
-        tabDisplayManager.refreshStore {
-            XCTAssertTrue(tabDisplayManager.inactiveViewModel?.inactiveTabs.isEmpty ?? false, "Inactive tabs should be empty after closing")
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 5)
+        // For delete all inactive tabs we don't actually delete the tabs we collapse
+        // the section and delete after toast delay
+        XCTAssertTrue(tabDisplayManager.inactiveViewModel?.shouldHideInactiveTabs ?? false, "Inactive tabs should be empty after closing")
     }
 
     func testInactiveTabs_grid_undoSingleTab() {

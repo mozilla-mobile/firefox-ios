@@ -688,7 +688,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
 
-        // Reload Inactive Tabs section for user feedback
+        // Hide inactive tabs and reload section to "simulate" deletion
+        inactiveViewModel?.shouldHideInactiveTabs = true
         collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
