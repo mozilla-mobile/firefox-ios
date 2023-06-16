@@ -1663,6 +1663,12 @@ extension String {
                 tableName: "TabsTray",
                 value: "Sync Tabs",
                 comment: "Button label to sync tabs in your Firefox Account")
+
+            public static let SyncTabsDisabled = MZLocalizedString(
+                key: "TabsTray.Sync.SyncTabsDisabled.v116",
+                tableName: "TabsTray",
+                value: "Turn on tab syncing to view a list of tabs from your other devices.",
+                comment: "Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs.")
         }
     }
 }

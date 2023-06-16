@@ -178,7 +178,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             settingDidChange: engineSettingChanged("history"))
         let tabs = BoolSetting(
             prefs: profile.prefs,
-            prefKey: "sync.engine.tabs.enabled",
+            prefKey: PrefsKeys.TabSyncEnabled,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine),
             attributedStatusText: nil,
