@@ -278,7 +278,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getSponsoredContentAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
+                                     iconString: ImageIdentifiers.Large.helpCircle,
+                                     tapHandler: { _ in
             guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
             self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)

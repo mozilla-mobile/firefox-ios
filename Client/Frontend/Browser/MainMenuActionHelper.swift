@@ -421,7 +421,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getHelpAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Help,
-                                     iconString: ImageIdentifiers.help) { _ in
+                                     iconString: ImageIdentifiers.Large.helpCircle) { _ in
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
