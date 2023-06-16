@@ -27,7 +27,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
+        cell.imageView?.image = UIImage.templateImageNamed(ImageIdentifiers.Large.logoFirefox)
         cell.imageView?.tintColor = theme.colors.textDisabled
         cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
         cell.imageView?.layer.masksToBounds = true

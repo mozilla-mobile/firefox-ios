@@ -24,6 +24,7 @@ public struct ImageIdentifiers {
         public static let helpCircle = "helpCircleLarge"
         public static let history = "historyLarge"
         public static let home = "homeLarge"
+        public static let logoFirefox = "logoFirefoxLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
     }
