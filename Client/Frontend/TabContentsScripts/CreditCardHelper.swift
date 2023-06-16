@@ -117,7 +117,7 @@ class CreditCardHelper: TabContentScript {
 
     // MARK: Injection
 
-    static func injectCardInfo(logger: Logger = DefaultLogger.shared,
+    static func injectCardInfo(logger: Logger,
                                card: UnencryptedCreditCardFields,
                                tab: Tab,
                                completion: @escaping (Error?) -> Void) {
@@ -174,7 +174,7 @@ class CreditCardHelper: TabContentScript {
     // MARK: Next & Previous focus fields
 
     static func focusNextInputField(tabWebView: WKWebView,
-                                    logger: Logger = DefaultLogger.shared) {
+                                    logger: Logger) {
         let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusNextInputField()"
 
@@ -187,7 +187,7 @@ class CreditCardHelper: TabContentScript {
     }
 
     static func focusPreviousInputField(tabWebView: WKWebView,
-                                        logger: Logger = DefaultLogger.shared) {
+                                        logger: Logger) {
         let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusPreviousInputField()"
 

@@ -2619,7 +2619,9 @@ extension BrowserViewController {
             guard let currentTab = self.tabManager.selectedTab else {
                 return
             }
-            CreditCardHelper.injectCardInfo(card: plainTextCard, tab: currentTab) { error in
+            CreditCardHelper.injectCardInfo(logger: self.logger,
+                                            card: plainTextCard,
+                                            tab: currentTab) { error in
                 guard let error = error else {
                     return
                 }
