@@ -50,7 +50,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
             if error == nil {
                 let viewModel = ButtonToastViewModel(labelText: download.filename,
-                                                     imageName: ImageIdentifiers.check,
+                                                     imageName: ImageIdentifiers.Large.checkmark,
                                                      buttonText: .DownloadsButtonTitle)
                 let downloadCompleteToast = ButtonToast(viewModel: viewModel,
                                                         theme: self.themeManager.currentTheme,

@@ -17,6 +17,7 @@ public struct ImageIdentifiers {
         public static let appMenu = "appMenuLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
+        public static let checkmark = "checkmarkLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
     }
@@ -32,7 +33,6 @@ public struct ImageIdentifiers {
     public static let bookmarkFolder = "bookmarkFolder"
     public static let bottomSheetClose = "bottomSheet-close"
     public static let contextualHintClose = "find_close"
-    public static let check = "check"
     public static let closeLargeButton = "close-large"
     public static let closeMediumButton = "close-medium"
     public static let closeTap = "menu-CloseTabs"
