@@ -39,6 +39,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // Raw data to build top sites with
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
+    private(set) var defaultSearchEngine: OpenSearchEngine?
 
     var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
@@ -53,6 +54,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private static let defaultTopSitesRowCount = 8
 
     init(profile: Profile,
+         defaultSearchEngine: OpenSearchEngine?,
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
@@ -60,6 +62,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile
+        self.defaultSearchEngine = defaultSearchEngine
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
@@ -102,6 +105,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         }
 
         sites.removeDuplicates()
+
+        sites = TopSitesDataUtility().removeSiteMatchingSites(in: defaultSearchEngine, from: sites)
 
         topSites = sites.map { TopSite(site: $0) }
     }

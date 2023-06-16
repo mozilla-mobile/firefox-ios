@@ -33,6 +33,7 @@
         "DownloadFilesTests",
         "DragAndDropTestIpad",
         "DragAndDropTests",
+        "EngagementNotificationTests",
         "FindInPageTests",
         "FirstRunTourTests",
         "FxScreenGraphTests",

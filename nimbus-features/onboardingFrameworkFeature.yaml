@@ -52,7 +52,7 @@ features:
               image: notifications
               buttons:
                 primary:
-                  title: Onboarding/Onboarding.Notification.Continue.Action.v114
+                  title: Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114
                   action: request-notifications
                 secondary:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115

@@ -3,13 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 protocol LegacyNotificationThemeable: AnyObject {
     func applyTheme()
 }
 
 protocol PrivateModeUI {
-    func applyUIMode(isPrivate: Bool)
+    func applyUIMode(isPrivate: Bool, theme: Theme)
 }
 
 extension UIColor {

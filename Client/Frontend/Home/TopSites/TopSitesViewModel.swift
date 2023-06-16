@@ -42,6 +42,7 @@ class TopSitesViewModel {
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
         let adaptor = TopSitesDataAdaptorImplementation(profile: profile,
+                                                        defaultSearchEngine: profile.searchEngines.defaultEngine,
                                                         topSiteHistoryManager: topSiteHistoryManager,
                                                         googleTopSiteManager: googleTopSiteManager)
         topSitesDataAdaptor = adaptor

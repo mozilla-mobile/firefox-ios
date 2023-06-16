@@ -150,7 +150,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         newTab.addInteraction(dropInteraction)
 
         tabsButton.applyTheme(theme: themeManager.currentTheme)
-        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme)
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
@@ -313,11 +313,11 @@ extension TopTabsViewController: TopTabCellDelegate {
 }
 
 extension TopTabsViewController: PrivateModeUI {
-    func applyUIMode(isPrivate: Bool) {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
-        privateModeButton.applyTheme(theme: themeManager.currentTheme)
-        privateModeButton.applyUIMode(isPrivate: topTabDisplayManager.isPrivate)
+        privateModeButton.applyTheme(theme: theme)
+        privateModeButton.applyUIMode(isPrivate: topTabDisplayManager.isPrivate, theme: theme)
     }
 }
 

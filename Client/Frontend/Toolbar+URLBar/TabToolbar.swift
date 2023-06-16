@@ -143,7 +143,7 @@ extension TabToolbar: ThemeApplicable, PrivateModeUI {
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 
-    func applyUIMode(isPrivate: Bool) {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
         privateModeBadge(visible: isPrivate)
     }
 }

@@ -86,7 +86,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell()
+        let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
 
