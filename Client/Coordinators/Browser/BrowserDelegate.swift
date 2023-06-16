@@ -22,4 +22,7 @@ protocol BrowserDelegate: AnyObject {
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
     func show(webView: WKWebView)
+
+    /// This is called the browser is ready to start navigating, ensuring we are in the required state to perform deeplinks
+    func browserHasLoaded()
 }

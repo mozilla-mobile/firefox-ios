@@ -84,6 +84,27 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
+    func testHandleRoute_launchNotFinished() {
+        let subject = createSubject()
+        subject.start()
+        let coordinator = subject.findAndHandle(route: .search(url: URL(string: "www.mozilla.com")!,
+                                                               isPrivate: false))
+
+        // laurie - we should store and navigate to when launch is done
+        XCTAssertNil(coordinator)
+    }
+
+    func testHandleRoute_launchFinished() {
+        let subject = createSubject()
+        subject.start()
+        subject.launchBrowser()
+        let coordinator = subject.findAndHandle(route: .search(url: URL(string: "www.mozilla.com")!,
+                                                               isPrivate: false))
+
+        // laurie - we should navigate when BVC is ready
+        XCTAssertNotNil(coordinator)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> SceneCoordinator {
