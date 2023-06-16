@@ -49,6 +49,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override func prepareForReuse() {
         super.prepareForReuse()
         textLabel?.text = nil
+        textLabel?.textAlignment = .natural
         textLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         detailTextLabel?.text = nil
         accessoryView = nil
