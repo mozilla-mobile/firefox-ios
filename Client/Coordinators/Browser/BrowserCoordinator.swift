@@ -20,7 +20,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
     private let isSettingsCoordinatorEnabled: Bool
-    private var browserIsReady: Bool = false
+    private var browserIsReady = false
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -146,7 +146,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             return false
         }
 
-        logger.log("Handling Route \(route)", level: .info, category: .coordinator)
+        logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
         case let .searchQuery(query):
             handle(query: query)

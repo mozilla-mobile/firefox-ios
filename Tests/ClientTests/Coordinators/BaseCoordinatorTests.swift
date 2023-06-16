@@ -40,36 +40,38 @@ final class BaseCoordinatorTests: XCTestCase {
 
     func testFindMatchingCoordinator() {
         // Given
-        let parentCoordinator = BaseCoordinator(router: router)
+        let subject = BaseCoordinator(router: router)
         let childCoordinator = BaseCoordinator(router: router)
         let grandChildCoordinator = MockSearchHandlerRouteCoordinator(router: router)
 
-        parentCoordinator.add(child: childCoordinator)
+        subject.add(child: childCoordinator)
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
         let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
-        let matchingCoordinator = parentCoordinator.findAndHandle(route: route)
+        let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then
         XCTAssertNotNil(matchingCoordinator)
         XCTAssertEqual(matchingCoordinator?.id, grandChildCoordinator.id)
+        XCTAssertNil(subject.savedRoute)
     }
 
     func testFindNoMatchingCoordinator() {
         // Given
-        let parentCoordinator = BaseCoordinator(router: router)
+        let subject = BaseCoordinator(router: router)
         let childCoordinator = BaseCoordinator(router: router)
         let grandChildCoordinator = BaseCoordinator(router: router)
 
-        parentCoordinator.add(child: childCoordinator)
+        subject.add(child: childCoordinator)
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
         let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
-        let matchingCoordinator = parentCoordinator.findAndHandle(route: route)
+        let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then
         XCTAssertNil(matchingCoordinator)
+        XCTAssertNotNil(subject.savedRoute)
     }
 }

@@ -52,6 +52,7 @@ open class BaseCoordinator: Coordinator {
 
         // If no matching coordinator is found, return nil and save the Route to be passed along when it next navigates
         savedRoute = route
+        logger.log("Saved a route", level: .info, category: .coordinator)
         return nil
     }
 }

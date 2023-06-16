@@ -192,7 +192,10 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let result = subject.handle(route: .searchQuery(query: query))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.handleQueryCalled)
         XCTAssertEqual(mbvc.handleQuery, query)
@@ -203,7 +206,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
-        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: nil))
+        subject.browserHasLoaded()
+
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!,
+                                                   isPrivate: false,
+                                                   options: nil))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
         XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
@@ -214,7 +222,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
-        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!, isPrivate: false, options: [.switchToNormalMode]))
+        subject.browserHasLoaded()
+
+        let result = subject.handle(route: .search(url: URL(string: "https://example.com")!,
+                                                   isPrivate: false,
+                                                   options: [.switchToNormalMode]))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToPrivacyModeCalled)
         XCTAssertFalse(mbvc.switchToPrivacyModeIsPrivate)
@@ -227,7 +240,10 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let result = subject.handle(route: .search(url: nil, isPrivate: false))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.openBlankNewTabCalled)
         XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
@@ -238,7 +254,10 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let result = subject.handle(route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
         XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
@@ -249,7 +268,10 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let result = subject.handle(route: .searchURL(url: nil, tabId: "1234"))
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.openBlankNewTabCalled)
         XCTAssertFalse(mbvc.openBlankNewTabIsPrivate)
@@ -262,8 +284,11 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
         let result = subject.handle(route: route!)
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
         XCTAssertEqual(mbvc.showLibraryPanel, .bookmarks)
@@ -274,8 +299,11 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
         let result = subject.handle(route: route!)
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
         XCTAssertEqual(mbvc.showLibraryPanel, .history)
@@ -286,8 +314,11 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
         let result = subject.handle(route: route!)
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
         XCTAssertEqual(mbvc.showLibraryPanel, .readingList)
@@ -298,8 +329,11 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
+
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
         let result = subject.handle(route: route!)
+
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
         XCTAssertEqual(mbvc.showLibraryPanel, .downloads)
@@ -312,6 +346,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(url: topSitesURL)
@@ -330,6 +365,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(url: newPrivateTabURL)
@@ -348,6 +384,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(url: newTabURL)
@@ -365,6 +402,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testDefaultBrowser_systemSettings_handlesRoute() {
         let route = Route.defaultBrowser(section: .systemSettings)
         let subject = createSubject()
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: route)
 
@@ -375,6 +413,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testDefaultBrowser_tutorial_handlesRoute() {
         let route = Route.defaultBrowser(section: .tutorial)
         let subject = createSubject()
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: route)
 
@@ -391,6 +430,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let expectedURL = URL(string: "www.example.com")!
         let route = Route.glean(url: expectedURL)
         let subject = createSubject()
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: route)
 
@@ -404,6 +444,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testGeneralSettingsRoute_showsGeneralSettingsPage() throws {
         let route = Route.settings(section: .general)
         let subject = createSubject()
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: route)
 
@@ -498,6 +539,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testSettingsRoute_addSettingsCoordinator() {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
 
@@ -508,6 +550,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testPresentedCompletion_callsDidFinishSettings_removesChild() {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
         mockRouter.savedCompletion?()
@@ -531,6 +574,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testSettingsCoordinatorDelegate_didFinishSettings_removesChild() {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
         let settingsCoordinator = subject.childCoordinators[0] as! SettingsCoordinator
@@ -548,6 +592,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!)
@@ -566,10 +611,10 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleHandleQRCode_returnsTrue() {
         // Given
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
-
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
@@ -586,6 +631,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
+        subject.browserHasLoaded()
 
         // When
         let route = routeBuilder.makeRoute(url: url)
@@ -594,6 +640,38 @@ final class BrowserCoordinatorTests: XCTestCase {
         // Then
         XCTAssertTrue(result)
         XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
+    }
+
+    // MARK: - Saved route
+
+    func testSavesRoute_whenLaunchFinished() throws {
+        let subject = createSubject()
+        subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+        subject.start(with: nil)
+
+        subject.didFinishLaunch(from: LaunchCoordinator(router: mockRouter))
+
+        XCTAssertNotNil(subject.savedRoute)
+    }
+
+    func testSavedRouteCalled_whenBrowserHasLoaded() throws {
+        let subject = createSubject()
+        subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+        subject.start(with: nil)
+
+        subject.browserHasLoaded()
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testSavesRoute_whenBrowserNotLoaded() {
+        let subject = createSubject()
+
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNotNil(subject.savedRoute)
+        XCTAssertNil(coordinator)
     }
 
     // MARK: - Helpers
