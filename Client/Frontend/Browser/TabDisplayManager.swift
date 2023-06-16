@@ -1101,17 +1101,13 @@ extension TabDisplayManager: TabManagerDelegate {
         /// collectionView is not visible the dataSource section/items differs from the actions to be perform
         /// which causes the crash
         collectionView.numberOfItems(inSection: 0)
-        /// Add temporary hack to delay the `collectionView.performBatchUpdates`
-        /// to fix crash caused by race condition where the dataSource hasn't finish loading causing Internal inconsistency crash
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
-            self.collectionView.performBatchUpdates({
-                operation()
-            }, completion: { [weak self] (done) in
-                self?.performingChainedOperations = false
-                self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-                self?.performChainedOperations()
-            })
-        }
+        collectionView.performBatchUpdates({
+            operation()
+        }, completion: { [weak self] (done) in
+            self?.performingChainedOperations = false
+            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+            self?.performChainedOperations()
+        })
     }
 
     private func updateWith(animationType: TabAnimationType,
