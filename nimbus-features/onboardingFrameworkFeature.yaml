@@ -41,7 +41,7 @@ features:
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Welcome.Action.v114
-                  action: open-default-browser-popup
+                  action: next-card
               type: fresh-install
               prerequisites:
                 - ALWAYS

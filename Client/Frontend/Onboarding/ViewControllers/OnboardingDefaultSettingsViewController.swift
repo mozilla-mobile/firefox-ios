@@ -83,7 +83,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var contentViewHeightConstraint: NSLayoutConstraint!
-    var didTapButton: Bool = false
+    var didTapButton = false
     var buttonTappedFinishFlow: (() -> Void)?
 
     // MARK: - Initializers
@@ -173,7 +173,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     private func setupNotifications() {
         notificationCenter.addObserver(
             self,
-            selector: #selector(appDidBecomeActiveNotification),
+            selector: #selector(appDidEnterBackgroundNotification),
             name: UIApplication.didEnterBackgroundNotification,
             object: nil)
     }
@@ -216,9 +216,10 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 
     @objc
-    func appDidBecomeActiveNotification() {
+    func appDidEnterBackgroundNotification() {
         if didTapButton {
             dismiss(animated: false)
+            buttonTappedFinishFlow?()
         }
     }
 
