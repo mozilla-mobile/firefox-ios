@@ -379,7 +379,7 @@ class NavigationTest: BaseTestCase {
 
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.downloads].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.download].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)

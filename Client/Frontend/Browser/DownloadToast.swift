@@ -20,7 +20,7 @@ class DownloadToast: Toast {
     }
 
     private var imageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.downloads)
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.download)
     }
 
     private var labelStackView: UIStackView = .build { stackView in

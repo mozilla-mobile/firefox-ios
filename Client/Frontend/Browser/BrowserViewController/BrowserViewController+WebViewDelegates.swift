@@ -253,7 +253,7 @@ extension BrowserViewController: WKUIDelegate {
                 let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
                 actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.downloads), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
+                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                     // This checks if download is a blob, if yes, begin blob download process
                     if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                         // if not a blob, set pendingDownloadWebView and load the request in

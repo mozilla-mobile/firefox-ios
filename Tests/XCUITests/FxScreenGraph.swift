@@ -953,7 +953,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.key], to: LoginsSettings)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.bookmarks], to: LibraryPanel_Bookmarks)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.history], to: LibraryPanel_History)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.download], to: LibraryPanel_Downloads)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.avatarCircle], to: FxAccountManagementPage)
 
