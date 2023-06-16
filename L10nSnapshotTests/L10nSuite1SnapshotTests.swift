@@ -55,7 +55,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         currentScreen += 1
         waitForExistence(app.textFields["url"])
         waitForExistence(app.webViews["contentView"])
-        print(app.debugDescription)
         snapshot("Homescreen-first-visit")
     }
 
