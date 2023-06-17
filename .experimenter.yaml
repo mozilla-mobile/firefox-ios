@@ -156,14 +156,6 @@ redux-integration-feature:
     enabled:
       type: boolean
       description: "Enables the feature\n"
-rust-sync-manager-component:
-  description: The feature that controls whether we use the rust sync manager
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    use-rust-sync-manager:
-      type: boolean
-      description: "If true, syncs will be performed by the `RustSyncManager` class backed by the rust sync manager component."
 search:
   description: "Configuring the functionality to do with search. This will be separated into smaller sub-features in later releases.\n"
   hasExposure: true

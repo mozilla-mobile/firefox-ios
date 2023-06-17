@@ -16,20 +16,20 @@ open class MockSyncManager: ClientSyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
+    private var emptySyncResult = deferMaybe(MZSyncResult(status: .ok,
+                                                          successful: [],
+                                                          failures: [:],
+                                                          persistedState: "",
+                                                          declined: nil,
+                                                          nextSyncAllowedAt: nil,
+                                                          telemetryJson: nil))
 
-    private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
-        return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
-    }
-
-    open func syncClients() -> OldSyncResult { return completedWithStats(collection: "mock_clients") }
-    open func syncClientsThenTabs() -> OldSyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
-    open func syncHistory() -> OldSyncResult { return completedWithStats(collection: "mock_history") }
-    open func syncEverything(why: OldSyncReason) -> Success {
-        return succeed()
-    }
+    open func syncTabs() -> Deferred<Maybe<MZSyncResult>> { return emptySyncResult }
+    open func syncHistory() -> Deferred<Maybe<MZSyncResult>> { return emptySyncResult }
+    open func syncEverything(why: MZSyncReason) -> Success { return succeed() }
 
     var syncNamedCollectionsCalled = 0
-    open func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success {
+    open func syncNamedCollections(why: MZSyncReason, names: [String]) -> Success {
         syncNamedCollectionsCalled += 1
         return succeed()
     }
@@ -180,14 +180,6 @@ open class MockProfile: Client.Profile {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 
-    internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return SQLiteRemoteClientsAndTabs(db: self.database)
-    }()
-
-    fileprivate lazy var syncCommands: SyncCommands = {
-        return SQLiteRemoteClientsAndTabs(db: self.database)
-    }()
-
     public func hasSyncAccount(completion: @escaping (Bool) -> Void) {
         completion(hasSyncableAccountMock)
     }
@@ -207,6 +199,10 @@ open class MockProfile: Client.Profile {
         self.syncManager.onRemovedAccount()
     }
 
+    public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
+        return deferMaybe(mockClientAndTabs)
+    }
+
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return deferMaybe([])
     }
@@ -215,10 +211,6 @@ open class MockProfile: Client.Profile {
 
     public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
         completion(mockClientAndTabs)
-    }
-
-    public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe(mockClientAndTabs)
     }
 
     public func cleanupHistoryIfNeeded() {}

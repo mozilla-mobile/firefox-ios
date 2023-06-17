@@ -14,17 +14,7 @@ import XCTest
 
 import Glean
 
-class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
-    override func getProfileAndDeviceId() -> (MozillaAppServices.Profile, String) {
-        return (MozillaAppServices.Profile(
-            uid: "test",
-            email: "test@test.test",
-            displayName: nil,
-            avatar: "",
-            isDefaultAvatar: true
-        ), "test")
-    }
-}
+class MockRustSyncManager: RustSyncManager { }
 
 class GleanTelemetryTests: XCTestCase {
     override func setUp() {
@@ -37,7 +27,7 @@ class GleanTelemetryTests: XCTestCase {
 
     func testSyncPingIsSentOnSyncOperation() throws {
         let profile = MockBrowserProfile(localName: "GleanTelemetryTests")
-        let syncManager = MockBrowserSyncManager(profile: profile)
+        let syncManager = MockRustSyncManager(profile: profile)
 
         let syncPingWasSent = expectation(description: "The tempSync ping was sent")
         GleanMetrics.Pings.shared.tempSync.testBeforeNextSubmit { _ in
@@ -46,7 +36,7 @@ class GleanTelemetryTests: XCTestCase {
         }
 
         _ = syncManager.syncNamedCollections(
-            why: OldSyncReason.didLogin,
+            why: .enabledChange,
             names: ["tabs", "logins", "bookmarks", "history", "clients"]
         )
 

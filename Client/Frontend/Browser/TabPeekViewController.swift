@@ -180,8 +180,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             browserProfile.places.isBookmarked(url: displayURL) >>== { isBookmarked in
                 self.isBookmarked = isBookmarked
             }
+            browserProfile.tabs.getClientGUIDs { (result, error) in
+                guard let clientGUIDs = result else { return }
 
-            browserProfile.getClientGUIDs { clientGUIDs in
                 self.hasRemoteClients = !clientGUIDs.isEmpty
 
                 DispatchQueue.main.async {
