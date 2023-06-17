@@ -13,12 +13,10 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         super.setUp()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
-    
     override func tearDown() {
         super.tearDown()
         mockRouter = nil
     }
-    
     func testEmptyChilds_whenCreated() {
         let subject = createSubject()
         XCTAssertEqual(subject.childCoordinators.count, 0)

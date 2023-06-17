@@ -4,6 +4,5 @@
 
 import Foundation
 
-
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
 }
