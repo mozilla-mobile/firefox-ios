@@ -503,7 +503,7 @@
 "Siri.erase" = "Διαγραφή";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "Διαγραφή & άνοιγμα";
+"Siri.eraseAndOpen" = "Διαγραφή και άνοιγμα";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "Άνοιγμα αγαπημένου ιστοτόπου";
@@ -614,7 +614,7 @@
 "URL.addToAutocompleteLabel" = "Προσθήκη συνδέσμου για αυτόματη συμπλήρωση";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Επικόλληση & μετάβαση";
+"URL.contextMenu" = "Επικόλληση και μετάβαση";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ΔΙΑΓΡΑΦΗ";

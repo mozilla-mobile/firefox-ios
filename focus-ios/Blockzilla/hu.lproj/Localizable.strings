@@ -5,7 +5,7 @@
 "About.missionLabel" = "A %@ böngészőt a Mozilla készíti. Küldetésünk az egészséges, nyílt internet támogatása.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Keressen és böngésszen közvetlenül az appban";
+"About.privateBullet1" = "Keressen és böngésszen közvetlenül az alkalmazásban";
 
 /* Label on About screen */
 "About.privateBullet2" = "Blokkolja a követőket (vagy módosítsa a beállításokat az engedélyezéshez)";
@@ -26,7 +26,7 @@
 "About.rowRights" = "Az Ön jogai";
 
 /* Label on About screen */
-"About.safariBullet1" = "Blokkolja a követőket a nagyobb magánszféra érdekében";
+"About.safariBullet1" = "Blokkolja a követőket a nagyobb adatvédelem érdekében";
 
 /* Label on About screen */
 "About.safariBullet2" = "Blokkolja a webes betűkészleteket az oldalméret csökkentése érdekében";
@@ -56,37 +56,37 @@
 "Authentication.reason" = "Hitelesítsen a %@hoz visszatéréshez";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Egyéni URL hozzáadása";
+"Autocomplete.addCustomUrl" = "Egyéni webcím hozzáadása";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "Ellenőrizze a megadott URL-t.";
+"Autocomplete.addCustomUrlError" = "Ellenőrizze a megadott webcímet.";
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Példa: example.com";
 
 /* Label for the input to add a custom URL */
-"Autocomplete.addCustomUrlLabel" = "Hozzáadandó URL";
+"Autocomplete.addCustomUrlLabel" = "Hozzáadandó webcím";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "Illessze be, vagy adja meg az URL-t";
+"Autocomplete.addCustomUrlPlaceholder" = "Webcím beillesztése vagy megadása";
 
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Egyéni URL hozzáadása";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Új egyéni URL hozzáadva.";
+"Autocomplete.customUrlAdded" = "Új egyéni webcím hozzáadva.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Engedélyezés, hogy a %@ 450 népszerű URL-t automatikusan kiegészítsen a címsávban.";
+"Autocomplete.defaultDescriptoin" = "Engedélyezés, hogy a %@ 450 népszerű webcímet automatikusan kiegészítsen a címsávban.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Letiltva";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
-"Autocomplete.duplicateUrl" = "Az URL már létezik";
+"Autocomplete.duplicateUrl" = "A webcím már létezik";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "Nincs megjelenítendő egyéni URL";
+"Autocomplete.emptyState" = "Nincs megjelenítendő egyéni webcím";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Engedélyezve";
@@ -95,10 +95,10 @@
 "Autocomplete.manageSites" = "Oldalak kezelése";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.mySites" = "Saját webhelyek";
+"Autocomplete.mySites" = "Saját oldalak";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Engedélyezed, hogy a %@ kiegészítse a kedvenc URL-eit.";
+"Autocomplete.mySitesDesc" = "Engedélyezed, hogy a %@ kiegészítse a kedvenc webcímeit.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Népszerű oldalak";
@@ -113,7 +113,7 @@
 "Browser.backLabel" = "Vissza";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL a vágólapra másolva";
+"browser.copyAddressToast" = "Webcím a vágólapra másolva";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Másolás";
@@ -146,13 +146,13 @@
 "ExternalAppLink.cancelTitle" = "Mégse";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "A %@ egy másik appot akar megnyitni";
+"ExternalAppLink.messageTitle" = "A %@ egy másik alkalmazást akar megnyitni";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Megnyitás";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "A %1$@ meg akarja nyitni a(z) %2$@ appot";
+"externalAppLinkWithAppName.messageTitle" = "A %1$@ meg akarja nyitni a(z) %2$@ alkalmazást";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Mégse";
@@ -194,7 +194,7 @@
 "Onboarding.DefaultBrowser.FirstSubtitle.V2" = "A fokozott adatvédelem érdekében töröljük az előzményeket, amikor bezárja az alkalmazást.";
 
 /* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
-"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Legyen a %@ az alapértelmezett, hogy minden megnyitott hivatkozásnál megvédje az adatait.";
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Legyen a %@ az alapértelmezett böngészője, hogy minden megnyitott hivatkozásnál megvédje az adatait.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "A %@ nem olyan, mint a többi böngésző";
@@ -239,7 +239,7 @@
 "Safari.instructionsNotEnabled" = "A %@ nincs engedélyezve.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Beállítások app megnyitása";
+"Safari.instructionsOpen" = "Beállítások alkalmazás megnyitása";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
 "Safari.openInstruction" = "Nyissa meg az eszközbeállításokat";
@@ -263,7 +263,7 @@
 "SearchSuggestions.promptTitle" = "Jelenítsen-e meg keresési javaslatokat?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Automatikus URL kiegészítés";
+"Settings.autocompleteSection" = "Automatikus webcím-kiegészítés";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "A többi tartalomkövető blokkolása eltörhet bizonyos videókat és weblapokat.";
@@ -356,7 +356,7 @@
 "Settings.setAsDefaultBrowser" = "Beállítás alapértelmezett böngészőként";
 
 /* %@ is the name of the app. Description for set as default browser option */
-"Settings.setAsDefaultBrowserDescription" = "Állítsa be a webhelyek, e-mailek és üzenetek hivatkozásait, hogy azok automatikusan a %@ban nyíljanak meg.";
+"Settings.setAsDefaultBrowserDescription" = "Állítsa be az oldalak, e-mailek és üzenetek hivatkozásait, hogy azok automatikusan a %@ban nyíljanak meg.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Rendszertéma";
@@ -383,10 +383,10 @@
 "Settings.toggleBlockSocial2" = "Közösségi média";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "Face ID használata az alkalmazás kinyitásához";
+"Settings.toggleFaceID" = "Face ID használata az alkalmazás feloldásához";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "A Face ID feloldhatja a %@t, ha az URL már meg van nyitva az alkalmazásban";
+"Settings.toggleFaceIDDescription" = "A Face ID feloldhatja a %@t, ha a webcím már meg van nyitva az alkalmazásban";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Tippek megjelenítése a kezdőképernyőn";
@@ -404,7 +404,7 @@
 "Settings.toggleTouchID" = "Touch ID használata az alkalmazás kinyitásához";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "A Touch ID feloldhatja a %@t, ha az URL már meg van nyitva az alkalmazásban";
+"Settings.toggleTouchIDDescription" = "A Touch ID feloldhatja a %@t, ha a webcím már meg van nyitva az alkalmazásban";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "Ki";
@@ -512,10 +512,10 @@
 "Siri.openURL" = "Kedvenc oldal megnyitása";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
-"Siri.urlToOpen" = "Megnyitandó URL";
+"Siri.urlToOpen" = "Megnyitandó webcím";
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
-"Tip.Biometric.Title" = "%@ zárolása, ha egy webhely nyitva van:";
+"Tip.Biometric.Title" = "%@ zárolása, ha egy oldal nyitva van:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "Face ID bekapcsolása";
@@ -524,10 +524,10 @@
 "Tip.BiometricTouchId.Description" = "Touch ID bekapcsolása";
 
 /* Text for a label that indicates the description for request desktop tip. */
-"Tip.RequestDesktop.Description" = "Oldalműveletek > Asztali webhely kérése";
+"Tip.RequestDesktop.Description" = "Oldalműveletek > Asztali oldal kérése";
 
 /* Text for a label that indicates the title for request desktop tip. */
-"Tip.RequestDesktop.Title" = "Egy webhely teljes, asztali verzióját szeretné?";
+"Tip.RequestDesktop.Title" = "Egy oldal teljes, asztali verzióját szeretné?";
 
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ nyomkövető blokkolva eddig";
@@ -539,7 +539,7 @@
 "Tip.Shortcuts.Description" = "Válassza a Hozzáadás a parancsokhoz lehetőséget a %@ menüben";
 
 /* Text for a label that indicates the title for shortcuts tip. */
-"Tip.Shortcuts.Title" = "Hozzon létre parancsokat a leggyakrabban felkeresett webhelyekhez:";
+"Tip.Shortcuts.Title" = "Hozzon létre parancsokat a leggyakrabban felkeresett oldalakhoz:";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Siri parancs hozzáadása";
@@ -557,7 +557,7 @@
 "Tip.SitesNotWorking.Description" = "Próbálja kikapcsolni a Követés elleni védelmet";
 
 /* Text for a label that indicates the title for sites not working tip. */
-"Tip.SitesNotWorking.Title" = "Hiányzik a webhely tartalma, vagy furcsán viselkedik?";
+"Tip.SitesNotWorking.Title" = "Hiányzik az oldal tartalma, vagy furcsán viselkedik?";
 
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
 "TodayWidget.SearchInApp.Instruction" = "Keresés ebben: %@";
@@ -572,10 +572,10 @@
 "TooltipBodyText.SearchBar" = "Indítsa el a privát böngészési munkamenetet, és menet közben blokkoljuk a nyomkövetőket és az egyéb rossz dolgokat.";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "A %@ megakadályozta, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy tájékozódjon arról, hogy mit blokkoltunk.";
+"TooltipBodyText.ShieldIcon" = "A %@ megakadályozta, hogy ez az oldal kémkedjen Ön után. Koppintson a pajzsra, hogy tájékozódjon arról, hogy mit blokkoltunk.";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Megvannak! Megakadályoztuk, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy megtudja mit blokkoltunk.";
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Megvannak! Megakadályoztuk, hogy ez az oldal kémkedjen Ön után. Koppintson a pajzsra, hogy megtudja mit blokkoltunk.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Koppintson bármikor a kukára, hogy eltávolítsa az aktuális munkamenet összes nyomát.";
@@ -629,7 +629,7 @@
 "URL.paste" = "Beillesztés";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Keressen, vagy adjon meg címet";
+"URL.placeholderText" = "Keresés vagy cím";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Keresés erre: %@";

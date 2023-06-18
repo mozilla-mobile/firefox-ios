@@ -5,7 +5,7 @@
 "NSFaceIDUsageDescription" = "Ezzel kinyithatja az alkalmazást.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";
+"NSLocationWhenInUseUsageDescription" = "A meglátogatott oldalak kérhetik az Ön helyét.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel.";
