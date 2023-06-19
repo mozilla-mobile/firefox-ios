@@ -109,8 +109,16 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
-        if let tab = self.tabManager.selectedTab {
-            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
+        if let tab = self.tabManager.selectedTab,
+            let url = tab.url,
+            let contentBlocker = tab.contentBlocker,
+            let webView = tab.webView {
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(
+                url: url,
+                displayTitle: tab.displayTitle,
+                connectionSecure: webView.hasOnlySecureContent,
+                contentBlocker: contentBlocker,
+                profile: profile)
             etpViewModel.onOpenSettingsTapped = {
                 if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
                     // Wait to show settings in async dispatch since hamburger menu is still showing at that time
@@ -121,6 +129,7 @@ extension BrowserViewController: URLBarDelegate {
                     self.legacyShowSettings(deeplink: .contentBlocker)
                 }
             }
+            etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
 
             let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
             if UIDevice.current.userInterfaceIdiom == .phone {
