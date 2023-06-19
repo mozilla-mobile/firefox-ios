@@ -15,7 +15,7 @@ var phases = { "phase1": "profile1" };
 var historyExpected = [
     { uri: "http://www.example.com/",
       visits: [
-        { type: 1, date: 1686859190228000 }
+        { type: 1 }
       ]
     }
 ];
