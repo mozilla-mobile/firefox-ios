@@ -681,14 +681,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getRemoveReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveReadingList,
                                      alternateTitle: .AppMenu.RemoveReadingListAlternateTitle,
-                                     iconString: ImageIdentifiers.removeFromReadingList) { _ in
+                                     iconString: ImageIdentifiers.Large.delete) { _ in
             guard let url = self.tabUrl?.displayURL?.absoluteString,
                   let record = self.profile.readingList.getRecordWithURL(url).value.successValue
             else { return }
 
             self.profile.readingList.deleteRecord(record, completion: nil)
-            self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage, toastAction: .removeFromReadingList, url: nil)
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .pageActionMenu)
+            self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage,
+                                     toastAction: .removeFromReadingList,
+                                     url: nil)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .delete,
+                                         object: .readingListItem,
+                                         value: .pageActionMenu)
         }
     }
 

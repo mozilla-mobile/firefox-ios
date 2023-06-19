@@ -171,7 +171,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        waitForExistence(app.buttons["Delete"])
+        waitForExistence(app.buttons[ImageIdentifiers.Large.delete])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -186,7 +186,7 @@ class BookmarkingTests: BaseTestCase {
         // Remove it
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        waitForExistence(app.buttons["Delete"])
+        waitForExistence(app.buttons[ImageIdentifiers.Large.delete])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -195,7 +195,7 @@ class BookmarkingTests: BaseTestCase {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].tap()
+        app.buttons[ImageIdentifiers.Large.delete].tap()
         checkItemsInBookmarksList(items: 0)
     }
 
@@ -276,7 +276,7 @@ class BookmarkingTests: BaseTestCase {
             app.tables.otherElements["Remove Bookmark"].tap()
         } else {
             app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-            app.buttons["Delete"].tap()
+            app.buttons[ImageIdentifiers.Large.delete].tap()
         }
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")

@@ -469,7 +469,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            app.buttons["Delete"].tap()
+            app.buttons[ImageIdentifiers.Large.delete].tap()
         }
     }
 

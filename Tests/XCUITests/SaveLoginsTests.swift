@@ -127,7 +127,7 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.buttons["Deselect All"])
 
         XCTAssertTrue(app.buttons["Deselect All"].exists)
-        XCTAssertTrue(app.buttons["Delete"].exists)
+        XCTAssertTrue(app.buttons[ImageIdentifiers.Large.delete].exists)
     }
 
     func testDeleteLogin() {
@@ -136,7 +136,7 @@ class SaveLoginTest: BaseTestCase {
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
         waitForExistence(app.alerts["Are you sure?"])
-        app.alerts.buttons["Delete"].tap()
+        app.alerts.buttons[ImageIdentifiers.Large.delete].tap()
         waitForExistence(app.tables["Login List"])
         XCTAssertFalse(app.staticTexts[domain].exists)
         XCTAssertFalse(app.staticTexts[domainLogin].exists)

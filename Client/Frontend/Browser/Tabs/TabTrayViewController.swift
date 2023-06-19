@@ -45,7 +45,7 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // Buttons & Menus
     private lazy var deleteButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
+        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
@@ -59,7 +59,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var deleteButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
+        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)

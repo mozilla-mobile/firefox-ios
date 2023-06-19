@@ -29,8 +29,8 @@ class DownloadFilesTests: BaseTestCase {
                 for _ in 0...list-1 {
                     waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                     app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                    waitForExistence(app.tables.cells.buttons["Delete"])
-                    app.tables.cells.buttons["Delete"].tap()
+                    waitForExistence(app.tables.cells.buttons[ImageIdentifiers.Large.delete])
+                    app.tables.cells.buttons[ImageIdentifiers.Large.delete].tap()
                 }
             }
         }
@@ -39,8 +39,8 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
-        waitForExistence(app.tables.cells.buttons["Delete"], timeout: TIMEOUT)
-        app.tables.cells.buttons["Delete"].tap()
+        waitForExistence(app.tables.cells.buttons[ImageIdentifiers.Large.delete], timeout: TIMEOUT)
+        app.tables.cells.buttons[ImageIdentifiers.Large.delete].tap()
     }
 
     func testDownloadFilesAppMenuFirstTime() {
@@ -122,7 +122,7 @@ class DownloadFilesTests: BaseTestCase {
         } else {
             app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
             XCTAssertTrue(app.tables.buttons.staticTexts["Share"].exists)
-            XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
+            XCTAssertTrue(app.tables.buttons.staticTexts[ImageIdentifiers.Large.delete].exists)
         }
     }
 

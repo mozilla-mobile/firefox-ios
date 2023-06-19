@@ -21,7 +21,7 @@ enum QuickLink: Int {
         case .copiedLink:
             return "tabTrayLarge"
         case .closePrivateTabs:
-            return "delete"
+            return "deleteLarge"
         }
     }
 

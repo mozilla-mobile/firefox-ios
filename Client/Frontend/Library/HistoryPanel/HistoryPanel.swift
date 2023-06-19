@@ -89,7 +89,7 @@ class HistoryPanel: UIViewController,
     }()
 
     private lazy var bottomDeleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelDelete),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.delete),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))

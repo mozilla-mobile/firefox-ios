@@ -446,8 +446,8 @@ class HistoryTests: BaseTestCase {
             navigator.goto(LibraryPanel_History)
             waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
             app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-            waitForExistence(app.buttons["Delete"], timeout: TIMEOUT)
-            app.buttons["Delete"].tap()
+            waitForExistence(app.buttons[ImageIdentifiers.Large.delete], timeout: TIMEOUT)
+            app.buttons[ImageIdentifiers.Large.delete].tap()
             waitForNoExistence(app.staticTexts["http://example.com"])
         }
     }
