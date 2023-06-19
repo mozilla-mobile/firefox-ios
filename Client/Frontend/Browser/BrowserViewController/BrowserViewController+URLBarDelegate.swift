@@ -121,7 +121,12 @@ extension BrowserViewController: URLBarDelegate {
                     self.legacyShowSettings(deeplink: .contentBlocker)
                 }
             }
-
+            
+            if CoordinatorFlagManager.isEtpCoordinatorEnabled {
+                
+                self.navigationHandler?.showEnhancedTrackingProtection()
+            }
+            
             let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
             if UIDevice.current.userInterfaceIdiom == .phone {
                 etpVC.modalPresentationStyle = .custom

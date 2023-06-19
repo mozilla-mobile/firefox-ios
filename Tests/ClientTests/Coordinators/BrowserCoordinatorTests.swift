@@ -184,6 +184,14 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(presentedVC.topViewController is LibraryViewController)
     }
+    
+    func testShowEnhancedTrackingProtection() throws {
+        let subject = createSubject()
+        subject.showEnhancedTrackingProtection()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator) //Fix this
+    }
 
     // MARK: - Search route
 

@@ -306,6 +306,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func show(homepanelSection: Route.HomepanelSection) {
         showLibrary(with: homepanelSection)
     }
+    
+    func showEnhancedTrackingProtection() {
+    }
 
     // MARK: - To be removed with FXIOS-6529
     private func handle(settingsSection: Route.SettingsSection) {
