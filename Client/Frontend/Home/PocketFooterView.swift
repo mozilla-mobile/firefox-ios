@@ -20,15 +20,8 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     private let titleLabel: UILabel = .build { label in
-        label.text = String(format: String.FirefoxHomepage.Pocket.Footer.Title, PocketAppName.shortName.rawValue)
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: UX.fontSize)
-    }
-
-    private let subtitleLabel: UILabel = .build { label in
-        label.text = String(format: .FirefoxHomepage.Pocket.Footer.Subtitle,
+        label.text = String(format: .FirefoxHomepage.Pocket.Footer.Title,
+                            PocketAppName.shortName.rawValue,
                             AppName.shortName.rawValue)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -73,7 +66,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
                                                 action: #selector(didTapLearnMore))
         learnMoreLabel.addGestureRecognizer(tapGesture)
 
-        [titleLabel, subtitleLabel, learnMoreLabel].forEach(labelsContainer.addArrangedSubview)
+        [titleLabel, learnMoreLabel].forEach(labelsContainer.addArrangedSubview)
         [pocketImageView, labelsContainer].forEach(mainContainer.addArrangedSubview)
 
         addSubview(mainContainer)
@@ -96,7 +89,6 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         titleLabel.textColor = colors.textSecondary
-        subtitleLabel.textColor = colors.textSecondary
         learnMoreLabel.textColor = colors.textAccent
     }
 }
