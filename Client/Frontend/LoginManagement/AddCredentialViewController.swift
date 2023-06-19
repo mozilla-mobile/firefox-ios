@@ -69,6 +69,7 @@ class AddCredentialViewController: UIViewController, Themeable {
         navigationItem.rightBarButtonItem = saveButton
         navigationItem.leftBarButtonItem = cancelButton
 
+        tableView.register(cellType: LoginDetailTableViewCell.self)
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -134,9 +135,11 @@ class AddCredentialViewController: UIViewController, Themeable {
 // MARK: - UITableViewDataSource
 extension AddCredentialViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let loginCell = cell(forIndexPath: indexPath)
+        loginCell.selectionStyle = .none
+        loginCell.delegate = self
         switch AddCredentialField(rawValue: indexPath.row)! {
         case .usernameItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailUsername,
                 keyboardType: .emailAddress,
@@ -149,7 +152,6 @@ extension AddCredentialViewController: UITableViewDataSource {
             return loginCell
 
         case .passwordItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailPassword,
                 displayDescriptionAsPassword: true,
@@ -161,7 +163,6 @@ extension AddCredentialViewController: UITableViewDataSource {
             return loginCell
 
         case .websiteItem:
-            let loginCell = cell(forIndexPath: indexPath)
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailWebsite,
                 descriptionPlaceholder: "https://www.example.com",
@@ -176,9 +177,10 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
-        let loginCell = LoginDetailTableViewCell()
-        loginCell.selectionStyle = .none
-        loginCell.delegate = self
+        guard let loginCell = tableView.dequeueReusableCell(withIdentifier: LoginDetailTableViewCell.cellIdentifier, for: indexPath) as? LoginDetailTableViewCell
+        else {
+            return LoginDetailTableViewCell()
+        }
         return loginCell
     }
 
