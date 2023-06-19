@@ -1,0 +1,64 @@
+name: Create a PR if there are changes in effective_tld_names file
+on:
+  schedule:
+    - cron: '0 6 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      branchName:
+        description: 'Branch used as target for automation'
+        required: true
+        default: 'main'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.event.inputs.branchName }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Compare file in repo with file upstream
+      run: |
+        echo "Fetch latest file version"
+
+        curl -o tmp.dat  "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
+
+        file_in_repo=Shared/effective_tld_names.dat
+
+        files_diff=$(cmp --silent tmp.dat $file_in_repo && echo '### SUCCESS: Files Are Identical! ###' || echo '### WARNING: Files Are Different! ###')
+
+        echo $files_diff
+        echo "current_date=$current_date" >> $GITHUB_ENV
+
+        if [[ "$files_diff" == *"Different"* ]]; then
+          echo "Files are different"
+          echo "create_pr=true" >> $GITHUB_ENV
+          cp tmp.dat Shared/effective_tld_names.dat
+          echo "branch_name=refactor-update-effective-tld-names" >> $GITHUB_ENV
+          echo "pr_title=Refactor [vXXX] Update effective_tld_names file $current_date" >> $GITHUB_ENV
+          echo "pr_body=This automated PR updates the effective_tld_names file" >> $GITHUB_ENV
+          rm tmp.dat
+        fi
+    - name: Add Modified File to PR
+      if: ${{ env.create_pr }}
+      run: |-
+        git diff || (git add Shared/effective_tld_names.dat)
+    - name: Create Pull Request
+      if: ${{ env.create_pr }}
+      uses: peter-evans/create-pull-request@v3
+      with:
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: ${{ env.pr_title }}
+        title: ${{ env.pr_title }}
+        branch: ${{ env.branch_name }}
+        body: ${{ env.pr_body }}
