@@ -513,57 +513,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNil(result)
     }
 
-<<<<<<< HEAD
-=======
-    func testSettingsRoute_addSettingsCoordinator() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
-        subject.browserHasLoaded()
-
-        let result = subject.handle(route: .settings(section: .general))
-
-        XCTAssertTrue(result)
-        XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
-    }
-
-    func testPresentedCompletion_callsDidFinishSettings_removesChild() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
-        subject.browserHasLoaded()
-
-        let result = subject.handle(route: .settings(section: .general))
-        mockRouter.savedCompletion?()
-
-        XCTAssertTrue(result)
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
-        XCTAssertTrue(subject.childCoordinators.isEmpty)
-    }
-
-    func testSettingsCoordinatorDelegate_openURLinNewTab() {
-        let expectedURL = URL(string: "www.mozilla.com")!
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        subject.browserViewController = mbvc
-
-        subject.openURLinNewTab(expectedURL)
-
-        XCTAssertEqual(mbvc.openURLInNewTabCount, 1)
-        XCTAssertEqual(mbvc.openURLInNewTabURL, expectedURL)
-    }
-
-    func testSettingsCoordinatorDelegate_didFinishSettings_removesChild() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
-        subject.browserHasLoaded()
-
-        let result = subject.handle(route: .settings(section: .general))
-        let settingsCoordinator = subject.childCoordinators[0] as! SettingsCoordinator
-        subject.didFinishSettings(from: settingsCoordinator)
-
-        XCTAssertTrue(result)
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
-        XCTAssertTrue(subject.childCoordinators.isEmpty)
-    }
-
->>>>>>> 9fb00bb45 (Bugfix FXIOS-6749 [v114] Deeplink is called when the browser isn't ready (#15025))
     // MARK: - Sign in route
 
     func testHandleFxaSignIn_returnsTrue() {

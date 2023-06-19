@@ -8,15 +8,9 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
-<<<<<<< HEAD
-=======
     /// Related to coordinator navigation
     case coordinator
 
-    /// Related to anything about credit cards.
-    case creditcard
-
->>>>>>> 9fb00bb45 (Bugfix FXIOS-6749 [v114] Deeplink is called when the browser isn't ready (#15025))
     /// Related to homepage UI and it's data management.
     case homepage
 

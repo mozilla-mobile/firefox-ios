@@ -12256,12 +12256,7 @@
 				C83DE54729DF35EE006E1B69 /* GleanPlumbMessageTests.swift in Sources */,
 				C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */,
 				C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */,
-<<<<<<< HEAD
-				8A93F86B29D39BDA004159D9 /* CoordinatorTests.swift in Sources */,
-=======
 				8A93F86B29D39BDA004159D9 /* BaseCoordinatorTests.swift in Sources */,
-				967EDABD29D705300089208D /* CreditCardValidatorTests.swift in Sources */,
->>>>>>> 9fb00bb45 (Bugfix FXIOS-6749 [v114] Deeplink is called when the browser isn't ready (#15025))
 				D815A3A824A53F3200AAB221 /* TabToolbarHelperTests.swift in Sources */,
 				C8445AD126443C7F00B83F53 /* LibraryPanelViewStateTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */,
