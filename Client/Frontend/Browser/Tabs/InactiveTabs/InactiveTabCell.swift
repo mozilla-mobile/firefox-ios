@@ -148,7 +148,6 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             }
 
             cell.buttonClosure = {
-                self.inactiveTabsViewModel?.shouldHideInactiveTabs = true
                 let inactiveTabsCount = self.inactiveTabsViewModel?.inactiveTabs.count
                 self.delegate?.didTapCloseInactiveTabs(tabsCount: inactiveTabsCount ?? 0)
             }
