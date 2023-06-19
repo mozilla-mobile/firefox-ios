@@ -293,7 +293,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         viewModel.decryptedCreditCard = nil
         // Add a sample card to the storage
         viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
-            guard error == nil, let creditCard = creditCard else {
+            guard error == nil, creditCard != nil else {
                 XCTFail()
                 return
             }
