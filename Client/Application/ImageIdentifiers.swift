@@ -18,6 +18,7 @@ public struct ImageIdentifiers {
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
         public static let bookmark = "bookmarkLarge"
+        public static let bookmarkFill = "bookmarkFillLarge"
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
         public static let checkmark = "checkmarkLarge"
