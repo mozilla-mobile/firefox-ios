@@ -35,6 +35,7 @@ public struct ImageIdentifiers {
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
         public static let folder = "folderLarge"
+        public static let forward = "forwardLarge"
         public static let globe = "globeLarge"
         public static let helpCircle = "helpCircleLarge"
         public static let history = "historyLarge"
