@@ -854,20 +854,23 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func undoCloseTab(tab: Tab, position: Int?) {
-        let tabToSelect = selectedTab
         if let index = position {
             tabs.insert(tab, at: index)
         } else {
             tabs.append(tab)
         }
 
-        // Select previous selected tab
-        if let tabToSelect = tabToSelect {
-            selectTab(tabToSelect, previous: nil)
-        }
-
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         storeChanges()
+
+        // Select previous selected tab
+        let tabUUID = selectedTab?.tabUUID
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+            if let tabUUID = tabUUID,
+               let tabToSelect = self.tabs.first(where: { $0.tabUUID == tabUUID }) {
+                self.selectTab(tabToSelect)
+            }
+        }
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.

@@ -320,18 +320,14 @@ class TabDisplayManagerTests: XCTestCase {
                                                              inactiveTab2]
 
         // Force collectionView reload section to avoid crash
-        collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.isUndoButtonPressed = false
         // Force collectionView reload to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
-        let expectation = self.expectation(description: "TabDisplayManagerTests")
-        tabDisplayManager.refreshStore {
-            XCTAssertTrue(tabDisplayManager.inactiveViewModel?.inactiveTabs.isEmpty ?? false, "Inactive tabs should be empty after closing")
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 5)
+        // For delete all inactive tabs we don't actually delete the tabs we collapse
+        // the section and delete after toast delay
+        XCTAssertTrue(tabDisplayManager.inactiveViewModel?.shouldHideInactiveTabs ?? false, "Inactive tabs should be empty after closing")
     }
 
     func testInactiveTabs_grid_undoSingleTab() {
@@ -353,8 +349,10 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
-        XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 2, "Expected 2 inactive tabs after undo")
-        expectation.fulfill()
+        tabDisplayManager.refreshStore {
+            XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 2, "Expected 2 inactive tabs after undo")
+            expectation.fulfill()
+        }
         waitForExpectations(timeout: 5)
     }
 
@@ -377,8 +375,13 @@ class TabDisplayManagerTests: XCTestCase {
         tabDisplayManager.closeInactiveTab(inactiveTab1, index: 0)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
-        XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 1, "Expected 1 inactive tab after deletion")
-        expectation.fulfill()
+        // Add delay so the tab removal finishes and the refreshStore gets the right tabs data
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+            tabDisplayManager.refreshStore {
+                XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 1, "Expected 1 inactive tab after deletion")
+                expectation.fulfill()
+            }
+        }
         waitForExpectations(timeout: 5)
     }
 
