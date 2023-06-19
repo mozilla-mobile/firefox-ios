@@ -144,7 +144,7 @@ objects:
           The set of buttons associated with the card.
         default:
           primary:
-            title: "Primary Button"
+            title: Onboarding/Onboarding.Sync.Skip.Action.v114
             action: next-card
           secondary: null
       prerequisites:
@@ -177,12 +177,12 @@ objects:
         type: Text
         description: >
           The text of the link title.
-        default: "Learn more about our privacy policy"
+        default: Onboarding/Onboarding.Welcome.Link.Action.v114
       url:
         type: String
         description: >
           The url that the link will lead to.
-        default: "https://macrumors.com"
+        default: "https://www.mozilla.org/privacy/firefox/"
   NimbusOnboardingButtons:
     description: >
       A set of buttons for the card. There can be up to two, but
