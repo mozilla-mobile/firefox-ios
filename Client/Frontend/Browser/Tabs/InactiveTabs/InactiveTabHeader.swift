@@ -15,7 +15,7 @@ enum ExpandButtonState {
                 .withRenderingMode(.alwaysTemplate)
                 .imageFlippedForRightToLeftLayoutDirection()
         case .down:
-            return UIImage(named: ImageIdentifiers.Large.chevronDown)
+            return UIImage(named: ImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         }
     }
 }
