@@ -200,7 +200,6 @@ final class SettingsCoordinatorTests: XCTestCase {
     // MARK: - Settings VC
     func testDelegatesAreSet() {
         let subject = createSubject()
-        subject.settingsViewController = mockSettingsVC
 
         XCTAssertNotNil(subject.settingsViewController.settingsDelegate)
         XCTAssertNotNil(subject.settingsViewController.parentCoordinator)
