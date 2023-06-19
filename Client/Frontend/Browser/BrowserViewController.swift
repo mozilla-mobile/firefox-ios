@@ -1809,6 +1809,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
+                if CoordinatorFlagManager.isCoordinatorEnabled {
+                    webView.frame = contentContainer.frame
+                }
                 view.insertSubview(webView, at: 0)
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
