@@ -76,6 +76,10 @@ class IntroViewController: UIViewController,
         populatePageController()
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     // MARK: View setup
     private func populatePageController() {
         if let firstViewController = viewModel.availableCards.first {
@@ -117,6 +121,21 @@ class IntroViewController: UIViewController,
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
         ])
+    }
+
+    private func setupNotifications() {
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(appDidEnterBackgroundNotification),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+    }
+
+    @objc
+    func appDidEnterBackgroundNotification() {
+        showNextPage(
+            from: viewModel.availableCards[pageControl.currentPage].viewModel.name,
+            completionIfLastCard: nil)
     }
 
     // MARK: - Button actions
@@ -208,6 +227,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 }
             }
         case .setDefaultBrowser:
+            setupNotifications()
             DefaultApplicationHelper().openSettings()
         case .openDefaultBrowserPopup:
             presentDefaultBrowserPopup(from: cardName)
