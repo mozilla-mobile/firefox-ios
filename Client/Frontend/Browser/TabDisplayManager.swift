@@ -668,7 +668,7 @@ extension TabDisplayManager: GroupedTabDelegate {
 extension TabDisplayManager: InactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
-        removeInactiveTabAndReloadView(tabs: [tab])
+        removeSingleInactiveTab(tab)
 
         cfrDelegate?.presentUndoSingleToast { undoButtonPressed in
             guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else {
@@ -679,7 +679,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                              extras: nil)
                 return
             }
-            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition!)
+            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition ?? 0)
         }
     }
 
@@ -688,18 +688,19 @@ extension TabDisplayManager: InactiveTabsDelegate {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
 
-        // Reload Inactive Tabs section for user feedback
-        _ = reloadInactiveTabsSection()
+        // Hide inactive tabs and reload section to "simulate" deletion
+        inactiveViewModel?.shouldHideInactiveTabs = true
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
                                       completion: { undoButtonPressed in
             undoButtonPressed ?
             self.undoInactiveTabsClose() :
-            self.closeInactiveTabs()
+            self.closeAllInactiveTabs()
         })
     }
 
-    private func closeInactiveTabs() {
+    private func closeAllInactiveTabs() {
         guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
               !inactiveTabs.isEmpty else { return }
 
@@ -711,11 +712,14 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                      extras: nil)
     }
 
-    // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
-        tabManager.removeTabs(tabs)
-        tabManager.selectTab(mostRecentTab(inTabs: tabManager.normalTabs) ?? tabManager.normalTabs.last)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+            self.tabManager.removeTabs(tabs)
+            let mostRecentTab = mostRecentTab(inTabs: self.tabManager.normalTabs) ?? self.tabManager.normalTabs.last
+            self.tabManager.selectTab(mostRecentTab)
+        }
+
         let allTabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         inactiveViewModel?.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
@@ -731,21 +735,25 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 
+    private func removeSingleInactiveTab(_ tab: Tab) {
+        tabManager.removeTab(tab)
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
+    }
+
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
         tabManager.undoCloseTab(tab: tab, position: index)
         inactiveViewModel?.inactiveTabs.insert(tab, at: index)
-        _ = reloadInactiveTabsSection()
+
+        if inactiveViewModel?.inactiveTabs.count == 1 {
+            toggleInactiveTabSection(hasExpanded: true)
+        } else {
+            collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
+        }
     }
 
     private func undoInactiveTabsClose() {
         inactiveViewModel?.shouldHideInactiveTabs = false
-        _ = reloadInactiveTabsSection()
-    }
-
-    private func reloadInactiveTabsSection() -> IndexPath {
-        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-        collectionView.reloadItems(at: [indexPath])
-        return indexPath
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
     }
 
     func didSelectInactiveTab(tab: Tab?) {
@@ -761,7 +769,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
 
         isInactiveViewExpanded = hasExpanded
-        let indexPath = reloadInactiveTabsSection()
+        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
 
@@ -1111,7 +1120,8 @@ extension TabDisplayManager: TabManagerDelegate {
         })
     }
 
-    private func updateWith(animationType: TabAnimationType, operation: (() -> Void)?) {
+    private func updateWith(animationType: TabAnimationType,
+                            operation: (() -> Void)?) {
         if let op = operation {
             operations.insert((animationType, op), at: 0)
         }
