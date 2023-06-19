@@ -482,6 +482,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
         overlayManager.setURLBar(urlBarView: urlBar)
+
+        browserDelegate?.browserHasLoaded()
     }
 
     private func setupAccessibleActions() {
