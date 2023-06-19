@@ -142,8 +142,8 @@ class BaseTestCase: XCTestCase {
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
     }
 

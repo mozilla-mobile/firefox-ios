@@ -14,7 +14,7 @@ let url_4 = "test-password-2.html"
 class BookmarkingTests: BaseTestCase {
     private func checkBookmarked() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -25,8 +25,8 @@ class BookmarkingTests: BaseTestCase {
 
     private func undoBookmarkRemoval() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["Undo"], timeout: 3)
         app.buttons["Undo"].tap()
@@ -204,7 +204,7 @@ class BookmarkingTests: BaseTestCase {
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells[ImageIdentifiers.actionRemoveBookmark].tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.Large.bookmarkSlash].tap()
         checkItemsInBookmarksList(items: 0)
     }*/
 

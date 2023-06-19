@@ -520,7 +520,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         actions.append(pinTopSite)
 
         let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
-                                                 iconString: ImageIdentifiers.actionRemoveBookmark,
+                                                 iconString: ImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action,

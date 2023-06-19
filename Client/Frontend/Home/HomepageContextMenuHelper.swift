@@ -133,7 +133,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
-        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
+        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
+                                     iconString: ImageIdentifiers.Large.bookmarkSlash,
+                                     tapHandler: { _ in
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                 site.setBookmarked(false)
             }
