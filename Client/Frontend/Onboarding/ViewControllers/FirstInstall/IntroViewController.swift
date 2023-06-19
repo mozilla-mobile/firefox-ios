@@ -9,7 +9,8 @@ import Common
 
 class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
-                           Themeable {
+                           Themeable,
+                           Notifiable {
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -24,6 +25,7 @@ class IntroViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
+    var hasRegisteredForDefaultBrowserNotification = false
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
@@ -123,21 +125,6 @@ class IntroViewController: UIViewController,
         ])
     }
 
-    private func setupNotifications() {
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidEnterBackgroundNotification),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil)
-    }
-
-    @objc
-    func appDidEnterBackgroundNotification() {
-        showNextPage(
-            from: viewModel.availableCards[pageControl.currentPage].viewModel.name,
-            completionIfLastCard: nil)
-    }
-
     // MARK: - Button actions
     @objc
     func closeOnboarding() {
@@ -156,6 +143,30 @@ class IntroViewController: UIViewController,
     @objc
     func dismissPrivacyPolicyViewController() {
         dismiss(animated: true, completion: nil)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didEnterBackgroundNotification:
+            appDidEnterBackgroundNotification()
+        default:
+            break
+        }
+    }
+
+    func registerForNotification() {
+        if !hasRegisteredForDefaultBrowserNotification {
+            setupNotifications(forObserver: self,
+                               observing: [UIApplication.didEnterBackgroundNotification])
+            hasRegisteredForDefaultBrowserNotification = true
+        }
+    }
+
+    func appDidEnterBackgroundNotification() {
+        showNextPage(
+            from: viewModel.availableCards[pageControl.currentPage].viewModel.name,
+            completionIfLastCard: nil)
     }
 
     // MARK: - Themable
@@ -227,7 +238,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 }
             }
         case .setDefaultBrowser:
-            setupNotifications()
+            registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openDefaultBrowserPopup:
             presentDefaultBrowserPopup(from: cardName)
