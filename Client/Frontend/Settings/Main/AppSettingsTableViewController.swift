@@ -117,7 +117,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         }
     }
 
-    // TODO Laurie - to test this
     private func handleCreditCardAuthenticatinFlow() {
         appAuthenticator.getAuthenticationState { state in
             switch state {

@@ -34,6 +34,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
 
         router.setRootViewController(settingsViewController)
         settingsViewController.settingsDelegate = self
+        settingsViewController.parentCoordinator = self
     }
 
     func start(with settingsSection: Route.SettingsSection) {
