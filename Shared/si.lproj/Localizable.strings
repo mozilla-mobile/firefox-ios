@@ -839,7 +839,7 @@
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "මුල";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"Menu.TrackingProtection.Details.Verifier" = "තහවුරු කළේ: %@";
+"Menu.TrackingProtection.Details.Verifier" = "සත්‍යාපනය: %@";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "රැකවරණ සැකසුම්";
@@ -1287,9 +1287,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "කෙටිමං";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
-"Settings.Home.Option.SponsoredPocket.v103" = "අනුග්‍රහය ලද කතා";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "පැය හතරක නිෂ්ක්‍රියාවෙන් පසු මුල් පිටුව";
