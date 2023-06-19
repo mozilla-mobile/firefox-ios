@@ -4,6 +4,7 @@
 
 import XCTest
 import Storage
+import Shared
 import Common
 @testable import Client
 
@@ -25,6 +26,13 @@ class RemoteTabsPanelTests: XCTestCase {
 
         let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
         XCTAssertEqual(dataSource.error, .notLoggedIn)
+    }
+
+    func testHasNoSync() throws {
+        let panel = createPanel(hasAccount: false, hasSyncEnabled: false)
+
+        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
+        XCTAssertEqual(dataSource.error, .syncDisabledByUser)
     }
 
     func testHasNoClients() {
@@ -125,10 +133,12 @@ private extension RemoteTabsPanelTests {
     }
 
     func createPanel(hasAccount: Bool = true,
+                     hasSyncEnabled: Bool = true,
                      clientAndTabs: [ClientAndTabs] = [],
                      file: StaticString = #file,
                      line: UInt = #line) -> RemoteTabsPanel {
         let profile = MockProfile()
+        profile.prefs.setBool(hasSyncEnabled, forKey: PrefsKeys.TabSyncEnabled)
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs
         let panel = RemoteTabsPanel(profile: profile)

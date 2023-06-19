@@ -124,6 +124,14 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
+    var isTabSyncEnabled: Bool {
+        guard let isEnabled = profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) else {
+            return false
+        }
+
+        return isEnabled
+    }
+
     init(profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -225,39 +233,32 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         guard !clientAndTabs.isEmpty else {
-            tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                          error: .noClients,
-                                                          theme: themeManager.currentTheme)
-            tableView.reloadData()
+            showEmptyTabsViewWith(.noClients)
             return
         }
 
         let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
-        if nonEmptyClientAndTabs.isEmpty {
-            tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                          error: .noTabs,
-                                                          theme: themeManager.currentTheme)
-        } else {
-            let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
-                                                                        clientAndTabs: nonEmptyClientAndTabs,
-                                                                        profile: profile,
-                                                                        theme: themeManager.currentTheme)
-            tabsPanelDataSource.collapsibleSectionDelegate = self
-            tableViewDelegate = tabsPanelDataSource
+        guard !nonEmptyClientAndTabs.isEmpty else {
+            showEmptyTabsViewWith(.noTabs)
+            return
         }
+
+        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+                                                                    clientAndTabs: nonEmptyClientAndTabs,
+                                                                    profile: profile,
+                                                                    theme: themeManager.currentTheme)
+        tabsPanelDataSource.collapsibleSectionDelegate = self
+        tableViewDelegate = tabsPanelDataSource
+
         tableView.reloadData()
     }
 
     func refreshTabs(updateCache: Bool = false, completion: (() -> Void)? = nil) {
-        guard let remoteTabsPanel = remoteTabsPanel else { return }
-
         ensureMainThread { [self] in
             // Short circuit if the user is not logged in
             guard profile.hasSyncableAccount() else {
                 endRefreshing()
-                tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                              error: .notLoggedIn,
-                                                              theme: themeManager.currentTheme)
+                showEmptyTabsViewWith(.notLoggedIn)
                 return
             }
 
@@ -265,7 +266,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
             profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
                 guard let clientAndTabs = result.successValue else {
                     self?.endRefreshing()
-                    self?.showFailedToSync()
+                    self?.showEmptyTabsViewWith(.failedToSync)
                     return
                 }
 
@@ -291,12 +292,18 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         }
     }
 
-    private func showFailedToSync() {
+    private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
+        var errorMessage = error
 
-        self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                           error: .failedToSync,
-                                                           theme: themeManager.currentTheme)
+        if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
+
+        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                            error: errorMessage,
+                                                            theme: themeManager.currentTheme)
+        tableViewDelegate = remoteTabsErrorView
+
+        tableView.reloadData()
     }
 
     @objc

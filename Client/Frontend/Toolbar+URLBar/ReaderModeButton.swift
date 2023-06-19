@@ -70,5 +70,6 @@ extension ReaderModeButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
         selectedTintColor = theme.colors.iconAction
         unselectedTintColor = theme.colors.iconSecondary
+        tintColor = isSelected ? selectedTintColor : unselectedTintColor
     }
 }

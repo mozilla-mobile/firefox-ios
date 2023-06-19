@@ -42,7 +42,6 @@ class TabTrayColor {
 }
 
 class TopTabsColor {
-    var background: UIColor { return UIColor.Photon.LightGrey20 }
     var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey10 }
     var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
     var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }

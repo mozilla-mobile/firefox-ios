@@ -38,7 +38,7 @@
 "No logins found" = "Δεν βρέθηκαν συνδέσεις";
 
 /* Open and Fill website text selection menu item */
-"Open & Fill" = "Άνοιγμα & Συμπλήρωση";
+"Open & Fill" = "Άνοιγμα και συμπλήρωση";
 
 /* Label displayed above the password row in Login Detail View. */
 "Password" = "Κωδικός πρόσβασης";

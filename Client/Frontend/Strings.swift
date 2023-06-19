@@ -401,8 +401,17 @@ extension String {
             public static let CreditCardUpdateSuccessToastMessage = MZLocalizedString(
                 key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
                 tableName: "RememberCard",
-                value: "Credit Card Updated",
+                value: "Card Information Updated",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
+        }
+
+        // Select Credit Card
+        public struct SelectCreditCard {
+            public static let MainTitle = MZLocalizedString(
+                key: "CreditCard.SelectCreditCard.MainTitle.v116",
+                tableName: "SelectCreditCard",
+                value: "Use a saved card?",
+                comment: "This value is used as the title for the select a credit card from list of available cards.")
         }
 
         // Error States for wrong input while editing credit card
@@ -1663,6 +1672,12 @@ extension String {
                 tableName: "TabsTray",
                 value: "Sync Tabs",
                 comment: "Button label to sync tabs in your Firefox Account")
+
+            public static let SyncTabsDisabled = MZLocalizedString(
+                key: "TabsTray.Sync.SyncTabsDisabled.v116",
+                tableName: "TabsTray",
+                value: "Turn on tab syncing to view a list of tabs from your other devices.",
+                comment: "Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs.")
         }
     }
 }

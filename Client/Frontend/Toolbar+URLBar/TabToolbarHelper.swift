@@ -60,7 +60,6 @@ open class TabToolbarHelper: NSObject {
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed(ImageIdentifiers.Large.home)
-    var themeManager: ThemeManager
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
@@ -91,14 +90,8 @@ open class TabToolbarHelper: NSObject {
     // Default state as reload
     var middleButtonState: MiddleButtonState = .home
 
-    func setTheme(forButtons buttons: [ThemeApplicable]) {
-        buttons.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
-    }
-
-    init(toolbar: TabToolbarProtocol,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(toolbar: TabToolbarProtocol) {
         self.toolbar = toolbar
-        self.themeManager = themeManager
         super.init()
 
         toolbar.backButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
@@ -154,7 +147,6 @@ open class TabToolbarHelper: NSObject {
         toolbar.bookmarksButton.accessibilityLabel = .AppMenu.Toolbar.BookmarksButtonAccessibilityLabel
         toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.bookmarksButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.bookmarksButton
-        setTheme(forButtons: toolbar.actionButtons)
     }
 
     func didClickBack() {

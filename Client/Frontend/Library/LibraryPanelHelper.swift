@@ -14,7 +14,7 @@ protocol LibraryPanelDelegate: AnyObject {
     func libraryPanel(didSelectURLString url: String, visitType: VisitType)
 }
 
-protocol LibraryPanel: UIViewController, LegacyNotificationThemeable {
+protocol LibraryPanel: UIViewController {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
     var state: LibraryPanelMainState { get set }
     var bottomToolbarItems: [UIBarButtonItem] { get }

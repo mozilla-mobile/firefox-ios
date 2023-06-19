@@ -575,6 +575,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
+        urlBar.applyTheme(theme: themeManager.currentTheme)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
 
         urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         view.addSubview(header)
@@ -1251,7 +1254,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         // No content is showing in between the bottom search bar and the searchViewController
         if isBottomSearchBar, keyboardBackdrop == nil {
             keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
+            keyboardBackdrop?.backgroundColor = themeManager.currentTheme.colors.layer1
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
             keyboardBackdrop?.snp.makeConstraints { make in
                 make.edges.equalTo(view)
@@ -1864,6 +1867,30 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             }
         }
     }
+
+    // MARK: Themeable
+    func applyTheme() {
+        let currentTheme = themeManager.currentTheme
+        let hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.backgroundColor = hasTopTabs ? currentTheme.colors.layer3 : currentTheme.colors.layer1
+        keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        setNeedsStatusBarAppearanceUpdate()
+
+        // Remove as part of FXIOS-5109
+        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
+
+        // Update the `background-color` of any blank webviews.
+        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
+        webViews.forEach({ $0.applyTheme() })
+
+        let tabs = tabManager.tabs
+        tabs.forEach {
+            $0.applyTheme()
+        }
+
+        guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
+        applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1996,13 +2023,27 @@ extension BrowserViewController: LegacyTabDelegate {
 
                 switch type {
                 case .formInput:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
+                    self?.profile.autofill.listCreditCards(completion: { cards, error in
+                        guard let cards = cards, !cards.isEmpty, error == nil
+                        else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            tabWebView.accessoryView.reloadViewFor(.creditCard)
+                            tabWebView.reloadInputViews()
+                        }
+                    })
                 case .formSubmit:
-                    tabWebView.accessoryView.reloadViewFor(.creditCard)
-                    tabWebView.reloadInputViews()
                     self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                     break
+                }
+
+                tabWebView.accessoryView.savedCardsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showBottomSheetCardViewController(creditCard: nil,
+                                                                decryptedCard: nil,
+                                                                viewType: .selectSavedCard)
+                    }
                 }
             }
         }
@@ -2617,6 +2658,22 @@ extension BrowserViewController {
             self.showCreditCardSettings()
         }
 
+        viewController.didSelectCreditCardToFill = { [unowned self] plainTextCard in
+            guard let currentTab = self.tabManager.selectedTab else {
+                return
+            }
+            CreditCardHelper.injectCardInfo(logger: self.logger,
+                                            card: plainTextCard,
+                                            tab: currentTab) { error in
+                guard let error = error else {
+                    return
+                }
+                self.logger.log("Credit card bottom sheet injection \(error)",
+                                level: .debug,
+                                category: .webview)
+            }
+        }
+
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
@@ -2911,41 +2968,6 @@ extension BrowserViewController: TabTrayDelegate {
         } else {
             showSettingsWithDeeplink(to: .customizeTabs)
         }
-    }
-}
-
-// MARK: Browser Chrome Theming
-extension BrowserViewController: LegacyNotificationThemeable {
-    func applyTheme() {
-        guard self.isViewLoaded else { return }
-        // TODO: Clean up after FXIOS-5109
-        let currentTheme = themeManager.currentTheme
-        let ui: [ThemeApplicable?] = [urlBar,
-                                      toolbar,
-                                      readerModeBar]
-        urlBar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: currentTheme)
-        ui.forEach { $0?.applyTheme(theme: currentTheme) }
-        zoomPageBar?.applyTheme(theme: currentTheme)
-        topTabsViewController?.applyTheme()
-
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
-        keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
-        setNeedsStatusBarAppearanceUpdate()
-
-        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
-
-        // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
-        webViews.forEach({ $0.applyTheme() })
-
-        let tabs = tabManager.tabs
-        tabs.forEach {
-            $0.applyTheme()
-            urlBar.locationView.tabDidChangeContentBlocking($0)
-        }
-
-        guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
-        applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 }
 

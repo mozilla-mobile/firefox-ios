@@ -120,6 +120,7 @@ public struct PrefsKeys {
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
     public static let TabMigrationKey = "TabMigrationKey"
+    public static let TabSyncEnabled = "sync.engine.tabs.enabled"
 
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"

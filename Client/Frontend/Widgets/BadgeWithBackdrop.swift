@@ -3,35 +3,35 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
-class BadgeWithBackdrop {
+class BadgeWithBackdrop: ThemeApplicable {
     struct UX {
         static let backdropAlpha: CGFloat = 0.05
         static let badgeOffset: CGFloat = 10
+        static let backdropCircleSize: CGFloat = 40
+        static let badgeSize: CGFloat = 20
     }
 
     // MARK: - Variables
     var backdrop: UIView
     var badge: ToolbarBadge
-    private let badgeSize: CGFloat
     private let backdropCircleSize: CGFloat
-    private let backdropCircleColor: UIColor?
+    private let isPrivateBadge: Bool
 
     // MARK: - Initializers
     init(imageName: String,
-         imageMask: String = "badge-mask",
-         backdropCircleColor: UIColor? = nil,
-         backdropCircleSize: CGFloat = 40,
-         badgeSize: CGFloat = 20) {
-        self.backdropCircleColor = backdropCircleColor
+         imageMask: String = ImageIdentifiers.badgeMask,
+         isPrivateBadge: Bool = false,
+         backdropCircleSize: CGFloat = UX.backdropCircleSize) {
         self.backdropCircleSize = backdropCircleSize
-        self.badgeSize = badgeSize
+        self.isPrivateBadge = isPrivateBadge
 
-        badge = ToolbarBadge(imageName: imageName, imageMask: imageMask, size: badgeSize)
+        badge = ToolbarBadge(imageName: imageName, imageMask: imageMask, size: UX.badgeSize)
         badge.isHidden = true
 
-        backdrop = BadgeWithBackdrop.makeCircle(color: backdropCircleColor, size: backdropCircleSize)
+        backdrop = BadgeWithBackdrop.makeCircle(color: nil, size: backdropCircleSize)
         backdrop.isHidden = true
         backdrop.isUserInteractionEnabled = false
 
@@ -59,6 +59,13 @@ class BadgeWithBackdrop {
         button.superview?.sendSubviewToBack(backdrop)
     }
 
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        let circleColor = isPrivateBadge ? theme.colors.layerAccentPrivate: nil
+        backdrop = BadgeWithBackdrop.makeCircle(color: circleColor,
+                                                size: backdropCircleSize)
+    }
+
     // MARK: - Private
     private static func makeCircle(color: UIColor?, size: CGFloat) -> UIView {
         let circle = UIView()
@@ -76,8 +83,8 @@ class BadgeWithBackdrop {
             backdrop.widthAnchor.constraint(equalToConstant: backdropCircleSize),
             backdrop.heightAnchor.constraint(equalToConstant: backdropCircleSize),
 
-            badge.widthAnchor.constraint(equalToConstant: badgeSize),
-            badge.heightAnchor.constraint(equalToConstant: badgeSize)
+            badge.widthAnchor.constraint(equalToConstant: UX.badgeSize),
+            badge.heightAnchor.constraint(equalToConstant: UX.badgeSize)
         ])
     }
 }

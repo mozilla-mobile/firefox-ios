@@ -950,6 +950,7 @@ private protocol TabWebViewDelegate: AnyObject {
 
 class TabWebView: WKWebView, MenuHelperInterface {
     var accessoryView: AccessoryViewProvider
+    private var logger: Logger = DefaultLogger.shared
 
     override var inputAccessoryView: UIView? {
         translatesAutoresizingMaskIntoConstraints = false
@@ -967,11 +968,13 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
         super.init(frame: frame, configuration: configuration)
         accessoryView.previousClosure = {
-            CreditCardHelper.focusPreviousInputField(tabWebView: self)
+            CreditCardHelper.focusPreviousInputField(tabWebView: self,
+                                                     logger: self.logger)
         }
 
         accessoryView.nextClosure = {
-            CreditCardHelper.focusNextInputField(tabWebView: self)
+            CreditCardHelper.focusNextInputField(tabWebView: self,
+                                                 logger: self.logger)
         }
         accessoryView.doneClosure = { self.endEditing(true) }
     }

@@ -103,7 +103,7 @@ struct CreditCardItemRow: View {
         titleTextColor = Color(color.textPrimary)
         subTextColor = Color(color.textSecondary)
         separatorColor = Color(color.borderPrimary)
-        backgroundColor = Color(color.layer2)
+        backgroundColor = Color(color.layer5)
     }
 }
 
