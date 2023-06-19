@@ -13,11 +13,11 @@ var phases = { "phase1": "profile1" };
 
 // expected history state
 var historyExpected = [
-    { uri: "http://www.example.com/",
-      visits: [
-        { type: 1 }
-      ]
-    }
+  { uri: "http://www.example.com/",
+    visits: [
+      { type: 1 }
+    ]
+  }
 ];
 
 // sync and verify history

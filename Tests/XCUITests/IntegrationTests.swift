@@ -12,7 +12,7 @@ private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
-    let testWithDB = [""]
+    let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
@@ -81,7 +81,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistory () {
-        navigator.openURL("example.com")
+        // navigator.openURL("example.com")
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells.staticTexts["http://example.com/"])
         // History is generated using the DB so go directly to Sign in
