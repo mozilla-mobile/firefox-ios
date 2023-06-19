@@ -145,7 +145,8 @@ open class TabToolbarHelper: NSObject {
         toolbar.homeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.homeButton
 
         toolbar.bookmarksButton.contentMode = .center
-        toolbar.bookmarksButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.bookmarks), for: .normal)
+        toolbar.bookmarksButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.bookmarkTrayFill),
+                                         for: .normal)
         toolbar.bookmarksButton.accessibilityLabel = .AppMenu.Toolbar.BookmarksButtonAccessibilityLabel
         toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.bookmarksButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.bookmarksButton

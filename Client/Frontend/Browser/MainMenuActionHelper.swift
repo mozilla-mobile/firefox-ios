@@ -713,7 +713,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getBookmarkLibraryAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.Bookmarks,
-                                     iconString: ImageIdentifiers.bookmarks) { _ in
+                                     iconString: ImageIdentifiers.Large.bookmarkTrayFill) { _ in
             self.delegate?.showLibrary(panel: .bookmarks)
         }
     }

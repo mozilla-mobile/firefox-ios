@@ -377,7 +377,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.history].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.download].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
