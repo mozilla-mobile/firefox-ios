@@ -12,16 +12,13 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 // Manages different types of onboarding that gets shown at the launch of the application
 class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     private let profile: Profile
-    private let logger: Logger
     private let isIphone: Bool
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
-         logger: Logger = DefaultLogger.shared) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
-        self.logger = logger
         self.isIphone = isIphone
         super.init(router: router)
     }

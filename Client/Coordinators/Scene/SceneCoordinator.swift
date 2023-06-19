@@ -49,19 +49,13 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
-    // MARK: - Route handling
-
-    /// Handles the specified route.
-    ///
-    /// - Parameter route: The route to handle.
-    ///
-    override func handle(route: Route) -> Bool {
-        return false
-    }
-
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
+        logger.log("Launching with launchtype \(launchType)",
+                   level: .info,
+                   category: .coordinator)
+
         let launchCoordinator = LaunchCoordinator(router: router)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
@@ -69,10 +63,18 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
+        logger.log("Starting browser with launchtype \(String(describing: launchType))",
+                   level: .info,
+                   category: .coordinator)
+
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
+
+        if let savedRoute {
+            browserCoordinator.findAndHandle(route: savedRoute)
+        }
     }
 
     // MARK: - LaunchCoordinatorDelegate
