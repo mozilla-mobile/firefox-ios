@@ -47,9 +47,16 @@ protocol SettingsFlowDelegate: AnyObject {
     func showCreditCardSettings()
 }
 
+protocol AppSettingsScreen: UIViewController {
+    var settingsDelegate: SettingsDelegate? { get set }
+    var parentCoordinator: SettingsFlowDelegate? { get set }
+
+    func handle(route: Route.SettingsSection)
+}
+
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate,
-                                        SearchBarLocationProvider {
+class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
+                                    FeatureFlaggable, AppSettingsDelegate, SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false

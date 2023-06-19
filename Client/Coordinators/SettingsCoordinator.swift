@@ -12,7 +12,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 }
 
 class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate {
-    private let settingsViewController: AppSettingsTableViewController
+    var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
