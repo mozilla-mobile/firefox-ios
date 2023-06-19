@@ -87,23 +87,23 @@ class FindInPageBar: UIView {
         matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
-        previousButton.setImage(UIImage(named: "find_previous"), for: [])
-        previousButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        previousButton.setImage(UIImage(named: ImageIdentifiers.Large.chevronUp), for: .normal)
+        previousButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         previousButton.accessibilityLabel = .FindInPagePreviousAccessibilityLabel
         previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
-        previousButton.accessibilityIdentifier = "FindInPage.find_previous"
+        previousButton.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findPreviousButton
         addSubview(previousButton)
 
-        nextButton.setImage(UIImage(named: "find_next"), for: [])
-        nextButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        nextButton.setImage(UIImage(named: ImageIdentifiers.Large.chevronDown), for: .normal)
+        nextButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         nextButton.accessibilityLabel = .FindInPageNextAccessibilityLabel
         nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
-        nextButton.accessibilityIdentifier = "FindInPage.find_next"
+        nextButton.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findNextButton
         addSubview(nextButton)
 
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: ImageIdentifiers.Medium.cross), for: [])
-        closeButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        closeButton.setImage(UIImage(named: ImageIdentifiers.Medium.cross), for: .normal)
+        closeButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         closeButton.accessibilityLabel = .FindInPageDoneAccessibilityLabel
         closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
         closeButton.accessibilityIdentifier = "FindInPage.close"

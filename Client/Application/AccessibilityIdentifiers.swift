@@ -317,6 +317,8 @@ public struct AccessibilityIdentifiers {
 
     struct FindInPage {
         static let findInPageCloseButton = "FindInPage.closeButton"
+        static let findNextButton = "FindInPage.find_next"
+        static let findPreviousButton = "FindInPage.find_previous"
     }
 
     struct RememberCreditCard {
