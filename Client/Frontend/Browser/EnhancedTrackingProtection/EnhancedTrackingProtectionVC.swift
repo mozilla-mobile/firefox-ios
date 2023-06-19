@@ -428,7 +428,7 @@ extension EnhancedTrackingProtectionMenuVC {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: ImageIdentifiers.closeMediumButton)?
+        let buttonImage = UIImage(named: ImageIdentifiers.Medium.cross)?
             .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         connectionView.backgroundColor = theme.colors.layer2

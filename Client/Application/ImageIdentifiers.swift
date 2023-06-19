@@ -12,6 +12,10 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct ImageIdentifiers {
+    public struct Medium {
+        public static let cross = "crossMedium"
+    }
+
     public struct Large {
         public static let appendUp = "appendUpLarge"
         public static let appMenu = "appMenuLarge"
@@ -48,8 +52,6 @@ public struct ImageIdentifiers {
     public static let bottomSheetClose = "bottomSheet-close"
     public static let circleFill = "circle.fill"
     public static let closeLargeButton = "close-large"
-    public static let closeMediumButton = "close-medium"
-    public static let contextualHintClose = "find_close"
     public static let copyLink = "menu-Copy-Link"
     public static let creditCardPlaceholder = "credit_card_placeholder"
     public static let customSwitchBackground = "menu-customswitch-background"
