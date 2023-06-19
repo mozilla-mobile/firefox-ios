@@ -37,10 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
     var sceneCoordinator: SceneCoordinator?
-
-    var routeBuilder = RouteBuilder(isPrivate: {
-        UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
-    })
+    var routeBuilder = RouteBuilder()
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -56,23 +53,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         if CoordinatorFlagManager.isCoordinatorEnabled {
+            routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
+                                   prefs: profile.prefs)
+
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-            if let context = connectionOptions.urlContexts.first,
-               let route = routeBuilder.makeRoute(url: context.url) {
-                sceneCoordinator?.findAndHandle(route: route)
-            }
-
-            if let activity = connectionOptions.userActivities.first,
-               let route = routeBuilder.makeRoute(userActivity: activity) {
-                sceneCoordinator?.findAndHandle(route: route)
-            }
-
-            if let shortcut = connectionOptions.shortcutItem,
-               let route = routeBuilder.makeRoute(shortcutItem: shortcut, tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
-                sceneCoordinator?.findAndHandle(route: route)
-            }
+            handle(connectionOptions: connectionOptions)
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()
@@ -246,6 +233,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 withBrowserViewController: browserViewController,
                 completionHandler: { _ in }
             )
+        }
+    }
+
+    private func handle(connectionOptions: UIScene.ConnectionOptions) {
+        if let context = connectionOptions.urlContexts.first,
+           let route = routeBuilder.makeRoute(url: context.url) {
+            sceneCoordinator?.findAndHandle(route: route)
+        }
+
+        if let activity = connectionOptions.userActivities.first,
+           let route = routeBuilder.makeRoute(userActivity: activity) {
+            sceneCoordinator?.findAndHandle(route: route)
+        }
+
+        if let shortcut = connectionOptions.shortcutItem,
+           let route = routeBuilder.makeRoute(shortcutItem: shortcut,
+                                              tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
+            sceneCoordinator?.findAndHandle(route: route)
         }
     }
 }

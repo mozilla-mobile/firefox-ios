@@ -8,11 +8,7 @@ import Shared
 import WebKit
 import Common
 
-class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-
+class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
@@ -21,7 +17,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     let viewModel: WebsiteDataManagementViewModel
-    private var tableView: UITableView!
 
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
     private var currentSearchText = ""
@@ -30,9 +25,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
-        super.init(nibName: nil, bundle: nil)
+        super.init(themeManager: themeManager, notificationCenter: notificationCenter)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -42,16 +35,10 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
-        view.addSubview(tableView)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
@@ -59,13 +46,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
         KeyboardHelper.defaultHelper.addDelegate(self)
-
-        listenForThemeChange(view)
-        applyTheme()
     }
 
     func reloadData() {
@@ -74,11 +55,11 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         filterContentForSearchText(currentSearchText)
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
         switch section {
         case .sites: return filteredSiteRecords.count
@@ -86,8 +67,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: themeManager.currentTheme)
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -110,7 +91,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -125,7 +106,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
     }
 
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -136,7 +117,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
     }
 
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -146,7 +127,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
@@ -168,7 +149,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         return headerView
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let section = Section(rawValue: section)!
         switch section {
         case .clearButton: return 10 // Controls the space between the site list and the button
@@ -182,11 +163,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         })
 
         tableView.reloadData()
-    }
-
-    func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
 

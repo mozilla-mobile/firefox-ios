@@ -31,7 +31,8 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         if cellStyle == .value2 || cellStyle == .value1 {
             if let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel {
                 let detailHeight = detailTextLabel.frame.size.height
-                if detailTextLabel.frame.minX > textLabel.frame.minX { // style = Value1 or Value2
+                let isValueTextEmpty = detailTextLabel.text?.isEmpty ?? false
+                if !isValueTextEmpty { // style = Value1 or Value2
                     let textHeight = textLabel.frame.size.height
                     if detailHeight > textHeight {
                         size.height += detailHeight - textHeight
@@ -49,6 +50,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override func prepareForReuse() {
         super.prepareForReuse()
         textLabel?.text = nil
+        textLabel?.textAlignment = .natural
         textLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         detailTextLabel?.text = nil
         accessoryView = nil
