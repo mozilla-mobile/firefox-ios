@@ -390,13 +390,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 
-    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        saveTabToDelete(tab: tab, index: tabManager.tabs.firstIndex(of: tab))
+    /// Handles close tab by clicking on close button or swipe gesture
+    func closeTabAction(tab: Tab, cell: TabCell) {
+        tabManager.backupCloseTab = BackupCloseTab(tab: tab,
+                                                   restorePosition: tabManager.tabs.firstIndex(of: tab))
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.performCloseAction(for: tab)
 
+        // Handles case for last tab where Toast is shown on Homepage
         guard !tabDisplayManager.shouldPresentUndoToastOnHomepage else {
-            // Show undo Toast on homepage
             handleUndoToastForLastTab()
             return
         }
@@ -425,10 +427,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
         })
         delegate?.tabTrayDidCloseLastTab(toast: toast)
-    }
-
-    private func saveTabToDelete(tab: Tab, index: Int?) {
-        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
     }
 
     private func presentUndoToast(toastType: UndoToastType,
@@ -557,7 +555,7 @@ extension GridTabViewController: SwipeAnimatorDelegate {
         guard let tabCell = animator.animatingView as? TabCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
+            self.closeTabAction(tab: tab, cell: tabCell)
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
                                  argument: String.TabTrayClosingTabAccessibilityMessage)
         }
@@ -574,7 +572,7 @@ extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell),
            let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            removeByButtonOrSwipe(tab: tab, cell: cell)
+            closeTabAction(tab: tab, cell: cell)
         }
     }
 }
