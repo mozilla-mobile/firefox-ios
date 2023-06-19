@@ -84,6 +84,42 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
+    func testHandleRoute_launchNotFinished_routeSaved() {
+        let subject = createSubject()
+
+        subject.start()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNil(coordinator)
+        XCTAssertNotNil(subject.savedRoute)
+    }
+
+    func testHandleRoute_launchFinishedAndBrowserNotReady_routeSaved() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.launchBrowser()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNil(coordinator)
+        XCTAssertNotNil(subject.savedRoute)
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        XCTAssertNotNil(browserCoordinator.savedRoute)
+    }
+
+    func testHandleRoute_launchFinishedAndBrowserReady_routeSavedCalled() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.launchBrowser()
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        browserCoordinator.browserHasLoaded()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNotNil(coordinator)
+        XCTAssertNil(subject.savedRoute)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> SceneCoordinator {
