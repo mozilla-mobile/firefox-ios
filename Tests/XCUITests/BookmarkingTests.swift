@@ -34,7 +34,7 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkUnbookmarked() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark"])
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)

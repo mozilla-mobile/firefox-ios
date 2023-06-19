@@ -6,7 +6,6 @@ import Foundation
 
 // TODO: Following images are duplicates and need to be cleaned up
 // - `action_bookmark_remove` and `menu-Bookmark-Remove`
-// - `action_bookmark` and `menu-Bookmark`
 
 /// This struct defines all the image identifiers of icons and images used in the app.
 /// When adding new identifiers, please respect alphabetical order.
@@ -21,6 +20,7 @@ public struct ImageIdentifiers {
         public static let appMenu = "appMenuLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
+        public static let bookmark = "bookmarkLarge"
         public static let checkmark = "checkmarkLarge"
         public static let chevronDown = "chevronDownLarge"
         public static let chevronLeft = "chevronLeftLarge"
@@ -45,10 +45,8 @@ public struct ImageIdentifiers {
         public static let tabTray = "tabTrayLarge"
     }
 
-    public static let actionAddBookmark = "action_bookmark"
     public static let actionRemoveBookmark = "action_bookmark_remove"
     public static let addShortcut = "action_pin"
-    public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"
     public static let badgeMask = "badge-mask"
     public static let bookmarks = "menu-panel-Bookmarks"

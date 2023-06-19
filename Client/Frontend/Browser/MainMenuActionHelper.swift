@@ -725,7 +725,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getAddBookmarkAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddBookmark,
                                      alternateTitle: .AppMenu.AddBookmarkAlternateTitle,
-                                     iconString: ImageIdentifiers.addToBookmark) { _ in
+                                     iconString: ImageIdentifiers.Large.bookmark) { _ in
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL
             else { return }

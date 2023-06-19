@@ -135,8 +135,8 @@ class BaseTestCase: XCTestCase {
     func bookmark() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 

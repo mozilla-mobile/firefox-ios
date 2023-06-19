@@ -228,7 +228,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let addBookmarkAction = UIAction(
                     title: .ContextMenuBookmarkLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
+                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
                     identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
                 ) { _ in
                     self.addBookmark(url: url.absoluteString, title: elements.title)

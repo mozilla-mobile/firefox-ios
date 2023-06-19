@@ -475,7 +475,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
         screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
-            app.tables.cells[ImageIdentifiers.actionAddBookmark].tap()
+            app.tables.cells[ImageIdentifiers.Large.bookmark].tap()
         }
         screenState.gesture(forAction: Action.AddNewFolder) { userState in
             app.tables.cells["bookmarkFolder"].tap()
@@ -979,7 +979,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.bookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addToReadingList], forAction: Action.AddToReadingListBrowserTabMenu)
 
         screenState.dismissOnUse = true
