@@ -19,6 +19,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
+<<<<<<< HEAD
+=======
+    private let isSettingsCoordinatorEnabled: Bool
+    private var browserIsReady = false
+>>>>>>> 9fb00bb45 (Bugfix FXIOS-6749 [v114] Deeplink is called when the browser isn't ready (#15025))
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -62,6 +67,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+
+        // Once launch is done, we check for any saved Route
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
     }
 
     // MARK: - BrowserDelegate
@@ -98,6 +108,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         screenshotService.screenshotableView = webviewController
     }
 
+    func browserHasLoaded() {
+        browserIsReady = true
+        logger.log("Browser has loaded", level: .info, category: .coordinator)
+
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
+    }
+
     private func getHomepage(inline: Bool,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
@@ -121,6 +140,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
+        guard browserIsReady else {
+            logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
+            return false
+        }
+
+        logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
         case let .searchQuery(query):
             handle(query: query)
