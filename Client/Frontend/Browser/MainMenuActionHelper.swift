@@ -385,7 +385,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getSendToDevice() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
-                                     iconString: ImageIdentifiers.sendToDevice) { _ in
+                                     iconString: ImageIdentifiers.Large.deviceDesktopSend) { _ in
             guard let delegate = self.sendToDeviceDelegate,
                   let selectedTab = self.selectedTab,
                   let url = selectedTab.canonicalURL?.displayURL
