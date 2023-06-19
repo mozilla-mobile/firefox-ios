@@ -19,11 +19,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
-<<<<<<< HEAD
-=======
-    private let isSettingsCoordinatorEnabled: Bool
     private var browserIsReady = false
->>>>>>> 9fb00bb45 (Bugfix FXIOS-6749 [v114] Deeplink is called when the browser isn't ready (#15025))
 
     init(router: Router,
          screenshotService: ScreenshotService,
