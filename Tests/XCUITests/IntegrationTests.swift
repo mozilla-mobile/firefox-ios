@@ -84,6 +84,7 @@ class IntegrationTests: BaseTestCase {
         // navigator.openURL("example.com")
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells.staticTexts["http://example.com/"])
+        // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
         navigator.goto(HomePanelsScreen)
         navigator.nowAt(NewTabScreen)
