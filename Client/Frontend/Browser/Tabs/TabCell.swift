@@ -62,7 +62,7 @@ class TabCell: UICollectionViewCell,
     lazy var favicon: FaviconImageView = .build { _ in }
 
     lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabViewController.UX.closeButtonEdgeInset)

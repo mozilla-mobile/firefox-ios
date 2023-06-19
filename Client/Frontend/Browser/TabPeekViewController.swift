@@ -96,7 +96,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab,
-                                image: UIImage.templateImageNamed(ImageIdentifiers.closeTap),
+                                image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
                                 identifier: nil) { [weak self] _ in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)

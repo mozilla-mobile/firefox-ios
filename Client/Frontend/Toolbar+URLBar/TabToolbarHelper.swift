@@ -56,7 +56,7 @@ enum MiddleButtonState {
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
-    let ImageStop = UIImage.templateImageNamed("nav-stop")
+    let ImageStop = UIImage.templateImageNamed(ImageIdentifiers.Large.cross)
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed(ImageIdentifiers.Large.home)

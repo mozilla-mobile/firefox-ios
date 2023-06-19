@@ -79,7 +79,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }()
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-stop"), style: .done, target: self, action: #selector(topLeftButtonAction))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross), style: .done, target: self, action: #selector(topLeftButtonAction))
         return button
     }()
 

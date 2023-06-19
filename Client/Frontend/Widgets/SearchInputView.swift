@@ -54,7 +54,7 @@ class SearchInputView: UIView, LegacyNotificationThemeable {
     fileprivate lazy var closeButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(tappedClose), for: .touchUpInside)
-        button.setImage(UIImage(named: "clear"), for: [])
+        button.setImage(UIImage(named: ImageIdentifiers.Large.cross), for: .normal)
         button.accessibilityLabel = .SearchInputClearAccessibilityLabel
         return button
     }()

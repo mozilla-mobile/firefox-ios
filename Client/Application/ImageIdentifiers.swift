@@ -21,6 +21,7 @@ public struct ImageIdentifiers {
         public static let chevronLeft = "chevronLeftLarge"
         public static let chevronRight = "chevronRightLarge"
         public static let creditCard = "creditCardLarge"
+        public static let cross = "crossLarge"
         public static let delete = "deleteLarge"
         public static let deviceDesktop = "deviceDesktopLarge"
         public static let deviceDesktopSend = "deviceDesktopSendLarge"
@@ -38,7 +39,6 @@ public struct ImageIdentifiers {
     }
 
     public static let actionAddBookmark = "action_bookmark"
-    public static let actionRemove = "action_remove"
     public static let actionRemoveBookmark = "action_bookmark_remove"
     public static let addShortcut = "action_pin"
     public static let addToBookmark = "menu-Bookmark"
@@ -49,7 +49,6 @@ public struct ImageIdentifiers {
     public static let circleFill = "circle.fill"
     public static let closeLargeButton = "close-large"
     public static let closeMediumButton = "close-medium"
-    public static let closeTap = "menu-CloseTabs"
     public static let contextualHintClose = "find_close"
     public static let copyLink = "menu-Copy-Link"
     public static let creditCardPlaceholder = "credit_card_placeholder"
@@ -122,6 +121,5 @@ public struct ImageIdentifiers {
     public static let warning = "menu-warning"
     public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
-    public static let xMark = "nav-stop"
     public static let zoomIn = "menu-ZoomIn"
 }

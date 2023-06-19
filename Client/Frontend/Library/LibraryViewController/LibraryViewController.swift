@@ -256,7 +256,7 @@ class LibraryViewController: UIViewController, Themeable {
             topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
-            topLeftButton.image = UIImage.templateImageNamed("nav-stop")
+            topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.Large.cross)
             navigationItem.leftBarButtonItem = topLeftButton
         default:
             navigationItem.leftBarButtonItem = nil

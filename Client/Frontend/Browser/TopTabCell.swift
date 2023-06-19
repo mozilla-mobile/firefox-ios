@@ -42,7 +42,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
     let favicon: FaviconImageView = .build { _ in }
 
     let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeTap), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
         button.imageEdgeInsets = UIEdgeInsets(top: 15,
                                               left: UX.tabTitlePadding,
                                               bottom: 15,

@@ -272,7 +272,7 @@ class TopTabsTest: BaseTestCase {
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.cells.otherElements[ImageIdentifiers.Large.plus])
             XCTAssertTrue(app.cells.otherElements[ImageIdentifiers.Large.plus].exists)
-            XCTAssertTrue(app.cells.otherElements["tab_close"].exists)
+            XCTAssertTrue(app.cells.otherElements[ImageIdentifiers.Large.cross].exists)
 
             // Open New Tab
             app.cells.otherElements[ImageIdentifiers.Large.plus].tap()
@@ -291,7 +291,7 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.Large.plus])
-            app.tables.cells.otherElements["tab_close"].tap()
+            app.tables.cells.otherElements[ImageIdentifiers.Large.cross].tap()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
