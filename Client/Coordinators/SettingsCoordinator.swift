@@ -144,4 +144,8 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         let creditCardViewController = CreditCardSettingsViewController(creditCardViewModel: viewModel)
         router.push(creditCardViewController)
     }
+
+    func didFinishShowingSettings() {
+        didFinish()
+    }
 }

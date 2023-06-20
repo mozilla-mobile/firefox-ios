@@ -29,6 +29,7 @@ enum DeeplinkInput {
         case settings = "settings"
         case homepanel = "homepanel"
         case defaultBrowser = "default-browser"
+        case action
     }
 
     enum Shortcut: String {

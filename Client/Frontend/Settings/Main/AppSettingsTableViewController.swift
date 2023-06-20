@@ -38,13 +38,16 @@ enum AppSettingsDeeplinkOption {
 
 /// Child settings pages action
 protocol AppSettingsDelegate: AnyObject {
-    func clickedVersion()
+    func pressedVersion()
+    func pressedShowTour()
 }
 
 /// Supports decision making from VC to parent coordinator
 protocol SettingsFlowDelegate: AnyObject {
     func showDevicePassCode()
     func showCreditCardSettings()
+
+    func didFinishShowingSettings()
 }
 
 protocol AppSettingsScreen: UIViewController {
@@ -62,6 +65,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     private var showDebugSettings = false
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
+    private var applicationHelper: ApplicationHelper
     weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Initializers
@@ -69,9 +73,11 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
          and tabManager: TabManager,
          delegate: SettingsDelegate? = nil,
          deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.deeplinkTo = destination
         self.appAuthenticator = appAuthenticator
+        self.applicationHelper = applicationHelper
 
         super.init()
         self.profile = profile
@@ -343,7 +349,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
-            ShowIntroductionSetting(settings: self),
+            ShowIntroductionSetting(settings: self, appSettingsDelegate: self),
             SendFeedbackSetting(),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
@@ -396,7 +402,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     // MARK: - AppSettingsDelegate
 
-    func clickedVersion() {
+    func pressedVersion() {
         debugSettingsClickCount += 1
         if debugSettingsClickCount >= 5 {
             debugSettingsClickCount = 0
@@ -404,6 +410,14 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             settings = generateSettings()
             tableView.reloadData()
         }
+    }
+
+    func pressedShowTour() {
+        parentCoordinator?.didFinishShowingSettings()
+
+        let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
+        guard let url = URL(string: urlString) else { return }
+        applicationHelper.open(url)
     }
 
     // MARK: - UITableViewDelegate

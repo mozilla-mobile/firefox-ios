@@ -10,6 +10,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     private var tabManager: TabManager!
     private var appAuthenticator: MockAppAuthenticator!
     private var delegate: MockSettingsFlowDelegate!
+    private var applicationHelper: MockApplicationHelper!
 
     override func setUp() {
         super.setUp()
@@ -18,6 +19,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
+        self.applicationHelper = MockApplicationHelper()
     }
 
     override func tearDown() {
@@ -27,6 +29,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.tabManager = nil
         self.appAuthenticator = nil
         self.delegate = nil
+        self.applicationHelper = nil
     }
 
     func testRouteNotHandled_delegatesArentCalled() {
@@ -68,11 +71,23 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.showCreditCardSettingsCalled, 0)
     }
 
+    func testPressedShowTour_openOnboardingDeeplinkURL() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.pressedShowTour()
+
+        XCTAssertEqual(delegate.didFinishShowingSettingsCalled, 1)
+        XCTAssertEqual(applicationHelper.lastOpenURL,
+                       URL(string: "fennec://deep-link?url=/action/show-intro-onboarding")!)
+    }
+
     // MARK: - Helper
     private func createSubject() -> AppSettingsTableViewController {
         let subject = AppSettingsTableViewController(with: profile,
                                                      and: tabManager,
-                                                     appAuthenticator: appAuthenticator)
+                                                     appAuthenticator: appAuthenticator,
+                                                     applicationHelper: applicationHelper)
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -82,6 +97,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
 class MockSettingsFlowDelegate: SettingsFlowDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
+    var didFinishShowingSettingsCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -89,5 +105,9 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate {
 
     func showCreditCardSettings() {
         showCreditCardSettingsCalled += 1
+    }
+
+    func didFinishShowingSettings() {
+        didFinishShowingSettingsCalled += 1
     }
 }

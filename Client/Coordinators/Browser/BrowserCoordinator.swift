@@ -185,6 +185,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             case .showQRCode:
                 handleQRCode()
                 return true
+            case .showIntroOnboarding:
+                return showIntroOnboarding()
             }
 
         case let .fxaSignIn(params):
@@ -200,6 +202,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             }
             return true
         }
+    }
+
+    private func showIntroOnboarding() -> Bool {
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        startLaunch(with: launchType)
+        return true
     }
 
     private func handleQRCode() {
