@@ -7,6 +7,28 @@ import XCTest
 @testable import Client
 
 class EnhancedTrackingProtectionMenuVMTests: XCTestCase {
+    func test_websiteTitle_whenURLHasBaseDomainDeliversCorrectTitle() {
+        let sut = EnhancedTrackingProtectionMenuVM(
+            url: URL(string: "https://firefox.com")!,
+            displayTitle: "any",
+            connectionSecure: true,
+            globalETPIsEnabled: true,
+            contentBlockerStatus: anyContentBlockerStatus())
+
+        XCTAssertEqual(sut.websiteTitle, "firefox.com")
+    }
+
+    func test_websiteTitle_whenURLDoesNotHaveBaseDomainDeliversEmptyTitle() {
+        let sut = EnhancedTrackingProtectionMenuVM(
+            url: URL(string: "https://192.168.0.1:8080/path/to/resource")!,
+            displayTitle: "any",
+            connectionSecure: true,
+            globalETPIsEnabled: true,
+            contentBlockerStatus: anyContentBlockerStatus())
+
+        XCTAssertEqual(sut.websiteTitle, "")
+    }
+
     func test_connectionStatusString_whenConnectionIsSecureDeliversCorrectStatus() {
         let sut = EnhancedTrackingProtectionMenuVM(
             url: anyURL(),
