@@ -26,15 +26,6 @@ class EnhancedTrackingProtectionMenuVM {
         return connectionSecure ? .ProtectionStatusSecure : .ProtectionStatusNotSecure
     }
 
-    func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        let insecureImageName = themeType.getThemedImageName(name: ImageIdentifiers.lockBlocked)
-        if connectionSecure {
-            return UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
-        } else {
-            return UIImage(imageLiteralResourceName: insecureImageName)
-        }
-    }
-
     var isSiteETPEnabled: Bool {
         switch contentBlockerStatus {
         case .noBlockedURLs, .blocking, .disabled: return true
@@ -57,6 +48,15 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     // MARK: - Functions
+
+    func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
+        let insecureImageName = themeType.getThemedImageName(name: ImageIdentifiers.lockBlocked)
+        if connectionSecure {
+            return UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
+        } else {
+            return UIImage(imageLiteralResourceName: insecureImageName)
+        }
+    }
 
     func getDetailsViewModel() -> EnhancedTrackingProtectionDetailsVM {
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
