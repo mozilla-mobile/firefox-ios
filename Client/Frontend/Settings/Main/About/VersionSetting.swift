@@ -32,7 +32,7 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        appSettingsDelegate?.clickedVersion()
+        appSettingsDelegate?.pressedVersion()
     }
 
     override func onLongPress(_ navigationController: UINavigationController?) {

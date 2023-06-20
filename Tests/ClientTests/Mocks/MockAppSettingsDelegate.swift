@@ -6,14 +6,14 @@ import Foundation
 @testable import Client
 
 class MockAppSettingsDelegate: AppSettingsDelegate {
-    var clickedVersionCalled = 0
-    var clickedShowTourCalled = 0
+    var pressedVersionCalled = 0
+    var pressedShowTourCalled = 0
 
-    func clickedVersion() {
-        clickedVersionCalled += 1
+    func pressedVersion() {
+        pressedVersionCalled += 1
     }
 
-    func clickedShowTour() {
-        clickedShowTourCalled += 1
+    func pressedShowTour() {
+        pressedShowTourCalled += 1
     }
 }

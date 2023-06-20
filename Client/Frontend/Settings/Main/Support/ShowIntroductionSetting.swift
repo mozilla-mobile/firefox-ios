@@ -27,7 +27,7 @@ class ShowIntroductionSetting: Setting {
         )
 
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            appSettingsDelegate?.clickedShowTour()
+            appSettingsDelegate?.pressedShowTour()
         } else {
             navigationController?.dismiss(animated: true) {
                 NotificationCenter.default.post(name: .PresentIntroView, object: self)

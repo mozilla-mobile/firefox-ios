@@ -71,11 +71,11 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.showCreditCardSettingsCalled, 0)
     }
 
-    func testClickedShowTour_openOnboardingDeeplinkURL() {
+    func testPressedShowTour_openOnboardingDeeplinkURL() {
         let subject = createSubject()
         subject.parentCoordinator = delegate
 
-        subject.clickedShowTour()
+        subject.pressedShowTour()
 
         XCTAssertEqual(delegate.didFinishShowingSettingsCalled, 1)
         XCTAssertEqual(applicationHelper.lastOpenURL,

@@ -38,8 +38,8 @@ enum AppSettingsDeeplinkOption {
 
 /// Child settings pages action
 protocol AppSettingsDelegate: AnyObject {
-    func clickedVersion()
-    func clickedShowTour()
+    func pressedVersion()
+    func pressedShowTour()
 }
 
 /// Supports decision making from VC to parent coordinator
@@ -402,7 +402,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     // MARK: - AppSettingsDelegate
 
-    func clickedVersion() {
+    func pressedVersion() {
         debugSettingsClickCount += 1
         if debugSettingsClickCount >= 5 {
             debugSettingsClickCount = 0
@@ -412,7 +412,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         }
     }
 
-    func clickedShowTour() {
+    func pressedShowTour() {
         parentCoordinator?.didFinishShowingSettings()
 
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
