@@ -55,6 +55,22 @@ class EnhancedTrackingProtectionMenuVMTests: XCTestCase {
         XCTAssertFalse(sut.isSiteETPEnabled)
     }
 
+    func test_getConnectionStatusImage_whenConnectionIsSecureDeliversCorrectImage() {
+        let sut = makeSUT(connectionSecure: true)
+
+        let image = sut.getConnectionStatusImage(themeType: .light)
+
+        XCTAssertEqual(image.accessibilityIdentifier, "lock_verified")
+    }
+
+    func test_getConnectionStatusImage_whenConnectionIsNotSecureDeliversCorrectImage() {
+        let sut = makeSUT(connectionSecure: false)
+
+        let image = sut.getConnectionStatusImage(themeType: .light)
+
+        XCTAssertEqual(image.accessibilityIdentifier, "lock_blocked")
+    }
+
     // MARK: Helpers
 
     private func makeSUT(
