@@ -38,7 +38,7 @@ class IntroViewControllerTests: XCTestCase {
         let subject = createSubject()
 
         XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 1)
-        subject.viewModel.availableCards[0].primaryAction()
+        subject.registerForNotification()
 
         XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
     }
