@@ -240,12 +240,8 @@
       "proposedEnrollment": 8,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
-<<<<<<< HEAD
-      "localizations": null
-=======
       "localizations": null,
       "locales": null
->>>>>>> 8f566695a (Refactor [v114.4] Update initial experiments JSON for Nimbus (#15057))
     },
     {
       "schemaVersion": "1.12.0",
