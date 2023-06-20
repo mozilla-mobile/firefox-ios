@@ -383,7 +383,6 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
-//        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.noImageMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
