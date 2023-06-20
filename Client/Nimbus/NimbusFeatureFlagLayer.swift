@@ -61,6 +61,9 @@ final class NimbusFeatureFlagLayer {
                 .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
+        case .reduxIntegration:
+            return checkReduxIntegrationFeature(from: nimbus)
+
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
@@ -192,6 +195,7 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.settingsCoordinatorRefactor.value()
         return config.enabled
     }
+
     private func checkEtpCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.etpCoordinatorRefactor.value()
         return config.enabled
@@ -220,6 +224,11 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.reduxIntegrationFeature.value()
+        return config.enabled
     }
 
     private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {

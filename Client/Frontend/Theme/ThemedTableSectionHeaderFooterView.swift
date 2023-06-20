@@ -46,7 +46,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         label.numberOfLines = 0
     }
 
-    fileprivate lazy var bordersHelper = ThemedHeaderFooterViewBordersHelper()
+    private lazy var bordersHelper = ThemedHeaderFooterViewBordersHelper()
     private var titleTopConstraint: NSLayoutConstraint!
     private var titleBottomConstraint: NSLayoutConstraint!
 
