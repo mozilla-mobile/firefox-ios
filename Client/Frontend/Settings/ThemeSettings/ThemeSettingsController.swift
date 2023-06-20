@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 import Shared
 
-class ThemeSettingsController: ThemedTableViewController {
+class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     struct UX {
         static var rowHeight: CGFloat = 70
         static var moonSunIconSize: CGFloat = 18
