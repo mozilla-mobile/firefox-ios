@@ -642,6 +642,17 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
     }
 
+    func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = subject.handle(route: .action(action: .showIntroOnboarding))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
+    }
+
     // MARK: - Saved route
 
     func testSavesRoute_whenLaunchFinished() throws {

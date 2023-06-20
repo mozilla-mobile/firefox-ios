@@ -234,6 +234,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is CreditCardSettingsViewController)
     }
 
+    func testDidFinishShowingSettings_callsDidFinish() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.didFinishShowingSettings()
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,

@@ -186,7 +186,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 handleQRCode()
                 return true
             case .showIntroOnboarding:
-                return showIntroOnboardingIfNeeded()
+                return showIntroOnboarding()
             }
 
         case let .fxaSignIn(params):
@@ -204,15 +204,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
-    private func showIntroOnboardingIfNeeded() -> Bool {
+    private func showIntroOnboarding() -> Bool {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
-        if launchType.canLaunch(fromType: .BrowserCoordinator) {
-            startLaunch(with: launchType)
-            return true
-        } else {
-            return false
-        }
+        startLaunch(with: launchType)
+        return true
     }
 
     private func handleQRCode() {
