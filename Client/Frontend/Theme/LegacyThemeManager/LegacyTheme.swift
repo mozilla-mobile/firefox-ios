@@ -58,7 +58,6 @@ class TopTabsColor {
 }
 
 class HomePanelColor {
-    var panelBackground: UIColor { return UIColor.Photon.White100 }
     var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
 }
 

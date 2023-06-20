@@ -10,7 +10,7 @@ import SiteImageView
 
 /// This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
 /// When we have coordinators, where the coordinator provides the VM to the VC, we can generalize this.
-class SearchGroupedItemsViewController: UIViewController {
+class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, Themeable {
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList
@@ -21,11 +21,13 @@ class SearchGroupedItemsViewController: UIViewController {
 
     let profile: Profile
     let viewModel: SearchGroupedItemsViewModel
-    var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
-    private var themeManager: ThemeManager
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     private var logger: Logger
 
-    lazy private var tableView: UITableView = .build { [weak self] tableView in
+    private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDatasource
         tableView.accessibilityIdentifier = a11y.tableView
@@ -38,7 +40,7 @@ class SearchGroupedItemsViewController: UIViewController {
         }
     }
 
-    fileprivate lazy var doneButton: UIBarButtonItem =  {
+    private lazy var doneButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(doneButtonAction))
         button.accessibilityIdentifier = "ShowGroupDoneButton"
         return button
@@ -51,10 +53,12 @@ class SearchGroupedItemsViewController: UIViewController {
     init(viewModel: SearchGroupedItemsViewModel,
          profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.profile = profile
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.logger = logger
 
         super.init(nibName: nil, bundle: nil)
@@ -71,7 +75,8 @@ class SearchGroupedItemsViewController: UIViewController {
 
         setupLayout()
         configureDatasource()
-        setupNotifications()
+
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -123,9 +128,9 @@ class SearchGroupedItemsViewController: UIViewController {
                 cell.titleLabel.isHidden = site.title.isEmpty
                 cell.descriptionLabel.text = site.url
                 cell.descriptionLabel.isHidden = false
-                cell.leftImageView.layer.borderColor = self.themeManager.currentTheme.colors.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
                 cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                cell.applyTheme(theme: themeManager.currentTheme)
 
                 return cell
             }
@@ -147,29 +152,12 @@ class SearchGroupedItemsViewController: UIViewController {
 
     // MARK: - Misc. helpers
 
-    private func setupNotifications() {
-        viewModel.notifications.forEach {
-            NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
-        }
-    }
-
-    @objc
-    private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-
     @objc
     private func doneButtonAction() {
         dismiss(animated: true, completion: nil)
     }
-}
 
-extension SearchGroupedItemsViewController: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
@@ -198,20 +186,13 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
             dismiss(animated: true, completion: nil)
         }
     }
-}
 
-extension SearchGroupedItemsViewController: LegacyNotificationThemeable {
+    // MARK: - Themeable
+
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
-        } else {
-            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
-        }
-
-        view.backgroundColor = .systemBackground
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-
-        tableView.reloadData()
+        let theme = themeManager.currentTheme
+        tableView.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer1
+        tableView.separatorColor = theme.colors.borderPrimary
     }
 }

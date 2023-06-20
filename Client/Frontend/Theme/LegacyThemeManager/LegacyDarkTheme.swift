@@ -22,7 +22,6 @@ private class DarkTabTrayColor: TabTrayColor {
 }
 
 private class DarkHomePanelColor: HomePanelColor {
-    override var panelBackground: UIColor { return UIColor.Photon.Grey80 }
     override var activityStreamHeaderText: UIColor { return UIColor.Photon.LightGrey05 }
 }
 
