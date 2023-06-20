@@ -13,6 +13,13 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
 
     var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
 
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

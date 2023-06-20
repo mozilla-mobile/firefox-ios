@@ -543,6 +543,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
             object: nil)
+
+        // PresentIntroView notification and code will be removed with FXIOS-6529
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(presentIntroFrom),

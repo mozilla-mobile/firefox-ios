@@ -36,8 +36,8 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
             creditCardViewModel: viewModel)
 
         guard let navController = navigationController else { return }
-        if appAuthenticator.canAuthenticateDeviceOwner() {
-            AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
+        if appAuthenticator.canAuthenticateDeviceOwner {
+            appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                 switch result {
                 case .success:
                     navController.pushViewController(viewController,

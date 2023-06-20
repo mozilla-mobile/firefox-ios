@@ -7,13 +7,13 @@ import UIKit
 
 class MockApplicationHelper: ApplicationHelper {
     var openSettingsCalled = 0
+    var openURLCalled = 0
+    var lastOpenURL: URL?
 
     func openSettings() {
         openSettingsCalled += 1
     }
 
-    var openURLCalled = 0
-    var lastOpenURL: URL?
     func open(_ url: URL) {
         openURLCalled += 1
         lastOpenURL = url

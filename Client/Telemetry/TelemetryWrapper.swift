@@ -296,7 +296,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
         // Device Authentication
-        GleanMetrics.Device.authentication.set(AppAuthenticator().canAuthenticateDeviceOwner())
+        GleanMetrics.Device.authentication.set(AppAuthenticator().canAuthenticateDeviceOwner)
 
         // Wallpapers
         let currentWallpaper = WallpaperManager().currentWallpaper

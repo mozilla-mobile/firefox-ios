@@ -6,12 +6,18 @@ import Foundation
 @testable import Client
 
 class MockAppAuthenticator: AppAuthenticationProtocol {
+    var authenticationState: AuthenticationState = .deviceOwnerAuthenticated
     var shouldAuthenticateDeviceOwner = true
-    func canAuthenticateDeviceOwner() -> Bool {
+    var shouldSucceed = true
+
+    func getAuthenticationState(completion: @escaping (AuthenticationState) -> Void) {
+        completion(authenticationState)
+    }
+
+    var canAuthenticateDeviceOwner: Bool {
         return shouldAuthenticateDeviceOwner
     }
 
-    var shouldSucceed = true
     func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
         if shouldSucceed {
             completion(.success(()))

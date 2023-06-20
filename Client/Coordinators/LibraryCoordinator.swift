@@ -32,7 +32,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.delegate = self
 
-        router.setRootViewController(libraryViewController, hideBar: false, animated: false)
+        router.setRootViewController(libraryViewController)
     }
 
     func libraryPanelDidRequestToSignIn() {

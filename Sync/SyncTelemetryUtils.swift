@@ -615,6 +615,9 @@ public class GleanSyncOperationHelper {
         case "clients":
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.incoming[l].add(Int32(v))}
             outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.outgoing[l].add(Int32(v)) }
+        case "creditcards":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.CreditCardsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.CreditCardsSync.outgoing[l].add(Int32(v)) }
         default:
             break
         }
@@ -629,6 +632,7 @@ public class GleanSyncOperationHelper {
         case "history": GleanMetrics.HistorySync.failureReason[correctedReson].add()
         case "logins", "passwords": GleanMetrics.LoginsSync.failureReason[correctedReson].add()
         case "clients": GleanMetrics.ClientsSync.failureReason[correctedReson].add()
+        case "creditcards": GleanMetrics.CreditCardsSync.failureReason[correctedReson].add()
         default:
             break
         }
@@ -641,6 +645,7 @@ public class GleanSyncOperationHelper {
         case "history": GleanMetrics.Pings.shared.tempHistorySync.submit()
         case "logins", "passwords": GleanMetrics.Pings.shared.tempLoginsSync.submit()
         case "clients": GleanMetrics.Pings.shared.tempClientsSync.submit()
+        case "creditcards": GleanMetrics.Pings.shared.tempCreditCardsSync.submit()
         default:
             break
         }
