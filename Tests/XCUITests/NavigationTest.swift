@@ -273,8 +273,8 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables["Context Menu"].otherElements["download"].exists)
-        app.tables["Context Menu"].otherElements["download"].tap()
+        XCTAssertTrue(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].exists)
+        app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])

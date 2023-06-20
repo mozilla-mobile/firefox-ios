@@ -65,7 +65,7 @@ class DownloadFilesTests: BaseTestCase {
 
         waitForExistence(app.tables["Context Menu"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.tables["Context Menu"].otherElements["download"].exists)
+        XCTAssertTrue(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].exists)
         app.buttons["Cancel"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -154,8 +154,8 @@ class DownloadFilesTests: BaseTestCase {
 
             app.webViews.links[testFileName].firstMatch.tap()
 
-            waitForExistence(app.tables["Context Menu"].otherElements["download"], timeout: TIMEOUT)
-            app.tables["Context Menu"].otherElements["download"].tap()
+            waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download], timeout: TIMEOUT)
+            app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].tap()
         }
     }
 

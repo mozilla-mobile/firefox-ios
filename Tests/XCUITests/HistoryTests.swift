@@ -379,10 +379,10 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
-            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
+            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
         } else {
-            app.cells.buttons["tab close"].firstMatch.tap()
-            // app.otherElements.cells.element(boundBy: 0).buttons["tab close"].tap()
+            app.cells.buttons[ImageIdentifiers.Large.cross].firstMatch.tap()
+            // app.otherElements.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
         }
     }
 
