@@ -51,7 +51,7 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
 
-        if appAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner {
             if LoginOnboarding.shouldShow() {
                 let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
 

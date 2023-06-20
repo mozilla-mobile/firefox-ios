@@ -246,23 +246,18 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func showSettings(with section: Route.SettingsSection) {
-        let settingsVC = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager
-        )
-        let navigationController = ThemedNavigationController(rootViewController: settingsVC)
+        let navigationController = ThemedNavigationController()
         navigationController.modalPresentationStyle = .formSheet
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
-        settingsVC.settingsDelegate = settingsCoordinator
         settingsCoordinator.parentCoordinator = self
-
         add(child: settingsCoordinator)
+        settingsCoordinator.start(with: section)
+
         router.present(navigationController) { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
-        settingsCoordinator.start(with: section)
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {

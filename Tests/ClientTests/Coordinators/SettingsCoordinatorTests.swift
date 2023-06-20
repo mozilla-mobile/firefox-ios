@@ -10,6 +10,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var wallpaperManager: WallpaperManagerMock!
     private var delegate: MockSettingsCoordinatorDelegate!
+    private var mockSettingsVC: MockAppSettingsScreen!
 
     override func setUp() {
         super.setUp()
@@ -18,6 +19,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.wallpaperManager = WallpaperManagerMock()
         self.delegate = MockSettingsCoordinatorDelegate()
+        self.mockSettingsVC = MockAppSettingsScreen()
     }
 
     override func tearDown() {
@@ -25,12 +27,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         self.mockRouter = nil
         self.wallpaperManager = nil
         self.delegate = nil
+        self.mockSettingsVC = nil
         DependencyHelperMock().reset()
     }
 
     func testEmptyChilds_whenCreated() {
         let subject = createSubject()
+
         XCTAssertEqual(subject.childCoordinators.count, 0)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertNotNil(mockRouter.rootViewController as? AppSettingsTableViewController)
     }
 
     func testGeneralSettingsRoute_showsGeneralSettingsPage() throws {
@@ -191,6 +197,43 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
+    // MARK: - Settings VC
+    func testDelegatesAreSet() {
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.settingsViewController.settingsDelegate)
+        XCTAssertNotNil(subject.settingsViewController.parentCoordinator)
+    }
+
+    func testHandleRouteCalled_whenCreditCardRouteIsSet() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.start(with: .creditCard)
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
+    }
+
+    // MARK: - SettingsFlowDelegate
+    func testShowDevicePasscode_showDevicePasscodeVC() {
+        let subject = createSubject()
+
+        subject.showDevicePassCode()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is DevicePasscodeRequiredViewController)
+    }
+
+    func testCreditCardSettings_showsCreditCardVC() {
+        let subject = createSubject()
+
+        subject.showCreditCardSettings()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is CreditCardSettingsViewController)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
@@ -213,5 +256,19 @@ class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
 
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         didFinishSettingsCalled += 1
+    }
+}
+
+// MARK: - MockAppSettingsScreen
+class MockAppSettingsScreen: UIViewController, AppSettingsScreen {
+    var settingsDelegate: SettingsDelegate?
+    var parentCoordinator: SettingsFlowDelegate?
+
+    var handleRouteCalled = 0
+    var savedRoute: Route.SettingsSection?
+
+    func handle(route: Route.SettingsSection) {
+        handleRouteCalled += 1
+        savedRoute = route
     }
 }

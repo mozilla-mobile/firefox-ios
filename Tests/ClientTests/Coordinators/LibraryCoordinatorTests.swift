@@ -12,6 +12,7 @@ final class LibraryCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.delegate = MockLibraryCoordinatorDelegate()
