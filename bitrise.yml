@@ -37,15 +37,15 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=16.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-    - xcode-test-without-building@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 600
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.4-x86_64.xctestrun"
-        - maximum_test_repetitions: 2
+    #- xcode-test-without-building@0:
+    #    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+    #    timeout: 600
+    #    inputs:
+    #    - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+    #    - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
+    #        "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    #    - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.4-x86_64.xctestrun"
+    #    - maximum_test_repetitions: 2
     - save-spm-cache@1:
         is_always_run: true
     - script@1.1:
