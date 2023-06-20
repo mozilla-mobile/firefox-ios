@@ -117,8 +117,8 @@ extension BrowserViewController: URLBarDelegate {
                 url: url,
                 displayTitle: tab.displayTitle,
                 connectionSecure: webView.hasOnlySecureContent,
-                contentBlocker: contentBlocker,
-                profile: profile)
+                globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+                contentBlockerStatus: contentBlocker.status)
             etpViewModel.onOpenSettingsTapped = {
                 if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
                     // Wait to show settings in async dispatch since hamburger menu is still showing at that time
