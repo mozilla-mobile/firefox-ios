@@ -28,9 +28,8 @@ pull_request_rules:
     conditions:
       - author=github-actions[bot]
       - check-success=Bitrise
-      - -files~=^Client.xcodeproj/project.pbxproj
-      - -files~=^Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
-      - head=update-rust-component-version
+      - files=Client.xcodeproj/project.pbxproj
+      - files=Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     actions:
       review:
         type: APPROVE

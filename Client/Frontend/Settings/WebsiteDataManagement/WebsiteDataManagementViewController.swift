@@ -4,87 +4,7 @@
 
 import UIKit
 import Shared
-import WebKit
 import Common
-
-class WebsiteDataManagementViewModel {
-    enum State {
-        case loading
-        case displayInitial
-        case displayAll
-    }
-
-    private(set) var state: State = .loading
-    private(set) var siteRecords: [WKWebsiteDataRecord] = []
-    private(set) var selectedRecords: Set<WKWebsiteDataRecord> = []
-    var onViewModelChanged: () -> Void = {}
-
-    var clearButtonTitle: String {
-        switch selectedRecords.count {
-        case 0: return .SettingsClearAllWebsiteDataButton
-        default: return String(format: .SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
-        }
-    }
-
-    func loadAllWebsiteData() {
-        state = .loading
-
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: types) { [weak self] records in
-            self?.siteRecords = records.sorted { $0.displayName < $1.displayName }
-            self?.state = .displayInitial
-            self?.onViewModelChanged()
-        }
-
-        self.onViewModelChanged()
-    }
-
-    func selectItem(_ item: WKWebsiteDataRecord) {
-        selectedRecords.insert(item)
-        onViewModelChanged()
-    }
-
-    func deselectItem(_ item: WKWebsiteDataRecord) {
-        selectedRecords.remove(item)
-        onViewModelChanged()
-    }
-
-    func createAlertToRemove() -> UIAlertController {
-        if selectedRecords.isEmpty {
-            return UIAlertController.clearAllWebsiteDataAlert { _ in self.removeAllRecords() }
-        } else {
-            return UIAlertController.clearSelectedWebsiteDataAlert { _ in self.removeSelectedRecords() }
-        }
-    }
-
-    private func removeSelectedRecords() {
-        let previousState = state
-        state = .loading
-        onViewModelChanged()
-
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, for: Array(selectedRecords)) { [weak self] in
-            self?.state = previousState
-            self?.siteRecords.removeAll { self?.selectedRecords.contains($0) ?? false }
-            self?.selectedRecords = []
-            self?.onViewModelChanged()
-        }
-    }
-
-    private func removeAllRecords() {
-        let previousState = state
-        state = .loading
-        onViewModelChanged()
-
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) { [weak self] in
-            self?.siteRecords = []
-            self?.selectedRecords = []
-            self?.state = previousState
-            self?.onViewModelChanged()
-        }
-    }
-}
 
 class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource,
                                            UITableViewDelegate, UISearchBarDelegate, Themeable {
@@ -136,6 +56,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
+        tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -198,7 +119,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = dequeueCellFor(indexPath: indexPath)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -210,6 +131,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                     tableView.deselectRow(at: indexPath, animated: false)
                 }
             }
+            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .standard)
+            cell.configure(viewModel: cellViewModel)
         case .showMore:
             let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: cellType)
@@ -228,6 +151,14 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         }
 
         cell.applyTheme(theme: themeManager.currentTheme)
+        return cell
+    }
+
+    private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell
+        else {
+            return ThemedTableViewCell()
+        }
         return cell
     }
 

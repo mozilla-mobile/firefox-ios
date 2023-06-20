@@ -400,7 +400,7 @@ extension ShareViewController {
         let profile = BrowserProfile(localName: "profile")
         profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
-       func firefoxUrl(_ url: String) -> String {
+        func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
             if isSearch {
                 return "firefox://open-text?text=\(encoded)"

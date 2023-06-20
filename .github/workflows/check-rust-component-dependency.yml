@@ -59,5 +59,4 @@ jobs:
         committer: GitHub <noreply@github.com>
         title: Refactor [vXXX] Auto update SPM with latest rust-component ${{ env.version }}
         branch: update-spm-new-rust-component-tag-${{ env.version }}
-        labels: Do Not Merge ⛔️
         token: ${{ secrets.GITHUB_TOKEN }}
