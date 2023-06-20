@@ -47,7 +47,10 @@ class ThemeSettingsController: ThemedTableViewController {
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(brightnessChanged),
+                                               name: UIScreen.brightnessDidChangeNotification,
+                                               object: nil)
     }
 
     @objc

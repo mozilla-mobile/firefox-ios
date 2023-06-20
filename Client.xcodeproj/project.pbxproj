@@ -92,6 +92,10 @@
 		2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */; };
 		2165B2CC28748CD7004C0786 /* LibraryPanelDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2CB28748CD7004C0786 /* LibraryPanelDescriptor.swift */; };
 		216A0D712A40D0FB008077BA /* ReduxFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */; };
+		216A0D742A40DD45008077BA /* MainState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D732A40DD45008077BA /* MainState.swift */; };
+		216A0D762A40E7AB008077BA /* Redux in Frameworks */ = {isa = PBXBuildFile; productRef = 216A0D752A40E7AB008077BA /* Redux */; };
+		216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D782A40E85A008077BA /* ThemeSettingsState.swift */; };
+		216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */; };
 		216C133E29DCA8FF0097533B /* TabLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216C133D29DCA8FF0097533B /* TabLayoutDelegate.swift */; };
 		2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173326629CCD259007F20C7 /* TabScrollControllerTests.swift */; };
 		2173326A29CCF901007F20C7 /* UIPanGestureRecognizerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */; };
@@ -2127,6 +2131,9 @@
 		2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustTelemetryData.swift; sourceTree = "<group>"; };
 		2165B2CB28748CD7004C0786 /* LibraryPanelDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelDescriptor.swift; sourceTree = "<group>"; };
 		216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduxFlagManager.swift; sourceTree = "<group>"; };
+		216A0D732A40DD45008077BA /* MainState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainState.swift; sourceTree = "<group>"; };
+		216A0D782A40E85A008077BA /* ThemeSettingsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsState.swift; sourceTree = "<group>"; };
+		216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsAction.swift; sourceTree = "<group>"; };
 		216C133D29DCA8FF0097533B /* TabLayoutDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabLayoutDelegate.swift; sourceTree = "<group>"; };
 		2173326629CCD259007F20C7 /* TabScrollControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollControllerTests.swift; sourceTree = "<group>"; };
 		2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPanGestureRecognizerMock.swift; sourceTree = "<group>"; };
@@ -6781,6 +6788,7 @@
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
 				5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */,
+				216A0D762A40E7AB008077BA /* Redux in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
 			);
@@ -7005,9 +7013,28 @@
 		216A0D6F2A40D0E4008077BA /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				216A0D722A40DD34008077BA /* State */,
 				216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */,
 			);
 			path = Redux;
+			sourceTree = "<group>";
+		};
+		216A0D722A40DD34008077BA /* State */ = {
+			isa = PBXGroup;
+			children = (
+				216A0D732A40DD45008077BA /* MainState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+		216A0D772A40E83F008077BA /* ThemeSettings */ = {
+			isa = PBXGroup;
+			children = (
+				EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */,
+				216A0D782A40E85A008077BA /* ThemeSettingsState.swift */,
+				216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */,
+			);
+			path = ThemeSettings;
 			sourceTree = "<group>";
 		};
 		216E9A3829D2119300ABE69B /* InactiveTabs */ = {
@@ -7245,6 +7272,7 @@
 		2F44FC551A9E83E200FD20CC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				216A0D772A40E83F008077BA /* ThemeSettings */,
 				8A3EF7ED2A2FCEC900796E3A /* Main */,
 				EBB895322193FFF400EB91A0 /* ContentBlockerSettingViewController.swift */,
 				7B4980A71CE363ED0017547C /* Settings.xcassets */,
@@ -11021,6 +11049,7 @@
 				5A70EF0D295DFCCF00790249 /* Common */,
 				5A37861829A2C337006B3A34 /* Sentry */,
 				5A06135929D6052E008F3D38 /* TabDataStore */,
+				216A0D752A40E7AB008077BA /* Redux */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -12413,6 +12442,7 @@
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
 				8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */,
 				C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */,
+				216A0D742A40DD45008077BA /* MainState.swift in Sources */,
 				8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
@@ -12598,6 +12628,7 @@
 				964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */,
 				439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */,
 				8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */,
+				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */,
@@ -12691,6 +12722,7 @@
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
 				EBB89507219398E500EB91A0 /* ContentBlocker.swift in Sources */,
+				216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */,
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
 				8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */,
@@ -19096,6 +19128,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		216A0D752A40E7AB008077BA /* Redux */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Redux;
 		};
 		432BD0232790EBD000A0F3C3 /* Adjust */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,7 +7,7 @@ import Foundation
 /// This is a temporary struct made to manage the feature flag for convenience
 struct ReduxFlagManager {
     static var isReduxEnabled: Bool {
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.tabStorageRefactor,
+        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.reduxIntegration,
                                                                  checking: .buildOnly)
     }
 }
