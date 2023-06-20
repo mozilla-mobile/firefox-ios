@@ -47,6 +47,16 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         }
     }
 
+    override func handle(route: Route) -> Bool {
+        switch route {
+        case let .settings(section):
+            start(with: section)
+            return true
+        default:
+            return false
+        }
+    }
+
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:

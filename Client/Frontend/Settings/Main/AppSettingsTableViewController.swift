@@ -144,7 +144,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     }
 
     // Will be removed with FXIOS-6529
-    private func checkForDeeplinkSetting() {
+    func checkForDeeplinkSetting() {
         guard let deeplink = deeplinkTo else { return }
         var viewController: SettingsTableViewController
 
