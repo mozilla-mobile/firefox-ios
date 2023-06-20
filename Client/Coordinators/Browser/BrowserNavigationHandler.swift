@@ -11,7 +11,6 @@ protocol BrowserNavigationHandler: AnyObject {
 
     /// Asks to show a enhancedTrackingProtection page, can be a general enhancedTrackingProtection page or a child page
     func showEnhancedTrackingProtection()
-    
     /// Shows the specified section of the home panel.
     ///
     /// - Parameter homepanelSection: The section to be displayed.

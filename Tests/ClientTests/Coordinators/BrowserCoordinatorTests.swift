@@ -184,7 +184,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(presentedVC.topViewController is LibraryViewController)
     }
-    
     func testShowEnhancedTrackingProtection() throws {
         let subject = createSubject()
         subject.showEnhancedTrackingProtection()

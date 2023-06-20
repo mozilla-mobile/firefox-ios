@@ -121,27 +121,30 @@ extension BrowserViewController: URLBarDelegate {
                     self.legacyShowSettings(deeplink: .contentBlocker)
                 }
             }
-            
             if CoordinatorFlagManager.isEtpCoordinatorEnabled {
-                
-                self.navigationHandler?.showEnhancedTrackingProtection()
-            }
-            
-            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                etpVC.modalPresentationStyle = .custom
-                etpVC.transitioningDelegate = self
+                DispatchQueue.main.async {
+                    self.navigationHandler?.showEnhancedTrackingProtection()
+                }
             } else {
-                etpVC.asPopover = true
-                etpVC.modalPresentationStyle = .popover
-                etpVC.popoverPresentationController?.sourceView = urlBar.locationView.trackingProtectionButton
-                etpVC.popoverPresentationController?.permittedArrowDirections = .up
-                etpVC.popoverPresentationController?.delegate = self
+                self.legacyShowEnhancedTrackingProtection(viewModel: etpViewModel)
             }
-
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            self.present(etpVC, animated: true, completion: nil)
         }
+    }
+    private func legacyShowEnhancedTrackingProtection(viewModel: EnhancedTrackingProtectionMenuVM) {
+        let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: viewModel)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            etpVC.modalPresentationStyle = .custom
+            etpVC.transitioningDelegate = self
+        } else {
+            etpVC.asPopover = true
+            etpVC.modalPresentationStyle = .popover
+            etpVC.popoverPresentationController?.sourceView = urlBar.locationView.trackingProtectionButton
+            etpVC.popoverPresentationController?.permittedArrowDirections = .up
+            etpVC.popoverPresentationController?.delegate = self
+        }
+
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
+        self.present(etpVC, animated: true, completion: nil)
     }
 
     // Will be removed with FXIOS-6529

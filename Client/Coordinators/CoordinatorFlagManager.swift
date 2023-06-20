@@ -26,9 +26,8 @@ struct CoordinatorFlagManager {
         && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
                                                              checking: .buildOnly)
     }
-    
     static var isEtpCoordinatorEnabled: Bool {
-        return CoordinatorFlagManager.isCoordinatorEnabled
+        return CoordinatorFlagManager.isSettingsCoordinatorEnabled
         && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.etpCoordinatorRefactor,
                                                              checking: .buildOnly)
     }
