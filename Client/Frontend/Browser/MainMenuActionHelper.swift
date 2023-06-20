@@ -800,7 +800,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
 
-            if self.appAuthenticator.canAuthenticateDeviceOwner() {
+            if self.appAuthenticator.canAuthenticateDeviceOwner {
                 if LoginOnboarding.shouldShow() {
                     self.showLoginOnboarding(navigationHandler: navigationHandler, navigationController: navigationController)
                 } else {

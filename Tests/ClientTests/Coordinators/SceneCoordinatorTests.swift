@@ -65,8 +65,9 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
-    func testLaunchBrowser() {
+    func testLaunchBrowser_onlyStartsOnce() {
         let subject = createSubject()
+        subject.launchBrowser()
         subject.launchBrowser()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -118,6 +119,18 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertNotNil(coordinator)
         XCTAssertNil(subject.savedRoute)
+    }
+
+    // MARK: - Handle route
+
+    func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
+        let subject = createSubject()
+
+        let result = subject.handle(route: .action(action: .showIntroOnboarding))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
 
     // MARK: - Helpers

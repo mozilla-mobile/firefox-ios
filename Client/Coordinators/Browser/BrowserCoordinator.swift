@@ -185,6 +185,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             case .showQRCode:
                 handleQRCode()
                 return true
+            case .showIntroOnboarding:
+                return showIntroOnboarding()
             }
 
         case let .fxaSignIn(params):
@@ -200,6 +202,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             }
             return true
         }
+    }
+
+    private func showIntroOnboarding() -> Bool {
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        startLaunch(with: launchType)
+        return true
     }
 
     private func handleQRCode() {
@@ -246,23 +255,18 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func showSettings(with section: Route.SettingsSection) {
-        let settingsVC = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager
-        )
-        let navigationController = ThemedNavigationController(rootViewController: settingsVC)
+        let navigationController = ThemedNavigationController()
         navigationController.modalPresentationStyle = .formSheet
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
-        settingsVC.settingsDelegate = settingsCoordinator
         settingsCoordinator.parentCoordinator = self
-
         add(child: settingsCoordinator)
+        settingsCoordinator.start(with: section)
+
         router.present(navigationController) { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
-        settingsCoordinator.start(with: section)
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {

@@ -307,6 +307,17 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .searchQuery(query: "google"))
     }
 
+    // MARK: - AppAction
+
+    func testAppAction_showIntroOnboarding() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://deep-link?url=/action/show-intro-onboarding")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertEqual(route, .action(action: .showIntroOnboarding))
+    }
+
     // MARK: - Helper
 
     func createSubject() -> RouteBuilder {
