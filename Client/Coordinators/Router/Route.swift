@@ -111,8 +111,16 @@ enum Route: Equatable {
                 return .wallpaper
             case .creditCard:
                 return .creditCard
-            default:
-                return nil // not all cases supported for AppSettingsDeeplinkOption
+            case .fxa:
+                return .fxa
+            case .mailto:
+                return .mailto
+            case .newTab:
+                return .newTab
+            case .search:
+                return .search
+            case .clearPrivateData, .general, .theme:
+                return nil // not handling those since not needed to temporary fix #14954
             }
         }
     }

@@ -15,6 +15,10 @@ enum AppSettingsDeeplinkOption {
     case customizeTopSites
     case wallpaper
     case creditCard
+    case fxa
+    case mailto
+    case newTab
+    case search
 
     func getSettingsRoute() -> Route.SettingsSection {
         switch self {
@@ -32,6 +36,14 @@ enum AppSettingsDeeplinkOption {
             return .wallpaper
         case .creditCard:
             return .creditCard
+        case .fxa:
+            return .fxa
+        case .mailto:
+            return .mailto
+        case .newTab:
+            return .newTab
+        case .search:
+            return .search
         }
     }
 }
@@ -198,6 +210,27 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             return
         case .customizeTopSites:
             viewController = TopSitesSettingsViewController()
+        case .fxa:
+            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+                fxaParams,
+                flowType: .emailLoginFlow,
+                referringPage: .settings,
+                profile: profile
+            )
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        case .mailto:
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        case .newTab:
+            viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+        case .search:
+            let viewController = SearchSettingsTableViewController(profile: profile)
+            navigationController?.pushViewController(viewController, animated: true)
+            return
         }
 
         viewController.profile = profile

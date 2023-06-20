@@ -320,11 +320,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private func handle(settingsSection: Route.SettingsSection) {
         // Temporary bugfix for #14954, real fix is with settings coordinator
         if let subNavigationController = router.navigationController.presentedViewController as? ThemedNavigationController,
-           let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController,
-           let deeplinkTo = settingsSection.getSettingsRoute() {
+           let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController {
             // Showing settings already, pass the deeplink down
-            settings.deeplinkTo = deeplinkTo
-            settings.checkForDeeplinkSetting()
+            if let deeplinkTo = settingsSection.getSettingsRoute() {
+                settings.deeplinkTo = deeplinkTo
+                settings.checkForDeeplinkSetting()
+            }
             return
         }
 
