@@ -99,6 +99,7 @@ enum Route: Equatable {
     enum AppAction: String, CaseIterable, Equatable {
         case closePrivateTabs = "close-private-tabs"
         case showQRCode
+        case showIntroOnboarding = "show-intro-onboarding"
     }
 
     /// An enumeration representing different sections of the default browser settings.

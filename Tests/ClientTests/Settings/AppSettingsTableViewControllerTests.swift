@@ -82,6 +82,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
 class MockSettingsFlowDelegate: SettingsFlowDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
+    var didFinishShowingSettingsCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -89,5 +90,9 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate {
 
     func showCreditCardSettings() {
         showCreditCardSettingsCalled += 1
+    }
+
+    func didFinishShowingSettings() {
+        didFinishShowingSettingsCalled += 1
     }
 }

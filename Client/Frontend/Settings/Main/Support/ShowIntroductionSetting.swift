@@ -7,27 +7,33 @@ import Foundation
 /// Opens the on-boarding screen again
 class ShowIntroductionSetting: Setting {
     let profile: Profile
+    weak var appSettingsDelegate: AppSettingsDelegate?
 
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.ShowIntroduction.title
     }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController, appSettingsDelegate: AppSettingsDelegate?) {
         self.profile = settings.profile
+        self.appSettingsDelegate = appSettingsDelegate
         let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
         super.init(title: NSAttributedString(string: .AppSettingsShowTour,
                                              attributes: attributes))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.dismiss(animated: true, completion: {
-            NotificationCenter.default.post(name: .PresentIntroView, object: self)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .settingsMenuShowTour
+        )
 
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .settingsMenuShowTour
-            )
-        })
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            appSettingsDelegate?.clickedShowTour()
+        } else {
+            navigationController?.dismiss(animated: true) {
+                NotificationCenter.default.post(name: .PresentIntroView, object: self)
+            }
+        }
     }
 }

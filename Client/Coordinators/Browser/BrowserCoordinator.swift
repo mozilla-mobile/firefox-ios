@@ -185,6 +185,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             case .showQRCode:
                 handleQRCode()
                 return true
+            case .showIntroOnboarding:
+                return false // TODO Laurie
             }
 
         case let .fxaSignIn(params):

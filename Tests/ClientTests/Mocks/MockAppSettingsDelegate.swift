@@ -7,8 +7,13 @@ import Foundation
 
 class MockAppSettingsDelegate: AppSettingsDelegate {
     var clickedVersionCalled = 0
+    var clickedShowTourCalled = 0
 
     func clickedVersion() {
         clickedVersionCalled += 1
+    }
+
+    func clickedShowTour() {
+        clickedShowTourCalled += 1
     }
 }

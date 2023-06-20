@@ -41,6 +41,8 @@ final class RouteBuilder {
                     return .homepanel(section: subPath)
                 } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
                     return .defaultBrowser(section: subPath)
+                } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
+                    return .action(action: subPath)
                 } else {
                     return nil
                 }

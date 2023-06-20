@@ -34,6 +34,15 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         router.push(launchScreenVC, animated: false)
     }
 
+    override func handle(route: Route) -> Bool {
+        switch route {
+        case .action(action: .showIntroOnboarding):
+            return false // TODO Laurie
+        default:
+            return false
+        }
+    }
+
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
