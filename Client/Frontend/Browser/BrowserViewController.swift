@@ -2018,6 +2018,9 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
+        let userDefaults = UserDefaults.standard
+        let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
+
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
@@ -2025,7 +2028,8 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
             creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
                 guard let tabWebView = tab.webView as? TabWebView,
-                      let type = type
+                      let type = type,
+                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
                 else { return }
 
                 switch type {
