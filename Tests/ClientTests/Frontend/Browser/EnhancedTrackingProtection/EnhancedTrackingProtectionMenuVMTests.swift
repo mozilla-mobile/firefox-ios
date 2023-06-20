@@ -31,6 +31,30 @@ class EnhancedTrackingProtectionMenuVMTests: XCTestCase {
         XCTAssertEqual(sut.connectionStatusString, .ProtectionStatusNotSecure)
     }
 
+    func test_isSiteETPEnabled_whenStatusIsNoBlockerURLsDeliversCorrectResult() {
+        let sut = makeSUT(contentBlockerStatus: .noBlockedURLs)
+
+        XCTAssertTrue(sut.isSiteETPEnabled)
+    }
+
+    func test_isSiteETPEnabled_whenStatusIsBlockingDeliversCorrectResult() {
+        let sut = makeSUT(contentBlockerStatus: .blocking)
+
+        XCTAssertTrue(sut.isSiteETPEnabled)
+    }
+
+    func test_isSiteETPEnabled_whenStatusIsDisabledDeliversCorrectResult() {
+        let sut = makeSUT(contentBlockerStatus: .disabled)
+
+        XCTAssertTrue(sut.isSiteETPEnabled)
+    }
+
+    func test_isSiteETPEnabled_whenStatusIsSafelistedDeliversCorrectResult() {
+        let sut = makeSUT(contentBlockerStatus: .safelisted)
+
+        XCTAssertFalse(sut.isSiteETPEnabled)
+    }
+
     // MARK: Helpers
 
     private func makeSUT(
