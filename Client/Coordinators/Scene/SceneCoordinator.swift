@@ -37,8 +37,20 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     override func handle(route: Route) -> Bool {
         switch route {
         case .action(action: .showIntroOnboarding):
-            return false // TODO Laurie
+            return showIntroOnboardingIfNeeded()
         default:
+            return false
+        }
+    }
+
+    private func showIntroOnboardingIfNeeded() -> Bool {
+        let profile: Profile = AppContainer.shared.resolve()
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        if launchType.canLaunch(fromType: .SceneCoordinator) {
+            startLaunch(with: launchType)
+            return true
+        } else {
             return false
         }
     }
@@ -72,6 +84,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
+        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator}) else { return }
+
         logger.log("Starting browser with launchtype \(String(describing: launchType))",
                    level: .info,
                    category: .coordinator)

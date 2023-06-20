@@ -6,7 +6,6 @@ import Foundation
 
 /// Opens the on-boarding screen again
 class ShowIntroductionSetting: Setting {
-    let profile: Profile
     weak var appSettingsDelegate: AppSettingsDelegate?
 
     override var accessibilityIdentifier: String? {
@@ -14,7 +13,6 @@ class ShowIntroductionSetting: Setting {
     }
 
     init(settings: SettingsTableViewController, appSettingsDelegate: AppSettingsDelegate?) {
-        self.profile = settings.profile
         self.appSettingsDelegate = appSettingsDelegate
         let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
         super.init(title: NSAttributedString(string: .AppSettingsShowTour,
