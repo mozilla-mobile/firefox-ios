@@ -190,7 +190,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.showEnhancedTrackingProtection()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator) //Fix this
+        XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
     }
 
     // MARK: - Search route
