@@ -243,6 +243,23 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
+    // MARK: - Handle route
+    func testHandleRouteSettings_generalIsHandled() {
+        let subject = createSubject()
+
+        let result = subject.handle(route: .settings(section: .general))
+
+        XCTAssertTrue(result)
+    }
+
+    func testHandleRouteOther_notHandled() {
+        let subject = createSubject()
+
+        let result = subject.handle(route: .homepanel(section: .downloads))
+
+        XCTAssertFalse(result)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
