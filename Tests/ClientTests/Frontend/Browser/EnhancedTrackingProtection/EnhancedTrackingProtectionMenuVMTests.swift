@@ -71,6 +71,20 @@ class EnhancedTrackingProtectionMenuVMTests: XCTestCase {
         XCTAssertEqual(image.accessibilityIdentifier, "lock_blocked")
     }
 
+    func test_getDetailsViewModel_deliversCorrectResult() {
+        let sut = makeSUT(url: URL(string: "https://firefox.com")!,
+                          displayTitle: "Firefox",
+                          connectionSecure: true)
+
+        let detailsVM = sut.getDetailsViewModel()
+
+        XCTAssertEqual(detailsVM.topLevelDomain, "firefox.com")
+        XCTAssertEqual(detailsVM.title, "Firefox")
+        XCTAssertEqual(detailsVM.URL, "https://firefox.com")
+        XCTAssertEqual(detailsVM.connectionStatusMessage, .ProtectionStatusSecure)
+        XCTAssertTrue(detailsVM.connectionSecure)
+    }
+
     // MARK: Helpers
 
     private func makeSUT(
