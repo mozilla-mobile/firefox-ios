@@ -897,6 +897,7 @@
 		C87DF976267246830097E707 /* LegacyThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179820E69A7E00B12184 /* LegacyThemeManager.swift */; };
 		C87DF98A2672468F0097E707 /* LegacyDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179920E69A7E00B12184 /* LegacyDarkTheme.swift */; };
 		C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */; };
+		C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88012222A40E38D00F4D1D6 /* IntroViewControllerTests.swift */; };
 		C889569A27E8D1AC00E3779E /* InactiveTabHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889569927E8D1AC00E3779E /* InactiveTabHeader.swift */; };
 		C889D7CE2858C4B500121E1D /* ContextMenuHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */; };
 		C889D7D52858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889D7D42858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift */; };
@@ -5351,6 +5352,7 @@
 		C87DC85927B2C8DE006EFCE2 /* LegacyWallpaperFilePathProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperFilePathProtocol.swift; sourceTree = "<group>"; };
 		C87DC85B27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperResourceManager.swift; sourceTree = "<group>"; };
 		C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIConstants+BottomInset.swift"; sourceTree = "<group>"; };
+		C88012222A40E38D00F4D1D6 /* IntroViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewControllerTests.swift; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		C889569927E8D1AC00E3779E /* InactiveTabHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabHeader.swift; sourceTree = "<group>"; };
 		C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuHelperTests.swift; sourceTree = "<group>"; };
@@ -8907,6 +8909,7 @@
 				21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */,
 				C89C91AC2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift */,
 				C8DF92F52A140F9900AA7B05 /* OnboardingViewControllerProtocolTests.swift */,
+				C88012222A40E38D00F4D1D6 /* IntroViewControllerTests.swift */,
 				43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */,
 			);
 			path = OnboardingTests;
@@ -12829,6 +12832,7 @@
 				C818AD452A2100BA007F30BC /* OnboardingNotificationCardHelperTests.swift in Sources */,
 				E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
+				C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
