@@ -24,11 +24,15 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
+        let cards = getOrderedOnboardingCards(
+            for: onboardingType,
+            from: framework.cards,
+            withConditions: framework.conditions)
+
         return OnboardingViewModel(
-            cards: getOrderedOnboardingCards(
-                for: onboardingType,
-                from: framework.cards,
-                withConditions: framework.conditions),
+            cards: cards,
+            infoPopupModel: getPopupInfoModel(from: framework.instructionPopup,
+                                              withA11yID: cards.first?.a11yIdRoot ?? "noID")
             isDismissable: framework.dismissable)
     }
 
@@ -179,5 +183,16 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .welcomeCtd: return ImageIdentifiers.onboardingWelcomeCTD
         case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
         }
+    }
+
+    private func getPopupInfoModel(
+        from data: NimbusInstructionPopup,
+        withA11yID a11yID: String?,
+    ) -> OnboardingDefaultBrowserInfoModel {
+        return OnboardingDefaultBrowserInfoModel(
+            title: data.title,
+            instructionSteps: data.instructions,
+            buttonTitle: data.buttonTitle,
+            a11yIdRoot: a11yID)
     }
 }
