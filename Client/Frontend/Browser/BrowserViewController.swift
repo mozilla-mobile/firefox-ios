@@ -483,7 +483,16 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         overlayManager.setURLBar(urlBarView: urlBar)
 
+<<<<<<< HEAD
         browserDelegate?.browserHasLoaded()
+=======
+        // Update theme of already existing views
+        let theme = themeManager.currentTheme
+        header.applyTheme(theme: theme)
+        overKeyboardContainer.applyTheme(theme: theme)
+        bottomContainer.applyTheme(theme: theme)
+        bottomContentStackView.applyTheme(theme: theme)
+>>>>>>> e9f8eb67f (Refactor FXIOS-6781 [v115] Ensure browserHasLoaded gets called once tabs have restored in viewWillAppear (#15113))
     }
 
     private func setupAccessibleActions() {
@@ -626,6 +635,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
 
         urlBar.searchEnginesDidUpdate()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
