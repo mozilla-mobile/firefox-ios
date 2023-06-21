@@ -23,7 +23,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
     var collapsibleState: ExpandButtonState?
 
     private let titleLabel: UILabel = .build { label in
-        label.textColor = UIColor.legacyTheme.tableView.headerTextDark
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
                                                                    size: 16)
