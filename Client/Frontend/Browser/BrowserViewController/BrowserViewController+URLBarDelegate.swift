@@ -121,7 +121,7 @@ extension BrowserViewController: URLBarDelegate {
                     self.legacyShowSettings(deeplink: .contentBlocker)
                 }
             }
-        
+
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             if CoordinatorFlagManager.isEtpCoordinatorEnabled {
                 DispatchQueue.main.async {
@@ -132,7 +132,7 @@ extension BrowserViewController: URLBarDelegate {
             }
         }
     }
-    
+
     private func legacyShowEnhancedTrackingProtection(viewModel: EnhancedTrackingProtectionMenuVM) {
         let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: viewModel)
         if UIDevice.current.userInterfaceIdiom == .phone {
