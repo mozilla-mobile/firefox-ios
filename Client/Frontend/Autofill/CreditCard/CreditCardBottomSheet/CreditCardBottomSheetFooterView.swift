@@ -9,6 +9,8 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     private struct UX {
         static let manageCardsButtonFontSize: CGFloat = 16
         static let manageCardsButtonLeadingSpace: CGFloat = 0
+        static let manageCardsButtonTopSpace: CGFloat = 24
+        static let manageCardsButtonBottomSpace: CGFloat = 24
         static let titleVerticalPadding: CGFloat = 6
         static let titleVerticalLongPadding: CGFloat = 20
     }
@@ -49,7 +51,10 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
                                                        constant: UX.manageCardsButtonLeadingSpace),
             manageCardsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                         constant: -UX.manageCardsButtonLeadingSpace),
-            manageCardsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            manageCardsButton.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                   constant: UX.manageCardsButtonTopSpace),
+            manageCardsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                      constant: -UX.manageCardsButtonBottomSpace)
         ])
     }
 }
