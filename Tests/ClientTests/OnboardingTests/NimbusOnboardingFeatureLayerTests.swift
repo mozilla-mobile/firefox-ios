@@ -244,6 +244,24 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(expectedNumberOfCards, subject.count)
     }
 
+    // MARK: - Test Info Popup
+    func testLayer_infoPopupReturnsExpectedValues() {
+        configUtility.setupNimbusWith()
+        let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
+
+        let subject = layer.getOnboardingModel(for: .freshInstall).infoPopupModel
+
+        XCTAssertEqual(subject.title, CardElementNames.popupTitle)
+        XCTAssertEqual(subject.buttonTitle, CardElementNames.popupButtonTitle)
+        XCTAssertEqual(
+            subject.instructionSteps,
+            [
+                CardElementNames.popupFirstInstruction,
+                CardElementNames.popupSecondInstruction,
+                CardElementNames.popupThirdInstruction,
+            ])
+    }
+
     // MARK: - Test image IDs
     func testLayer_cardIsReturned_WithGlobeImageIdenfier() {
         configUtility.setupNimbusWith(image: .welcomeGlobe)

@@ -11,6 +11,11 @@ struct NimbusOnboardingTestingConfigUtility {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"
+        static let popupTitle = "Popup"
+        static let popupButtonTitle = "Popup Button"
+        static let popupFirstInstruction = "first instruction"
+        static let popupSecondInstruction = "second instruction"
+        static let popupThirdInstruction = "third instruction"
         static let a11yIDOnboarding = "onboarding."
         static let a11yIDUpgrade = "upgrade."
         static let linkTitle = "MacRumors"
@@ -42,7 +47,10 @@ struct NimbusOnboardingTestingConfigUtility {
         }
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
-            OnboardingFrameworkFeature(cards: dictionary, dismissable: true)
+            OnboardingFrameworkFeature(
+                cards: dictionary,
+                dismissable: true,
+                instructionPopup: buildInfoPopup())
         })
     }
 
@@ -69,7 +77,10 @@ struct NimbusOnboardingTestingConfigUtility {
             disqualifiers: disqualifiers)
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
-            OnboardingFrameworkFeature(cards: cards, dismissable: dismissable)
+            OnboardingFrameworkFeature(
+                cards: cards,
+                dismissable: dismissable,
+                instructionPopup: buildInfoPopup())
         })
     }
 
@@ -183,5 +194,16 @@ struct NimbusOnboardingTestingConfigUtility {
         return NimbusOnboardingLink(
             title: "\(CardElementNames.linkTitle)",
             url: "\(CardElementNames.linkURL)")
+    }
+
+    private func buildInfoPopup() -> NimbusInstructionPopup {
+        return NimbusInstructionPopup(
+            buttonTitle: CardElementNames.popupButtonTitle,
+            instructions: [
+                CardElementNames.popupFirstInstruction,
+                CardElementNames.popupSecondInstruction,
+                CardElementNames.popupThirdInstruction,
+            ],
+            title: CardElementNames.popupTitle)
     }
 }
