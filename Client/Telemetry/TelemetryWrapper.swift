@@ -260,6 +260,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         default:
             GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
         }
+        // Notifications
+        GleanMetrics.Preferences.tipsAndFeaturesNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications))
+        GleanMetrics.Preferences.syncNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications))
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
