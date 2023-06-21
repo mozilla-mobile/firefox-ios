@@ -419,7 +419,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 passcodeViewController.profile = profile
                 completion(passcodeViewController)
             }
-            return
 
         default:
             completion(nil)
