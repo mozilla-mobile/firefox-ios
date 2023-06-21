@@ -52,6 +52,12 @@ struct ThemeSettingsState: Equatable {
                                       manualThemeMode: state.manualThemeMode,
                                       systemBrightnessValue: state.systemBrightnessValue,
                                       userBrightnessThreshold: state.userBrightnessThreshold)
+        case .systemThemeChanged(let isEnabled):
+            return ThemeSettingsState(useSystemAppearance: isEnabled,
+                                      switchMode: state.switchMode,
+                                      manualThemeMode: state.manualThemeMode,
+                                      systemBrightnessValue: state.systemBrightnessValue,
+                                      userBrightnessThreshold: state.userBrightnessThreshold)
         case .toggleSwitchMode(let switchMode):
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
                                       switchMode: switchMode,

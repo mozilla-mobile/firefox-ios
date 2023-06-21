@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 
 protocol ThemeManagerProvider {
     var systemThemeIsOn: Bool { get }
@@ -19,8 +20,21 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // TODO: Ask if should use new Theming system
-    init(themeManager: LegacyThemeManager) {
+    init(themeManager: LegacyThemeManager = LegacyThemeManager.instance) {
         self.themeManager = themeManager
+    }
+
+    lazy var setSystemTheme: Middleware<MainState> = { state, action in
+        switch action {
+        case ThemeSettingsAction.enableSystemAppearance(let enabled):
+            // TODO: Use enabled
+            let themeSystemValue = state.themeSettings.useSystemAppearance
+            self.themeManager.systemThemeIsOn = !themeSystemValue
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(!themeSystemValue))
+        default:
+            print("YRD case not  handled")
+            break
+        }
     }
 
     func setSystemTheme(isOn: Bool) {

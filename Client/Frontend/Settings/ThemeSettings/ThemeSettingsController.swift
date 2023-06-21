@@ -7,6 +7,7 @@ import Redux
 import Shared
 
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
+    typealias SubscriberStateType = MainState
     struct UX {
         static var rowHeight: CGFloat = 70
         static var moonSunIconSize: CGFloat = 18
@@ -23,6 +24,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
+
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     var isAutoBrightnessOn: Bool {
         return LegacyThemeManager.instance.automaticBrightnessIsOn
@@ -52,6 +55,12 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                selector: #selector(brightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
+        store.subscribe(self)
+    }
+
+    func newState(state: MainState) {
+        print("YRD received new state \(state.themeSettings.useSystemAppearance)")
+        // TODO: Update UI
     }
 
     @objc
@@ -118,8 +127,12 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-        themeManager.setSystemTheme(isOn: control.isOn)
+        if isReduxIntegrationEnabled {
+            store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
+        } else {
+            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+            themeManager.setSystemTheme(isOn: control.isOn)
+        }
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
