@@ -466,8 +466,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        browserDelegate?.browserHasLoaded()
-
         // Update theme of already existing views
         let theme = themeManager.currentTheme
         header.applyTheme(theme: theme)
@@ -616,6 +614,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
 
         urlBar.searchEnginesDidUpdate()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
