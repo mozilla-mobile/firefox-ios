@@ -4,19 +4,18 @@
 
 import Foundation
 import SnapKit
+import Shared
 
 protocol AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat)
 }
 
-class BaseAlphaStackView: UIStackView, AlphaDimmable {
+class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isClearBackground = false
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        applyTheme()
         setupStyle()
-        setupObservers()
     }
 
     required init(coder: NSCoder) {
@@ -86,25 +85,8 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
         self.layoutIfNeeded()
     }
 
-    // MARK: - LegacyNotificationThemeable
-
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
-    }
-
-    @objc
-    private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
-}
-
-extension BaseAlphaStackView: LegacyNotificationThemeable {
-    func applyTheme() {
-        let color = isClearBackground ? .clear : UIColor.legacyTheme.browser.background
+    func applyTheme(theme: Theme) {
+        let color = isClearBackground ? .clear : theme.colors.layer1
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color
         insetSpacer?.backgroundColor = color

@@ -222,11 +222,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         LegacyThemeManager.instance.statusBarStyle
     }
 
-    @objc
-    func displayThemeChanged(notification: Notification) {
-        applyTheme()
-    }
-
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
     @objc
@@ -472,6 +467,13 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         overlayManager.setURLBar(urlBarView: urlBar)
 
         browserDelegate?.browserHasLoaded()
+
+        // Update theme of already existing views
+        let theme = themeManager.currentTheme
+        header.applyTheme(theme: theme)
+        overKeyboardContainer.applyTheme(theme: theme)
+        bottomContainer.applyTheme(theme: theme)
+        bottomContentStackView.applyTheme(theme: theme)
     }
 
     private func setupAccessibleActions() {
@@ -522,11 +524,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             self,
             selector: #selector(appMenuBadgeUpdate),
             name: .FirefoxAccountStateChange,
-            object: nil)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(displayThemeChanged),
-            name: .DisplayThemeChanged,
             object: nil)
         NotificationCenter.default.addObserver(
             self,
@@ -2018,6 +2015,9 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
+        let userDefaults = UserDefaults.standard
+        let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
+
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
@@ -2025,7 +2025,8 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
             creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
                 guard let tabWebView = tab.webView as? TabWebView,
-                      let type = type
+                      let type = type,
+                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
                 else { return }
 
                 switch type {
