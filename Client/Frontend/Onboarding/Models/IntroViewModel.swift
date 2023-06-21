@@ -11,6 +11,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var introScreenManager: IntroScreenManager?
 
     var availableCards: [OnboardingCardViewController]
+    var infoPopup: OnboardingDefaultBrowserModelProtocol
     var isDismissable: Bool
     var profile: Profile
     var telemetryUtility: OnboardingTelemetryProtocol
@@ -28,6 +29,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
+        self.infoPopup = model.infoPopupModel
         self.availableCards = []
     }
 

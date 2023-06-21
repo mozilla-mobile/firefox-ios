@@ -31,8 +31,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return OnboardingViewModel(
             cards: cards,
-            infoPopupModel: getPopupInfoModel(from: framework.instructionPopup,
-                                              withA11yID: cards.first?.a11yIdRoot ?? "noID")
+            infoPopupModel: getPopupInfoModel(
+                from: framework.instructionPopup,
+                withA11yID: cards.first?.a11yIdRoot ?? "noID"),
             isDismissable: framework.dismissable)
     }
 
@@ -187,11 +188,12 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getPopupInfoModel(
         from data: NimbusInstructionPopup,
-        withA11yID a11yID: String?,
+        withA11yID a11yID: String
     ) -> OnboardingDefaultBrowserInfoModel {
         return OnboardingDefaultBrowserInfoModel(
             title: data.title,
-            instructionSteps: data.instructions,
+            instructionSteps: data.instructions
+                .map { String(format: $0, AppName.shortName.rawValue)},
             buttonTitle: data.buttonTitle,
             a11yIdRoot: a11yID)
     }
