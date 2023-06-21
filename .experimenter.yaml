@@ -145,6 +145,9 @@ onboarding-framework-feature:
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
+    instruction-popup:
+      type: json
+      description: "The contents of the instruction popup.\n"
 redux-integration-feature:
   description: "This feature is for managing the roll out of the Redux integration feature\n"
   hasExposure: true
