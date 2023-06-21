@@ -288,6 +288,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             self?.didFinishLibrary(from: libraryCoordinator)
         }
     }
+    
     private func showETPMenu() {
         let navigationController = DismissableNavigationViewController()
         navigationController.modalPresentationStyle = .formSheet
@@ -319,6 +320,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         remove(child: coordinator)
     }
     // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
+    
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
@@ -333,6 +335,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func show(homepanelSection: Route.HomepanelSection) {
         showLibrary(with: homepanelSection)
     }
+    
     func showEnhancedTrackingProtection() {
         showETPMenu()
     }

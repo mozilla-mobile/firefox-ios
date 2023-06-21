@@ -468,7 +468,7 @@ class WebPageSetting: StringPrefSetting {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
         cell.accessoryType = isChecked() ? .checkmark : .none
-        textField.textAlignment = .left
+        textField.textAlignment = .natural
     }
 
     static func isURLOrEmpty(_ string: String?) -> Bool {
