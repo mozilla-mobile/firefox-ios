@@ -39,7 +39,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // Raw data to build top sites with
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
-    private(set) var defaultSearchEngine: OpenSearchEngine?
+    private var defaultSearchEngine: OpenSearchEngine?
 
     var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
@@ -105,8 +105,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         }
 
         sites.removeDuplicates()
-
-        sites = TopSitesDataUtility().removeSiteMatchingSites(in: defaultSearchEngine, from: sites)
 
         topSites = sites.map { TopSite(site: $0) }
     }
@@ -177,7 +175,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
             let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
-                                    maxNumberOfSponsoredTile: maxNumberOfTiles)
+                                    maxNumberOfSponsoredTile: maxNumberOfTiles,
+                                    defaultSearchEngine: defaultSearchEngine)
         }
     }
 
@@ -223,8 +222,11 @@ private extension Array where Element == Site {
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
     ///   - contiles: An array of Contiles a type of tiles belonging in the Shortcuts section on the Firefox home page.
     ///   - maxNumberOfSponsoredTile: maximum number of sponsored tiles
-    ///   - sites: The top sites to add the sponsored tile to
-    mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
+    ///   - defaultSearchEngine: The default engine to filter sponsored tiles against
+    mutating func addSponsoredTiles(sponsoredTileSpaces: Int,
+                                    contiles: [Contile],
+                                    maxNumberOfSponsoredTile: Int,
+                                    defaultSearchEngine: OpenSearchEngine?) {
         guard maxNumberOfSponsoredTile > 0 else { return }
         var siteAddedCount = 0
 
@@ -233,7 +235,10 @@ private extension Array where Element == Site {
             let site = SponsoredTile(contile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
-            guard !siteIsAlreadyPresent(site: site) else { continue }
+            // or if it's the default search engine
+            guard !siteIsAlreadyPresent(site: site),
+                  SponsoredTileDataUtility().shouldAdd(site: site, with: defaultSearchEngine)
+            else { continue }
 
             insert(site, at: siteAddedCount)
             siteAddedCount += 1
