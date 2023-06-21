@@ -555,6 +555,19 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
     }
 
+    func testSettingsRoute_addSettingsCoordinatorOnlyOnce() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
+
+        let result1 = subject.handle(route: .settings(section: .general))
+        let result2 = subject.handle(route: .settings(section: .general))
+
+        XCTAssertTrue(result1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+        XCTAssertFalse(result2)
+    }
+
     func testPresentedCompletion_callsDidFinishSettings_removesChild() {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.browserHasLoaded()

@@ -31,8 +31,6 @@ class ThemeSettingsController: ThemedTableViewController {
         return LegacyThemeManager.instance.systemThemeIsOn
     }
 
-    private var shouldHideSystemThemeSection = false
-
     init() {
         super.init(style: .grouped)
     }
@@ -49,7 +47,10 @@ class ThemeSettingsController: ThemedTableViewController {
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(brightnessChanged),
+                                               name: UIScreen.brightnessDidChangeNotification,
+                                               object: nil)
     }
 
     @objc
@@ -89,28 +90,21 @@ class ThemeSettingsController: ThemedTableViewController {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
+            label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
+                                                                       size: UX.footerFontSize)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         footer.addSubview(label)
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: footer.topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -16),
+            label.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: UX.sliderLeftRightInset),
+            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -UX.sliderLeftRightInset),
         ])
         return footer
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == Section.systemTheme.rawValue else {
-            return UITableView.automaticDimension
-        }
-
-        if shouldHideSystemThemeSection {
-            return CGFloat.leastNonzeroMagnitude
-        } else {
-            return UITableView.automaticDimension
-        }
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -134,7 +128,11 @@ class ThemeSettingsController: ThemedTableViewController {
         } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .setting,
+                                     value: .systemThemeSwitch,
+                                     extras: ["to": control.isOn])
 
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
@@ -166,8 +164,8 @@ class ThemeSettingsController: ThemedTableViewController {
         parent.addSubview(slider)
 
         NSLayoutConstraint.activate([
-            slider.topAnchor.constraint(equalTo: parent.topAnchor),
-            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor),
+            slider.topAnchor.constraint(equalTo: parent.topAnchor, constant: 4),
+            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor, constant: -4),
             slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
             slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
         ])
@@ -245,11 +243,7 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if shouldHideSystemThemeSection {
-            return 3
-        } else {
-            return isSystemThemeOn ? 1 : 3
-        }
+        return isSystemThemeOn ? 1 : 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

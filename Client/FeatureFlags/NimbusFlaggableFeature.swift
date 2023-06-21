@@ -30,6 +30,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pocket
     case pullToRefresh
     case recentlySaved
+    case reduxIntegration
     case reportSiteIssue
     case searchHighlights
     case settingsCoordinatorRefactor
@@ -108,6 +109,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
+                .reduxIntegration,
                 .reportSiteIssue,
                 .searchHighlights,
                 .settingsCoordinatorRefactor,
