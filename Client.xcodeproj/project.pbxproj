@@ -1455,7 +1455,6 @@
 		EBC9D38822D4D56F0011D881 /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D38422D4D56F0011D881 /* disconnect-block-cookies-social.json */; };
 		EBC9D38922D4D56F0011D881 /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D38522D4D56F0011D881 /* disconnect-block-cookies-advertising.json */; };
 		EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE26B4E220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift */; };
-		EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
@@ -11544,7 +11543,6 @@
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
-				EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */,
 				E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */,
 				E1AF3564286DE5F800960045 /* SyncIntegrationTestPlan.xctestplan in Resources */,
 				8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */,
