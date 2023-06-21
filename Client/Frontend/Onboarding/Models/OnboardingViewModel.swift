@@ -6,5 +6,6 @@ import Foundation
 
 struct OnboardingViewModel {
     let cards: [OnboardingCardInfoModel]
+    let infoPopupModel: OnboardingDefaultBrowserInfoModel
     let isDismissable: Bool
 }
