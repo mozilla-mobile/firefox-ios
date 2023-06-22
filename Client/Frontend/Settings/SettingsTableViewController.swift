@@ -755,9 +755,6 @@ protocol SettingsDelegate: AnyObject {
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController {
-    typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
-
-    fileprivate let Identifier = "CellIdentifier"
     var settings = [SettingSection]()
 
     weak var settingsDelegate: SettingsDelegate?

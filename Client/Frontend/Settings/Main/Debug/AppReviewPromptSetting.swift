@@ -6,12 +6,24 @@ import Foundation
 import Shared
 
 class AppReviewPromptSetting: HiddenSetting {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+    
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Toggle App Review (needs tab switch)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         UserDefaults.standard.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }

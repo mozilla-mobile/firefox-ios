@@ -5,6 +5,14 @@
 import Foundation
 
 class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+    
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
@@ -15,6 +23,10 @@ class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
         featureFlags.set(feature: .historyGroups, to: newStatus)
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }
