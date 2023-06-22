@@ -458,63 +458,63 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.newTab
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is NewTabContentSettingsViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is NewTabContentSettingsViewController)
+        }
     }
 
     func testHomepageSettingsRoute_returnsHomepageSettingsPage() throws {
         let route = Route.SettingsSection.homePage
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is HomePageSettingViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is HomePageSettingViewController)
+        }
     }
 
     func testMailtoSettingsRoute_returnsMailtoSettingsPage() throws {
         let route = Route.SettingsSection.mailto
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is OpenWithSettingsViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is OpenWithSettingsViewController)
+        }
     }
 
     func testSearchSettingsRoute_returnsSearchSettingsPage() throws {
         let route = Route.SettingsSection.search
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is SearchSettingsTableViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is SearchSettingsTableViewController)
+        }
     }
 
     func testClearPrivateDataSettingsRoute_returnsClearPrivateDataSettingsPage() throws {
         let route = Route.SettingsSection.clearPrivateData
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is ClearPrivateDataTableViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is ClearPrivateDataTableViewController)
+        }
     }
 
     func testFxaSettingsRoute_returnsFxaSettingsPage() throws {
         let route = Route.SettingsSection.fxa
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is SyncContentSettingsViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is SyncContentSettingsViewController)
+        }
     }
 
     func testThemeSettingsRoute_returnsThemeSettingsPage() throws {
         let route = Route.SettingsSection.theme
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is ThemeSettingsController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is ThemeSettingsController)
+        }
     }
 
     func testWallpaperSettingsRoute_canShow_returnsWallpaperSettingsPage() throws {
@@ -522,9 +522,9 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertTrue(result is WallpaperSettingsViewController)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertTrue(result is WallpaperSettingsViewController)
+        }
     }
 
     func testWallpaperSettingsRoute_cannotShow_returnsWallpaperSettingsPage() throws {
@@ -532,9 +532,9 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        let result = subject.getSettingsViewController(settingsSection: route)
-
-        XCTAssertNil(result)
+        subject.getSettingsViewController(settingsSection: route) { result in
+            XCTAssertNil(result)
+        }
     }
 
     func testSettingsRoute_addSettingsCoordinator() {
