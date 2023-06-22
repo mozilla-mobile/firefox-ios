@@ -6,8 +6,7 @@ import Foundation
 import Redux
 import Shared
 
-class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
-    typealias SubscriberStateType = AppState
+class ThemeSettingsController: ThemedTableViewController {
     struct UX {
         static var rowHeight: CGFloat = 70
         static var moonSunIconSize: CGFloat = 18
@@ -55,16 +54,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                selector: #selector(brightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
-//        store.subscribe(self, transform: {
-//            $0.select(ThemeSettingsState())
-//        })
-        store.subscribe(self)
-    }
-
-    func newState(state: AppState) {
-//        var themeSettingsState = state.screenState(for: .themeSettings(themeState: ThemeSettingsState()))
-//        print("YRD received new state \(themeSettingsState.useSystemAppearance)")
-        // TODO: Update UI
     }
 
     @objc
@@ -131,12 +120,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
-        } else {
-            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-            themeManager.setSystemTheme(isOn: control.isOn)
-        }
+        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+        themeManager.setSystemTheme(isOn: control.isOn)
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme

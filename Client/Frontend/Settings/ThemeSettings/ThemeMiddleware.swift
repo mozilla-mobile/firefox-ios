@@ -30,7 +30,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             self.themeManager.systemThemeIsOn = enabled
             store.dispatch(ThemeSettingsAction.systemThemeChanged(enabled))
         default:
-            print("YRD case not  handled")
             break
         }
     }

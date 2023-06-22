@@ -12,7 +12,6 @@ public class Store<State: StateType>: DefaultDispatchStore {
 
     public var state: State {
         didSet {
-            print("YRD state changed")
             subscriptions.forEach {
                 guard $0.subscriber != nil else {
                     subscriptions.remove($0)
