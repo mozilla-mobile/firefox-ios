@@ -18,6 +18,14 @@ enum AppScreenState: Equatable {
 struct ActiveScreensState: Equatable {
     let screens: [AppScreenState]
 
+    init() {
+        self.screens = []
+    }
+
+    init(screens: [AppScreenState]) {
+        self.screens = screens
+    }
+
     static let reducer: Reducer<Self> = { state, action in
         var screens = state.screens
 
@@ -31,11 +39,5 @@ struct ActiveScreensState: Equatable {
         }
 
         return ActiveScreensState(screens: screens)
-    }
-}
-
-extension ActiveScreensState {
-    init() {
-        screens = []
     }
 }

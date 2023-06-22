@@ -33,7 +33,7 @@ struct ThemeSettingsState: Equatable {
         self.systemBrightnessValue =  1
         self.userBrightnessThreshold = 0.1
     }
-//
+
     init(useSystemAppearance: Bool,
          switchMode: SwitchMode,
          manualThemeMode: ThemePicker,

@@ -16,8 +16,7 @@ struct AppState: StateType {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
-                case (.themeSettings(let state), .themeSettings(let themeState)): return state as? State
-                default: return nil
+                case (.themeSettings(let state), .themeSettings): return state as? State
                 }
             }
             .first

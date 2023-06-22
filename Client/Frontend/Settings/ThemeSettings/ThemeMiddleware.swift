@@ -19,8 +19,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.systemThemeIsOn
     }
 
-    // TODO: Ask if should use new Theming system
     init(themeManager: LegacyThemeManager = LegacyThemeManager.instance) {
+        // TODO: Add support for themeManager
         self.themeManager = themeManager
     }
 
