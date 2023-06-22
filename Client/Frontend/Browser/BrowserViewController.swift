@@ -624,8 +624,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
 
         urlBar.searchEnginesDidUpdate()
-
-        browserDelegate?.browserHasLoaded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -644,6 +642,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     private func prepareURLOnboardingContextualHint() {
