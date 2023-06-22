@@ -2025,6 +2025,28 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  tips_and_features_notifs:
+    type: boolean
+    description: |
+      True if notifications for tips and features are allowed, otherwise false.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14907
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15114
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  sync_notifs:
+    type: boolean
+    description: |
+      True if notifications for sync are allowed, otherwise false.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14907
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15114
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
   close_private_tabs:
     type: boolean
     description: |
