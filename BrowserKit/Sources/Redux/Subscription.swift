@@ -39,7 +39,29 @@ public class Subscription<State> {
 
     init() {}
 
+    public init(sink: @escaping (@escaping (State?, State) -> Void) -> Void) {
+        // Provide the caller with a closure that will forward all values
+        // to observers of this subscription.
+        sink { old, new in
+            self.newValues(oldState: old, newState: new)
+        }
+    }
+
     func newValues(oldState: State?, newState: State) {
         self.observer?(oldState, newState)
+    }
+
+    /// Provides a subscription that selects a substate of the state of the original subscription.
+    /// - parameter selector: A closure that maps a state to a selected substate
+    public func select<Substate>(_ selector: @escaping (State) -> Substate) -> Subscription<Substate> {
+        return self._select(selector)
+    }
+
+    private func _select<Substate>(_ selector: @escaping (State) -> Substate) -> Subscription<Substate> {
+        return Subscription<Substate> { sink in
+            self.observer = { oldState, newState in
+                sink(oldState.map(selector) ?? nil, selector(newState))
+            }
+        }
     }
 }
