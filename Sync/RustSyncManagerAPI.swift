@@ -7,8 +7,6 @@ import Common
 import Shared
 @_exported import MozillaAppServices
 
-public typealias MZSyncResult = MozillaAppServices.SyncResult
-
 open class RustSyncManagerAPI {
     private let logger: Logger
     let api: SyncManagerComponent
@@ -38,7 +36,7 @@ open class RustSyncManagerAPI {
     }
 
     public func sync(params: SyncParams,
-                     completion: @escaping (MZSyncResult) -> Void) {
+                     completion: @escaping (SyncResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             do {
                 let result = try self.api.sync(params: params)
@@ -62,7 +60,7 @@ open class RustSyncManagerAPI {
         }
     }
 
-    public func reportSyncTelemetry(syncResult: MZSyncResult,
+    public func reportSyncTelemetry(syncResult: SyncResult,
                                     completion: @escaping (String) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             do {
