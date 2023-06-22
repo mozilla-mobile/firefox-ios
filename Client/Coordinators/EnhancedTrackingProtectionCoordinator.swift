@@ -4,6 +4,8 @@
 
 import Common
 import Foundation
+import WebKit
+import Shared
 
 protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator)
@@ -11,20 +13,21 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
 
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
     private let profile: Profile
-    private let tab: Tab
+    private let tabManager: TabManager
     private let enhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
-    init(
-        router: Router,
-        profile: Profile = AppContainer.shared.resolve(),
-        tab: Tab = AppContainer.shared.resolve()
+
+    init(router: Router,
+         profile: Profile = AppContainer.shared.resolve(),
+         tabManager: TabManager = AppContainer.shared.resolve()
     ) {
-        let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
+        let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tabManager.selectedTab, profile: profile)
         self.enhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
         self.profile = profile
-        self.tab = tab
+        self.tabManager = tabManager
         super.init(router: router)
     }
+
     func start() {
     }
 }

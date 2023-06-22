@@ -109,7 +109,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
-        if let tab = self.tabManager.selectedTab {
+        let tab = self.tabManager.selectedTab
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
             etpViewModel.onOpenSettingsTapped = {
                 if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
@@ -130,7 +130,6 @@ extension BrowserViewController: URLBarDelegate {
             } else {
                 self.legacyShowEnhancedTrackingProtection(viewModel: etpViewModel)
             }
-        }
     }
 
     private func legacyShowEnhancedTrackingProtection(viewModel: EnhancedTrackingProtectionMenuVM) {

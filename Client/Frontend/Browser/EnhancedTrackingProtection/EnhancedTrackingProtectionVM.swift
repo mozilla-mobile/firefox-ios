@@ -7,13 +7,13 @@ import Storage
 
 class EnhancedTrackingProtectionMenuVM {
     // MARK: - Variables
-    var tab: Tab
+    var tab: Tab?
     var profile: Profile
     var onOpenSettingsTapped: (() -> Void)?
     var heroImage: UIImage?
 
     var websiteTitle: String {
-        return tab.url?.baseDomain ?? ""
+        return tab?.url?.baseDomain ?? ""
     }
 
     var connectionStatusString: String {
@@ -30,11 +30,11 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionSecure: Bool {
-        return tab.webView?.hasOnlySecureContent ?? false
+        return tab?.webView?.hasOnlySecureContent ?? false
     }
 
     var isSiteETPEnabled: Bool {
-        guard let blocker = tab.contentBlocker else { return true }
+        guard let blocker = tab?.contentBlocker else { return true }
 
         switch blocker.status {
         case .noBlockedURLs, .blocking, .disabled: return true
@@ -48,7 +48,7 @@ class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Initializers
 
-    init(tab: Tab, profile: Profile) {
+    init(tab: Tab?, profile: Profile) {
         self.tab = tab
         self.profile = profile
     }
@@ -57,19 +57,19 @@ class EnhancedTrackingProtectionMenuVM {
 
     func getDetailsViewModel() -> EnhancedTrackingProtectionDetailsVM {
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
-                                                   title: tab.displayTitle,
-                                                   URL: tab.url?.absoluteDisplayString ?? websiteTitle,
+                                                   title: tab?.displayTitle ?? "",
+                                                   URL: tab?.url?.absoluteDisplayString ?? websiteTitle,
                                                    getLockIcon: getConnectionStatusImage(themeType:),
                                                    connectionStatusMessage: connectionStatusString,
                                                    connectionSecure: connectionSecure)
     }
 
     func toggleSiteSafelistStatus() {
-        guard let currentURL = tab.url else { return }
+        guard let currentURL = tab?.url else { return }
 
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
-        ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
-            self.tab.reload()
+        ContentBlocker.shared.safelist(enable: tab?.contentBlocker?.status != .safelisted, url: currentURL) {
+            self.tab?.reload()
         }
     }
 }
