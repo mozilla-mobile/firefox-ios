@@ -11,7 +11,8 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
+class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate {
+    var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
@@ -27,12 +28,33 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.settingsViewController = AppSettingsTableViewController(with: profile,
+                                                                     and: tabManager)
         super.init(router: router)
+
+        router.setRootViewController(settingsViewController)
+        settingsViewController.settingsDelegate = self
+        settingsViewController.parentCoordinator = self
     }
 
     func start(with settingsSection: Route.SettingsSection) {
-        guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
-        router.push(viewController)
+        // We might already know the sub-settings page we want to show, but in some case we don't and
+        // the flow decision needs to be figured out by the view controller
+        if let viewController = getSettingsViewController(settingsSection: settingsSection) {
+            router.push(viewController)
+        } else {
+            settingsViewController.handle(route: settingsSection)
+        }
+    }
+
+    override func handle(route: Route) -> Bool {
+        switch route {
+        case let .settings(section):
+            start(with: section)
+            return true
+        default:
+            return false
+        }
     }
 
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
@@ -93,10 +115,6 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
             contentBlockerVC.tabManager = tabManager
             return contentBlockerVC
 
-        case .creditCard:
-            // FXIOS-6612 Handle credit card settings page in coordinator
-            return nil
-
         case .tabs:
             return TabsSettingsViewController()
 
@@ -106,6 +124,9 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
 
         case .topSites:
             return TopSitesSettingsViewController()
+
+        case .creditCard:
+            return nil // Needs authentication, decision handled by VC
 
         case .general:
             return nil // Return nil since we're already at the general page
@@ -119,5 +140,22 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate {
 
     func didFinish() {
         parentCoordinator?.didFinishSettings(from: self)
+    }
+
+    // MARK: - SettingsFlowDelegate
+    func showDevicePassCode() {
+        let passcodeViewController = DevicePasscodeRequiredViewController()
+        passcodeViewController.profile = profile
+        router.push(passcodeViewController)
+    }
+
+    func showCreditCardSettings() {
+        let viewModel = CreditCardSettingsViewModel(profile: profile)
+        let creditCardViewController = CreditCardSettingsViewController(creditCardViewModel: viewModel)
+        router.push(creditCardViewController)
+    }
+
+    func didFinishShowingSettings() {
+        didFinish()
     }
 }

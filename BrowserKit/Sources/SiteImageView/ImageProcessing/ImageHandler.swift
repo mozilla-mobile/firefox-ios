@@ -119,7 +119,7 @@ class DefaultImageHandler: ImageHandler {
             await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
             return image
         } catch {
-            return UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
     }
 }

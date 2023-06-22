@@ -223,7 +223,8 @@ class DownloadsPanel: UIViewController,
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         let logoImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage.templateImageNamed("emptyDownloads")?.withRenderingMode(.alwaysTemplate)
+            imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.download)?
+                .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         }
         let welcomeLabel: UILabel = .build { label in

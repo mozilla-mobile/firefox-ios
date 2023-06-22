@@ -8,6 +8,9 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
+    /// Related to coordinator navigation
+    case coordinator
+
     /// Related to anything about credit cards.
     case creditcard
 

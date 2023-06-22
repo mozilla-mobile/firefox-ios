@@ -43,7 +43,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
 
     override func prepareInterfaceForExtensionConfiguration() {
-        if appAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.extensionConfigurationRequested()
         } else {
             self.presenter?.showPasscodeRequirement()
@@ -57,7 +57,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
 
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        if appAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.credentialList(for: serviceIdentifiers)
         } else {
             self.presenter?.showPasscodeRequirement()
@@ -74,7 +74,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
 
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if appAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.credentialProvisionRequested(for: credentialIdentity)
         } else {
             self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))

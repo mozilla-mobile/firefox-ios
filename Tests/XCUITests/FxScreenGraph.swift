@@ -469,13 +469,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            app.buttons["Delete"].tap()
+            app.buttons[ImageIdentifiers.Large.delete].tap()
         }
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
         screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
-            app.tables.cells[ImageIdentifiers.actionAddBookmark].tap()
+            app.tables.cells[ImageIdentifiers.Large.bookmark].tap()
         }
         screenState.gesture(forAction: Action.AddNewFolder) { userState in
             app.tables.cells["bookmarkFolder"].tap()
@@ -655,7 +655,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(WebsiteDataSettings) { screenState in
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
-            app.tables.cells["ClearAllWebsiteData"].tap()
+            app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].tap()
             app.alerts.buttons["OK"].tap()
         }
         // The swipeDown() is a workaround for an intermittent issue that the search filed is not always in view.
@@ -815,8 +815,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     if !isTablet {
         map.addScreenState(TabTrayLongPressMenu) { screenState in
             screenState.dismissOnUse = true
-            screenState.tap(app.otherElements[ImageIdentifiers.newTab], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
-            screenState.tap(app.otherElements["tab_close"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
+            screenState.tap(app.otherElements[ImageIdentifiers.Large.plus], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
+            screenState.tap(app.otherElements[ImageIdentifiers.Large.cross], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
             screenState.tap(app.otherElements["nav-tabcounter"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
                 userState.isPrivate = !userState.isPrivate
             }
@@ -951,11 +951,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.settings], to: SettingsScreen)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.sync], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(app.tables.otherElements[ImageIdentifiers.key], to: LoginsSettings)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.bookmarks], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.history], to: LibraryPanel_History)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.history], to: LibraryPanel_History)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.download], to: LibraryPanel_Downloads)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.placeholderAvatar], to: FxAccountManagementPage)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.avatarCircle], to: FxAccountManagementPage)
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.nightMode], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
@@ -963,15 +963,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.whatsNew], forAction: Action.OpenWhatsNewPage) { userState in
         }
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.sendToDevice], forAction: Action.SentToDevice) { userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceDesktopSend], forAction: Action.SentToDevice) { userState in
         }
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.share], forAction: Action.ShareBrowserTabMenuOption) {
             userState in
         }
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestMobileSite], to: RequestMobileSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceDesktop], to: RequestDesktopSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceMobile], to: RequestMobileSite)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.findInPage], to: FindInPage)
         // TODO: Add new state
         // screenState.tap(app.tables["Context Menu"].otherElements[ImageIdentifiers.reportSiteIssue], to: ReportSiteIssue)
@@ -979,7 +979,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.bookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addToReadingList], forAction: Action.AddToReadingListBrowserTabMenu)
 
         screenState.dismissOnUse = true

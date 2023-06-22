@@ -48,6 +48,6 @@ class VersionSettingTests: XCTestCase {
         versionSetting.onClick(navigationController)
 
         // Then
-        XCTAssertEqual(delegate.clickedVersionCalled, 1)
+        XCTAssertEqual(delegate.pressedVersionCalled, 1)
     }
 }

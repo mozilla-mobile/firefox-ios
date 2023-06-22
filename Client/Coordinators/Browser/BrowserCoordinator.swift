@@ -20,6 +20,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
     private let isSettingsCoordinatorEnabled: Bool
+    private var browserIsReady = false
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -67,6 +68,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+
+        // Once launch is done, we check for any saved Route
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
     }
 
     // MARK: - BrowserDelegate
@@ -103,6 +109,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         screenshotService.screenshotableView = webviewController
     }
 
+    func browserHasLoaded() {
+        browserIsReady = true
+        logger.log("Browser has loaded", level: .info, category: .coordinator)
+
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
+    }
+
     private func getHomepage(inline: Bool,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
@@ -126,6 +141,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
+        guard browserIsReady else {
+            logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
+            return false
+        }
+
+        logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
         case let .searchQuery(query):
             handle(query: query)
@@ -150,11 +171,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         case let .settings(section):
             // 'Else' case will be removed with FXIOS-6529
             if isSettingsCoordinatorEnabled {
-                showSettings(with: section)
+                return handleSettings(with: section)
             } else {
                 handle(settingsSection: section)
+                return true
             }
-            return true
 
         case let .action(routeAction):
             switch routeAction {
@@ -164,6 +185,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             case .showQRCode:
                 handleQRCode()
                 return true
+            case .showIntroOnboarding:
+                return showIntroOnboarding()
             }
 
         case let .fxaSignIn(params):
@@ -179,6 +202,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             }
             return true
         }
+    }
+
+    private func showIntroOnboarding() -> Bool {
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        startLaunch(with: launchType)
+        return true
     }
 
     private func handleQRCode() {
@@ -224,24 +254,24 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.presentSignInViewController(fxaParams)
     }
 
-    private func showSettings(with section: Route.SettingsSection) {
-        let settingsVC = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager
-        )
-        let navigationController = ThemedNavigationController(rootViewController: settingsVC)
+    private func handleSettings(with section: Route.SettingsSection) -> Bool {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+            return false // route is handled with existing child coordinator
+        }
+
+        let navigationController = ThemedNavigationController()
         navigationController.modalPresentationStyle = .formSheet
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
-        settingsVC.settingsDelegate = settingsCoordinator
         settingsCoordinator.parentCoordinator = self
-
         add(child: settingsCoordinator)
+        settingsCoordinator.start(with: section)
+
         router.present(navigationController) { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
-        settingsCoordinator.start(with: section)
+        return true
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
@@ -283,7 +313,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
-        showSettings(with: settings)
+        _ = handleSettings(with: settings)
     }
 
     func show(homepanelSection: Route.HomepanelSection) {
@@ -292,6 +322,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     // MARK: - To be removed with FXIOS-6529
     private func handle(settingsSection: Route.SettingsSection) {
+        // Temporary bugfix for #14954, real fix is with settings coordinator
+        if let subNavigationController = router.navigationController.presentedViewController as? ThemedNavigationController,
+           let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController {
+            // Showing settings already, pass the deeplink down
+            if let deeplinkTo = settingsSection.getSettingsRoute() {
+                settings.deeplinkTo = deeplinkTo
+                settings.checkForDeeplinkSetting()
+            }
+            return
+        }
+
         let baseSettingsVC = AppSettingsTableViewController(
             with: profile,
             and: tabManager,

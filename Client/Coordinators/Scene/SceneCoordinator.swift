@@ -34,6 +34,27 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         router.push(launchScreenVC, animated: false)
     }
 
+    override func handle(route: Route) -> Bool {
+        switch route {
+        case .action(action: .showIntroOnboarding):
+            return showIntroOnboardingIfNeeded()
+        default:
+            return false
+        }
+    }
+
+    private func showIntroOnboardingIfNeeded() -> Bool {
+        let profile: Profile = AppContainer.shared.resolve()
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        if launchType.canLaunch(fromType: .SceneCoordinator) {
+            startLaunch(with: launchType)
+            return true
+        } else {
+            return false
+        }
+    }
+
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
@@ -49,19 +70,13 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
-    // MARK: - Route handling
-
-    /// Handles the specified route.
-    ///
-    /// - Parameter route: The route to handle.
-    ///
-    override func handle(route: Route) -> Bool {
-        return false
-    }
-
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
+        logger.log("Launching with launchtype \(launchType)",
+                   level: .info,
+                   category: .coordinator)
+
         let launchCoordinator = LaunchCoordinator(router: router)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
@@ -69,10 +84,20 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
+        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator}) else { return }
+
+        logger.log("Starting browser with launchtype \(String(describing: launchType))",
+                   level: .info,
+                   category: .coordinator)
+
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
+
+        if let savedRoute {
+            browserCoordinator.findAndHandle(route: savedRoute)
+        }
     }
 
     // MARK: - LaunchCoordinatorDelegate

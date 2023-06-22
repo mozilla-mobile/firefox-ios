@@ -222,11 +222,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         LegacyThemeManager.instance.statusBarStyle
     }
 
-    @objc
-    func displayThemeChanged(notification: Notification) {
-        applyTheme()
-    }
-
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
     @objc
@@ -470,6 +465,13 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
         overlayManager.setURLBar(urlBarView: urlBar)
+
+        // Update theme of already existing views
+        let theme = themeManager.currentTheme
+        header.applyTheme(theme: theme)
+        overKeyboardContainer.applyTheme(theme: theme)
+        bottomContainer.applyTheme(theme: theme)
+        bottomContentStackView.applyTheme(theme: theme)
     }
 
     private func setupAccessibleActions() {
@@ -523,11 +525,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             object: nil)
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(displayThemeChanged),
-            name: .DisplayThemeChanged,
-            object: nil)
-        NotificationCenter.default.addObserver(
-            self,
             selector: #selector(searchBarPositionDidChange),
             name: .SearchBarPositionDidChange,
             object: nil)
@@ -541,6 +538,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
             object: nil)
+
+        // PresentIntroView notification and code will be removed with FXIOS-6529
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(presentIntroFrom),
@@ -615,6 +614,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
 
         urlBar.searchEnginesDidUpdate()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1807,6 +1808,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
+                if CoordinatorFlagManager.isCoordinatorEnabled {
+                    webView.frame = contentContainer.frame
+                }
                 view.insertSubview(webView, at: 0)
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
@@ -1844,6 +1848,49 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     }
 
     // MARK: Autofill
+
+    private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
+        let userDefaults = UserDefaults.standard
+        let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
+
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            let creditCardHelper = CreditCardHelper(tab: tab)
+            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
+                guard let tabWebView = tab.webView as? TabWebView,
+                      let type = type,
+                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
+                else { return }
+
+                switch type {
+                case .formInput:
+                    self?.profile.autofill.listCreditCards(completion: { cards, error in
+                        guard let cards = cards, !cards.isEmpty, error == nil
+                        else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            tabWebView.accessoryView.reloadViewFor(.creditCard)
+                            tabWebView.reloadInputViews()
+                        }
+                    })
+                case .formSubmit:
+                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
+                    break
+                }
+
+                tabWebView.accessoryView.savedCardsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showBottomSheetCardViewController(creditCard: nil,
+                                                                decryptedCard: nil,
+                                                                viewType: .selectSavedCard)
+                    }
+                }
+            }
+        }
+    }
 
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
         self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
@@ -2011,42 +2058,8 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            let creditCardHelper = CreditCardHelper(tab: tab)
-            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
-                guard let tabWebView = tab.webView as? TabWebView,
-                      let type = type
-                else { return }
-
-                switch type {
-                case .formInput:
-                    self?.profile.autofill.listCreditCards(completion: { cards, error in
-                        guard let cards = cards, !cards.isEmpty, error == nil
-                        else {
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            tabWebView.accessoryView.reloadViewFor(.creditCard)
-                            tabWebView.reloadInputViews()
-                        }
-                    })
-                case .formSubmit:
-                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
-                    break
-                }
-
-                tabWebView.accessoryView.savedCardsClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
-                    }
-                }
-            }
-        }
+        // Credit card autofill setup and callback
+        creditCardAutofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self

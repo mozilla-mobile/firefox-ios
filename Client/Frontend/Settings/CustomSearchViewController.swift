@@ -243,7 +243,6 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         placeholderLabel.textColor = theme.colors.textSecondary
         placeholderLabel.text = placeholder
         placeholderLabel.isHidden = !textField.text.isEmpty
-        placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
@@ -265,6 +264,8 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
             make.top.bottom.equalTo(0).inset(Padding / 2)
             make.left.right.equalTo(cell.contentView).inset(Padding)
         }
+        textField.layoutIfNeeded()
+        placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

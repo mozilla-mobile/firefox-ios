@@ -16,7 +16,7 @@ class IntegrationTests: BaseTestCase {
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
-    let historyDB = "exampleURLHistoryBookmark.db"
+    let historyDB = "exampleURLHistoryBookmark-places.db"
 
     override func setUp() {
      // Test name looks like: "[Class testFunc]", parse out the function name
@@ -109,8 +109,8 @@ class IntegrationTests: BaseTestCase {
         navigator.openURL("example.com")
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: 15)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: 15)
+        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
 

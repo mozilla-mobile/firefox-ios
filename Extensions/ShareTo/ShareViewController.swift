@@ -115,12 +115,12 @@ class ShareViewController: UIViewController {
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
-            makeActionRow(addTo: stackView, label: .ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: .ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: .ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareOpenInFirefox, imageName: "logoFirefoxLarge", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareLoadInBackground, imageName: "tabTrayLarge", action: #selector(actionLoadInBackground), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareBookmarkThisPage, imageName: "bookmarkLarge", action: #selector(actionBookmarkThisPage), hasNavigation: false)
             makeActionRow(addTo: stackView, label: .ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
             makeSeparator(addTo: stackView)
-            makeActionRow(addTo: stackView, label: .ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+            makeActionRow(addTo: stackView, label: .ShareSendToDevice, imageName: "deviceDesktopSendLarge", action: #selector(actionSendToDevice), hasNavigation: true)
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
             makeActionRow(addTo: stackView, label: .ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
@@ -227,7 +227,7 @@ class ShareViewController: UIViewController {
         icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
 
         if hasNavigation {
-            let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
+            let navButton = UIImageView(image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = themeManager.currentTheme.colors.textPrimary
             navButton.translatesAutoresizingMaskIntoConstraints = false
@@ -400,7 +400,7 @@ extension ShareViewController {
         let profile = BrowserProfile(localName: "profile")
         profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
-       func firefoxUrl(_ url: String) -> String {
+        func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
             if isSearch {
                 return "firefox://open-text?text=\(encoded)"

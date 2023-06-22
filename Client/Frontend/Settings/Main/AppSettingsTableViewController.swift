@@ -15,6 +15,10 @@ enum AppSettingsDeeplinkOption {
     case customizeTopSites
     case wallpaper
     case creditCard
+    case fxa
+    case mailto
+    case newTab
+    case search
 
     func getSettingsRoute() -> Route.SettingsSection {
         switch self {
@@ -32,31 +36,60 @@ enum AppSettingsDeeplinkOption {
             return .wallpaper
         case .creditCard:
             return .creditCard
+        case .fxa:
+            return .fxa
+        case .mailto:
+            return .mailto
+        case .newTab:
+            return .newTab
+        case .search:
+            return .search
         }
     }
 }
 
+/// Child settings pages action
 protocol AppSettingsDelegate: AnyObject {
-    func clickedVersion()
+    func pressedVersion()
+    func pressedShowTour()
+}
+
+/// Supports decision making from VC to parent coordinator
+protocol SettingsFlowDelegate: AnyObject {
+    func showDevicePassCode()
+    func showCreditCardSettings()
+
+    func didFinishShowingSettings()
+}
+
+protocol AppSettingsScreen: UIViewController {
+    var settingsDelegate: SettingsDelegate? { get set }
+    var parentCoordinator: SettingsFlowDelegate? { get set }
+
+    func handle(route: Route.SettingsSection)
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable, AppSettingsDelegate,
-                                        SearchBarLocationProvider {
+class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
+                                    FeatureFlaggable, AppSettingsDelegate, SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
+    private var applicationHelper: ApplicationHelper
+    weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
          delegate: SettingsDelegate? = nil,
          deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.deeplinkTo = destination
         self.appAuthenticator = appAuthenticator
+        self.applicationHelper = applicationHelper
 
         super.init()
         self.profile = profile
@@ -98,8 +131,32 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settingsDelegate?.didFinish()
     }
 
-    // Will be clean up with FXIOS-6529
-    private func checkForDeeplinkSetting() {
+    // MARK: Handle Route decisions
+
+    func handle(route: Route.SettingsSection) {
+        switch route {
+        case .creditCard:
+            handleCreditCardAuthenticatinFlow()
+        default:
+            break
+        }
+    }
+
+    private func handleCreditCardAuthenticatinFlow() {
+        appAuthenticator.getAuthenticationState { state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.parentCoordinator?.showCreditCardSettings()
+            case .deviceOwnerFailed:
+                break // Keep showing the main settings page
+            case .passCodeRequired:
+                self.parentCoordinator?.showDevicePassCode()
+            }
+        }
+    }
+
+    // Will be removed with FXIOS-6529
+    func checkForDeeplinkSetting() {
         guard let deeplink = deeplinkTo else { return }
         var viewController: SettingsTableViewController
 
@@ -134,8 +191,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             let viewController = CreditCardSettingsViewController(
                 creditCardViewModel: viewModel)
             guard let navController = navigationController else { return }
-            if appAuthenticator.canAuthenticateDeviceOwner() {
-                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
+            if appAuthenticator.canAuthenticateDeviceOwner {
+                appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                     switch result {
                     case .success:
                         navController.pushViewController(viewController,
@@ -153,6 +210,27 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             return
         case .customizeTopSites:
             viewController = TopSitesSettingsViewController()
+        case .fxa:
+            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
+                fxaParams,
+                flowType: .emailLoginFlow,
+                referringPage: .settings,
+                profile: profile
+            )
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        case .mailto:
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        case .newTab:
+            viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+        case .search:
+            let viewController = SearchSettingsTableViewController(profile: profile)
+            navigationController?.pushViewController(viewController, animated: true)
+            return
         }
 
         viewController.profile = profile
@@ -304,7 +382,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
-            ShowIntroductionSetting(settings: self),
+            ShowIntroductionSetting(settings: self, appSettingsDelegate: self),
             SendFeedbackSetting(),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
@@ -357,7 +435,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
     // MARK: - AppSettingsDelegate
 
-    func clickedVersion() {
+    func pressedVersion() {
         debugSettingsClickCount += 1
         if debugSettingsClickCount >= 5 {
             debugSettingsClickCount = 0
@@ -365,6 +443,14 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             settings = generateSettings()
             tableView.reloadData()
         }
+    }
+
+    func pressedShowTour() {
+        parentCoordinator?.didFinishShowingSettings()
+
+        let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
+        guard let url = URL(string: urlString) else { return }
+        applicationHelper.open(url)
     }
 
     // MARK: - UITableViewDelegate

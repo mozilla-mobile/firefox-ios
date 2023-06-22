@@ -135,15 +135,15 @@ class BaseTestCase: XCTestCase {
     func bookmark() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
     }
 
@@ -273,5 +273,30 @@ extension XCUIElement {
         } else if force {
             coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         }
+    }
+
+    /// Tap at @offsetPoint point in @self element view. This might not work for simulators lower than iPhone 14 Plus.
+    func tapAtPoint(_ offsetPoint: CGPoint) {
+        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0)).withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y)).tap()
+    }
+
+    /// Press at @offsetPoint point in @self element view
+    func pressAtPoint(_ offsetPoint: CGPoint, forDuration duration: TimeInterval) {
+        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0)).withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y)).press(forDuration: duration)
+    }
+
+    /// Tap on app screen at the central of the current element
+    func tapOnApp() {
+        coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    }
+}
+
+extension XCUIElementQuery {
+    func containingText(_ text: String) -> XCUIElementQuery {
+        return matching(NSPredicate(format: "label CONTAINS %@ OR %@ == '' AND label != nil AND label != ''", text, text))
+    }
+
+    func elementContainingText(_ text: String) -> XCUIElement {
+        return containingText(text).element(boundBy: 0)
     }
 }

@@ -4,27 +4,17 @@
 
 import XCTest
 
-let PDF_website = ["url": "http://www.pdf995.com/samples/pdf.pdf", "pdfValue": "www.pdf995.com/samples", "urlValue": "www.pdf995.com/", "bookmarkLabel": "http://www.pdf995.com/samples/pdf.pdf", "longUrlValue": "http://www.pdf995.com/"]
-
+let PDF_website = ["url": "www.orimi.com/pdf-test.pdf", "pdfValue": "www.orimi.com/pdf", "urlValue": "yukon.ca/en/educat", "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf", "longUrlValue": "http://www.education.gov.yk.ca/"]
 class BrowsingPDFTests: BaseTestCase {
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
-
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
         // Swipe Up and Down
-        let element = app.children(matching: .other).element
-        element.swipeUp()
-        waitForExistence(app.staticTexts["2 of 5"])
-
-        var i = 0
-        repeat {
-            element.swipeDown()
-            i = i+1
-        } while (app.staticTexts["1 of 5"].exists == false && i < 10)
-
-        waitForExistence(app.staticTexts["1 of 5"])
-        XCTAssertTrue(app.staticTexts["1 of 5"].exists)
+        app.swipeUp()
+        waitForExistence(app.staticTexts["1 of 1"])
+        app.swipeDown()
+        XCTAssertTrue(app.staticTexts["1 of 1"].exists)
     }
 
     func testOpenLinkFromPDF() {
@@ -32,14 +22,10 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Click on a link on the pdf and check that the website is shown
-        app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0).tap()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
-
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-        element.children(matching: .other).element(boundBy: 11).tap()
+        app.links.element(boundBy: 0).tapOnApp()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["urlValue"]!)
-        XCTAssertTrue(app.webViews.links["Download Now"].exists)
+        XCTAssertTrue(app.staticTexts["Education and schools"].exists)
 
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
@@ -50,31 +36,23 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0).tap()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-        element.children(matching: .other).element(boundBy: 11).press(forDuration: 1)
-
-        waitForExistence(app.sheets.staticTexts[PDF_website["longUrlValue"]!])
-        waitForExistence(app.sheets.buttons["Open"])
-        waitForExistence(app.sheets.buttons["Add to Reading List"])
-        waitForExistence(app.sheets.buttons["Copy"])
-        waitForExistence(app.sheets.buttons["Share…"])
+        waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
+        waitForExistence(app.buttons["Open"])
+        waitForExistence(app.buttons["Add to Reading List"])
+        waitForExistence(app.buttons["Copy Link"])
+        waitForExistence(app.buttons["Share…"])
     }
 
     func testLongPressOnPDFLinkToAddToReadingList() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0).tap()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-        element.children(matching: .other).element(boundBy: 11).press(forDuration: 1)
-
-        waitForExistence(app.sheets.staticTexts[PDF_website["longUrlValue"]!])
-        app.sheets.buttons["Add to Reading List"].tap()
+        waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
+        app.buttons["Add to Reading List"].tap()
         navigator.nowAt(BrowserTab)
 
         // Go to reading list and check that the item is there
@@ -88,25 +66,25 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
-        navigator.goto(NewTabScreen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
-        waitForExistence(app.collectionViews.cells.staticTexts["pdf995"])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts["pdf995"].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
 
         // Open pdf from pinned site
-        let pdfTopSite = app.collectionViews.cells.staticTexts["pdf995"]
+        let pdfTopSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].cells[PDF_website["bookmarkLabel"]!].children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         pdfTopSite.tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.collectionViews.cells.staticTexts["pdf995"])
+        waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut])
-        app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut].tap()
+        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut])
+        app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut].tap()
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts["pdf995"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }
 
     func testBookmarkPDF() {

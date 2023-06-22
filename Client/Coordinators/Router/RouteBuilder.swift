@@ -4,12 +4,16 @@
 
 import Foundation
 import CoreSpotlight
+import Shared
 
-struct RouteBuilder {
-    private var isPrivate: () -> Bool
+final class RouteBuilder {
+    private var isPrivate = false
+    private var prefs: Prefs?
 
-    init(isPrivate: @escaping () -> Bool) {
+    func configure(isPrivate: Bool,
+                   prefs: Prefs) {
         self.isPrivate = isPrivate
+        self.prefs = prefs
     }
 
     func makeRoute(url: URL) -> Route? {
@@ -19,7 +23,7 @@ struct RouteBuilder {
             let urlQuery = urlScanner.value(query: "url")?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
-            let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate()
+            let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate
 
             recordTelemetry(input: host, isPrivate: isPrivate)
 
@@ -37,6 +41,8 @@ struct RouteBuilder {
                     return .homepanel(section: subPath)
                 } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
                     return .defaultBrowser(section: subPath)
+                } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
+                    return .action(action: subPath)
                 } else {
                     return nil
                 }
@@ -105,34 +111,9 @@ struct RouteBuilder {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
-            return .search(url: url, isPrivate: isPrivate(), options: [.focusLocationField])
+            return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
         } else {
             return nil
-        }
-    }
-
-    func recordTelemetry(input: DeeplinkInput.Host, isPrivate: Bool) {
-        switch input {
-        case .deepLink, .fxaSignIn, .openUrl, .openText, .glean:
-            return
-        case .widgetMediumTopSitesOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
-        case .widgetSmallQuickLinkOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
-        case .widgetMediumQuickLinkOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch)
-        case .widgetSmallQuickLinkOpenCopied:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
-        case .widgetMediumQuickLinkOpenCopied:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
-        case .widgetSmallQuickLinkClosePrivateTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
-        case .widgetMediumQuickLinkClosePrivateTabs:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
-        case .widgetTabsMediumOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
-        case .widgetTabsLargeOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
         }
     }
 
@@ -185,6 +166,46 @@ struct RouteBuilder {
             }
         case .qrCode:
             return .action(action: .showQRCode)
+        }
+    }
+
+    // MARK: - Telemetry
+
+    private func recordTelemetry(input: DeeplinkInput.Host, isPrivate: Bool) {
+        switch input {
+        case .deepLink, .fxaSignIn, .glean:
+            return
+        case .widgetMediumTopSitesOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
+        case .widgetSmallQuickLinkOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
+        case .widgetMediumQuickLinkOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch)
+        case .widgetSmallQuickLinkOpenCopied:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
+        case .widgetMediumQuickLinkOpenCopied:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+        case .widgetSmallQuickLinkClosePrivateTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
+        case .widgetMediumQuickLinkClosePrivateTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+        case .widgetTabsMediumOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
+        case .widgetTabsLargeOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
+        case .openText:
+            sendAppExtensionTelemetry(object: .searchText)
+        case .openUrl:
+            sendAppExtensionTelemetry(object: .url)
+        }
+    }
+
+    private func sendAppExtensionTelemetry(object: TelemetryWrapper.EventObject) {
+        if prefs?.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
+            prefs?.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
+            TelemetryWrapper.recordEvent(category: .appExtensionAction,
+                                         method: .applicationOpenUrl,
+                                         object: object)
         }
     }
 }

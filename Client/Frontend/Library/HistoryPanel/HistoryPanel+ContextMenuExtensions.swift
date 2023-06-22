@@ -20,7 +20,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = SingleActionViewModel(title: .DeleteFromHistoryContextMenuTitle,
-                                                 iconString: ImageIdentifiers.trashIcon,
+                                                 iconString: ImageIdentifiers.Large.delete,
                                                  tapHandler: { _ in
             self.removeHistoryItem(at: indexPath)
         })

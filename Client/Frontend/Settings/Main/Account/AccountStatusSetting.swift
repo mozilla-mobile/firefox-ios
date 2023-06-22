@@ -79,8 +79,9 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
 
-            imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?
+            imageView.image = UIImage(named: ImageIdentifiers.Large.avatarCircle)?
                 .createScaled(CGSize(width: 30, height: 30))
+                .tinted(withColor: theme.colors.iconPrimary)
 
             guard let str = RustFirefoxAccounts.shared.userProfile?.avatarUrl,
                   let actionIconUrl = URL(string: str)

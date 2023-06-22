@@ -18,6 +18,7 @@ include:
   - nimbus-features/coordinatorsRefactorFeature.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/engagementNotificationFeature.yaml
+  - nimbus-features/etpCoordinatorRefactor.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/libraryCoordinatorRefactor.yaml
@@ -25,6 +26,7 @@ include:
   - nimbus-features/notificationSettingsFeature.yaml
   - nimbus-features/onboardingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/reduxIntegrationFeature.yaml
   - nimbus-features/rustSyncManagerFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml

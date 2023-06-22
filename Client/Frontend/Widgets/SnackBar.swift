@@ -50,7 +50,7 @@ class SnackBar: UIView {
     init(text: String, img: UIImage?, snackbarClassIdentifier: String? = nil) {
         self.snackbarClassIdentifier = snackbarClassIdentifier ?? text
         super.init(frame: .zero)
-        imageView.image = img ?? UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysOriginal)
+        imageView.image = img ?? UIImage(named: ImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal)
         textLabel.text = text
         setupLayout()
         setupUI()

@@ -992,7 +992,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "المسار (استخدم ‎%s بدل نص البحث)";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "اسمح كل بيانات المواقع";
+"Settings.ClearAllWebsiteData.Clear.Button" = "امسح كل بيانات المواقع";
 
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "امسح البيانات الخاصة";

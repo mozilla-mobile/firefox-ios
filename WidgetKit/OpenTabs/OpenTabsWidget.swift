@@ -35,7 +35,7 @@ struct OpenTabsView: View {
                     if entry.favicons[tab.imageKey] != nil {
                         (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
-                        Image("placeholderFavicon")
+                        Image("globeLarge")
                             .foregroundColor(Color.white)
                             .frame(width: 16, height: 16)
                     }

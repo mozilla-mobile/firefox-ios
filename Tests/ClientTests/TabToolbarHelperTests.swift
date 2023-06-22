@@ -13,12 +13,12 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let backButtonImage = UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection()
-    let forwardButtonImage = UIImage.templateImageNamed("nav-forward")?.imageFlippedForRightToLeftLayoutDirection()
-    let menuButtonImage = UIImage.templateImageNamed("nav-menu")
+    let backButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection()
+    let forwardButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.forward)?.imageFlippedForRightToLeftLayoutDirection()
+    let menuButtonImage = UIImage.templateImageNamed(ImageIdentifiers.Large.appMenu)
     let searchButtonImage = UIImage.templateImageNamed("search")
-    let imageNewTab = UIImage.templateImageNamed("nav-add")
-    let imageHome = UIImage.templateImageNamed("menu-Home")
+    let imageNewTab = UIImage.templateImageNamed(ImageIdentifiers.Large.plus)
+    let imageHome = UIImage.templateImageNamed(ImageIdentifiers.Large.home)
 
     override func setUp() {
         super.setUp()

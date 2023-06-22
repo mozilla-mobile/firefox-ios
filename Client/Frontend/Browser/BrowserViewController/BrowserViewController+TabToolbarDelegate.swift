@@ -142,19 +142,21 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
+        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: ImageIdentifiers.Large.plus, iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
-        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
+        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: ImageIdentifiers.Large.plus, iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
         }.items
 
-        let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab, iconString: "tab_close", iconType: .Image) { _ in
+        let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,
+                                             iconString: ImageIdentifiers.Large.cross,
+                                             iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)

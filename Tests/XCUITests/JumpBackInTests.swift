@@ -164,7 +164,7 @@ class JumpBackInTests: BaseTestCase {
         } else {
             waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
         }
-        app.cells["Amazon.com. Spend less. Smile more."].buttons["tab close"].tap()
+        app.cells["Amazon.com. Spend less. Smile more."].buttons[ImageIdentifiers.Large.cross].tap()
 
         // Revisit the "Jump Back In" section
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)

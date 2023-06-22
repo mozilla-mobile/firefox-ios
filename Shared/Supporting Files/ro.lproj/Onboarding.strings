@@ -1,0 +1,3 @@
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Title.TreatementA.v114" = "Desemnează %@ drept browserul implicit";
+

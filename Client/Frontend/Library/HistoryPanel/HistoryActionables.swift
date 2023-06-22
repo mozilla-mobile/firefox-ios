@@ -42,11 +42,11 @@ struct HistoryActionablesModel: Hashable {
     // As this section evolves (or we experiment with it), we may need to replace items within.
     // Let's keep separate stashes of ALL and ACTIVE items.
     static let allActionables = [
-        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon,
+        HistoryActionablesModel(imageName: ImageIdentifiers.Large.delete,
                                 title: History.HistoryPanelClearHistoryButtonTitle,
                                 a11yId: a11y.clearHistoryCell,
                                 itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon,
+        HistoryActionablesModel(imageName: ImageIdentifiers.Large.tabTray,
                                 title: History.RecentlyClosedTabsButtonTitle,
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed),
@@ -57,7 +57,7 @@ struct HistoryActionablesModel: Hashable {
     ]
 
     static let activeActionables = [
-        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon,
+        HistoryActionablesModel(imageName: ImageIdentifiers.Large.tabTray,
                                 title: History.RecentlyClosedTabsButtonTitle,
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed)

@@ -41,6 +41,8 @@ final class NimbusFeatureFlagLayer {
 
         case .settingsCoordinatorRefactor:
             return checkSettingsCoordinatorRefactorFeature(from: nimbus)
+        case .etpCoordinatorRefactor:
+            return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
@@ -58,6 +60,9 @@ final class NimbusFeatureFlagLayer {
         case .onboardingUpgrade,
                 .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
+
+        case .reduxIntegration:
+            return checkReduxIntegrationFeature(from: nimbus)
 
         case .shareSheetChanges,
                 .shareToolbarChanges:
@@ -191,6 +196,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkEtpCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.etpCoordinatorRefactor.value()
+        return config.enabled
+    }
+
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.wallpaperFeature.value()
 
@@ -214,6 +224,11 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.reduxIntegrationFeature.value()
+        return config.enabled
     }
 
     private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {

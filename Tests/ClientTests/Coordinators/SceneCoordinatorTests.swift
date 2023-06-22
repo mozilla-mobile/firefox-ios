@@ -65,8 +65,9 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
-    func testLaunchBrowser() {
+    func testLaunchBrowser_onlyStartsOnce() {
         let subject = createSubject()
+        subject.launchBrowser()
         subject.launchBrowser()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -82,6 +83,54 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
+    }
+
+    func testHandleRoute_launchNotFinished_routeSaved() {
+        let subject = createSubject()
+
+        subject.start()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNil(coordinator)
+        XCTAssertNotNil(subject.savedRoute)
+    }
+
+    func testHandleRoute_launchFinishedAndBrowserNotReady_routeSaved() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.launchBrowser()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNil(coordinator)
+        XCTAssertNotNil(subject.savedRoute)
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        XCTAssertNotNil(browserCoordinator.savedRoute)
+    }
+
+    func testHandleRoute_launchFinishedAndBrowserReady_routeSavedCalled() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.launchBrowser()
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        browserCoordinator.browserHasLoaded()
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNotNil(coordinator)
+        XCTAssertNil(subject.savedRoute)
+    }
+
+    // MARK: - Handle route
+
+    func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
+        let subject = createSubject()
+
+        let result = subject.handle(route: .action(action: .showIntroOnboarding))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
 
     // MARK: - Helpers

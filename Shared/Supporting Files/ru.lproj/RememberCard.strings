@@ -1,5 +1,5 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "Надежно сохраните данные своей карты с помощью %@, чтобы в следующий раз расплачиваться быстрее.";
+"CreditCard.RememberCard.Header.v115" = "Надежно сохраните данные своей карты с помощью %@, чтобы в следующий раз быстрее расплатиться.";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Да";
@@ -9,4 +9,7 @@
 
 /* This value is used as the title for the Not Now button in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Не сейчас";
+
+/* This value is used as the toast message for the saving success alert in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Новая карта сохранена";
 
