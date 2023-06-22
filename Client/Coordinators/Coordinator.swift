@@ -69,3 +69,9 @@ open class BaseCoordinator: Coordinator {
         return false
     }
 }
+
+extension Array where Element == Coordinator {
+    subscript<T: Coordinator>(type: T.Type) -> T? {
+        self.first(where: { $0 is T }) as? T
+    }
+}

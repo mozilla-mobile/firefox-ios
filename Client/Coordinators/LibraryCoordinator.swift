@@ -26,13 +26,13 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
+        self.router.setRootViewController(libraryViewController, hideBar: false, animated: false)
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
         libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.delegate = self
-
-        router.setRootViewController(libraryViewController, hideBar: false, animated: false)
+        libraryViewController.resetHistoryPanelPagination()
     }
 
     func libraryPanelDidRequestToSignIn() {

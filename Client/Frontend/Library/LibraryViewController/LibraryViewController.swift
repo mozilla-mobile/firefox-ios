@@ -76,10 +76,6 @@ class LibraryViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.logger = logger
 
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            viewModel.resetHistoryPanelPagination()
-        }
-
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -133,6 +129,12 @@ class LibraryViewController: UIViewController, Themeable {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         LegacyThemeManager.instance.statusBarStyle
+    }
+
+    func resetHistoryPanelPagination() {
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            viewModel.resetHistoryPanelPagination()
+        }
     }
 
     func updateViewWithState() {
