@@ -323,7 +323,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let hostingCell = cardTableView.dequeueReusableCell(
+        guard let hostingCell = tableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
               let plainTextCreditCard = viewModel.getPlainCreditCardValues(
                 bottomSheetState: .selectSavedCard,
@@ -334,15 +334,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         }
         didSelectCreditCardToFill?(plainTextCreditCard)
         hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5Hover
+        tableView.deselectRow(at: indexPath, animated: true)
         dismissVC()
-    }
-
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        guard let hostingCell = cardTableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
-            return
-        }
-        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5
     }
 
     // MARK: Themable

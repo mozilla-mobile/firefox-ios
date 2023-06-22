@@ -161,6 +161,12 @@ extension CreditCardTableViewController: UITableViewDelegate,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectCardAtIndex?(viewModel.creditCards[indexPath.row])
+        guard let hostingCell = tableView.dequeueReusableCell(
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>
+        else {
+            return
+        }
+        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5Hover
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -191,6 +197,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
         hostingCell.isAccessibilityElement = true
+        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5
         return hostingCell
     }
 }
