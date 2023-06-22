@@ -253,6 +253,7 @@ FormAutofillUtils = {
     "cc-exp-year": "creditCard",
     "cc-exp": "creditCard",
     "cc-type": "creditCard",
+    "cc-csc": "creditCard",
   },
 
   _collators: {},

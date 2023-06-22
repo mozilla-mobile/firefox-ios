@@ -88,6 +88,7 @@ export class FormSection {
  */
 export const FormAutofillHeuristics = {
   RULES: HeuristicsRegExp.getRules(),
+  LABEL_RULES: HeuristicsRegExp.getLabelRules(),
 
   CREDIT_CARD_FIELDNAMES: [],
   ADDRESS_FIELDNAMES: [],
@@ -260,7 +261,7 @@ export const FormAutofillHeuristics = {
       ) {
         const regExpTelExtension = new RegExp(
           "\\bext|ext\\b|extension|ramal", // pt-BR, pt-PT
-          "iu"
+          "iug"
         );
         if (this._matchRegexp(field.element, regExpTelExtension)) {
           scanner.updateFieldName(scanner.parsingIndex, "tel-extension");
@@ -623,16 +624,10 @@ export const FormAutofillHeuristics = {
     let fieldNames = [];
     const isAutoCompleteOff =
       element.autocomplete == "off" || element.form?.autocomplete == "off";
-    if (
-      FormAutofill.isAutofillCreditCardsAvailable &&
-      (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
-    ) {
+    if (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff) {
       fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
     }
-    if (
-      FormAutofill.isAutofillAddressesAvailable &&
-      (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
-    ) {
+    if (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff) {
       fieldNames.push(...this.ADDRESS_FIELDNAMES);
     }
 
@@ -747,15 +742,9 @@ export const FormAutofillHeuristics = {
       }
     }
 
-    if (fields.length) {
-      // Find a matched field name using regex-based heuristics
-      const matchedFieldName = this._findMatchedFieldName(element, fields);
-      if (matchedFieldName) {
-        return [matchedFieldName, null, null];
-      }
-    }
-
-    return [null, null, null];
+    // Find a matched field name using regexp-based heuristics
+    const matchedFieldName = this._findMatchedFieldName(element, fields);
+    return [matchedFieldName, null, null];
   },
 
   /**
@@ -884,15 +873,21 @@ export const FormAutofillHeuristics = {
    * Extract all the signature strings of an element.
    *
    * @param {HTMLElement} element
-   * @returns {ElementStrings}
+   * @returns {Array<string>}
    */
   _getElementStrings(element) {
+    return [element.id, element.name, element.placeholder?.trim()];
+  },
+
+  /**
+   * Extract all the label strings associated with an element.
+   *
+   * @param {HTMLElement} element
+   * @returns {ElementStrings}
+   */
+  _getElementLabelStrings(element) {
     return {
       *[Symbol.iterator]() {
-        yield element.id;
-        yield element.name;
-        yield element.placeholder?.trim();
-
         const labels = lazy.LabelUtils.findLabelElements(element);
         for (let label of labels) {
           yield* lazy.LabelUtils.extractLabelStrings(label);
@@ -924,42 +919,75 @@ export const FormAutofillHeuristics = {
   },
 
   /**
-   * Find the first matched field name of the element wih given regex list.
+   * Find the first matching field name from a given list of field names
+   * that matches an HTML element.
    *
-   * @param {HTMLElement} element
-   * @param {Array<string>} regexps
-   *        The regex key names that correspond to pattern in the rule list. It will
-   *        be matched against the element string converted to lower case.
-   * @returns {?string} The first matched field name
+   * The function first tries to match the element against a set of
+   * pre-defined regular expression rules. If no match is found, it
+   * then checks for label-specific rules, if they exist.
+   *
+   * Note: For label rules, the keyword is often more general
+   * (e.g., "^\\W*address"), hence they are only searched within labels
+   * to reduce the occurrence of false positives.
+   *
+   * @param {HTMLElement} element The element to match.
+   * @param {Array<string>} fieldNames An array of field names to compare against.
+   * @returns {string|null} The name of the matched field, or null if no match was found.
    */
-  _findMatchedFieldName(element, regexps) {
-    const getElementStrings = this._getElementStrings(element);
-    for (let regexp of regexps) {
-      for (let string of getElementStrings) {
-        if (this.testRegex(this.RULES[regexp], string?.toLowerCase())) {
-          return regexp;
-        }
-      }
+  _findMatchedFieldName(element, fieldNames) {
+    if (!fieldNames.length) {
+      return null;
     }
 
-    return null;
+    // Attempt to match the element against the default set of rules
+    let matchedFieldName = fieldNames.find(fieldName =>
+      this._matchRegexp(element, this.RULES[fieldName])
+    );
+
+    // If no match is found, and if a label rule exists for the field,
+    // attempt to match against the label rules
+    if (!matchedFieldName) {
+      matchedFieldName = fieldNames.find(fieldName => {
+        const regexp = this.LABEL_RULES[fieldName];
+        return this._matchRegexp(element, regexp, { attribute: false });
+      });
+    }
+    return matchedFieldName;
   },
 
   /**
    * Determine whether the regexp can match any of element strings.
    *
-   * @param {HTMLElement} element
-   * @param {RegExp} regexp
-   *
-   * @returns {boolean}
+   * @param {HTMLElement} element The HTML element to match.
+   * @param {RegExp} regexp       The regular expression to match against.
+   * @param {object} [options]    Optional parameters for matching.
+   * @param {boolean} [options.attribute=true]
+   *                              Whether to match against the element's attributes.
+   * @param {boolean} [options.label=true]
+   *                              Whether to match against the element's labels.
+   * @returns {boolean} True if a match is found, otherwise false.
    */
-  _matchRegexp(element, regexp) {
-    const elemStrings = this._getElementStrings(element);
-    for (const str of elemStrings) {
-      if (regexp.test(str)) {
+  _matchRegexp(element, regexp, { attribute = true, label = true } = {}) {
+    if (!regexp) {
+      return false;
+    }
+
+    if (attribute) {
+      const elemStrings = this._getElementStrings(element);
+      if (elemStrings.find(s => this.testRegex(regexp, s?.toLowerCase()))) {
         return true;
       }
     }
+
+    if (label) {
+      const elementLabelStrings = this._getElementLabelStrings(element);
+      for (const s of elementLabelStrings) {
+        if (this.testRegex(regexp, s?.toLowerCase())) {
+          return true;
+        }
+      }
+    }
+
     return false;
   },
 

@@ -87,6 +87,8 @@ var FathomHeuristicsRegExp = {
         "|titolare.*carta" +
         // pl-PL
         "|posiadacz.*karty" +
+        // es-ES
+        "|nombre.*(titular|tarjeta)" +
         // Rules from Bitwarden
         "|cc-?name" +
         "|card-?name" +
@@ -96,7 +98,6 @@ var FathomHeuristicsRegExp = {
         "|card.?(?:holder|owner)|name.*(\\b)?on(\\b)?.*card" +
         "|(?:card|cc).?name|cc.?full.?name" +
         "|(?:card|cc).?owner" +
-        "|nombre.*tarjeta" + // es
         "|nom.*carte" + // fr-FR
         "|nome.*cart" + // it-IT
         "|名前" + // ja-JP
@@ -115,6 +116,8 @@ var FathomHeuristicsRegExp = {
         "|(numero|número|numéro).*(carte)" +
         // pl-PL
         "|numer.*karty" +
+        // es-ES
+        "|(número|numero).*tarjeta" +
         // Rules from Bitwarden
         "|cc-?number" +
         "|cc-?num" +
