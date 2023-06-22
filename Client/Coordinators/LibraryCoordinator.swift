@@ -26,7 +26,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
-        self.router.setRootViewController(libraryViewController, hideBar: false, animated: false)
+        self.router.setRootViewController(libraryViewController)
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
