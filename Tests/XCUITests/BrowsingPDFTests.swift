@@ -36,7 +36,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 0, y: 0), forDuration: 3)
+        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
         waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
         waitForExistence(app.buttons["Open"])
@@ -49,7 +49,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 0, y: 0), forDuration: 3)
+        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
         waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
         app.buttons["Add to Reading List"].tap()
