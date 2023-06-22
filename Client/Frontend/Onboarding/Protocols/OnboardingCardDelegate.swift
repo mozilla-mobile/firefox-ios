@@ -78,7 +78,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController)
+            childViewController: viewController,
+            usingDimmedBackground: true)
 
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
