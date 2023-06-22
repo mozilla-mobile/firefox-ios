@@ -69,7 +69,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     lazy private var cardImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.creditCardPlaceholder)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: ImageIdentifiers.Large.creditCard)?.withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityElementsHidden = true
 

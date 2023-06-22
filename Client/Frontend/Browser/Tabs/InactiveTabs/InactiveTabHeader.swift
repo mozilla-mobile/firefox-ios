@@ -11,9 +11,11 @@ enum ExpandButtonState {
     var image: UIImage? {
         switch self {
         case .right:
-            return UIImage(named: ImageIdentifiers.menuChevron)?.imageFlippedForRightToLeftLayoutDirection()
+            return UIImage(named: ImageIdentifiers.Large.chevronRight)?
+                .withRenderingMode(.alwaysTemplate)
+                .imageFlippedForRightToLeftLayoutDirection()
         case .down:
-            return UIImage(named: ImageIdentifiers.findNext)
+            return UIImage(named: ImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         }
     }
 }
@@ -90,5 +92,6 @@ class InactiveTabHeader: UITableViewHeaderFooterView, LegacyNotificationThemeabl
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.titleLabel.textColor = theme == .dark ? .white : .black
+        moreButton.tintColor = theme == .dark ? .white : .black
     }
 }

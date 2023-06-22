@@ -30,7 +30,7 @@ class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, Reusa
             withTextStyle: .body,
             weight: .semibold,
             maxSize: 16)
-        button.setImage(UIImage(named: ImageIdentifiers.trashIconMonochrome), for: .normal)
+        button.setImage(UIImage(named: ImageIdentifiers.Large.delete), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .Photon.LightGrey30
         button.setTitleColor(.black, for: .normal)

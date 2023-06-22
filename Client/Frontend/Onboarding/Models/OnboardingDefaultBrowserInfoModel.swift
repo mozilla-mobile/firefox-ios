@@ -11,11 +11,9 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
     var buttonTitle: String
     var a11yIdRoot: String
 
-    init(title: String = String.Onboarding.DefaultBrowserPopup.Title,
-         instructionSteps: [String] = [String.Onboarding.DefaultBrowserPopup.FirstInstruction,
-              String.Onboarding.DefaultBrowserPopup.SecondInstruction,
-              String(format: String.Onboarding.DefaultBrowserPopup.ThirdInstruction, AppName.shortName.rawValue)],
-         buttonTitle: String = String.Onboarding.DefaultBrowserPopup.ButtonTitle,
+    init(title: String,
+         instructionSteps: [String],
+         buttonTitle: String,
          a11yIdRoot: String) {
         self.title = title
         self.instructionSteps = instructionSteps

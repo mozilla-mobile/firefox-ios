@@ -20,7 +20,7 @@ class DownloadToast: Toast {
     }
 
     private var imageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.downloads)
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.download)
     }
 
     private var labelStackView: UIStackView = .build { stackView in
@@ -42,7 +42,7 @@ class DownloadToast: Toast {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeMediumButton), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Medium.cross), for: [])
         button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
     }
 

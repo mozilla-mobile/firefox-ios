@@ -29,7 +29,7 @@ struct CreditCardSettingsEmptyView: View {
                         .background(Color.white)
                         .padding(.top, 25)
                         Spacer()
-                        Image(ImageIdentifiers.creditCardPlaceholder)
+                        Image(ImageIdentifiers.Large.creditCard)
                             .resizable()
                             .frame(width: 200, height: 200)
                             .aspectRatio(contentMode: .fit)

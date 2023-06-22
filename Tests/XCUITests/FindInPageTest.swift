@@ -13,8 +13,8 @@ class FindInPageTests: BaseTestCase {
 
         navigator.goto(FindInPage)
 
-        waitForExistence(app.buttons["FindInPage.find_next"], timeout: 5)
-        waitForExistence(app.buttons["FindInPage.find_previous"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton], timeout: 5)
         XCTAssertTrue(app.textFields["FindInPage.searchField"].exists)
     }
 
@@ -47,7 +47,7 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
-        let nextInPageResultButton = app.buttons["FindInPage.find_next"]
+        let nextInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton]
         nextInPageResultButton.tap()
         waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
@@ -56,7 +56,7 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.staticTexts["3/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3/6"].exists)
 
-        let previousInPageResultButton = app.buttons["FindInPage.find_previous"]
+        let previousInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton]
         previousInPageResultButton.tap()
 
         waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
@@ -144,8 +144,8 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.cells.staticTexts["The Book of Mozilla"])
         app.cells.staticTexts["The Book of Mozilla"].firstMatch.tap()
         XCTAssertFalse(app.textFields[""].exists)
-        XCTAssertFalse(app.buttons["FindInPage.find_next"].exists)
-        XCTAssertFalse(app.buttons["FindInPage.find_previous"].exists)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists)
     }
 
     func testFindFromSelection() {
@@ -170,7 +170,7 @@ class FindInPageTests: BaseTestCase {
         app.menuItems["Find in Page"].tap()
         waitForExistence(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
-        XCTAssertTrue(app.buttons["FindInPage.find_previous"].exists, "Find previous button exists")
-        XCTAssertTrue(app.buttons["FindInPage.find_next"].exists, "Find next button exists")
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists, "Find previous button exists")
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists, "Find next button exists")
     }
 }

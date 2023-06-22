@@ -210,7 +210,7 @@ extension BrowserViewController: WKUIDelegate {
                     actions.append(
                         UIAction(
                             title: .ContextMenuOpenInNewTab,
-                            image: UIImage.templateImageNamed("menu-NewTab"),
+                            image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
                             identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
                         ) { _ in
                             addTab(url, false)
@@ -228,7 +228,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let addBookmarkAction = UIAction(
                     title: .ContextMenuBookmarkLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
+                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
                     identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
                 ) { _ in
                     self.addBookmark(url: url.absoluteString, title: elements.title)
@@ -240,7 +240,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let removeAction = UIAction(
                     title: .RemoveBookmarkContextMenuTitle,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.actionRemoveBookmark),
+                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
                     identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                 ) { _ in
                     self.removeBookmark(url: url.absoluteString)
@@ -253,7 +253,7 @@ extension BrowserViewController: WKUIDelegate {
                 let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
                 actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.downloads), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
+                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                     // This checks if download is a blob, if yes, begin blob download process
                     if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                         // if not a blob, set pendingDownloadWebView and load the request in

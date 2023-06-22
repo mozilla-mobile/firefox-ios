@@ -19,10 +19,10 @@ export class FormAutofillSection {
   static SHOULD_FOCUS_ON_AUTOFILL = true;
   #focusedInput = null;
 
-  #section = null;
+  #fieldDetails = [];
 
-  constructor(section, handler) {
-    this.#section = section;
+  constructor(fieldDetails, handler) {
+    this.#fieldDetails = fieldDetails;
 
     if (!this.isValidSection()) {
       return;
@@ -60,7 +60,7 @@ export class FormAutofillSection {
   }
 
   get fieldDetails() {
-    return this.#section.fieldDetails;
+    return this.#fieldDetails;
   }
 
   /*
@@ -903,10 +903,10 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
   /**
    * Credit Card Section Constructor
    *
-   * @param {object} fieldDetails
+   * @param {Array<FieldDetails>} fieldDetails
    *        The fieldDetail objects for the fields in this section
-   * @param {object} handler
-   *        The FormAutofillHandler responsible for this section
+   * @param {Object<FormAutofillHandler>} handler
+   *        The handler responsible for this section
    */
   constructor(fieldDetails, handler) {
     super(fieldDetails, handler);

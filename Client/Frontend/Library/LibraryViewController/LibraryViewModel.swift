@@ -25,9 +25,9 @@ class LibraryViewModel {
     }
 
     var segmentedControlItems: [UIImage] {
-        [UIImage(named: ImageIdentifiers.libraryBookmarks) ?? UIImage(),
-         UIImage(named: ImageIdentifiers.libraryHistory) ?? UIImage(),
-         UIImage(named: ImageIdentifiers.libraryDownloads) ?? UIImage(),
+        [UIImage(named: ImageIdentifiers.Large.bookmarkTrayFill) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.Large.history) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.Large.download) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
     }
 

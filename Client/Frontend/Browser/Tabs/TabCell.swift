@@ -62,7 +62,7 @@ class TabCell: UICollectionViewCell,
     lazy var favicon: FaviconImageView = .build { _ in }
 
     lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabViewController.UX.closeButtonEdgeInset)
@@ -164,7 +164,7 @@ class TabCell: UICollectionViewCell,
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
-        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)
         if !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
         }
@@ -188,7 +188,7 @@ class TabCell: UICollectionViewCell,
         // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
-            smallFaviconView.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+            smallFaviconView.image = UIImage(named: ImageIdentifiers.Large.globe)
             faviconBG.isHidden = false
             screenshotView.image = nil
 

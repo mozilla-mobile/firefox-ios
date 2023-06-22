@@ -17,6 +17,11 @@ features:
           The list of available cards for onboarding.
         type: Map<String, NimbusOnboardingCardData>
         default: {}
+      instruction-popup:
+        description: >
+          The contents of the instruction popup.
+        type: NimbusInstructionPopup
+        default: {}
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -102,6 +107,13 @@ features:
               type: upgrade
               prerequisites:
                 - ALWAYS
+          instruction-popup:
+            title: Onboarding/DefaultBrowserPopup.Title.v114
+            button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+            instructions:
+              - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+              - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+              - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
           dismissable: true
 
 objects:
@@ -216,6 +228,27 @@ objects:
           The action the button should take.
           The default for this will be "next-card"
         default: next-card
+  NimbusInstructionPopup:
+    description: >
+      The object outlining the content of the instruction card.
+    fields:
+      title:
+        type: Text
+        description: >
+          The text of the popup.
+          This should never be defaulted.
+        default: ""
+      instructions:
+        type: List<Text>
+        description: >
+          A list of instructions, either as free text, or as Text identifiers.
+        default: []
+      button-title:
+        type: Text
+        description: >
+          The title the button should have.
+          This should never be defaulted.
+        default: ""
 
 enums:
   OnboardingActions:

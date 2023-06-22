@@ -466,8 +466,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        browserDelegate?.browserHasLoaded()
-
         // Update theme of already existing views
         let theme = themeManager.currentTheme
         header.applyTheme(theme: theme)
@@ -634,6 +632,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1849,6 +1849,49 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
     // MARK: Autofill
 
+    private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
+        let userDefaults = UserDefaults.standard
+        let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
+
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        if autofillCreditCardStatus {
+            let creditCardHelper = CreditCardHelper(tab: tab)
+            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
+                guard let tabWebView = tab.webView as? TabWebView,
+                      let type = type,
+                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
+                else { return }
+
+                switch type {
+                case .formInput:
+                    self?.profile.autofill.listCreditCards(completion: { cards, error in
+                        guard let cards = cards, !cards.isEmpty, error == nil
+                        else {
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            tabWebView.accessoryView.reloadViewFor(.creditCard)
+                            tabWebView.reloadInputViews()
+                        }
+                    })
+                case .formSubmit:
+                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
+                    break
+                }
+
+                tabWebView.accessoryView.savedCardsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showBottomSheetCardViewController(creditCard: nil,
+                                                                decryptedCard: nil,
+                                                                viewType: .selectSavedCard)
+                    }
+                }
+            }
+        }
+    }
+
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
         self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
             existingCard, error in
@@ -2015,42 +2058,8 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            let creditCardHelper = CreditCardHelper(tab: tab)
-            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
-                guard let tabWebView = tab.webView as? TabWebView,
-                      let type = type
-                else { return }
-
-                switch type {
-                case .formInput:
-                    self?.profile.autofill.listCreditCards(completion: { cards, error in
-                        guard let cards = cards, !cards.isEmpty, error == nil
-                        else {
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            tabWebView.accessoryView.reloadViewFor(.creditCard)
-                            tabWebView.reloadInputViews()
-                        }
-                    })
-                case .formSubmit:
-                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
-                    break
-                }
-
-                tabWebView.accessoryView.savedCardsClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
-                    }
-                }
-            }
-        }
+        // Credit card autofill setup and callback
+        creditCardAutofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self

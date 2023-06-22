@@ -13,7 +13,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
     private var searchEngines: SearchEngines!
-    private var orderedEngines: [OpenSearchEngine]!
     private var mockSearchEngineProvider: MockSearchEngineProvider!
 
     override func setUp() {
@@ -21,10 +20,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         notificationCenter = MockNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
-        mockSearchEngineProvider = MockSearchEngineProvider()
-        searchEngines = SearchEngines(prefs: profile.prefs,
-                                      files: profile.files,
-                                      engineProvider: mockSearchEngineProvider)
         profile.reopen()
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -74,7 +69,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(data[0].isGoogleGUID)
     }
 
-    func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNi() {
+    func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNil() {
         let subject = createSubject(addPinnedSiteCount: 3)
 
         subject.recalculateTopSiteData(for: 1)
@@ -412,6 +407,77 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(data[2].isPinned)
         XCTAssertEqual(data[2].site.url, "https://www.apinnedurl.com/pinned1")
     }
+
+    // MARK: - Search engine
+    // We need to remove current search engine from sponsored tile, but not in other tiles type
+
+    func testSearchEngine_googleTile_doesntGetRemoved() {
+        let googleSearchEngine = OpenSearchEngine(engineID: "12345",
+                                                  shortName: "Google",
+                                                  image: UIImage(),
+                                                  searchTemplate: "https://google.com/find?q={searchTerm}",
+                                                  suggestTemplate: nil,
+                                                  isCustomEngine: false)
+        add(searchEngine: googleSearchEngine)
+        let subject = createSubject()
+        subject.recalculateTopSiteData(for: 6)
+
+        let data = subject.getTopSitesData()
+
+        XCTAssertTrue(data[0].isGoogleURL)
+        XCTAssertTrue(data[0].isGoogleGUID)
+    }
+
+    func testSearchEngine_pinnedTile_doesntGetRemoved() {
+        let pinnedTileSearchEngine = OpenSearchEngine(engineID: "12345",
+                                                      shortName: "Apinnedurl1",
+                                                      image: UIImage(),
+                                                      searchTemplate: "https://apinnedurl1.com/find?q={searchTerm}",
+                                                      suggestTemplate: nil,
+                                                      isCustomEngine: false)
+        add(searchEngine: pinnedTileSearchEngine)
+        let subject = createSubject(addPinnedSiteCount: 3)
+        subject.recalculateTopSiteData(for: 6)
+
+        let data = subject.getTopSitesData()
+        XCTAssertEqual(data.count, 14)
+        XCTAssertTrue(data[0].isPinned)
+    }
+
+    func testSearchEngine_historyTile_doesntGetRemoved() {
+        let historyTileSearchEngine = OpenSearchEngine(engineID: "12345",
+                                                       shortName: "Aurl0",
+                                                       image: UIImage(),
+                                                       searchTemplate: "https://aurl0.com/find?q={searchTerm}",
+                                                       suggestTemplate: nil,
+                                                       isCustomEngine: false)
+        add(searchEngine: historyTileSearchEngine)
+        let subject = createSubject()
+        subject.recalculateTopSiteData(for: 6)
+
+        let data = subject.getTopSitesData()
+
+        XCTAssertEqual(data[1].title, "A title 0")
+    }
+
+    func testSearchEngine_sponsoredTile_getsRemoved() {
+        featureFlags.set(feature: .sponsoredTiles, to: true)
+        let sponsoredTileSearchEngine = OpenSearchEngine(engineID: "Firefox",
+                                                         shortName: "Firefox",
+                                                         image: UIImage(),
+                                                         searchTemplate: "https://firefox.com/find?q={searchTerm}",
+                                                         suggestTemplate: nil,
+                                                         isCustomEngine: false)
+        add(searchEngine: sponsoredTileSearchEngine)
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
+        let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
+
+        subject.recalculateTopSiteData(for: 6)
+
+        let data = subject.getTopSitesData()
+        XCTAssertTrue(data[0].isGoogleURL)
+        XCTAssertFalse(data[1].isSponsoredTile)
+    }
 }
 
 // MARK: - ContileProviderMock
@@ -514,8 +580,9 @@ extension TopSitesDataAdaptorTests {
         let googleManager = GoogleTopSiteManager(prefs: profile.prefs)
         let dispatchGroup = MockDispatchGroup()
 
+        let defaultEngine = searchEngines != nil ? searchEngines.defaultEngine: nil
         let subject = TopSitesDataAdaptorImplementation(profile: profile,
-                                                        defaultSearchEngine: searchEngines.defaultEngine,
+                                                        defaultSearchEngine: defaultEngine,
                                                         topSiteHistoryManager: historyStub,
                                                         googleTopSiteManager: googleManager,
                                                         contileProvider: contileProviderMock,
@@ -528,6 +595,14 @@ extension TopSitesDataAdaptorTests {
         trackForMemoryLeaks(dispatchGroup, file: file, line: line)
 
         return subject
+    }
+
+    func add(searchEngine: OpenSearchEngine) {
+        mockSearchEngineProvider = MockSearchEngineProvider()
+        mockSearchEngineProvider.mockEngines.insert(searchEngine, at: 0)
+        searchEngines = SearchEngines(prefs: profile.prefs,
+                                      files: profile.files,
+                                      engineProvider: mockSearchEngineProvider)
     }
 }
 
