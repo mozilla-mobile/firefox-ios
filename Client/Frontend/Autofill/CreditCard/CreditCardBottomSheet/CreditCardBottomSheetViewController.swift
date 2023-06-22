@@ -276,7 +276,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
-
+        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5
         hostingCell.isAccessibilityElement = true
         return hostingCell
     }
@@ -323,14 +323,26 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let plainTextCreditCard = viewModel.getPlainCreditCardValues(
-            bottomSheetState: .selectSavedCard,
-            row: indexPath.row
-        ) else {
+        guard let hostingCell = cardTableView.dequeueReusableCell(
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
+              let plainTextCreditCard = viewModel.getPlainCreditCardValues(
+                bottomSheetState: .selectSavedCard,
+                row: indexPath.row
+              )
+        else {
             return
         }
         didSelectCreditCardToFill?(plainTextCreditCard)
+        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5Hover
         dismissVC()
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let hostingCell = cardTableView.dequeueReusableCell(
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
+            return
+        }
+        hostingCell.backgroundColor = themeManager.currentTheme.colors.layer5
     }
 
     // MARK: Themable
