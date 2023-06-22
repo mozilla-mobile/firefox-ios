@@ -27,7 +27,6 @@ include:
   - nimbus-features/onboardingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/reduxIntegrationFeature.yaml
-  - nimbus-features/rustSyncManagerFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml
   - nimbus-features/settingsCoordinatorRefactor.yaml

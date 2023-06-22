@@ -7,10 +7,19 @@ import Common
 import Shared
 @_exported import MozillaAppServices
 
+public typealias MZSyncResult = MozillaAppServices.SyncResult
+
 open class RustSyncManagerAPI {
     private let logger: Logger
     let api: SyncManagerComponent
-    public typealias MZSyncResult = MozillaAppServices.SyncResult
+
+    // Names of collections that can be enabled/disabled locally.
+    public var rustTogglableEngines: [String] = [
+        "tabs",
+        "passwords",
+        "bookmarks",
+        "history",
+    ]
 
     public init(logger: Logger = DefaultLogger.shared,
                 creditCardAutofillEnabled: Bool = false) {
@@ -18,7 +27,7 @@ open class RustSyncManagerAPI {
         self.logger = logger
 
         if creditCardAutofillEnabled {
-            RustSyncManagerAPI.rustTogglableEngines.append("creditcards")
+            self.rustTogglableEngines.append("creditcards")
         }
     }
 
@@ -76,28 +85,5 @@ open class RustSyncManagerAPI {
             let engines = self.api.getAvailableEngines()
             completion(engines)
         }
-    }
-
-    // Names of collections that can be enabled/disabled locally.
-    public static var rustTogglableEngines: [String] = [
-        "tabs",
-        "passwords",
-        "bookmarks",
-        "history",
-    ]
-}
-
-public func toRustSyncReason(reason: OldSyncReason) -> MozillaAppServices.SyncReason {
-    switch reason {
-    case .startup:
-        return MozillaAppServices.SyncReason.startup
-    case .scheduled:
-        return MozillaAppServices.SyncReason.scheduled
-    case .backgrounded:
-        return MozillaAppServices.SyncReason.backgrounded
-    case .push, .user, .syncNow:
-        return MozillaAppServices.SyncReason.user
-    case .didLogin, .clientNameChanged, .engineEnabled:
-        return MozillaAppServices.SyncReason.enabledChange
     }
 }

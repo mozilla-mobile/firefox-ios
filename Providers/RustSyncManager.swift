@@ -6,11 +6,11 @@ import Account
 import Shared
 import Storage
 import Sync
-import SyncTelemetry
 import AuthenticationServices
 import Common
 
-private typealias MZSyncResult = MozillaAppServices.SyncResult
+public typealias MZSyncResult = MozillaAppServices.SyncResult
+public typealias MZSyncReason = MozillaAppServices.SyncReason
 
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
@@ -228,7 +228,7 @@ public class RustSyncManager: NSObject, SyncManager {
         guard let profile = profile, profile.hasSyncableAccount() else { return succeed() }
 
         beginTimedSyncs()
-        return syncEverything(why: .didLogin)
+        return syncEverything(why: .enabledChange)
     }
 
     public func onRemovedAccount() -> Success {
@@ -241,12 +241,14 @@ public class RustSyncManager: NSObject, SyncManager {
                 // This will remove keys from the Keychain if they exist, as well
                 // as wiping the Sync prefs.
 
-                // `Scratchpad.clearFromPrefs` and `clearAll` were pulled from
-                // `SyncStateMachine.clearStateFromPrefs` to reduce RustSyncManager's
-                // dependence on the swift sync state machine logic. This will make
-                // refactoring or eliminating that code easier once the rust sync manager
-                // experiment is complete.
-                Scratchpad.clearFromPrefs(self.prefsForSync.branch("scratchpad"))
+                if let keyLabel = self
+                    .prefsForSync
+                    .branch("scratchpad")
+                    .stringForKey("keyLabel") {
+                        MZKeychainWrapper
+                            .sharedClientAppContainerKeychain
+                            .removeObject(forKey: keyLabel)
+                }
                 self.prefsForSync.clearAll()
             }
             return succeed()
@@ -265,7 +267,7 @@ public class RustSyncManager: NSObject, SyncManager {
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
-            RustSyncManagerAPI.rustTogglableEngines.forEach { engine in
+            syncManagerAPI.rustTogglableEngines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
@@ -310,12 +312,12 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     func getEnginesAndKeys(engines: [String],
-                           completion: @escaping (([EngineIdentifier], [String: String])) -> Void) {
+                           completion: @escaping (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
         var registeredPlaces = false
 
-        for engine in engines.filter({ RustSyncManagerAPI.rustTogglableEngines.contains($0) }) {
+        for engine in engines.filter({ syncManagerAPI.rustTogglableEngines.contains($0) }) {
             switch engine {
             case "tabs":
                 profile?.tabs.registerWithSyncManager()
@@ -405,7 +407,7 @@ public class RustSyncManager: NSObject, SyncManager {
                             extra: enablementDetails)
         }
 
-        RustSyncManagerAPI.rustTogglableEngines.forEach({
+        syncManagerAPI.rustTogglableEngines.forEach({
             if declined.contains($0) {
                 updateEnginePref($0, false)
             } else {
@@ -414,7 +416,7 @@ public class RustSyncManager: NSObject, SyncManager {
         })
     }
 
-    private func syncRustEngines(why: MozillaAppServices.SyncReason,
+    private func syncRustEngines(why: MZSyncReason,
                                  engines: [String]) -> Deferred<Maybe<MZSyncResult>> {
         let deferred = Deferred<Maybe<MZSyncResult>>()
 
@@ -473,10 +475,9 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     @discardableResult
-    public func syncEverything(why: OldSyncReason) -> Success {
-        let rustReason = toRustSyncReason(reason: why)
-        return syncRustEngines(why: rustReason,
-                               engines: RustSyncManagerAPI.rustTogglableEngines) >>> succeed
+    public func syncEverything(why: MZSyncReason) -> Success {
+        return syncRustEngines(why: why,
+                               engines: syncManagerAPI.rustTogglableEngines) >>> succeed
     }
 
     /**
@@ -484,7 +485,7 @@ public class RustSyncManager: NSObject, SyncManager {
      * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
      * and to preserve some ordering rules.
      */
-    public func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success {
+    public func syncNamedCollections(why: MZSyncReason, names: [String]) -> Success {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
@@ -493,52 +494,14 @@ public class RustSyncManager: NSObject, SyncManager {
             engines.append(name)
         }
 
-        let rustReason = toRustSyncReason(reason: why)
-        return syncRustEngines(why: rustReason, engines: engines) >>> succeed
+        return syncRustEngines(why: why, engines: engines) >>> succeed
     }
 
-    private func syncTabs() -> Deferred<Maybe<MZSyncResult>> {
+    public func syncTabs() -> Deferred<Maybe<MZSyncResult>> {
         return syncRustEngines(why: .user, engines: ["tabs"])
     }
 
-    public func syncClientsThenTabs() -> OldSyncResult {
-        // This function exists to comply with the `SyncManager` protocol while the
-        // rust sync manager experiment is enabled. To be safe, `syncTabs` is called. Once
-        // the experiment is complete this can be removed along with an update to the
-        // protocol.
-
-        return syncTabs().bind { result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            // The current callers of `BrowserSyncManager.syncClientsThenTabs` only care
-            // whether the function fails or succeeds and does nothing with return value
-            // upon success so we are returning a meaningless value here.
-            return deferMaybe(SyncStatus.notStarted(SyncNotStartedReason.unknown))
-        }
-    }
-
-    public func syncClients() -> OldSyncResult {
-        // This function exists to to comply with the `SyncManager` protocol and has
-        // no callers. It will be removed when the rust sync manager experiment is
-        // complete. To be safe, `syncClientsThenTabs` is called.
-        return syncClientsThenTabs()
-    }
-
-    public func syncHistory() -> OldSyncResult {
-        // The return type of this function has been changed to comply with the
-        // `SyncManager` protocol during the rust sync manager experiment. It will be updated
-        // once the experiment is complete.
-        return syncRustEngines(why: .user, engines: ["history"]).bind { result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            // The current callers of this function only care whether this function fails
-            // or succeeds and does nothing with return value upon success so we are
-            // returning a meaningless value here.
-            return deferMaybe(SyncStatus.notStarted(SyncNotStartedReason.unknown))
-        }
+    public func syncHistory() -> Deferred<Maybe<MZSyncResult>> {
+        return syncRustEngines(why: .user, engines: ["history"])
     }
 }

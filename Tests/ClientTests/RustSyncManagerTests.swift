@@ -7,7 +7,7 @@ import Sync
 import Storage
 import XCTest
 
-private typealias MZSyncResult = MozillaAppServices.SyncResult
+class MockBrowserProfile: BrowserProfile {}
 
 class RustSyncManagerTests: XCTestCase {
     let bookmarksStateChangedPrefKey = "sync.engine.bookmarks.enabledStateChanged"
