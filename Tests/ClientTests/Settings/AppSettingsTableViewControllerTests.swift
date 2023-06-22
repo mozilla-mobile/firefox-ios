@@ -82,6 +82,15 @@ class AppSettingsTableViewControllerTests: XCTestCase {
                        URL(string: "fennec://deep-link?url=/action/show-intro-onboarding")!)
     }
 
+    func testShowExperiments_openExperiments() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.pressedExperiments()
+
+        XCTAssertEqual(delegate.showExperimentsCalled, 1)
+    }
+
     // MARK: - Helper
     private func createSubject() -> AppSettingsTableViewController {
         let subject = AppSettingsTableViewController(with: profile,
@@ -98,6 +107,7 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
+    var showExperimentsCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -109,5 +119,9 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate {
 
     func didFinishShowingSettings() {
         didFinishShowingSettingsCalled += 1
+    }
+
+    func showExperiments() {
+        showExperimentsCalled += 1
     }
 }

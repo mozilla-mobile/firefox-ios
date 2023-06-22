@@ -62,6 +62,7 @@ protocol DebugSettingsDelegate: AnyObject {
 protocol SettingsFlowDelegate: AnyObject {
     func showDevicePassCode()
     func showCreditCardSettings()
+    func showExperiments()
 
     func didFinishShowingSettings()
 }
@@ -458,8 +459,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     }
 
     func pressedExperiments() {
-        // laurie
-//        pushViewController(ExperimentsViewController(), animated: true)
+        parentCoordinator?.showExperiments()
     }
 
     func askedToShow(alert: AlertController) {
