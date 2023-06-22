@@ -655,7 +655,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(WebsiteDataSettings) { screenState in
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
-            app.tables.cells["ClearAllWebsiteData"].tap()
+            app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].tap()
             app.alerts.buttons["OK"].tap()
         }
         // The swipeDown() is a workaround for an intermittent issue that the search filed is not always in view.

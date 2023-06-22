@@ -16,7 +16,7 @@ class IntegrationTests: BaseTestCase {
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
-    let historyDB = "exampleURLHistoryBookmark.db"
+    let historyDB = "exampleURLHistoryBookmark-places.db"
 
     override func setUp() {
      // Test name looks like: "[Class testFunc]", parse out the function name

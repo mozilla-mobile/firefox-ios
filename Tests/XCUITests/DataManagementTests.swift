@@ -25,7 +25,7 @@ class DataManagementTests: BaseTestCase {
         waitForExistence(app.tables.otherElements["Website Data"], timeout: 3)
 
         navigator.performAction(Action.AcceptClearAllWebsiteData)
-        waitForExistence(app.tables.cells["ClearAllWebsiteData"])
+        waitForExistence(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
         let expectedWebsitesCleared = app.tables.cells.count
         XCTAssertEqual(expectedWebsitesCleared, 1)
     }
