@@ -77,7 +77,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isBookmarked && !isHomeTab {
-                actions.append(UIAction(title: .TabPeekAddToBookmarks, image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark), identifier: nil) { [weak self] _ in
+                actions.append(UIAction(title: .TabPeekAddToBookmarks,
+                                        image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
+                                        identifier: nil) { [weak self] _ in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
                 })
@@ -96,7 +98,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab,
-                                image: UIImage.templateImageNamed(ImageIdentifiers.closeTap),
+                                image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
                                 identifier: nil) { [weak self] _ in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)

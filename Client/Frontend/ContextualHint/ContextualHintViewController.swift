@@ -25,7 +25,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     }
 
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose)?.withRenderingMode(.alwaysTemplate),
+        button.setImage(UIImage(named: ImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),

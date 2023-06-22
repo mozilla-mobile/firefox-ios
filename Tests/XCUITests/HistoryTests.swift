@@ -218,7 +218,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newTab].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.plus].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
     }
 
@@ -235,7 +235,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.newTab].tap()
+        app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
 
         // The page is opened on the new tab
         navigator.goto(TabTray)
@@ -379,10 +379,10 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
-            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
+            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
         } else {
-            app.cells.buttons["tab close"].firstMatch.tap()
-            // app.otherElements.cells.element(boundBy: 0).buttons["tab close"].tap()
+            app.cells.buttons[ImageIdentifiers.Large.cross].firstMatch.tap()
+            // app.otherElements.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
         }
     }
 
@@ -446,8 +446,8 @@ class HistoryTests: BaseTestCase {
             navigator.goto(LibraryPanel_History)
             waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
             app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-            waitForExistence(app.buttons["Delete"], timeout: TIMEOUT)
-            app.buttons["Delete"].tap()
+            waitForExistence(app.buttons[ImageIdentifiers.Large.delete], timeout: TIMEOUT)
+            app.buttons[ImageIdentifiers.Large.delete].tap()
             waitForNoExistence(app.staticTexts["http://example.com"])
         }
     }

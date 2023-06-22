@@ -88,7 +88,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
         return [SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                      iconString: ImageIdentifiers.actionRemove,
+                                      iconString: ImageIdentifiers.Large.cross,
                                       tapHandler: { _ in
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
             self.sendHistoryHighlightContextualTelemetry(type: .remove)
@@ -109,7 +109,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
+        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.Large.plus) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {
@@ -133,7 +133,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
-        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
+        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
+                                     iconString: ImageIdentifiers.Large.bookmarkSlash,
+                                     tapHandler: { _ in
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                 site.setBookmarked(false)
             }
@@ -143,7 +145,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
-        return SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
+        return SingleActionViewModel(title: .BookmarkContextMenuTitle,
+                                     iconString: ImageIdentifiers.Large.bookmark,
+                                     tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
             // Add new mobile bookmark at the top of the list
             _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
@@ -240,7 +244,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     // Removes the site out of the top sites. If site is pinned it removes it from pinned and remove
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                     iconString: ImageIdentifiers.actionRemove,
+                                     iconString: ImageIdentifiers.Large.cross,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
@@ -278,7 +282,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getSponsoredContentAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
+                                     iconString: ImageIdentifiers.Large.helpCircle,
+                                     tapHandler: { _ in
             guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
             self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)

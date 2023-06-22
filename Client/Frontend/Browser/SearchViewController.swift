@@ -25,7 +25,6 @@ private struct SearchViewControllerUX {
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
     static let SearchImage = "search"
-    static let SearchAppendImage = "search-append"
     static let SearchEngineTopBorderWidth = 0.5
     static let SuggestionMargin: CGFloat = 8
 
@@ -749,7 +748,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: SearchViewControllerUX.SearchAppendImage)
+        var searchAppendImage = UIImage(named: ImageIdentifiers.Large.appendUp)
 
         if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
             searchAppendImage = UIImage(

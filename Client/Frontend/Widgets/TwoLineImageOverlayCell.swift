@@ -118,6 +118,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
         leftImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        accessoryView?.tintColor = theme.colors.actionSecondary
     }
 
     override func prepareForReuse() {

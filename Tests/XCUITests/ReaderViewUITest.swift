@@ -188,7 +188,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Select to open in New Tab
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.newTab].tap()
+        app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Now there should be two tabs open
@@ -207,7 +207,7 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.actionRemove].tap()
+        app.tables.otherElements[ImageIdentifiers.Large.cross].tap()
 
         // Verify the item has been removed
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

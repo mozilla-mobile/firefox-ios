@@ -85,7 +85,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons["Send Tab"].tap()
 
         // User not logged in
-        waitForExistence(app.images["emptySync"])
+        waitForExistence(app.images[ImageIdentifiers.emptySyncImageName])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }*/
 

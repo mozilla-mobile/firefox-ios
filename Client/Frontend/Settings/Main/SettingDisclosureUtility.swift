@@ -8,7 +8,7 @@ import Shared
 struct SettingDisclosureUtility {
     static func buildDisclosureIndicator(theme: Theme) -> UIImageView {
         let disclosureIndicator = UIImageView()
-        disclosureIndicator.image = UIImage(named: ImageIdentifiers.menuChevron)?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        disclosureIndicator.image = UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         disclosureIndicator.tintColor = theme.colors.actionSecondary
         disclosureIndicator.sizeToFit()
         return disclosureIndicator
