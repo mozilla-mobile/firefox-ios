@@ -46,6 +46,7 @@ enum CreditCardPayloadType: String {
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
+    private static var frame: WKFrameInfo?
 
     // Closure to send the field values
     var foundFieldValues: ((UnencryptedCreditCardFields, CreditCardPayloadType?) -> Void)?
@@ -56,6 +57,7 @@ class CreditCardHelper: TabContentScript {
 
     required init(tab: Tab) {
         self.tab = tab
+        CreditCardHelper.frame = nil
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -66,6 +68,7 @@ class CreditCardHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
+        CreditCardHelper.frame = message.frameInfo
         guard let data = getValidPayloadData(from: message),
               let fieldValues = parseFieldType(messageBody: data),
               let payloadType = CreditCardPayloadType(rawValue: fieldValues.type)
@@ -136,13 +139,14 @@ class CreditCardHelper: TabContentScript {
                 completion(CreditCardHelperError.injectionInvalidJSON)
                 return
             }
-            let fxWindowVal = "window.__firefox__.CreditCardHelper"
-            let fillCreditCardInfoCallback = "\(fxWindowVal).fillFormFields('\(jsonDataVal)')"
+
             guard let webView = tab.webView else {
                 completion(CreditCardHelperError.injectionIssue)
                 return
             }
-            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
+
+            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields('\(jsonDataVal)')"
+            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, CreditCardHelper.frame) { _, err in
                 guard let err = err else {
                     completion(nil)
                     return
