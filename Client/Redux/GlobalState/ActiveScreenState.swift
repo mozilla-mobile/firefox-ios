@@ -10,7 +10,7 @@ enum AppScreenState: Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
-        case .themeSettings(let state): return .themeSettings(ThemeManagerState.reducer(state, action))
+        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         }
     }
 }
@@ -24,7 +24,7 @@ struct ActiveScreensState: Equatable {
         if let action = action as? ActiveScreensStateAction {
             switch action {
             case .showThemeSettings(.themeSettings):
-                screens = [.themeSettings(ThemeManagerState())]
+                screens = [.themeSettings(ThemeSettingsState())]
             case .closeThemeSettings(.themeSettings):
                 break
             }

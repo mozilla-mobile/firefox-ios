@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 
 enum MainStateAction: Action {
-    case showThemeSettings(ThemeManagerState)
+    case showThemeSettings(ThemeSettingsState)
     case closeThemeSettings
 }

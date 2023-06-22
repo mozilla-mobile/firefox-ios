@@ -7,7 +7,7 @@ import Redux
 import Shared
 
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
-    typealias SubscriberStateType = MainState
+    typealias SubscriberStateType = AppState
     struct UX {
         static var rowHeight: CGFloat = 70
         static var moonSunIconSize: CGFloat = 18
@@ -55,11 +55,15 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                selector: #selector(brightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
+//        store.subscribe(self, transform: {
+//            $0.select(ThemeSettingsState())
+//        })
         store.subscribe(self)
     }
 
-    func newState(state: MainState) {
-        print("YRD received new state \(state.themeSettings.useSystemAppearance)")
+    func newState(state: AppState) {
+//        var themeSettingsState = state.screenState(for: .themeSettings(themeState: ThemeSettingsState()))
+//        print("YRD received new state \(themeSettingsState.useSystemAppearance)")
         // TODO: Update UI
     }
 

@@ -9,7 +9,18 @@ struct AppState: StateType {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in
-        MainState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+    }
+
+    func screenState<State>(for screen: AppScreen) -> State? {
+        return activeScreens.screens
+            .compactMap {
+                switch ($0, screen) {
+                case (.themeSettings(let state), .themeSettings(let themeState)): return state as? State
+                default: return nil
+                }
+            }
+            .first
     }
 }
 

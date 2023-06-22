@@ -24,13 +24,11 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         self.themeManager = themeManager
     }
 
-    lazy var setSystemTheme: Middleware<MainState> = { state, action in
+    lazy var setSystemTheme: Middleware<AppState> = { state, action in
         switch action {
         case ThemeSettingsAction.enableSystemAppearance(let enabled):
-            // TODO: Use enabled
-            let themeSystemValue = state.themeSettings.useSystemAppearance
-            self.themeManager.systemThemeIsOn = !themeSystemValue
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(!themeSystemValue))
+            self.themeManager.systemThemeIsOn = enabled
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(enabled))
         default:
             print("YRD case not  handled")
             break

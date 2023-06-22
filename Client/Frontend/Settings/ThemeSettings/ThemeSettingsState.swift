@@ -22,6 +22,10 @@ struct ThemeSettingsState: Equatable {
     var systemBrightnessValue: Float
     var userBrightnessThreshold: Float
 
+    init(_ state: AppState) {
+        self.init()
+    }
+
     init() {
         self.useSystemAppearance = false
         self.switchMode = .manual(ThemePicker.light)
@@ -29,7 +33,7 @@ struct ThemeSettingsState: Equatable {
         self.systemBrightnessValue =  1
         self.userBrightnessThreshold = 0.1
     }
-
+//
     init(useSystemAppearance: Bool,
          switchMode: SwitchMode,
          manualThemeMode: ThemePicker,

@@ -4,20 +4,16 @@
 
 import Redux
 
-enum ThemeSettingsState: Equatable {
-    case show(ThemeManagerState)
+enum ThemeSettingsScreen: Equatable {
+    case show(ThemeSettingsState)
     case close
 }
 
 struct MainState: StateType, Equatable {
     var themeSettingsState: ThemeSettingsState
-    var themeManagerState: ThemeManagerState
-
-    func mainReducer(action: Action, state: MainState?) -> MainState {
-    }
+    var themeManagerScreen: ThemeSettingsScreen
 }
 
-let mainState = MainState()
-let store = Store(state: mainState(),
-                  reducer: mainState.mainReducer(action: <#T##Action#>, state: <#T##MainState?#>),
+let store = Store(state: AppState(),
+                  reducer: AppState.reducer,
                   middlewares: [ThemeManagerMiddleware().setSystemTheme])
