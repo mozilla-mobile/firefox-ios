@@ -137,7 +137,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         cancelButton.setImage(
-            UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection(),
+            UIImage.templateImageNamed(ImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
             for: .normal)
         cancelButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
         cancelButton.accessibilityLabel = AccessibilityIdentifiers.GeneralizedIdentifiers.back
