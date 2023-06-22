@@ -40,8 +40,14 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
 
     private func setupScreenTimeController() {
         addChild(screenTimeController)
-        screenTimeController.view.frame = webView.frame
         view.addSubview(screenTimeController.view)
+        screenTimeController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            screenTimeController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            screenTimeController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            screenTimeController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            screenTimeController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         screenTimeController.didMove(toParent: self)
         screenTimeController.url = webView.url
     }
