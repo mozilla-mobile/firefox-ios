@@ -13,6 +13,13 @@ struct SimpleToast: ThemeApplicable {
         label.textAlignment = .center
     }
 
+    private let heightConstraint: NSLayoutConstraint
+
+    init() {
+        heightConstraint = toastLabel.heightAnchor
+            .constraint(equalToConstant: Toast.UX.toastHeight)
+    }
+
     func showAlertWithText(_ text: String,
                            bottomContainer: UIView,
                            theme: Theme,
@@ -20,10 +27,11 @@ struct SimpleToast: ThemeApplicable {
         toastLabel.text = text
         bottomContainer.addSubview(toastLabel)
         NSLayoutConstraint.activate([
+            heightConstraint,
             toastLabel.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
             toastLabel.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
-            toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor, constant: bottomConstraintPadding),
-            toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
+            toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
+                                               constant: bottomConstraintPadding)
         ])
         applyTheme(theme: theme)
         animate(toastLabel)
@@ -38,10 +46,8 @@ struct SimpleToast: ThemeApplicable {
         UIView.animate(
             withDuration: Toast.UX.toastAnimationDuration,
             animations: {
-                var frame = toast.frame
-                frame.origin.y = frame.origin.y + Toast.UX.toastHeight
-                frame.size.height = 0
-                toast.frame = frame
+                heightConstraint.constant = 0
+                toast.superview?.layoutIfNeeded()
             },
             completion: { finished in
                 toast.removeFromSuperview()
