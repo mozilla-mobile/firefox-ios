@@ -5,9 +5,11 @@
 import Foundation
 import Shared
 import WebKit
+import ScreenTime
 
 class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private var webView: WKWebView
+    private let screenTimeController = STWebpageController()
     var contentType: ContentType = .webview
 
     init(webView: WKWebView) {
@@ -21,10 +23,11 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
+        setupWebView()
+        setupScreenTimeController()
     }
 
-    private func setupLayout() {
+    private func setupWebView() {
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -35,9 +38,24 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         ])
     }
 
+    private func setupScreenTimeController() {
+        addChild(screenTimeController)
+        view.addSubview(screenTimeController.view)
+        screenTimeController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            screenTimeController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            screenTimeController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            screenTimeController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            screenTimeController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        screenTimeController.didMove(toParent: self)
+        screenTimeController.url = webView.url
+    }
+
     func update(webView: WKWebView) {
         self.webView = webView
-        setupLayout()
+        setupWebView()
+        setupScreenTimeController()
     }
 
     // MARK: - ScreenshotableView
