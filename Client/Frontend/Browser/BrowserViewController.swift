@@ -56,7 +56,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
-
+    var appAuthenticator: AppAuthenticationProtocol?
     var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
@@ -176,7 +176,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -186,7 +187,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
-
+        self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -1884,11 +1885,33 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 tabWebView.accessoryView.savedCardsClosure = {
                     DispatchQueue.main.async { [weak self] in
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
+                        // Dismiss keyboard
+                        webView.resignFirstResponder()
+                        // Authenticate and show bottom sheet with select a card flow
+                        self?.authenticateSavedCreditCardBottomSheet(fieldValues: fieldValues)
                     }
                 }
+            }
+        }
+    }
+
+    private func authenticateSavedCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields)
+        guard let appAuthenticator else {
+            return
+        }
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.showBottomSheetCardViewController(creditCard: nil,
+                                                       decryptedCard: nil,
+                                                       viewType: .selectSavedCard)
+            case .deviceOwnerFailed:
+                break // Keep showing bvc
+            case .passCodeRequired:
+                let passcodeViewController = DevicePasscodeRequiredViewController()
+                passcodeViewController.profile = self.profile
+                self.navigationController?.pushViewController(passcodeViewController,
+                                                              animated: true)
             }
         }
     }
