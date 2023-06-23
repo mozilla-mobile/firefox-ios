@@ -125,7 +125,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         case .topSites:
             return TopSitesSettingsViewController()
 
-        case .creditCard:
+        case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
         case .general:
@@ -158,6 +158,26 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
     func showExperiments() {
         let experimentsViewController = ExperimentsViewController()
         router.push(experimentsViewController)
+    }
+
+    // TODO: Move the both show password methods into it's own coordinator
+    func showPasswordList() {
+        let navigationHandler: (_ url: URL?) -> Void = { url in
+            guard let url = url else { return }
+            self.settingsOpenURLInNewTab(url)
+            self.didFinish()
+        }
+
+        let viewController = LoginListViewController(
+            profile: profile,
+            webpageNavigationHandler: navigationHandler
+        )
+        viewController.settingsDelegate = self
+        router.push(viewController)
+    }
+
+    func showPasswordOnboarding() {
+        
     }
 
     func didFinishShowingSettings() {

@@ -63,6 +63,8 @@ protocol SettingsFlowDelegate: AnyObject {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
+    func showPasswordList()
+    func showPasswordOnboarding()
 
     func didFinishShowingSettings()
 }
@@ -140,14 +142,15 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     func handle(route: Route.SettingsSection) {
         switch route {
-        case .creditCard:
-            handleCreditCardAuthenticatinFlow()
+        case .creditCard, .password:
+            authenticateUserFor(route: route)
         default:
             break
         }
     }
 
-    private func handleCreditCardAuthenticatinFlow() {
+    // Authenticates the user prior to allowing access to sensitive sections
+    private func authenticateUserFor(route: Route.SettingsSection) {
         appAuthenticator.getAuthenticationState { state in
             switch state {
             case .deviceOwnerAuthenticated:
@@ -157,6 +160,22 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             case .passCodeRequired:
                 self.parentCoordinator?.showDevicePassCode()
             }
+        }
+    }
+
+    // Called after the user has been prompted to authenticate to access a sensitive section
+    private func openDeferredRouteAfterAuthentication(route: Route.SettingsSection) {
+        switch route {
+        case .creditCard:
+            self.parentCoordinator?.showCreditCardSettings()
+        case .password:
+            if LoginOnboarding.shouldShow() {
+                self.parentCoordinator?.showPasswordOnboarding()
+            } else {
+                self.parentCoordinator?.showPasswordList()
+            }
+        default:
+            break
         }
     }
 

@@ -44,6 +44,11 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         deselectRow()
 
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settings?.handle(route: .password)
+            return
+        }
+
         guard let navController = navigationController else { return }
         let navigationHandler: (_ url: URL?) -> Void = { url in
             guard let url = url else { return }
