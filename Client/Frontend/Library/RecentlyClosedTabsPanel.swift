@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Storage
 import SiteImageView
+import Common
 
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
@@ -18,7 +19,11 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
+class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
@@ -27,7 +32,13 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
 
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
 
-    init(profile: Profile) {
+    init(
+        profile: Profile,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,16 +50,14 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
-
         tableViewController.libraryPanelDelegate = libraryPanelDelegate
         tableViewController.recentlyClosedTabsDelegate = recentlyClosedTabsDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
-        self.addChild(tableViewController)
+        addChild(tableViewController)
         tableViewController.didMove(toParent: self)
 
-        self.view.addSubview(tableViewController.view)
+        view.addSubview(tableViewController.view)
 
         NSLayoutConstraint.activate([
             tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
@@ -56,6 +65,8 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
             tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        listenForThemeChange(view)
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -73,6 +84,10 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
 
             return
         }
+    }
+
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
 
@@ -171,11 +186,5 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
             return getRecentlyClosedTabContexMenuActions(for: site, recentlyClosedPanelDelegate: recentlyClosedTabsDelegate)
         }
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate)
-    }
-}
-
-extension RecentlyClosedTabsPanel: LegacyNotificationThemeable {
-    func applyTheme() {
-        tableViewController.tableView.reloadData()
     }
 }
