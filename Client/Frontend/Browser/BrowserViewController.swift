@@ -1895,7 +1895,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
     }
 
-    private func authenticateSavedCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields)
+    private func authenticateSavedCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields) {
         guard let appAuthenticator else {
             return
         }
