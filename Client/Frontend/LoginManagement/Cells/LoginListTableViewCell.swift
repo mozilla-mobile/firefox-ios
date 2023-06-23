@@ -73,7 +73,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        accessoryType = .disclosureIndicator
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         multipleSelectionBackgroundView = UIView()
@@ -81,6 +80,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
 
     func configure(inset: UIEdgeInsets) {
         self.inset = inset
+        accessoryType = .disclosureIndicator
         setConstraints()
     }
 
