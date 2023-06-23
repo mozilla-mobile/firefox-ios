@@ -77,14 +77,15 @@ class OnboardingCardViewController: UIViewController, Themeable {
         stack.distribution = .fill
         stack.spacing = UX.topStackViewSpacing
         stack.axis = .vertical
+        stack.accessibilityIdentifier = "Roux - TopStackView"
     }
 
     lazy var contentStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.alignment = .center
         stack.distribution = .equalSpacing
-        stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
+        stack.accessibilityIdentifier = "Roux - ContentStackView"
     }
 
     lazy var imageView: UIImageView = .build { imageView in
@@ -114,7 +115,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
     lazy var buttonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .equalSpacing
-        stack.spacing = UX.stackViewSpacing
         stack.axis = .vertical
     }
 
@@ -221,7 +221,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - View setup
     func setupView() {
         view.backgroundColor = .clear
-
+        contentStackView.spacing = stackViewSpacing()
+        buttonStackView.spacing = stackViewSpacing()
         addViewsToView()
 
         // Adapt layout for smaller screens
@@ -323,7 +324,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private func stackViewSpacing() -> CGFloat {
-        guard _ = viewModel.link?.title else {
+        guard viewModel.link?.title != nil else {
             return UX.stackViewSpacingWithoutLink
         }
 
