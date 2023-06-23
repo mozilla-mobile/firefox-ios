@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Storage
 
 @testable import Client
 
@@ -75,10 +76,14 @@ final class LibraryCoordinatorTests: XCTestCase {
     }
 }
 
-class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate {
+class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDelegate {
     var didFinishSettingsCalled = 0
 
     func didFinishLibrary(from coordinator: LibraryCoordinator) {
         didFinishSettingsCalled += 1
     }
+
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {}
+
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {}
 }
