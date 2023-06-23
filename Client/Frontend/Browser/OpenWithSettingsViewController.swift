@@ -100,7 +100,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell()
+        let cell = dequeueCellFor(indexPath: indexPath)
         let option = mailProviderSource[indexPath.row]
 
         cell.applyTheme(theme: themeManager.currentTheme)
