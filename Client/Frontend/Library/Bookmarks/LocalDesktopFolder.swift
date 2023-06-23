@@ -4,6 +4,7 @@
 
 import MozillaAppServices
 import Storage
+import Common
 
 /// A folder class that enables us to have local folder presented to the user
 /// We can use this folder class for:
@@ -57,7 +58,8 @@ extension LocalDesktopFolder: BookmarksFolderCell {
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?) {
+                   navigationController: UINavigationController?,
+                   logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarkFolderGUID: guid)
         let nextController = BookmarksPanel(viewModel: viewModel)

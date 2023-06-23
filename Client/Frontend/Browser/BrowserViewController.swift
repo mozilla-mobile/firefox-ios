@@ -2144,16 +2144,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
 // MARK: - LibraryPanelDelegate
 extension BrowserViewController: LibraryPanelDelegate {
-    func libraryPanelDidRequestToSignIn() {
-        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams)
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams)
-    }
-
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -2163,16 +2153,6 @@ extension BrowserViewController: LibraryPanelDelegate {
         }
 
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
-    }
-
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
-            logger.log("Invalid URL, and couldn't generate a search URL for it.",
-                       level: .warning,
-                       category: .library)
-            return
-        }
-        return self.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
