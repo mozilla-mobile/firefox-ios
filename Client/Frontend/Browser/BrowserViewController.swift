@@ -614,8 +614,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         }
 
         urlBar.searchEnginesDidUpdate()
-
-        browserDelegate?.browserHasLoaded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -634,6 +632,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
+
+        browserDelegate?.browserHasLoaded()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -738,7 +738,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         if CoordinatorFlagManager.isCoordinatorEnabled {
             NSLayoutConstraint.activate([
-                contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
+                contentContainer.topAnchor.constraint(equalTo: statusBarOverlay.bottomAnchor, priority: .init(998)),
+                contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor, priority: .init(999)),
                 contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),

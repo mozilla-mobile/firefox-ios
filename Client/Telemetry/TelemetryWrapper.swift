@@ -198,13 +198,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     // Sets hashed fxa sync device id for glean deletion ping
     func setSyncDeviceId() {
-        guard let prefs = profile?.prefs else { return }
-        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for deletion-request ping
-        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, kSync) in
-            let scratchpadPrefs = prefs.branch("sync.scratchpad")
-            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else { return }
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID for deletion-request ping
+        guard let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
+              let state = accountManager.deviceConstellation()?.state(),
+              let clientGUID = state.localDevice?.id
+        else { return }
 
-            let deviceId = (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, _) in
+            let deviceId = (clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
     }
@@ -260,6 +261,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         default:
             GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
         }
+        // Notifications
+        GleanMetrics.Preferences.tipsAndFeaturesNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications))
+        GleanMetrics.Preferences.syncNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications))
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)

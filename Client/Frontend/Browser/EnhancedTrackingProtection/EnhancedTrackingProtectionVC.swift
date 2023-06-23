@@ -92,7 +92,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.menuGoBack).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 
@@ -336,10 +336,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        if let urlString = viewModel.tab.url?.absoluteString {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: urlString,
-                                                     faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
-        }
+        favicon.setFavicon(FaviconImageViewModel(siteURLString: viewModel.url.absoluteString,
+                                                 faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
 
         siteDomainLabel.text = viewModel.websiteTitle
         connectionLabel.text = viewModel.connectionStatusString

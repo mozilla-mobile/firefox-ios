@@ -79,7 +79,6 @@ public struct ImageIdentifiers {
     public static let logoUnionpay = "logo_unionpay"
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
-    public static let menuGoBack = "goBack"
     public static let menuScanQRCode = "menu-ScanQRCode"
     public static let menuWarning = "menuWarning"
     public static let menuWarningMask = "warning-mask"
