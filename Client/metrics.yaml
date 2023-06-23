@@ -328,6 +328,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
@@ -2047,6 +2048,17 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  fxa_logged_in:
+    type: boolean
+    description: |
+      Measures the state of the fxa login.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14904
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
   close_private_tabs:
     type: boolean
     description: |
@@ -2450,6 +2462,41 @@ sync:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  use_email:
+    type: event
+    description: |
+      A user chose to use their email to attempt a sign in instead
+      of scanning a QR code, counterpart to "scan_pairing".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14904
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  paired:
+    type: event
+    description: |
+      A user scanned QR code to attempt to sign in.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14904
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  disconnect:
+    type: event
+    description: |
+      A user tapped disconnect sync in fxa page.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14904
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+
 
 # Tab metrics
 tabs:

@@ -60,7 +60,7 @@ class DisconnectSetting: Setting {
         alertController.addAction(
             UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile.removeAccount()
-                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
+                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncUserLoggedOut)
 
                 // If there is more than one view controller in the navigation controller, we can pop.
                 // Otherwise, assume that we got here directly from the App Menu and dismiss the VC.
