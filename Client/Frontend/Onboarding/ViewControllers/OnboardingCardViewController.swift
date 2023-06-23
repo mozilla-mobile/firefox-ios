@@ -31,11 +31,13 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let smallTitleFontSize: CGFloat = 20
         static let smallStackViewSpacing: CGFloat = 8
         static let smallScrollViewVerticalPadding: CGFloat = 20
-        static let smallImageViewSize = CGSize(width: 240, height: 300)
+        static let smallImageViewSize = CGSize(width: 240, height: 280)
         static let smallTopStackViewPadding: CGFloat = 40
 
         // tiny device (SE 1st gen)
         static let tinyImageViewSize = CGSize(width: 144, height: 180)
+
+        static let baseImageHeight: CGFloat = 211
     }
 
     // MARK: - Properties
@@ -158,14 +160,22 @@ class OnboardingCardViewController: UIViewController, Themeable {
                                                 right: UX.buttonHorizontalInset)
     }
 
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6816
+    // This should not be calculated using scaling coefficients, but with some
+    // version based on constrains of some kind. The ticket above ensures this work
+    // should get addressed.
     private var imageViewHeight: CGFloat {
+        return UX.baseImageHeight * scalingCoefficient()
+    }
+
+    private func scalingCoefficient() -> CGFloat {
         if shouldUseTinyDeviceLayout {
-            return UX.tinyImageViewSize.height
+            return 1.0
         } else if shouldUseSmallDeviceLayout {
-            return UX.imageViewSize.height
-        } else {
-            return UX.smallImageViewSize.height
+            return 1.25
         }
+
+        return 1
     }
 
     // MARK: - Initializers
@@ -275,7 +285,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
             contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: horizontalTopStackViewPadding),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -10),
             contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -horizontalTopStackViewPadding),
             contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
 
