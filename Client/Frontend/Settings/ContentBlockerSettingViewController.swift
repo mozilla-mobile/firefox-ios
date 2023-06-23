@@ -50,8 +50,7 @@ class TPAccessoryInfo: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         tableView.estimatedRowHeight = 130
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
@@ -109,7 +108,7 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: themeManager.currentTheme)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
@@ -151,6 +150,14 @@ class TPAccessoryInfo: ThemedTableViewController {
         cell.backgroundColor = .clear
         cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         cell.selectionStyle = .none
+        return cell
+    }
+
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell
+        else {
+            return ThemedSubtitleTableViewCell()
+        }
         return cell
     }
 }

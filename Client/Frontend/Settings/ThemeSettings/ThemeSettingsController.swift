@@ -43,7 +43,7 @@ class ThemeSettingsController: ThemedTableViewController {
         super.viewDidLoad()
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
-
+        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -173,7 +173,7 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = dequeueCellFor(indexPath: indexPath)
         cell.selectionStyle = .none
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
         switch section {
@@ -239,6 +239,14 @@ class ThemeSettingsController: ThemedTableViewController {
         }
         cell.applyTheme(theme: themeManager.currentTheme)
 
+        return cell
+    }
+
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell
+        else {
+            return ThemedSubtitleTableViewCell()
+        }
         return cell
     }
 

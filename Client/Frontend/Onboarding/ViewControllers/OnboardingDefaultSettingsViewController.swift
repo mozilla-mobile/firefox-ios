@@ -22,7 +22,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         static let cardShadowHeight: CGFloat = 14
 
         static let scrollViewVerticalPadding: CGFloat = 30
-        static let topPaddingPhone: CGFloat = 20
+        static let topPaddingPhone: CGFloat = 30
         static let topPaddingPad: CGFloat = 60
         static let leadingPaddingPhone: CGFloat = 40
         static let leadingPaddingPad: CGFloat = 200

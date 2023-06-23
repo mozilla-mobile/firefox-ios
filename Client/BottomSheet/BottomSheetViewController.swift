@@ -22,6 +22,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private let viewModel: BottomSheetViewModel
+    private var useDimmedBackground: Bool
 
     typealias BottomSheetChildViewController = UIViewController & BottomSheetChild
     private let childViewController: BottomSheetChildViewController
@@ -49,12 +50,14 @@ class BottomSheetViewController: UIViewController, Themeable {
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
                 childViewController: BottomSheetChildViewController,
+                usingDimmedBackground: Bool = false,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.childViewController = childViewController
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.useDimmedBackground = usingDimmedBackground
 
         super.init(nibName: nil, bundle: nil)
 
@@ -128,6 +131,10 @@ class BottomSheetViewController: UIViewController, Themeable {
     func applyTheme() {
         contentView.backgroundColor = themeManager.currentTheme.colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
+        if useDimmedBackground {
+            topTapView.alpha = 0.4
+            topTapView.backgroundColor = .black
+        }
     }
 }
 

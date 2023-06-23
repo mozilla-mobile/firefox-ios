@@ -306,7 +306,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             ThemeSetting(settings: self),
             SiriPageSetting(settings: self),
             blockpopUpSetting,
-            NoImageModeSetting(settings: self)
+            NoImageModeSetting(settings: self),
         ]
 
         if isSearchBarLocationFeatureEnabled {
