@@ -72,7 +72,6 @@ private extension PocketDataAdaptorTests {
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
         expectation.expectedFulfillmentCount = expectedFulfillmentCount
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
-                                                      pocketSponsoredAPI: pocketSponsoredAPI,
                                                       notificationCenter: mockNotificationCenter) {
             expectation.fulfill()
             dataCompletion?()
