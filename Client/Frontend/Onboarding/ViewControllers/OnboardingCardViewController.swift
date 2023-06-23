@@ -8,12 +8,12 @@ import Shared
 
 class OnboardingCardViewController: UIViewController, Themeable {
     struct UX {
-        static let stackViewSpacing: CGFloat = 24
+        static let stackViewSpacing: CGFloat = 15
         static let stackViewSpacingButtons: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
-        static let topStackViewPaddingPhone: CGFloat = 90
+        static let topStackViewPaddingPhone: CGFloat = 60
         static let bottomStackViewPaddingPad: CGFloat = 32
         static let bottomStackViewPaddingPhone: CGFloat = 0
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
@@ -175,7 +175,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
             return 1.25
         }
 
-        return 1
+        return 1.4
     }
 
     // MARK: - Initializers
