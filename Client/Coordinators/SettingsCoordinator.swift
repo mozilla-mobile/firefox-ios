@@ -162,10 +162,10 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
 
     // TODO: Move the both show password methods into it's own coordinator
     func showPasswordList() {
-        let navigationHandler: (_ url: URL?) -> Void = { url in
+        let navigationHandler: (_ url: URL?) -> Void = { [weak self] url in
             guard let url = url else { return }
-            self.settingsOpenURLInNewTab(url)
-            self.didFinish()
+            self?.settingsOpenURLInNewTab(url)
+            self?.didFinish()
         }
 
         let viewController = LoginListViewController(
@@ -177,7 +177,15 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
     }
 
     func showPasswordOnboarding() {
-        
+        let viewController = LoginOnboardingViewController(
+            profile: profile,
+            tabManager: tabManager
+        )
+
+        viewController.doneHandler = { [weak self] in
+            self?.router.dismiss(animated: true, completion: nil)
+        }
+        router.push(viewController)
     }
 
     func didFinishShowingSettings() {

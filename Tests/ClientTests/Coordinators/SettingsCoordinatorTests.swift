@@ -243,6 +243,24 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is ExperimentsViewController)
     }
 
+    func testPasswordSettings_showsPasswordListVC() {
+        let subject = createSubject()
+
+        subject.showPasswordList()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is LoginListViewController)
+    }
+
+    func testPasswordSettings_showsPasswordOnboardingVC() {
+        let subject = createSubject()
+
+        subject.showPasswordOnboarding()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is LoginOnboardingViewController)
+    }
+
     func testDidFinishShowingSettings_callsDidFinish() {
         let subject = createSubject()
         subject.parentCoordinator = delegate
