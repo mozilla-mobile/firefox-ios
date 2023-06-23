@@ -43,9 +43,9 @@ export const HeuristicsRegExp = {
     //=========================================================================
     // Firefox-specific rules
     {
-      "address-line1": "addrline1|address_1",
-      "address-line2": "addrline2|address_2",
-      "address-line3": "addrline3|address_3",
+      "address-line1": "addrline1|address_1|addl1",
+      "address-line2": "addrline2|address_2|addl2",
+      "address-line3": "addrline3|address_3|addl3",
       "address-level1": "land", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
