@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class PocketFooterView: UICollectionReusableView, ReusableCell,, ThemeApplicable {
+class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {
         static let fontSize: CGFloat = 12
         static let mainContainerSpacing: CGFloat = 8
