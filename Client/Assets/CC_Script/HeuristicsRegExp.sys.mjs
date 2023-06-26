@@ -56,7 +56,7 @@ export const HeuristicsRegExp = {
       "cc-exp":
         "ważna.*do" +        // pl-PL
         "|data.*ważności" +  // pl-PL
-        "|mm\s*[\-\/]\s*aa",  // es-ES
+        "|mm\\s*[\\-\\/]\\s*aa",  // es-ES
       "cc-exp-month":
         "month" +
         "|(cc|kk)month" +    // de-DE
@@ -71,6 +71,8 @@ export const HeuristicsRegExp = {
         "type" +
         "|kartenmarke" +     // de-DE
         "|typ.*karty",       // pl-PL
+      "cc-csc":
+        "(\\bcvn\\b|\\bcvv\\b|\\bcvc\\b|\\bcsc\\b|\\bcvd\\b|\\bcid\\b|\\bccv\\b)",
     },
 
     //=========================================================================
@@ -597,7 +599,9 @@ export const HeuristicsRegExp = {
         "verification|card.?identification|security.?code|card.?code" +
         "|security.?value" +
         "|security.?number|card.?pin|c-v-v" +
-        "|(cvn|cvv|cvc|csc|cvd|cid|ccv)(field)?" +
+        // We omit this regexp in favor of being less generic.
+        // See "Firefox-specific" rules for cc-csc
+        // "|(cvn|cvv|cvc|csc|cvd|cid|ccv)(field)?" +
         "|\\bcid\\b",
     },
   ],
