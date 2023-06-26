@@ -7,13 +7,14 @@ import Foundation
 public enum Model: String {
     case simulator = "simulator"
     case iPhoneSE = "iPhone SE (1st gen)"
+    case iPodTouch = "iPod touch 7th gen"
     case unrecognized = "?unrecognized?"
 }
 
 extension UIDevice {
-    // returns true when device is an iPhone SE 1st gen
+    // returns true when device is an iPhone SE 1st gen or an iPod touch 7th gen
     var isTinyFormFactor: Bool {
-        return UIDevice().type == .iPhoneSE
+        return UIDevice().type == .iPhoneSE || UIDevice().type == .iPodTouch
     }
 
     var isIphoneLandscape: Bool {
@@ -33,6 +34,7 @@ extension UIDevice {
             "i386": .simulator,
             "x86_64": .simulator,
             "iPhone8,4": .iPhoneSE,
+            "iPod9,1": .iPodTouch
         ]
 
         if let modelCode = modelCode, let model = modelMap[modelCode] {
