@@ -5,13 +5,13 @@
 import UIKit
 import Shared
 
-class PocketFooterView: UICollectionReusableView, ReusableCell, FeatureFlaggable, ThemeApplicable {
+class PocketFooterView: UICollectionReusableView, ReusableCell,, ThemeApplicable {
     private struct UX {
         static let fontSize: CGFloat = 12
         static let mainContainerSpacing: CGFloat = 8
     }
 
-    private let wallpaperManager: WallpaperManagerInterface
+    private let wallpaperManager: WallpaperManager
     var onTapLearnMore: (() -> Void)?
 
     private let pocketImageView: UIImageView = .build { imageView in
