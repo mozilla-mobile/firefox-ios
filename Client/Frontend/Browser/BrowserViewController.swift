@@ -1859,7 +1859,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
                 guard let tabWebView = tab.webView as? TabWebView,
                       let type = type,
                       userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1884,9 +1884,12 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 tabWebView.accessoryView.savedCardsClosure = {
                     DispatchQueue.main.async { [weak self] in
+                        // Note: Since we are injecting card info, we pass on the frame
+                        // for special iframe cases
                         self?.showBottomSheetCardViewController(creditCard: nil,
                                                                 decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
+                                                                viewType: .selectSavedCard,
+                                                                frame: frame)
                     }
                 }
             }
@@ -2642,12 +2645,12 @@ extension BrowserViewController {
 
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
-                                                  viewType state: CreditCardBottomSheetState) {
+                                                  viewType state: CreditCardBottomSheetState,
+                                                  frame: WKFrameInfo? = nil) {
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-
         let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
         viewController.didTapYesClosure = { error in
             if let error = error {
@@ -2678,7 +2681,8 @@ extension BrowserViewController {
             }
             CreditCardHelper.injectCardInfo(logger: self.logger,
                                             card: plainTextCard,
-                                            tab: currentTab) { error in
+                                            tab: currentTab,
+                                            frame: frame) { error in
                 guard let error = error else {
                     return
                 }

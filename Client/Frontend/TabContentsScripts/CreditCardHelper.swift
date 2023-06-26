@@ -46,10 +46,12 @@ enum CreditCardPayloadType: String {
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
-    private static var frame: WKFrameInfo?
+    private var frame: WKFrameInfo?
 
     // Closure to send the field values
-    var foundFieldValues: ((UnencryptedCreditCardFields, CreditCardPayloadType?) -> Void)?
+    var foundFieldValues: ((UnencryptedCreditCardFields,
+                            CreditCardPayloadType?,
+                            WKFrameInfo?) -> Void)?
 
     class func name() -> String {
         return "CreditCardHelper"
@@ -57,7 +59,6 @@ class CreditCardHelper: TabContentScript {
 
     required init(tab: Tab) {
         self.tab = tab
-        CreditCardHelper.frame = nil
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -68,7 +69,10 @@ class CreditCardHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
-        CreditCardHelper.frame = message.frameInfo
+        // Note: We require frame so that we can submit information
+        // to embedded iframe on a webpage for injecting card info
+        frame = message.frameInfo
+
         guard let data = getValidPayloadData(from: message),
               let fieldValues = parseFieldType(messageBody: data),
               let payloadType = CreditCardPayloadType(rawValue: fieldValues.type)
@@ -79,7 +83,7 @@ class CreditCardHelper: TabContentScript {
             return
         }
         let payloadData = fieldValues.creditCardPayload
-        foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType)
+        foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
     }
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
@@ -123,6 +127,7 @@ class CreditCardHelper: TabContentScript {
     static func injectCardInfo(logger: Logger,
                                card: UnencryptedCreditCardFields,
                                tab: Tab,
+                               frame: WKFrameInfo? = nil,
                                completion: @escaping (Error?) -> Void) {
         guard !card.ccNumber.isEmpty,
               card.ccExpYear > 0,
@@ -146,7 +151,7 @@ class CreditCardHelper: TabContentScript {
             }
 
             let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields('\(jsonDataVal)')"
-            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, CreditCardHelper.frame) { _, err in
+            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, err in
                 guard let err = err else {
                     completion(nil)
                     return
