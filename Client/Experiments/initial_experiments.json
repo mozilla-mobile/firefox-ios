@@ -65,7 +65,7 @@
       "channel": "release",
       "userFacingName": "iOS Set to Default in Onboarding Final",
       "userFacingDescription": "Onboarding experiment",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -234,13 +234,14 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
       "startDate": "2023-05-30",
-      "enrollmentEndDate": "2023-06-07",
+      "enrollmentEndDate": "2023-06-19",
       "endDate": null,
       "proposedDuration": 36,
       "proposedEnrollment": 8,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
-      "localizations": null
+      "localizations": null,
+      "locales": null
     },
     {
       "schemaVersion": "1.12.0",
