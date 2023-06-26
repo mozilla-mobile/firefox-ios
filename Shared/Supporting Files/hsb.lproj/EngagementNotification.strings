@@ -4,6 +4,9 @@
 /* Title of notification send to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Startujće swoje prěnje pytanje";
 
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Priwatny modus w %@ waše informacije njeskładuje a blokuje schowane přesćěhowaki.";
+
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "Bjez slěda přehladować";
 

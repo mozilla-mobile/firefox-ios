@@ -356,7 +356,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Ρυθμίσεις";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Οι χορηγοί μας & το απόρρητό σας";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Οι χορηγοί μας και το απόρρητό σας";
 
 /* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Άνοιγμα συγχρονισμένης καρτέλας";
@@ -380,7 +380,7 @@
 "FxA.FirefoxAccount" = "Λογαριασμός Firefox";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "Διαχείριση λογαριασμού & συσκευών";
+"FxA.ManageAccount" = "Διαχείριση λογαριασμού και συσκευών";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Χωρίς σύνδεση στο διαδίκτυο";
@@ -791,7 +791,7 @@
 "Menu.Paste.Title" = "Επικόλληση";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Επικόλληση & μετάβαση";
+"Menu.PasteAndGo.Title" = "Επικόλληση και μετάβαση";
 
 /* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Λίστα ανάγνωσης";
@@ -1400,7 +1400,7 @@
 "Settings.HomePage.UseCurrent.Button" = "Χρήση τρέχουσας σελίδας";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "Συνδέσεις & κωδικοί πρόσβασης";
+"Settings.LoginsAndPasswordsTitle" = "Συνδέσεις και κωδικοί πρόσβασης";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Προσαρμοσμένο URL";
@@ -1763,7 +1763,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Επικόλληση & μετάβαση";
+"UIMenuItem.PasteGo" = "Επικόλληση και μετάβαση";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Αναζήτηση με το Firefox";
