@@ -5,7 +5,7 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db", "testHistoryDatabasePerformance": "testHistoryDatabase4000-browser.db", "testPerfHistory4000startUp": "testHistoryDatabase4000-browser.db", "testPerfHistory4000openMenu": "testHistoryDatabase4000-browser.db", "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-browser.db", "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-browser.db"]
+    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-places.db", "testPerfHistory100startUp": "testHistoryDatabase4000-places.db", "testPerfHistory100openMenu": "testHistoryDatabase4000-places.db", "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db", "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -20,49 +20,34 @@ class DatabaseFixtureTest: BaseTestCase {
                            LaunchArguments.TurnOffTabGroupsInUserPreferences]
         super.setUp()
     }
-    /* Disabled due to issue with db: 8281*/
-    /*func testOneBookmark() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
-        navigator.goto(MobileBookmarks)
-        let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-    }*/
 
-    // Disabled due to #7789
-    /*func testBookmarksDatabaseFixture() {
+    func testBookmarksDatabaseFixture() {
         waitForTabsButton()
-        navigator.goto(MobileBookmarks)
-        waitForExistence(app.tables["Bookmarks List"], timeout: 15)
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
 
-        let loaded = NSPredicate(format: "count == 1013")
+        let loaded = NSPredicate(format: "count == 1001")
         expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-        waitForExpectations(timeout: 60, handler: nil)
+        waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
 
         let bookmarksList = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
-    }*/
+        XCTAssertEqual(bookmarksList, 1001, "There should be an entry in the bookmarks list")
+    }
 
     func testHistoryDatabaseFixture() throws {
-        throw XCTSkip("MTE-514 Database may not be loaded")
-        /*
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_History)
 
         // History list has one cell that are for recently closed
         // the actual max number is 100
         let loaded = NSPredicate(format: "count == 101")
         expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-        waitForExpectations(timeout: 30, handler: nil)
-        */
+        waitForExpectations(timeout: TIMEOUT, handler: nil)
+        let historyList = app.tables["History List"].cells.count
+        XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
     }
 
-    func testPerfHistory4000startUp() {
+    func testPerfHistory100startUp() {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -74,7 +59,10 @@ class DatabaseFixtureTest: BaseTestCase {
         }
     }
 
-    func testPerfHistory4000openMenu() {
+    func testPerfHistory100openMenu() {
+        app.launch()
+        waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -82,7 +70,17 @@ class DatabaseFixtureTest: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // activity measurement here
-            navigator.goto(LibraryPanel_History)
+            waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.history], timeout: TIMEOUT)
+            app.tables.otherElements[ImageIdentifiers.Large.history].tap()
+                
+            let loaded = NSPredicate(format: "count == 101")
+            expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
+            waitForExpectations(timeout: TIMEOUT, handler: nil)
+                
+            app.buttons["Done"].tap()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(BrowserTabMenu)
         }
     }
 
@@ -99,6 +97,9 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     func testPerfBookmarks1000openMenu() {
+        app.launch()
+        waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -106,7 +107,18 @@ class DatabaseFixtureTest: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // activity measurement here
-            navigator.goto(LibraryPanel_Bookmarks)
+                
+                waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill], timeout: TIMEOUT)
+                app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill].tap()
+                
+                let loaded = NSPredicate(format: "count == 1001")
+                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+                waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
+                
+                app.buttons["Done"].tap()
+                waitForTabsButton()
+                navigator.nowAt(NewTabScreen)
+                navigator.goto(BrowserTabMenu)
         }
     }
 }
