@@ -92,7 +92,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.menuGoBack).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 

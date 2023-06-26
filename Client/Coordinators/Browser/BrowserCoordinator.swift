@@ -364,36 +364,39 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         controller.modalPresentationStyle = .formSheet
         router.present(controller)
 
-        guard let viewController = getSettingsViewController(settingsSection: settingsSection) else { return }
-        controller.pushViewController(viewController, animated: true)
+        getSettingsViewController(settingsSection: settingsSection) { viewController in
+            guard let viewController else { return }
+            controller.pushViewController(viewController, animated: true)
+        }
     }
 
     // Will be removed with FXIOS-6529
-    func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
+    func getSettingsViewController(settingsSection section: Route.SettingsSection,
+                                   completion: @escaping (UIViewController?) -> Void) {
         switch section {
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
             viewController.profile = profile
-            return viewController
+            completion(viewController)
 
         case .homePage:
             let viewController = HomePageSettingViewController(prefs: profile.prefs)
             viewController.profile = profile
-            return viewController
+            completion(viewController)
 
         case .mailto:
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
-            return viewController
+            completion(viewController)
 
         case .search:
             let viewController = SearchSettingsTableViewController(profile: profile)
-            return viewController
+            completion(viewController)
 
         case .clearPrivateData:
             let viewController = ClearPrivateDataTableViewController()
             viewController.profile = profile
             viewController.tabManager = tabManager
-            return viewController
+            completion(viewController)
 
         case .fxa:
             let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
@@ -403,10 +406,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                 referringPage: .settings,
                 profile: browserViewController.profile
             )
-            return viewController
+            completion(viewController)
 
         case .theme:
-            return ThemeSettingsController()
+            completion(ThemeSettingsController())
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -416,13 +419,33 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                     theme: themeManager.currentTheme
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                return wallpaperVC
+                completion(wallpaperVC)
             } else {
-                return nil
+                completion(nil)
+            }
+
+        case .creditCard:
+            let viewModel = CreditCardSettingsViewModel(profile: profile)
+            let viewController = CreditCardSettingsViewController(
+                creditCardViewModel: viewModel)
+            let appAuthenticator = AppAuthenticator()
+            if appAuthenticator.canAuthenticateDeviceOwner {
+                appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                    switch result {
+                    case .success:
+                        completion(viewController)
+                    case .failure:
+                        break
+                    }
+                }
+            } else {
+                let passcodeViewController = DevicePasscodeRequiredViewController()
+                passcodeViewController.profile = profile
+                completion(passcodeViewController)
             }
 
         default:
-            return nil
+            completion(nil)
         }
     }
 }
