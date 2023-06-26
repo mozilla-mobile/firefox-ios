@@ -11,7 +11,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, FeatureFlaggable
         static let mainContainerSpacing: CGFloat = 8
     }
 
-    private let wallpaperManager: WallpaperManager
+    private let wallpaperManager: WallpaperManagerInterface
     var onTapLearnMore: (() -> Void)?
 
     private let pocketImageView: UIImageView = .build { imageView in
