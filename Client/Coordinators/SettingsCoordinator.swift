@@ -182,13 +182,17 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
             tabManager: tabManager
         )
 
-        viewController.doneHandler = { [weak self] in
-            self?.router.dismiss(animated: true, completion: nil)
+        viewController.proceedHandler = { [weak self] in
+            self?.showPasswordList()
         }
         router.push(viewController)
     }
 
     func didFinishShowingSettings() {
         didFinish()
+    }
+
+    func goToPasswordManager() {
+        settingsViewController.handle(route: .password)
     }
 }

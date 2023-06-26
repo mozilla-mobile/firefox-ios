@@ -45,7 +45,7 @@ class LoginsSetting: Setting {
         deselectRow()
 
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settings?.handle(route: .password)
+            delegate?.goToPasswordManager()
             return
         }
 
