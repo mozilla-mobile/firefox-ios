@@ -577,42 +577,6 @@ public class RustLogins {
         return error
     }
 
-    public func syncLogins(unlockInfo: SyncUnlockInfo) -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                try _ = self.storage?.sync(unlockInfo: unlockInfo)
-                deferred.fill(Maybe(success: ()))
-            } catch let err as NSError {
-                if let loginsStoreError = err as? LoginsStoreError {
-                    switch loginsStoreError {
-                    case let .SyncAuthInvalid(message):
-                        self.logger.log("Authentication failed when syncing Logins database",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: message)
-                    default:
-                        self.logger.log("Unknown or other error when syncing Logins database",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: loginsStoreError.localizedDescription)
-                    }
-                }
-
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
     public func getLogin(id: String) -> Deferred<Maybe<EncryptedLogin?>> {
         let deferred = Deferred<Maybe<EncryptedLogin?>>()
 
@@ -800,27 +764,6 @@ public class RustLogins {
             do {
                 let existed = try self.storage?.delete(id: id)
                 deferred.fill(Maybe(success: existed!))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
-    public func resetSync() -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                try self.storage?.reset()
-                deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 deferred.fill(Maybe(failure: err))
             }

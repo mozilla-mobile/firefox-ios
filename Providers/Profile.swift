@@ -21,11 +21,11 @@ public protocol SyncManager {
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
 
-    func syncTabs() -> Deferred<Maybe<MZSyncResult>>
-    func syncHistory() -> Deferred<Maybe<MZSyncResult>>
-    func syncNamedCollections(why: MZSyncReason, names: [String]) -> Success
+    func syncTabs() -> Deferred<Maybe<SyncResult>>
+    func syncHistory() -> Deferred<Maybe<SyncResult>>
+    func syncNamedCollections(why: SyncReason, names: [String]) -> Success
     @discardableResult
-    func syncEverything(why: MZSyncReason) -> Success
+    func syncEverything(why: SyncReason) -> Success
 
     func endTimedSyncs()
     func applicationDidBecomeActive()
