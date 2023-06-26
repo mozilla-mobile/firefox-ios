@@ -219,8 +219,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        guard tab.tabUUID != selectedTab?.tabUUID else { return }
-
         // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
         saveCurrentTabSessionData()
 
