@@ -5,12 +5,13 @@
 import UIKit
 import Shared
 
-class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
+class PocketFooterView: UICollectionReusableView, ReusableCell, FeatureFlaggable, ThemeApplicable {
     private struct UX {
         static let fontSize: CGFloat = 12
         static let mainContainerSpacing: CGFloat = 8
     }
 
+    private let wallpaperManager: WallpaperManager
     var onTapLearnMore: (() -> Void)?
 
     private let pocketImageView: UIImageView = .build { imageView in
@@ -52,6 +53,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     override init(frame: CGRect) {
+        wallpaperManager = WallpaperManager()
         super.init(frame: frame)
         setupViews()
         setupLayout()
@@ -88,7 +90,8 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        titleLabel.textColor = colors.textPrimary
+        titleLabel.textColor = wallpaperManager.featureAvailable ?
+        wallpaperManager.currentWallpaper.textColor : colors.textPrimary
         learnMoreLabel.textColor = colors.textAccent
     }
 }
