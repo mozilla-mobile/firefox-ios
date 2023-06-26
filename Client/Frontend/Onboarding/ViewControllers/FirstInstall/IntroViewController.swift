@@ -164,9 +164,14 @@ class IntroViewController: UIViewController,
     }
 
     func appDidEnterBackgroundNotification() {
+        let currentViewModel = viewModel.availableCards[pageControl.currentPage].viewModel
+        guard currentViewModel.buttons.primary.action == .setDefaultBrowser
+                || currentViewModel.buttons.secondary?.action == .setDefaultBrowser
+        else { return }
+
         showNextPage(
-            from: viewModel.availableCards[pageControl.currentPage].viewModel.name,
-            completionIfLastCard: nil)
+            from: currentViewModel.name,
+            completionIfLastCard: { self.showNextPageCompletionForLastCard() })
     }
 
     // MARK: - Themable
@@ -241,7 +246,9 @@ extension IntroViewController: OnboardingCardDelegate {
             registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openDefaultBrowserPopup:
-            presentDefaultBrowserPopup(from: cardName)
+            presentDefaultBrowserPopup(
+                from: cardName,
+                completionIfLastCard: { self.showNextPageCompletionForLastCard() })
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
                 from: cardName,
