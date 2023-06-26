@@ -326,9 +326,9 @@ extension String {
                 value: "Remove Card",
                 comment: "Title label for button that allows user to remove their saved credit card.")
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
+                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v116",
                 tableName: "EditCard",
-                value: "Save and autofill cards",
+                value: "Save and Autofill Cards",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.SavedCardListTitle.v112",
