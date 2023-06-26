@@ -48,23 +48,22 @@ struct NimbusOnboardingTestingConfigUtility {
 
     // MARK: - Custom setups
     func setupNimbusWith(
-        cards numberOfCards: Int = 1,
         image: NimbusOnboardingImages = .welcomeGlobe,
         type: OnboardingType = .freshInstall,
         dismissable: Bool = true,
         shouldAddLink: Bool = false,
         withSecondaryButton: Bool = false,
-        withPrimaryButtonAction: OnboardingActions = .nextCard,
+        withPrimaryButtonAction primaryAction: [OnboardingActions] = [.nextCard],
         prerequisites: [String] = ["ALWAYS"],
         disqualifiers: [String] = []
     ) {
         let cards = createCards(
-            numbering: numberOfCards,
+            numbering: primaryAction.count,
             image: image,
             type: type,
             shouldAddLink: shouldAddLink,
             withSecondaryButton: withSecondaryButton,
-            primaryButtonAction: withPrimaryButtonAction,
+            primaryButtonAction: primaryAction,
             prerequisites: prerequisites,
             disqualifiers: disqualifiers)
 
@@ -80,7 +79,7 @@ struct NimbusOnboardingTestingConfigUtility {
         type: OnboardingType,
         shouldAddLink: Bool,
         withSecondaryButton: Bool,
-        primaryButtonAction: OnboardingActions,
+        primaryButtonAction: [OnboardingActions],
         prerequisites: [String],
         disqualifiers: [String]
     ) -> [String: NimbusOnboardingCardData] {
@@ -90,7 +89,7 @@ struct NimbusOnboardingTestingConfigUtility {
             dictionary["\(CardElementNames.name) \(number)"] = NimbusOnboardingCardData(
                 body: "\(CardElementNames.body) \(number)",
                 buttons: createButtons(
-                    withPrimaryAction: primaryButtonAction,
+                    withPrimaryAction: primaryButtonAction[number - 1],
                     andSecondaryButton: withSecondaryButton),
                 disqualifiers: disqualifiers,
                 image: image,

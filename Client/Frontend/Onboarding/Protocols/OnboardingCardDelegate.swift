@@ -25,7 +25,8 @@ protocol OnboardingCardDelegate: AnyObject {
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
-    func presentDefaultBrowserPopup(from name: String)
+    func presentDefaultBrowserPopup(from name: String,
+                                    completionIfLastCard: (() -> Void)?)
 
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
@@ -69,12 +70,19 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Default Browser Popup
-    func presentDefaultBrowserPopup(from name: String) {
+    func presentDefaultBrowserPopup(
+        from name: String,
+        completionIfLastCard: (() -> Void)?
+    ) {
         guard let a11yIdRoot = viewModel.availableCards.first?.viewModel.a11yIdRoot else { return }
         let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
         let viewController = OnboardingDefaultSettingsViewController(
             viewModel: infoModel,
-            buttonTappedFinishFlow: { self.showNextPage(from: name, completionIfLastCard: nil) }
+            buttonTappedFinishFlow: {
+                self.showNextPage(
+                    from: name,
+                    completionIfLastCard: completionIfLastCard)
+            }
         )
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
