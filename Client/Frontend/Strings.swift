@@ -1261,8 +1261,8 @@ extension String {
                 public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
                     key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
                     tableName: "CustomizeFirefoxHome",
-                    value: "Articles powered by Pocket",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
+                    value: "Articles powered by %@",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. The placeholder is the pocket app name.")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,
