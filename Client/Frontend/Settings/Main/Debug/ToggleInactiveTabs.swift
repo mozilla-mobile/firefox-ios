@@ -12,7 +12,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
     }
-    
+
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",

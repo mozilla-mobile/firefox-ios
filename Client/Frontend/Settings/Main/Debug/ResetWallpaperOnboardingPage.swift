@@ -13,7 +13,7 @@ class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
     }
-    
+
     override var title: NSAttributedString? {
         let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "seen" : "unseen"
         return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
