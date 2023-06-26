@@ -43,13 +43,35 @@ class IntroViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
     }
 
-    func testViewMovesToNextScreenWithFunction() {
+    func testViewMoving_MovesToNextCard_ifSetDefaultBrowserCard() {
         let subject = createSubject()
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
         subject.appDidEnterBackgroundNotification()
 
         XCTAssertEqual(subject.pageControl.currentPage, 1)
+    }
+
+    func testViewMoving_StaysOnCurrentScreen_ifNotASetDefaultBrowserCard() {
+        let subject = createSubject(withCustomPrimaryActions: [.syncSignIn, .setDefaultBrowser, .requestNotifications])
+
+        XCTAssertEqual(subject.pageControl.currentPage, 0)
+        subject.appDidEnterBackgroundNotification()
+
+        XCTAssertEqual(subject.pageControl.currentPage, 0)
+    }
+
+    func testViewMoving_MovesToNextCard_ifSetDefaultBrowserCardIfNotFirstPosition() {
+        let subject = createSubject(withCustomPrimaryActions: [.syncSignIn, .setDefaultBrowser, .requestNotifications])
+
+        XCTAssertEqual(subject.pageControl.currentPage, 0)
+        subject.showNextPage(
+            from: subject.viewModel.availableCards[subject.pageControl.currentPage].viewModel.name,
+            completionIfLastCard: nil)
+        XCTAssertEqual(subject.pageControl.currentPage, 1)
+        subject.appDidEnterBackgroundNotification()
+
+        XCTAssertEqual(subject.pageControl.currentPage, 2)
     }
 
     func testViewMovesToNextScreenAfterNotification() {
@@ -66,17 +88,17 @@ class IntroViewControllerTests: XCTestCase {
 
     // MARK: - Private Helpers
     func createSubject(
+        withCustomPrimaryActions: [OnboardingActions] = [.setDefaultBrowser, .syncSignIn, .requestNotifications],
         file: StaticString = #file,
         line: UInt = #line
     ) -> IntroViewController {
         NimbusOnboardingTestingConfigUtility().setupNimbusWith(
-            cards: 3,
             image: .notifications,
             type: .freshInstall,
             dismissable: true,
             shouldAddLink: false,
             withSecondaryButton: true,
-            withPrimaryButtonAction: .setDefaultBrowser
+            withPrimaryButtonAction: withCustomPrimaryActions
         )
 
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)

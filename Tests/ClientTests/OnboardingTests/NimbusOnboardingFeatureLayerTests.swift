@@ -59,7 +59,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test A11yRoot
     func testLayer_a11yroot_isOnboarding() {
-        configUtility.setupNimbusWith(cards: 2)
+        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -70,8 +70,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_a11yroot_isUpgrade() {
         configUtility.setupNimbusWith(
-            cards: 2,
-            type: .upgrade)
+            type: .upgrade,
+            withPrimaryButtonAction: [.nextCard, .syncSignIn])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .upgrade).cards
@@ -127,7 +127,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {
         let expectedNumberOfCards = 3
-        configUtility.setupNimbusWith(cards: expectedNumberOfCards)
+        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn, .requestNotifications])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -137,7 +137,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardsAreReturned_InExpectedOrder() {
         let expectedNumberOfCards = 3
-        configUtility.setupNimbusWith(cards: expectedNumberOfCards)
+        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn, .requestNotifications])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -364,7 +364,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_cardIsReturned_WithNextCardButton() {
         configUtility.setupNimbusWith(
             withSecondaryButton: false,
-            withPrimaryButtonAction: .nextCard
+            withPrimaryButtonAction: [.nextCard]
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
@@ -379,7 +379,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_cardIsReturned_WithDefaultBrowserButton() {
         configUtility.setupNimbusWith(
             withSecondaryButton: true,
-            withPrimaryButtonAction: .setDefaultBrowser
+            withPrimaryButtonAction: [.setDefaultBrowser]
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
@@ -394,7 +394,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_cardIsReturned_WithSyncSignInButton() {
         configUtility.setupNimbusWith(
             withSecondaryButton: true,
-            withPrimaryButtonAction: .syncSignIn
+            withPrimaryButtonAction: [.syncSignIn]
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
@@ -409,7 +409,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_cardIsReturned_WithRequestNotificationsButton() {
         configUtility.setupNimbusWith(
             withSecondaryButton: true,
-            withPrimaryButtonAction: .requestNotifications
+            withPrimaryButtonAction: [.requestNotifications]
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 

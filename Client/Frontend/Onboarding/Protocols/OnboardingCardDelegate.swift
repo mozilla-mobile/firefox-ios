@@ -25,7 +25,8 @@ protocol OnboardingCardDelegate: AnyObject {
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
-    func presentDefaultBrowserPopup(from name: String)
+    func presentDefaultBrowserPopup(from name: String,
+                                    completionIfLastCard: (() -> Void)?)
 
     func presentSignToSync(
         with fxaOptions: FxALaunchParams,
@@ -69,12 +70,26 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Default Browser Popup
+<<<<<<< HEAD
     func presentDefaultBrowserPopup(from name: String) {
         guard let a11yIdRoot = viewModel.availableCards.first?.viewModel.a11yIdRoot else { return }
         let infoModel = OnboardingDefaultBrowserInfoModel(a11yIdRoot: a11yIdRoot)
         let viewController = OnboardingDefaultSettingsViewController(
             viewModel: infoModel,
             buttonTappedFinishFlow: { self.showNextPage(from: name, completionIfLastCard: nil) }
+=======
+    func presentDefaultBrowserPopup(
+        from name: String,
+        completionIfLastCard: (() -> Void)?
+    ) {
+        let viewController = OnboardingDefaultSettingsViewController(
+            viewModel: viewModel.infoPopup,
+            buttonTappedFinishFlow: {
+                self.showNextPage(
+                    from: name,
+                    completionIfLastCard: completionIfLastCard)
+            }
+>>>>>>> ec68dad27 (Bugfix FXIOS-6782 [v115] Fix onboarding background call bug (#15173))
         )
         var bottomSheetViewModel = BottomSheetViewModel()
         bottomSheetViewModel.shouldDismissForTapOutside = true
