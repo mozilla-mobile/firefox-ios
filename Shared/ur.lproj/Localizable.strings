@@ -163,6 +163,9 @@
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "نیا نجی ٹیب کھل گیا";
 
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "نیا نجی ٹیب کھل گیا";
+
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "سوئچ";
 
@@ -198,6 +201,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "سیٹنگز میں بند کر دیں۔";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "بند کریں";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "پڑھنے کی فہرست میں صفحہ شامل نہیں کر سکتا";
@@ -342,6 +348,9 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ہمارے کفیل اور آپ کی رازداری";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "سپانسر شدہ";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "سپانسر شدہ";
@@ -559,6 +568,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "پچھلا ہفتہ";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "بک مارک";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "سابقات";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "منسوخ کریں";
 
@@ -567,6 +582,9 @@
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ میں تمام سائٹس کو حذف کریں؟";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "حذف کریں";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "کوئی سابقات نہیں ملی";
@@ -970,6 +988,9 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ٹھیک ہے";
 
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "تلاش کریں";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ایک تباہ رپورٹ ارسال کریں تاکہ Mozilla مسلہ کو جل کرسکے؟";
 
@@ -981,6 +1002,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "منسوخ کریں";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "بند کریں";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "دستیاب آلات";
@@ -1117,6 +1141,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "تھیم آپ کی ڈسپلے کی چمک کی بنیاد پر خود بخود تبدیل ہوجائے گی. آپ اس حد کو مقرر کرسکتے ہیں جہاں تھیم تبدیل ہوسکتی ہے. حلقہ آپ کی ڈسپلے کی موجودہ چمک کی نشاندہی کرتا ہے۔";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "خودکار";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "موڈ تبدیل کریں";
 
@@ -1183,6 +1210,9 @@
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "وال پیپرز";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "مزید سیکھیں";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "وال پیپرز";
 
@@ -1225,6 +1255,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "جالی صفحہ";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "مخصوص";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox ابتدائی صفحہ";
 
@@ -1257,6 +1290,12 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "میل ایپ";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "پاس ورڈز محفوظ کریں۔";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "پاس ورڈ";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "لاگ ان محفوظ کریں";
@@ -1345,6 +1384,9 @@
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "معیاری (پہلے سے طے شدہ)";
 
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "معیاری";
+
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "سخت";
 
@@ -1386,6 +1428,12 @@
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox میں تلاش کریں";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "نقل کریں";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ربط کو آلہ پر ارسال کریں";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "تلاش تجاویز دکھائیں";
@@ -1429,6 +1477,15 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d ٹیب بند کر دیئے گئے";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "غیر فعال ٹیبز دیکھیں";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "غیر فعال ٹیبز کو چھپائیں۔";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "تلاش کریں";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "ٹیب شامل کریں";
 
@@ -1459,6 +1516,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "ٹیب کھولیں";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "ٹیبس دکھائیں";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "صفحہ ریڈر ویو میں ظاہر نہیں کیا جا سکا۔";
 
@@ -1470,6 +1530,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "‏‏اس ہفتہ";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "کل";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ابھی نہیں";
@@ -1521,6 +1584,12 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "صارف کا نام";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "منسوخ کریں";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "دوبارہ کوشش کریں";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ویب مواد";
