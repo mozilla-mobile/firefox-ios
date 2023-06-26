@@ -14,11 +14,6 @@ class EnhancedTrackingProtectionMenuVM {
     var heroImage: UIImage?
 
     // MARK: - Constants
-    let contentBlockerStatus: BlockerStatus
-    let url: URL
-    let displayTitle: String
-    let connectionSecure: Bool
-    let globalETPIsEnabled: Bool
 
     var websiteTitle: String {
         return tab?.url?.baseDomain ?? ""
@@ -50,6 +45,10 @@ class EnhancedTrackingProtectionMenuVM {
         }
     }
 
+    var globalETPIsEnabled: Bool {
+        return FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+    }
+
     // MARK: - Initializers
 
     init(tab: Tab?, profile: Profile) {
@@ -58,15 +57,6 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     // MARK: - Functions
-
-    func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        let insecureImageName = themeType.getThemedImageName(name: ImageIdentifiers.lockBlocked)
-        if connectionSecure {
-            return UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
-        } else {
-            return UIImage(imageLiteralResourceName: insecureImageName)
-        }
-    }
 
     func getDetailsViewModel() -> EnhancedTrackingProtectionDetailsVM {
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
