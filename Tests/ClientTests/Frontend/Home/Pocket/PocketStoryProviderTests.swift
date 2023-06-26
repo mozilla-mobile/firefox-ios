@@ -18,7 +18,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
         subject = nil
     }
 
-    func testIfSponsoredAreDisabled_FetchingStories_ReturnsList() async {
+    func tesFetchingStories_ReturnsList() async {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
