@@ -1888,18 +1888,16 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
                         // Dismiss keyboard
                         webView.resignFirstResponder()
                         // Authenticate and show bottom sheet with select a card flow
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard,
-                                                                frame: frame)
+                        self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
+                                                                      frame: frame)
                     }
                 }
             }
         }
     }
 
-    private func authenticateSavedCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
-                                                        frame: WKFrameInfo? = nil) {
+    private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
+                                                         frame: WKFrameInfo? = nil) {
         guard let appAuthenticator else {
             return
         }
