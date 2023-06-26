@@ -77,7 +77,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         stack.distribution = .fill
         stack.spacing = UX.topStackViewSpacing
         stack.axis = .vertical
-        stack.accessibilityIdentifier = "Roux - TopStackView"
     }
 
     lazy var contentStackView: UIStackView = .build { stack in
@@ -85,7 +84,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         stack.alignment = .center
         stack.distribution = .equalSpacing
         stack.axis = .vertical
-        stack.accessibilityIdentifier = "Roux - ContentStackView"
     }
 
     lazy var imageView: UIImageView = .build { imageView in
