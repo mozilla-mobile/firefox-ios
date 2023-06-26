@@ -6,6 +6,14 @@ import Foundation
 import Shared
 
 class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+
     override var title: NSAttributedString? {
         let seenStatus = UserDefaults.standard.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey) ? "seen" : "unseen"
         return NSAttributedString(string: "Reset wallpaper onboarding sheet (\(seenStatus))",
@@ -14,6 +22,10 @@ class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
 
     override func onClick(_ navigationController: UINavigationController?) {
         UserDefaults.standard.set(false, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }

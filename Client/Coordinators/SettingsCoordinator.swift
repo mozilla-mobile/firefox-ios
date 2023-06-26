@@ -155,6 +155,11 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(creditCardViewController)
     }
 
+    func showExperiments() {
+        let experimentsViewController = ExperimentsViewController()
+        router.push(experimentsViewController)
+    }
+
     func didFinishShowingSettings() {
         didFinish()
     }

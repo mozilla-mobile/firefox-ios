@@ -48,16 +48,21 @@ enum AppSettingsDeeplinkOption {
     }
 }
 
-/// Child settings pages action
-protocol AppSettingsDelegate: AnyObject {
+/// Child settings pages debug action
+protocol DebugSettingsDelegate: AnyObject {
     func pressedVersion()
     func pressedShowTour()
+    func pressedExperiments()
+
+    func askedToShow(alert: AlertController)
+    func askedToReload()
 }
 
 /// Supports decision making from VC to parent coordinator
 protocol SettingsFlowDelegate: AnyObject {
     func showDevicePassCode()
     func showCreditCardSettings()
+    func showExperiments()
 
     func didFinishShowingSettings()
 }
@@ -71,7 +76,7 @@ protocol AppSettingsScreen: UIViewController {
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
-                                    FeatureFlaggable, AppSettingsDelegate, SearchBarLocationProvider {
+                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -382,7 +387,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
-            ShowIntroductionSetting(settings: self, appSettingsDelegate: self),
+            ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
@@ -401,7 +406,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     private func getAboutSettings() -> [SettingSection] {
         let aboutSettings = [
             AppStoreReviewSetting(),
-            VersionSetting(settings: self, appSettingsDelegate: self),
+            VersionSetting(settingsDelegate: self),
             LicenseAndAcknowledgementsSetting(),
             YourRightsSetting()
         ]
@@ -412,28 +417,28 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getDebugSettings() -> [SettingSection] {
         let hiddenDebugOptions = [
-            ExperimentsSettings(settings: self),
+            ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
             DeleteExportedDataSetting(settings: self),
             ForceCrashSetting(settings: self),
             ForgetSyncAuthStateDebugSetting(settings: self),
             ChangeToChinaSetting(settings: self),
-            AppReviewPromptSetting(settings: self),
-            TogglePullToRefresh(settings: self),
-            ToggleHistoryGroups(settings: self),
-            ToggleInactiveTabs(settings: self),
+            AppReviewPromptSetting(settings: self, settingsDelegate: self),
+            TogglePullToRefresh(settings: self, settingsDelegate: self),
+            ToggleHistoryGroups(settings: self, settingsDelegate: self),
+            ToggleInactiveTabs(settings: self, settingsDelegate: self),
             ResetContextualHints(settings: self),
-            ResetWallpaperOnboardingPage(settings: self),
-            SentryIDSetting(settings: self),
-            FasterInactiveTabs(settings: self),
+            ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
+            SentryIDSetting(settings: self, settingsDelegate: self),
+            FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self),
         ]
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
-    // MARK: - AppSettingsDelegate
+    // MARK: - DebugSettingsDelegate
 
     func pressedVersion() {
         debugSettingsClickCount += 1
@@ -451,6 +456,23 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
         applicationHelper.open(url)
+    }
+
+    func pressedExperiments() {
+        parentCoordinator?.showExperiments()
+    }
+
+    func askedToShow(alert: AlertController) {
+        present(alert, animated: true) {
+            // Dismiss the debug alert briefly after it's shown
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+
+    func askedToReload() {
+        tableView.reloadData()
     }
 
     // MARK: - UITableViewDelegate
