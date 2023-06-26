@@ -136,7 +136,6 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardsAreReturned_InExpectedOrder() {
-        let expectedNumberOfCards = 3
         configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn, .requestNotifications])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
