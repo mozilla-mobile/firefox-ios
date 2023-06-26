@@ -593,7 +593,7 @@
       "channel": "release",
       "userFacingName": "Release iOS re-engagement notifications A/B experiment 114.1",
       "userFacingDescription": "We are looking to test privacy and search messages against a control that receives no message. This is our first A/B test on messaging for iOS.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -704,7 +704,7 @@
       ],
       "targeting": "(app_version|versionCompare('116.*') <= 0) && ((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('114.!') >= 0)))",
       "startDate": "2023-06-08",
-      "enrollmentEndDate": "2023-06-22",
+      "enrollmentEndDate": "2023-06-23",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
