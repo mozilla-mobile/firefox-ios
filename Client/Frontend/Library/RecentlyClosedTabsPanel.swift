@@ -10,7 +10,6 @@ import Common
 
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
-    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 
@@ -127,10 +126,9 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.titleLabel.text = tab.title
         twoLineCell.titleLabel.isHidden = tab.title?.isEmpty ?? true ? true : false
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
-        twoLineCell.leftImageView.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
-
+        twoLineCell.applyTheme(theme: themeManager.currentTheme)
         return twoLineCell
     }
 
