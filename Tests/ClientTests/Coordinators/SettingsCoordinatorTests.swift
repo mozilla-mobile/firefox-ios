@@ -215,6 +215,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
     }
 
+    func testHandleRouteCalled_whenPasswordRouteIsSet() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.start(with: .password)
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
     // MARK: - SettingsFlowDelegate
     func testShowDevicePasscode_showDevicePasscodeVC() {
         let subject = createSubject()

@@ -160,7 +160,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(experimentsViewController)
     }
 
-    // TODO: Move the both show password methods into it's own coordinator
+    // TODO: FXIOS-6822 Move both show password methods into it's own coordinator
     func showPasswordList() {
         let navigationHandler: (_ url: URL?) -> Void = { [weak self] url in
             guard let url = url else { return }

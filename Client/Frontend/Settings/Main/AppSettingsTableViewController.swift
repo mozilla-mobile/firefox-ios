@@ -154,7 +154,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         appAuthenticator.getAuthenticationState { state in
             switch state {
             case .deviceOwnerAuthenticated:
-                self.parentCoordinator?.showCreditCardSettings()
+                self.openDeferredRouteAfterAuthentication(route: route)
             case .deviceOwnerFailed:
                 break // Keep showing the main settings page
             case .passCodeRequired:
