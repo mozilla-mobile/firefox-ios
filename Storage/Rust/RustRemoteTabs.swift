@@ -62,60 +62,6 @@ public class RustRemoteTabs {
         return error
     }
 
-    public func sync(unlockInfo: SyncUnlockInfo) -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = TabsApiError.UnexpectedTabsError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                try _ = self.storage?.sync(unlockInfo: unlockInfo)
-                deferred.fill(Maybe(success: ()))
-            } catch let err as NSError {
-                if let tabsError = err as? TabsApiError {
-                    self.logger.log("Tabs error when syncing Tabs database",
-                                    level: .warning,
-                                    category: .tabs,
-                                    description: tabsError.localizedDescription)
-                } else {
-                    self.logger.log("Unknown error when opening Rust Tabs database",
-                                    level: .warning,
-                                    category: .tabs,
-                                    description: err.localizedDescription)
-                }
-
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
-    public func resetSync() -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = TabsApiError.UnexpectedTabsError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                try self.storage?.reset()
-                deferred.fill(Maybe(success: ()))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
     public func setLocalTabs(localTabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         let deferred = Deferred<Maybe<Int>>()
 

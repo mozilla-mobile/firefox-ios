@@ -607,15 +607,10 @@ extension String {
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
             public struct Footer {
                 public static let Title = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.Footer.Title.v115",
+                    key: "FirefoxHomepage.Pocket.Footer.Title.v116",
                     tableName: "Footer",
-                    value: "Powered by %@.",
-                    comment: "This is the title of the Pocket footer on Firefox Homepage. placeholder will be for App Name")
-                public static let Subtitle = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.Footer.Subtitle.v115",
-                    tableName: "Footer",
-                    value: "Part of the %@ family.",
-                    comment: "This is the subtitle of the Pocket footer on Firefox Homepage. The placeholder is the app name.")
+                    value: "Powered by %@. Part of the %@ family.",
+                    comment: "This is the title of the Pocket footer on Firefox Homepage. The first placeholder is for the Pocket app name and the second placeholder for the app name")
                 public static let LearnMore = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.LearnMore.v115",
                     tableName: "Footer",
