@@ -59,7 +59,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-            handle(connectionOptions: connectionOptions)
+            // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
+            // This is a hacky fix and a long term solution will be add in FXIOS-6828
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                handle(connectionOptions: connectionOptions)
+            }
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()
@@ -69,7 +73,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             self.window = window
 
-            handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
+            // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
+            // This is a hacky fix and a long term solution will be add in FXIOS-6828
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
+            }
         }
     }
 
@@ -223,20 +231,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         with connectionOptions: UIScene.ConnectionOptions,
         on scene: UIScene
     ) {
-        // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
-        // This is a hacky fix and a long term solution will be add in FXIOS-6828
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if !connectionOptions.urlContexts.isEmpty {
-                self.scene(scene, openURLContexts: connectionOptions.urlContexts)
-            }
+        if !connectionOptions.urlContexts.isEmpty {
+            self.scene(scene, openURLContexts: connectionOptions.urlContexts)
+        }
 
-            if let shortcutItem = connectionOptions.shortcutItem {
-                QuickActionsImplementation().handleShortCutItem(
-                    shortcutItem,
-                    withBrowserViewController: self.browserViewController,
-                    completionHandler: { _ in }
-                )
-            }
+        if let shortcutItem = connectionOptions.shortcutItem {
+            QuickActionsImplementation().handleShortCutItem(
+                shortcutItem,
+                withBrowserViewController: self.browserViewController,
+                completionHandler: { _ in }
+            )
         }
     }
 
