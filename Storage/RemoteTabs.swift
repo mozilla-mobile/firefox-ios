@@ -24,17 +24,6 @@ public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
            (lhs.tabs == rhs.tabs)
 }
 
-public protocol RemoteClientsAndTabs: SyncCommands {
-    func wipeClients() -> Deferred<Maybe<()>>
-    func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>>
-    func getClients() -> Deferred<Maybe<[RemoteClient]>>
-    func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>>
-    func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>>
-    func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>>
-    func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>>
-    func deleteClient(guid: GUID) -> Success
-}
-
 public struct RemoteTab: Equatable {
     public let clientGUID: String?
     public let URL: Foundation.URL
@@ -85,10 +74,4 @@ public func == (lhs: RemoteTab, rhs: RemoteTab) -> Bool {
         lhs.history == rhs.history &&
         lhs.lastUsed == rhs.lastUsed &&
         lhs.icon == rhs.icon
-}
-
-extension RemoteTab: CustomStringConvertible {
-    public var description: String {
-        return "<RemoteTab clientGUID: \(clientGUID ?? "nil"), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
-    }
 }

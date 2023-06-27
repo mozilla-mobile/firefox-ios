@@ -8,7 +8,6 @@ import Shared
 import Account
 import Storage
 import SwiftyJSON
-import SyncTelemetry
 
 public class GleanSyncOperationHelper {
     public init () {}
