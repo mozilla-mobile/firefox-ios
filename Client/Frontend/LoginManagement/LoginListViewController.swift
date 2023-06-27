@@ -64,11 +64,11 @@ class LoginListViewController: SensitiveViewController, Themeable {
         }
     }
 
-    private init(shownFromAppMenu: Bool,
-                 profile: Profile,
-                 webpageNavigationHandler: ((_ url: URL?) -> Void)?,
-                 themeManager: ThemeManager = AppContainer.shared.resolve(),
-                 notificationCenter: NotificationCenter = NotificationCenter.default) {
+    init(shownFromAppMenu: Bool = false,
+         profile: Profile,
+         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = LoginListViewModel(profile: profile,
                                             searchController: searchController,
                                             theme: themeManager.currentTheme)

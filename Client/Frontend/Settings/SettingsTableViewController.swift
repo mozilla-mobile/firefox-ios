@@ -750,6 +750,7 @@ class WithoutAccountSetting: AccountSetting {
 @objc
 protocol SettingsDelegate: AnyObject {
     func settingsOpenURLInNewTab(_ url: URL)
+    func goToPasswordManager()
     func didFinish()
 }
 

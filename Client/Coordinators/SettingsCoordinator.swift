@@ -125,7 +125,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         case .topSites:
             return TopSitesSettingsViewController()
 
-        case .creditCard:
+        case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
         case .general:
@@ -160,7 +160,39 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(experimentsViewController)
     }
 
+    // TODO: FXIOS-6822 Move both show password methods into it's own coordinator
+    func showPasswordList() {
+        let navigationHandler: (_ url: URL?) -> Void = { [weak self] url in
+            guard let url = url else { return }
+            self?.settingsOpenURLInNewTab(url)
+            self?.didFinish()
+        }
+
+        let viewController = LoginListViewController(
+            profile: profile,
+            webpageNavigationHandler: navigationHandler
+        )
+        viewController.settingsDelegate = self
+        router.push(viewController)
+    }
+
+    func showPasswordOnboarding() {
+        let viewController = LoginOnboardingViewController(
+            profile: profile,
+            tabManager: tabManager
+        )
+
+        viewController.proceedHandler = { [weak self] in
+            self?.showPasswordList()
+        }
+        router.push(viewController)
+    }
+
     func didFinishShowingSettings() {
         didFinish()
+    }
+
+    func goToPasswordManager() {
+        settingsViewController.handle(route: .password)
     }
 }
