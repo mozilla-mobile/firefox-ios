@@ -18,6 +18,7 @@ struct CreditCardInputView: View {
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
     @State var barButtonColor: Color = .clear
+    @State var saveButtonDisabledColor: Color = .clear
 
     var body: some View {
         NavigationView {
@@ -118,6 +119,7 @@ struct CreditCardInputView: View {
         backgroundColor = Color(color.layer1)
         textFieldBackgroundColor = Color(color.layer2)
         barButtonColor = Color(color.actionPrimary)
+        saveButtonDisabledColor = Color(color.textSecondary)
     }
 
     func rightBarButton() -> some View {
@@ -153,7 +155,7 @@ struct CreditCardInputView: View {
                     }
                 }
             }
-        }
+        }.foregroundColor(viewModel.isRightBarButtonEnabled ? barButtonColor : saveButtonDisabledColor)
     }
 
     func leftBarButton() -> some View {
