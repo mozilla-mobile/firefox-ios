@@ -25,5 +25,7 @@ class NoImageModeSetting: BoolSetting {
         )
     }
 
-    override var accessibilityIdentifier: String? { return "NoImageMode" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.NoImageMode.title
+    }
 }

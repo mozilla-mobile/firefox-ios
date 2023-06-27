@@ -5,13 +5,16 @@
 import Foundation
 
 class NewTabPageSetting: Setting {
-    let profile: Profile
+    private let profile: Profile
+    private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
-    override var accessibilityIdentifier: String? { return "NewTab" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.NewTab.title
+    }
 
     override var status: NSAttributedString {
         return NSAttributedString(string: NewTabAccessors.getNewTabPage(self.profile.prefs).settingTitle)
@@ -19,15 +22,21 @@ class NewTabPageSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .SettingsNewTabSectionName,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedNewTab()
+        } else {
+            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }

@@ -48,18 +48,8 @@ enum AppSettingsDeeplinkOption {
     }
 }
 
-/// Child settings pages debug action
-protocol DebugSettingsDelegate: AnyObject {
-    func pressedVersion()
-    func pressedShowTour()
-    func pressedExperiments()
-
-    func askedToShow(alert: AlertController)
-    func askedToReload()
-}
-
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject {
+protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
@@ -324,24 +314,24 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         )
 
         var generalSettings: [Setting] = [
-            SearchSetting(settings: self),
-            NewTabPageSetting(settings: self),
-            HomeSetting(settings: self),
-            OpenWithSetting(settings: self),
-            ThemeSetting(settings: self),
-            SiriPageSetting(settings: self),
+            SearchSetting(settings: self, settingsDelegate: parentCoordinator),
+            NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
+            HomeSetting(settings: self, settingsDelegate: parentCoordinator),
+            OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
+            ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
             blockpopUpSetting,
             NoImageModeSetting(settings: self),
         ]
 
         if isSearchBarLocationFeatureEnabled {
-            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+            generalSettings.insert(SearchBarSetting(settings: self, settingsDelegate: parentCoordinator), at: 5)
         }
 
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
+            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator), at: 3)
         }
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
