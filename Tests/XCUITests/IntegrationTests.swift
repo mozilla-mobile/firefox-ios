@@ -73,11 +73,11 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
         sleep(5)
+        if app.tables.staticTexts["Sync Now"].exists {
+            app.tables.staticTexts["Sync Now"].tap()
+        }
+        waitForNoExistence(app.tables.staticTexts["Syncing…"])
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
-        app.tables.staticTexts["Sync Now"].tap()
-        waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
-        sleep(3)
     }
 
     func testFxASyncHistory () {
