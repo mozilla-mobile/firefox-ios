@@ -263,7 +263,9 @@ class LoginListViewController: SensitiveViewController, Themeable {
 extension LoginListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text else { return }
-        selectionButton.isHidden = !query.isEmpty
+        if tableView.isEditing {
+            selectionButton.isHidden = !query.isEmpty
+        }
         loadLogins(query)
     }
 }
