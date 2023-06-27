@@ -8,7 +8,7 @@ import Shared
 /// Empty state view when there is no logins to display.
 class NoLoginsView: UIView, ThemeApplicable {
     lazy var titleLabel: UILabel = .build { label in
-        label.font = LoginListViewModel.LoginListUX.noResultsFont
+        label.font = PasswordManagerViewModel.UX.noResultsFont
         label.text = .NoLoginsFound
     }
 

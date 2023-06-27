@@ -7,14 +7,14 @@ import Storage
 import Shared
 import Common
 
-class LoginListViewController: SensitiveViewController, Themeable {
+class PasswordManagerListViewController: SensitiveViewController, Themeable {
     static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
-    private let viewModel: LoginListViewModel
+    private let viewModel: PasswordManagerViewModel
 
     fileprivate var loginDataSource: LoginDataSource
     fileprivate let searchController = UISearchController(searchResultsController: nil)
@@ -28,7 +28,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     fileprivate lazy var selectionButton: UIButton = .build { button in
-        button.titleLabel?.font = LoginListViewModel.LoginListUX.selectionButtonFont
+        button.titleLabel?.font = PasswordManagerViewModel.UX.selectionButtonFont
         button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
     }
 
@@ -43,13 +43,13 @@ class LoginListViewController: SensitiveViewController, Themeable {
         profile: Profile,
         settingsDelegate: SettingsDelegate? = nil,
         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
-        completion: @escaping ((LoginListViewController?) -> Void)
+        completion: @escaping ((PasswordManagerListViewController?) -> Void)
     ) {
         AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
-            let viewController: LoginListViewController?
+            let viewController: PasswordManagerListViewController?
             switch result {
             case .success:
-                viewController = LoginListViewController(
+                viewController = PasswordManagerListViewController(
                     shownFromAppMenu: didShowFromAppMenu,
                     profile: profile,
                     webpageNavigationHandler: webpageNavigationHandler
@@ -69,9 +69,11 @@ class LoginListViewController: SensitiveViewController, Themeable {
          webpageNavigationHandler: ((_ url: URL?) -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.viewModel = LoginListViewModel(profile: profile,
-                                            searchController: searchController,
-                                            theme: themeManager.currentTheme)
+        self.viewModel = PasswordManagerViewModel(
+            profile: profile,
+            searchController: searchController,
+            theme: themeManager.currentTheme
+        )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.webpageNavigationHandler = webpageNavigationHandler
         self.themeManager = themeManager
@@ -89,8 +91,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
         super.viewDidLoad()
         self.title = .Settings.Passwords.Title
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        tableView.register(cellType: LoginListTableViewSettingsCell.self)
-        tableView.register(cellType: LoginListTableViewCell.self)
+        tableView.register(cellType: PasswordManagerSettingsTableViewCell.self)
+        tableView.register(cellType: PasswordManagerTableViewCell.self)
         tableView.registerHeaderFooter(cellType: ThemedTableSectionHeaderFooterView.self)
 
         tableView.accessibilityIdentifier = "Login List"
@@ -180,7 +182,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
-        tableView.reloadSections(IndexSet(integer: LoginListViewController.loginsSettingsSection),
+        tableView.reloadSections(IndexSet(integer: PasswordManagerListViewController.loginsSettingsSection),
                                  with: .none)
 
         view.backgroundColor = theme.colors.layer1
@@ -260,7 +262,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     }
 }
 
-extension LoginListViewController: UISearchResultsUpdating {
+extension PasswordManagerListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text else { return }
         if tableView.isEditing {
@@ -270,7 +272,7 @@ extension LoginListViewController: UISearchResultsUpdating {
     }
 }
 
-extension LoginListViewController: UISearchControllerDelegate {
+extension PasswordManagerListViewController: UISearchControllerDelegate {
     func willDismissSearchController(_ searchController: UISearchController) {
         viewModel.setIsDuringSearchControllerDismiss(to: true)
     }
@@ -281,7 +283,7 @@ extension LoginListViewController: UISearchControllerDelegate {
 }
 
 // MARK: - Selectors
-private extension LoginListViewController {
+private extension PasswordManagerListViewController {
     @objc
     func remoteLoginsDidChange() {
         DispatchQueue.main.async {
@@ -390,7 +392,7 @@ private extension LoginListViewController {
 }
 
 // MARK: - UITableViewDelegate
-extension LoginListViewController: UITableViewDelegate {
+extension PasswordManagerListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Headers are hidden except for the first login section, which has a title (see also viewForHeaderInSection)
         return section == 1 ? UITableView.automaticDimension : 0
@@ -411,7 +413,7 @@ extension LoginListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == LoginListViewController.loginsSettingsSection,
+        if indexPath.section == PasswordManagerListViewController.loginsSettingsSection,
            searchController.isActive || tableView.isEditing {
             return 0
         }
@@ -424,7 +426,7 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         // Prevent row selection for logins settings section
-        indexPath.section == LoginListViewController.loginsSettingsSection ? nil : indexPath
+        indexPath.section == PasswordManagerListViewController.loginsSettingsSection ? nil : indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -463,7 +465,7 @@ extension LoginListViewController: UITableViewDelegate {
 }
 
 // MARK: - KeyboardHelperDelegate
-extension LoginListViewController: KeyboardHelperDelegate {
+extension PasswordManagerListViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -475,7 +477,7 @@ extension LoginListViewController: KeyboardHelperDelegate {
 }
 
 // MARK: - SearchInputViewDelegate
-extension LoginListViewController: SearchInputViewDelegate {
+extension PasswordManagerListViewController: SearchInputViewDelegate {
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
         loadLogins(text)
     }
@@ -496,11 +498,11 @@ extension LoginListViewController: SearchInputViewDelegate {
 }
 
 // MARK: - LoginViewModelDelegate
-extension LoginListViewController: LoginViewModelDelegate {
+extension PasswordManagerListViewController: LoginViewModelDelegate {
     func breachPathDidUpdate() {
         DispatchQueue.main.async {
             self.viewModel.breachIndexPath.forEach {
-                guard let cell = self.tableView.cellForRow(at: $0) as? LoginListTableViewCell else { return }
+                guard let cell = self.tableView.cellForRow(at: $0) as? PasswordManagerTableViewCell else { return }
                 cell.breachAlertImageView.isHidden = false
                 cell.accessibilityValue = "Breached Login Alert"
             }
@@ -518,7 +520,7 @@ extension LoginListViewController: LoginViewModelDelegate {
 // MARK: - UITableView extension
 private extension UITableView {
     var allLoginIndexPaths: [IndexPath] {
-        return ((LoginListViewController.loginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+        return ((PasswordManagerListViewController.loginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
             (0..<self.numberOfRows(inSection: sectionNum)).map {
                 IndexPath(row: $0, section: sectionNum)
             }

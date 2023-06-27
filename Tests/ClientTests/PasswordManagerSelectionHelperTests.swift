@@ -6,13 +6,13 @@
 import XCTest
 import MozillaAppServices
 
-class LoginsListSelectionHelperTests: XCTestCase {
-    private var selectionHelper: LoginListSelectionHelper!
+class PasswordManagerSelectionHelperTests: XCTestCase {
+    private var selectionHelper: PasswordManagerSelectionHelper!
     private let loginRecord = EncryptedLogin(credentials: URLCredential(user: "test", password: "doubletest", persistence: .permanent), protectionSpace: URLProtectionSpace.fromOrigin("https://test.com"))
 
     override func setUp() {
         super.setUp()
-        selectionHelper = LoginListSelectionHelper()
+        selectionHelper = PasswordManagerSelectionHelper()
     }
 
     override func tearDown() {

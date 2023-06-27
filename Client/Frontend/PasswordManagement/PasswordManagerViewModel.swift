@@ -13,7 +13,7 @@ struct NewSearchInProgressError: MaybeErrorType {
 
 // MARK: - Main View Model
 // Login List View Model
-final class LoginListViewModel {
+final class PasswordManagerViewModel {
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
@@ -28,8 +28,8 @@ final class LoginListViewModel {
             }
         }
     }
-    let listSelectionHelper = LoginListSelectionHelper()
-    fileprivate let helper = LoginListDataSourceHelper()
+    let listSelectionHelper = PasswordManagerSelectionHelper()
+    fileprivate let helper = PasswordManagerDataSourceHelper()
     private(set) lazy var breachAlertsManager: BreachAlertsManager = {
         return BreachAlertsManager(profile: self.profile)
     }()
@@ -169,7 +169,7 @@ final class LoginListViewModel {
     }
 
     // MARK: - UX Constants
-    struct LoginListUX {
+    struct UX {
         static let rowHeight: CGFloat = 58
         static let searchHeight: CGFloat = 58
         static let selectionButtonFont = UIFont.systemFont(ofSize: 16)

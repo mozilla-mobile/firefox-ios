@@ -7,17 +7,19 @@ import Storage
 import Shared
 import XCTest
 
-class LoginsListViewModelTests: XCTestCase {
-    var viewModel: LoginListViewModel!
+class PasswordManagerViewModelTests: XCTestCase {
+    var viewModel: PasswordManagerViewModel!
     var dataSource: LoginDataSource!
 
     override func setUp() {
         super.setUp()
         let mockProfile = MockProfile()
         let searchController = UISearchController()
-        self.viewModel = LoginListViewModel(profile: mockProfile,
-                                            searchController: searchController,
-                                            theme: LightTheme())
+        self.viewModel = PasswordManagerViewModel(
+            profile: mockProfile,
+            searchController: searchController,
+            theme: LightTheme()
+        )
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
         self.addLogins()
