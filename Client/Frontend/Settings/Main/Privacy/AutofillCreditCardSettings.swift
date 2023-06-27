@@ -5,21 +5,28 @@
 import Foundation
 
 class AutofillCreditCardSettings: Setting, FeatureFlaggable {
+    private weak var settingsDelegate: PrivacySettingsDelegate?
     private let profile: Profile
     private let appAuthenticator: AppAuthenticationProtocol
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
+
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
-    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.CreditCard.title }
+
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.CreditCard.title
+    }
 
     init(settings: SettingsTableViewController,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+         settingsDelegate: PrivacySettingsDelegate?) {
         self.profile = settings.profile
         self.appAuthenticator = appAuthenticator
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
+        self.settingsDelegate = settingsDelegate
 
         super.init(
             title: NSAttributedString(
@@ -31,9 +38,13 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
 
     override func onClick(_ navigationController: UINavigationController?) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedCreditCard()
+            return
+        }
+
         let viewModel = CreditCardSettingsViewModel(profile: profile)
-        let viewController = CreditCardSettingsViewController(
-            creditCardViewModel: viewModel)
+        let viewController = CreditCardSettingsViewController(creditCardViewModel: viewModel)
 
         guard let navController = navigationController else { return }
         if appAuthenticator.canAuthenticateDeviceOwner {

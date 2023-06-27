@@ -11,7 +11,8 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate {
+class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate,
+                            PrivacySettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -192,8 +193,42 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         didFinish()
     }
 
-    func goToPasswordManager() {
-        settingsViewController.handle(route: .password)
+    // MARK: PrivacySettingsDelegate
+
+    func pressedCreditCard() {
+        findAndHandle(route: .settings(section: .creditCard))
+    }
+
+    func pressedClearPrivateData() {
+        let viewController = ClearPrivateDataTableViewController()
+        viewController.profile = profile
+        viewController.tabManager = tabManager
+        router.push(viewController)
+    }
+
+    func pressedContentBlocker() {
+        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        viewController.tabManager = tabManager
+        router.push(viewController)
+    }
+
+    func pressedPasswords() {
+        findAndHandle(route: .settings(section: .password))
+    }
+
+    func pressedNotifications() {
+        let viewController = NotificationsSettingsViewController(prefs: profile.prefs,
+                                                                 hasAccount: profile.hasAccount())
+        router.push(viewController)
+    }
+
+    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
+        guard let url = url else { return }
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
     }
 
     // MARK: GeneralSettingsDelegate
