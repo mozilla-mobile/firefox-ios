@@ -371,6 +371,64 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
     }
 
+    // MARK: - PrivacySettingsDelegate
+
+    func testPrivacySettingsDelegate_handleCreditCardRoute() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.pressedCreditCard()
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
+    }
+
+    func testPrivacySettingsDelegate_pushedClearPrivateData() {
+        let subject = createSubject()
+
+        subject.pressedClearPrivateData()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ClearPrivateDataTableViewController)
+    }
+
+    func testPrivacySettingsDelegate_pushedContentBlocked() {
+        let subject = createSubject()
+
+        subject.pressedContentBlocker()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ContentBlockerSettingViewController)
+    }
+
+    func testPrivacySettingsDelegate_handlePasswordRoute() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.pressedPasswords()
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
+    func testPrivacySettingsDelegate_pushedNotifications() {
+        let subject = createSubject()
+
+        subject.pressedNotifications()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is NotificationsSettingsViewController)
+    }
+
+    func testPrivacySettingsDelegate_pushedContentWithURL() {
+        let subject = createSubject()
+
+        subject.askedToOpen(url: URL(string: "www.mozilla.com")!, withTitle: nil)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SettingsContentViewController)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
