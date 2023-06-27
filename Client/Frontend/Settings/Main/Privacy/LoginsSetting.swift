@@ -50,7 +50,6 @@ class LoginsSetting: Setting {
             return
         }
 
-        // laurie - test this
         deselectRow()
 
         guard let navController = navigationController else { return }
