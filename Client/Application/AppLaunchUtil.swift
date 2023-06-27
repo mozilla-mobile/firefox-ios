@@ -44,7 +44,7 @@ class AppLaunchUtil {
 
         // Initialize conversion value by specifying fineValue and coarseValue.
         // Call update postback conversion value for install event.
-        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .high, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
 
         // Initialize the feature flag subsystem.
