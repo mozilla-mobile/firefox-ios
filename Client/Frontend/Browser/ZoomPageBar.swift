@@ -120,6 +120,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         super.layoutSubviews()
         remakeGradientViewHeightConstraint()
         updateStepperConstraintsBasedOnSizeClass()
+        layoutIfNeeded()
     }
 
     private func setupViews() {
