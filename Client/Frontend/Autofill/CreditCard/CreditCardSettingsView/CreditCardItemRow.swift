@@ -97,7 +97,7 @@ struct CreditCardItemRow: View {
                 .padding(.trailing, 10)
                 .opacity(shouldShowSeparator ? 1 : 0)
         }
-        .background(BackgroundCleanerView())
+        .background(Color.clear)
         .padding(.vertical, addPadding ? 8 : 0)
         .onAppear {
             applyTheme(theme: themeVal.theme)
