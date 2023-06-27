@@ -11,8 +11,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate {
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
     var showExperimentsCalled = 0
-
-    // MARK: SettingsFlowDelegate
+    var showPasswordListCalled = 0
+    var showPasswordOnboardingCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -28,6 +28,14 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate {
 
     func showExperiments() {
         showExperimentsCalled += 1
+    }
+
+    func showPasswordList() {
+        showPasswordListCalled += 1
+    }
+
+    func showPasswordOnboarding() {
+        showPasswordOnboardingCalled += 1
     }
 
     // MARK: GeneralSettingsDelegate
