@@ -291,9 +291,9 @@ extension String {
                 value: "Cancel",
                 comment: "Button label for cancelling editing of the credit card details shown in the form")
             public static let ViewCreditCardTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ViewCreditCardTitle.v113",
+                key: "CreditCard.EditCard.ViewCreditCardTitle.v116",
                 tableName: "EditCard",
-                value: "View Credit Card",
+                value: "View Card",
                 comment: "Title label for the view where user can view their credit card info")
             public static let AddCreditCardTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.AddCreditCardTitle.v113",
@@ -326,9 +326,9 @@ extension String {
                 value: "Remove Card",
                 comment: "Title label for button that allows user to remove their saved credit card.")
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
+                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v116",
                 tableName: "EditCard",
-                value: "Save and autofill cards",
+                value: "Save and Autofill Cards",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.SavedCardListTitle.v112",
@@ -436,19 +436,19 @@ extension String {
         // Snackbar / toast
         public struct SnackBar {
             public static let SavedCardLabel = MZLocalizedString(
-                key: "CreditCard.SnackBar.SavedCardLabel.v112",
+                key: "CreditCard.SnackBar.SavedCardLabel.v116",
                 tableName: "SnackBar",
-                value: "New card saved",
+                value: "New Card Saved",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
             public static let UpdatedCardLabel = MZLocalizedString(
-                key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
+                key: "CreditCard.SnackBar.UpdatedCardLabel.v116",
                 tableName: "SnackBar",
-                value: "Card information updated",
+                value: "Card Information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
             public static let RemovedCardLabel = MZLocalizedString(
-                key: "CreditCard.SnackBar.RemovedCardLabel.v112",
+                key: "CreditCard.SnackBar.RemovedCardLabel.v116",
                 tableName: "SnackBar",
-                value: "Card removed",
+                value: "Card Removed",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed.")
         }
 

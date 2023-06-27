@@ -167,39 +167,30 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
-    func testCopyLink() throws {
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("Copy & paste may not work on M1")
-        } else {
-            longPressLinkOptions(optionSelected: "Copy Link")
-            navigator.goto(NewTabScreen)
-            app.textFields["url"].press(forDuration: 2)
+    func testCopyLink() {
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        app.textFields["url"].press(forDuration: 2)
 
-            waitForExistence(app.tables["Context Menu"])
-            app.tables.otherElements[ImageIdentifiers.paste].tap()
-            app.buttons["Go"].tap()
-            waitUntilPageLoad()
-            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-        }
+        waitForExistence(app.tables["Context Menu"])
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
+        app.buttons["Go"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    func testCopyLinkPrivateMode() throws {
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("Copy & paste may not work on M1")
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-            longPressLinkOptions(optionSelected: "Copy Link")
-            navigator.goto(NewTabScreen)
-            waitForExistence(app.textFields["url"])
-            app.textFields["url"].press(forDuration: 2)
+    func testCopyLinkPrivateMode() {
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        waitForExistence(app.textFields["url"])
+        app.textFields["url"].press(forDuration: 2)
 
-            app.tables.otherElements[ImageIdentifiers.paste].tap()
-            app.buttons["Go"].tap()
-            waitUntilPageLoad()
-            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-        }
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
+        app.buttons["Go"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
     func testLongPressOnAddressBar() throws {
