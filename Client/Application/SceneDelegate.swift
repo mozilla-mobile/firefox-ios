@@ -59,26 +59,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
-<<<<<<< HEAD
-            if let context = connectionOptions.urlContexts.first,
-               let route = routeBuilder.makeRoute(url: context.url) {
-                sceneCoordinator?.findAndHandle(route: route)
-            }
-
-            if let activity = connectionOptions.userActivities.first,
-               let route = routeBuilder.makeRoute(userActivity: activity) {
-                sceneCoordinator?.findAndHandle(route: route)
-            }
-
-            if let shortcut = connectionOptions.shortcutItem,
-               let route = routeBuilder.makeRoute(shortcutItem: shortcut, tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
-                sceneCoordinator?.findAndHandle(route: route)
-=======
             // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
             // This is a hacky fix and a long term solution will be add in FXIOS-6828
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.handle(connectionOptions: connectionOptions)
->>>>>>> 7d41f2bfe (Bugfix FXIOS-6812 [v115] Add a delay prior to performing deeplinks (#15216))
+                if let context = connectionOptions.urlContexts.first,
+                   let route = self.routeBuilder.makeRoute(url: context.url) {
+                    self.sceneCoordinator?.findAndHandle(route: route)
+                }
+
+                if let activity = connectionOptions.userActivities.first,
+                   let route = self.routeBuilder.makeRoute(userActivity: activity) {
+                    self.sceneCoordinator?.findAndHandle(route: route)
+                }
+
+                if let shortcut = connectionOptions.shortcutItem,
+                   let route = self.routeBuilder.makeRoute(shortcutItem: shortcut, tabSetting: NewTabAccessors.getNewTabPage(self.profile.prefs)) {
+                    self.sceneCoordinator?.findAndHandle(route: route)
+                }
             }
         } else {
             let window = configureWindowFor(scene)
