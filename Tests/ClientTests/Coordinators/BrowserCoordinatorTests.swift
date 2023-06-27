@@ -698,6 +698,25 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator)
     }
 
+    func testOneLibraryCoordinatorInstanceExists_whenPresetingMultipleLibraryTabs() {
+        let subject = createSubject()
+
+        // When the coordinator is created, there should no instance of LibraryCoordinator
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is LibraryCoordinator })
+
+        // We show the library with bookmarks tab
+        subject.show(homepanelSection: .bookmarks)
+
+        // Checking to see if there's one library coordinator instance presented
+        XCTAssertEqual(subject.childCoordinators.filter { $0 is LibraryCoordinator }.count, 1)
+
+        // We try to show the library again on downloads tab (notice for now the Done button is not connected and will not remove the coordinator). Showing the library again should use the existing instance of the LibraryCoordinator
+        subject.show(homepanelSection: .downloads)
+
+        // Checking to see if there's only one library coordinator instance presented
+        XCTAssertEqual(subject.childCoordinators.filter { $0 is LibraryCoordinator }.count, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
                                file: StaticString = #file,

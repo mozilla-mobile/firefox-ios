@@ -32,3 +32,9 @@ protocol Coordinator: AnyObject {
     func add(child coordinator: Coordinator)
     func remove(child coordinator: Coordinator?)
 }
+
+extension Array where Element == Coordinator {
+    subscript<T: Coordinator>(type: T.Type) -> T? {
+        self.first(where: { $0 is T }) as? T
+    }
+}
