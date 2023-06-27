@@ -223,7 +223,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         with connectionOptions: UIScene.ConnectionOptions,
         on scene: UIScene
     ) {
-        // Adding a half second delay to ensure start up actions have resolved prior to attepmting deeplink actions
+        // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
         // This is a hacky fix and a long term solution will be add in FXIOS-6828
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if !connectionOptions.urlContexts.isEmpty {
