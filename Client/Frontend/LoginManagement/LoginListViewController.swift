@@ -371,9 +371,10 @@ private extension LoginListViewController {
         // If we haven't selected everything yet, select all
         if viewModel.listSelectionHelper.numberOfSelectedCells < viewModel.count {
             tableView.allLoginIndexPaths.forEach {
-                let cell = tableView.cellForRow(at: $0) as! LoginListTableViewCell
-                viewModel.listSelectionHelper.setCellSelected(cell)
                 tableView.selectRow(at: $0, animated: false, scrollPosition: .none)
+            }
+            viewModel.loginRecordSections.forEach {
+                $1.forEach { viewModel.listSelectionHelper.setCellSelected(with: $0) }
             }
         } else {
             tableView.allLoginIndexPaths.forEach {

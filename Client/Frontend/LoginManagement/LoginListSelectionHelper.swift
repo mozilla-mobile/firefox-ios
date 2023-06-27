@@ -19,11 +19,6 @@ class LoginListSelectionHelper {
         selectionCellsState[key] = true
     }
 
-    func setCellSelected(_ cell: LoginListTableViewCell) {
-        let key = "\(cell.hostnameLabel.text ?? "")\(cell.usernameLabel.text ?? "")"
-        selectionCellsState[key] = true
-    }
-
     func removeCell(with loginRecord: LoginRecord) {
         let key = getKeyFromLoginRecord(loginRecord)
         _ = selectionCellsState.removeValue(forKey: key)
