@@ -93,23 +93,19 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "example")
     }
 
-    func testClipboard() throws {
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("Copy & paste may not work on M1")
-        } else {
-            navigator.nowAt(NewTabScreen)
-            // Check that what's in clipboard is copied
-            UIPasteboard.general.string = websiteUrl1
-            navigator.goto(HomeSettings)
-            app.textFields["HomeAsCustomURLTextField"].tap()
-            app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
-            waitForExistence(app.menuItems["Paste"])
-            app.menuItems["Paste"].tap()
-            waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
-            // Check that the webpage has been correctly copied into the correct field
-            let value = app.textFields["HomeAsCustomURLTextField"].value as! String
-            XCTAssertEqual(value, websiteUrl1)
-        }
+    func testClipboard() {
+        navigator.nowAt(NewTabScreen)
+        // Check that what's in clipboard is copied
+        UIPasteboard.general.string = websiteUrl1
+        navigator.goto(HomeSettings)
+        app.textFields["HomeAsCustomURLTextField"].tap()
+        app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
+        waitForExistence(app.menuItems["Paste"])
+        app.menuItems["Paste"].tap()
+        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        // Check that the webpage has been correctly copied into the correct field
+        let value = app.textFields["HomeAsCustomURLTextField"].value as! String
+        XCTAssertEqual(value, websiteUrl1)
     }
 
     func testSetFirefoxHomeAsHome() {

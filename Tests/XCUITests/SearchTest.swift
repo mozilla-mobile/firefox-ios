@@ -121,47 +121,43 @@ class SearchTests: BaseTestCase {
     }
 
     func testCopyPasteComplete() throws {
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("Copy & paste may not work on M1")
-        } else {
-            // Copy, Paste and Go to url
-            navigator.goto(URLBarOpen)
-            typeOnSearchBar(text: "www.mozilla.org")
-            app.textFields["address"].press(forDuration: 5)
-            app.menuItems["Select All"].tap()
-            waitForExistence(app.menuItems["Copy"], timeout: 3)
-            app.menuItems["Copy"].tap()
-            waitForExistence(app.buttons["urlBar-cancel"])
-            app.buttons["urlBar-cancel"].tap()
+        // Copy, Paste and Go to url
+        navigator.goto(URLBarOpen)
+        typeOnSearchBar(text: "www.mozilla.org")
+        app.textFields["address"].press(forDuration: 5)
+        app.menuItems["Select All"].tap()
+        waitForExistence(app.menuItems["Copy"], timeout: 3)
+        app.menuItems["Copy"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
 
-            navigator.nowAt(HomePanelsScreen)
-            waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
-            waitForExistence(app.textFields["url"], timeout: 3)
-            app.textFields["url"].tap()
-            waitForExistence(app.textFields["address"], timeout: 3)
-            app.textFields["address"].tap()
+        navigator.nowAt(HomePanelsScreen)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        waitForExistence(app.textFields["url"], timeout: 3)
+        app.textFields["url"].tap()
+        waitForExistence(app.textFields["address"], timeout: 3)
+        app.textFields["address"].tap()
 
-            waitForExistence(app.menuItems["Paste"])
-            app.menuItems["Paste"].tap()
+        waitForExistence(app.menuItems["Paste"])
+        app.menuItems["Paste"].tap()
 
-            // Verify that the Paste shows the search controller with prompt
-            waitForNoExistence(app.staticTexts[LabelPrompt])
-            app.typeText("\r")
-            waitUntilPageLoad()
+        // Verify that the Paste shows the search controller with prompt
+        waitForNoExistence(app.staticTexts[LabelPrompt])
+        app.typeText("\r")
+        waitUntilPageLoad()
 
-            // Check that the website is loaded
-            waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
-            waitUntilPageLoad()
+        // Check that the website is loaded
+        waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+        waitUntilPageLoad()
 
-            // Go back, write part of moz, check the autocompletion
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-            navigator.nowAt(HomePanelsScreen)
-            waitForTabsButton()
-            typeOnSearchBar(text: "moz")
-            waitForValueContains(app.textFields["address"], value: "mozilla.org")
-            let value = app.textFields["address"].value
-            XCTAssertEqual(value as? String, "mozilla.org")
-        }
+        // Go back, write part of moz, check the autocompletion
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+        typeOnSearchBar(text: "moz")
+        waitForValueContains(app.textFields["address"], value: "mozilla.org")
+        let value = app.textFields["address"].value
+        XCTAssertEqual(value as? String, "mozilla.org")
     }
 
     private func changeSearchEngine(searchEngine: String) {
