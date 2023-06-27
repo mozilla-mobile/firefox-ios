@@ -1852,7 +1852,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     // MARK: Autofill
 
     private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
-        let userDefaults = UserDefaults.standard
+         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
@@ -2695,10 +2695,6 @@ extension BrowserViewController {
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
-        }
-
-        viewController.didTapNotNowClosure = {
-            viewController.dismissVC()
         }
 
         viewController.didTapManageCardsClosure = {

@@ -9,7 +9,6 @@ final class HostingTableViewCell<Content: View>: UITableViewCell, ReusableCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        hostingController.view.backgroundColor = .clear
     }
 
     private func removeHostingControllerFromParent() {
