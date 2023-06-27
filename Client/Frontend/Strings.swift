@@ -328,7 +328,7 @@ extension String {
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
                 tableName: "EditCard",
-                value: "Save and autofill cards",
+                value: "Save and Autofill Cards",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.SavedCardListTitle.v112",
@@ -438,17 +438,17 @@ extension String {
             public static let SavedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.SavedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "New card saved",
+                value: "New Card Saved",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
             public static let UpdatedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "Card information updated",
+                value: "Card Information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "Card removed",
+                value: "Card Removed",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed.")
         }
 
