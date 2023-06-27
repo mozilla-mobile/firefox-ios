@@ -290,7 +290,7 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             showSearchController()
         }
-
+        urlBar.locationTextField?.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
         searchController?.searchQuery = text
         searchLoader?.query = text
     }
