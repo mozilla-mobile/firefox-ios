@@ -48,7 +48,7 @@ class AppAuthenticator: AppAuthenticationProtocol {
 
         // First check if we have the needed hardware support.
         var error: NSError?
-        let localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReason
+        let localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReasonV2
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
             context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: localizedErrorMessage) { success, error in
                 if success {
