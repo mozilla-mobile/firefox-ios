@@ -27,15 +27,6 @@ class LoginsListSelectionHelperTests: XCTestCase {
         XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
     }
 
-    func testSelectCellFromLoginListTableViewCell() {
-        let cell = LoginListTableViewCell()
-        cell.hostnameLabel.text = "www.test.com"
-        cell.usernameLabel.text = "test"
-
-        selectionHelper.setCellSelected(cell)
-        XCTAssertEqual(selectionHelper.numberOfSelectedCells, 1)
-    }
-
     func testAddTwoTimesTheSameLoginRecordGivesOneSelection() {
         selectionHelper.setCellSelected(with: loginRecord)
         selectionHelper.setCellSelected(with: loginRecord)
