@@ -172,6 +172,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         let contentViewWidth = UX.contentViewWidth > view.frame.width ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
         contentWidthConstraint.priority = UILayoutPriority(999)
+        cardTableView.isScrollEnabled = viewModel.creditCards?.count ?? 0 > 6
 
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.topAnchor),
