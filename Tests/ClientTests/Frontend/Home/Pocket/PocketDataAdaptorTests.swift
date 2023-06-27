@@ -67,12 +67,9 @@ private extension PocketDataAdaptorTests {
                        dataCompletion: (() -> Void)? = nil,
                        file: StaticString = #file,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
-        let pocketSponsoredAPI = MockSponsoredPocketAPI(result: .success([]))
-
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
         expectation.expectedFulfillmentCount = expectedFulfillmentCount
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
-                                                      pocketSponsoredAPI: pocketSponsoredAPI,
                                                       notificationCenter: mockNotificationCenter) {
             expectation.fulfill()
             dataCompletion?()
