@@ -62,7 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
             // This is a hacky fix and a long term solution will be add in FXIOS-6828
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                handle(connectionOptions: connectionOptions)
+                self.handle(connectionOptions: connectionOptions)
             }
         } else {
             let window = configureWindowFor(scene)
@@ -76,7 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
             // This is a hacky fix and a long term solution will be add in FXIOS-6828
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
+                self.handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
             }
         }
     }
