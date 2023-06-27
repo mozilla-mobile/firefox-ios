@@ -11,7 +11,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate {
+class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -194,5 +194,50 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
 
     func goToPasswordManager() {
         settingsViewController.handle(route: .password)
+    }
+
+    // MARK: GeneralSettingsDelegate
+
+    func pressedHome() {
+        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedMailApp() {
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        router.push(viewController)
+    }
+
+    func pressedNewTab() {
+        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedSearchEngine() {
+        let viewController = SearchSettingsTableViewController(profile: profile)
+        router.push(viewController)
+    }
+
+    func pressedSiri() {
+        let viewController = SiriSettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedToolbar() {
+        let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+        let viewController = SearchBarSettingsViewController(viewModel: viewModel)
+        router.push(viewController)
+    }
+
+    func pressedTabs() {
+        let viewController = TabsSettingsViewController()
+        router.push(viewController)
+    }
+
+    func pressedTheme() {
+        router.push(ThemeSettingsController())
     }
 }

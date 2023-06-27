@@ -101,37 +101,3 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         return subject
     }
 }
-
-// MARK: - MockSettingsFlowDelegate
-class MockSettingsFlowDelegate: SettingsFlowDelegate {
-    var showDevicePassCodeCalled = 0
-    var showCreditCardSettingsCalled = 0
-    var didFinishShowingSettingsCalled = 0
-    var showExperimentsCalled = 0
-    var showPasswordListCalled = 0
-    var showPasswordOnboardingCalled = 0
-
-    func showDevicePassCode() {
-        showDevicePassCodeCalled += 1
-    }
-
-    func showCreditCardSettings() {
-        showCreditCardSettingsCalled += 1
-    }
-
-    func didFinishShowingSettings() {
-        didFinishShowingSettingsCalled += 1
-    }
-
-    func showExperiments() {
-        showExperimentsCalled += 1
-    }
-
-    func showPasswordList() {
-        showPasswordListCalled += 1
-    }
-
-    func showPasswordOnboarding() {
-        showPasswordOnboardingCalled += 1
-    }
-}

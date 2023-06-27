@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class ResetWallpaperOnboardingPage: HiddenSetting, FeatureFlaggable {
+class ResetWallpaperOnboardingPage: HiddenSetting {
     private weak var settingsDelegate: DebugSettingsDelegate?
 
     init(settings: SettingsTableViewController,

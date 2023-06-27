@@ -5,11 +5,16 @@
 import Foundation
 
 class SearchBarSetting: Setting {
-    let viewModel: SearchBarSettingsViewModel
+    private let viewModel: SearchBarSettingsViewModel
+    private weak var settingsDelegate: GeneralSettingsDelegate?
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
-    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
+    }
 
     override var status: NSAttributedString {
         return NSAttributedString(string: viewModel.searchBarTitle )
@@ -17,14 +22,20 @@ class SearchBarSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: viewModel.title,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SearchBarSettingsViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedToolbar()
+        } else {
+            let viewController = SearchBarSettingsViewController(viewModel: viewModel)
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }
