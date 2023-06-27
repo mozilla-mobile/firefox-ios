@@ -97,7 +97,7 @@ struct CreditCardItemRow: View {
                 .padding(.trailing, 10)
                 .opacity(shouldShowSeparator ? 1 : 0)
         }
-        .background(Color.clear)
+        .background(ClearBackgroundView())
         .padding(.vertical, addPadding ? 8 : 0)
         .onAppear {
             applyTheme(theme: themeVal.theme)
@@ -163,7 +163,10 @@ struct CreditCardItemRow_Previews: PreviewProvider {
     }
 }
 
-struct BackgroundCleanerView: UIViewRepresentable {
+// Note: We use a clear view because Color.clear doesn't work
+// well if we embed a SwiftUI View inside a UIHostingController
+// and it displays black instead of clear color
+struct ClearBackgroundView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         DispatchQueue.main.async {
