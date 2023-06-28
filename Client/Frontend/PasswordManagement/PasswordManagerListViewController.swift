@@ -16,14 +16,16 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
     private let viewModel: PasswordManagerViewModel
 
-    fileprivate var loginDataSource: LoginDataSource
-    fileprivate let searchController = UISearchController(searchResultsController: nil)
-    fileprivate let loadingView: SettingsLoadingView = .build()
-    fileprivate var deleteAlert: UIAlertController?
-    fileprivate var selectedIndexPaths = [IndexPath]()
-    fileprivate let tableView: UITableView = .build()
+    private var loginDataSource: LoginDataSource
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let loadingView: SettingsLoadingView = .build()
+    private var deleteAlert: UIAlertController?
+    private var selectedIndexPaths = [IndexPath]()
+    private let tableView: UITableView = .build()
 
     weak var settingsDelegate: SettingsDelegate?
+    weak var coordinator: PasswordManagerFlowDelegate?
+
     var shownFromAppMenu = false
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
@@ -66,7 +68,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
     init(shownFromAppMenu: Bool = false,
          profile: Profile,
-         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+         webpageNavigationHandler: ((_ url: URL?) -> Void)? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = PasswordManagerViewModel(
@@ -316,16 +318,22 @@ private extension PasswordManagerListViewController {
 
     @objc
     func presentAddCredential() {
-        let addController = AddCredentialViewController { [weak self] record in
-            self?.presentedViewController?.dismiss(animated: true) {
-                self?.viewModel.save(loginRecord: record) { _ in
-                    DispatchQueue.main.async {
-                        self?.loadLogins()
-                        self?.tableView.reloadData()
-                    }
+        let completion: (LoginEntry) -> Void = { [weak self] record in
+            self?.viewModel.save(loginRecord: record) { _ in
+                DispatchQueue.main.async {
+                    self?.loadLogins()
+                    self?.tableView.reloadData()
                 }
             }
         }
+
+        // The assumption is that if webpageNavigationHandler is not nil, we came from the photon menu
+        // where coordinators are not yet implemented
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && webpageNavigationHandler == nil {
+            coordinator?.pressedAddPassword(completion: completion)
+            return
+        }
+        let addController = AddCredentialViewController(didSaveAction: completion)
 
         let controller = UINavigationController(
             rootViewController: addController
@@ -439,15 +447,24 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         } else if let login = viewModel.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
             var breachRecord: BreachRecord?
-            if viewModel.breachIndexPath.contains(indexPath),
-                let login = viewModel.loginAtIndexPath(indexPath) {
+            if viewModel.breachIndexPath.contains(indexPath) {
                 breachRecord = viewModel.breachAlertsManager.breachRecordForLogin(login)
             }
-            let detailViewModel = LoginDetailViewControllerModel(profile: viewModel.profile,
-                                                                 login: login,
-                                                                 webpageNavigationHandler: webpageNavigationHandler,
-                                                                 breachRecord: breachRecord)
-            let detailViewController = LoginDetailViewController(viewModel: detailViewModel)
+            let detailViewModel = PasswordDetailViewControllerModel(
+                profile: viewModel.profile,
+                login: login,
+                webpageNavigationHandler: webpageNavigationHandler,
+                breachRecord: breachRecord
+            )
+
+            // The assumption is that if webpageNavigationHandler is not nil, we came from the photon menu
+            // where coordinators are not yet implemented
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled && webpageNavigationHandler == nil {
+                coordinator?.pressedPasswordDetail(model: detailViewModel)
+                return
+            }
+
+            let detailViewController = PasswordDetailViewController(viewModel: detailViewModel)
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
         }

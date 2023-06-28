@@ -38,6 +38,8 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         return button
     }()
 
+    weak var coordinator: PasswordManagerFlowDelegate?
+
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
 
@@ -93,7 +95,11 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
-        self.proceedHandler()
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && !shownFromAppMenu {
+            coordinator?.continueFromOnboarding()
+        } else {
+            proceedHandler()
+        }
     }
 
     override func applyTheme() {
