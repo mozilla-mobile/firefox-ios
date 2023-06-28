@@ -4,7 +4,7 @@
 
 import Foundation
 
-class LoginsSetting: Setting {
+class PasswordManagerSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
     private let profile: Profile
     private var tabManager: TabManager!
@@ -68,7 +68,7 @@ class LoginsSetting: Setting {
                 }
 
                 loginOnboardingViewController.proceedHandler = {
-                    LoginListViewController.create(
+                    PasswordManagerListViewController.create(
                         didShowFromAppMenu: false,
                         authenticateInNavigationController: navController,
                         profile: self.profile,
@@ -87,7 +87,7 @@ class LoginsSetting: Setting {
 
                 LoginOnboarding.setShown()
             } else {
-                LoginListViewController.create(
+                PasswordManagerListViewController.create(
                     didShowFromAppMenu: false,
                     authenticateInNavigationController: navController,
                     profile: profile,

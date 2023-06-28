@@ -5,8 +5,8 @@
 import Foundation
 import Storage
 
-/// Helper that keeps track of selected login records cells for LoginListViewController
-class LoginListSelectionHelper {
+/// Helper that keeps track of selected login records cells for PasswordManagerListViewController
+class PasswordManagerSelectionHelper {
     /// The key represents a unique identifier for the cell, composed with the hostname interpolated with user name
     private(set) var selectionCellsState: [String: Bool] = [:]
 

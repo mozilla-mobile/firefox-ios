@@ -7,9 +7,9 @@ import Storage
 import Shared
 import XCTest
 
-class LoginListDataSourceHelperTests: XCTestCase {
+class PasswordManagerDataSourceHelperTests: XCTestCase {
     func testSetDomainLookup() {
-        let subject = LoginListDataSourceHelper()
+        let subject = PasswordManagerDataSourceHelper()
         let login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com/",
             "id": "example"
@@ -22,7 +22,7 @@ class LoginListDataSourceHelperTests: XCTestCase {
     }
 
     func testTitleForLogin() {
-        let subject = LoginListDataSourceHelper()
+        let subject = PasswordManagerDataSourceHelper()
         let login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com/",
             "id": "example"
@@ -32,7 +32,7 @@ class LoginListDataSourceHelperTests: XCTestCase {
     }
 
     func testSortByDomain() {
-        let subject = LoginListDataSourceHelper()
+        let subject = PasswordManagerDataSourceHelper()
         let apple = LoginRecord(fromJSONDict: [
             "hostname": "https://apple.com/",
             "id": "apple"
@@ -49,7 +49,7 @@ class LoginListDataSourceHelperTests: XCTestCase {
     }
 
     func testComputeSectionsFromLogins() {
-        let subject = LoginListDataSourceHelper()
+        let subject = PasswordManagerDataSourceHelper()
         let apple = LoginRecord(fromJSONDict: [
             "hostname": "https://apple.com/",
             "id": "apple"

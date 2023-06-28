@@ -259,7 +259,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.showPasswordList()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is LoginListViewController)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
     }
 
     func testPasswordSettings_showsPasswordOnboardingVC() {

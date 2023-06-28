@@ -363,7 +363,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, settingsDelegate: parentCoordinator))
+        privacySettings.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {

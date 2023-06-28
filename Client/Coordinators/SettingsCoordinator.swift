@@ -169,7 +169,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
             self?.didFinish()
         }
 
-        let viewController = LoginListViewController(
+        let viewController = PasswordManagerListViewController(
             profile: profile,
             webpageNavigationHandler: navigationHandler
         )

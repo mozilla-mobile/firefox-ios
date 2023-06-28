@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class LoginListTableViewSettingsCell: ThemedTableViewCell {
+class PasswordManagerSettingsTableViewCell: ThemedTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -15,7 +15,7 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
     }
 }
 
-class LoginListTableViewCell: ThemedTableViewCell {
+class PasswordManagerTableViewCell: ThemedTableViewCell {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }

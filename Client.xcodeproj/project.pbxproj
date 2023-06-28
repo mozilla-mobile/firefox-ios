@@ -531,7 +531,7 @@
 		8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */; };
 		8A171A6329F82B0E0085770E /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A171A6129F82AE20085770E /* SceneDelegateTests.swift */; };
 		8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */; };
-		8A19ACAE2A329058001C2147 /* LoginsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAD2A329058001C2147 /* LoginsSetting.swift */; };
+		8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */; };
 		8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */; };
 		8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */; };
 		8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */; };
@@ -1006,18 +1006,18 @@
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */; };
-		CA24B52224ABD7D40093848C /* LoginsListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */; };
-		CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */; };
-		CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */; };
+		CA24B52224ABD7D40093848C /* PasswordManagerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B52024ABD7D40093848C /* PasswordManagerViewModelTests.swift */; };
+		CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */; };
+		CA24B53B24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53A24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift */; };
 		CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */; };
-		CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */; };
+		CA520E7A24913C1B00CCAB48 /* PasswordManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* PasswordManagerViewModel.swift */; };
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */; };
-		CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */; };
-		CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */; };
+		CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7FC7D224A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift */; };
+		CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8226F224C11DB7008A6F38 /* PasswordManagerTableViewCell.swift */; };
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
-		CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */; };
+		CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */; };
 		CD1CE85F24EDE66A00006DFB /* WKWebViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
@@ -1325,7 +1325,7 @@
 		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
 		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */; };
-		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
+		E63ED8E11BFD25580097D08E /* PasswordManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* PasswordManagerViewController.swift */; };
 		E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */; };
 		E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* DynamicFontHelper.swift */; };
 		E650755C1E37F747006961AC /* Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = E650755B1E37F747006961AC /* Swizzling.m */; };
@@ -4560,7 +4560,7 @@
 		8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSponsoredTileLayer.swift; sourceTree = "<group>"; };
 		8A171A6129F82AE20085770E /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationHandler.swift; sourceTree = "<group>"; };
-		8A19ACAD2A329058001C2147 /* LoginsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsSetting.swift; sourceTree = "<group>"; };
+		8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSetting.swift; sourceTree = "<group>"; };
 		8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillCreditCardSettings.swift; sourceTree = "<group>"; };
 		8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataSetting.swift; sourceTree = "<group>"; };
 		8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSetting.swift; sourceTree = "<group>"; };
@@ -5586,21 +5586,21 @@
 		C9F54301B9DAE0BAA03DAA68 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		C9F84738A8E6E512DBC35ADE /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsClient.swift; sourceTree = "<group>"; };
-		CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginsListViewModelTests.swift; sourceTree = "<group>"; };
-		CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListSelectionHelperTests.swift; sourceTree = "<group>"; };
-		CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListDataSourceHelperTests.swift; sourceTree = "<group>"; };
+		CA24B52024ABD7D40093848C /* PasswordManagerViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordManagerViewModelTests.swift; sourceTree = "<group>"; };
+		CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSelectionHelperTests.swift; sourceTree = "<group>"; };
+		CA24B53A24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerDataSourceHelperTests.swift; sourceTree = "<group>"; };
 		CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsDetailView.swift; sourceTree = "<group>"; };
-		CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
+		CA520E7924913C1B00CCAB48 /* PasswordManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerViewModel.swift; sourceTree = "<group>"; };
 		CA734AC9B9629155033B810B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Search.strings; sourceTree = "<group>"; };
 		CA774043B34B7F86DA31B93A /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsTests.swift; sourceTree = "<group>"; };
-		CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListDataSourceHelper.swift; sourceTree = "<group>"; };
-		CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListTableViewCell.swift; sourceTree = "<group>"; };
+		CA7FC7D224A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerDataSourceHelper.swift; sourceTree = "<group>"; };
+		CA8226F224C11DB7008A6F38 /* PasswordManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerTableViewCell.swift; sourceTree = "<group>"; };
 		CA90753724929B22005B794D /* NoLoginsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoginsView.swift; sourceTree = "<group>"; };
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
-		CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListSelectionHelper.swift; sourceTree = "<group>"; };
+		CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSelectionHelper.swift; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		CBD64E6DB514D36802C243A2 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -6355,7 +6355,7 @@
 		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginDetailTableViewCell.swift; sourceTree = "<group>"; };
-		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		E63ED8E01BFD25580097D08E /* PasswordManagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordManagerViewController.swift; sourceTree = "<group>"; };
 		E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteMetadata.swift; sourceTree = "<group>"; };
 		E65075531E37F6FC006961AC /* DynamicFontHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DynamicFontHelper.swift; path = Helpers/DynamicFontHelper.swift; sourceTree = "<group>"; };
 		E650755A1E37F747006961AC /* Swizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swizzling.h; sourceTree = "<group>"; };
@@ -7873,7 +7873,7 @@
 				8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */,
 				8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */,
 				8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */,
-				8A19ACAD2A329058001C2147 /* LoginsSetting.swift */,
+				8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */,
 				8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */,
 				8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */,
 				8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */,
@@ -9716,7 +9716,7 @@
 		E1CEC2002A28C3B600B177D5 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */,
+				CA8226F224C11DB7008A6F38 /* PasswordManagerTableViewCell.swift */,
 				E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */,
 				E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */,
 			);
@@ -9869,18 +9869,18 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
-		E63ED8DF1BFD254E0097D08E /* LoginManagement */ = {
+		E63ED8DF1BFD254E0097D08E /* PasswordManagement */ = {
 			isa = PBXGroup;
 			children = (
 				E1CEC2002A28C3B600B177D5 /* Cells */,
-				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
+				E63ED8E01BFD25580097D08E /* PasswordManagerViewController.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
 				E1E5BE242A28F7BE00248F77 /* LoginDetailViewControllerModel.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
-				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
-				CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */,
+				CA520E7924913C1B00CCAB48 /* PasswordManagerViewModel.swift */,
+				CA7FC7D224A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift */,
 				CA90753724929B22005B794D /* NoLoginsView.swift */,
-				CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */,
+				CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */,
 				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
 				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
 				CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */,
@@ -9889,7 +9889,7 @@
 				F85C7EDC27109241004BDBA4 /* LoginOnboardingViewController.swift */,
 				F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */,
 			);
-			path = LoginManagement;
+			path = PasswordManagement;
 			sourceTree = "<group>";
 		};
 		E65075551E37F714006961AC /* Utils */ = {
@@ -10265,9 +10265,9 @@
 				8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */,
 				8AED868128CA3A1F00351A50 /* Library */,
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
-				CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */,
-				CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */,
-				CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */,
+				CA24B53A24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift */,
+				CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */,
+				CA24B52024ABD7D40093848C /* PasswordManagerViewModelTests.swift */,
 				C8DC90CA2A067BF10008832B /* MarkupParseUtilityTests */,
 				C83DE54529DF3579006E1B69 /* Messaging */,
 				C889D7D22858C85200121E1D /* Mocks */,
@@ -10397,7 +10397,7 @@
 				F84B22211A09122500AAB793 /* Home */,
 				EBC486972195F46A00CDA48D /* InternalSchemeHandler */,
 				D05434F3225FDA3400FDE4EF /* Library */,
-				E63ED8DF1BFD254E0097D08E /* LoginManagement */,
+				E63ED8DF1BFD254E0097D08E /* PasswordManagement */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
 				E1FE132D29C0B334002A65FF /* NotificationSurface */,
 				C8BD875D2A0C23F500CD803A /* Onboarding */,
@@ -12183,7 +12183,7 @@
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				8AB8573027D94CAD0075C173 /* HomepageViewModelProtocol.swift in Sources */,
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
-				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
+				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
@@ -12412,7 +12412,7 @@
 				282DA4731A68C1E700A406E2 /* OpenSearchParser.swift in Sources */,
 				D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				C8DC90BD2A06699E0008832B /* MarkupNode.swift in Sources */,
-				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
+				E63ED8E11BFD25580097D08E /* PasswordManagerViewController.swift in Sources */,
 				8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
@@ -12444,13 +12444,13 @@
 				8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
-				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
+				CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */,
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
 				965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
 				8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */,
-				CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */,
+				CA520E7A24913C1B00CCAB48 /* PasswordManagerViewModel.swift in Sources */,
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
@@ -12612,7 +12612,7 @@
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				5A8E7B6F29B8E5E500BF060F /* UIButton+Extensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
-				8A19ACAE2A329058001C2147 /* LoginsSetting.swift in Sources */,
+				8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */,
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
 				216A0D712A40D0FB008077BA /* ReduxFlagManager.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
@@ -12696,7 +12696,7 @@
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
 				C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
-				CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */,
+				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
@@ -12964,7 +12964,7 @@
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,
 				8AF10D8A29D713F50086351D /* LaunchScreenViewModelTests.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
-				CA24B52224ABD7D40093848C /* LoginsListViewModelTests.swift in Sources */,
+				CA24B52224ABD7D40093848C /* PasswordManagerViewModelTests.swift in Sources */,
 				E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */,
 				8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */,
 				965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */,
@@ -12972,7 +12972,7 @@
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
-				CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */,
+				CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */,
 				C8610DA82A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift in Sources */,
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
@@ -13023,7 +13023,7 @@
 				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,
 				8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
-				CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */,
+				CA24B53B24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift in Sources */,
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
 				ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
