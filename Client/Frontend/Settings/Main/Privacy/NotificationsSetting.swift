@@ -6,6 +6,9 @@ import Foundation
 import Shared
 
 class NotificationsSetting: Setting {
+    private weak var settingsDelegate: PrivacySettingsDelegate?
+    private let profile: Profile
+
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
@@ -14,15 +17,21 @@ class NotificationsSetting: Setting {
         return AccessibilityIdentifiers.Settings.Notifications.title
     }
 
-    let profile: Profile
-
-    init(theme: Theme, profile: Profile) {
+    init(theme: Theme,
+         profile: Profile,
+         settingsDelegate: PrivacySettingsDelegate?) {
         self.profile = profile
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .Settings.Notifications.Title,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedNotifications()
+            return
+        }
+
         let viewController = NotificationsSettingsViewController(prefs: profile.prefs,
                                                                  hasAccount: profile.hasAccount())
         navigationController?.pushViewController(viewController, animated: true)

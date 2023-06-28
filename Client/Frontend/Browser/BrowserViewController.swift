@@ -2021,11 +2021,6 @@ extension BrowserViewController: SettingsDelegate {
         self.openURLInNewTab(url, isPrivate: isPrivate)
     }
 
-    func goToPasswordManager() {
-        // Does nothing since this is used by Coordinators
-        // BVC will stop being a SettingsDelegate after FXIOS-6529
-    }
-
     func didFinish() {
         // Does nothing since this is used by Coordinators
         // BVC will stop being a SettingsDelegate after FXIOS-6529

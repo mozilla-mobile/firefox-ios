@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate {
+class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate, PrivacySettingsDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
@@ -55,4 +55,18 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate {
     func pressedTabs() {}
 
     func pressedTheme() {}
+
+    // MARK: PrivacySettingsDelegate
+
+    func pressedCreditCard() {}
+
+    func pressedClearPrivateData() {}
+
+    func pressedContentBlocker() {}
+
+    func pressedPasswords() {}
+
+    func pressedNotifications() {}
+
+    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {}
 }
