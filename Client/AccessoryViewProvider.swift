@@ -139,9 +139,9 @@ class AccessoryViewProvider: UIView, Themeable {
         layoutIfNeeded()
     }
 
-    private func setupSpacer(_ spacer: UIView) {
+    private func setupSpacer(_ spacer: UIView, width: CGFloat = 0) {
         NSLayoutConstraint.activate([
-            spacer.widthAnchor.constraint(equalToConstant: 2),
+            spacer.widthAnchor.constraint(equalToConstant: width),
             spacer.heightAnchor.constraint(equalToConstant: 30)
         ])
         spacer.accessibilityElementsHidden = true
@@ -149,8 +149,8 @@ class AccessoryViewProvider: UIView, Themeable {
 
     private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
-        setupSpacer(leadingFixedSpacer)
-        setupSpacer(trailingFixedSpacer)
+        setupSpacer(leadingFixedSpacer, width: 2)
+        setupSpacer(trailingFixedSpacer, width: 3)
 
         if showCreditCard {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
