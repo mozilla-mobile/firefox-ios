@@ -159,11 +159,6 @@ extension CreditCardTableViewController: UITableViewDelegate,
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        didSelectCardAtIndex?(viewModel.creditCards[indexPath.row])
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-
     // MARK: - Private
     private func toggleCell() -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
@@ -183,13 +178,21 @@ extension CreditCardTableViewController: UITableViewDelegate,
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
             return UITableViewCell()
         }
-
+        let creditCardCount = viewModel.creditCards.count
         let creditCard = viewModel.creditCards[indexPath.row]
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
-            isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
+            isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory,
+            shouldShowSeparator: indexPath.row < creditCardCount - 1 && creditCardCount > 1,
+            addPadding: false,
+            didSelectAction: { [weak self] in
+                self?.didSelectCardAtIndex?(creditCard)
+            })
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
+        hostingCell.backgroundColor = .clear
+        hostingCell.contentView.backgroundColor = .clear
+        hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
         return hostingCell
     }

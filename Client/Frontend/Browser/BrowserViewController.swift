@@ -2692,10 +2692,6 @@ extension BrowserViewController {
             }
         }
 
-        viewController.didTapNotNowClosure = {
-            viewController.dismissVC()
-        }
-
         viewController.didTapManageCardsClosure = {
             self.showCreditCardSettings()
         }
