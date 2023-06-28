@@ -7,13 +7,24 @@ import Shared
 
 /// Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
-    init(delegate: SettingsDelegate?, theme: Theme) {
+    private weak var settingsDelegate: SupportSettingsDelegate?
+
+    init(delegate: SettingsDelegate?,
+         theme: Theme,
+         settingsDelegate: SupportSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .AppSettingsHelp,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
                    delegate: delegate)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled,
+           let url = URL(string: "https://support.mozilla.org/products/ios") {
+            settingsDelegate?.pressedOpenSupportPage(url: url)
+            return
+        }
+
         navigationController?.dismiss(animated: true) {
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.settingsOpenURLInNewTab(url)

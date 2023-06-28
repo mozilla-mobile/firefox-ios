@@ -6,6 +6,8 @@ import Foundation
 import Shared
 
 class SendFeedbackSetting: Setting {
+    private weak var settingsDelegate: SupportSettingsDelegate?
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -15,7 +17,17 @@ class SendFeedbackSetting: Setting {
         return URL(string: "https://connect.mozilla.org/")
     }
 
+    init(settingsDelegate: SupportSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+        super.init()
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+            return
+        }
+
         setUpAndPushSettingsContentViewController(navigationController, url)
     }
 }
