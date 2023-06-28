@@ -61,7 +61,10 @@ class PasswordManagerSetting: Setting {
 
         if appAuthenticator.canAuthenticateDeviceOwner {
             if LoginOnboarding.shouldShow() {
-                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                let loginOnboardingViewController = PasswordManagerOnboardingViewController(
+                    profile: profile,
+                    tabManager: tabManager
+                )
 
                 loginOnboardingViewController.doneHandler = {
                     loginOnboardingViewController.dismiss(animated: true)
