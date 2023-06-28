@@ -105,6 +105,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
         self.viewModel.didUpdateCreditCard = { [weak self] in
             self?.cardTableView.reloadData()
+            self?.cardTableView.isScrollEnabled = self?.cardTableView.contentSize.height ?? 0 > self?.view.frame.height ?? 0
         }
 
         // Only allow selection when we are in selectSavedCard state
