@@ -820,7 +820,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func showLoginOnboarding(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
-        let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
+        let loginOnboardingViewController = PasswordManagerOnboardingViewController(shownFromAppMenu: true)
         loginOnboardingViewController.doneHandler = {
             loginOnboardingViewController.dismiss(animated: true)
         }

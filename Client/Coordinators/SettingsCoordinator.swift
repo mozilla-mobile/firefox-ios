@@ -161,32 +161,13 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(experimentsViewController)
     }
 
-    // TODO: FXIOS-6822 Move both show password methods into it's own coordinator
-    func showPasswordList() {
-        let navigationHandler: (_ url: URL?) -> Void = { [weak self] url in
-            guard let url = url else { return }
-            self?.settingsOpenURLInNewTab(url)
-            self?.didFinish()
-        }
-
-        let viewController = PasswordManagerListViewController(
-            profile: profile,
-            webpageNavigationHandler: navigationHandler
+    func showPasswordManager(shouldShowOnboarding: Bool) {
+        let passwordCoordinator = PasswordManagerCoordinator(
+            router: router,
+            profile: profile
         )
-        viewController.settingsDelegate = self
-        router.push(viewController)
-    }
-
-    func showPasswordOnboarding() {
-        let viewController = LoginOnboardingViewController(
-            profile: profile,
-            tabManager: tabManager
-        )
-
-        viewController.proceedHandler = { [weak self] in
-            self?.showPasswordList()
-        }
-        router.push(viewController)
+        add(child: passwordCoordinator)
+        passwordCoordinator.start(with: shouldShowOnboarding)
     }
 
     func didFinishShowingSettings() {

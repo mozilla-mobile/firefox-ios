@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class LoginOnboardingViewController: SettingsViewController {
+class PasswordManagerOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu = false
 
     private var onboardingMessageLabel: UILabel = {

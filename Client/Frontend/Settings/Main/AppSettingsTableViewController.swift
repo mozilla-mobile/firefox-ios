@@ -53,8 +53,7 @@ protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettin
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
-    func showPasswordList()
-    func showPasswordOnboarding()
+    func showPasswordManager(shouldShowOnboarding: Bool)
 
     func didFinishShowingSettings()
 }
@@ -159,12 +158,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         case .creditCard:
             self.parentCoordinator?.showCreditCardSettings()
         case .password:
-            if LoginOnboarding.shouldShow() {
-                LoginOnboarding.setShown()
-                self.parentCoordinator?.showPasswordOnboarding()
-            } else {
-                self.parentCoordinator?.showPasswordList()
-            }
+            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: LoginOnboarding.shouldShow())
         default:
             break
         }
