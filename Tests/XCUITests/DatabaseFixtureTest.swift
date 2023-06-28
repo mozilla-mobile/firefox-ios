@@ -58,51 +58,6 @@ class DatabaseFixtureTest: BaseTestCase {
         XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
     }
 
-    func testPerfHistory100startUp() {
-        waitForTabsButton()
-        app.terminate()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-            // activity measurement here
-            app.launch()
-            waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory100openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let loaded = NSPredicate(format: "count == 101")
-                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-                waitForExpectations(timeout: TIMEOUT, handler: nil)
-        }
-    }
-
-    func testPerfBookmarks1000startUp() {
-        waitForTabsButton()
-        app.terminate()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-            // activity measurement here
-            app.launch()
-            waitForTabsButton()
-        }
-    }
-
     func testPerfBookmarks1000openMenu() {
         waitForTabsButton()
         measure(metrics: [
@@ -113,9 +68,9 @@ class DatabaseFixtureTest: BaseTestCase {
             XCTMemoryMetric()]) {
             // activity measurement here
             navigator.goto(LibraryPanel_Bookmarks)
-            let loaded = NSPredicate(format: "count == 101")
-            expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-            waitForExpectations(timeout: TIMEOUT, handler: nil)
+            let loaded = NSPredicate(format: "count == 1001")
+            expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+            waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
         }
     }
 }

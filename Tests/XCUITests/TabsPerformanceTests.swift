@@ -5,16 +5,15 @@
 import XCTest
 
 class TabsPerformanceTest: BaseTestCase {
-    let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive", "testPerfTabs_3_20tabTray": "tabsState20.archive", "testPerfTabs_2_1280startup": "tabsState1280.archive", "testPerfTabs_4_1280tabTray": "tabsState1280.archive"]
+    let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive", "testPerfTabs_3_20tabTray": "tabsState20.archive", "testPerfTabs_2_1280startup": "tabsState1280.archive", "testPerfTabs_4_1280tabTray": "tabsState1280.archive", "testPerfHistory100startUp": "testHistoryDatabase100-places.db", "testPerfHistory100openMenu": "testHistoryDatabase100-places.db", "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db", "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let functionName = String(parts[1])
         let archiveName = fixtures[functionName]
-
         // defaults
-        launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHints]
+        launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHints, LaunchArguments.LoadDatabasePrefix + fixtures[functionName]!]
 
         // append specific load profiles to LaunchArguments
         if fixtures.keys.contains(functionName) {
@@ -133,4 +132,65 @@ class TabsPerformanceTest: BaseTestCase {
             counter += 1
         }
     }*/
+
+        func testPerfHistory100startUp() {
+        waitForTabsButton()
+        app.terminate()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
+            waitForTabsButton()
+        }
+    }
+
+    func testPerfHistory100openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                navigator.goto(LibraryPanel_History)
+                let loaded = NSPredicate(format: "count == 101")
+                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
+                waitForExpectations(timeout: TIMEOUT, handler: nil)
+        }
+    }
+
+    func testPerfBookmarks1000startUp() {
+        waitForTabsButton()
+        app.terminate()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
+            waitForTabsButton()
+        }
+    }
+
+    func testPerfBookmarks1000openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            navigator.goto(LibraryPanel_Bookmarks)
+            let loaded = NSPredicate(format: "count == 1001")
+            expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+            waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
+        }
+    }
 }
