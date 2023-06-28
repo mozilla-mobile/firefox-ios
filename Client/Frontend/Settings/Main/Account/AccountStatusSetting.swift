@@ -75,15 +75,21 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
+            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                settingsDelegate?.pressedToShowFirefoxAccount()
+                return
+            }
+
             let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
             let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(controller, animated: true)
             return
         }
 
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedAccountStatusSetting()
+            settingsDelegate?.pressedToShowSyncContent()
             return
         }
 

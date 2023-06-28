@@ -449,13 +449,22 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is AdvancedAccountSettingViewController)
     }
 
-    func testAccountSettingsDelegate_pushedAccountStatusSetting() {
+    func testAccountSettingsDelegate_pushedToShowSyncContent() {
         let subject = createSubject()
 
-        subject.pressedAccountStatusSetting()
+        subject.pressedToShowSyncContent()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is SyncContentSettingsViewController)
+    }
+
+    func testAccountSettingsDelegate_pushedToShowFirefoxAccount() {
+        let subject = createSubject()
+
+        subject.pressedToShowFirefoxAccount()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is FirefoxAccountSignInViewController)
     }
 
     // MARK: - Helper

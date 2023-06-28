@@ -8,6 +8,7 @@ import Foundation
 protocol AccountSettingsDelegate: AnyObject {
     func pressedConnectSetting()
     func pressedAdvancedAccountSetting()
-    func pressedAccountStatusSetting()
+    func pressedToShowSyncContent()
+    func pressedToShowFirefoxAccount()
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?)
 }

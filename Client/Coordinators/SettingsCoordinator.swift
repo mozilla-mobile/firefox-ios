@@ -12,7 +12,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 }
 
 class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate,
-                           PrivacySettingsDelegate {
+                           PrivacySettingsDelegate, AccountSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -292,9 +292,17 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(viewController)
     }
 
-    func pressedAccountStatusSetting() {
+    func pressedToShowSyncContent() {
         let viewController = SyncContentSettingsViewController()
         viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedToShowFirefoxAccount() {
+        let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile,
+                                                                parentType: .settings,
+                                                                deepLinkParams: fxaParams)
         router.push(viewController)
     }
 }
