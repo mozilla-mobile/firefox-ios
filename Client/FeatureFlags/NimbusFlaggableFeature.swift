@@ -37,7 +37,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shakeToRestore
     case shareSheetChanges
     case shareToolbarChanges
-    case sponsoredPocket
     case sponsoredTiles
     case startAtHome
     case tabStorageRefactor
@@ -84,8 +83,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
-        case .sponsoredPocket:
-            return FlagKeys.ASSponsoredPocketStories
         case .sponsoredTiles:
             return FlagKeys.SponsoredShortcuts
         case .startAtHome:
@@ -140,7 +137,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
 
         switch featureID {
-        case .pocket, .sponsoredPocket:
+        case .pocket:
             return nimbusValue && PocketProvider.islocaleSupported(Locale.current.identifier)
         default:
             return nimbusValue

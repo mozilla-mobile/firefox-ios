@@ -22,23 +22,6 @@ public struct RemoteClient: Equatable {
     let formfactor: String?
     let device: String?
 
-    // Requires a valid ClientPayload (: CleartextPayloadJSON: JSON).
-    public init(json: JSON, modified: Timestamp) {
-        self.guid = json["id"].string
-        self.modified = modified
-        self.name = json["name"].stringValue
-        self.type = json["type"].string
-
-        self.version = json["version"].string
-        self.protocols = jsonsToStrings(json["protocols"].array)
-        self.os = json["os"].string
-        self.appPackage = json["appPackage"].string
-        self.application = json["application"].string
-        self.formfactor = json["formfactor"].string
-        self.device = json["device"].string
-        self.fxaDeviceId = json["fxaDeviceId"].string
-    }
-
     public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?, version: String?, fxaDeviceId: String?) {
         self.guid = guid
         self.name = name
@@ -66,14 +49,4 @@ public func == (lhs: RemoteClient, rhs: RemoteClient) -> Bool {
         lhs.os == rhs.os &&
         lhs.version == rhs.version &&
         lhs.fxaDeviceId == rhs.fxaDeviceId
-}
-
-extension RemoteClient: CustomStringConvertible {
-    public var description: String {
-        return """
-<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), \
-type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), \
-version: \(version ?? "nil"), fxaDeviceId: \(fxaDeviceId ?? "nil")>
-"""
-    }
 }

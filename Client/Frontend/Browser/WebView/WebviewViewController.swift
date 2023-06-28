@@ -12,8 +12,10 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     private let screenTimeController = STWebpageController()
     var contentType: ContentType = .webview
 
-    init(webView: WKWebView) {
+    init(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
+        // Usage recording is suppressed if the navigation is set to incognito mode.
+        screenTimeController.suppressUsageRecording = isPrivate
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -52,10 +54,12 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         screenTimeController.url = webView.url
     }
 
-    func update(webView: WKWebView) {
+    func update(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
         setupWebView()
         setupScreenTimeController()
+        // Usage recording is suppressed if the navigation is set to incognito mode.
+        screenTimeController.suppressUsageRecording = isPrivate
     }
 
     // MARK: - ScreenshotableView

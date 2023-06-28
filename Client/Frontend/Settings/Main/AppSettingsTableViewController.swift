@@ -48,16 +48,13 @@ enum AppSettingsDeeplinkOption {
     }
 }
 
-/// Child settings pages action
-protocol AppSettingsDelegate: AnyObject {
-    func pressedVersion()
-    func pressedShowTour()
-}
-
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject {
+protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
+    func showExperiments()
+    func showPasswordList()
+    func showPasswordOnboarding()
 
     func didFinishShowingSettings()
 }
@@ -71,7 +68,7 @@ protocol AppSettingsScreen: UIViewController {
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
-                                    FeatureFlaggable, AppSettingsDelegate, SearchBarLocationProvider {
+                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -135,23 +132,41 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     func handle(route: Route.SettingsSection) {
         switch route {
-        case .creditCard:
-            handleCreditCardAuthenticatinFlow()
+        case .creditCard, .password:
+            authenticateUserFor(route: route)
         default:
             break
         }
     }
 
-    private func handleCreditCardAuthenticatinFlow() {
+    // Authenticates the user prior to allowing access to sensitive sections
+    private func authenticateUserFor(route: Route.SettingsSection) {
         appAuthenticator.getAuthenticationState { state in
             switch state {
             case .deviceOwnerAuthenticated:
-                self.parentCoordinator?.showCreditCardSettings()
+                self.openDeferredRouteAfterAuthentication(route: route)
             case .deviceOwnerFailed:
                 break // Keep showing the main settings page
             case .passCodeRequired:
                 self.parentCoordinator?.showDevicePassCode()
             }
+        }
+    }
+
+    // Called after the user has been prompted to authenticate to access a sensitive section
+    private func openDeferredRouteAfterAuthentication(route: Route.SettingsSection) {
+        switch route {
+        case .creditCard:
+            self.parentCoordinator?.showCreditCardSettings()
+        case .password:
+            if LoginOnboarding.shouldShow() {
+                LoginOnboarding.setShown()
+                self.parentCoordinator?.showPasswordOnboarding()
+            } else {
+                self.parentCoordinator?.showPasswordList()
+            }
+        default:
+            break
         }
     }
 
@@ -299,24 +314,24 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         )
 
         var generalSettings: [Setting] = [
-            SearchSetting(settings: self),
-            NewTabPageSetting(settings: self),
-            HomeSetting(settings: self),
-            OpenWithSetting(settings: self),
-            ThemeSetting(settings: self),
-            SiriPageSetting(settings: self),
+            SearchSetting(settings: self, settingsDelegate: parentCoordinator),
+            NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
+            HomeSetting(settings: self, settingsDelegate: parentCoordinator),
+            OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
+            ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
             blockpopUpSetting,
             NoImageModeSetting(settings: self),
         ]
 
         if isSearchBarLocationFeatureEnabled {
-            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+            generalSettings.insert(SearchBarSetting(settings: self, settingsDelegate: parentCoordinator), at: 5)
         }
 
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
+            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator), at: 3)
         }
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
@@ -348,7 +363,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(PasswordManagerSetting(settings: self, delegate: settingsDelegate))
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
@@ -382,7 +397,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
-            ShowIntroductionSetting(settings: self, appSettingsDelegate: self),
+            ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
@@ -401,7 +416,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     private func getAboutSettings() -> [SettingSection] {
         let aboutSettings = [
             AppStoreReviewSetting(),
-            VersionSetting(settings: self, appSettingsDelegate: self),
+            VersionSetting(settingsDelegate: self),
             LicenseAndAcknowledgementsSetting(),
             YourRightsSetting()
         ]
@@ -412,28 +427,28 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getDebugSettings() -> [SettingSection] {
         let hiddenDebugOptions = [
-            ExperimentsSettings(settings: self),
+            ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
             DeleteExportedDataSetting(settings: self),
             ForceCrashSetting(settings: self),
             ForgetSyncAuthStateDebugSetting(settings: self),
             ChangeToChinaSetting(settings: self),
-            AppReviewPromptSetting(settings: self),
-            TogglePullToRefresh(settings: self),
-            ToggleHistoryGroups(settings: self),
-            ToggleInactiveTabs(settings: self),
+            AppReviewPromptSetting(settings: self, settingsDelegate: self),
+            TogglePullToRefresh(settings: self, settingsDelegate: self),
+            ToggleHistoryGroups(settings: self, settingsDelegate: self),
+            ToggleInactiveTabs(settings: self, settingsDelegate: self),
             ResetContextualHints(settings: self),
-            ResetWallpaperOnboardingPage(settings: self),
-            SentryIDSetting(settings: self),
-            FasterInactiveTabs(settings: self),
+            ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
+            SentryIDSetting(settings: self, settingsDelegate: self),
+            FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self),
         ]
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
-    // MARK: - AppSettingsDelegate
+    // MARK: - DebugSettingsDelegate
 
     func pressedVersion() {
         debugSettingsClickCount += 1
@@ -451,6 +466,23 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
         applicationHelper.open(url)
+    }
+
+    func pressedExperiments() {
+        parentCoordinator?.showExperiments()
+    }
+
+    func askedToShow(alert: AlertController) {
+        present(alert, animated: true) {
+            // Dismiss the debug alert briefly after it's shown
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+
+    func askedToReload() {
+        tableView.reloadData()
     }
 
     // MARK: - UITableViewDelegate

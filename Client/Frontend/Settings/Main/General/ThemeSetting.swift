@@ -5,12 +5,17 @@
 import Foundation
 
 class ThemeSetting: Setting {
-    let profile: Profile
+    private weak var settingsDelegate: GeneralSettingsDelegate?
+    private let profile: Profile
+
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
     override var style: UITableViewCell.CellStyle { return .value1 }
-    override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
+
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Theme.title
+    }
 
     override var status: NSAttributedString {
         if LegacyThemeManager.instance.systemThemeIsOn {
@@ -23,13 +28,19 @@ class ThemeSetting: Setting {
         return NSAttributedString(string: "")
     }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .SettingsDisplayThemeTitle,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(ThemeSettingsController(), animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedTheme()
+        } else {
+            navigationController?.pushViewController(ThemeSettingsController(), animated: true)
+        }
     }
 }

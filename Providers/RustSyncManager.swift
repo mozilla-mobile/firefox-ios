@@ -9,9 +9,6 @@ import Sync
 import AuthenticationServices
 import Common
 
-public typealias MZSyncResult = MozillaAppServices.SyncResult
-public typealias MZSyncReason = MozillaAppServices.SyncReason
-
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
@@ -162,7 +159,7 @@ public class RustSyncManager: NSObject, SyncManager {
         notifySyncing(notification: .ProfileDidStartSyncing)
     }
 
-    private func resolveSyncState(result: MZSyncResult) -> SyncDisplayState {
+    private func resolveSyncState(result: SyncResult) -> SyncDisplayState {
         let hasSynced = !result.successful.isEmpty
         let status = result.status
 
@@ -180,7 +177,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    private func endSyncing(_ result: MZSyncResult) {
+    private func endSyncing(_ result: SyncResult) {
         logger.log("Ending all syncs.",
                    level: .info,
                    category: .sync)
@@ -356,7 +353,7 @@ public class RustSyncManager: NSObject, SyncManager {
         completion((rustEngines, localEncryptionKeys))
     }
 
-    private func doSync(params: SyncParams, completion: @escaping (MZSyncResult) -> Void) {
+    private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state
@@ -416,9 +413,9 @@ public class RustSyncManager: NSObject, SyncManager {
         })
     }
 
-    private func syncRustEngines(why: MZSyncReason,
-                                 engines: [String]) -> Deferred<Maybe<MZSyncResult>> {
-        let deferred = Deferred<Maybe<MZSyncResult>>()
+    private func syncRustEngines(why: SyncReason,
+                                 engines: [String]) -> Deferred<Maybe<SyncResult>> {
+        let deferred = Deferred<Maybe<SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
         self.profile?.rustFxA.accountManager.upon { accountManager in
@@ -475,7 +472,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     @discardableResult
-    public func syncEverything(why: MZSyncReason) -> Success {
+    public func syncEverything(why: SyncReason) -> Success {
         return syncRustEngines(why: why,
                                engines: syncManagerAPI.rustTogglableEngines) >>> succeed
     }
@@ -485,7 +482,7 @@ public class RustSyncManager: NSObject, SyncManager {
      * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
      * and to preserve some ordering rules.
      */
-    public func syncNamedCollections(why: MZSyncReason, names: [String]) -> Success {
+    public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
@@ -497,11 +494,11 @@ public class RustSyncManager: NSObject, SyncManager {
         return syncRustEngines(why: why, engines: engines) >>> succeed
     }
 
-    public func syncTabs() -> Deferred<Maybe<MZSyncResult>> {
+    public func syncTabs() -> Deferred<Maybe<SyncResult>> {
         return syncRustEngines(why: .user, engines: ["tabs"])
     }
 
-    public func syncHistory() -> Deferred<Maybe<MZSyncResult>> {
+    public func syncHistory() -> Deferred<Maybe<SyncResult>> {
         return syncRustEngines(why: .user, engines: ["history"])
     }
 }

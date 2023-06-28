@@ -5,24 +5,33 @@
 import Foundation
 
 class SiriPageSetting: Setting {
-    let profile: Profile
+    private weak var settingsDelegate: GeneralSettingsDelegate?
+    private let profile: Profile
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
-    override var accessibilityIdentifier: String? { return "SiriSettings" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Siri.title
+    }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.settingsDelegate = settingsDelegate
 
         super.init(title: NSAttributedString(string: .SettingsSiriSectionName,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SiriSettingsViewController(prefs: profile.prefs)
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedSiri()
+        } else {
+            let viewController = SiriSettingsViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }

@@ -375,6 +375,32 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMenu.showTourPressed)
     }
 
+    func test_signIntoSync_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.signIntoSync)
+    }
+
+    // MARK: - Sync
+
+    func test_userLoggedOut_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncUserLoggedOut)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Sync.disconnect)
+    }
+
+    func test_loginWithQRCode_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInScanQRCode)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Sync.paired)
+    }
+
+    func test_loginWithEmail_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInUseEmail)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Sync.useEmail)
+    }
+
     // MARK: - Credit card autofill
 
     func test_autofill_credit_card_settings_tapped_GleanIsCalled() {

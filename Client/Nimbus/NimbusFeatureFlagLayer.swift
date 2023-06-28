@@ -47,9 +47,6 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
-        case .sponsoredPocket:
-            return checkNimbusForPocketSponsoredStoriesFeature(using: nimbus)
-
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 

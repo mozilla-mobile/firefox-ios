@@ -98,10 +98,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
-            webviewController.update(webView: webView)
+            webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             browserViewController.frontEmbeddedContent(webviewController)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             webviewController = webviewViewController
             _ = browserViewController.embedContent(webviewViewController)
         }
@@ -275,17 +275,21 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
-        let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
-        let libraryRouter = DefaultRouter(navigationController: navigationController)
+        if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
+            libraryCoordinator.start(with: homepanelSection)
+            (libraryCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
+        } else {
+            let navigationController = DismissableNavigationViewController()
+            navigationController.modalPresentationStyle = .formSheet
 
-        let libraryCoordinator = LibraryCoordinator(router: libraryRouter)
-        libraryCoordinator.parentCoordinator = self
-        add(child: libraryCoordinator)
-        libraryCoordinator.start(with: homepanelSection)
+            let libraryCoordinator = LibraryCoordinator(
+                router: DefaultRouter(navigationController: navigationController)
+            )
+            libraryCoordinator.parentCoordinator = self
+            add(child: libraryCoordinator)
+            libraryCoordinator.start(with: homepanelSection)
 
-        router.present(navigationController) { [weak self] in
-            self?.didFinishLibrary(from: libraryCoordinator)
+            router.present(navigationController)
         }
     }
 

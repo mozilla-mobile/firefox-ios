@@ -5,6 +5,14 @@
 import Foundation
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
@@ -14,6 +22,10 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
         featureFlags.set(feature: .pullToRefresh, to: newStatus)
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }

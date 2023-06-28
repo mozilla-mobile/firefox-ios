@@ -13,10 +13,4 @@ extension CGRect {
             self.origin = CGPoint(x: newValue.x - size.width / 2, y: newValue.y - size.height / 2)
         }
     }
-
-    func visibilityRatio(relativeTo otherFrame: CGRect) -> CGFloat {
-        let inter = self.intersection(otherFrame)
-        let ratio = (inter.width * inter.height) / (self.width * self.height)
-        return ratio
-    }
 }

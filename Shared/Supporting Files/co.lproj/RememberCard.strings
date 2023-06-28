@@ -1,3 +1,15 @@
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v115" = "Arregistrate l’infurmazione di a vostra carta di manera assicurata cù %@ per pagà più prestu a prossima volta.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "Iè";
+"CreditCard.RememberCard.MainButtonTitle.v115" = "Sì";
+
+/* This value is used as the title for the remember credit card page */
+"CreditCard.RememberCard.MainTitle.v115" = "Arricurdassi di sta carta ?";
+
+/* This value is used as the title for the Not Now button in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Micca subitu";
+
+/* This value is used as the toast message for the saving success alert in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Nova carta arregistrata";
 

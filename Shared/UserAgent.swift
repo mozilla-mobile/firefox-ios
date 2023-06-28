@@ -6,10 +6,9 @@ import Common
 import WebKit
 import UIKit
 
-open class UserAgent {
+public class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
-    public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
     public static let product = "Mozilla/5.0"
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
@@ -18,6 +17,19 @@ open class UserAgent {
     public static let uaBitGoogleIpad = "Version/13.0.3"
 
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+
+    static var systemInfo: String {
+        var deviceModel = UIDevice.current.model
+        // Only use first part of device name(so "iPod Touch" becomes "iPod")
+        if let deviceNameFirstPart = deviceModel.split(separator: " ").first {
+            deviceModel = String(deviceNameFirstPart)
+        }
+
+        let platform = UIDevice.current.userInterfaceIdiom == .pad ? "OS" : "iPhone OS"
+        let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
+
+        return "(\(deviceModel); CPU \(platform) \(osVersion) like Mac OS X)"
+    }
 
     private static func clientUserAgent(prefix: String) -> String {
         let versionStr: String
@@ -107,11 +119,11 @@ public struct CustomUserAgentConstant {
 
 public struct UserAgentBuilder {
     // User agent components
-    fileprivate var product = ""
-    fileprivate var systemInfo = ""
-    fileprivate var platform = ""
-    fileprivate var platformDetails = ""
-    fileprivate var extensions = ""
+    private var product = ""
+    private var systemInfo = ""
+    private var platform = ""
+    private var platformDetails = ""
+    private var extensions = ""
 
     init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
         self.product = product
@@ -126,8 +138,16 @@ public struct UserAgentBuilder {
         return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
 
-    public func clone(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
-        let userAgentItems = [product ?? self.product, systemInfo ?? self.systemInfo, platform ?? self.platform, platformDetails ?? self.platformDetails, extensions ?? self.extensions]
+    public func clone(product: String? = nil,
+                      systemInfo: String? = nil,
+                      platform: String? = nil,
+                      platformDetails: String? = nil,
+                      extensions: String? = nil) -> String {
+        let userAgentItems = [product ?? self.product,
+                              systemInfo ?? self.systemInfo,
+                              platform ?? self.platform,
+                              platformDetails ?? self.platformDetails,
+                              extensions ?? self.extensions]
         return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
 
@@ -139,10 +159,10 @@ public struct UserAgentBuilder {
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
+            systemInfo: UserAgent.systemInfo,
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+            extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
@@ -151,6 +171,6 @@ public struct UserAgentBuilder {
             systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+            extensions: UserAgent.uaBitSafari)
     }
 }

@@ -3,11 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+
 @testable import Client
 
-class MockAppSettingsDelegate: AppSettingsDelegate {
+class MockDebugSettingsDelegate: DebugSettingsDelegate {
     var pressedVersionCalled = 0
     var pressedShowTourCalled = 0
+    var pressedExperimentsCalled = 0
+    var askedToShowAlertCalled = 0
+    var askedToReloadCalled = 0
 
     func pressedVersion() {
         pressedVersionCalled += 1
@@ -15,5 +20,17 @@ class MockAppSettingsDelegate: AppSettingsDelegate {
 
     func pressedShowTour() {
         pressedShowTourCalled += 1
+    }
+
+    func pressedExperiments() {
+        pressedExperimentsCalled += 1
+    }
+
+    func askedToShow(alert: AlertController) {
+        askedToShowAlertCalled += 1
+    }
+
+    func askedToReload() {
+        askedToReloadCalled += 1
     }
 }

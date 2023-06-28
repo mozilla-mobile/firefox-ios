@@ -7,12 +7,13 @@ import XCTest
 import Shared
 
 class VersionSettingTests: XCTestCase {
-    private var delegate: MockAppSettingsDelegate!
+    private var delegate: MockDebugSettingsDelegate!
 
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
-        delegate = MockAppSettingsDelegate()
+        delegate = MockDebugSettingsDelegate()
     }
 
     override func tearDown() {
@@ -25,7 +26,7 @@ class VersionSettingTests: XCTestCase {
         // Given
         let settingsTable = SettingsTableViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: settingsTable)
-        let versionSetting = VersionSetting(settings: settingsTable, appSettingsDelegate: delegate)
+        let versionSetting = VersionSetting(settingsDelegate: delegate)
         versionSetting.theme = DefaultThemeManager().currentTheme
 
         // When
@@ -42,7 +43,7 @@ class VersionSettingTests: XCTestCase {
         // Given
         let settingsTable = SettingsTableViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: settingsTable)
-        let versionSetting = VersionSetting(settings: settingsTable, appSettingsDelegate: delegate)
+        let versionSetting = VersionSetting(settingsDelegate: delegate)
 
         // When
         versionSetting.onClick(navigationController)

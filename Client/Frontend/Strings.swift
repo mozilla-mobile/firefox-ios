@@ -90,6 +90,11 @@ extension String {
                 tableName: "BiometricAuthentication",
                 value: "Authenticate to access passwords.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
+            public static let UniversalAuthenticationReasonV2 = MZLocalizedString(
+                key: "Biometry.Screen.UniversalAuthenticationReasonV2.v116",
+                tableName: "BiometricAuthentication",
+                value: "Authenticate to access your saved logins and encrypted cards.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.")
         }
     }
 }
@@ -291,9 +296,9 @@ extension String {
                 value: "Cancel",
                 comment: "Button label for cancelling editing of the credit card details shown in the form")
             public static let ViewCreditCardTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ViewCreditCardTitle.v113",
+                key: "CreditCard.EditCard.ViewCreditCardTitle.v116",
                 tableName: "EditCard",
-                value: "View Credit Card",
+                value: "View Card",
                 comment: "Title label for the view where user can view their credit card info")
             public static let AddCreditCardTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.AddCreditCardTitle.v113",
@@ -328,7 +333,7 @@ extension String {
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
                 tableName: "EditCard",
-                value: "Save and autofill cards",
+                value: "Save and Autofill Cards",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.SavedCardListTitle.v112",
@@ -438,17 +443,17 @@ extension String {
             public static let SavedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.SavedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "New card saved",
+                value: "New Card Saved",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
             public static let UpdatedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "Card information updated",
+                value: "Card Information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardLabel.v112",
                 tableName: "SnackBar",
-                value: "Card removed",
+                value: "Card Removed",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed.")
         }
 
@@ -607,15 +612,10 @@ extension String {
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
             public struct Footer {
                 public static let Title = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.Footer.Title.v115",
+                    key: "FirefoxHomepage.Pocket.Footer.Title.v116",
                     tableName: "Footer",
-                    value: "Powered by %@.",
-                    comment: "This is the title of the Pocket footer on Firefox Homepage. placeholder will be for App Name")
-                public static let Subtitle = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.Footer.Subtitle.v115",
-                    tableName: "Footer",
-                    value: "Part of the %@ family.",
-                    comment: "This is the subtitle of the Pocket footer on Firefox Homepage. The placeholder is the app name.")
+                    value: "Powered by %@. Part of the %@ family.",
+                    comment: "This is the title of the Pocket footer on Firefox Homepage. The first placeholder is for the Pocket app name and the second placeholder for the app name")
                 public static let LearnMore = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.LearnMore.v115",
                     tableName: "Footer",
@@ -1261,8 +1261,8 @@ extension String {
                 public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
                     key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
                     tableName: "CustomizeFirefoxHome",
-                    value: "Articles powered by Pocket",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
+                    value: "Articles powered by %@",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. The placeholder is the pocket app name.")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,
