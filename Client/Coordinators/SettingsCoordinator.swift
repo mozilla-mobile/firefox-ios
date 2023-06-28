@@ -276,17 +276,25 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(ThemeSettingsController())
     }
 
-    // MARK: PrivacySettingsDelegate
+    // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {
-        // TODO: Laurie
+        let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile,
+                                                                parentType: .settings,
+                                                                deepLinkParams: fxaParams)
+        router.push(viewController)
     }
 
     func pressedAdvancedAccountSetting() {
-        // TODO: Laurie
+        let viewController = AdvancedAccountSettingViewController()
+        viewController.profile = profile
+        router.push(viewController)
     }
 
     func pressedAccountStatusSetting() {
-        // TODO: Laurie
+        let viewController = SyncContentSettingsViewController()
+        viewController.profile = profile
+        router.push(viewController)
     }
 }
