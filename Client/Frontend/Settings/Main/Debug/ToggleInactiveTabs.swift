@@ -5,10 +5,10 @@
 import Foundation
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
-    private weak var settingsDelegate: DebugSettingsDelegate?
+    private weak var settingsDelegate: SharedSettingsDelegate?
 
     init(settings: SettingsTableViewController,
-         settingsDelegate: DebugSettingsDelegate) {
+         settingsDelegate: SharedSettingsDelegate) {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
     }

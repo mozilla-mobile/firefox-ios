@@ -46,8 +46,6 @@ extension Notification.Name {
 
     public static let DynamicFontChanged = Notification.Name("DynamicFontChanged")
 
-    public static let UserInitiatedSyncManually = Notification.Name("UserInitiatedSyncManually")
-
     public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")

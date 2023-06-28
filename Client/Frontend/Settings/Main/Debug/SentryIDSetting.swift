@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 class SentryIDSetting: HiddenSetting {
-    private weak var settingsDelegate: DebugSettingsDelegate?
+    private weak var settingsDelegate: SharedSettingsDelegate?
     private let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash")
 
     override var title: NSAttributedString? {
@@ -17,7 +17,7 @@ class SentryIDSetting: HiddenSetting {
     }
 
     init(settings: SettingsTableViewController,
-         settingsDelegate: DebugSettingsDelegate) {
+         settingsDelegate: SharedSettingsDelegate) {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
     }

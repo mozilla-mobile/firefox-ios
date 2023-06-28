@@ -12,7 +12,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 }
 
 class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate,
-                            PrivacySettingsDelegate {
+                           PrivacySettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -274,5 +274,19 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
 
     func pressedTheme() {
         router.push(ThemeSettingsController())
+    }
+
+    // MARK: PrivacySettingsDelegate
+
+    func pressedConnectSetting() {
+        // TODO: Laurie
+    }
+
+    func pressedAdvancedAccountSetting() {
+        // TODO: Laurie
+    }
+
+    func pressedAccountStatusSetting() {
+        // TODO: Laurie
     }
 }

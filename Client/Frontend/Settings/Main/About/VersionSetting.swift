@@ -42,7 +42,7 @@ class VersionSetting: Setting {
         }
     }
 
-    func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
+    private func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle: String = .SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
@@ -54,7 +54,7 @@ class VersionSetting: Setting {
         }
     }
 
-    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
+    private func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
         let controller = navigationController?.topViewController
         let tableView = (controller as? AppSettingsTableViewController)?.tableView
         guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
