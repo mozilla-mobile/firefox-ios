@@ -2952,7 +2952,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     private func finishEditionMode() {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
-        if newTabChoice != .topSites {
+        if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.finishEditing(shouldCancelLoading: false)
         }
     }
