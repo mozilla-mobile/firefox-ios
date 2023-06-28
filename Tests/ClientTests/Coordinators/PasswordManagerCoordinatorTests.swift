@@ -20,7 +20,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     // MARK: - Helper
     func createSubject() -> PasswordManagerCoordinator {
-        let subject = PasswordManagerCoordinator(router: mockRouter)
+        let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile())
         trackForMemoryLeaks(subject)
         return subject
     }
