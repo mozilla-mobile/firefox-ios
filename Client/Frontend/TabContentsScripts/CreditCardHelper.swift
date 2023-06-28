@@ -153,9 +153,15 @@ class CreditCardHelper: TabContentScript {
             let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields('\(jsonDataVal)')"
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, err in
                 guard let err = err else {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardAutofilled)
                     completion(nil)
                     return
                 }
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .creditCardAutofillFailed)
                 completion(err)
                 logger.log("Credit card script error \(err)",
                            level: .debug,

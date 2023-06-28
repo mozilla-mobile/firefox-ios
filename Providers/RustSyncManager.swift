@@ -254,7 +254,19 @@ public class RustSyncManager: NSObject, SyncManager {
         return clearPrefs()
     }
 
-    func getEngineEnablementChangesForAccount() -> [String: Bool] {
+    public func checkCreditCardEngineEnablement() -> Bool {
+        let engine = "creditcards"
+        guard let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines),
+              !declined.isEmpty,
+              declined.contains(engine)
+        else {
+            let engineEnabled = prefsForSync.boolForKey("engine.\(engine).enabled") ?? false
+            return engineEnabled
+        }
+        return false
+    }
+
+    private func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
         // We just created the account, the user went through the Choose What to Sync
         // screen on FxA.

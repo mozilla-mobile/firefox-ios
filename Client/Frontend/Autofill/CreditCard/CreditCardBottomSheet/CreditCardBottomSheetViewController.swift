@@ -255,7 +255,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             item: creditCard,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory,
             shouldShowSeparator: false,
-            addPadding: true,
+            addPadding: numberOfCards > 1,
             didSelectAction: { [weak self] in
                 self?.handleCreditCardSelection(row: indexPath.row)
             })

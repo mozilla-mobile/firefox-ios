@@ -147,7 +147,12 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
 
     func engineSettingChanged(_ engineName: String) -> (Bool) -> Void {
         let prefName = "sync.engine.\(engineName).enabledStateChanged"
-        return { enabled in
+        return { [unowned self] enabled in
+            // Credit card sync telemetry
+            if engineName == "creditcards" {
+                self.creditCardSyncEnabledTelemetry(status: enabled)
+            }
+
             if self.profile.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
                 self.profile.prefs.removeObjectForKey(prefName)
                 self.enginesToSyncOnExit.remove(engineName)
@@ -156,6 +161,17 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
                 self.enginesToSyncOnExit.insert(engineName)
             }
         }
+    }
+
+    private func creditCardSyncEnabledTelemetry(status: Bool) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .creditCardSyncToggle,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardSyncToggleEnabled.rawValue: status
+            ]
+        )
     }
 
     override func generateSettings() -> [SettingSection] {

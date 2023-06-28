@@ -47,6 +47,16 @@ class CreditCardSettingsViewModel {
             return userDefaults.bool(forKey: key)
         }
         set {
+            // Telemetry for card autofill
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .creditCardAutofillToggle,
+                extras: [
+                    TelemetryWrapper.ExtraKey.isCreditCardAutofillToggleEnabled.rawValue: newValue
+                ]
+            )
+
             UserDefaults.standard.set(newValue, forKey: PrefsKeys.KeyAutofillCreditCardStatus)
         }
     }

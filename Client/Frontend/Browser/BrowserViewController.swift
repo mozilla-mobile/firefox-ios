@@ -473,6 +473,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
+
+        // Credit card initial setup telemetry
+        creditCardInitialSetupTelemetry()
     }
 
     private func setupAccessibleActions() {
@@ -1851,6 +1854,36 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
     // MARK: Autofill
 
+    private func creditCardInitialSetupTelemetry() {
+        // Credit card autofill status telemetry
+        let userDefaults = UserDefaults.standard
+        let key = PrefsKeys.KeyAutofillCreditCardStatus
+        // Default value is true for autofill credit card input
+        let autofillStatus = userDefaults.value(forKey: key) as? Bool ?? true
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .creditCardAutofillEnabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardAutofillEnabled.rawValue: autofillStatus
+            ]
+        )
+
+        // Credit card sync telemetry
+        self.profile.hasSyncAccount { [unowned self] hasSync in
+            guard hasSync else { return }
+            let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .creditCardSyncEnabled,
+                extras: [
+                    TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
+                ]
+            )
+        }
+    }
+
     private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -1868,6 +1901,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 switch type {
                 case .formInput:
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardFormDetected)
                     self?.profile.autofill.listCreditCards(completion: { cards, error in
                         guard let cards = cards, !cards.isEmpty, error == nil
                         else {
@@ -2683,6 +2719,14 @@ extension BrowserViewController {
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             } else {
+                // Save a card telemetry
+                if state == .save {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardSavePromptCreate)
+                }
+
+                // Save or update a card toast message
                 let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
                 let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
                 let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
