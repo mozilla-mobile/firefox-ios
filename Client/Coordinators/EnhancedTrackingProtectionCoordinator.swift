@@ -21,7 +21,18 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve()
     ) {
-        let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tabManager.selectedTab, profile: profile)
+        let tab = tabManager.selectedTab
+        let url = tab?.url ?? URL(fileURLWithPath: "")
+        let displayTitle = tab?.displayTitle ?? ""
+        let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
+        let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
+        let etpViewModel = EnhancedTrackingProtectionMenuVM(
+            url: url,
+            displayTitle: displayTitle,
+            connectionSecure: connectionSecure,
+            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+            contentBlockerStatus: contentBlockerStatus)
+
         self.enhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
         self.profile = profile
         self.tabManager = tabManager
@@ -29,5 +40,9 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
     }
 
     func start() {
+    }
+
+    func didFinish() {
+        parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
     }
 }

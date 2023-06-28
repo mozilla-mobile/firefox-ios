@@ -336,10 +336,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        if let urlString = viewModel.tab?.url?.absoluteString {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: urlString,
-                                                     faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
-        }
+        favicon.setFavicon(FaviconImageViewModel(siteURLString: viewModel.url.absoluteString,
+                                                 faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
 
         siteDomainLabel.text = viewModel.websiteTitle
         connectionLabel.text = viewModel.connectionStatusString

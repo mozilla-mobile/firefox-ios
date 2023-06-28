@@ -292,13 +292,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     private func showETPMenu() {
         let navigationController = DismissableNavigationViewController()
         navigationController.modalPresentationStyle = .formSheet
-        let enhancedTrackingProtectionRouter = DefaultRouter(navigationController: navigationController)
-        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: enhancedTrackingProtectionRouter)
+        let etpRouter = DefaultRouter(navigationController: navigationController)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: etpRouter)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start()
 
-        enhancedTrackingProtectionRouter.present(navigationController) { [weak self] in
+        router.present(navigationController) { [weak self] in
             self?.didFinishEnhancedTrackingProtection(from: enhancedTrackingProtectionCoordinator)
         }
     }
