@@ -197,5 +197,3 @@ extension CreditCardTableViewController: UITableViewDelegate,
         return hostingCell
     }
 }
-
-
