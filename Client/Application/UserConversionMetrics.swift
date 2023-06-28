@@ -76,7 +76,7 @@ class UserConversionMetrics {
 
     private func sendActivationEvent() {
         let logger: Logger = DefaultLogger.shared
-        let conversionValue = ConversionValueUtil(fineValue: 1, coarseValue: .low, logger: logger)
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .high, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
         userDefaults.set(true, forKey: PrefsKeys.Session.didUpdateConversionValue)
     }
