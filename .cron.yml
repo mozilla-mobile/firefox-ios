@@ -15,4 +15,5 @@ jobs:
           type: decision-task
           target-tasks-method: tab_performance_test
           treeherder-symbol: tab-performance-test
-      when: [{weekday: 'Sunday', hour: 22, minute: 0}]
+      when: 
+        - {hour: 22, minute: 0}

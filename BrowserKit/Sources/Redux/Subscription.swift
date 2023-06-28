@@ -39,7 +39,21 @@ public class Subscription<State> {
 
     init() {}
 
+    public init(sink: @escaping (@escaping (State?, State) -> Void) -> Void) {
+        sink { old, new in
+            self.newValues(oldState: old, newState: new)
+        }
+    }
+
     func newValues(oldState: State?, newState: State) {
         self.observer?(oldState, newState)
+    }
+
+    public func select<Substate>(_ selector: @escaping (State) -> Substate) -> Subscription<Substate> {
+        return Subscription<Substate> { sink in
+            self.observer = { oldState, newState in
+                sink(oldState.map(selector) ?? nil, selector(newState))
+            }
+        }
     }
 }

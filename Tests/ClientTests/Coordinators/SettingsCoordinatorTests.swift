@@ -215,6 +215,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
     }
 
+    func testHandleRouteCalled_whenPasswordRouteIsSet() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.start(with: .password)
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
     // MARK: - SettingsFlowDelegate
     func testShowDevicePasscode_showDevicePasscodeVC() {
         let subject = createSubject()
@@ -232,6 +242,33 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is CreditCardSettingsViewController)
+    }
+
+    func testShowExperimentSettings_showsExperimentVC() {
+        let subject = createSubject()
+
+        subject.showExperiments()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ExperimentsViewController)
+    }
+
+    func testPasswordSettings_showsPasswordListVC() {
+        let subject = createSubject()
+
+        subject.showPasswordList()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
+    }
+
+    func testPasswordSettings_showsPasswordOnboardingVC() {
+        let subject = createSubject()
+
+        subject.showPasswordOnboarding()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is LoginOnboardingViewController)
     }
 
     func testDidFinishShowingSettings_callsDidFinish() {
@@ -258,6 +295,80 @@ final class SettingsCoordinatorTests: XCTestCase {
         let result = subject.handle(route: .homepanel(section: .downloads))
 
         XCTAssertFalse(result)
+    }
+
+    // MARK: - GeneralSettingsDelegate
+
+    func testGeneralSettingsDelegate_pushedHome() {
+        let subject = createSubject()
+
+        subject.pressedHome()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is HomePageSettingViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedMailApp() {
+        let subject = createSubject()
+
+        subject.pressedMailApp()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is OpenWithSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedNewTab() {
+        let subject = createSubject()
+
+        subject.pressedNewTab()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is NewTabContentSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedSearchEngine() {
+        let subject = createSubject()
+
+        subject.pressedSearchEngine()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchSettingsTableViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedSiri() {
+        let subject = createSubject()
+
+        subject.pressedSiri()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SiriSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedToolbar() {
+        let subject = createSubject()
+
+        subject.pressedToolbar()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchBarSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedTabs() {
+        let subject = createSubject()
+
+        subject.pressedTabs()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedTheme() {
+        let subject = createSubject()
+
+        subject.pressedTheme()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
     }
 
     // MARK: - Helper

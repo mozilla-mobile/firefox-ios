@@ -82,6 +82,7 @@ enum Route: Equatable {
         case contentBlocker
         case clearPrivateData = "clear-private-data"
         case creditCard
+        case password
         case fxa
         case general
         case homePage = "homepage"
@@ -119,7 +120,7 @@ enum Route: Equatable {
                 return .newTab
             case .search:
                 return .search
-            case .clearPrivateData, .general, .theme:
+            case .clearPrivateData, .general, .theme, .password:
                 return nil // not handling those since not needed to temporary fix #14954
             }
         }

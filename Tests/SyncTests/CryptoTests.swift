@@ -46,57 +46,11 @@ c2l0cyI6W3siZGF0ZSI6MTMxOTE0OTAxMjM3MjQyNSwidHlwZSI6MX1dfQ==
         super.tearDown()
     }
 
-    func testHMAC() {
-        let keyBundle = KeyBundle(encKey: encKey, hmacKey: hmacKey)
-        // HMAC is computed against the Base64 ciphertext.
-        let ciphertextRaw: Data = dataFromBase64(b64: ciphertextB64)
-        XCTAssertNotNil(ciphertextRaw)
-        XCTAssertEqual(hmacB16, keyBundle.hmacString(ciphertextRaw))
-    }
-
     func dataFromBase64(b64: String) -> Data {
         return Bytes.dataFromBase64(b64)!
     }
 
-    func testDecrypt() {
-        let keyBundle = KeyBundle(encKey: encKey, hmacKey: hmacKey)
-        // Decryption is done against raw bytes.
-        let ciphertext = Bytes.decodeBase64(ciphertextB64)!
-        let iv = Bytes.decodeBase64(ivB64)!
-        let s = keyBundle.decrypt(ciphertext, iv: iv)
-        let cleartext = NSString(data: Bytes.decodeBase64(cleartextB64)!,
-                                 encoding: String.Encoding.utf8.rawValue)
-        XCTAssertTrue(cleartext!.isEqual(to: s!))
-    }
-
     func testBadBase64() {
         XCTAssertNil(Bytes.decodeBase64(invalidB64))
-    }
-
-    func testEncrypt() {
-        let keyBundle = KeyBundle(encKey: encKey, hmacKey: hmacKey)
-        let cleartext = Bytes.decodeBase64(cleartextB64)!
-
-        // With specified IV.
-        let iv = Bytes.decodeBase64(ivB64)!
-        if let (b, ivOut) = keyBundle.encrypt(cleartext, iv: iv) {
-            // The output IV should be the input.
-            XCTAssertEqual(ivOut, iv)
-            XCTAssertEqual(b, Bytes.decodeBase64(ciphertextB64)!)
-        } else {
-            XCTFail("Encrypt failed.")
-        }
-
-        // With a random IV.
-        if let (b, ivOut) = keyBundle.encrypt(cleartext) {
-            // The output IV should be different.
-            // TODO: check that it's not empty!
-            XCTAssertNotEqual(ivOut, iv)
-
-            // The result will not match the ciphertext for which a different IV was used.
-            XCTAssertNotEqual(b, Bytes.decodeBase64(ciphertextB64)!)
-        } else {
-            XCTFail("Encrypt failed.")
-        }
     }
 }

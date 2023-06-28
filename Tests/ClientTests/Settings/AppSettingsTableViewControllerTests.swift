@@ -82,6 +82,15 @@ class AppSettingsTableViewControllerTests: XCTestCase {
                        URL(string: "fennec://deep-link?url=/action/show-intro-onboarding")!)
     }
 
+    func testShowExperiments_openExperiments() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.pressedExperiments()
+
+        XCTAssertEqual(delegate.showExperimentsCalled, 1)
+    }
+
     // MARK: - Helper
     private func createSubject() -> AppSettingsTableViewController {
         let subject = AppSettingsTableViewController(with: profile,
@@ -90,24 +99,5 @@ class AppSettingsTableViewControllerTests: XCTestCase {
                                                      applicationHelper: applicationHelper)
         trackForMemoryLeaks(subject)
         return subject
-    }
-}
-
-// MARK: - MockSettingsFlowDelegate
-class MockSettingsFlowDelegate: SettingsFlowDelegate {
-    var showDevicePassCodeCalled = 0
-    var showCreditCardSettingsCalled = 0
-    var didFinishShowingSettingsCalled = 0
-
-    func showDevicePassCode() {
-        showDevicePassCodeCalled += 1
-    }
-
-    func showCreditCardSettings() {
-        showCreditCardSettingsCalled += 1
-    }
-
-    func didFinishShowingSettings() {
-        didFinishShowingSettingsCalled += 1
     }
 }

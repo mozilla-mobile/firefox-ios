@@ -15,9 +15,7 @@ protocol PocketDelegate: AnyObject {
 
 class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     var notificationCenter: NotificationProtocol
-
     private let pocketAPI: PocketStoriesProviding
-    private let pocketSponsoredAPI: PocketSponsoredStoriesProviding
     private let storyProvider: StoryProvider
     private var pocketStories = [PocketStory]()
 
@@ -27,14 +25,11 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     private var dataCompletion: (() -> Void)?
 
     init(pocketAPI: PocketStoriesProviding,
-         pocketSponsoredAPI: PocketSponsoredStoriesProviding,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          dataCompletion: (() -> Void)? = nil) {
         self.pocketAPI = pocketAPI
-        self.pocketSponsoredAPI = pocketSponsoredAPI
         self.notificationCenter = notificationCenter
-        self.storyProvider = StoryProvider(pocketAPI: pocketAPI,
-                                           pocketSponsoredAPI: pocketSponsoredAPI)
+        self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
         self.dataCompletion = dataCompletion
 
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])

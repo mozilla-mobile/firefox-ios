@@ -5,11 +5,16 @@
 import Foundation
 
 class HomeSetting: Setting {
-    let profile: Profile
+    private weak var settingsDelegate: GeneralSettingsDelegate?
+    private let profile: Profile
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
-    override var accessibilityIdentifier: String? { return "Home" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Homepage.homeSettings
+    }
 
     override var status: NSAttributedString {
         return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).settingTitle)
@@ -17,15 +22,21 @@ class HomeSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .SettingsHomePageSectionName,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = HomePageSettingViewController(prefs: profile.prefs)
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedHome()
+        } else {
+            let viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }

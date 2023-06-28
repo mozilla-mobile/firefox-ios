@@ -28,7 +28,7 @@ class DependencyHelperMock {
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)
 
-        let themeManager: ThemeManager = DefaultThemeManager()
+        let themeManager: ThemeManager = MockThemeManager()
         AppContainer.shared.register(service: themeManager)
 
         let ratingPromptManager = RatingPromptManager(profile: profile)

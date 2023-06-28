@@ -750,14 +750,12 @@ class WithoutAccountSetting: AccountSetting {
 @objc
 protocol SettingsDelegate: AnyObject {
     func settingsOpenURLInNewTab(_ url: URL)
+    func goToPasswordManager()
     func didFinish()
 }
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController {
-    typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
-
-    fileprivate let Identifier = "CellIdentifier"
     var settings = [SettingSection]()
 
     weak var settingsDelegate: SettingsDelegate?

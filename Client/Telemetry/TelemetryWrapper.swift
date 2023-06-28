@@ -243,6 +243,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         // If the setting exists at the key location, use that value. Otherwise record the default
         // value for that preference to ensure it makes it into the metrics ping.
         let prefs = profile.prefs
+        // FxA Account Login status
+        GleanMetrics.Preferences.fxaLoggedIn.set(profile.hasSyncableAccount())
         // Record New Tab setting
         if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
             GleanMetrics.Preferences.newTabExperience.set(newTabChoice)
@@ -473,6 +475,9 @@ extension TelemetryWrapper {
         case signIntoSync = "sign-into-sync"
         case syncTab = "sync-tab"
         case syncSignIn = "sync-sign-in"
+        case syncSignInUseEmail = "sync-sign-in-use-email"
+        case syncSignInScanQRCode = "sync-sign-in-scan-qr-code"
+        case syncUserLoggedOut = "sync-user-logged-out"
         case syncCreateAccount = "sync-create-account"
         case libraryPanel = "library-panel"
         case navigateToGroupHistory = "navigate-to-group-history"
@@ -1030,6 +1035,12 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
             GleanMetrics.Sync.loginTokenView.record()
+        case (.firefoxAccount, .tap, .syncSignInUseEmail, _, _):
+            GleanMetrics.Sync.useEmail.record()
+        case (.firefoxAccount, .tap, .syncSignInScanQRCode, _, _):
+            GleanMetrics.Sync.paired.record()
+        case (.firefoxAccount, .tap, .syncUserLoggedOut, _, _):
+            GleanMetrics.Sync.disconnect.record()
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()

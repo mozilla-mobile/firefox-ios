@@ -157,7 +157,7 @@ class SiteTableViewController: UIViewController,
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
         setNeedsStatusBarAppearanceUpdate()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.reloadData()
     }

@@ -79,6 +79,7 @@ struct CreditCardItemRow: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
         }
+        .background(backgroundColor)
         .onAppear {
             applyTheme(theme: themeVal.theme)
         }

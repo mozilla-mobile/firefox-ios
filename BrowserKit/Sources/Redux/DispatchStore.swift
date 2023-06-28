@@ -16,7 +16,6 @@ public protocol DefaultDispatchStore: DispatchStore {
     associatedtype ActionCreator = (_ state: State, _ store: DefaultDispatchStore) -> Action?
 
     var state: State { get }
-    var dispatchFunction: DispatchFunction { get }
 
     func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
     func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State

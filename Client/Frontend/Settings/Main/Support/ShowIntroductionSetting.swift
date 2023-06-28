@@ -6,14 +6,15 @@ import Foundation
 
 /// Opens the on-boarding screen again
 class ShowIntroductionSetting: Setting {
-    weak var appSettingsDelegate: AppSettingsDelegate?
+    private weak var settingsDelegate: DebugSettingsDelegate?
 
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.ShowIntroduction.title
     }
 
-    init(settings: SettingsTableViewController, appSettingsDelegate: AppSettingsDelegate?) {
-        self.appSettingsDelegate = appSettingsDelegate
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
         let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
         super.init(title: NSAttributedString(string: .AppSettingsShowTour,
                                              attributes: attributes))
@@ -27,7 +28,7 @@ class ShowIntroductionSetting: Setting {
         )
 
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            appSettingsDelegate?.pressedShowTour()
+            settingsDelegate?.pressedShowTour()
         } else {
             navigationController?.dismiss(animated: true) {
                 NotificationCenter.default.post(name: .PresentIntroView, object: self)

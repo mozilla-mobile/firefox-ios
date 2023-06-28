@@ -32,10 +32,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
     }
 
-    var isPocketSponsoredStoriesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
-    }
-
     var isHistoryHighlightsSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
@@ -119,21 +115,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     private func customizeFirefoxSettingSection() -> SettingSection {
         // Setup
         var sectionItems = [Setting]()
-
-        let pocketSponsoredSetting = BoolSetting(
-            with: .sponsoredPocket,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories),
-            statusText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle))
-        // This sets whether the cell is enabled or not, and not the setting itself.
-        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
-            .pocket,
-            checking: .buildAndUser)
-
         let pocketSetting = BoolSetting(
             with: .pocket,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Pocket)) { [weak self] in
-                // Disable sponsored option if pocket stories are disabled
-                pocketSponsoredSetting.enabled = $0
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Pocket)) { [weak self] _ in
                 self?.tableView.reloadData()
             }
 
@@ -164,11 +148,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         if isPocketSectionEnabled {
             sectionItems.append(pocketSetting)
-
-            // Only show the sponsored stories setting if the Pocket setting is showing
-            if isPocketSponsoredStoriesEnabled {
-                sectionItems.append(pocketSponsoredSetting)
-            }
         }
 
         if isWallpaperSectionEnabled {

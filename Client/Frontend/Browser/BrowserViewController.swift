@@ -56,7 +56,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
-
+    var appAuthenticator: AppAuthenticationProtocol?
     var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
@@ -176,7 +176,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -186,7 +187,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
-
+        self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -1859,7 +1860,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
                 guard let tabWebView = tab.webView as? TabWebView,
                       let type = type,
                       userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1884,11 +1885,38 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 tabWebView.accessoryView.savedCardsClosure = {
                     DispatchQueue.main.async { [weak self] in
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
+                        // Dismiss keyboard
+                        webView.resignFirstResponder()
+                        // Authenticate and show bottom sheet with select a card flow
+                        self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
+                                                                      frame: frame)
                     }
                 }
+            }
+        }
+    }
+
+    private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
+                                                         frame: WKFrameInfo? = nil) {
+        guard let appAuthenticator else {
+            return
+        }
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                // Note: Since we are injecting card info, we pass on the frame
+                // for special iframe cases
+                self.showBottomSheetCardViewController(creditCard: nil,
+                                                       decryptedCard: nil,
+                                                       viewType: .selectSavedCard,
+                                                       frame: frame)
+            case .deviceOwnerFailed:
+                break // Keep showing bvc
+            case .passCodeRequired:
+                let passcodeViewController = DevicePasscodeRequiredViewController()
+                passcodeViewController.profile = self.profile
+                self.navigationController?.pushViewController(passcodeViewController,
+                                                              animated: true)
             }
         }
     }
@@ -1991,6 +2019,11 @@ extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.openURLInNewTab(url, isPrivate: isPrivate)
+    }
+
+    func goToPasswordManager() {
+        // Does nothing since this is used by Coordinators
+        // BVC will stop being a SettingsDelegate after FXIOS-6529
     }
 
     func didFinish() {
@@ -2622,12 +2655,12 @@ extension BrowserViewController {
 
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
-                                                  viewType state: CreditCardBottomSheetState) {
+                                                  viewType state: CreditCardBottomSheetState,
+                                                  frame: WKFrameInfo? = nil) {
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-
         let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
         viewController.didTapYesClosure = { error in
             if let error = error {
@@ -2658,7 +2691,8 @@ extension BrowserViewController {
             }
             CreditCardHelper.injectCardInfo(logger: self.logger,
                                             card: plainTextCard,
-                                            tab: currentTab) { error in
+                                            tab: currentTab,
+                                            frame: frame) { error in
                 guard let error = error else {
                     return
                 }
