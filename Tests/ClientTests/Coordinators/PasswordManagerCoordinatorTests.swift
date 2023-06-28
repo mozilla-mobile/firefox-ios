@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Storage
 @testable import Client
 
 final class PasswordManagerCoordinatorTests: XCTestCase {
@@ -10,12 +11,69 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
         super.tearDown()
         self.mockRouter = nil
+        DependencyHelperMock().reset()
+    }
+
+    func testStart_withShowOnboarding() {
+        let subject = createSubject()
+
+        subject.start(with: true)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerOnboardingViewController)
+    }
+
+    func testStart_withDontShowOnboarding() {
+        let subject = createSubject()
+
+        subject.start(with: false)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
+    }
+
+    func testShowPasswordManager() {
+        let subject = createSubject()
+
+        subject.showPasswordManager()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
+    }
+
+    func testShowPasswordOnboarding() {
+        let subject = createSubject()
+
+        subject.showPasswordOnboarding()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerOnboardingViewController)
+    }
+
+    func testPressedPasswordDetail() {
+        let subject = createSubject()
+
+        let mockLoginRecord = LoginRecord(
+            credentials: URLCredential(user: "", password: "", persistence: .none),
+            protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+        )
+        let mockModel = PasswordDetailViewControllerModel(
+            profile: MockProfile(),
+            login: mockLoginRecord,
+            webpageNavigationHandler: nil,
+            breachRecord: nil
+        )
+        subject.pressedPasswordDetail(model: mockModel)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordDetailViewController)
     }
 
     // MARK: - Helper

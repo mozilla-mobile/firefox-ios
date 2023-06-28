@@ -31,6 +31,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     private weak var passwordField: UITextField?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
+    weak var coordinator: PasswordManagerFlowDelegate?
 
     private var viewModel: PasswordDetailViewControllerModel
 
@@ -302,7 +303,12 @@ extension PasswordDetailViewController {
 
     @objc
     func didTapBreachLearnMore() {
-        viewModel.webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
+        guard let url = BreachAlertsManager.monitorAboutUrl else { return }
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
+        viewModel.webpageNavigationHandler?(url)
     }
 
     @objc
@@ -311,7 +317,12 @@ extension PasswordDetailViewController {
         var urlComponents = URLComponents()
         urlComponents.host = domain
         urlComponents.scheme = "https"
-        viewModel.webpageNavigationHandler?(urlComponents.url)
+        guard let url = urlComponents.url else { return }
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
+        viewModel.webpageNavigationHandler?(url)
     }
 
     func deleteLogin() {
@@ -414,6 +425,11 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
         guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
+
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
 
         navigationController?.dismiss(animated: true, completion: {
             self.settingsDelegate?.settingsOpenURLInNewTab(url)

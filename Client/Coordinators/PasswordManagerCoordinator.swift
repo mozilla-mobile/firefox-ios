@@ -5,16 +5,23 @@
 import Foundation
 import Storage
 
+protocol PasswordManagerCoordinatorDelegate: AnyObject {
+    func settingsOpenURLInNewTab(_ url: URL)
+    func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator)
+}
+
 protocol PasswordManagerFlowDelegate: AnyObject {
     func continueFromOnboarding()
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel)
     func pressedAddPassword(completion: @escaping (LoginEntry) -> Void)
+    func openURL(url: URL)
 }
 
-class PasswordManagerCoordinator: BaseCoordinator, PasswordManagerFlowDelegate {
+class PasswordManagerCoordinator: BaseCoordinator,
+                                  PasswordManagerFlowDelegate {
     let profile: Profile
     weak var passwordManager: PasswordManagerListViewController?
-    weak var settingsDelegate: SettingsDelegate?
+    weak var parentCoordinator: PasswordManagerCoordinatorDelegate?
 
     init(router: Router, profile: Profile) {
         self.profile = profile
@@ -30,12 +37,6 @@ class PasswordManagerCoordinator: BaseCoordinator, PasswordManagerFlowDelegate {
     }
 
     func showPasswordManager() {
-//        let navigationHandler: (_ url: URL?) -> Void = { [weak self] url in
-////            guard let url = url else { return }
-////            self?.settingsOpenURLInNewTab(url)
-////            self?.didFinish()
-//        }
-//
         let viewController = PasswordManagerListViewController(profile: profile)
         viewController.coordinator = self
         router.push(viewController)
@@ -48,8 +49,6 @@ class PasswordManagerCoordinator: BaseCoordinator, PasswordManagerFlowDelegate {
         router.push(viewController)
     }
 
-    func finishPasswordManagerFlow() {}
-
     // MARK: - PasswordManagerFlowDelegate
 
     func continueFromOnboarding() {
@@ -58,7 +57,7 @@ class PasswordManagerCoordinator: BaseCoordinator, PasswordManagerFlowDelegate {
 
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
         let viewController = PasswordDetailViewController(viewModel: model)
-        viewController.settingsDelegate = settingsDelegate
+        viewController.coordinator = self
         router.push(viewController)
     }
 
@@ -67,5 +66,10 @@ class PasswordManagerCoordinator: BaseCoordinator, PasswordManagerFlowDelegate {
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .formSheet
         passwordManager?.present(navigationController, animated: true)
+    }
+
+    func openURL(url: URL) {
+        parentCoordinator?.settingsOpenURLInNewTab(url)
+        parentCoordinator?.didFinishPasswordManager(from: self)
     }
 }

@@ -11,8 +11,13 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate, GeneralSettingsDelegate,
-                           PrivacySettingsDelegate, AccountSettingsDelegate {
+class SettingsCoordinator: BaseCoordinator,
+                           SettingsDelegate,
+                           SettingsFlowDelegate,
+                           GeneralSettingsDelegate,
+                           PrivacySettingsDelegate,
+                           PasswordManagerCoordinatorDelegate,
+                           AccountSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -167,6 +172,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
             profile: profile
         )
         add(child: passwordCoordinator)
+        passwordCoordinator.parentCoordinator = self
         passwordCoordinator.start(with: shouldShowOnboarding)
     }
 
@@ -285,5 +291,12 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
                                                                 parentType: .settings,
                                                                 deepLinkParams: fxaParams)
         router.push(viewController)
+    }
+
+    // MARK: - PasswordManagerCoordinatorDelegate
+
+    func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
+        didFinish()
+        remove(child: coordinator)
     }
 }
