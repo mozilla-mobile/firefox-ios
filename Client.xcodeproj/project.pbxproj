@@ -442,6 +442,7 @@
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */; };
+		5AE371822A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */; };
 		5AEF388E299BD74300537C1B /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */; };
 		5AF6254528A57B6700A90253 /* MockHistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */; };
@@ -4156,6 +4157,7 @@
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabSessionStore.swift; sourceTree = "<group>"; };
+		5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinatorDelegateMock.swift; sourceTree = "<group>"; };
 		5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptorTests.swift; sourceTree = "<group>"; };
 		5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsManager.swift; sourceTree = "<group>"; };
 		5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
@@ -7747,6 +7749,14 @@
 			path = Legacy;
 			sourceTree = "<group>";
 		};
+		5AE371802A4DD0CE0092A760 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		5AF6254128A5799D00A90253 /* HistoryHighlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -8121,6 +8131,7 @@
 		8A93F86329D37314004159D9 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				5AE371802A4DD0CE0092A760 /* Mocks */,
 				8AFCE50329DDCD3F00B1B253 /* LaunchView */,
 				8AF10D8829D713E70086351D /* Launch */,
 				8A93F86429D37331004159D9 /* DefaultRouterTests.swift */,
@@ -12437,6 +12448,7 @@
 				4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */,
 				8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
+				5AE371822A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */,

@@ -8,16 +8,19 @@ import Storage
 
 final class PasswordManagerCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var mockParentCoordinator: PasswordManagerCoordinatorDelegateMock!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        self.mockParentCoordinator = PasswordManagerCoordinatorDelegateMock()
     }
 
     override func tearDown() {
         super.tearDown()
         self.mockRouter = nil
+        self.mockParentCoordinator = nil
         DependencyHelperMock().reset()
     }
 
@@ -34,6 +37,15 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.start(with: false)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
+    }
+
+    func testContinueFromOnboarding() {
+        let subject = createSubject()
+
+        subject.continueFromOnboarding()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
@@ -76,9 +88,20 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is PasswordDetailViewController)
     }
 
+    func testOpenURL() {
+        let subject = createSubject()
+
+        subject.openURL(url: URL(string: "https://firefox.com")!)
+
+        XCTAssertEqual(mockParentCoordinator.url?.absoluteString, "https://firefox.com")
+        XCTAssertEqual(mockParentCoordinator.settingsOpenURLInNewTabCalled, 1)
+        XCTAssertEqual(mockParentCoordinator.didFinishPasswordManagerCalled, 1)
+    }
+
     // MARK: - Helper
     func createSubject() -> PasswordManagerCoordinator {
         let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile())
+        subject.parentCoordinator = mockParentCoordinator
         trackForMemoryLeaks(subject)
         return subject
     }
