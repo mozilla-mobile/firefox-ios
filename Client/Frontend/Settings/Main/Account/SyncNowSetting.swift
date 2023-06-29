@@ -7,25 +7,40 @@ import Foundation
 import Shared
 
 class SyncNowSetting: WithAccountSetting {
-    let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
-    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
-    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
+    private weak var settingsDelegate: AccountSettingsDelegate?
+    private var notificationCenter: NotificationProtocol
+
+    private let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
+    private let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    private let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
-    let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+    private let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
 
-    override init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: AccountSettingsDelegate?,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.settingsDelegate = settingsDelegate
+        self.notificationCenter = notificationCenter
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
+
+        notificationCenter.addObserver(self,
+                                       selector: #selector(stopRotateSyncIcon),
+                                       name: .ProfileDidFinishSyncing,
+                                       object: nil)
     }
 
-    fileprivate lazy var timestampFormatter: DateFormatter = {
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
+    private lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }()
 
-    fileprivate var syncNowTitle: NSAttributedString {
+    private var syncNowTitle: NSAttributedString {
         if !DeviceInfo.hasConnectivity() {
             return NSAttributedString(
                 string: .FxANoInternetConnection,
@@ -134,7 +149,7 @@ class SyncNowSetting: WithAccountSetting {
         // swiftlint:enable unused_setter_value
     }
 
-    fileprivate lazy var troubleshootButton: UIButton = {
+    private lazy var troubleshootButton: UIButton = {
         let troubleshootButton = UIButton(type: .roundedRect)
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
@@ -144,22 +159,27 @@ class SyncNowSetting: WithAccountSetting {
         return troubleshootButton
     }()
 
-    fileprivate lazy var warningIcon: UIImageView = {
+    private lazy var warningIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "AmberCaution"))
         imageView.sizeToFit()
         return imageView
     }()
 
-    fileprivate lazy var errorIcon: UIImageView = {
+    private lazy var errorIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "RedCaution"))
         imageView.sizeToFit()
         return imageView
     }()
 
-    fileprivate let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
+    private let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
 
     @objc
-    fileprivate func troubleshoot() {
+    private func troubleshoot() {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToOpen(url: syncSUMOURL, withTitle: title)
+            return
+        }
+
         let viewController = SettingsContentViewController()
         viewController.url = syncSUMOURL
         settings.navigationController?.pushViewController(viewController, animated: true)
@@ -228,7 +248,7 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    fileprivate func addIcon(_ image: UIImageView, toCell cell: UITableViewCell) {
+    private func addIcon(_ image: UIImageView, toCell cell: UITableViewCell) {
         cell.contentView.addSubview(image)
 
         cell.textLabel?.snp.updateConstraints { make in
@@ -248,7 +268,6 @@ class SyncNowSetting: WithAccountSetting {
             return
         }
 
-        NotificationCenter.default.post(name: .UserInitiatedSyncManually, object: nil)
         profile.syncManager.syncEverything(why: .user)
         profile.pollCommands(forcePoll: true)
     }

@@ -7,6 +7,8 @@ import Shared
 
 // Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
+    private weak var settingsDelegate: AccountSettingsDelegate?
+
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
@@ -16,12 +18,25 @@ class ConnectSetting: WithoutAccountSetting {
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
-    override var accessibilityIdentifier: String? { return "SignInToSync" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.ConnectSetting.title
+    }
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: AccountSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedConnectSetting()
+            return
+        }
+
         let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
