@@ -194,10 +194,14 @@ class TabsPerformanceTest: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // activity measurement here
-            navigator.goto(LibraryPanel_Bookmarks)
-            let loaded = NSPredicate(format: "count == 1001")
-            expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-            waitForExpectations(timeout: 60, handler: nil)
+                navigator.goto(LibraryPanel_Bookmarks)
+                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
+                let number_cells = app.tables["Bookmarks List"].cells.count
+                // debug line - remove
+                print("Number cells \(number_cells)")
+                let loaded = NSPredicate(format: "count == 1001")
+                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+                waitForExpectations(timeout: 60, handler: nil)
         }
     }
 }
