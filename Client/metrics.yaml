@@ -3767,3 +3767,117 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  form_detected:
+    type: event
+    description: |
+      Recorded when the user taps on credit card form input
+      and we detect it.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  autofilled:
+    type: event
+    description: |
+      Recorded when a user taps a card from bottom sheet
+      select a card flow and the credit card does not
+      get autofilled on the webpage page
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  autofill_failed:
+    type: event
+    description: |
+      Recorded when a user taps a card from bottom sheet
+      select a card flow and the credit card does not
+      get autofilled on the webpage page
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  save_prompt_create:
+    type: event
+    description: |
+      Recorded when a user saved a credit card using
+      the autofill save prompt.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  autofill_toggle:
+    type: event
+    description: |
+      Recorded when a user toggles to enable save and autofill
+      cards in autofill settings
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  sync_toggle:
+    type: event
+    description: |
+      Recorded when a user toggles to enable save and autofill
+      cards in sync settings
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  autofill_enabled:
+    type: boolean
+    description: |
+      Recorded on startup to check if credit card
+      autofill settings are enabled
+    lifetime: application
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"
+  sync_enabled:
+    type: boolean
+    description: |
+      Recorded on startup to check if credit card
+      sync settings are enabled
+    lifetime: application
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-31"

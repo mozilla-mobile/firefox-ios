@@ -30,6 +30,7 @@ public protocol SyncManager {
     func endTimedSyncs()
     func applicationDidBecomeActive()
     func applicationDidEnterBackground()
+    func checkCreditCardEngineEnablement() -> Bool
 
     @discardableResult
     func onRemovedAccount() -> Success
