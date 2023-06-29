@@ -14,7 +14,11 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 class SettingsCoordinator: BaseCoordinator,
                            SettingsDelegate,
                            SettingsFlowDelegate,
-                           PasswordManagerCoordinatorDelegate {
+                           GeneralSettingsDelegate,
+                           PrivacySettingsDelegate,
+                           PasswordManagerCoordinatorDelegate,
+                           AccountSettingsDelegate,
+                           AboutSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -302,5 +306,25 @@ class SettingsCoordinator: BaseCoordinator,
     func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
         didFinish()
         remove(child: coordinator)
+    }
+
+    // MARK: - AboutSettingsDelegate
+
+    func pressedRateApp() {
+        RatingPromptManager.goToAppStoreReview()
+    }
+
+    func pressedLicense(url: URL, title: NSAttributedString) {
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
+    }
+
+    func pressedYourRights(url: URL, title: NSAttributedString) {
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
     }
 }

@@ -11,7 +11,17 @@ class AppStoreReviewSetting: Setting {
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
+    weak var settingsDelegate: AboutSettingsDelegate?
+
+    init(settingsDelegate: AboutSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedRateApp()
+            return
+        }
         RatingPromptManager.goToAppStoreReview()
     }
 }
