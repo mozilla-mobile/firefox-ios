@@ -149,6 +149,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         let prefName = "sync.engine.\(engineName).enabledStateChanged"
         return { [unowned self] enabled in
             // Credit card sync telemetry
+            // Refactor: FXIOS-6851
             if engineName == "creditcards" {
                 self.creditCardSyncEnabledTelemetry(status: enabled)
             }

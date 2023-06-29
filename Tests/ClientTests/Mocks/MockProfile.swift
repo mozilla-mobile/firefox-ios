@@ -48,6 +48,10 @@ open class MockSyncManager: ClientSyncManager {
     open func onRemovedAccount() -> Success {
         return succeed()
     }
+    open func checkCreditCardEngineEnablement() -> Bool {
+        // Refactor: FXIOS-6852
+        return true
+    }
 }
 
 open class MockTabQueue: TabQueue {

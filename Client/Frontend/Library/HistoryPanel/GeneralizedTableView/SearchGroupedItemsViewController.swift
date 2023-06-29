@@ -130,7 +130,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderWidth = 0.5
                 cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
-                cell.applyTheme(theme: themeManager.currentTheme)
+                cell.applyTheme(theme: self.themeManager.currentTheme)
 
                 return cell
             }
