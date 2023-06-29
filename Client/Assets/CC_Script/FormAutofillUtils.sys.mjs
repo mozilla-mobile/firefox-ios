@@ -388,25 +388,6 @@ FormAutofillUtils = {
   },
 
   /**
-   * Compares two addresses, removing internal whitespace
-   *
-   * @param {string} a The first address to compare
-   * @param {string} b The second address to compare
-   * @param {Array} collators Search collators that will be used for comparison
-   * @param {string} [delimiter="\n"] The separator that is used between lines in the address
-   * @returns {boolean} True if the addresses are equal, false otherwise
-   */
-  compareStreetAddress(a, b, collators, delimiter = "\n") {
-    let oneLineA = this._toStreetAddressParts(a, delimiter)
-      .map(p => p.replace(/\s/g, ""))
-      .join("");
-    let oneLineB = this._toStreetAddressParts(b, delimiter)
-      .map(p => p.replace(/\s/g, ""))
-      .join("");
-    return this.strCompare(oneLineA, oneLineB, collators);
-  },
-
-  /**
    * In-place concatenate tel-related components into a single "tel" field and
    * delete unnecessary fields.
    *
