@@ -1475,13 +1475,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  workflow: perfherder-test
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v116
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  workflow: perfherder-test
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
