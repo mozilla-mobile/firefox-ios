@@ -56,9 +56,7 @@ export class FormAutofillChild {
   }
 
   fillFormFields(payload) {
-    this.fieldDetailsManager.activeHandler.autofillFormFields(
-      JSON.parse(payload)
-    );
+    this.fieldDetailsManager.activeHandler.autofillFormFields(payload);
   }
 }
 
