@@ -476,27 +476,6 @@ extension PasswordManagerListViewController: KeyboardHelperDelegate {
     }
 }
 
-// MARK: - SearchInputViewDelegate
-extension PasswordManagerListViewController: SearchInputViewDelegate {
-    func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
-        loadLogins(text)
-    }
-
-    func searchInputViewBeganEditing(_ searchView: SearchInputView) {
-        // Trigger a cancel for editing
-        cancelSelection()
-
-        // Hide the edit button while we're searching
-        navigationItem.rightBarButtonItem = nil
-        loadLogins()
-    }
-
-    func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
-        setupDefaultNavButtons()
-        loadLogins()
-    }
-}
-
 // MARK: - LoginViewModelDelegate
 extension PasswordManagerListViewController: LoginViewModelDelegate {
     func breachPathDidUpdate() {
