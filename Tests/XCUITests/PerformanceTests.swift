@@ -142,16 +142,15 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfHistory100startUp() {
         waitForTabsButton()
-        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-            // activity measurement here
-            app.launch()
-            waitForTabsButton()
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
         }
     }
 
@@ -179,9 +178,9 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-            // activity measurement here
-            app.launch()
-            waitForTabsButton()
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
         }
     }
 
@@ -193,12 +192,9 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-            // activity measurement here
+                // activity measurement here
                 navigator.goto(LibraryPanel_Bookmarks)
                 waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
-                let number_cells = app.tables["Bookmarks List"].cells.count
-                // debug line - remove
-                print("Number cells \(number_cells)")
                 let loaded = NSPredicate(format: "count == 1001")
                 expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
                 waitForExpectations(timeout: 60, handler: nil)
