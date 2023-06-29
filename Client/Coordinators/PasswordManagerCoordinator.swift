@@ -20,7 +20,7 @@ protocol PasswordManagerFlowDelegate: AnyObject {
 class PasswordManagerCoordinator: BaseCoordinator,
                                   PasswordManagerFlowDelegate {
     let profile: Profile
-    weak var passwordManager: PasswordManagerListViewController?
+    private weak var passwordManager: PasswordManagerListViewController?
     weak var parentCoordinator: PasswordManagerCoordinatorDelegate?
 
     init(router: Router, profile: Profile) {

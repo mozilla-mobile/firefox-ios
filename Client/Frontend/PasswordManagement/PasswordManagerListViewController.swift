@@ -170,9 +170,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         super.viewDidAppear(animated)
 
         guard settingsDelegate != nil else {
-            if CoordinatorFlagManager.isCoordinatorEnabled {
-                settingsDelegate = sceneForVC?.coordinatorBrowserViewController
-            } else {
+            if !CoordinatorFlagManager.isCoordinatorEnabled {
                 settingsDelegate = sceneForVC?.browserViewController
             }
 

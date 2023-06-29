@@ -13,6 +13,7 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         let mockProfile = MockProfile()
         let searchController = UISearchController()
         self.viewModel = PasswordManagerViewModel(
@@ -27,6 +28,7 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        DependencyHelperMock().reset()
         viewModel = nil
         dataSource = nil
     }

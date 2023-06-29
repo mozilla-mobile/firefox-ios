@@ -8,11 +8,13 @@ import XCTest
 class PocketSponsoredStoriesProviderTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         clearState()
     }
 
     override func tearDown() {
         super.tearDown()
+        DependencyHelperMock().reset()
         clearState()
     }
 
