@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TabsPerformanceTest: BaseTestCase {
+class PerformanceTests: BaseTestCase {
     let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive",
                     "testPerfTabs_3_20tabTray": "tabsState20.archive",
                     "testPerfTabs_2_1280startup": "tabsState1280.archive",
