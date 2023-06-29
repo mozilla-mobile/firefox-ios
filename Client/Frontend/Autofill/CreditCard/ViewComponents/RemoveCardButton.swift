@@ -62,6 +62,9 @@ struct RemoveCardButton: View {
         .onChange(of: themeVal) { newThemeValue in
             applyTheme(theme: newThemeValue.theme)
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            showAlert = false
+        }
     }
 
     func applyTheme(theme: Theme) {
