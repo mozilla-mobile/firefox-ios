@@ -23,7 +23,7 @@ enum LoginDetailCellType: Int {
     }
 }
 
-struct LoginDetailViewControllerModel {
+struct PasswordDetailViewControllerModel {
     let profile: Profile
     var login: LoginRecord
     let webpageNavigationHandler: ((_ url: URL?) -> Void)?

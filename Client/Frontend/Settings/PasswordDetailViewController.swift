@@ -7,7 +7,7 @@ import Storage
 import Shared
 import Common
 
-class LoginDetailViewController: SensitiveViewController, Themeable {
+class PasswordDetailViewController: SensitiveViewController, Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -31,8 +31,9 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     private weak var passwordField: UITextField?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
+    weak var coordinator: PasswordManagerFlowDelegate?
 
-    private var viewModel: LoginDetailViewControllerModel
+    private var viewModel: PasswordDetailViewControllerModel
 
     private var isEditingFieldData = false {
         didSet {
@@ -42,7 +43,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
         }
     }
 
-    init(viewModel: LoginDetailViewControllerModel,
+    init(viewModel: PasswordDetailViewControllerModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
@@ -101,7 +102,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
 }
 
 // MARK: - UITableViewDataSource
-extension LoginDetailViewController: UITableViewDataSource {
+extension PasswordDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cellType = viewModel.cellType(atIndexPath: indexPath) else { return UITableViewCell() }
 
@@ -128,8 +129,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             breachDetailView.setup(breach)
             breachDetailView.applyTheme(theme: themeManager.currentTheme)
 
-            breachDetailView.learnMoreButton.addTarget(self, action: #selector(LoginDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
-            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(LoginDetailViewController
+            breachDetailView.learnMoreButton.addTarget(self, action: #selector(PasswordDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
+            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(PasswordDetailViewController
                 .didTapBreachLink(_:)))
             breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
             breachCell.isAccessibilityElement = false
@@ -253,7 +254,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-extension LoginDetailViewController: UITableViewDelegate {
+extension PasswordDetailViewController: UITableViewDelegate {
     private func showMenuOnSingleTap(forIndexPath indexPath: IndexPath) {
         guard let cellType = viewModel.cellType(atIndexPath: indexPath),
             cellType.shouldShowMenu,
@@ -282,7 +283,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 }
 
 // MARK: - KeyboardHelperDelegate
-extension LoginDetailViewController: KeyboardHelperDelegate {
+extension PasswordDetailViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -294,7 +295,7 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 }
 
 // MARK: - Selectors
-extension LoginDetailViewController {
+extension PasswordDetailViewController {
     @objc
     func dismissAlertController() {
         deleteAlert?.dismiss(animated: false, completion: nil)
@@ -302,7 +303,12 @@ extension LoginDetailViewController {
 
     @objc
     func didTapBreachLearnMore() {
-        viewModel.webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
+        guard let url = BreachAlertsManager.monitorAboutUrl else { return }
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
+        viewModel.webpageNavigationHandler?(url)
     }
 
     @objc
@@ -311,7 +317,12 @@ extension LoginDetailViewController {
         var urlComponents = URLComponents()
         urlComponents.host = domain
         urlComponents.scheme = "https"
-        viewModel.webpageNavigationHandler?(urlComponents.url)
+        guard let url = urlComponents.url else { return }
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
+        viewModel.webpageNavigationHandler?(url)
     }
 
     func deleteLogin() {
@@ -384,7 +395,7 @@ extension LoginDetailViewController {
 }
 
 // MARK: - Cell Delegate
-extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
+extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) { }
     func textFieldDidChange(_ cell: LoginDetailTableViewCell) { }
 
@@ -414,6 +425,11 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
         guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
+
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
+            coordinator?.openURL(url: url)
+            return
+        }
 
         navigationController?.dismiss(animated: true, completion: {
             self.settingsDelegate?.settingsOpenURLInNewTab(url)
