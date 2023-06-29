@@ -827,9 +827,6 @@ extension TelemetryWrapper {
             GleanMetrics.CreditCard.autofillFailed.record()
         case(.action, .tap, .creditCardSavePromptCreate, _, _):
             GleanMetrics.CreditCard.savePromptCreate.record()
-//        case creditCardAutofillEnabled = "creditCardAutofillEnabled"
-//        case creditCardSyncEnabled = "creditCardSyncEnabled"
-
         case(.information, .settings, .creditCardAutofillEnabled, _, let extras):
             if let isEnabled = extras?[EventExtraKey.isCreditCardAutofillEnabled.rawValue]
                 as? Bool {
