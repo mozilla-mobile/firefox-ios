@@ -14,10 +14,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 class SettingsCoordinator: BaseCoordinator,
                            SettingsDelegate,
                            SettingsFlowDelegate,
-                           PasswordManagerCoordinatorDelegate,
-                           AccountSettingsDelegate {
-                           PrivacySettingsDelegate,
-                           GeneralSettingsDelegate,
+                           PasswordManagerCoordinatorDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile

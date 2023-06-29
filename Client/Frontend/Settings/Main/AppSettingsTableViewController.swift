@@ -49,8 +49,11 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate,
-                                AccountSettingsDelegate, SupportSettingsDelegate {
+protocol SettingsFlowDelegate: AnyObject,
+                               GeneralSettingsDelegate,
+                               PrivacySettingsDelegate,
+                               AccountSettingsDelegate,
+                               SupportSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
