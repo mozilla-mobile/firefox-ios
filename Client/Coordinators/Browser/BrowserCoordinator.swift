@@ -6,6 +6,7 @@ import Common
 import Foundation
 import WebKit
 import Shared
+import Storage
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate {
     var browserViewController: BrowserViewController
@@ -451,5 +452,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         default:
             completion(nil)
         }
+    }
+
+    // MARK: - LibraryPanelDelegate
+
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        browserViewController.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+    }
+
+    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+        browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 }
