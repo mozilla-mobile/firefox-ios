@@ -5,8 +5,9 @@
 import Foundation
 
 class ClearPrivateDataSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
+    private let profile: Profile
+    private var tabManager: TabManager!
+    private weak var settingsDelegate: PrivacySettingsDelegate?
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
@@ -14,9 +15,11 @@ class ClearPrivateDataSetting: Setting {
 
     override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.ClearData.title }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: PrivacySettingsDelegate?) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.settingsDelegate = settingsDelegate
 
         let clearTitle: String = .SettingsDataManagementSectionName
         super.init(title: NSAttributedString(string: clearTitle,
@@ -24,6 +27,11 @@ class ClearPrivateDataSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedClearPrivateData()
+            return
+        }
+
         let viewController = ClearPrivateDataTableViewController()
         viewController.profile = profile
         viewController.tabManager = tabManager

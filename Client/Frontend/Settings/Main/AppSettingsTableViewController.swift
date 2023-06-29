@@ -49,12 +49,11 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate {
+protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
-    func showPasswordList()
-    func showPasswordOnboarding()
+    func showPasswordManager(shouldShowOnboarding: Bool)
 
     func didFinishShowingSettings()
 }
@@ -159,12 +158,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         case .creditCard:
             self.parentCoordinator?.showCreditCardSettings()
         case .password:
-            if LoginOnboarding.shouldShow() {
-                LoginOnboarding.setShown()
-                self.parentCoordinator?.showPasswordOnboarding()
-            } else {
-                self.parentCoordinator?.showPasswordList()
-            }
+            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: LoginOnboarding.shouldShow())
         default:
             break
         }
@@ -363,14 +357,14 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
-        privacySettings.append(PasswordManagerSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self))
+            privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
+        privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
         privacySettings += [
             BoolSetting(prefs: profile.prefs,
@@ -381,14 +375,16 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
                         statusText: .AppSettingsClosePrivateTabsDescription)
         ]
 
-        privacySettings.append(ContentBlockerSetting(settings: self))
+        privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: profile))
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme,
+                                                        profile: profile,
+                                                        settingsDelegate: parentCoordinator))
         }
 
         privacySettings += [
-            PrivacyPolicySetting()
+            PrivacyPolicySetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator)
         ]
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),

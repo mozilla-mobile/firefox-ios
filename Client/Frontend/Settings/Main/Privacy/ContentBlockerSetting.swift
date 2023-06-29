@@ -5,12 +5,17 @@
 import Foundation
 
 class ContentBlockerSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
+    private weak var settingsDelegate: PrivacySettingsDelegate?
+    private let profile: Profile
+    private var tabManager: TabManager!
+
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
-    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.ContentBlocker.title }
+
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.ContentBlocker.title
+    }
 
     override var status: NSAttributedString? {
         let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
@@ -28,14 +33,21 @@ class ContentBlockerSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: PrivacySettingsDelegate?) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .SettingsTrackingProtectionSectionName,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedContentBlocker()
+            return
+        }
+
         let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
         viewController.profile = profile
         viewController.tabManager = tabManager

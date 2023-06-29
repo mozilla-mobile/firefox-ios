@@ -8,7 +8,7 @@ import WebKit
 import Shared
 import Storage
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, LibraryPanelDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate, LibraryPanelDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -294,6 +294,20 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
+    private func showETPMenu() {
+        let navigationController = DismissableNavigationViewController()
+        navigationController.modalPresentationStyle = .formSheet
+        let etpRouter = DefaultRouter(navigationController: navigationController)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: etpRouter)
+        enhancedTrackingProtectionCoordinator.parentCoordinator = self
+        add(child: enhancedTrackingProtectionCoordinator)
+        enhancedTrackingProtectionCoordinator.start()
+
+        router.present(navigationController) { [weak self] in
+            self?.didFinishEnhancedTrackingProtection(from: enhancedTrackingProtectionCoordinator)
+        }
+    }
+
     // MARK: - SettingsCoordinatorDelegate
     func openURLinNewTab(_ url: URL) {
         browserViewController.openURLInNewTab(url)
@@ -310,6 +324,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
     }
+    // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
+
+    func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
 
     // MARK: - BrowserNavigationHandler
 
@@ -319,6 +339,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     func show(homepanelSection: Route.HomepanelSection) {
         showLibrary(with: homepanelSection)
+    }
+
+    func showEnhancedTrackingProtection() {
+        showETPMenu()
     }
 
     // MARK: - To be removed with FXIOS-6529

@@ -3,18 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 class PrivacyPolicySetting: Setting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: .AppSettingsPrivacyPolicy,
-                                  attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
+    private weak var settingsDelegate: PrivacySettingsDelegate?
 
     override var url: URL? {
         return URL(string: "https://www.mozilla.org/privacy/firefox/")
     }
 
+    init(theme: Theme,
+         settingsDelegate: PrivacySettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+        super.init(title: NSAttributedString(string: .AppSettingsPrivacyPolicy,
+                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+            return
+        }
+
         setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }

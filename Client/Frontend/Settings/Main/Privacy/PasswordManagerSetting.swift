@@ -5,33 +5,36 @@
 import Foundation
 
 class PasswordManagerSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
+    private weak var settingsDelegate: PrivacySettingsDelegate?
+    private let profile: Profile
+    private var tabManager: TabManager!
     private let appAuthenticator: AppAuthenticationProtocol
-    weak var navigationController: UINavigationController?
-    weak var settings: AppSettingsTableViewController?
+    private weak var navigationController: UINavigationController?
+    private weak var settings: AppSettingsTableViewController?
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
-    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Logins.title }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Logins.title
+    }
 
     init(settings: SettingsTableViewController,
-         delegate: SettingsDelegate?,
+         settingsDelegate: PrivacySettingsDelegate?,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
         self.appAuthenticator = appAuthenticator
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
+        self.settingsDelegate = settingsDelegate
 
         super.init(
             title: NSAttributedString(
                 string: .Settings.Passwords.Title,
                 attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
-            ),
-            delegate: delegate
+            )
         )
     }
 
@@ -42,12 +45,12 @@ class PasswordManagerSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        deselectRow()
-
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            delegate?.goToPasswordManager()
+            settingsDelegate?.pressedPasswords()
             return
         }
+
+        deselectRow()
 
         guard let navController = navigationController else { return }
         let navigationHandler: (_ url: URL?) -> Void = { url in
@@ -58,7 +61,10 @@ class PasswordManagerSetting: Setting {
 
         if appAuthenticator.canAuthenticateDeviceOwner {
             if LoginOnboarding.shouldShow() {
-                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                let loginOnboardingViewController = PasswordManagerOnboardingViewController(
+                    profile: profile,
+                    tabManager: tabManager
+                )
 
                 loginOnboardingViewController.doneHandler = {
                     loginOnboardingViewController.dismiss(animated: true)
