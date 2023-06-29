@@ -360,6 +360,12 @@ extension AutocompleteTextField: MenuHelperInterface {
 extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         isPrivateMode = isPrivate
+        let autocompleteText = NSMutableAttributedString(string: self.autocompleteTextLabel?.attributedText?.string ?? "")
+        let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
+        autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
+                                      value: color,
+                                      range: NSRange(location: 0, length: autocompleteText.length))
+        self.autocompleteTextLabel?.attributedText = autocompleteText
         applyTheme(theme: theme)
     }
 
@@ -372,6 +378,7 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
         backgroundColor = theme.colors.layer3
         textColor = theme.colors.textPrimary
         tintColor = theme.colors.actionPrimary
+
         if autocompleteTextLabel?.attributedText != nil {
             autocompleteTextLabel?.backgroundColor = backgroundColor
             autocompleteTextLabel?.textColor = textColor

@@ -161,6 +161,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             self.parentCoordinator?.showCreditCardSettings()
         case .password:
             self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: LoginOnboarding.shouldShow())
+            LoginOnboarding.setShown()
         default:
             break
         }
