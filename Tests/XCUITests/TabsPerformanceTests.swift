@@ -190,7 +190,7 @@ class TabsPerformanceTest: BaseTestCase {
             navigator.goto(LibraryPanel_Bookmarks)
             let loaded = NSPredicate(format: "count == 1001")
             expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-            waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
+            waitForExpectations(timeout: 60, handler: nil)
         }
     }
 }
