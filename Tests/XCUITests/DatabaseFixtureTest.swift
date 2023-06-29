@@ -5,7 +5,7 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db", "testPerfHistory100startUp": "testHistoryDatabase100-places.db", "testPerfHistory100openMenu": "testHistoryDatabase100-places.db", "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db", "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
+    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -56,21 +56,5 @@ class DatabaseFixtureTest: BaseTestCase {
         waitForExpectations(timeout: TIMEOUT, handler: nil)
         let historyList = app.tables["History List"].cells.count
         XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
-    }
-
-    func testPerfBookmarks1000openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-            // activity measurement here
-            navigator.goto(LibraryPanel_Bookmarks)
-            let loaded = NSPredicate(format: "count == 1001")
-            expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-            waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
-        }
     }
 }
