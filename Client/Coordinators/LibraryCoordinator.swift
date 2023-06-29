@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import Storage
 
-protocol LibraryCoordinatorDelegate: AnyObject {
+protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
 
@@ -15,7 +15,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private let libraryViewController: LibraryViewController
-    weak var parentCoordinator: (LibraryCoordinatorDelegate & LibraryPanelDelegate)?
+    weak var parentCoordinator: LibraryCoordinatorDelegate?
 
     init(
         router: Router,
