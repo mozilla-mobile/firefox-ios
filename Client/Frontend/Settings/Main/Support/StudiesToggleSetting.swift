@@ -18,7 +18,7 @@ class StudiesToggleSetting: BoolSetting {
         statusText.append(NSAttributedString(string: " "))
         statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
-        
+
         self.settingsDelegate = settingsDelegate
         super.init(
             prefs: prefs,
