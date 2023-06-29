@@ -67,6 +67,7 @@ class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplica
         backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textAccent
         textField.textColor = theme.colors.textPrimary
+        textField.tintColor = theme.colors.actionPrimary
     }
 
     // MARK: UITextFieldDelegate
