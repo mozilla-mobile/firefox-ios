@@ -49,7 +49,7 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate {
+protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate, AccountSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
@@ -67,7 +67,8 @@ protocol AppSettingsScreen: UIViewController {
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
-                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider {
+                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider,
+                                        SharedSettingsDelegate {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -281,7 +282,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         } else {
             accountChinaSyncSetting = [
                 // Show China sync service setting:
-                ChinaSyncServiceSetting(settings: self)
+                ChinaSyncServiceSetting(settings: self, settingsDelegate: self)
             ]
         }
 
@@ -290,11 +291,11 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         let accountFooterText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
         return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
             // Without a Firefox Account:
-            ConnectSetting(settings: self),
-            AdvancedAccountSetting(settings: self, isHidden: showDebugSettings),
+            ConnectSetting(settings: self, settingsDelegate: parentCoordinator),
+            AdvancedAccountSetting(settings: self, isHidden: showDebugSettings, settingsDelegate: parentCoordinator),
             // With a Firefox Account:
-            AccountStatusSetting(settings: self),
-            SyncNowSetting(settings: self)
+            AccountStatusSetting(settings: self, settingsDelegate: parentCoordinator),
+            SyncNowSetting(settings: self, settingsDelegate: parentCoordinator)
         ] + accountChinaSyncSetting)]
     }
 

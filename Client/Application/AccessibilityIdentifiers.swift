@@ -231,6 +231,10 @@ public struct AccessibilityIdentifiers {
             static let deleteButton = "Delete"
         }
 
+        struct AdvancedAccountSettings {
+            static let title = "AdvancedAccount.Setting"
+        }
+
         struct Logins {
             static let title = "Logins"
         }
@@ -245,6 +249,10 @@ public struct AccessibilityIdentifiers {
 
         struct CreditCard {
             static let title = "AutofillCreditCard"
+        }
+
+        struct ConnectSetting {
+            static let title = "SignInToSync"
         }
 
         struct ContentBlocker {

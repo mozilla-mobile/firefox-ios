@@ -3,14 +3,30 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Account
+import Common
 import Foundation
 import Shared
 
 // Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
-    override init(settings: SettingsTableViewController) {
+    private weak var settingsDelegate: AccountSettingsDelegate?
+    private var notificationCenter: NotificationProtocol
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: AccountSettingsDelegate?,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
+        self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
+
+        notificationCenter.addObserver(self,
+                                       selector: #selector(updateAccount),
+                                       name: .FirefoxAccountProfileChanged,
+                                       object: nil)
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     @objc
@@ -59,10 +75,21 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
+            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                settingsDelegate?.pressedToShowFirefoxAccount()
+                return
+            }
+
             let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
             let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(controller, animated: true)
+            return
+        }
+
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedToShowSyncContent()
             return
         }
 

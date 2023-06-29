@@ -5,9 +5,8 @@
 import Foundation
 import Shared
 
-/// Child settings pages debug actions
-protocol DebugSettingsDelegate: AnyObject, SharedSettingsDelegate {
-    func pressedVersion()
-    func pressedShowTour()
-    func pressedExperiments()
+/// The actions used by multiple child settings
+protocol SharedSettingsDelegate: AnyObject {
+    func askedToReload()
+    func askedToShow(alert: AlertController)
 }
