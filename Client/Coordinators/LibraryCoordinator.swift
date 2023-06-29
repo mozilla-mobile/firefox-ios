@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import Storage
 
-protocol LibraryCoordinatorDelegate: AnyObject {
+protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
 
@@ -35,24 +35,14 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
         libraryViewController.resetHistoryPanelPagination()
     }
 
-    func libraryPanelDidRequestToSignIn() {
-        // TODO: Will be handled by FXIOS-6604
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        // TODO: Will be handled by FXIOS-6604
-    }
-
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        // TODO: Will be handled by FXIOS-6604
-    }
-
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        // TODO: Will be handled by FXIOS-6604
-    }
+    // MARK: - LibraryCoordinatorDelegate
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        // TODO: Will be handled by FXIOS-6604
+        parentCoordinator?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+    }
+
+    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+        parentCoordinator?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 
     func didFinish() {

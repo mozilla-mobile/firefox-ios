@@ -30,7 +30,7 @@ class HistoryPanel: UIViewController,
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
-    var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var state: LibraryPanelMainState
 
