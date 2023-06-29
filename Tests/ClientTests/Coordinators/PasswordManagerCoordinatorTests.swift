@@ -88,7 +88,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is PasswordDetailViewController)
     }
 
-    func testOpenURL() {
+    func testPressedAddPassword() {
         let subject = createSubject()
 
         subject.openURL(url: URL(string: "https://firefox.com")!)
@@ -96,6 +96,18 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockParentCoordinator.url?.absoluteString, "https://firefox.com")
         XCTAssertEqual(mockParentCoordinator.settingsOpenURLInNewTabCalled, 1)
         XCTAssertEqual(mockParentCoordinator.didFinishPasswordManagerCalled, 1)
+    }
+
+    func testAddPassword() {
+        let subject = createSubject()
+        let passwordManagerSpy = PasswordManagerListViewControllerSpy(profile: MockProfile())
+        subject.passwordManager = passwordManagerSpy
+
+        subject.pressedAddPassword { _ in }
+
+        let navigationController = passwordManagerSpy.viewControllerToPresent as? UINavigationController
+        XCTAssertEqual(passwordManagerSpy.presentCalled, 1)
+        XCTAssertTrue(navigationController?.viewControllers.first is AddCredentialViewController)
     }
 
     // MARK: - Helper
