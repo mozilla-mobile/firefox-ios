@@ -40,6 +40,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
     }
 
     func start() {
+        router.push(enhancedTrackingProtectionMenuVC)
     }
 
     func didFinish() {

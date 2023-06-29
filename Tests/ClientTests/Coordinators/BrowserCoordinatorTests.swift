@@ -191,6 +191,9 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is EnhancedTrackingProtectionMenuVC)
     }
 
     // MARK: - Search route
