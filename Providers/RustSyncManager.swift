@@ -266,7 +266,7 @@ public class RustSyncManager: NSObject, SyncManager {
         return false
     }
 
-    private func getEngineEnablementChangesForAccount() -> [String: Bool] {
+    public func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
         // We just created the account, the user went through the Choose What to Sync
         // screen on FxA.
