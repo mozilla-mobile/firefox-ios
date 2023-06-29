@@ -89,7 +89,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.lastVisitType, .bookmark)
     }
 
-    func testTappingOpenUrlInNewTap_CallsTheDidSelectUrlInNewTap() throws {
+    func testTappingOpenUrlInNewTab_CallsTheDidSelectUrlInNewTap() throws {
         let subject = createSubject()
         subject.parentCoordinator = delegate
         subject.start(with: .bookmarks)

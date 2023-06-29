@@ -725,6 +725,40 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.filter { $0 is LibraryCoordinator }.count, 1)
     }
 
+    func testTappingOpenUrl_CallsTheDidSelectUrlOnBrowserViewController() throws {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // We show the library with bookmarks tab
+        subject.show(homepanelSection: .bookmarks)
+
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let url = URL(string: "http://google.com")!
+        coordinator.libraryPanel(didSelectURL: url, visitType: .bookmark)
+
+        XCTAssertTrue(mbvc.didSelectURLCalled)
+        XCTAssertEqual(mbvc.lastOpenedURL, url)
+        XCTAssertEqual(mbvc.lastVisitType, .bookmark)
+    }
+
+    func testTappingOpenUrlInNewTab_CallsTheDidSelectUrlInNewTapOnBrowserViewController() throws {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        // We show the library with bookmarks tab
+        subject.show(homepanelSection: .bookmarks)
+
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let url = URL(string: "http://google.com")!
+        coordinator.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: true)
+
+        XCTAssertTrue(mbvc.didRequestToOpenInNewTabCalled)
+        XCTAssertEqual(mbvc.lastOpenedURL, url)
+        XCTAssertTrue(mbvc.isPrivate)
+    }
+
     // MARK: - Helpers
     private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
                                file: StaticString = #file,
