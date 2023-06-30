@@ -14,6 +14,11 @@ class AccessoryViewProvider: UIView, Themeable {
     private struct UX {
         static let toolbarHeight: CGFloat = 50
         static let cornerRadius: CGFloat = 4
+        static let cardImageViewSize: CGFloat = 24
+        static let fixedSpacerHeight: CGFloat = 30
+        static let fixedLeadingSpacerWidth: CGFloat = 2
+        static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let cardButtonStackViewSpacing: CGFloat = 2
     }
 
     var themeManager: ThemeManager
@@ -69,8 +74,8 @@ class AccessoryViewProvider: UIView, Themeable {
         imageView.accessibilityElementsHidden = true
 
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 24),
-            imageView.heightAnchor.constraint(equalToConstant: 24)
+            imageView.widthAnchor.constraint(equalToConstant: UX.cardImageViewSize),
+            imageView.heightAnchor.constraint(equalToConstant: UX.cardImageViewSize)
         ])
     }
 
@@ -90,7 +95,7 @@ class AccessoryViewProvider: UIView, Themeable {
         stackView.addArrangedSubview(self.cardImageView)
         stackView.addArrangedSubview(self.useCardTextLabel)
         stackView.addArrangedSubview(self.trailingFixedSpacer)
-        stackView.spacing = 2
+        stackView.spacing = UX.cardButtonStackViewSpacing
         stackView.distribution = .equalCentering
         stackView.layer.cornerRadius = UX.cornerRadius
         stackView.addGestureRecognizer(stackViewTapped)
@@ -139,18 +144,18 @@ class AccessoryViewProvider: UIView, Themeable {
         layoutIfNeeded()
     }
 
-    private func setupSpacer(_ spacer: UIView, width: CGFloat = 0) {
+    private func setupSpacer(_ spacer: UIView, width: CGFloat) {
         NSLayoutConstraint.activate([
             spacer.widthAnchor.constraint(equalToConstant: width),
-            spacer.heightAnchor.constraint(equalToConstant: 30)
+            spacer.heightAnchor.constraint(equalToConstant: UX.fixedSpacerHeight)
         ])
         spacer.accessibilityElementsHidden = true
     }
 
     private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
-        setupSpacer(leadingFixedSpacer, width: 2)
-        setupSpacer(trailingFixedSpacer, width: 3)
+        setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
+        setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
         if showCreditCard {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
