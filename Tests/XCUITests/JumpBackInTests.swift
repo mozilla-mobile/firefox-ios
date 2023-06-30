@@ -142,7 +142,6 @@ class JumpBackInTests: BaseTestCase {
 
         // The view is switched to the twitter tab
         let url = app.textFields["url"].value as! String
-        UIFocusDebugger()
         XCTAssertEqual(url, "twitter.com/i/flow/login")
 
         // Open a new tab in normal browsing
