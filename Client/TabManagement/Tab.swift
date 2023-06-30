@@ -538,7 +538,7 @@ class Tab: NSObject {
         debugTabCount -= 1
 
 #if DEBUG
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard let appDelegate = UIApplication.shared.parentCoordinator as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
             // Need delay for pool to drain.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
