@@ -34,28 +34,22 @@ class NimbusWrapper {
             fatalError("Failed to determine Nimbus database path")
         }
 
-        let builder = NimbusBuilder(dbPath: databasePath)
-
         let urlString = NimbusServerSettings.getNimbusEndpoint(useStagingServer: useStagingServer)?.absoluteString
-        builder.with(url: urlString)
 
         let bundles = [
             Bundle.main,
-            Bundle.main.fallbackTranslationBundle()
+            Bundle.main.fallbackTranslationBundle(language: "en-US")
         ].compactMap { $0 }
 
-        builder.with(bundles: bundles)
+        return NimbusBuilder(dbPath: databasePath)
+            .with(url: urlString)
+            .with(bundles: bundles)
+            .with(featureManifest: AppNimbus.shared)
+            .with(commandLineArgs: CommandLine.arguments)
             .using(previewCollection: usePreviewCollection)
             .with(initialExperiments: Bundle.main.url(forResource: "initial_experiments", withExtension: "json"))
             .isFirstRun(isFirstRun)
-            .onCreate { nimbus in
-                AppNimbus.shared.initialize { nimbus }
-            }
-            .onApply { _ in
-                AppNimbus.shared.invalidateCachedValues()
-            }
-
-        return builder.build(appInfo: nimbusAppSettings)
+            .build(appInfo: nimbusAppSettings)
     }()
 
     func initializeRustComponents() throws {
