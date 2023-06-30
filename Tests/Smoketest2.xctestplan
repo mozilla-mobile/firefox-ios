@@ -52,6 +52,7 @@
         "NewTabSettingsTest",
         "NightModeTests",
         "NoImageTests",
+        "PerformanceTests",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
         "PhotonActionSheetTest\/testShareOptionIsShown()",
         "PhotonActionSheetTest\/testShareSheetOpenAndCancel()",
