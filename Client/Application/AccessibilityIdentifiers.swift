@@ -224,10 +224,15 @@ public struct AccessibilityIdentifiers {
         }
 
         struct Search {
+            static let title = "Search"
             static let customEngineViewButton = "customEngineViewButton"
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Delete Mozilla Engine"
             static let deleteButton = "Delete"
+        }
+
+        struct AdvancedAccountSettings {
+            static let title = "AdvancedAccount.Setting"
         }
 
         struct Logins {
@@ -246,8 +251,24 @@ public struct AccessibilityIdentifiers {
             static let title = "AutofillCreditCard"
         }
 
+        struct ConnectSetting {
+            static let title = "SignInToSync"
+        }
+
         struct ContentBlocker {
             static let title = "TrackingProtection"
+        }
+
+        struct NewTab {
+            static let title = "NewTab"
+        }
+
+        struct NoImageMode {
+            static let title = "NoImageMode"
+        }
+
+        struct OpenWithMail {
+            static let title = "OpenWith.Setting"
         }
 
         struct SearchBar {
@@ -264,8 +285,20 @@ public struct AccessibilityIdentifiers {
             static let title = "ShowTour"
         }
 
+        struct Siri {
+            static let title = "SiriSettings"
+        }
+
         struct StudiesToggle {
             static let title = "StudiesToggle"
+        }
+
+        struct Tabs {
+            static let title = "TabsSetting"
+        }
+
+        struct Theme {
+            static let title = "DisplayThemeOption"
         }
 
         struct BlockImages {

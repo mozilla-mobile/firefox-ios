@@ -9,6 +9,9 @@ protocol BrowserNavigationHandler: AnyObject {
     /// - Parameter settings: The settings route we're trying to get to
     func show(settings: Route.SettingsSection)
 
+    /// Asks to show a enhancedTrackingProtection page, can be a general enhancedTrackingProtection page or a child page
+    func showEnhancedTrackingProtection()
+
     /// Shows the specified section of the home panel.
     ///
     /// - Parameter homepanelSection: The section to be displayed.

@@ -14,7 +14,7 @@ import MobileCoreServices
 import Telemetry
 import Common
 
-class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable {
+class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable, LibraryPanelDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -56,7 +56,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
-
+    var appAuthenticator: AppAuthenticationProtocol?
     var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
@@ -176,7 +176,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -186,7 +187,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
-
+        self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -472,6 +473,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
+
+        // Credit card initial setup telemetry
+        creditCardInitialSetupTelemetry()
     }
 
     private func setupAccessibleActions() {
@@ -1850,6 +1854,36 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
     // MARK: Autofill
 
+    private func creditCardInitialSetupTelemetry() {
+        // Credit card autofill status telemetry
+        let userDefaults = UserDefaults.standard
+        let key = PrefsKeys.KeyAutofillCreditCardStatus
+        // Default value is true for autofill credit card input
+        let autofillStatus = userDefaults.value(forKey: key) as? Bool ?? true
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .creditCardAutofillEnabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardAutofillEnabled.rawValue: autofillStatus
+            ]
+        )
+
+        // Credit card sync telemetry
+        self.profile.hasSyncAccount { [unowned self] hasSync in
+            guard hasSync else { return }
+            let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .creditCardSyncEnabled,
+                extras: [
+                    TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
+                ]
+            )
+        }
+    }
+
     private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -1859,7 +1893,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         if autofillCreditCardStatus {
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type in
+            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
                 guard let tabWebView = tab.webView as? TabWebView,
                       let type = type,
                       userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1867,6 +1901,9 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 switch type {
                 case .formInput:
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardFormDetected)
                     self?.profile.autofill.listCreditCards(completion: { cards, error in
                         guard let cards = cards, !cards.isEmpty, error == nil
                         else {
@@ -1884,11 +1921,38 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
                 tabWebView.accessoryView.savedCardsClosure = {
                     DispatchQueue.main.async { [weak self] in
-                        self?.showBottomSheetCardViewController(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard)
+                        // Dismiss keyboard
+                        webView.resignFirstResponder()
+                        // Authenticate and show bottom sheet with select a card flow
+                        self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
+                                                                      frame: frame)
                     }
                 }
+            }
+        }
+    }
+
+    private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
+                                                         frame: WKFrameInfo? = nil) {
+        guard let appAuthenticator else {
+            return
+        }
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                // Note: Since we are injecting card info, we pass on the frame
+                // for special iframe cases
+                self.showBottomSheetCardViewController(creditCard: nil,
+                                                       decryptedCard: nil,
+                                                       viewType: .selectSavedCard,
+                                                       frame: frame)
+            case .deviceOwnerFailed:
+                break // Keep showing bvc
+            case .passCodeRequired:
+                let passcodeViewController = DevicePasscodeRequiredViewController()
+                passcodeViewController.profile = self.profile
+                self.navigationController?.pushViewController(passcodeViewController,
+                                                              animated: true)
             }
         }
     }
@@ -1938,6 +2002,37 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+    }
+
+    // MARK: - LibraryPanelDelegate
+
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
+        guard let tab = tabManager.selectedTab else { return }
+
+        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
+        }
+
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+    }
+
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        // If we are showing toptabs a user can just use the top tab bar
+        // If in overlay mode switching doesnt correctly dismiss the homepanels
+        guard !topTabsVisible, !self.urlBar.inOverlayMode else { return }
+        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            if buttonPressed {
+                self.tabManager.selectTab(tab)
+            }
+        })
+        self.show(toast: toast)
     }
 }
 
@@ -2139,58 +2234,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
         bottomContentStackView.removeArrangedView(bar)
-    }
-}
-
-// MARK: - LibraryPanelDelegate
-extension BrowserViewController: LibraryPanelDelegate {
-    func libraryPanelDidRequestToSignIn() {
-        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams)
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        presentSignInViewController(fxaParams)
-    }
-
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        guard let tab = tabManager.selectedTab else { return }
-
-        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-        }
-
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
-    }
-
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
-            logger.log("Invalid URL, and couldn't generate a search URL for it.",
-                       level: .warning,
-                       category: .library)
-            return
-        }
-        return self.libraryPanel(didSelectURL: url, visitType: visitType)
-    }
-
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
-        // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !self.urlBar.inOverlayMode else { return }
-        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
-                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
-            if buttonPressed {
-                self.tabManager.selectTab(tab)
-            }
-        })
-        self.show(toast: toast)
     }
 }
 
@@ -2642,12 +2685,12 @@ extension BrowserViewController {
 
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
-                                                  viewType state: CreditCardBottomSheetState) {
+                                                  viewType state: CreditCardBottomSheetState,
+                                                  frame: WKFrameInfo? = nil) {
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-
         let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
         viewController.didTapYesClosure = { error in
             if let error = error {
@@ -2655,6 +2698,14 @@ extension BrowserViewController {
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             } else {
+                // Save a card telemetry
+                if state == .save {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardSavePromptCreate)
+                }
+
+                // Save or update a card toast message
                 let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
                 let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
                 let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
@@ -2662,10 +2713,6 @@ extension BrowserViewController {
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.currentTheme)
             }
-        }
-
-        viewController.didTapNotNowClosure = {
-            viewController.dismissVC()
         }
 
         viewController.didTapManageCardsClosure = {
@@ -2678,7 +2725,8 @@ extension BrowserViewController {
             }
             CreditCardHelper.injectCardInfo(logger: self.logger,
                                             card: plainTextCard,
-                                            tab: currentTab) { error in
+                                            tab: currentTab,
+                                            frame: frame) { error in
                 guard let error = error else {
                     return
                 }
@@ -2927,7 +2975,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     private func finishEditionMode() {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
-        if newTabChoice != .topSites {
+        if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.finishEditing(shouldCancelLoading: false)
         }
     }

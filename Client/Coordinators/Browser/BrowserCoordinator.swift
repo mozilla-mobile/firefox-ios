@@ -6,8 +6,9 @@ import Common
 import Foundation
 import WebKit
 import Shared
+import Storage
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -98,10 +99,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
-            webviewController.update(webView: webView)
+            webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             browserViewController.frontEmbeddedContent(webviewController)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             webviewController = webviewViewController
             _ = browserViewController.embedContent(webviewViewController)
         }
@@ -275,17 +276,35 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
+        if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
+            libraryCoordinator.start(with: homepanelSection)
+            (libraryCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
+        } else {
+            let navigationController = DismissableNavigationViewController()
+            navigationController.modalPresentationStyle = .formSheet
+
+            let libraryCoordinator = LibraryCoordinator(
+                router: DefaultRouter(navigationController: navigationController)
+            )
+            libraryCoordinator.parentCoordinator = self
+            add(child: libraryCoordinator)
+            libraryCoordinator.start(with: homepanelSection)
+
+            router.present(navigationController)
+        }
+    }
+
+    private func showETPMenu() {
         let navigationController = DismissableNavigationViewController()
         navigationController.modalPresentationStyle = .formSheet
-        let libraryRouter = DefaultRouter(navigationController: navigationController)
-
-        let libraryCoordinator = LibraryCoordinator(router: libraryRouter)
-        libraryCoordinator.parentCoordinator = self
-        add(child: libraryCoordinator)
-        libraryCoordinator.start(with: homepanelSection)
+        let etpRouter = DefaultRouter(navigationController: navigationController)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: etpRouter)
+        enhancedTrackingProtectionCoordinator.parentCoordinator = self
+        add(child: enhancedTrackingProtectionCoordinator)
+        enhancedTrackingProtectionCoordinator.start()
 
         router.present(navigationController) { [weak self] in
-            self?.didFinishLibrary(from: libraryCoordinator)
+            self?.didFinishEnhancedTrackingProtection(from: enhancedTrackingProtectionCoordinator)
         }
     }
 
@@ -305,6 +324,12 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
     }
+    // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
+
+    func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
 
     // MARK: - BrowserNavigationHandler
 
@@ -314,6 +339,10 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     func show(homepanelSection: Route.HomepanelSection) {
         showLibrary(with: homepanelSection)
+    }
+
+    func showEnhancedTrackingProtection() {
+        showETPMenu()
     }
 
     // MARK: - To be removed with FXIOS-6529
@@ -423,5 +452,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         default:
             completion(nil)
         }
+    }
+
+    // MARK: - LibraryPanelDelegate
+
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        browserViewController.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+    }
+
+    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+        browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 }

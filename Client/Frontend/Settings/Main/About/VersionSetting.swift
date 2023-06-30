@@ -8,17 +8,14 @@ import Shared
 
 /// Show the current version of Firefox
 class VersionSetting: Setting {
-    unowned let settings: SettingsTableViewController
-    weak var appSettingsDelegate: AppSettingsDelegate?
+    private weak var settingsDelegate: DebugSettingsDelegate?
 
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.Version.title
     }
 
-    init(settings: SettingsTableViewController,
-         appSettingsDelegate: AppSettingsDelegate) {
-        self.settings = settings
-        self.appSettingsDelegate = appSettingsDelegate
+    init(settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
         super.init(title: nil)
     }
 
@@ -32,14 +29,20 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        appSettingsDelegate?.pressedVersion()
+        settingsDelegate?.pressedVersion()
     }
 
     override func onLongPress(_ navigationController: UINavigationController?) {
-        copyAppVersionAndPresentAlert(by: navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            let alertTitle: String = .SettingsCopyAppVersionAlertTitle
+            let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+            settingsDelegate?.askedToShow(alert: alert)
+        } else {
+            copyAppVersionAndPresentAlert(by: navigationController)
+        }
     }
 
-    func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
+    private func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle: String = .SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
@@ -51,7 +54,7 @@ class VersionSetting: Setting {
         }
     }
 
-    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
+    private func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
         let controller = navigationController?.topViewController
         let tableView = (controller as? AppSettingsTableViewController)?.tableView
         guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }

@@ -26,19 +26,6 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
-    lazy public var dispatchFunction: DispatchFunction = {
-        let dispatchFunc = middlewares
-            .reversed()
-            .reduce({ [unowned self] action in
-                    self.handleReducer(action)
-                }, { dispatchFunction, middleware in
-                    let dispatch: (Action) -> Void = { [weak self] in self?.dispatch($0)
-                    }
-                    let getState = { [weak self] in self?.state }
-                    return middleware(dispatch, getState)(dispatchFunction)
-            })
-        return dispatchFunc
-    }()
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
@@ -68,11 +55,12 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        dispatchFunction(action)
-    }
-
-    private func handleReducer(_ action: Action) {
         let newState = reducer(state, action)
+
+        middlewares.forEach { middleware in
+            middleware(state, action)
+        }
+
         state = newState
     }
 

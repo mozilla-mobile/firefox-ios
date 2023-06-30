@@ -23,7 +23,6 @@ class PocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
-    var onScroll: (([NSCollectionLayoutVisibleItem]) -> Void)?
     weak var delegate: HomepageDataModelDelegate?
 
     private var dataAdaptor: PocketDataAdaptor
@@ -168,9 +167,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                                  elementKind: UICollectionView.elementKindSectionFooter,
                                                                  alignment: .bottom)
         section.boundarySupplementaryItems = [header, footer]
-        section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
-            self.onScroll?(visibleItems)
-        }
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,

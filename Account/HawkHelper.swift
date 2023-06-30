@@ -138,13 +138,3 @@ open class HawkHelper {
         return extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\n", with: "\\n")
     }
 }
-
-extension URLRequest {
-    mutating func addAuthorizationHeader(forHKDFSHA256Key bytes: Data) {
-        let tokenId = bytes.subdata(in: 0..<KeyLength)
-        let reqHMACKey = bytes.subdata(in: KeyLength..<(2 * KeyLength))
-        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
-        let hawkValue = hawkHelper.getAuthorizationValueFor(self)
-        setValue(hawkValue, forHTTPHeaderField: "Authorization")
-    }
-}

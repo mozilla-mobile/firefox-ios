@@ -11,7 +11,13 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelegate {
+class SettingsCoordinator: BaseCoordinator,
+                           SettingsDelegate,
+                           SettingsFlowDelegate,
+                           GeneralSettingsDelegate,
+                           PrivacySettingsDelegate,
+                           PasswordManagerCoordinatorDelegate,
+                           AccountSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -125,7 +131,7 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         case .topSites:
             return TopSitesSettingsViewController()
 
-        case .creditCard:
+        case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
         case .general:
@@ -155,7 +161,142 @@ class SettingsCoordinator: BaseCoordinator, SettingsDelegate, SettingsFlowDelega
         router.push(creditCardViewController)
     }
 
+    func showExperiments() {
+        let experimentsViewController = ExperimentsViewController()
+        router.push(experimentsViewController)
+    }
+
+    func showPasswordManager(shouldShowOnboarding: Bool) {
+        let passwordCoordinator = PasswordManagerCoordinator(
+            router: router,
+            profile: profile
+        )
+        add(child: passwordCoordinator)
+        passwordCoordinator.parentCoordinator = self
+        passwordCoordinator.start(with: shouldShowOnboarding)
+    }
+
     func didFinishShowingSettings() {
         didFinish()
+    }
+
+    // MARK: PrivacySettingsDelegate
+
+    func pressedCreditCard() {
+        findAndHandle(route: .settings(section: .creditCard))
+    }
+
+    func pressedClearPrivateData() {
+        let viewController = ClearPrivateDataTableViewController()
+        viewController.profile = profile
+        viewController.tabManager = tabManager
+        router.push(viewController)
+    }
+
+    func pressedContentBlocker() {
+        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        viewController.tabManager = tabManager
+        router.push(viewController)
+    }
+
+    func pressedPasswords() {
+        findAndHandle(route: .settings(section: .password))
+    }
+
+    func pressedNotifications() {
+        let viewController = NotificationsSettingsViewController(prefs: profile.prefs,
+                                                                 hasAccount: profile.hasAccount())
+        router.push(viewController)
+    }
+
+    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
+        guard let url = url else { return }
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
+    }
+
+    // MARK: GeneralSettingsDelegate
+
+    func pressedHome() {
+        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedMailApp() {
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        router.push(viewController)
+    }
+
+    func pressedNewTab() {
+        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedSearchEngine() {
+        let viewController = SearchSettingsTableViewController(profile: profile)
+        router.push(viewController)
+    }
+
+    func pressedSiri() {
+        let viewController = SiriSettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedToolbar() {
+        let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+        let viewController = SearchBarSettingsViewController(viewModel: viewModel)
+        router.push(viewController)
+    }
+
+    func pressedTabs() {
+        let viewController = TabsSettingsViewController()
+        router.push(viewController)
+    }
+
+    func pressedTheme() {
+        router.push(ThemeSettingsController())
+    }
+
+    // MARK: AccountSettingsDelegate
+
+    func pressedConnectSetting() {
+        let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile,
+                                                                parentType: .settings,
+                                                                deepLinkParams: fxaParams)
+        router.push(viewController)
+    }
+
+    func pressedAdvancedAccountSetting() {
+        let viewController = AdvancedAccountSettingViewController()
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedToShowSyncContent() {
+        let viewController = SyncContentSettingsViewController()
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
+    func pressedToShowFirefoxAccount() {
+        let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile,
+                                                                parentType: .settings,
+                                                                deepLinkParams: fxaParams)
+        router.push(viewController)
+    }
+
+    // MARK: - PasswordManagerCoordinatorDelegate
+
+    func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
+        didFinish()
+        remove(child: coordinator)
     }
 }

@@ -215,6 +215,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
     }
 
+    func testHandleRouteCalled_whenPasswordRouteIsSet() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.start(with: .password)
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
     // MARK: - SettingsFlowDelegate
     func testShowDevicePasscode_showDevicePasscodeVC() {
         let subject = createSubject()
@@ -232,6 +242,23 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is CreditCardSettingsViewController)
+    }
+
+    func testShowExperimentSettings_showsExperimentVC() {
+        let subject = createSubject()
+
+        subject.showExperiments()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ExperimentsViewController)
+    }
+
+    func testPasswordSettings_showsPasswordListVC() {
+        let subject = createSubject()
+
+        subject.showPasswordManager(shouldShowOnboarding: false)
+
+        XCTAssertTrue(subject.childCoordinators.first is PasswordManagerCoordinator)
     }
 
     func testDidFinishShowingSettings_callsDidFinish() {
@@ -258,6 +285,176 @@ final class SettingsCoordinatorTests: XCTestCase {
         let result = subject.handle(route: .homepanel(section: .downloads))
 
         XCTAssertFalse(result)
+    }
+
+    // MARK: - GeneralSettingsDelegate
+
+    func testGeneralSettingsDelegate_pushedHome() {
+        let subject = createSubject()
+
+        subject.pressedHome()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is HomePageSettingViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedMailApp() {
+        let subject = createSubject()
+
+        subject.pressedMailApp()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is OpenWithSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedNewTab() {
+        let subject = createSubject()
+
+        subject.pressedNewTab()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is NewTabContentSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedSearchEngine() {
+        let subject = createSubject()
+
+        subject.pressedSearchEngine()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchSettingsTableViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedSiri() {
+        let subject = createSubject()
+
+        subject.pressedSiri()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SiriSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedToolbar() {
+        let subject = createSubject()
+
+        subject.pressedToolbar()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SearchBarSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedTabs() {
+        let subject = createSubject()
+
+        subject.pressedTabs()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedTheme() {
+        let subject = createSubject()
+
+        subject.pressedTheme()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
+    }
+
+    // MARK: - PrivacySettingsDelegate
+
+    func testPrivacySettingsDelegate_handleCreditCardRoute() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.pressedCreditCard()
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .creditCard)
+    }
+
+    func testPrivacySettingsDelegate_pushedClearPrivateData() {
+        let subject = createSubject()
+
+        subject.pressedClearPrivateData()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ClearPrivateDataTableViewController)
+    }
+
+    func testPrivacySettingsDelegate_pushedContentBlocked() {
+        let subject = createSubject()
+
+        subject.pressedContentBlocker()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is ContentBlockerSettingViewController)
+    }
+
+    func testPrivacySettingsDelegate_handlePasswordRoute() {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+
+        subject.pressedPasswords()
+
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
+    func testPrivacySettingsDelegate_pushedNotifications() {
+        let subject = createSubject()
+
+        subject.pressedNotifications()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is NotificationsSettingsViewController)
+    }
+
+    func testPrivacySettingsDelegate_pushedContentWithURL() {
+        let subject = createSubject()
+
+        subject.askedToOpen(url: URL(string: "www.mozilla.com")!, withTitle: nil)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SettingsContentViewController)
+    }
+
+    // MARK: AccountSettingsDelegate
+
+    func testAccountSettingsDelegate_pushedConnectSetting() {
+        let subject = createSubject()
+
+        subject.pressedConnectSetting()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is FirefoxAccountSignInViewController)
+    }
+
+    func testAccountSettingsDelegate_pushedAdvancedAccountSetting() {
+        let subject = createSubject()
+
+        subject.pressedAdvancedAccountSetting()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is AdvancedAccountSettingViewController)
+    }
+
+    func testAccountSettingsDelegate_pushedToShowSyncContent() {
+        let subject = createSubject()
+
+        subject.pressedToShowSyncContent()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SyncContentSettingsViewController)
+    }
+
+    func testAccountSettingsDelegate_pushedToShowFirefoxAccount() {
+        let subject = createSubject()
+
+        subject.pressedToShowFirefoxAccount()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is FirefoxAccountSignInViewController)
     }
 
     // MARK: - Helper

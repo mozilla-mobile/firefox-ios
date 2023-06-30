@@ -209,6 +209,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
     }
+
     @objc
     func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { return }
@@ -426,6 +427,14 @@ extension TelemetryWrapper {
         case creditCardBottomSheetManageCards = "creditCardBottomSheetManageCards"
         case creditCardBottomSheetDismiss = "creditCardBottomSheetDismiss"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
+        case creditCardFormDetected = "creditCardFormDetected"
+        case creditCardAutofilled = "creditCardAutofilled"
+        case creditCardAutofillFailed = "creditCardAutofillFailed"
+        case creditCardSavePromptCreate = "creditCardSavePromptCreate"
+        case creditCardAutofillEnabled = "creditCardAutofillEnabled"
+        case creditCardSyncEnabled = "creditCardSyncEnabled"
+        case creditCardAutofillToggle = "creditCardAutofillToggle"
+        case creditCardSyncToggle = "creditCardSyncToggle"
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
@@ -658,6 +667,12 @@ extension TelemetryWrapper {
         case notificationPermissionIsGranted = "is-granted"
         case notificationPermissionStatus = "status"
         case notificationPermissionAlertSetting = "alert-setting"
+
+        // Credit card
+        case isCreditCardAutofillToggleEnabled = "is-credit-card-autofill-toggle-enabled"
+        case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
+        case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
+        case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
     }
 
     func recordEvent(category: EventCategory,
@@ -804,7 +819,64 @@ extension TelemetryWrapper {
         // MARK: Credit Card
         case(.action, .tap, .creditCardAutofillSettings, _, _):
             GleanMetrics.CreditCard.autofillSettingsTapped.record()
-
+        case(.action, .tap, .creditCardFormDetected, _, _):
+            GleanMetrics.CreditCard.formDetected.record()
+        case(.action, .tap, .creditCardAutofilled, _, _):
+            GleanMetrics.CreditCard.autofilled.record()
+        case(.action, .tap, .creditCardAutofillFailed, _, _):
+            GleanMetrics.CreditCard.autofillFailed.record()
+        case(.action, .tap, .creditCardSavePromptCreate, _, _):
+            GleanMetrics.CreditCard.savePromptCreate.record()
+        case(.information, .settings, .creditCardAutofillEnabled, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isCreditCardAutofillEnabled.rawValue]
+                as? Bool {
+                GleanMetrics.CreditCard.autofillEnabled.set(isEnabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.information, .settings, .creditCardSyncEnabled, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isCreditCardSyncEnabled.rawValue]
+                as? Bool {
+                GleanMetrics.CreditCard.syncEnabled.set(isEnabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.action, .tap, .creditCardAutofillToggle, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isCreditCardAutofillToggleEnabled.rawValue]
+                as? Bool {
+                let isEnabledExtra = GleanMetrics.CreditCard.AutofillToggleExtra(isEnabled: isEnabled)
+                GleanMetrics.CreditCard.autofillToggle.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.action, .tap, .creditCardSyncToggle, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isCreditCardSyncToggleEnabled.rawValue]
+                as? Bool {
+                let isEnabledExtra = GleanMetrics.CreditCard.SyncToggleExtra(isEnabled: isEnabled)
+                GleanMetrics.CreditCard.syncToggle.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()

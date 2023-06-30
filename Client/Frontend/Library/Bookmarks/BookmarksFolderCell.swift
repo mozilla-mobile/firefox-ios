@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
@@ -11,7 +12,8 @@ protocol BookmarksFolderCell {
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?)
+                   navigationController: UINavigationController?,
+                   logger: Logger)
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
@@ -31,7 +33,8 @@ extension BookmarkFolderData: BookmarksFolderCell {
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?) {
+                   navigationController: UINavigationController?,
+                   logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarkFolderGUID: guid)
         let nextController = BookmarksPanel(viewModel: viewModel)
@@ -62,8 +65,21 @@ extension BookmarkItemData: BookmarksFolderCell {
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?) {
-        libraryPanelDelegate?.libraryPanel(didSelectURLString: url, visitType: .bookmark)
+                   navigationController: UINavigationController?,
+                   logger: Logger) {
+        // If we can't get a real URL out of what should be a URL, we let the user's
+        // default search engine give it a shot.
+        // Typically we'll be in this state if the user has tapped a bookmarked search template
+        // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
+        // they'd copied and pasted into the URL bar.
+        // See BrowserViewController.urlBar:didSubmitText:.
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
+            logger.log("Invalid URL, and couldn't generate a search URL for it.",
+                       level: .warning,
+                       category: .library)
+            return
+        }
+        libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
     }
 }

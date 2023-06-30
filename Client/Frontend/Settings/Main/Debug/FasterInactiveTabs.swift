@@ -6,6 +6,14 @@ import Foundation
 import Shared
 
 class FasterInactiveTabs: HiddenSetting {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+
     override var title: NSAttributedString? {
         let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
         let buttonTitle = isFasterEnabled ? "Set Inactive Tab Timeout to Default" : "Set Inactive Tab Timeout to 10s"
@@ -15,6 +23,10 @@ class FasterInactiveTabs: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
         UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }

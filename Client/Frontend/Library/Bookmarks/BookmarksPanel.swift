@@ -26,7 +26,7 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Properties
     var bookmarksHandler: BookmarksHandler
-    var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
     private var logger: Logger
@@ -363,7 +363,8 @@ class BookmarksPanel: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolder))
         bookmarkCell.didSelect(profile: profile,
                                libraryPanelDelegate: libraryPanelDelegate,
-                               navigationController: navigationController)
+                               navigationController: navigationController,
+                               logger: logger)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

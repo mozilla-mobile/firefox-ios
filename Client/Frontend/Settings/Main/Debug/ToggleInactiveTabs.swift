@@ -5,6 +5,14 @@
 import Foundation
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
+    private weak var settingsDelegate: SharedSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: SharedSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
@@ -15,6 +23,10 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
         let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
-        updateCell(navigationController)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToReload()
+        } else {
+            updateCell(navigationController)
+        }
     }
 }

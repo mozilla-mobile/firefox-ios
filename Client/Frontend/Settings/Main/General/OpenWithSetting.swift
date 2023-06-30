@@ -6,13 +6,16 @@ import Foundation
 import Shared
 
 class OpenWithSetting: Setting {
-    let profile: Profile
+    private weak var settingsDelegate: GeneralSettingsDelegate?
+    private let profile: Profile
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
-    override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.OpenWithMail.title
+    }
 
     override var status: NSAttributedString {
         guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
@@ -30,15 +33,21 @@ class OpenWithSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.settingsDelegate = settingsDelegate
 
         super.init(title: NSAttributedString(string: .SettingsOpenWithSectionName,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
-        navigationController?.pushViewController(viewController, animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedMailApp()
+        } else {
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }

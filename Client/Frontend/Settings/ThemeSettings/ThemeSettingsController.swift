@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 import Shared
 
 class ThemeSettingsController: ThemedTableViewController {
@@ -22,6 +23,8 @@ class ThemeSettingsController: ThemedTableViewController {
 
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
+
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     var isAutoBrightnessOn: Bool {
         return LegacyThemeManager.instance.automaticBrightnessIsOn

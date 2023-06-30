@@ -33,10 +33,18 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     var themeObserver: NSObjectProtocol?
     private var viewModel: CreditCardBottomSheetViewModel
 
-    var didTapNotNowClosure: (() -> Void)?
     var didTapYesClosure: ((Error?) -> Void)?
     var didTapManageCardsClosure: (() -> Void)?
     var didSelectCreditCardToFill: ((UnencryptedCreditCardFields) -> Void)?
+
+    private var numberOfCards: Int {
+        switch viewModel.state {
+        case .save, .update:
+            return 1
+        case .selectSavedCard:
+            return viewModel.creditCards?.count ?? 1
+        }
+    }
 
     // MARK: Views
     private lazy var contentView: UIView = .build { _ in }
@@ -47,7 +55,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         cardTableView.backgroundColor = .clear
         cardTableView.dataSource = self
         cardTableView.delegate = self
-        cardTableView.allowsSelection = true
+        cardTableView.allowsSelection = false
         cardTableView.separatorColor = .clear
         cardTableView.separatorStyle = .none
         cardTableView.isScrollEnabled = false
@@ -83,17 +91,6 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.yesButton
     }
 
-    private lazy var notNowButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .headline,
-            size: UX.yesButtonFontSize)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.notNowButton
-        button.addTarget(self, action: #selector(CreditCardBottomSheetViewController.didTapNotNow), for: .touchUpInside)
-        button.setTitle(.CreditCard.RememberCreditCard.SecondaryButtonTitle, for: .normal)
-        button.layer.cornerRadius = UX.yesButtonCornerRadius
-    }
-
     private var contentViewHeightConstraint: NSLayoutConstraint!
     private var contentWidthConstraint: NSLayoutConstraint!
 
@@ -108,6 +105,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
         self.viewModel.didUpdateCreditCard = { [weak self] in
             self?.cardTableView.reloadData()
+            self?.cardTableView.isScrollEnabled = self?.cardTableView.contentSize.height ?? 0 > self?.view.frame.height ?? 0
         }
 
         // Only allow selection when we are in selectSavedCard state
@@ -143,13 +141,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: View Setup
     func addSubviews() {
-        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-
         if viewModel.state != .selectSavedCard {
             buttonsContainerStackView.addArrangedSubview(yesButton)
-        }
-        if isIpad {
-            buttonsContainerStackView.addArrangedSubview(notNowButton)
         }
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
         view.addSubview(contentView)
@@ -188,7 +181,6 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             buttonsContainerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.tableMargin),
 
             yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
-            notNowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
             contentWidthConstraint,
             contentViewHeightConstraint
         ])
@@ -229,13 +221,6 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     }
 
     @objc
-    private func didTapNotNow() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
-        dismissVC()
-        didTapNotNowClosure?()
-    }
-
-    @objc
     private func didTapManageCards() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetManageCards)
         didTapManageCardsClosure?()
@@ -248,12 +233,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch viewModel.state {
-        case .save, .update:
-            return 1
-        case .selectSavedCard:
-            return viewModel.creditCards?.count ?? 1
-        }
+        return numberOfCards
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -274,9 +254,16 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
-            isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
+            isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory,
+            shouldShowSeparator: false,
+            addPadding: numberOfCards > 1,
+            didSelectAction: { [weak self] in
+                self?.handleCreditCardSelection(row: indexPath.row)
+            })
         hostingCell.host(creditCardRow, parentController: self)
-
+        hostingCell.backgroundColor = .clear
+        hostingCell.contentView.backgroundColor = .clear
+        hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
         return hostingCell
     }
@@ -322,10 +309,10 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func handleCreditCardSelection(row: Int) {
         guard let plainTextCreditCard = viewModel.getPlainCreditCardValues(
             bottomSheetState: .selectSavedCard,
-            row: indexPath.row
+            row: row
         ) else {
             return
         }
@@ -337,13 +324,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     func applyTheme() {
         let currentTheme = themeManager.currentTheme
         view.backgroundColor = currentTheme.colors.layer1
-        contentView.backgroundColor = currentTheme.colors.layer1
         yesButton.backgroundColor = currentTheme.colors.actionPrimary
         yesButton.titleLabel?.textColor = currentTheme.colors.textInverted
-
-        notNowButton.backgroundColor = currentTheme.colors.actionSecondary
-        notNowButton.titleLabel?.textColor = currentTheme.colors.textPrimary
-
         cardTableView.reloadData()
     }
 }

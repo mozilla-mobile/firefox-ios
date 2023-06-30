@@ -16,20 +16,20 @@ open class MockSyncManager: ClientSyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
-    private var emptySyncResult = deferMaybe(MZSyncResult(status: .ok,
-                                                          successful: [],
-                                                          failures: [:],
-                                                          persistedState: "",
-                                                          declined: nil,
-                                                          nextSyncAllowedAt: nil,
-                                                          telemetryJson: nil))
+    private var emptySyncResult = deferMaybe(SyncResult(status: .ok,
+                                                        successful: [],
+                                                        failures: [:],
+                                                        persistedState: "",
+                                                        declined: nil,
+                                                        nextSyncAllowedAt: nil,
+                                                        telemetryJson: nil))
 
-    open func syncTabs() -> Deferred<Maybe<MZSyncResult>> { return emptySyncResult }
-    open func syncHistory() -> Deferred<Maybe<MZSyncResult>> { return emptySyncResult }
-    open func syncEverything(why: MZSyncReason) -> Success { return succeed() }
+    open func syncTabs() -> Deferred<Maybe<SyncResult>> { return emptySyncResult }
+    open func syncHistory() -> Deferred<Maybe<SyncResult>> { return emptySyncResult }
+    open func syncEverything(why: SyncReason) -> Success { return succeed() }
 
     var syncNamedCollectionsCalled = 0
-    open func syncNamedCollections(why: MZSyncReason, names: [String]) -> Success {
+    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
         syncNamedCollectionsCalled += 1
         return succeed()
     }
@@ -47,6 +47,10 @@ open class MockSyncManager: ClientSyncManager {
     }
     open func onRemovedAccount() -> Success {
         return succeed()
+    }
+    open func checkCreditCardEngineEnablement() -> Bool {
+        // Refactor: FXIOS-6852
+        return true
     }
 }
 

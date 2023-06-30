@@ -468,7 +468,7 @@ class WebPageSetting: StringPrefSetting {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
         cell.accessoryType = isChecked() ? .checkmark : .none
-        textField.textAlignment = .left
+        textField.textAlignment = .natural
     }
 
     static func isURLOrEmpty(_ string: String?) -> Bool {
@@ -755,9 +755,6 @@ protocol SettingsDelegate: AnyObject {
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController {
-    typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
-
-    fileprivate let Identifier = "CellIdentifier"
     var settings = [SettingSection]()
 
     weak var settingsDelegate: SettingsDelegate?

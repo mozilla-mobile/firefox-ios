@@ -8,11 +8,13 @@ import Foundation
 import Shared
 
 class ChinaSyncServiceSetting: Setting {
+    private weak var settingsDelegate: SharedSettingsDelegate?
+    private var prefs: Prefs { return profile.prefs }
+    private let prefKey = PrefsKeys.KeyEnableChinaSyncService
+    private let profile: Profile
+    private let settings: UIViewController
+
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return profile.prefs }
-    let prefKey = PrefsKeys.KeyEnableChinaSyncService
-    let profile: Profile
-    let settings: UIViewController
 
     override var hidden: Bool { return !AppInfo.isChinaEdition }
 
@@ -26,9 +28,11 @@ class ChinaSyncServiceSetting: Setting {
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary])
     }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: SharedSettingsDelegate?) {
         self.profile = settings.profile
         self.settings = settings
+        self.settingsDelegate = settingsDelegate
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
@@ -53,7 +57,7 @@ class ChinaSyncServiceSetting: Setting {
         // Show confirmation dialog for the user to sign out of FxA
 
         let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
-        let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
+        let alert = AlertController(title: "", message: msg, preferredStyle: .alert)
         let okString = UIAlertAction(title: .OKString, style: .default) { _ in
             self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
             self.profile.removeAccount()
@@ -64,6 +68,11 @@ class ChinaSyncServiceSetting: Setting {
         }
         alert.addAction(okString)
         alert.addAction(cancel)
-        settings.present(alert, animated: true)
+
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToShow(alert: alert)
+        } else {
+            settings.present(alert, animated: true)
+        }
     }
 }

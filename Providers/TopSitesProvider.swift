@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import UIKit
 import Storage
-import SyncTelemetry
 
 /// A provider for frecency and pinned top sites, used for the home page and widgets
 protocol TopSitesProvider {

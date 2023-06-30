@@ -5,9 +5,21 @@
 import Foundation
 
 class ExperimentsSettings: HiddenSetting {
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
     override var title: NSAttributedString? { return NSAttributedString(string: "Experiments")}
 
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(ExperimentsViewController(), animated: true)
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.pressedExperiments()
+        } else {
+            navigationController?.pushViewController(ExperimentsViewController(), animated: true)
+        }
     }
 }
