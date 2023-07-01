@@ -7,7 +7,6 @@ import Common
 import Shared
 import Storage
 
-// TODO: unit tests, dequeue not shown js alert implemenatation
 class ShareExtensionCoordinator: BaseCoordinator {
     // MARK: - Properties
 
@@ -62,9 +61,9 @@ class ShareExtensionCoordinator: BaseCoordinator {
                 .AppMenu.AppMenuCopyURLConfirmMessage,
                 bottomContainer: alertContainer,
                 theme: themeManager.currentTheme)
-            parentCoordinator?.didFinish(from: self)
+            dequeueNotShownJSAlert()
         default:
-            parentCoordinator?.didFinish(from: self)
+            dequeueNotShownJSAlert()
         }
     }
 
@@ -92,6 +91,14 @@ class ShareExtensionCoordinator: BaseCoordinator {
     }
 
     private func dequeueNotShownJSAlert() {
+        guard let alertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt()
+        else {
+            parentCoordinator?.didFinish(from: self)
+            return
+        }
+        let alertController = alertInfo.alertController()
+        alertController.delegate = self
+        router.present(alertController)
     }
 }
 
@@ -102,7 +109,12 @@ extension ShareExtensionCoordinator: DevicePickerViewControllerDelegate, Instruc
     }
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
-        guard let shareItem = devicePickerViewController.shareItem else { return }
+        guard let shareItem = devicePickerViewController.shareItem
+        else {
+            router.dismiss()
+            parentCoordinator?.didFinish(from: self)
+            return
+        }
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
@@ -128,5 +140,11 @@ extension ShareExtensionCoordinator: DevicePickerViewControllerDelegate, Instruc
     func dismissInstructionsView() {
         router.dismiss()
         parentCoordinator?.didFinish(from: self)
+    }
+}
+
+extension ShareExtensionCoordinator: JSPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
+        dequeueNotShownJSAlert()
     }
 }

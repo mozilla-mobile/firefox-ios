@@ -41,6 +41,9 @@ struct InstructionsView: View {
             .accessibility(identifier: AccessibilityIdentifiers.ShareTo.HelpView.doneButton)
         )
         .navigationBarBackButtonHidden(true)
+        .onDisappear {
+            dismissAction?()
+        }
     }
 }
 
