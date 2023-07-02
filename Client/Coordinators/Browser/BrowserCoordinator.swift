@@ -345,13 +345,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         showETPMenu()
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, alertContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
             // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: alertContainer, router: router, profile: profile, parentCoordinator: self)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
     }

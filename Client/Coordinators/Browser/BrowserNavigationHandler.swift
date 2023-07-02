@@ -21,12 +21,12 @@ protocol BrowserNavigationHandler: AnyObject {
     ///
     /// - Parameter url: The url to be shared.
     /// - Parameter sourceView: The reference view to show the popoverViewController.
-    /// - Parameter alertContainer: The view in which is displayed the alert results from actions in the share extension.
-    func showShareExtension(url: URL, sourceView: UIView, alertContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection)
+    /// - Parameter toastContainer: The view in which is displayed the toast results from actions in the share extension.
+    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection)
 }
 
 extension BrowserNavigationHandler {
-    func showShareExtension(url: URL, sourceView: UIView, alertContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection = .up) {
-        showShareExtension(url: url, sourceView: sourceView, alertContainer: alertContainer, popoverArrowDirection: popoverArrowDirection)
+    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection = .up) {
+        showShareExtension(url: url, sourceView: sourceView, toastContainer: toastContainer, popoverArrowDirection: popoverArrowDirection)
     }
 }
