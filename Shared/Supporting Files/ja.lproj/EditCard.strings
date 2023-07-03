@@ -46,6 +46,3 @@
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "カード情報を保存して自動入力する";
 
-/* Title label for the view where user can view their credit card info */
-"CreditCard.EditCard.ViewCreditCardTitle.v113" = "クレジットカード情報を表示";
-

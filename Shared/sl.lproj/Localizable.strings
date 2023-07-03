@@ -1028,7 +1028,7 @@
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";
 
 /* Open search section of settings */
-"Search" = "Iskanje";
+"Search" = "Išči";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Iskanje ali naslov strani";

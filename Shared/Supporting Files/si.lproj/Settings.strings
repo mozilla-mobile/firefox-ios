@@ -26,7 +26,7 @@
 "CreditCards.Settings.ManageCards.v112" = "පත් කළමනාකරණය";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
-"CreditCards.Settings.UseASavedCard.v112" = "සුරැකි පතක් භාවිතා කරන්නද?";
+"CreditCards.Settings.UseASavedCard.v112" = "සුරැකි පතක් යොදා ගන්නද?";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "සුරැකි පත යොදාගන්න";

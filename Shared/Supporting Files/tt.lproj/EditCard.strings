@@ -46,6 +46,3 @@
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Карталарны саклау һәм автотөгәлләү";
 
-/* Title label for the view where user can view their credit card info */
-"CreditCard.EditCard.ViewCreditCardTitle.v113" = "Кредит картасын карау";
-
