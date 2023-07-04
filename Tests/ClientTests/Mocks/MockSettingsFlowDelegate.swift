@@ -6,8 +6,12 @@ import Foundation
 
 @testable import Client
 
-class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate, PrivacySettingsDelegate,
-                                AccountSettingsDelegate, SupportSettingsDelegate {
+class MockSettingsFlowDelegate: SettingsFlowDelegate,
+                                GeneralSettingsDelegate,
+                                PrivacySettingsDelegate,
+                                AccountSettingsDelegate,
+                                AboutSettingsDelegate,
+                                SupportSettingsDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
@@ -75,6 +79,14 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate, GeneralSettingsDelegate, P
     func pressedToShowSyncContent() {}
 
     func pressedToShowFirefoxAccount() {}
+
+    // MARK: AboutSettingsDelegate
+
+    func pressedRateApp() {}
+
+    func pressedLicense(url: URL, title: NSAttributedString) {}
+
+    func pressedYourRights(url: URL, title: NSAttributedString) {}
 
     // MARK: SupportSettingsDelegate
 
