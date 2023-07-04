@@ -273,7 +273,7 @@
 		4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */; };
 		4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */; };
 		4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331D3EE2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift */; };
-		433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433396C727ACE92500491049 /* CellWithRoundedButton.swift */; };
+		433396C827ACE92500491049 /* InactiveTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433396C727ACE92500491049 /* InactiveTabButton.swift */; };
 		4336FAD2264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */; };
 		433BADA029C8769800E34991 /* BiometricAuthentication.strings in Resources */ = {isa = PBXBuildFile; fileRef = 433BAD9E29C8769800E34991 /* BiometricAuthentication.strings */; };
 		433BADA429C8769800E34991 /* ErrorState.strings in Resources */ = {isa = PBXBuildFile; fileRef = 433BADA229C8769800E34991 /* ErrorState.strings */; };
@@ -698,6 +698,7 @@
 		8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */; };
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
 		8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */; };
+		8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */; };
 		8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
@@ -2814,7 +2815,7 @@
 		4331D3EE2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContentSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		4333498629F69D080059610C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Notification.strings; sourceTree = "<group>"; };
 		4333498729F69D080059610C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ZoomPageBar.strings; sourceTree = "<group>"; };
-		433396C727ACE92500491049 /* CellWithRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellWithRoundedButton.swift; sourceTree = "<group>"; };
+		433396C727ACE92500491049 /* InactiveTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabButton.swift; sourceTree = "<group>"; };
 		4333FB0129225C4700A3C600 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/SearchHeaderTitle.strings"; sourceTree = "<group>"; };
 		43340F98292B962100CF9ED8 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		433429FA29BA6CB1005B05B0 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/EngagementNotification.strings"; sourceTree = "<group>"; };
@@ -4808,6 +4809,7 @@
 		8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncHandlerTests.swift; sourceTree = "<group>"; };
 		8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottlerTests.swift; sourceTree = "<group>"; };
+		8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButtonState.swift; sourceTree = "<group>"; };
 		8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetryTests.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
@@ -7069,6 +7071,7 @@
 		216E9A3829D2119300ABE69B /* InactiveTabs */ = {
 			isa = PBXGroup;
 			children = (
+				433396C727ACE92500491049 /* InactiveTabButton.swift */,
 				437A9B672681256800FB41C1 /* InactiveTabCell.swift */,
 				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
 				E118B9282862674E00C84831 /* InactiveTabItemCellModel.swift */,
@@ -8451,6 +8454,7 @@
 				43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */,
 				217AEF7728480844004EED37 /* ResizableButton.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
+				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -9459,7 +9463,6 @@
 				EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				EBA3B2D12268F57E00728BDB /* BadgeWithBackdrop.swift */,
-				433396C727ACE92500491049 /* CellWithRoundedButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
 				D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
@@ -12654,7 +12657,7 @@
 				C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */,
 				8A83B7462A264FA0002FF9AC /* SettingsCoordinator.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
-				433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */,
+				433396C827ACE92500491049 /* InactiveTabButton.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
@@ -12893,6 +12896,7 @@
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
 				C8CD80D72A1E2C6E0097C3AE /* NimbusMessagingHelperUtilityProtocol.swift in Sources */,
+				8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				8AEDB11529F9F00400F2A53B /* SceneContainer.swift in Sources */,
 				AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */,

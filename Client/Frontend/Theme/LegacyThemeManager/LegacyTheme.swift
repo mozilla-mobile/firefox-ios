@@ -26,10 +26,8 @@ enum BuiltinThemeName: String {
 
 class TableViewColor {
     var rowBackground: UIColor { return UIColor.Photon.White100 } // layer5
-    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight } // layer5Hover
     var rowText: UIColor { return UIColor.Photon.Grey90 } // textPrimary
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
-    var headerBackground: UIColor { return UIColor.Photon.Grey10 } // layer1
 }
 
 class BrowserColor {
@@ -38,10 +36,6 @@ class BrowserColor {
 
 class TabTrayColor {
     var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
-}
-
-class HomePanelColor {
-    var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
 }
 
 class SnackBarColor {
@@ -56,7 +50,6 @@ protocol LegacyTheme {
     var tableView: TableViewColor { get }
     var browser: BrowserColor { get }
     var tabTray: TabTrayColor { get }
-    var homePanel: HomePanelColor { get }
     var snackbar: SnackBarColor { get }
 }
 
@@ -65,6 +58,5 @@ class LegacyNormalTheme: LegacyTheme {
     var tableView: TableViewColor { return TableViewColor() }
     var browser: BrowserColor { return BrowserColor() }
     var tabTray: TabTrayColor { return TabTrayColor() }
-    var homePanel: HomePanelColor { return HomePanelColor() }
     var snackbar: SnackBarColor { return SnackBarColor() }
 }
