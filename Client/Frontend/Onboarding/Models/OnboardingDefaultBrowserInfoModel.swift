@@ -11,7 +11,6 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
     var buttonTitle: String
     var a11yIdRoot: String
 
-<<<<<<< HEAD
     init(title: String = String.Onboarding.DefaultBrowserPopup.Title,
          instructionSteps: [String] = [String.Onboarding.DefaultBrowserPopup.FirstInstruction,
               String.Onboarding.DefaultBrowserPopup.SecondInstruction,
@@ -24,8 +23,6 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
         self.a11yIdRoot = a11yIdRoot
     }
 
-=======
->>>>>>> 4b02822e6 (Bugfix [v116] Fix swiftlint warnings (#15290))
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
         return instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
     }
