@@ -27,6 +27,10 @@ struct CoordinatorFlagManager {
                                                              checking: .buildOnly)
     }
 
+    static var isShareExtensionCoordinatorEnabled: Bool {
+        isCoordinatorEnabled && NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
+    }
+
     static var isEtpCoordinatorEnabled: Bool {
         return CoordinatorFlagManager.isSettingsCoordinatorEnabled
         && LegacyFeatureFlagsManager.shared.isFeatureEnabled(.etpCoordinatorRefactor,

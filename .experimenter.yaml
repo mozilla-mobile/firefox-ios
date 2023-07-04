@@ -180,6 +180,14 @@ settings-coordinator-refactor:
     enabled:
       type: boolean
       description: "Enables the feature\n"
+share-extension-coordinator-refactor:
+  description: "This feature is for managing the roll out of the share extension coordinator as part of the changes to the navigation in the app\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 share-sheet:
   description: This feature define the redesign of the share sheet
   hasExposure: true
