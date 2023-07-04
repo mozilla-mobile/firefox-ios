@@ -6,7 +6,12 @@ import Foundation
 import Shared
 
 class SendAnonymousUsageDataSetting: BoolSetting {
-    init(prefs: Prefs, delegate: SettingsDelegate?, theme: Theme) {
+    private weak var settingsDelegate: SupportSettingsDelegate?
+
+    init(prefs: Prefs,
+         delegate: SettingsDelegate?,
+         theme: Theme,
+         settingsDelegate: SupportSettingsDelegate?) {
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: .SendUsageSettingMessage,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]))
@@ -14,6 +19,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         statusText.append(NSAttributedString(string: .SendUsageSettingLink,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
 
+        self.settingsDelegate = settingsDelegate
         super.init(
             prefs: prefs,
             prefKey: AppConstants.prefSendUsageData,
@@ -40,6 +46,11 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+            return
+        }
+
         setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }

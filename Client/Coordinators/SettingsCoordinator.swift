@@ -14,10 +14,7 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 class SettingsCoordinator: BaseCoordinator,
                            SettingsDelegate,
                            SettingsFlowDelegate,
-                           GeneralSettingsDelegate,
-                           PrivacySettingsDelegate,
-                           PasswordManagerCoordinatorDelegate,
-                           AccountSettingsDelegate {
+                           PasswordManagerCoordinatorDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -291,6 +288,13 @@ class SettingsCoordinator: BaseCoordinator,
                                                                 parentType: .settings,
                                                                 deepLinkParams: fxaParams)
         router.push(viewController)
+    }
+
+    // MARK: - SupportSettingsDelegate
+
+    func pressedOpenSupportPage(url: URL) {
+        didFinish()
+        settingsOpenURLInNewTab(url)
     }
 
     // MARK: - PasswordManagerCoordinatorDelegate
