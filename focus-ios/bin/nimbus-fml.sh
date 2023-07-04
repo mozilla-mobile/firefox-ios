@@ -165,7 +165,7 @@ if [ -n "$MOZ_APPSERVICES_LOCAL" ] ; then
     export BINARY_PATH="$HOME/.cargo/bin/cargo run --manifest-path $LOCAL_FML_DIR/Cargo.toml --"
 else
     # Otherwise, we should download a pre-built copy
-    AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/v$AS_VERSION"
+    AS_DOWNLOAD_URL="https://archive.mozilla.org/pub/app-services/releases/$AS_VERSION"
     CHECKSUM_URL="$AS_DOWNLOAD_URL/nimbus-fml.sha256"
     FML_URL="$AS_DOWNLOAD_URL/nimbus-fml.zip"
     RELEASE_STATUS_CODE=$(curl -L --write-out '%{http_code}' --silent --output /dev/null "$CHECKSUM_URL")
