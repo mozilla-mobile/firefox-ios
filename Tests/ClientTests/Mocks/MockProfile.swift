@@ -16,6 +16,9 @@ open class MockSyncManager: ClientSyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
+
+    private var mockDeclinedEngines: [String]?
+    private var mockEngineEnabled = false
     private var emptySyncResult = deferMaybe(SyncResult(status: .ok,
                                                         successful: [],
                                                         failures: [:],
@@ -49,8 +52,20 @@ open class MockSyncManager: ClientSyncManager {
         return succeed()
     }
     open func checkCreditCardEngineEnablement() -> Bool {
-        // Refactor: FXIOS-6852
-        return true
+        guard let mockDeclinedEngines = mockDeclinedEngines,
+              !mockDeclinedEngines.isEmpty,
+              mockDeclinedEngines.contains("creditcards") else {
+            return mockEngineEnabled
+        }
+        return false
+    }
+
+    func setMockDeclinedEngines(_ engines: [String]?) {
+        mockDeclinedEngines = engines
+    }
+
+    func setMockEngineEnabled(_ enabled: Bool) {
+        mockEngineEnabled = enabled
     }
 }
 
