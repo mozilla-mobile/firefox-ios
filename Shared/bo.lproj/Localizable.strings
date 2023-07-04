@@ -34,6 +34,9 @@
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "གསར་བཅོས།";
 
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "New Tab";
+
 /* OK button */
 "OK" = "ཆོག";
 

@@ -1,3 +1,6 @@
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v115" = "Αποθηκεύστε τα στοιχεία της κάρτας σας με ασφάλεια στο %@ για πιο γρήγορη πληρωμή την επόμενη φορά.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Ναι";
 

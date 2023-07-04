@@ -671,7 +671,7 @@
 "LoginsHelper.DontSave.Button" = "Χωρίς αποθήκευση";
 
 /* Button to not update the user's password */
-"LoginsHelper.DontUpdate.Button" = "Να μην γίνει ενημέρωση";
+"LoginsHelper.DontUpdate.Button" = "Να μη γίνει ενημέρωση";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
 "LoginsHelper.PromptSaveLogin.Title" = "Αποθήκευση σύνδεσης %1$@ για %2$@;";
@@ -857,7 +857,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστοσελίδες μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοσελίδων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ίσως να μην λειτουργούν.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστοσελίδες μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοσελίδων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ίσως να μη λειτουργούν.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookies σας ακολουθούν από ιστοσελίδα σε ιστοσελίδα για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
