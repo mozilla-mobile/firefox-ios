@@ -135,7 +135,7 @@ class SettingsCoordinator: BaseCoordinator,
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
-        case .general:
+        case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
     }
@@ -311,7 +311,7 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: - AboutSettingsDelegate
 
     func pressedRateApp() {
-        RatingPromptManager.goToAppStoreReview()
+        settingsViewController.handle(route: .rateApp)
     }
 
     func pressedLicense(url: URL, title: NSAttributedString) {

@@ -142,6 +142,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         switch route {
         case .creditCard, .password:
             authenticateUserFor(route: route)
+        case .rateApp:
+            RatingPromptManager.goToAppStoreReview()
         default:
             break
         }
