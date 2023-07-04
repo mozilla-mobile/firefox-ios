@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Lec'hiennoù gwellañ";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Dibrennañ";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Estez nevez";
 
@@ -178,11 +181,20 @@
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Kregiñ ganti";
 
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Prim. Prevez. Disoursi.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Kregiñ gant ar merdeiñ";
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Tremen";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Evit muioc'h a vuhez prevez e vo skarzhet ar roll istor pa vo serret an arload.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Lakaat %@ dre ziouer evit gwareziñ ho roadennoù gant pep liamm digoret.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ n'eo ket evel ar verdeerien all";
@@ -279,6 +291,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Gouzout hiroc'h.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Lañvazioù";
 
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Sklaer";
@@ -463,6 +478,15 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Graet";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Stokit ar skramm degemer e-pad pell amzer betek ma hejfe an arlunioù.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Klask %@. Dibab ur widjet war-lec’h.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Pouezit an arlun mui.";
+
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
 "ShowMeHowOnboarding.Title.V2" = "Ouzhpenn ur widjet %@";
 
@@ -544,8 +568,20 @@
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "An arventennoù dre ziouer-se a ginnig ur gwarez kreñv. Aes eo kemmañ an arventennoù evit klotañ gant hoc’h ezhommoù resis.";
 
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Loc'hit hoc'h estez merdeiñ prevez ha stanket e vo an heulierien ha traoù fall all.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Miret en deus %@ da vezañ spiet gant al lec’hienn. Stokit ar skoed evit kaout titouroù war ar pezh a zo bet stanket.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Tapet eo! Miret hon eus ac’hanoc’h da vezañ spiet gant al lec’hienn. Stokit ar skoed evit kaout titouroù war ar pezh a zo bet stanket.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Stokit ar boubelenn pa fell deoc’h tennañ holl roudoù hoc’h estez bremanel.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Stokañ amañ da zilemel pep tra — roll istor, toupinoù, pep tra — ha loc'hañ en-dro en un ivinell nevez.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Gwarezet hoc’h!";
@@ -603,4 +639,10 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Diskouez din penaos ober";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Leuskel a reomp ac'hanoc'h da verdeiñ, met posupl e vo deoc'h kregiñ ganti buanoc'h ar wech a zeu a-drugarez d'ar widjed %@ war ho pajenn degemer.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Roll istor skarzhet! 🎉";
 

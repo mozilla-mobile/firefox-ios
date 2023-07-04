@@ -173,7 +173,7 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, κατάλαβα!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Περιηγηθείτε σαν να μην σας βλέπει κανείς.";
+"FirstRun.messageLabelTagline" = "Περιηγηθείτε σαν να μη σας βλέπει κανείς.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Κλείσιμο";
