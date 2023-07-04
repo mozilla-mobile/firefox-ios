@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "يستعمل Firefox كمرتك لمسح رموز QR رقميًا والتقاط الصور والڤِديوهات.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "يطلب Firefox تفعيل Face ID للوصول إلى جلسات الولوج المحفوظة لديك.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "يمكن أن تطلب منك المواقع التي تزورها معرفة مكانك.";
 

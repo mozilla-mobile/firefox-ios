@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ayagi ad k-isireg tuṭṭfa d usali n tvidyutin.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox yesra Face ID i wakken ad yekcem ɣer yinekcamen-ik·im yettuskelsen.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ismal web iɣer trezzuḍ zemren ad sutren adig-inek.";
 
