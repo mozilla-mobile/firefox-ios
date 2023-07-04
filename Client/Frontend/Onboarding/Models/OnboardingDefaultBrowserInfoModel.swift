@@ -11,16 +11,6 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
     var buttonTitle: String
     var a11yIdRoot: String
 
-    init(title: String,
-         instructionSteps: [String],
-         buttonTitle: String,
-         a11yIdRoot: String) {
-        self.title = title
-        self.instructionSteps = instructionSteps
-        self.buttonTitle = buttonTitle
-        self.a11yIdRoot = a11yIdRoot
-    }
-
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
         return instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
     }
