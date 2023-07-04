@@ -70,10 +70,6 @@ class FxAWebViewModel {
         self.deepLinkParams = deepLinkParams
         self.shouldAskForNotificationPermission = shouldAskForNotificationPermission
         self.logger = logger
-
-        // If accountMigrationFailed then the app menu has a caution icon,
-        // and at this point the user has taken sufficient action to clear the caution.
-        profile.rustFxA.accountMigrationFailed = false
     }
 
     var onDismissController: (() -> Void)?

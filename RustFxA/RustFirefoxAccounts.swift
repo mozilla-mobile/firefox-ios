@@ -37,16 +37,6 @@ open class RustFirefoxAccounts {
     public let pushNotifications = PushNotificationSetup()
     private let logger: Logger
 
-    // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
-    public var accountMigrationFailed: Bool {
-        get {
-            return UserDefaults.standard.bool(forKey: "fxaccount-migration-failed")
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "fxaccount-migration-failed")
-        }
-    }
-
     /** Must be called before this class is fully usable. Until this function is complete,
      all methods in this class will behave as if there is no Fx account.
      It will be called on app startup, and extensions must call this before using the class.
@@ -81,18 +71,6 @@ open class RustFirefoxAccounts {
             }
 
             isInitializingAccountManager = false
-
-            let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
-
-            // Note this checks if startup() is called in an app extensions, and if so, do not try account migration
-            if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
-                UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
-
-                // The client app only needs to trigger this one time. If it fails due to offline state, the rust library
-                // will automatically re-try until success or permanent failure (notifications accountAuthenticated / accountMigrationFailed respectively).
-                // See also `init()` use of `.accountAuthenticated` below.
-                manager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
-            }
 
             RustFirefoxAccounts.shared.accountManager.fill(manager)
 
@@ -181,75 +159,18 @@ open class RustFirefoxAccounts {
                                              factory: syncAuthStateCachefromJSON)
         syncAuthState = FirefoxAccountSyncAuthState(cache: cache)
 
-        // Called when account is logged in for the first time, on every app start when the account is found (even if offline), and when migration of an account is completed.
+        // Called when account is logged in for the first time, on every app start when the account is found (even if offline).
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
-            // Handle account migration completed successfully. Need to clear the old stored apnsToken and re-register push.
-            if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
-                MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
-                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-            }
-
             self?.update()
         }
 
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
-
-        NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: .main) { [weak self] notification in
-            var info = ""
-            if let error = notification.userInfo?["error"] as? Error {
-                info = error.localizedDescription
-            }
-            logger.log("RustFxa failed account migration",
-                       level: .warning,
-                       category: .sync,
-                       description: info)
-            self?.accountMigrationFailed = true
-            NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
-        }
-    }
-
-    struct MigrationTokens {
-        let session: String
-        let ksync: String
-        let kxcs: String
-    }
-
-    /// When migrating to new rust FxA, grab the old session tokens and try to re-use them.
-    private class func migrationTokens() -> MigrationTokens? {
-        // Keychain forKey("profile.account"), return dictionary, from there
-        // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
-        // that returns JSON string.
-        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        let key = "profile.account"
-        keychain.ensureDictonaryItemAccessibility(.afterFirstUnlock, forKey: key)
-
-        // Ignore this class when de-archiving, it isn't needed.
-        NSKeyedUnarchiver.setClass(Unknown.self, forClassName: "Account.FxADeviceRegistration")
-
-        guard let dict = keychain.object(forKey: key, ofClass: NSDictionary.self) as? [String: AnyObject],
-              let guid = dict["stateKeyLabel"]
-        else { return nil }
-
-        let key2 = "account.state.\(guid)"
-        keychain.ensureDictonaryItemAccessibility(.afterFirstUnlock, forKey: key2)
-        guard let jsonData = keychain.data(forKey: key2) else { return nil }
-
-        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else { return nil }
-
-        guard let sessionToken = json["sessionToken"] as? String,
-              let ksync = json["kSync"] as? String,
-              let kxcs = json["kXCS"] as? String
-        else { return nil }
-
-        return MigrationTokens(session: sessionToken, ksync: ksync, kxcs: kxcs)
     }
 
     /// This is typically used to add a UI indicator that FxA needs attention (usually re-login manually).
     public var isActionNeeded: Bool {
-        guard let accountManager = accountManager.peek() else { return false }
-        if accountManager.accountMigrationInFlight() || accountMigrationFailed { return true }
         if !hasAccount() { return false }
         return accountNeedsReauth()
     }
