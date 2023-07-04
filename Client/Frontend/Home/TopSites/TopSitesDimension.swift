@@ -14,16 +14,6 @@ struct TopSitesUIInterface {
     var interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     var trait: UITraitCollection
     var availableWidth: CGFloat
-
-    init(isLandscape: Bool = UIWindow.isLandscape,
-         interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-         trait: UITraitCollection,
-         availableWidth: CGFloat) {
-        self.isLandscape = isLandscape
-        self.interfaceIdiom = interfaceIdiom
-        self.trait = trait
-        self.availableWidth = availableWidth
-    }
 }
 
 /// Top sites dimension are subject to change depending on the user's number of rows,
