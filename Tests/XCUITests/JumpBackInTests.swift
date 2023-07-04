@@ -142,7 +142,7 @@ class JumpBackInTests: BaseTestCase {
 
         // The view is switched to the twitter tab
         let url = app.textFields["url"].value as! String
-        XCTAssertEqual(url, "twitter.com/i/flow/login")
+        XCTAssertEqual(url, "twitter.com/i/flow/login?redirect_after_login=%2F")
 
         // Open a new tab in normal browsing
         navigator.goto(TabTray)
