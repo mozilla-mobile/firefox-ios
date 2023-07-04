@@ -457,6 +457,20 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is FirefoxAccountSignInViewController)
     }
 
+    // MARK: SupportSettingsDelegate
+
+    func testSupportSettingsDelegate_openSupportPageInNewTab() {
+        let subject = createSubject()
+        let expectedURL = URL(string: "www.mozilla.com")!
+        subject.parentCoordinator = delegate
+
+        subject.pressedOpenSupportPage(url: expectedURL)
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
+        XCTAssertEqual(delegate.openURLinNewTabCalled, 1)
+        XCTAssertEqual(delegate.savedURL, expectedURL)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,

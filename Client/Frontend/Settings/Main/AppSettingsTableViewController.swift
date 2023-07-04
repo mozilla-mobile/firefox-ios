@@ -49,7 +49,11 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate, AccountSettingsDelegate {
+protocol SettingsFlowDelegate: AnyObject,
+                               GeneralSettingsDelegate,
+                               PrivacySettingsDelegate,
+                               AccountSettingsDelegate,
+                               SupportSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
@@ -396,15 +400,18 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
-            SendFeedbackSetting(),
+            SendFeedbackSetting(settingsDelegate: parentCoordinator),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme),
+                                          theme: themeManager.currentTheme,
+                                          settingsDelegate: parentCoordinator),
             StudiesToggleSetting(prefs: profile.prefs,
                                  delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme),
+                                 theme: themeManager.currentTheme,
+                                 settingsDelegate: parentCoordinator),
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme),
+                                   theme: themeManager.currentTheme,
+                                   settingsDelegate: parentCoordinator),
         ]
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
@@ -454,8 +461,12 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             debugSettingsClickCount = 0
             showDebugSettings = !showDebugSettings
             settings = generateSettings()
-            tableView.reloadData()
+            askedToReload()
         }
+    }
+
+    func pressedExperiments() {
+        parentCoordinator?.showExperiments()
     }
 
     func pressedShowTour() {
@@ -466,9 +477,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         applicationHelper.open(url)
     }
 
-    func pressedExperiments() {
-        parentCoordinator?.showExperiments()
-    }
+    // MARK: SharedSettingsDelegate
 
     func askedToShow(alert: AlertController) {
         present(alert, animated: true) {
