@@ -16,7 +16,20 @@ class LicenseAndAcknowledgementsSetting: Setting {
         return URL(string: "\(InternalURL.baseUrl)/\(AboutLicenseHandler.path)")
     }
 
+    weak var settingsDelegate: AboutSettingsDelegate?
+
+    init(settingsDelegate: AboutSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            guard let url = self.url,
+                  let title = self.title
+            else { return }
+            settingsDelegate?.pressedLicense(url: url, title: title)
+            return
+        }
         setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }

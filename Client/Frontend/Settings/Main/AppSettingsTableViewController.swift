@@ -53,6 +53,7 @@ protocol SettingsFlowDelegate: AnyObject,
                                GeneralSettingsDelegate,
                                PrivacySettingsDelegate,
                                AccountSettingsDelegate,
+                               AboutSettingsDelegate,
                                SupportSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
@@ -70,9 +71,12 @@ protocol AppSettingsScreen: UIViewController {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
-                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider,
-                                        SharedSettingsDelegate {
+class AppSettingsTableViewController: SettingsTableViewController,
+                                      AppSettingsScreen,
+                                      FeatureFlaggable,
+                                      DebugSettingsDelegate,
+                                      SearchBarLocationProvider,
+                                      SharedSettingsDelegate {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -138,6 +142,8 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         switch route {
         case .creditCard, .password:
             authenticateUserFor(route: route)
+        case .rateApp:
+            RatingPromptManager.goToAppStoreReview()
         default:
             break
         }
@@ -420,10 +426,10 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getAboutSettings() -> [SettingSection] {
         let aboutSettings = [
-            AppStoreReviewSetting(),
+            AppStoreReviewSetting(settingsDelegate: parentCoordinator),
             VersionSetting(settingsDelegate: self),
-            LicenseAndAcknowledgementsSetting(),
-            YourRightsSetting()
+            LicenseAndAcknowledgementsSetting(settingsDelegate: parentCoordinator),
+            YourRightsSetting(settingsDelegate: parentCoordinator)
         ]
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsAbout),
