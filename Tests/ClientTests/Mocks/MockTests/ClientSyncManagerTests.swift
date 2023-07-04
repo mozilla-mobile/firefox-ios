@@ -7,13 +7,13 @@ import Foundation
 
 @testable import Client
 
-final class MockSyncManagerTests: XCTestCase {
-    private var sut: MockSyncManager!
+final class ClientSyncManagerTests: XCTestCase {
+    private var sut: ClientSyncManagerSpy!
     private let engine = "creditcards"
 
     override func setUp() {
         super.setUp()
-        sut = MockSyncManager()
+        sut = ClientSyncManagerSpy()
     }
 
     override func tearDown() {

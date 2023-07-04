@@ -12,7 +12,7 @@ import XCTest
 
 public typealias ClientSyncManager = Client.SyncManager
 
-open class MockSyncManager: ClientSyncManager {
+open class ClientSyncManagerSpy: ClientSyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
@@ -113,7 +113,7 @@ open class MockProfile: Client.Profile {
 
     init(databasePrefix: String = "mock") {
         files = MockFiles()
-        syncManager = MockSyncManager()
+        syncManager = ClientSyncManagerSpy()
 
         let oldLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
         try? files.remove("\(databasePrefix)_logins.db")
