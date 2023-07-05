@@ -296,7 +296,7 @@ class CreditCardInputViewModel: ObservableObject {
         let month = creditCard.ccExpMonth
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
 
-        expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear)"
+        expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear % 100)"
     }
 
     func getDisplayedCCValues() -> UnencryptedCreditCardFields? {
