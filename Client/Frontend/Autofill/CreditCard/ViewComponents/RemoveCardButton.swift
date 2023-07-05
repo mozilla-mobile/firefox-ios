@@ -62,7 +62,10 @@ struct RemoveCardButton: View {
         .onChange(of: themeVal) { newThemeValue in
             applyTheme(theme: newThemeValue.theme)
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+        .onReceive(
+            NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification))
+        { _ in
+            // part of FXIOS-6797, if the app goes to the background and then the user fails the biometric authentication this alert prevents the screen dismissal, hiding it is the simplest way to solve the issue.
             showAlert = false
         }
     }
