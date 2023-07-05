@@ -5,6 +5,10 @@
 import Foundation
 import WebKit
 
+enum JavascriptError: Error {
+  case invalid
+}
+
 extension WKWebView {
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
@@ -41,6 +45,74 @@ extension WKWebView {
             self.evaluateJavaScript(javascript) { data, error  in
                 completion(data, error)
             }
+        }
+    }
+
+    /// Generates a JavaScript function call string.
+    /// - Parameters:
+    ///   - functionName: The name of the JavaScript function to call.
+    ///   - args: An array of arguments to pass to the JavaScript function. Each argument can be of any type.
+    ///   - escapeArgs: A Boolean value indicating whether to escape string arguments for HTML entities.
+    /// - Returns: A tuple containing the JavaScript function call string and an optional error.
+    func generateJSFunctionString(functionName: String,
+                                  args: [Any?],
+                                  escapeArgs: Bool = true) -> (javascript: String, error: Error?) {
+        var sanitizedArgs = [String]()
+        // Iterate through each argument in the provided array
+        for arg in args {
+            if let arg = arg {
+                do {
+                    if let arg = arg as? String {
+                        // If the argument is a string, optionally escape it for HTML entities
+                        sanitizedArgs.append(escapeArgs ? "'\(arg.htmlEntityEncodedString)'" : "\(arg)")
+                    } else {
+                        // If the argument is not a string, serialize it as JSON
+                        let data = try JSONSerialization.data(withJSONObject: arg,
+                                                              options: [.fragmentsAllowed])
+                        if let str = String(data: data, encoding: .utf8) {
+                            sanitizedArgs.append(str)
+                        } else {
+                            throw JavascriptError.invalid
+                        }
+                    }
+                } catch {
+                    return ("", error)
+                }
+            } else {
+                // If the argument is nil, add "null" as the argument value
+                sanitizedArgs.append("null")
+            }
+        }
+
+        // Check if the number of sanitized arguments matches the original number of arguments
+        if args.count != sanitizedArgs.count {
+            assertionFailure("Javascript parsing failed.")
+            return ("", JavascriptError.invalid)
+        }
+
+        // Generate the JavaScript function call string with sanitized arguments
+        return ("\(functionName)(\(sanitizedArgs.joined(separator: ", ")))", nil)
+    }
+
+    func evaluateSafeJavaScriptInDefaultContentWorld(functionName: String,
+                                                     args: [Any] = [],
+                                                     frame: WKFrameInfo? = nil,
+                                                     escapeArgs: Bool = true,
+                                                     asFunction: Bool = true,
+                                                     _ completion: @escaping (Any?, Error?) -> Void) {
+        var javascript = functionName
+
+        if asFunction {
+            let js = generateJSFunctionString(functionName: functionName, args: args, escapeArgs: escapeArgs)
+            if js.error != nil {
+                completion(nil, js.error)
+                return
+            }
+            javascript = js.javascript
+        }
+
+        DispatchQueue.main.async {
+            self.evaluateJavascriptInDefaultContentWorld(javascript, frame, completion)
         }
     }
 }
