@@ -10,7 +10,7 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         super.init(frame: frame)
         accessibilityLabel = .TabTrayToggleAccessibilityLabel
         accessibilityHint = .TabTrayToggleAccessibilityHint
-        let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
+        let maskImage = UIImage(named: ImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
 
