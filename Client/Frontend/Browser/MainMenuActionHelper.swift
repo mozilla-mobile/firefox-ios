@@ -412,7 +412,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         guard featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly) else { return nil }
 
         return SingleActionViewModel(title: .AppMenu.AppMenuReportSiteIssueTitleString,
-                                     iconString: ImageIdentifiers.reportSiteIssue) { _ in
+                                     iconString: ImageIdentifiers.Large.lightbulb) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
