@@ -5,12 +5,12 @@
 import Foundation
 
 enum ExpandButtonState {
-    case right
+    case trailing
     case down
 
     var image: UIImage? {
         switch self {
-        case .right:
+        case .trailing:
             return UIImage(named: ImageIdentifiers.Large.chevronRight)?
                 .withRenderingMode(.alwaysTemplate)
                 .imageFlippedForRightToLeftLayoutDirection()

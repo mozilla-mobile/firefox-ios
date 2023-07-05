@@ -215,7 +215,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
-            headerView.state = hasExpanded ? .down : .right
+            headerView.state = hasExpanded ? .down : .trailing
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.accessibilityLabel = hasExpanded ?
                 .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
