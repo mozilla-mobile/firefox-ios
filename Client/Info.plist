@@ -155,7 +155,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>menu-ScanQRCode</string>
+			<string>qrCodeLarge</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Scan QR Code</string>
 			<key>UIApplicationShortcutItemType</key>

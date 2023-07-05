@@ -148,7 +148,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     fileprivate lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.menuScanQRCode), for: .normal)
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.qrCode), for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton
         button.accessibilityLabel = .ScanQRCodeViewTitle
         button.clipsToBounds = false
