@@ -43,6 +43,7 @@ public struct ImageIdentifiers {
         public static let logoFirefox = "logoFirefoxLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
+        public static let login = "loginLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
     }
@@ -61,7 +62,6 @@ public struct ImageIdentifiers {
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
-    public static let key = "key"
     public static let largePrivateTabsMask = "largePrivateMask"
     public static let libraryPanelSearch = "search"
     public static let libraryReadingList = "library-readinglist"

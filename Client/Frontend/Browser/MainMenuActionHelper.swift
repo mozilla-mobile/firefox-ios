@@ -797,7 +797,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         else { return nil }
 
         return SingleActionViewModel(title: .AppMenu.AppMenuPasswords,
-                                     iconString: ImageIdentifiers.key,
+                                     iconString: ImageIdentifiers.Large.login,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
             let navigationHandler: NavigationHandlerType = { url in
