@@ -66,7 +66,7 @@ struct CreditCardItemRow: View {
                         Text(String.CreditCard.DisplayCard.ExpiresLabel)
                             .font(.body)
                             .foregroundColor(subTextColor)
-                        Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear)")
+                        Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear % 100)")
                             .font(.subheadline)
                             .foregroundColor(subTextColor)
                     }
@@ -110,7 +110,7 @@ struct CreditCardItemRow: View {
     func getImage(creditCard: CreditCard) -> Image {
         let defaultImage = Image(ImageIdentifiers.Large.creditCard)
 
-        guard let type = CreditCardType(rawValue: creditCard.ccType),
+        guard let type = CreditCardType(rawValue: creditCard.ccType.uppercased()),
               let image = type.image else {
             return defaultImage
         }
