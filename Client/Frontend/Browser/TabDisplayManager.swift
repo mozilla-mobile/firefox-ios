@@ -208,7 +208,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
-        self.inactiveViewModel = InactiveTabViewModel()
+        self.inactiveViewModel = InactiveTabViewModel(theme: theme)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
@@ -594,8 +594,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
-                inactiveCell.applyTheme(theme)
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
+                inactiveCell.applyTheme(theme: theme)
                 inactiveCell.hasExpanded = isInactiveViewExpanded
                 inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
