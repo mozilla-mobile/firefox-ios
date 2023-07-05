@@ -234,10 +234,18 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine?.engineID ?? "custom")
 
-        // Record the open tab count
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        if let count = delegate?.tabManager.count {
-            GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
+        // Tabs count telemetry
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            let normalTabs = delegate.tabManager.normalTabs
+            let privateTabs = delegate.tabManager.privateTabs
+            let normalAndPrivateTabsCount = normalTabs.count + privateTabs.count
+            let activeTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
+                                                                            profile: profile)
+
+            GleanMetrics.Tabs.cumulativeCount.add(Int32(normalAndPrivateTabsCount))
+            GleanMetrics.Tabs.normalTabsOpenCount.add(Int32(normalTabs.count))
+            GleanMetrics.Tabs.privateTabsOpenCount.add(Int32(privateTabs.count))
+            GleanMetrics.Tabs.inactiveTabsCount.add(Int32(normalTabs.count - activeTabs.count))
         }
 
         // Record other preference settings.

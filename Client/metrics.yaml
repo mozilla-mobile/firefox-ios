@@ -2552,6 +2552,42 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  normal_tabs_open_count:
+    type: counter
+    description: |
+      A counter that indicates how many NORMAL tabs a user
+      currently has open.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15341
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  private_tabs_open_count:
+    type: counter
+    description: |
+      A counter that indicates how many PRIVATE tabs a user
+      currently has open.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15341
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  inactive_tabs_count:
+    type: counter
+    description: |
+      A counter that indicates how many INACTIVE tabs a user
+      currently has open.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15341
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
   open:
     type: labeled_counter
     description: |
