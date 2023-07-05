@@ -115,6 +115,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     private func customizeFirefoxSettingSection() -> SettingSection {
         // Setup
         var sectionItems = [Setting]()
+
         let pocketStatusText = String(
             format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
             PocketAppName.shortName.rawValue)
