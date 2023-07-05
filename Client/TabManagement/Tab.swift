@@ -979,7 +979,8 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
         accessoryView.doneClosure = {
             CreditCardHelper.blurActiveElement(tabWebView: self, logger: self.logger)
-            self.endEditing(true) }
+            self.endEditing(true)
+        }
     }
 
     required init?(coder: NSCoder) {

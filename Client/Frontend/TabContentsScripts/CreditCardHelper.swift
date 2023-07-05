@@ -221,9 +221,9 @@ class CreditCardHelper: TabContentScript {
     static func blurActiveElement(tabWebView: WKWebView,
                                   logger: Logger) {
         let fillCreditCardInfoCallback = "document.activeElement.blur()"
-        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
-            guard let err = err else { return }
-            logger.log("Unable to go previous field: \(err)",
+        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
+            guard let error = error else { return }
+            logger.log("Unable to go previous field: \(error)",
                        level: .debug,
                        category: .webview)
         }
