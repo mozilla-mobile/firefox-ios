@@ -24,7 +24,7 @@ class SendToDeviceHelper {
     private var shareItem: ShareItem
     private var profile: Profile
     private var colors: Colors
-    private var delegate: Delegate
+    private weak var delegate: Delegate?
 
     init(shareItem: ShareItem, profile: Profile, colors: Colors, delegate: Delegate) {
         self.shareItem = shareItem
@@ -40,7 +40,7 @@ class SendToDeviceHelper {
                                                     textColor: colors.textColor,
                                                     imageColor: colors.iconColor,
                                                     dismissAction: {
-                self.delegate.dismissInstructionsView()
+                self.delegate?.dismissInstructionsView()
             })
             let hostingViewController = UIHostingController(rootView: instructionsView)
             #if MOZ_TARGET_SHARETO

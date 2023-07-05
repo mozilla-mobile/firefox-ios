@@ -196,6 +196,32 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedVC.topViewController is EnhancedTrackingProtectionMenuVC)
     }
 
+    func testShowShareExtension() {
+        let subject = createSubject()
+
+        subject.showShareExtension(url: URL(string: "https://www.google.com")!, sourceView: UIView(), toastContainer: UIView())
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func testRemoveChildCoordinator_whenDidFinishCalled() {
+        let subject = createSubject()
+        let childCoordinator = ShareExtensionCoordinator(
+            alertContainer: UIView(),
+            router: mockRouter,
+            profile: profile)
+
+        subject.add(child: childCoordinator)
+        subject.didFinish(from: childCoordinator)
+
+        XCTAssertEqual(subject.childCoordinators.count, 0)
+    }
+
     // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {
