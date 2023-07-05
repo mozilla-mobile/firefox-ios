@@ -239,13 +239,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             let normalTabs = delegate.tabManager.normalTabs
             let privateTabs = delegate.tabManager.privateTabs
             let normalAndPrivateTabsCount = normalTabs.count + privateTabs.count
-            let activeTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
-                                                                            profile: profile)
+            let normalActiveTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
+                                                                                  profile: profile)
 
             GleanMetrics.Tabs.cumulativeCount.add(Int32(normalAndPrivateTabsCount))
-            GleanMetrics.Tabs.normalTabsOpenCount.add(Int32(normalTabs.count))
+            GleanMetrics.Tabs.normalTabsOpenCount.add(Int32(normalActiveTabs.count))
             GleanMetrics.Tabs.privateTabsOpenCount.add(Int32(privateTabs.count))
-            GleanMetrics.Tabs.inactiveTabsCount.add(Int32(normalTabs.count - activeTabs.count))
+            GleanMetrics.Tabs.inactiveTabsCount.add(Int32(normalTabs.count - normalActiveTabs.count))
         }
 
         // Record other preference settings.
