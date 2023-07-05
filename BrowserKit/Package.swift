@@ -19,7 +19,10 @@ let package = Package(
             targets: ["TabDataStore"]),
         .library(
             name: "Redux",
-            targets: ["Redux"])
+            targets: ["Redux"]),
+        .library(
+            name: "ComponentLibrary",
+            targets: ["ComponentLibrary"])
     ],
     dependencies: [
         .package(
@@ -39,6 +42,13 @@ let package = Package(
             exact: "8.8.0"),
     ],
     targets: [
+        .target(
+            name: "ComponentLibrary",
+            dependencies: ["Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "ComponentLibraryTests",
+            dependencies: ["ComponentLibrary"]),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common"],
@@ -67,6 +77,6 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"])
+            dependencies: ["Redux"]),
     ]
 )
