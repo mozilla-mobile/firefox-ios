@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox, QR kodlarını taramak, fotoğraf ve video çekmek için kameranızı kullanır.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox, kayıtlı hesaplarınıza erişmek için Face ID gerektirir.";
+"NSFaceIDUsageDescription" = "Firefox, kayıtlı hesaplarınıza ve şifrelenmiş kartlarınıza erişmek için Face ID gerektirir.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir.";

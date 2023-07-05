@@ -2,13 +2,10 @@
 "New Private Tab" = "ផ្ទាំង​ឯកជន​ថ្មី";
 
 /* (No Comment) */
-"New Tab" = "ផ្ទាំង​ថ្មី";
+"New Tab" = "ផ្ទាំងថ្មី";
 
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "វា​អនុញ្ញាតឱ្យអ្នកថត និងបង្ហោះ​រូបថត។";
-
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox តម្រូវឱ្យ​មាន​​លេខសម្គាល់​មុខ ដើម្បី​អាចចូលប្រើប្រាស់​​ព័ត៌មានការចូល​ដែល​បាន​រក្សាទុក​របស់​អ្នក។";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "វិបសាយ​ដែល​អ្នក​ចូល​មើល​អាច​ស្នើ​សុំ​ទីតាំង​របស់​អ្នក។";

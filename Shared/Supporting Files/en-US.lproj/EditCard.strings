@@ -44,8 +44,8 @@
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Save";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Save and autofill cards";
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Save and Autofill Cards";
 
 /* Title label for the view where user can view their credit card info */
-"CreditCard.EditCard.ViewCreditCardTitle.v113" = "View Credit Card";
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "View Card";
 

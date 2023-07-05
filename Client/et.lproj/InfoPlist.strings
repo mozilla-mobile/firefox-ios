@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox vajab salvestatud kasutajatunnustele ligipääsemiseks Face ID'd.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Külastatavad saidid võivad küsida sinu asukohta.";
 

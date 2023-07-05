@@ -15,7 +15,20 @@ class YourRightsSetting: Setting {
         return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
     }
 
+    weak var settingsDelegate: AboutSettingsDelegate?
+
+    init(settingsDelegate: AboutSettingsDelegate?) {
+        self.settingsDelegate = settingsDelegate
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            guard let url = self.url,
+                  let title = self.title
+            else { return }
+            settingsDelegate?.pressedYourRights(url: url, title: title)
+            return
+        }
         setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }

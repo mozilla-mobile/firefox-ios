@@ -6,7 +6,12 @@ import Foundation
 import Shared
 
 class StudiesToggleSetting: BoolSetting {
-    init(prefs: Prefs, delegate: SettingsDelegate?, theme: Theme) {
+    private weak var settingsDelegate: SupportSettingsDelegate?
+
+    init(prefs: Prefs,
+         delegate: SettingsDelegate?,
+         theme: Theme,
+         settingsDelegate: SupportSettingsDelegate?) {
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: .SettingsStudiesToggleMessage,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]))
@@ -14,6 +19,7 @@ class StudiesToggleSetting: BoolSetting {
         statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink,
                                              attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
 
+        self.settingsDelegate = settingsDelegate
         super.init(
             prefs: prefs,
             prefKey: AppConstants.prefStudiesToggle,
@@ -38,6 +44,11 @@ class StudiesToggleSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+            return
+        }
+
         setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }

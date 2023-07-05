@@ -49,7 +49,12 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// Supports decision making from VC to parent coordinator
-protocol SettingsFlowDelegate: AnyObject, GeneralSettingsDelegate, PrivacySettingsDelegate, AccountSettingsDelegate {
+protocol SettingsFlowDelegate: AnyObject,
+                               GeneralSettingsDelegate,
+                               PrivacySettingsDelegate,
+                               AccountSettingsDelegate,
+                               AboutSettingsDelegate,
+                               SupportSettingsDelegate {
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
@@ -66,9 +71,12 @@ protocol AppSettingsScreen: UIViewController {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, AppSettingsScreen,
-                                    FeatureFlaggable, DebugSettingsDelegate, SearchBarLocationProvider,
-                                        SharedSettingsDelegate {
+class AppSettingsTableViewController: SettingsTableViewController,
+                                      AppSettingsScreen,
+                                      FeatureFlaggable,
+                                      DebugSettingsDelegate,
+                                      SearchBarLocationProvider,
+                                      SharedSettingsDelegate {
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption? // Will be clean up with FXIOS-6529
     private var showDebugSettings = false
@@ -134,6 +142,8 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         switch route {
         case .creditCard, .password:
             authenticateUserFor(route: route)
+        case .rateApp:
+            RatingPromptManager.goToAppStoreReview()
         default:
             break
         }
@@ -396,15 +406,18 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
     private func getSupportSettings() -> [SettingSection] {
         let supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
-            SendFeedbackSetting(),
+            SendFeedbackSetting(settingsDelegate: parentCoordinator),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme),
+                                          theme: themeManager.currentTheme,
+                                          settingsDelegate: parentCoordinator),
             StudiesToggleSetting(prefs: profile.prefs,
                                  delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme),
+                                 theme: themeManager.currentTheme,
+                                 settingsDelegate: parentCoordinator),
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme),
+                                   theme: themeManager.currentTheme,
+                                   settingsDelegate: parentCoordinator),
         ]
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
@@ -413,10 +426,10 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
 
     private func getAboutSettings() -> [SettingSection] {
         let aboutSettings = [
-            AppStoreReviewSetting(),
+            AppStoreReviewSetting(settingsDelegate: parentCoordinator),
             VersionSetting(settingsDelegate: self),
-            LicenseAndAcknowledgementsSetting(),
-            YourRightsSetting()
+            LicenseAndAcknowledgementsSetting(settingsDelegate: parentCoordinator),
+            YourRightsSetting(settingsDelegate: parentCoordinator)
         ]
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsAbout),
@@ -454,8 +467,12 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
             debugSettingsClickCount = 0
             showDebugSettings = !showDebugSettings
             settings = generateSettings()
-            tableView.reloadData()
+            askedToReload()
         }
+    }
+
+    func pressedExperiments() {
+        parentCoordinator?.showExperiments()
     }
 
     func pressedShowTour() {
@@ -466,9 +483,7 @@ class AppSettingsTableViewController: SettingsTableViewController, AppSettingsSc
         applicationHelper.open(url)
     }
 
-    func pressedExperiments() {
-        parentCoordinator?.showExperiments()
-    }
+    // MARK: SharedSettingsDelegate
 
     func askedToShow(alert: AlertController) {
         present(alert, animated: true) {

@@ -1028,7 +1028,7 @@
 "ScanQRCode.View.Title" = "Skannaa QR-koodi";
 
 /* Open search section of settings */
-"Search" = "Haku";
+"Search" = "Hae";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Hae tai kirjoita osoite";

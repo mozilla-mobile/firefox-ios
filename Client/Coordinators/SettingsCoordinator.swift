@@ -17,7 +17,8 @@ class SettingsCoordinator: BaseCoordinator,
                            GeneralSettingsDelegate,
                            PrivacySettingsDelegate,
                            PasswordManagerCoordinatorDelegate,
-                           AccountSettingsDelegate {
+                           AccountSettingsDelegate,
+                           AboutSettingsDelegate {
     var settingsViewController: AppSettingsScreen
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -134,7 +135,7 @@ class SettingsCoordinator: BaseCoordinator,
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
-        case .general:
+        case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
     }
@@ -293,10 +294,37 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    // MARK: - SupportSettingsDelegate
+
+    func pressedOpenSupportPage(url: URL) {
+        didFinish()
+        settingsOpenURLInNewTab(url)
+    }
+
     // MARK: - PasswordManagerCoordinatorDelegate
 
     func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
         didFinish()
         remove(child: coordinator)
+    }
+
+    // MARK: - AboutSettingsDelegate
+
+    func pressedRateApp() {
+        settingsViewController.handle(route: .rateApp)
+    }
+
+    func pressedLicense(url: URL, title: NSAttributedString) {
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
+    }
+
+    func pressedYourRights(url: URL, title: NSAttributedString) {
+        let viewController = SettingsContentViewController()
+        viewController.settingsTitle = title
+        viewController.url = url
+        router.push(viewController)
     }
 }

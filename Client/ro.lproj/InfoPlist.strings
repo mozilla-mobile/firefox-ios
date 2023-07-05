@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox necesită Face ID pentru a-ți accesa datele de autentificare salvate.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Site-urile web pe care le vizitezi îți pot solicita locația.";
 

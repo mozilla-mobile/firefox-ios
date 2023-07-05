@@ -61,6 +61,9 @@ final class NimbusFeatureFlagLayer {
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
 
+        case .shareExtensionCoordinatorRefactor:
+            return checkShareExtensionCoordinatorRefactorFeature(from: nimbus)
+
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
@@ -190,6 +193,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.settingsCoordinatorRefactor.value()
+        return config.enabled
+    }
+
+    private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
         return config.enabled
     }
 

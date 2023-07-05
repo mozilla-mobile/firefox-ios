@@ -457,6 +457,42 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is FirefoxAccountSignInViewController)
     }
 
+    // MARK: SupportSettingsDelegate
+
+    func testSupportSettingsDelegate_openSupportPageInNewTab() {
+        let subject = createSubject()
+        let expectedURL = URL(string: "www.mozilla.com")!
+        subject.parentCoordinator = delegate
+
+        subject.pressedOpenSupportPage(url: expectedURL)
+
+        XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
+        XCTAssertEqual(delegate.openURLinNewTabCalled, 1)
+        XCTAssertEqual(delegate.savedURL, expectedURL)
+    }
+
+    // MARK: - AboutSettingsDelegate
+
+    func testPressedLicense() {
+        let subject = createSubject()
+
+        subject.pressedLicense(url: URL(string: "https://firefox.com")!,
+                               title: NSAttributedString(string: "Firefox"))
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SettingsContentViewController)
+    }
+
+    func testPressedYourRights() {
+        let subject = createSubject()
+
+        subject.pressedYourRights(url: URL(string: "https://firefox.com")!,
+                                  title: NSAttributedString(string: "Firefox"))
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SettingsContentViewController)
+    }
+
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
