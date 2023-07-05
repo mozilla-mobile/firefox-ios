@@ -90,7 +90,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                 })
             }
-            actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed(ImageIdentifiers.copyLink), identifier: nil) { [weak self] _ in
+            actions.append(UIAction(title: .TabPeekCopyUrl,
+                                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.link),
+                                    identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
 
                 UIPasteboard.general.url = url

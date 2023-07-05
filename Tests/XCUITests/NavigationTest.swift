@@ -231,7 +231,7 @@ class NavigationTest: BaseTestCase {
             waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
             app.textFields["url"].press(forDuration: 3)
-            app.tables.otherElements[ImageIdentifiers.copyLink].tap()
+            app.tables.otherElements[ImageIdentifiers.Large.link].tap()
 
             sleep(2)
             app.textFields["url"].tap()

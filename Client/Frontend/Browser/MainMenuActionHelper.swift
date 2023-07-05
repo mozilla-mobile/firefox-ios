@@ -374,7 +374,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getCopyAction() -> PhotonRowActions? {
         return SingleActionViewModel(title: .AppMenu.AppMenuCopyLinkTitleString,
-                                     iconString: ImageIdentifiers.copyLink) { _ in
+                                     iconString: ImageIdentifiers.Large.link) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url

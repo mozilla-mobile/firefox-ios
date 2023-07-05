@@ -42,6 +42,7 @@ public struct ImageIdentifiers {
         public static let home = "homeLarge"
         public static let logoFirefox = "logoFirefoxLarge"
         public static let lightbulb = "lightbulbLarge"
+        public static let link = "linkLarge"
         public static let plus = "plusLarge"
         public static let tabTray = "tabTrayLarge"
     }
@@ -52,7 +53,6 @@ public struct ImageIdentifiers {
     public static let bottomSheetClose = "bottomSheet-close"
     public static let circleFill = "circle.fill"
     public static let closeLargeButton = "close-large"
-    public static let copyLink = "menu-Copy-Link"
     public static let creditCardPlaceholder = "credit_card_placeholder"
     public static let errorAutofill = "error_autofill"
     public static let emptySyncImageName = "emptySync"
