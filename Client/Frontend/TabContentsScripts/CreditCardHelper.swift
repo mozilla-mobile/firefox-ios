@@ -193,9 +193,9 @@ class CreditCardHelper: TabContentScript {
         let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusNextInputField()"
 
-        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
-            guard let err = err else { return }
-            logger.log("Unable to go next field: \(err)",
+        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
+            guard let error = error else { return }
+            logger.log("Unable to go next field: \(error)",
                        level: .debug,
                        category: .webview)
         }
@@ -206,9 +206,9 @@ class CreditCardHelper: TabContentScript {
         let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusPreviousInputField()"
 
-        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, err in
-            guard let err = err else { return }
-            logger.log("Unable to go previous field: \(err)",
+        tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
+            guard let error = error else { return }
+            logger.log("Unable to go previous field: \(error)",
                        level: .debug,
                        category: .webview)
         }
