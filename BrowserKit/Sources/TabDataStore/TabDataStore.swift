@@ -12,7 +12,7 @@ public protocol TabDataStore {
 
     /// Saves the window data (contains the list of tabs) to disk
     /// - Parameter window: the window data object to be saved
-    func saveWindowData(window: WindowData) async
+    func saveWindowData(window: WindowData, forced: Bool) async
 
     /// Erases all window data on disk
     func clearAllWindowsData() async
@@ -129,7 +129,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: - Saving Data
 
-    public func saveWindowData(window: WindowData) async {
+    public func saveWindowData(window: WindowData, forced: Bool) async {
         guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else { return }
 
         if fileManager.fileExists(atPath: windowSavingPath) {
@@ -139,7 +139,15 @@ public actor DefaultTabDataStore: TabDataStore {
                 fileManager.createDirectoryAtPath(path: windowDataDirectoryURL)
             }
         }
-        await writeWindowDataToFileWithThrottle(window: window, path: windowSavingPath)
+
+        // Hold onto a copy of the latest window data so whenever the save happens it is using the latest
+        windowDataToSave = window
+
+        if forced {
+            await writeWindowDataToFile(path: windowSavingPath)
+        } else {
+            await writeWindowDataToFileWithThrottle(path: windowSavingPath)
+        }
     }
 
     private func createWindowDataBackup(window: WindowData, windowSavingPath: URL) {
@@ -161,10 +169,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // Throttles the saving of the data so that it happens every 'throttleTime' nanoseconds
     // as long as their is new data to be saved
-    private func writeWindowDataToFileWithThrottle(window: WindowData, path: URL) async {
-        // Hold onto a copy of the latest window data so whenever the save happens it is using the latest
-        windowDataToSave = window
-
+    private func writeWindowDataToFileWithThrottle(path: URL) async {
         // Ignore the request because a save is already scheduled to happen
         guard !nextSaveIsScheduled else { return }
 
@@ -176,20 +181,23 @@ public actor DefaultTabDataStore: TabDataStore {
             // Once the throttle time has passed initiate the save and reset the bool
             try? await Task.sleep(nanoseconds: throttleTime)
             nextSaveIsScheduled = false
+            await writeWindowDataToFile(path: path)
+        }
+    }
 
-            do {
-                guard let windowDataToSave = windowDataToSave else {
-                    logger.log("Tried to save window data but found nil",
-                               level: .fatal,
-                               category: .tabs)
-                    return
-                }
-                try fileManager.writeWindowData(windowData: windowDataToSave, to: path)
-            } catch {
-                logger.log("Failed to save window data: \(error)",
-                           level: .debug,
+    private func writeWindowDataToFile(path: URL) async {
+        do {
+            guard let windowDataToSave = windowDataToSave else {
+                logger.log("Tried to save window data but found nil",
+                           level: .fatal,
                            category: .tabs)
+                return
             }
+            try fileManager.writeWindowData(windowData: windowDataToSave, to: path)
+        } catch {
+            logger.log("Failed to save window data: \(error)",
+                       level: .debug,
+                       category: .tabs)
         }
     }
 
