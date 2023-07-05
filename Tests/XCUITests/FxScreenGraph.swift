@@ -695,7 +695,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
             userState.pocketInNewTab = !userState.pocketInNewTab
-            app.tables.cells.switches["Recommended by Pocket"].tap()
+            app.tables.cells.switches["Thought-Provoking Stories"].tap()
         }
 
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
