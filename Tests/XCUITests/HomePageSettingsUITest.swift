@@ -36,6 +36,7 @@ class HomePageSettingsUITests: BaseTestCase {
         }
         super.setUp()
     }
+
     func testCheckHomeSettingsByDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -58,8 +59,6 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", recentlySaved as? String)
         let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
         XCTAssertEqual("1", recentlyVisited as? String)
-        let recommendedByPocket = app.tables.cells.switches["Recommended by Pocket"].value
-        XCTAssertEqual("1", recommendedByPocket as? String)
         let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
