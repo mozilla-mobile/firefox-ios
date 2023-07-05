@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "„Firefox“ naudoja jūsų kamerą QR kodų nuskaitymui, nuotraukų darymui, ir vaizdo įrašams.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Norint pasiekti jūsų įrašytus prisijungimus, „Firefox“ reikalingas „Face ID“.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Svetainės gali teirautis jūsų buvimo vietos.";
 

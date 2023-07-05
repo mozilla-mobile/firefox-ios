@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ଏହା ଆପଣକୁ ଫଟୋ ଉଠାଇବା ଓ ଅପଲୋଡ଼ କରିବାର ସୁଯୋଗ ଦେବ ।";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox ଆପଣଙ୍କ ସଂରକ୍ଷିତ ଲଗ୍ ଇନ୍ ଆକସେସ୍ କରିବାକୁ ଫେସ୍ ଆଇଡି ଆବଶ୍ୟକ କରେ।";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ଆପଣ ଦେଖୁଥିବା ୱେବସାଇଟସବୁ ଆପଣଙ୍କ ଅବସ୍ଥିତି ମାଗିପାରନ୍ତି ।";
 

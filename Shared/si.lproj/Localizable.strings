@@ -647,7 +647,7 @@
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "තව දැනගන්න";
 
 /* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "පිවිසුම් හා මුරපද සුරැකීමට සහ ස්වයං පිරවුමට, මුහුණු හැඳු., ස්පර්ශ හැඳු. හෝ උපාංග මුර කේතයක් සබල කරන්න.";
+"Logins.DevicePasscodeRequired.Message" = "පිවිසුම් හා මුරපද සුරැකීමට සහ ස්වයං පිරවුමට; මුහුණක හැඳු., ස්පර්ශ හැඳු. හෝ උපාංගයේ මුර කේතයක් සබල කරන්න.";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "ඉදිරියට";
@@ -1439,7 +1439,7 @@
 "Settings.Passwords.FingerPrintReason.v103" = "දැන් මුරපද වෙත ප්‍රවේශ වීමට ඔබගේ ඇඟිලි සලකුණ යොදා ගන්න.";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "ඔබගේ මුරපද දැන් මුහුණු හැඳු., ස්පර්ශ හැඳු. හෝ උපාංග මුර කේතයකින් සුරක්‍ෂිතයි.";
+"Settings.Passwords.OnboardingMessage.v103" = "ඔබගේ මුරපද දැන් මුහුණේ හැඳු., ස්පර්ශ හැඳු. හෝ උපාංගයේ මුර කේතයකින් සුරක්‍ෂිතයි.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "මුරපද සුරකින්න";
@@ -1784,7 +1784,7 @@
 "Wallpaper.Error.Dismiss.v106" = "අවලංගු";
 
 /* Action displayed when changing wallpaper fails. */
-"Wallpaper.Error.TryAgain.v106" = "යළි උත්සාහය";
+"Wallpaper.Error.TryAgain.v106" = "නැවත";
 
 /* Accessibility label for the main web content view */
 "Web content" = "වියමන අන්තර්ගතය";

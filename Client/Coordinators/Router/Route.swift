@@ -94,6 +94,7 @@ enum Route: Equatable {
         case toolbar
         case topSites
         case wallpaper
+        case rateApp
 
         // Will be clean up with FXIOS-6529
         func getSettingsRoute() -> AppSettingsDeeplinkOption? {
@@ -120,7 +121,7 @@ enum Route: Equatable {
                 return .newTab
             case .search:
                 return .search
-            case .clearPrivateData, .general, .theme, .password:
+            case .clearPrivateData, .general, .theme, .password, .rateApp:
                 return nil // not handling those since not needed to temporary fix #14954
             }
         }

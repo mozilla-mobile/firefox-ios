@@ -2,13 +2,10 @@
 "New Private Tab" = "زبانه‌ی خصوصی جدید";
 
 /* (No Comment) */
-"New Tab" = "زبانه جدید";
+"New Tab" = "زبانه‌ جدید";
 
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "فایرفاکس از دوربین شما برای پردازش کد QR یا گرفتن عکس یا ویدیو شما استفاده می‌کند.";
-
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox برای دسترسی به ورودهای ذخیره شده شما نیاز به Face ID دارد.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "وب سایت‌هایی که شما بازدید میکنید ممکن است مکان شما را درخواست کنند.";

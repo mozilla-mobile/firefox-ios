@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Το Firefox χρησιμοποιεί την κάμερα για τη σάρωση κωδικών QR και τη λήψη φωτογραφιών και βίντεο.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για πρόσβαση στις αποθηκευμένες συνδέσεις σας.";
+"NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για την πρόσβαση σε αποθηκευμένες συνδέσεις και κρυπτογραφημένες κάρτες.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ίσως απαιτήσουν την τοποθεσία σας.";
