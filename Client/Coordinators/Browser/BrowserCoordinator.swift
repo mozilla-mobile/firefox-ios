@@ -8,7 +8,7 @@ import WebKit
 import Shared
 import Storage
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate, ParentCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -474,9 +474,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
     }
-}
 
-extension BrowserCoordinator: ParentCoordinatorDelegate {
+    // MARK: - ParentCoordinatorDelegate
+
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }

@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-class ShareExtensionCoordinator: BaseCoordinator {
+class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDelegate, InstructionsViewDelegate, JSPromptAlertControllerDelegate {
     // MARK: - Properties
 
     private let tabManager: TabManager
@@ -100,9 +100,9 @@ class ShareExtensionCoordinator: BaseCoordinator {
         alertController.delegate = self
         router.present(alertController)
     }
-}
 
-extension ShareExtensionCoordinator: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
+    // MARK: DevicePickerViewControllerDelegate
+
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         router.dismiss()
         parentCoordinator?.didFinish(from: self)
@@ -137,13 +137,15 @@ extension ShareExtensionCoordinator: DevicePickerViewControllerDelegate, Instruc
         }
     }
 
+    // MARK: - InstructionViewDelegate
+
     func dismissInstructionsView() {
         router.dismiss()
         parentCoordinator?.didFinish(from: self)
     }
-}
 
-extension ShareExtensionCoordinator: JSPromptAlertControllerDelegate {
+    // MARK: - JSPromptAlertControllerDelegate
+
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
         dequeueNotShownJSAlert()
     }

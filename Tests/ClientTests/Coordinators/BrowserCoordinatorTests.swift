@@ -207,6 +207,21 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
+    // MARK: - ParentCoordinatorDelegate
+
+    func testRemoveChildCoordinator_whenDidFinishCalled() {
+        let subject = createSubject()
+        let childCoordinator = ShareExtensionCoordinator(
+            alertContainer: UIView(),
+            router: mockRouter,
+            profile: profile)
+
+        subject.add(child: childCoordinator)
+        subject.didFinish(from: childCoordinator)
+
+        XCTAssertEqual(subject.childCoordinators.count, 0)
+    }
+
     // MARK: - Search route
 
     func testHandleSearchQuery_returnsTrue() {
