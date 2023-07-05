@@ -4,7 +4,7 @@
 
 import Foundation
 
-// Something needs to be in the target, this will be removed in the next PR
+// Something needs to be in the target, this will be removed in the rest of FXIOS-6864
 struct Foo {
     var bar = 1
 }
