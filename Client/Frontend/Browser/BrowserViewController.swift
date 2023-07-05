@@ -1861,8 +1861,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         // Default value is true for autofill credit card input
         let autofillStatus = userDefaults.value(forKey: key) as? Bool ?? true
         TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
+            category: .information,
+            method: .settings,
             object: .creditCardAutofillEnabled,
             extras: [
                 TelemetryWrapper.ExtraKey.isCreditCardAutofillEnabled.rawValue: autofillStatus
@@ -1874,8 +1874,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             guard hasSync else { return }
             let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
             TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
+                category: .information,
+                method: .settings,
                 object: .creditCardSyncEnabled,
                 extras: [
                     TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
