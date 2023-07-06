@@ -40,13 +40,15 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
-        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle, iconString: ImageIdentifiers.pasteAndGo) { _ in
+        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle,
+                                                  iconString: ImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
         }.items
 
-        let pasteAction = SingleActionViewModel(title: .PasteTitle, iconString: ImageIdentifiers.paste) { _ in
+        let pasteAction = SingleActionViewModel(title: .PasteTitle,
+                                                iconString: ImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
