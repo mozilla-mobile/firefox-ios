@@ -114,8 +114,7 @@ class CreditCardHelper: TabContentScript {
 
         ccPlainText.ccName = payload.ccName
         ccPlainText.ccExpMonth = Int64(payload.ccExpMonth.filter { $0.isNumber }) ?? 0
-        // Note: we only need the last 2 digits of the ccExpYear
-        ccPlainText.ccExpYear = (Int64(payload.ccExpYear.filter { $0.isNumber }) ?? 0) % 100
+        ccPlainText.ccExpYear = Int64(payload.ccExpYear.filter { $0.isNumber }) ?? 0
         ccPlainText.ccNumber = "\(payload.ccNumber.filter { $0.isNumber })"
         ccPlainText.ccNumberLast4 = ccPlainText.ccNumber.count > 4 ? String(ccPlainText.ccNumber.suffix(4)) : ""
         ccPlainText.ccType = creditCardValidator.cardTypeFor(ccPlainText.ccNumber)?.rawValue ?? ""

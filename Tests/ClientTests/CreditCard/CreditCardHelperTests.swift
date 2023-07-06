@@ -134,7 +134,7 @@ class CreditCardHelperTests: XCTestCase {
         XCTAssertNotNil(messageFields)
         let fieldValues = creditCardHelper.getFieldTypeValues(payload: messageFields!.creditCardPayload)
         XCTAssertEqual(fieldValues.ccExpMonth, 3)
-        XCTAssertEqual(fieldValues.ccExpYear, 99)
+        XCTAssertEqual(fieldValues.ccExpYear, 2999)
         XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
         XCTAssertEqual(fieldValues.ccNumberLast4, "6788")
         XCTAssertEqual(fieldValues.ccType, "VISA")
