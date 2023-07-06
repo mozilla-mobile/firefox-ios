@@ -9,7 +9,6 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct ImageIdentifiers {
-    public static let addShortcut = "action_pin"
     public static let addToReadingList = "addToReadingList"
     public static let badgeMask = "badge-mask"
     public static let bottomSheetClose = "bottomSheet-close"

@@ -26,7 +26,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Check that it has been unpinned
         cell.press(forDuration: 2)
-        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.addShortcut])
+        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.Large.pin])
     }
 
     func testShareOptionIsShown() {

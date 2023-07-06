@@ -272,7 +272,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .PinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.addShortcut,
+                                     iconString: ImageIdentifiers.Large.pin,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.pinTopSite(site)
             self.sendTopSiteContextualTelemetry(type: .pin)
