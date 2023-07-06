@@ -46,6 +46,7 @@ public struct StandardImageIdentifiers {
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
         public static let login = "loginLarge"
+        public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
         public static let privateMode = "privateModeLarge"
         public static let qrCode = "qrCodeLarge"

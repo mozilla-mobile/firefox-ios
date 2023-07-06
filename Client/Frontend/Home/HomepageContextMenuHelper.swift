@@ -282,7 +282,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     // Unpin removes it from the location it's in. Still can appear in the top sites as unpin
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.removeFromShortcut,
+                                     iconString: ImageIdentifiers.Large.pinSlash,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
             self.sendTopSiteContextualTelemetry(type: .unpin)

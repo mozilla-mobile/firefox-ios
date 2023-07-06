@@ -54,7 +54,6 @@ public struct ImageIdentifiers {
     public static let qrCodeLightTurnedOn = "qrcode-isLighting"
     public static let privateModeBadge = "privateModeBadge"
     public static let readingList = "menu-panel-ReadingList"
-    public static let removeFromShortcut = "action_unpin"
     public static let reportSiteIssue = "menu-reportSiteIssue"
     public static let settings = "menu-Settings"
     public static let share = "action_share"

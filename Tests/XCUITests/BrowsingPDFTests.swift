@@ -81,8 +81,8 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut])
-        app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut].tap()
+        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.Large.pinSlash])
+        app.tables.cells.otherElements[ImageIdentifiers.Large.pinSlash].tap()
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }

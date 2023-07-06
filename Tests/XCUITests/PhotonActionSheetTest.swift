@@ -22,7 +22,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut].tap()
+        app.tables.cells.otherElements[ImageIdentifiers.Large.pinSlash].tap()
 
         // Check that it has been unpinned
         cell.press(forDuration: 2)
