@@ -58,7 +58,7 @@ class HistoryClearable: Clearable {
         siteImageHandler.clearAllCaches()
 
         self.profile.recentlyClosedTabs.clearTabs()
-        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
+        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global()) { _ in }
         CSSearchableIndex.default().deleteAllSearchableItems()
         NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
         logger.log("HistoryClearable succeeded: \(success).",

@@ -57,7 +57,7 @@ class AppLaunchUtil {
         initializeExperiments()
 
         // We migrate history from browser db to places if it hasn't already
-        DispatchQueue.global(qos: .default).async {
+        DispatchQueue.global().async {
             self.runAppServicesHistoryMigration()
         }
 

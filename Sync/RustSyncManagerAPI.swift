@@ -30,14 +30,14 @@ open class RustSyncManagerAPI {
     }
 
     public func disconnect() {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             self.api.disconnect()
         }
     }
 
     public func sync(params: SyncParams,
                      completion: @escaping (SyncResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             do {
                 let result = try self.api.sync(params: params)
                 completion(result)
@@ -62,7 +62,7 @@ open class RustSyncManagerAPI {
 
     public func reportSyncTelemetry(syncResult: SyncResult,
                                     completion: @escaping (String) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             do {
                 try SyncManagerComponent.reportSyncTelemetry(syncResult: syncResult)
             } catch let err as NSError {
@@ -79,7 +79,7 @@ open class RustSyncManagerAPI {
     }
 
     public func getAvailableEngines(completion: @escaping ([String]) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             let engines = self.api.getAvailableEngines()
             completion(engines)
         }

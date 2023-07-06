@@ -1120,7 +1120,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func writeCorruptionInfoForDBNamed(_ dbFilename: String) {
-        DispatchQueue.global(qos: DispatchQoS.default.qosClass).sync {
+        DispatchQueue.global().sync {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
             logger.log("Corrupt DB detected! DB filename: \(dbFilename)",

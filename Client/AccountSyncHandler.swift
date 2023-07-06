@@ -14,7 +14,7 @@ class AccountSyncHandler: TabEventHandler {
 
     init(with profile: Profile,
          throttleTime: Double = 5.0,
-         queue: DispatchQueueInterface = DispatchQueue.global(qos: .utility)) {
+         queue: DispatchQueueInterface = DispatchQueue.global()) {
         self.profile = profile
         self.throttler = Throttler(seconds: throttleTime,
                                    on: queue)

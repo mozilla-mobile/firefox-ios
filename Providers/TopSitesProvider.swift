@@ -68,7 +68,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
         getFrecencySites(group: group, numberOfMaxItems: numberOfMaxItems)
         getPinnedSites(group: group)
 
-        group.notify(queue: .global(qos: .userInitiated)) { [weak self] in
+        group.notify(queue: .global()) { [weak self] in
             guard let self = self else { return }
             self.calculateTopSites(completion: completion)
         }
@@ -86,7 +86,7 @@ private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems, thresholdOption: FrecencyThresholdOption.none)
-            .uponQueue(.global(qos: .userInitiated)) { [weak self] result in
+            .uponQueue(.global()) { [weak self] result in
                 if let sites = result.successValue {
                     self?.frecencySites = sites
                 }
@@ -99,7 +99,7 @@ private extension TopSitesProviderImplementation {
         group.enter()
         pinnedSiteFetcher
             .getPinnedTopSites()
-            .uponQueue(.global(qos: .userInitiated)) { [weak self] result in
+            .uponQueue(.global()) { [weak self] result in
                 if let sites = result.successValue?.asArray() {
                     self?.pinnedSites = sites
                 }
