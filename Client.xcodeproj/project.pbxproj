@@ -8574,13 +8574,6 @@
 			path = Messaging;
 			sourceTree = "<group>";
 		};
-		96441BD229DF7DA500FE041F /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		965C3C8B29313949006499ED /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -10274,7 +10267,6 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
-				96441BD229DF7DA500FE041F /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
