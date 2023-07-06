@@ -9,7 +9,6 @@ private class DarkBrowserColor: BrowserColor {
 }
 
 private class DarkTableViewColor: TableViewColor {
-    override var rowBackground: UIColor { return UIColor.Photon.Grey70 } // layer2
     override var rowText: UIColor { return UIColor.Photon.Grey10 } // textPrimary
     override var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
 }
