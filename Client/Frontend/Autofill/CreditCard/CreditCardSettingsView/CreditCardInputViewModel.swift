@@ -308,12 +308,16 @@ class CreditCardInputViewModel: ObservableObject {
             return nil
         }
 
+        // We need to show only 2 digits but save full year for sync
+        let period = Int64(Date.getCurrentPeriod())
+        let yearVal = year < 1000 ? year + period : year
+
         let plainCreditCard = UnencryptedCreditCardFields(
                          ccName: nameOnCard,
                          ccNumber: cardNumber,
                          ccNumberLast4: String(cardNumber.suffix(4)),
                          ccExpMonth: month,
-                         ccExpYear: year,
+                         ccExpYear: yearVal,
                          ccType: cardType.rawValue)
 
         return plainCreditCard

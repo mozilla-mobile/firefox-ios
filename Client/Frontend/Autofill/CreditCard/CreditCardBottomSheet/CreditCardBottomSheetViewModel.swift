@@ -191,12 +191,15 @@ class CreditCardBottomSheetViewModel {
             guard !decryptedCreditCardNum.isEmpty else {
                 return nil
             }
-
+            // We need to show only 2 digits but save full year for sync
+            let period = Int64(Date.getCurrentPeriod())
+            let selectedExpYear = selectedCreditCard.ccExpYear
+            let yearVal = selectedExpYear < 1000 ? selectedExpYear + period : selectedExpYear
             let plainTextCard = UnencryptedCreditCardFields(ccName: selectedCreditCard.ccName,
                                                             ccNumber: decryptedCreditCardNum,
                                                             ccNumberLast4: selectedCreditCard.ccNumberLast4,
                                                             ccExpMonth: selectedCreditCard.ccExpMonth,
-                                                            ccExpYear: selectedCreditCard.ccExpYear,
+                                                            ccExpYear: yearVal,
                                                             ccType: selectedCreditCard.ccType)
             return plainTextCard
         }
@@ -261,10 +264,15 @@ class CreditCardBottomSheetViewModel {
         decryptedCreditCardVal.ccExpMonth = isValidMonth ? month : originalCreditCard.ccExpMonth
 
         // Year
-        let yearVal = decryptedCreditCardVal.ccExpYear
+        var decryptedYearVal = decryptedCreditCardVal.ccExpYear
+        var originalYearVal = originalCreditCard.ccExpYear
         let currentYear = Calendar.current.component(.year, from: Date()) % 100
-        let isValidYear = (currentYear...99).contains(Int(yearVal) % 100)
-        decryptedCreditCardVal.ccExpYear = isValidYear ? yearVal : originalCreditCard.ccExpYear
+        let isValidYear = (currentYear...99).contains(Int(decryptedYearVal) % 100)
+        // We need to show only 2 digits but save full year for sync
+        let period = Int64(Date.getCurrentPeriod())
+        decryptedYearVal = decryptedYearVal < 1000 ? decryptedYearVal + period : decryptedYearVal
+        originalYearVal = originalYearVal < 1000 ? originalYearVal + period : originalYearVal
+        decryptedCreditCardVal.ccExpYear = isValidYear ? decryptedYearVal : originalYearVal
 
         return decryptedCreditCardVal
     }
