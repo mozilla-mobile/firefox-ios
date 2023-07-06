@@ -17,7 +17,7 @@ class EngagementNotificationTests: BaseTestCase {
     }
 
     func testShowingNotification() throws {
-        XCTSkip("This test passes only right after the simulator is erased")
+        throw XCTSkip("This test passes only right after the simulator is erased")
         // goThroughOnboarding()
 
         // As we cannot trigger the background refresh 
