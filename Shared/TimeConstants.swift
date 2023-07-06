@@ -78,6 +78,11 @@ extension Date {
         return Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
     }
 
+    public static func getCurrentPeriod() -> Int {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return Int((currentYear / 1000) * 1000)
+    }
+
     public func toRelativeTimeString(dateStyle: DateFormatter.Style = .short, timeStyle: DateFormatter.Style = .short) -> String {
         let now = Date()
 
