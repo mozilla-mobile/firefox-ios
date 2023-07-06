@@ -12,20 +12,22 @@ open class RustSyncManagerAPI {
     let api: SyncManagerComponent
 
     // Names of collections that can be enabled/disabled locally.
-    public var rustTogglableEngines: [String] = [
-        "tabs",
-        "passwords",
-        "bookmarks",
-        "history",
-    ]
+    public enum TogglableEngine: String, CaseIterable {
+        case tabs
+        case passwords
+        case bookmarks
+        case history
+        case creditcards
+    }
 
+    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history]
     public init(logger: Logger = DefaultLogger.shared,
                 creditCardAutofillEnabled: Bool = false) {
         self.api = SyncManagerComponent()
         self.logger = logger
 
         if creditCardAutofillEnabled {
-            self.rustTogglableEngines.append("creditcards")
+            self.rustTogglableEngines.append(.creditcards)
         }
     }
 
