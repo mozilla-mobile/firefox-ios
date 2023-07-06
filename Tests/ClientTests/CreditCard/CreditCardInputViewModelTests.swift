@@ -260,7 +260,7 @@ class CreditCardInputViewModelTests: XCTestCase {
                         XCTAssertNil(error)
                         XCTAssertNotNil(ccUpdatedCard)
                         XCTAssertEqual(ccUpdatedCard?.ccName, "Mickey Mouse")
-                        XCTAssertEqual(ccUpdatedCard?.ccExpYear, 56)
+                        XCTAssertEqual(ccUpdatedCard?.ccExpYear, 2056)
                         XCTAssertEqual(ccUpdatedCard?.ccExpMonth, 02)
                         // Note: We do not test encrypted card number
                         // but the last 4 digits
