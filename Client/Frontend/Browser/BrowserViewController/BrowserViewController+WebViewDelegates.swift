@@ -267,7 +267,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 actions.append(UIAction(
                     title: .ContextMenuCopyLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.copyLink),
+                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.link),
                     identifier: UIAction.Identifier("linkContextMenu.copyLink")
                 ) { _ in
                     UIPasteboard.general.url = url
