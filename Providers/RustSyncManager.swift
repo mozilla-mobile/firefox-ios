@@ -255,7 +255,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     public func checkCreditCardEngineEnablement() -> Bool {
-        let engine = "creditcards"
+        let engine = RustSyncManagerAPI.TogglableEngine.creditcards.rawValue
         guard let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines),
               !declined.isEmpty,
               declined.contains(engine)
@@ -280,7 +280,7 @@ public class RustSyncManager: NSObject, SyncManager {
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
-                    engineEnablements[engine] = enabled
+                    engineEnablements[engine.rawValue] = enabled
                 }
             }
         }
@@ -320,7 +320,7 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
-    func getEnginesAndKeys(engines: [String],
+    func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
@@ -328,37 +328,35 @@ public class RustSyncManager: NSObject, SyncManager {
 
         for engine in engines.filter({ syncManagerAPI.rustTogglableEngines.contains($0) }) {
             switch engine {
-            case "tabs":
+            case .tabs:
                 profile?.tabs.registerWithSyncManager()
-                rustEngines.append(engine)
-            case "passwords":
+                rustEngines.append(engine.rawValue)
+            case .passwords:
                 profile?.logins.registerWithSyncManager()
                 if let key = try? profile?.logins.getStoredKey() {
-                    localEncryptionKeys[engine] = key
-                    rustEngines.append(engine)
+                    localEncryptionKeys[engine.rawValue] = key
+                    rustEngines.append(engine.rawValue)
                 } else {
                     logger.log("Login encryption key could not be retrieved for syncing",
                                level: .warning,
                                category: .sync)
                 }
-            case "creditcards":
+            case .creditcards:
                 profile?.autofill.registerWithSyncManager()
                 if let key = try? profile?.autofill.getStoredKey() {
-                    localEncryptionKeys[engine] = key
-                    rustEngines.append(engine)
+                    localEncryptionKeys[engine.rawValue] = key
+                    rustEngines.append(engine.rawValue)
                 } else {
                     logger.log("Credit card encryption key could not be retrieved for syncing",
                                level: .warning,
                                category: .sync)
                 }
-            case "bookmarks", "history":
+            case .bookmarks, .history:
                 if !registeredPlaces {
                     profile?.places.registerWithSyncManager()
                     registeredPlaces = true
                 }
-                rustEngines.append(engine)
-            default:
-                continue
+                rustEngines.append(engine.rawValue)
             }
         }
 
@@ -417,10 +415,10 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         syncManagerAPI.rustTogglableEngines.forEach({
-            if declined.contains($0) {
-                updateEnginePref($0, false)
+            if declined.contains($0.rawValue) {
+                updateEnginePref($0.rawValue, false)
             } else {
-                updateEnginePref($0, true)
+                updateEnginePref($0.rawValue, true)
             }
         })
     }
@@ -454,7 +452,7 @@ public class RustSyncManager: NSObject, SyncManager {
                         return
                     }
 
-                    self.getEnginesAndKeys(engines: engines) { (rustEngines, localEncryptionKeys) in
+                    self.getEnginesAndKeys(engines: engines.compactMap { RustSyncManagerAPI.TogglableEngine(rawValue: $0) }) { (rustEngines, localEncryptionKeys) in
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),
@@ -486,7 +484,7 @@ public class RustSyncManager: NSObject, SyncManager {
     @discardableResult
     public func syncEverything(why: SyncReason) -> Success {
         return syncRustEngines(why: why,
-                               engines: syncManagerAPI.rustTogglableEngines) >>> succeed
+                               engines: syncManagerAPI.rustTogglableEngines.compactMap { $0.rawValue }) >>> succeed
     }
 
     /**
