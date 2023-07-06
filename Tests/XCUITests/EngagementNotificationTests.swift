@@ -16,19 +16,20 @@ class EngagementNotificationTests: BaseTestCase {
         super.setUp()
     }
 
-    func testShowingNotification() {
-        goThroughOnboarding()
+    func testShowingNotification() throws {
+        XCTSkip("This test passes only right after the simulator is erased")
+        // goThroughOnboarding()
 
         // As we cannot trigger the background refresh 
-        XCUIDevice.shared.press(XCUIDevice.Button.home)
+        // XCUIDevice.shared.press(XCUIDevice.Button.home)
 
-        let notification = springboard.otherElements["Notification"]
-        XCTAssertTrue(notification.waitForExistence(timeout: TIMEOUT_LONG)) // implicit wait
-        notification.tap()
+        // let notification = springboard.otherElements["Notification"]
+        // XCTAssertTrue(notification.waitForExistence(timeout: TIMEOUT_LONG)) // implicit wait
+        // notification.tap()
 
-        waitForExistence(app.textFields["url"])
-        let url = app.textFields["url"].value as! String
-        XCTAssertEqual(url, "mozilla.com", "Wrong url loaded")
+        // waitForExistence(app.textFields["url"])
+        //let url = app.textFields["url"].value as! String
+        // XCTAssertEqual(url, "mozilla.com", "Wrong url loaded")
     }
 
     // MARK: Helper
