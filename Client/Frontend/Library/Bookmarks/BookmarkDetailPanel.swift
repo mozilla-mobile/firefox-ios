@@ -395,6 +395,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 cell.accessoryType = .none
             }
 
+            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
         }
 
@@ -404,6 +405,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
 
         cell.delegate = self
+        cell.applyTheme(theme: themeManager.currentTheme)
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:

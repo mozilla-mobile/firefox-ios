@@ -9,7 +9,6 @@ extension UIColor {
     // These are colors which we shouldn't use anymore - we'll migrate to use the new theming system
     struct LegacyDefaults {
         static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded) // This color should exactly match the ios text highlight
-        static let SystemBlueColor = UIColor.Photon.Blue40
     }
 }
 

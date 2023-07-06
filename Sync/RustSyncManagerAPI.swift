@@ -12,32 +12,34 @@ open class RustSyncManagerAPI {
     let api: SyncManagerComponent
 
     // Names of collections that can be enabled/disabled locally.
-    public var rustTogglableEngines: [String] = [
-        "tabs",
-        "passwords",
-        "bookmarks",
-        "history",
-    ]
+    public enum TogglableEngine: String, CaseIterable {
+        case tabs
+        case passwords
+        case bookmarks
+        case history
+        case creditcards
+    }
 
+    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history]
     public init(logger: Logger = DefaultLogger.shared,
                 creditCardAutofillEnabled: Bool = false) {
         self.api = SyncManagerComponent()
         self.logger = logger
 
         if creditCardAutofillEnabled {
-            self.rustTogglableEngines.append("creditcards")
+            self.rustTogglableEngines.append(.creditcards)
         }
     }
 
     public func disconnect() {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             self.api.disconnect()
         }
     }
 
     public func sync(params: SyncParams,
                      completion: @escaping (SyncResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             do {
                 let result = try self.api.sync(params: params)
                 completion(result)
@@ -62,7 +64,7 @@ open class RustSyncManagerAPI {
 
     public func reportSyncTelemetry(syncResult: SyncResult,
                                     completion: @escaping (String) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             do {
                 try SyncManagerComponent.reportSyncTelemetry(syncResult: syncResult)
             } catch let err as NSError {
@@ -79,7 +81,7 @@ open class RustSyncManagerAPI {
     }
 
     public func getAvailableEngines(completion: @escaping ([String]) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             let engines = self.api.getAvailableEngines()
             completion(engines)
         }

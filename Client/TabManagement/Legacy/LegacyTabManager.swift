@@ -683,7 +683,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                                           _ previousTabUUID: String) -> Void) {
         let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
         // moved closing of multiple tabs to background thread
-        DispatchQueue.global(qos: .background).async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             let tabsToRemove = isPrivate ? self.privateTabs : self.normalTabs
 
             if isPrivate && self.privateTabs.count < 1 {
@@ -760,7 +760,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
             } else {
                 // Finish clean up for recently close tabs
-                DispatchQueue.global(qos: .background).async { [unowned self] in
+                DispatchQueue.global().async { [unowned self] in
                     let previousTab = tabs.first(where: { $0.tabUUID == previousTabUUID })
 
                     self.cleanupClosedTabs(recentlyClosedTabs,

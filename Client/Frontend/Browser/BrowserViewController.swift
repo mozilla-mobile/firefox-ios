@@ -994,8 +994,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     }
 
     private func updateWallpaperMetadata() {
-        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
-                                          qos: .utility)
+        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
         metadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
@@ -1987,9 +1986,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         statusBarOverlay.backgroundColor = hasTopTabs ? currentTheme.colors.layer3 : currentTheme.colors.layer1
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         setNeedsStatusBarAppearanceUpdate()
-
-        // Remove as part of FXIOS-5109
-        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })

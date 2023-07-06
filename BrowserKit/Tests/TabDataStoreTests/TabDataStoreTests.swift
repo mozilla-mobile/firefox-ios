@@ -31,7 +31,7 @@ final class TabDataStoreTests: XCTestCase {
         mockFileManager.windowData = windowData
         mockFileManager.fileExists = false
 
-        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData, forced: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 2)
@@ -49,7 +49,7 @@ final class TabDataStoreTests: XCTestCase {
         mockFileManager.windowData = windowData
         mockFileManager.fileExists = true
 
-        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData, forced: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 3)

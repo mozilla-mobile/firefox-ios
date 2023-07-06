@@ -950,7 +950,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.otherElements[ImageIdentifiers.settings], to: SettingsScreen)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.sync], to: Intro_FxASignin, if: "fxaUsername == nil")
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.key], to: LoginsSettings)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.login], to: LoginsSettings)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill], to: LibraryPanel_Bookmarks)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.history], to: LibraryPanel_History)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.download], to: LibraryPanel_Downloads)
@@ -974,10 +974,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.deviceMobile], to: RequestMobileSite)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.findInPage], to: FindInPage)
         // TODO: Add new state
-        // screenState.tap(app.tables["Context Menu"].otherElements[ImageIdentifiers.reportSiteIssue], to: ReportSiteIssue)
+        // screenState.tap(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.lightbulb], to: ReportSiteIssue)
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.link], forAction: Action.CopyAddressPAM)
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.Large.bookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addToReadingList], forAction: Action.AddToReadingListBrowserTabMenu)

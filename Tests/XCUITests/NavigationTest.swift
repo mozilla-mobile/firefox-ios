@@ -231,7 +231,7 @@ class NavigationTest: BaseTestCase {
             waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
             app.textFields["url"].press(forDuration: 3)
-            app.tables.otherElements[ImageIdentifiers.copyLink].tap()
+            app.tables.otherElements[ImageIdentifiers.Large.link].tap()
 
             sleep(2)
             app.textFields["url"].tap()
@@ -372,7 +372,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.history].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.download].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.login].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)

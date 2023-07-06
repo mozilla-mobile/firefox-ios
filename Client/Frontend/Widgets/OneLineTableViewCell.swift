@@ -52,7 +52,6 @@ class OneLineTableViewCell: UITableViewCell,
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
         // separator hidden by default
         separatorLine.isHidden = true
-        separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

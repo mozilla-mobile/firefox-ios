@@ -4,7 +4,7 @@
 
 import Foundation
 
-public let DefaultDispatchQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
+public let DefaultDispatchQueue = DispatchQueue.global()
 
 public func asyncReducer<T, U>(_ initialValue: T, combine: @escaping (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
     return AsyncReducer(initialValue: initialValue, combine: combine)

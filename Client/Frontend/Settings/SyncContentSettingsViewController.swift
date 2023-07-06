@@ -145,21 +145,19 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         super.viewWillDisappear(animated)
     }
 
-    func engineSettingChanged(_ engineName: String) -> (Bool) -> Void {
-        let prefName = "sync.engine.\(engineName).enabledStateChanged"
+    func engineSettingChanged(_ engineName: RustSyncManagerAPI.TogglableEngine) -> (Bool) -> Void {
+        let prefName = "sync.engine.\(engineName.rawValue).enabledStateChanged"
         return { [unowned self] enabled in
-            // Credit card sync telemetry
-            // Refactor: FXIOS-6851
-            if engineName == "creditcards" {
+            if engineName == .creditcards {
                 self.creditCardSyncEnabledTelemetry(status: enabled)
             }
 
             if self.profile.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
                 self.profile.prefs.removeObjectForKey(prefName)
-                self.enginesToSyncOnExit.remove(engineName)
+                self.enginesToSyncOnExit.remove(engineName.rawValue)
             } else {
                 self.profile.prefs.setBool(true, forKey: prefName)
-                self.enginesToSyncOnExit.insert(engineName)
+                self.enginesToSyncOnExit.insert(engineName.rawValue)
             }
         }
     }
@@ -185,28 +183,28 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncBookmarksEngine),
             attributedStatusText: nil,
-            settingDidChange: engineSettingChanged("bookmarks"))
+            settingDidChange: engineSettingChanged(.bookmarks))
         let history = BoolSetting(
             prefs: profile.prefs,
             prefKey: "sync.engine.history.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncHistoryEngine),
             attributedStatusText: nil,
-            settingDidChange: engineSettingChanged("history"))
+            settingDidChange: engineSettingChanged(.history))
         let tabs = BoolSetting(
             prefs: profile.prefs,
             prefKey: PrefsKeys.TabSyncEnabled,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine),
             attributedStatusText: nil,
-            settingDidChange: engineSettingChanged("tabs"))
+            settingDidChange: engineSettingChanged(.tabs))
         let passwords = BoolSetting(
             prefs: profile.prefs,
             prefKey: "sync.engine.passwords.enabled",
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncLoginsEngine),
             attributedStatusText: nil,
-            settingDidChange: engineSettingChanged("passwords"))
+            settingDidChange: engineSettingChanged(.passwords))
 
         let creditCards = BoolSetting(
             prefs: profile.prefs,
@@ -214,7 +212,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .FirefoxSyncCreditCardsEngine),
             attributedStatusText: nil,
-            settingDidChange: engineSettingChanged("creditcards"))
+            settingDidChange: engineSettingChanged(.creditcards))
 
         var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords]
 

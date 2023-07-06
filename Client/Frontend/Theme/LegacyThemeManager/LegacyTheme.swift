@@ -5,10 +5,6 @@
 import UIKit
 import Shared
 
-protocol LegacyNotificationThemeable: AnyObject {
-    func applyTheme()
-}
-
 protocol PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme)
 }
@@ -25,7 +21,6 @@ enum BuiltinThemeName: String {
 }
 
 class TableViewColor {
-    var rowBackground: UIColor { return UIColor.Photon.White100 } // layer5
     var rowText: UIColor { return UIColor.Photon.Grey90 } // textPrimary
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
 }

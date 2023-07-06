@@ -153,6 +153,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         super.preserveTabs()
         guard shouldUseNewTabStore() else { return }
 
+        preserveTabs(forced: false)
+    }
+
+    private func preserveTabs(forced: Bool) {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
@@ -160,7 +164,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
-            await tabDataStore.saveWindowData(window: windowData)
+            await tabDataStore.saveWindowData(window: windowData, forced: false)
         }
     }
 
@@ -207,6 +211,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
         }
+    }
+
+    private func saveAllTabData() {
+        saveCurrentTabSessionData()
+        preserveTabs(forced: true)
     }
 
     // MARK: - Select Tab
@@ -296,7 +305,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willResignActiveNotification:
-            saveCurrentTabSessionData()
+            saveAllTabData()
         default:
             break
         }
