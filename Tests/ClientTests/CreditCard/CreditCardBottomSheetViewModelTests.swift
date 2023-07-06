@@ -25,14 +25,14 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                                         ccNumber: "4111111111111111",
                                                                         ccNumberLast4: "1111",
                                                                         ccExpMonth: 09,
-                                                                        ccExpYear: 56,
+                                                                        ccExpYear: 2056,
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
                                               ccNumberEnc: "4111111111111111",
                                               ccNumberLast4: "1111",
                                               ccExpMonth: 3,
-                                              ccExpYear: 43,
+                                              ccExpYear: 2043,
                                               ccType: "VISA",
                                               timeCreated: 1234678,
                                               timeLastUsed: nil,
@@ -95,6 +95,9 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         viewModel.creditCard = sampleCreditCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
         let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
+        // Make sure the year saved is a 4 digit year and not 2 digit
+        // 2000 because that is our current period
+        XCTAssertEqual(decryptedCreditCard?.ccExpYear > 2000)
         viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
                 XCTFail()
@@ -124,7 +127,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
             // Note: the number for credit card is encrypted so that part
             // will get added later and for now we will check the name only
 
-            self.samplePlainTextCard.ccExpYear = 45
+            self.samplePlainTextCard.ccExpYear = 2045
             self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
 
@@ -165,6 +168,9 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value!.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
         XCTAssertEqual(value!.ccType, samplePlainTextCard.ccType)
+        // Make sure the year saved is a 4 digit year and not 2 digit
+        // 2000 because that is our current period
+        XCTAssertEqual(value!.ccExpYear> 2000)
     }
 
     func test_select_PlainCreditCard_WithNegativeRow() {
@@ -243,7 +249,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let sampleCreditCardVal = sampleCreditCard
         let updatedName = "Red Dragon"
         let updatedMonth: Int64 = 12
-        let updatedYear: Int64 = 48
+        let updatedYear: Int64 = 2048
         let newUnencryptedCreditCard = UnencryptedCreditCardFields(ccName: updatedName,
                                                                    ccNumber: sampleCreditCardVal.ccNumberEnc,
                                                                    ccNumberLast4: sampleCreditCardVal.ccNumberLast4,
