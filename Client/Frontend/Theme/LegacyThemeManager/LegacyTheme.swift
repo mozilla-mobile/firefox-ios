@@ -5,10 +5,6 @@
 import UIKit
 import Shared
 
-protocol LegacyNotificationThemeable: AnyObject {
-    func applyTheme()
-}
-
 protocol PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme)
 }

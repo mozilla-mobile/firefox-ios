@@ -1988,9 +1988,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         setNeedsStatusBarAppearanceUpdate()
 
-        // Remove as part of FXIOS-5109
-        (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
-
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
         webViews.forEach({ $0.applyTheme() })
