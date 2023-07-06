@@ -8,6 +8,10 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
+    public struct Small {
+        public static let pinBadgeFill = "pinBadgeFillSmall"
+    }
+
     public struct Medium {
         public static let cross = "crossMedium"
     }
