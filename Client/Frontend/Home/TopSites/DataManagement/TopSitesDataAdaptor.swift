@@ -34,7 +34,7 @@ protocol TopSitesDataAdaptor {
 class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
     private let profile: Profile
     private var topSites: [TopSite] = []
-    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue", qos: .userInteractive)
+    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
 
     // Raw data to build top sites with
     private var historySites: [Site] = []

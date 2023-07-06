@@ -994,8 +994,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     }
 
     private func updateWallpaperMetadata() {
-        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
-                                          qos: .utility)
+        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
         metadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()

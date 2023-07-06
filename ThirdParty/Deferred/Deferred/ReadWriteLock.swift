@@ -14,7 +14,7 @@ public protocol ReadWriteLock: AnyObject {
 }
 
 public final class GCDReadWriteLock: ReadWriteLock {
-    private let queue = DispatchQueue(label: "GCDReadWriteLock", qos: .default, attributes: .concurrent)
+    private let queue = DispatchQueue(label: "GCDReadWriteLock", attributes: .concurrent)
 
     public init() {}
 

@@ -238,7 +238,7 @@ open class RustFirefoxAccounts {
     }
 
     public func hasAccount(completion: @escaping (Bool) -> Void) {
-        accountManager.uponQueue(.global(qos: .userInitiated)) { manager in
+        accountManager.uponQueue(.global()) { manager in
             completion(manager.hasAccount())
         }
     }

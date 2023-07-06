@@ -104,7 +104,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         }
 
         fetchData { [weak self] fetchedSites in
-            DispatchQueue.global(qos: .userInteractive).async {
+            DispatchQueue.global().async {
                 guard let self = self,
                       !fetchedSites.isEmpty else {
                     completion(false)
