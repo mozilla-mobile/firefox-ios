@@ -63,7 +63,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
                                     tabData: tabsToMigrate)
 
         // Save migration WindowData
-        await tabDataStore.saveWindowData(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData, forced: true)
         prefs.setBool(false, forKey: migrationKey)
         return windowData
     }
