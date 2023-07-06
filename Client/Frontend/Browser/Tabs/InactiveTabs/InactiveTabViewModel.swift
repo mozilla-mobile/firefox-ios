@@ -69,6 +69,7 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
     var shouldHideInactiveTabs = false
+    var theme: Theme
 
     private var appSessionManager: AppSessionProvider
 
@@ -76,7 +77,9 @@ class InactiveTabViewModel {
         return activeTabs.isEmpty || shouldHideInactiveTabs
     }
 
-    init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
+    init(theme: Theme,
+         appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
+        self.theme = theme
         self.appSessionManager = appSessionManager
     }
 

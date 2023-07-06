@@ -10,18 +10,12 @@ private class DarkBrowserColor: BrowserColor {
 
 private class DarkTableViewColor: TableViewColor {
     override var rowBackground: UIColor { return UIColor.Photon.Grey70 } // layer2
-    override var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightDark }
     override var rowText: UIColor { return UIColor.Photon.Grey10 } // textPrimary
     override var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
-    override var headerBackground: UIColor { return UIColor.Photon.Grey80 }
 }
 
 private class DarkTabTrayColor: TabTrayColor {
     override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
-}
-
-private class DarkHomePanelColor: HomePanelColor {
-    override var activityStreamHeaderText: UIColor { return UIColor.Photon.LightGrey05 }
 }
 
 class LegacyDarkTheme: LegacyNormalTheme {
@@ -29,6 +23,5 @@ class LegacyDarkTheme: LegacyNormalTheme {
     override var tableView: TableViewColor { return DarkTableViewColor() }
     override var browser: BrowserColor { return DarkBrowserColor() }
     override var tabTray: TabTrayColor { return DarkTabTrayColor() }
-    override var homePanel: HomePanelColor { return DarkHomePanelColor() }
     override var snackbar: SnackBarColor { return SnackBarColor() }
 }

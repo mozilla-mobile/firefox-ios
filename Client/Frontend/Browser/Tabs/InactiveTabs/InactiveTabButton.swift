@@ -3,26 +3,24 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
-struct CellWithRoundedButtonUX {
-    static let ImageSize: CGFloat = 29
-    static let BorderViewMargin: CGFloat = 16
-    static let ButtonInset: CGFloat = 14
-    static let ButtonImagePadding: CGFloat = 11
-}
+class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
+    private struct UX {
+        static let ImageSize: CGFloat = 29
+        static let BorderViewMargin: CGFloat = 16
+        static let ButtonInset: CGFloat = 14
+        static let ButtonImagePadding: CGFloat = 11
+    }
 
-class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, ReusableCell {
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
-
-    let containerView = UIView()
-    var shouldLeftAlignTitle = false
-    var customization: OneLineTableViewCustomization = .regular
+    private let containerView = UIView()
+    private var shouldLeftAlignTitle = false
+    private var customization: OneLineTableViewCustomization = .regular
 
     // MARK: - UI Elements
-    private let selectedView: UIView = .build { view in
-        view.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
-    }
+    private let selectedView: UIView = .build { _ in }
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
@@ -30,10 +28,6 @@ class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, Reusa
             withTextStyle: .body,
             weight: .semibold,
             maxSize: 16)
-        button.setImage(UIImage(named: ImageIdentifiers.Large.delete), for: .normal)
-        button.tintColor = .black
-        button.backgroundColor = .Photon.LightGrey30
-        button.setTitleColor(.black, for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -62,11 +56,11 @@ class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, Reusa
 
         contentView.addSubview(roundedButton)
 
-        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: CellWithRoundedButtonUX.ButtonInset,
-                                                                left: CellWithRoundedButtonUX.ButtonInset,
-                                                                bottom: CellWithRoundedButtonUX.ButtonInset,
-                                                                right: CellWithRoundedButtonUX.ButtonInset),
-                                imageTitlePadding: CellWithRoundedButtonUX.ButtonImagePadding)
+        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: UX.ButtonInset,
+                                                                left: UX.ButtonInset,
+                                                                bottom: UX.ButtonInset,
+                                                                right: UX.ButtonInset),
+                                imageTitlePadding: UX.ButtonImagePadding)
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
@@ -80,23 +74,31 @@ class CellWithRoundedButton: UITableViewCell, LegacyNotificationThemeable, Reusa
         ])
 
         selectedBackgroundView = selectedView
-        applyTheme()
-    }
-
-    func applyTheme() {
-        selectedView.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
-        self.backgroundColor = .clear
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
-        separatorInset = UIEdgeInsets(top: 0, left: CellWithRoundedButtonUX.ImageSize + 2 * CellWithRoundedButtonUX.BorderViewMargin, bottom: 0, right: 0)
-        applyTheme()
+        separatorInset = UIEdgeInsets(top: 0,
+                                      left: UX.ImageSize + 2 * UX.BorderViewMargin,
+                                      bottom: 0,
+                                      right: 0)
     }
 
     @objc
     func buttonPressed() {
         self.buttonClosure?()
+    }
+
+    // MARK: ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        backgroundColor = .clear
+        selectedView.backgroundColor = theme.colors.layer5Hover
+        roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        roundedButton.backgroundColor = theme.colors.layer3
+        roundedButton.tintColor = theme.colors.textPrimary
+        let image = UIImage(named: ImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
+        roundedButton.setImage(image, for: .normal)
     }
 }

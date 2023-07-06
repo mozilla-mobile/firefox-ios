@@ -658,7 +658,7 @@ extension HistoryPanel: UITableViewDelegate {
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+                                                        isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down)
         header.configure(headerViewModel)
         header.applyTheme(theme: themeManager.currentTheme)
 

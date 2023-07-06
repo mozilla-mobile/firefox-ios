@@ -4,33 +4,23 @@
 
 import UIKit
 import SiteImageView
+import Shared
 
-class InactiveTabItemCell: UITableViewCell, LegacyNotificationThemeable, ReusableCell {
+class InactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private var viewModel: InactiveTabItemCellModel?
 
-    private var selectedView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
-        return view
-    }()
-
+    private lazy var selectedView: UIView = .build { _ in }
     private lazy var leftImageView: FaviconImageView = .build { _ in }
+    private lazy var bottomSeparatorView: UIView = .build { _ in }
+    private lazy var containerView: UIView = .build { _ in }
+    private lazy var midView: UIView = .build { _ in }
+    private var containerViewLeadingConstraint: NSLayoutConstraint!
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.textColor = .black
         label.textAlignment = .natural
         label.numberOfLines = 1
         label.contentMode = .center
     }
-
-    private lazy var bottomSeparatorView: UIView = .build { separatorLine in
-        separatorLine.backgroundColor = UIColor.Photon.LightGrey30
-    }
-
-    private var containerViewLeadingConstraint: NSLayoutConstraint!
-
-    private lazy var containerView: UIView = .build { _ in }
-    private lazy var midView: UIView = .build { _ in }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -111,24 +101,19 @@ class InactiveTabItemCell: UITableViewCell, LegacyNotificationThemeable, Reusabl
         leftImageView.setContentHuggingPriority(.required, for: .vertical)
 
         selectedBackgroundView = selectedView
-        applyTheme()
-    }
-
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        selectedView.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
-        if theme == .dark {
-            backgroundColor = UIColor.Photon.Grey80
-            titleLabel.textColor = .white
-        } else {
-            backgroundColor = .white
-            titleLabel.textColor = .black
-        }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         selectionStyle = .default
-        applyTheme()
+    }
+
+    // MARK: ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        selectedView.backgroundColor = theme.colors.layer5Hover
+        titleLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer2
+        bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
     }
 }

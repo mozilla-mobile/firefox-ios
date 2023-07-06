@@ -176,7 +176,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
+            "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-x86_64.xctestrun"
@@ -222,7 +222,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
+            "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun"
@@ -268,7 +268,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
+            "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun"
@@ -314,7 +314,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"
+            "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun"
@@ -1426,8 +1426,20 @@ workflows:
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
                 2>&1 | tee /dev/stdout)
+            envman add --key GCLOUD_EXIT_CODE --value $?
             MATRIX_WEBLINK=$(echo "$GCLOUD_OUTPUT" | grep 'https://console.firebase.google.com/project' | awk -F '[][]' '{print $2}' | head -n 1)
             envman add --key MATRIX_WEBLINK --value "$MATRIX_WEBLINK"
+    - script@1:
+        title: Modify Slack Message Based on GCLOUD_EXIT_CODE
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ "${GCLOUD_EXIT_CODE}" -ne 0 ]; then
+                SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
+            else 
+                SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
+            fi
+            envman add --key SLACK_MESSAGE_PRETEXT --value "$SLACK_MESSAGE_PRETEXT"
     - slack@3.5.0:
         is_always_run: true
         inputs:
@@ -1436,8 +1448,8 @@ workflows:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
         - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
-        - pretext: "*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
+        - pretext_on_error: "${SLACK_MESSAGE_PRETEXT}"
+        - pretext: "${SLACK_MESSAGE_PRETEXT}"
         - timestamp: 'no'
         - fields: |
             Task | ${BITRISE_BUILD_URL}
