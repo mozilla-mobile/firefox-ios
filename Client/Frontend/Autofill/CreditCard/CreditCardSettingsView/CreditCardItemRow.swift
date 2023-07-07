@@ -22,9 +22,7 @@ struct CreditCardItemRow: View {
     @State var separatorColor: Color = .clear
     @State var backgroundColor: Color = .clear
     @State var backgroundHoverColor: Color = .clear
-
-    // Vars
-    @GestureState private var isTapped = false
+    @State var isTapping = false
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -78,17 +76,14 @@ struct CreditCardItemRow: View {
             .padding(.trailing, 16)
             .padding(.top, 11)
             .padding(.bottom, 11)
-            .background(isTapped ? backgroundHoverColor : backgroundColor)
-            .gesture(
-                TapGesture()
-                    .onEnded { _ in
-                        didSelectAction?()
-                    }
-                    .simultaneously(with: DragGesture(minimumDistance: 0))
-                    .updating($isTapped) { (_, isTapped, _) in
-                        isTapped = true
-                    }
-            )
+            .background(isTapping ? backgroundHoverColor : backgroundColor)
+            .onTapGesture {
+                isTapping = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isTapping = false
+                    didSelectAction?()
+                }
+            }
             Rectangle()
                 .fill(separatorColor)
                 .frame(maxWidth: .infinity)
