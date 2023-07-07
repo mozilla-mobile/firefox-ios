@@ -5,10 +5,7 @@
 import Foundation
 import UIKit
 
-protocol ComponentViewModel {
-    // The title of that component
-    var title: String { get }
-
-    // The view controller to present for that component
-    var viewController: UIViewController { get }
+struct ExampleComponentViewModel: ComponentViewModel {
+    var title = "Example"
+    var viewController: UIViewController = ExampleViewController()
 }

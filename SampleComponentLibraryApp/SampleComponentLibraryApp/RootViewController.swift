@@ -6,21 +6,24 @@ import UIKit
 import Common
 import ComponentLibrary
 
-class RootViewController: UIViewController, UITableViewDelegate {
+class RootViewController: UIViewController, Presenter {
     // MARK: - Properties
     private let dataSource = ComponentDataSource()
+    private let componentDelegate: ComponentDelegate
 
     private lazy var tableView: UITableView = .build { tableView in
-        tableView.register(ComponentButtonCell.self, forCellReuseIdentifier: ComponentButtonCell.cellIdentifier)
-        tableView.delegate = self
+        tableView.register(ComponentCell.self, forCellReuseIdentifier: ComponentCell.cellIdentifier)
         tableView.separatorStyle = .none
     }
 
     // MARK: - Init
     init() {
+        componentDelegate = ComponentDelegate(componentData: dataSource.componentData)
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .white
         tableView.backgroundColor = .clear
+
+        componentDelegate.presenter = self
     }
 
     required init?(coder: NSCoder) {
@@ -43,21 +46,7 @@ class RootViewController: UIViewController, UITableViewDelegate {
         ])
 
         tableView.dataSource = dataSource
+        tableView.delegate = componentDelegate
         tableView.reloadData()
-    }
-}
-
-class ComponentDataSource: NSObject, UITableViewDataSource {
-    private var componentData = ComponentData()
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return componentData.data.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ComponentButtonCell.cellIdentifier)
-        guard let cell = cell as? ComponentButtonCell else { return UITableViewCell() }
-        cell.setup(componentData.data[indexPath.row])
-        return cell
     }
 }

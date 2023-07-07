@@ -6,12 +6,8 @@ import Foundation
 
 struct ComponentData {
     var data: [ComponentViewModel] {
-        return [getExampleData(),
-                getExampleData(),
-                getExampleData()]
-    }
-
-    private func getExampleData() -> ComponentViewModel {
-        return ComponentViewModel(title: "Example")
+        return [ExampleComponentViewModel(),
+                ExampleComponentViewModel(),
+                ExampleComponentViewModel()]
     }
 }

@@ -6,14 +6,15 @@ import Foundation
 import UIKit
 import Common
 
-class ComponentButtonCell: UITableViewCell {
+class ComponentCell: UITableViewCell {
     static var cellIdentifier: String { return String(describing: self) }
 
-    private lazy var button: UIButton = .build { button in
-        button.backgroundColor = .lightGray
-        button.setTitleColor(.black, for: .normal)
-        button.layer.cornerRadius = 8
-        button.clipsToBounds = true
+    private lazy var label: UILabel = .build { label in
+        label.backgroundColor = .lightGray
+        label.textColor = .black
+        label.layer.cornerRadius = 8
+        label.clipsToBounds = true
+        label.textAlignment = .center
     }
 
     // MARK: - Initializers
@@ -28,17 +29,18 @@ class ComponentButtonCell: UITableViewCell {
 
     func initialViewSetup() {
         contentView.backgroundColor = .clear
-        contentView.addSubview(button)
+        contentView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            button.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            label.heightAnchor.constraint(greaterThanOrEqualToConstant: 32),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
     }
 
     func setup(_ data: ComponentViewModel) {
-        button.setTitle(data.title, for: .normal)
+        label.text = data.title
     }
 }
