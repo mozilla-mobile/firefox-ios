@@ -3123,6 +3123,26 @@ cfr_analytics:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
 
+# Tabs Tray metrics
+tabs_tray:
+  private_browsing_icon_tapped:
+    type: event
+    description: |
+      A user has tapped on the private browsing icon in tabs tray.
+    extra_keys:
+      action:
+       type: string
+       description: |
+         Records the action:
+         close_all_tabs / add / done
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
+
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:

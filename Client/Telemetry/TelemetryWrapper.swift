@@ -409,6 +409,7 @@ extension TelemetryWrapper {
         case dismissETPCoverSheetAndStartBrowsing = "dismissed-etp-cover-sheet-and-start-browsing"
         case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
         case privateBrowsingButton = "private-browsing-button"
+        case privateBrowsingIcon = "private-browsing-icon"
         case startSearchButton = "start-search-button"
         case addNewTabButton = "add-new-tab-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
@@ -638,6 +639,9 @@ extension TelemetryWrapper {
         var description: String {
             return self.rawValue
         }
+
+        // Tabs Tray
+        case done = "done"
 
         // Inactive Tab
         case inactiveTabsCollapsed = "collapsed"
@@ -1250,6 +1254,14 @@ extension TelemetryWrapper {
         case (.action, .tap, .createNewTab, _, _):
             GleanMetrics.PageActionMenu.createNewTab.add()
 
+        // MARK: Tabs Tray
+        case (.action, .tap, .privateBrowsingIcon, .tabTray, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.TabsTray.PrivateBrowsingIconTappedExtra(action: action)
+                GleanMetrics.TabsTray.privateBrowsingIconTapped.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         // MARK: Inactive Tab Tray
         case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
             GleanMetrics.InactiveTabsTray.openInactiveTab.add()

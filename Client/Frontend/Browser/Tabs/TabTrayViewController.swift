@@ -302,6 +302,7 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private func changePanel() {
         let segment = TabTrayViewModel.Segment(rawValue: segmentedControlIphone.selectedSegmentIndex)
+        viewModel.segmentToFocus = segment
         switch segment {
         case .tabs:
             switchBetweenLocalPanels(withPrivateMode: false)
@@ -574,6 +575,13 @@ extension TabTrayViewController {
         // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
         updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
+        if viewModel.segmentToFocus == .privateTabs {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .privateBrowsingIcon,
+                                         value: .tabTray,
+                                         extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "done"] )
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }
