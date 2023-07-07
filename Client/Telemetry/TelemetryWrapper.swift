@@ -410,6 +410,7 @@ extension TelemetryWrapper {
         case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
         case privateBrowsingButton = "private-browsing-button"
         case privateBrowsingIcon = "private-browsing-icon"
+        case newPrivateTab = "new-private-tab"
         case startSearchButton = "start-search-button"
         case addNewTabButton = "add-new-tab-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
@@ -1262,6 +1263,8 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        case (.action, .tap, .newPrivateTab, .tabTray, _):
+            GleanMetrics.TabsTray.newPrivateTabTapped.record()
         // MARK: Inactive Tab Tray
         case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
             GleanMetrics.InactiveTabsTray.openInactiveTab.add()

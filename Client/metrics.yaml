@@ -3142,7 +3142,17 @@ tabs_tray:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-07-06"
-
+  new_private_tab_tapped:
+    type: event
+    description: |
+      A user opened a new private tab from the tab tray
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:
