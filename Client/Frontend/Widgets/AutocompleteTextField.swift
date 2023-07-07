@@ -233,6 +233,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
+        autocompleteTextLabel = nil
+        autocompleteTextLabel?.removeFromSuperview()
+
         if let theme {
             let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
             autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
@@ -240,8 +243,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                                           range: NSRange(location: 0, length: suggestionText.count))
             autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         }
-
-        autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
 
         if let label = autocompleteTextLabel {
             addSubview(label)
