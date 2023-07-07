@@ -149,9 +149,21 @@ class CreditCardHelper: TabContentScript {
                 return
             }
 
-            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields(\(jsonDataVal))"
-            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, err in
-                guard let err = err else {
+            let methodName = "fillFormFields"
+            let safeMethod = webView.generateJSFunctionString(functionName: methodName,
+                                                              args: [jsonDataVal],
+                                                              escapeArgs: true)
+
+            guard safeMethod.error == nil, !safeMethod.javascript.isEmpty else {
+                completion(CreditCardHelperError.injectionInvalidFields)
+                return
+            }
+
+            let sanitizedMethod = safeMethod.javascript
+            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.\(sanitizedMethod)"
+
+            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
+                guard let error = error else {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .tap,
                                                  object: .creditCardAutofilled)
@@ -161,8 +173,8 @@ class CreditCardHelper: TabContentScript {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
                                              object: .creditCardAutofillFailed)
-                completion(err)
-                logger.log("Credit card script error \(err)",
+                completion(error)
+                logger.log("Credit card script error \(error)",
                            level: .debug,
                            category: .webview)
             }

@@ -54,9 +54,9 @@ extension WKWebView {
     ///   - args: An array of arguments to pass to the JavaScript function. Each argument can be of any type.
     ///   - escapeArgs: A Boolean value indicating whether to escape string arguments for HTML entities.
     /// - Returns: A tuple containing the JavaScript function call string and an optional error.
-    func generateJSFunctionString(functionName: String,
-                                  args: [Any?],
-                                  escapeArgs: Bool = true) -> (javascript: String, error: Error?) {
+    public func generateJSFunctionString(functionName: String,
+                                         args: [Any?],
+                                         escapeArgs: Bool = true) -> (javascript: String, error: Error?) {
         var sanitizedArgs = [String]()
         // Iterate through each argument in the provided array
         for arg in args {
@@ -94,12 +94,12 @@ extension WKWebView {
         return ("\(functionName)(\(sanitizedArgs.joined(separator: ", ")))", nil)
     }
 
-    func evaluateSafeJavaScriptInDefaultContentWorld(functionName: String,
-                                                     args: [Any] = [],
-                                                     frame: WKFrameInfo? = nil,
-                                                     escapeArgs: Bool = true,
-                                                     asFunction: Bool = true,
-                                                     _ completion: @escaping (Any?, Error?) -> Void) {
+    public func evaluateSafeJavaScriptInDefaultContentWorld(functionName: String,
+                                                            args: [Any] = [],
+                                                            frame: WKFrameInfo? = nil,
+                                                            escapeArgs: Bool = true,
+                                                            asFunction: Bool = true,
+                                                            _ completion: @escaping (Any?, Error?) -> Void) {
         var javascript = functionName
 
         if asFunction {
