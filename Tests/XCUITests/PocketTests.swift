@@ -25,7 +25,7 @@ class PocketTest: BaseTestCase {
         waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
 
         // Tap on the first Pocket element
-        app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell).children(matching: .cell).element(boundBy: 1).tap()
+        app.collectionViews.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell].firstMatch.tap()
         waitUntilPageLoad()
         // The url textField is not empty
         XCTAssertNotEqual(app.textFields["url"].value as! String, "", "The url textField is empty")
