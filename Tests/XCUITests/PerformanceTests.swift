@@ -169,6 +169,99 @@ class PerformanceTests: BaseTestCase {
         }
     }
 
+    func testPerfHistory1000startUp() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
+        }
+    }
+
+    func testPerfHistory1000openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                navigator.goto(LibraryPanel_History)
+                let loaded = NSPredicate(format: "count == 1000")
+                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
+                waitForExpectations(timeout: TIMEOUT, handler: nil)
+        }
+    }
+
+    func testPerfBookmarks1startUp() {
+        waitForTabsButton()
+        app.terminate()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
+        }
+    }
+
+    func testPerfBookmarks1openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                navigator.goto(LibraryPanel_Bookmarks)
+                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
+                let loaded = NSPredicate(format: "count == 1")
+                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+                waitForExpectations(timeout: 60, handler: nil)
+        }
+    }
+
+    func testPerfBookmarks100startUp() {
+        waitForTabsButton()
+        app.terminate()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
+        }
+    }
+
+    func testPerfBookmarks100openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                navigator.goto(LibraryPanel_Bookmarks)
+                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
+                let loaded = NSPredicate(format: "count == 100")
+                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+                waitForExpectations(timeout: 60, handler: nil)
+        }
+    }
+
     func testPerfBookmarks1000startUp() {
         waitForTabsButton()
         app.terminate()
