@@ -11,6 +11,7 @@ enum CreditCardInputType {
 }
 
 struct CreditCardInputField: View {
+    let creditCardValidator: CreditCardValidator
     let inputType: CreditCardInputType
     var fieldHeadline: String = ""
     var errorString: String = ""
@@ -45,12 +46,14 @@ struct CreditCardInputField: View {
 
     init(inputType: CreditCardInputType,
          showError: Bool,
+         creditCardValidator: CreditCardValidator = CreditCardValidator(),
          inputViewModel: CreditCardInputViewModel
     ) {
         self.inputType = inputType
         self.showError = showError
         self.viewModel = inputViewModel
         self.inputFieldHelper = CreditCardInputFieldHelper(inputType: inputType)
+        self.creditCardValidator = creditCardValidator
 
         self._shouldReveal = viewModel.state == .view ? State(initialValue: false) : State(initialValue: true)
 
@@ -169,18 +172,23 @@ struct CreditCardInputField: View {
     }
 
     private func getTextField(editMode: Bool) -> some View {
-        TextField(text, text: $text)
-            .preferredBodyFont(size: 17)
-            .disabled(editMode)
-            .padding(.top, 7.5)
-            .foregroundColor(textFieldColor)
-            .multilineTextAlignment(.leading)
-            .keyboardType(keyboardType)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: text) { [oldValue = text] newValue in
-                    handleTextInputWith(oldValue, and: newValue)
+        // TODO: to be replaced with FocusState once iOS 14 is dropped
+        TextField(text, text: $text, onEditingChanged: { (changed) in
+            if !changed {
+                self.handleDidEndEditing()
             }
+        })
+        .preferredBodyFont(size: 17)
+        .disabled(editMode)
+        .padding(.top, 7.5)
+        .foregroundColor(textFieldColor)
+        .multilineTextAlignment(.leading)
+        .keyboardType(keyboardType)
+        .lineLimit(1)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .onChange(of: text) { [oldValue = text] newValue in
+            handleTextInputWith(oldValue, and: newValue)
+        }
     }
 
     // MARK: Helper
@@ -197,11 +205,44 @@ struct CreditCardInputField: View {
         }
     }
 
+    func handleDidEndEditing(_ textToCheck: String? = nil) {
+        if textToCheck != nil {
+            self.text = textToCheck!
+        }
+        switch inputType {
+        case .name:
+            guard !text.isEmpty && !(textToCheck?.isEmpty ?? false) else {
+                viewModel.nameIsValid = false
+                return
+            }
+
+            viewModel.nameOnCard = text
+            viewModel.nameIsValid = !text.isEmpty
+        case .number:
+            // Do not process concealed numbers
+            guard shouldReveal else { return }
+            // Credit card text with `-` delimiter
+            let val = inputFieldHelper.sanitizeInputOn(text)
+            viewModel.cardNumber = "\(val)"
+            viewModel.numberIsValid = creditCardValidator.isCardNumberValidFor(card: val)
+        case .expiration:
+            let newSanitizedValue = inputFieldHelper.sanitizeInputOn(text)
+            let numbersCount = inputFieldHelper.countNumbersIn(text: newSanitizedValue)
+
+            guard numbersCount % 4 == 0 else {
+                viewModel.expirationIsValid = false
+                return
+            }
+            viewModel.expirationIsValid = creditCardValidator.isExpirationValidFor(date: newSanitizedValue)
+        }
+    }
+
     func handleTextInputWith(_ oldValue: String, and newValue: String) {
         switch inputType {
         case .name:
             guard !newValue.isEmpty else {
                 viewModel.nameIsValid = false
+                viewModel.isRightBarButtonEnabled = false
                 return
             }
 
@@ -221,27 +262,25 @@ struct CreditCardInputField: View {
             viewModel.cardNumber = "\(val)"
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
-
             let newSanitizedValue = inputFieldHelper.sanitizeInputOn(newValue)
             let numbersCount = inputFieldHelper.countNumbersIn(text: newSanitizedValue)
 
             guard !(newValue.count > formattedTextLimit) || !(numbersCount > 4) else {
                 text = oldValue
+                viewModel.isRightBarButtonEnabled = false
                 return
             }
 
             guard numbersCount % 4 == 0 else {
                 text = newSanitizedValue.removingOccurrences(of: " / ")
-                viewModel.expirationIsValid = false
+                viewModel.isRightBarButtonEnabled = false
                 return
             }
-
-            viewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
-
             let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
-
+            viewModel.expirationDate = formattedText
             text = formattedText
         }
+        viewModel.isRightBarButtonEnabled = viewModel.areFieldValuesValid()
     }
 
     func concealedCardNum() -> String {

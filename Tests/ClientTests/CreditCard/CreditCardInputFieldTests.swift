@@ -67,11 +67,12 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testValidNameInput() {
+//        viewModel.nameOnCard = "H"
         let inputField = CreditCardInputField(inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
-
-        inputField.handleTextInputWith("", and: "H")
+        inputField.text = "H"
+        inputField.handleDidEndEditing("H")
         XCTAssert(viewModel.nameIsValid)
         XCTAssertEqual(viewModel.nameOnCard, "H")
     }
