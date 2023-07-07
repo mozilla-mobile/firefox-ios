@@ -12,6 +12,10 @@
 		8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */; };
 		8A2FE65B2A55EE3F0036B6AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A2FE65A2A55EE3F0036B6AF /* Assets.xcassets */; };
 		8A2FE65E2A55EE3F0036B6AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A2FE65C2A55EE3F0036B6AF /* LaunchScreen.storyboard */; };
+		8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0962A5730A100B4D401 /* ComponentData.swift */; };
+		8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */; };
+		8A6EE09B2A57317200B4D401 /* ComponentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE09A2A57317200B4D401 /* ComponentButtonCell.swift */; };
+		8A6EE0A22A574ED500B4D401 /* ComponentLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8A6EE0A12A574ED500B4D401 /* ComponentLibrary */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +26,10 @@
 		8A2FE65A2A55EE3F0036B6AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A2FE65D2A55EE3F0036B6AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A2FE65F2A55EE3F0036B6AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8A2FE6822A55EE6F0036B6AF /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
+		8A6EE0962A5730A100B4D401 /* ComponentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentData.swift; sourceTree = "<group>"; };
+		8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewModel.swift; sourceTree = "<group>"; };
+		8A6EE09A2A57317200B4D401 /* ComponentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentButtonCell.swift; sourceTree = "<group>"; };
+		8A6EE09C2A574E3700B4D401 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A6EE0A22A574ED500B4D401 /* ComponentLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +50,7 @@
 				8A2FE6812A55EE6F0036B6AF /* Packages */,
 				8A2FE6502A55EE3D0036B6AF /* SampleComponentLibraryApp */,
 				8A2FE64F2A55EE3D0036B6AF /* Products */,
+				8A6EE09D2A574E3F00B4D401 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +65,7 @@
 		8A2FE6502A55EE3D0036B6AF /* SampleComponentLibraryApp */ = {
 			isa = PBXGroup;
 			children = (
+				8A6EE0A32A5863D600B4D401 /* Component */,
 				8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */,
 				8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */,
 				8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */,
@@ -69,9 +79,26 @@
 		8A2FE6812A55EE6F0036B6AF /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				8A2FE6822A55EE6F0036B6AF /* BrowserKit */,
+				8A6EE09C2A574E3700B4D401 /* BrowserKit */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		8A6EE09D2A574E3F00B4D401 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8A6EE0A32A5863D600B4D401 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				8A6EE09A2A57317200B4D401 /* ComponentButtonCell.swift */,
+				8A6EE0962A5730A100B4D401 /* ComponentData.swift */,
+				8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -91,6 +118,9 @@
 			dependencies = (
 			);
 			name = SampleComponentLibraryApp;
+			packageProductDependencies = (
+				8A6EE0A12A574ED500B4D401 /* ComponentLibrary */,
+			);
 			productName = SampleComponentLibraryApp;
 			productReference = 8A2FE64E2A55EE3D0036B6AF /* SampleComponentLibraryApp.app */;
 			productType = "com.apple.product-type.application";
@@ -170,6 +200,9 @@
 				8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */,
 				8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
+				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
+				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
+				8A6EE09B2A57317200B4D401 /* ComponentButtonCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +412,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A6EE0A12A574ED500B4D401 /* ComponentLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ComponentLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8A2FE6462A55EE3D0036B6AF /* Project object */;
 }
