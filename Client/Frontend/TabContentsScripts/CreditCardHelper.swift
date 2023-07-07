@@ -149,19 +149,7 @@ class CreditCardHelper: TabContentScript {
                 return
             }
 
-            let methodName = "fillFormFields"
-            let safeMethod = webView.generateJSFunctionString(functionName: methodName,
-                                                              args: [jsonDataVal],
-                                                              escapeArgs: true)
-
-            guard safeMethod.error == nil, !safeMethod.javascript.isEmpty else {
-                completion(CreditCardHelperError.injectionInvalidFields)
-                return
-            }
-
-            let sanitizedMethod = safeMethod.javascript
-            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.\(sanitizedMethod)"
-
+            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields(\(jsonDataVal))"
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
                 guard let error = error else {
                     TelemetryWrapper.recordEvent(category: .action,
@@ -186,14 +174,15 @@ class CreditCardHelper: TabContentScript {
     }
 
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
+        let sanitizedName = card.ccName.htmlEntityEncodedString
+        let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
         let injectionJSON: [String: Any] = [
-                "cc-name": card.ccName,
-                "cc-number": card.ccNumber,
+                "cc-name": sanitizedName,
+                "cc-number": sanitizedNumber,
                 "cc-exp-month": "\(card.ccExpMonth)",
                 "cc-exp-year": "\(card.ccExpYear)",
                 "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
-
         return injectionJSON
     }
 
