@@ -334,7 +334,21 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
-        _ = handleSettings(with: settings)
+        presentWithModalDismissIfNeeded {
+            _ = self.handleSettings(with: settings)
+        }
+    }
+
+    /// Not all flows are handled by coordinators at the moment so we can't call router.dismiss for all
+    /// This bridges to use the presentWithModalDismissIfNeeded method we have in older flows
+    private func presentWithModalDismissIfNeeded(completion: @escaping () -> Void) {
+        if let presentedViewController = router.navigationController.presentedViewController {
+            presentedViewController.dismiss(animated: false, completion: {
+                completion()
+            })
+        } else {
+            completion()
+        }
     }
 
     func show(homepanelSection: Route.HomepanelSection) {
