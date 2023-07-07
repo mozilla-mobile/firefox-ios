@@ -14,4 +14,3 @@ extension Presenter where Self: UIViewController {
         present(viewController, animated: true)
     }
 }
-
