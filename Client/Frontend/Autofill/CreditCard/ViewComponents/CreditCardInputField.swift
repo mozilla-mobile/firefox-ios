@@ -89,6 +89,8 @@ struct CreditCardInputField: View {
                     case .edit, .add:
                         shouldReveal = true
                     case.view:
+                        updateFields(inputType: .name)
+                        updateFields(inputType: .expiration)
                         shouldReveal = false
                     }
                 }
