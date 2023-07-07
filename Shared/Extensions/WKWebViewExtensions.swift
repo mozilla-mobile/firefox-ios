@@ -5,10 +5,6 @@
 import Foundation
 import WebKit
 
-enum JavascriptError: Error {
-  case invalid
-}
-
 extension WKWebView {
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
