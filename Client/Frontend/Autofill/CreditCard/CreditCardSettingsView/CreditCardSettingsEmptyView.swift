@@ -13,6 +13,7 @@ struct CreditCardSettingsEmptyView: View {
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var toggleTextColor: Color = .clear
+    @State var imageColor: Color = .clear
 
     @ObservedObject var toggleModel: ToggleModel
 
@@ -31,6 +32,8 @@ struct CreditCardSettingsEmptyView: View {
                         Spacer()
                         Image(ImageIdentifiers.Large.creditCard)
                             .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(imageColor)
                             .frame(width: 200, height: 200)
                             .aspectRatio(contentMode: .fit)
                             .fixedSize()
@@ -70,6 +73,7 @@ struct CreditCardSettingsEmptyView: View {
         titleTextColor = Color(color.textPrimary)
         subTextColor = Color(color.textSecondary)
         toggleTextColor = Color(color.textPrimary)
+        imageColor = Color(color.iconSecondary)
     }
 }
 

@@ -59,10 +59,13 @@ public class AppConstants {
         }
 
         let scheme = identifier.replacingOccurrences(of: "org.mozilla.ios.", with: "")
-        if scheme == "FirefoxNightly.enterprise" {
-            return "FirefoxNightly"
+        // We only want to keep the first component past the `org.mozilla.ios`
+        // in practice, that would be "Fennec", "FennecEnterprise", "FirefoxBeta" and "Firefox"
+        guard let firstSchemeComponent = scheme.components(separatedBy: ".").first else {
+            return scheme
         }
-        return scheme
+
+        return firstSchemeComponent
     }()
 
     public static let prefSendUsageData = "settings.sendUsageData"

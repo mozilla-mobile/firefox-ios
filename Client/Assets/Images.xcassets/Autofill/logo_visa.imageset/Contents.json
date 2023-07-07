@@ -3,6 +3,16 @@
     {
       "filename" : "logo_visa.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "512_512VISA.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

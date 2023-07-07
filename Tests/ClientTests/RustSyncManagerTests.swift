@@ -52,7 +52,7 @@ class RustSyncManagerTests: XCTestCase {
     }
 
     func testGetEnginesAndKeys() {
-        let engines = ["bookmarks", "creditcards", "history", "passwords", "tabs"]
+        let engines: [RustSyncManagerAPI.TogglableEngine] = [.bookmarks, .creditcards, .history, .passwords, .tabs]
         rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
             XCTAssertEqual(engines.count, 5)
 
@@ -69,7 +69,7 @@ class RustSyncManagerTests: XCTestCase {
     }
 
     func testGetEnginesAndKeysWithNoKey() {
-        rustSyncManager.getEnginesAndKeys(engines: ["tabs"]) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: [.tabs]) { (engines, keys) in
             XCTAssertEqual(engines.count, 1)
             XCTAssertTrue(engines.contains("tabs"))
             XCTAssertTrue(keys.isEmpty)

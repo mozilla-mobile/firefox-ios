@@ -9,13 +9,13 @@ import WebKit
 
 class AccountSyncHandlerTests: XCTestCase {
     private var profile: MockProfile!
-    private var syncManager: MockSyncManager!
+    private var syncManager: ClientSyncManagerSpy!
     private var queue: MockDispatchQueue!
 
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
-        self.syncManager = profile.syncManager as? MockSyncManager
+        self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         self.queue = MockDispatchQueue()
     }
 

@@ -152,7 +152,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         getIsPinned(url: url, group: group)
         getIsInReadingList(url: url, group: group)
 
-        let dataQueue = DispatchQueue.global(qos: .userInitiated)
+        let dataQueue = DispatchQueue.global()
         group.notify(queue: dataQueue) {
             dataLoadingCompletion?()
         }
