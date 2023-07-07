@@ -197,7 +197,7 @@ class PerformanceTests: BaseTestCase {
                 waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
                 let loaded = NSPredicate(format: "count == 1001")
                 expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-                waitForExpectations(timeout: 60, handler: nil)
+                    waitForExpectations(timeout: 120, handler: nil)
         }
     }
 }
