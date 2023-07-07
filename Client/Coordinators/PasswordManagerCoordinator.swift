@@ -53,6 +53,12 @@ class PasswordManagerCoordinator: BaseCoordinator,
 
     func continueFromOnboarding() {
         showPasswordManager()
+
+        // Remove the onboarding from the navigation stack so that we go straight back to settings
+        guard let navigationController = router.navigationController as? UINavigationController else { return }
+        navigationController.viewControllers.removeAll(where: { viewController in
+            type(of: viewController) == PasswordManagerOnboardingViewController.self
+        })
     }
 
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
