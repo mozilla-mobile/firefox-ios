@@ -22,7 +22,11 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
         }
     }
-
+    weak var browserNavigationHandler: BrowserNavigationHandler? {
+        didSet {
+            contextMenuHelper.browserNavigationHandler = browserNavigationHandler
+        }
+    }
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
@@ -60,6 +64,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
+         toastContainer: UIView? = nil,
          tabManager: TabManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -82,7 +87,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let syncTabContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackInSyncedTab,
                                                                  with: viewModel.profile)
         self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewModel)
-        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel)
+        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter

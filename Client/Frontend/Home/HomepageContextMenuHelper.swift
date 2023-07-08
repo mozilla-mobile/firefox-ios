@@ -25,13 +25,18 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
+    private let toastContainer: UIView
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
-
+    weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
 
-    init(viewModel: HomepageViewModel) {
+    init(
+        viewModel: HomepageViewModel,
+        toastContainer: UIView? = nil
+    ) {
         self.viewModel = viewModel
+        self.toastContainer = toastContainer ?? UIView()
     }
 
     func presentContextMenu(for site: Site,
@@ -176,27 +181,35 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             guard let url = URL(string: site.url) else { return }
 
-            let helper = ShareExtensionHelper(url: url, tab: nil)
-            let controller = helper.createActivityViewController { (_, activityType) in
-                switch activityType {
-                case CustomActivityAction.sendToDevice.actionType:
-                    self.showSendToDevice(site: site)
-                case CustomActivityAction.copyLink.actionType:
-                    self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
-                default: break
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                self.browserNavigationHandler?.showShareExtension(
+                    url: url,
+                    sourceView: sourceView ?? UIView(),
+                    toastContainer: self.toastContainer,
+                    popoverArrowDirection: [.up, .down, .left])
+            } else {
+                let helper = ShareExtensionHelper(url: url, tab: nil)
+                let controller = helper.createActivityViewController { (_, activityType) in
+                    switch activityType {
+                    case CustomActivityAction.sendToDevice.actionType:
+                        self.showSendToDevice(site: site)
+                    case CustomActivityAction.copyLink.actionType:
+                        self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
+                    default: break
+                    }
                 }
-            }
 
-            if UIDevice.current.userInterfaceIdiom == .pad,
-               let popoverController = controller.popoverPresentationController,
-               let getSourceRect = self.getPopoverSourceRect {
-                popoverController.sourceView = sourceView
-                popoverController.sourceRect = getSourceRect(sourceView)
-                popoverController.permittedArrowDirections = [.up, .down, .left]
-                popoverController.delegate = self.delegate
-            }
+                if UIDevice.current.userInterfaceIdiom == .pad,
+                   let popoverController = controller.popoverPresentationController,
+                   let getSourceRect = self.getPopoverSourceRect {
+                    popoverController.sourceView = sourceView
+                    popoverController.sourceRect = getSourceRect(sourceView)
+                    popoverController.permittedArrowDirections = [.up, .down, .left]
+                    popoverController.delegate = self.delegate
+                }
 
-            self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
+                self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
+            }
         }).items
     }
 

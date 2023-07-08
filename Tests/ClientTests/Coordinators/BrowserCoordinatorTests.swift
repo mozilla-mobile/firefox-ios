@@ -90,6 +90,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
         subject.showHomepage(inline: true,
+                             toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
@@ -104,6 +105,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
         subject.showHomepage(inline: true,
+                             toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
@@ -112,6 +114,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.homepageViewController)
 
         subject.showHomepage(inline: true,
+                             toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
