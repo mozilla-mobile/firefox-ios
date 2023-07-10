@@ -643,6 +643,10 @@ extension TelemetryWrapper {
         var description: String {
             return self.rawValue
         }
+        
+        // Tracking Protection
+        case etpSetting = "etp_setting"
+        case etpEnabled = "etp_enabled"
 
         // Tabs Tray
         case done = "done"
@@ -1264,6 +1268,17 @@ extension TelemetryWrapper {
         case (.action, .tap, .createNewTab, _, _):
             GleanMetrics.PageActionMenu.createNewTab.add()
 
+        // MARK: Tracking Protection
+        case (.action, .tap, .trackingProtectionMenu, _, let extras):
+            if let action = extras?[EventExtraKey.etpSetting.rawValue] as? String {
+                let actionExtra = GleanMetrics.TrackingProtection.EtpSettingChangedExtra(etpSetting: action)
+                GleanMetrics.TrackingProtection.etpSettingChanged.record(actionExtra)
+            } else if let action = extras?[EventExtraKey.etpEnabled.rawValue] as? Bool {
+                let actionExtra = GleanMetrics.TrackingProtection.EtpSettingChangedExtra(etpEnabled: action)
+                GleanMetrics.TrackingProtection.etpSettingChanged.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         // MARK: Tabs Tray
         case (.action, .tap, .privateBrowsingIcon, .tabTray, let extras):
             if let action = extras?[EventExtraKey.action.rawValue] as? String {

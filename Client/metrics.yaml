@@ -2928,7 +2928,29 @@ tracking_protection:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
-
+  etp_setting_changed:
+    type: event
+    description: |
+      A user changed their tracking protection
+      level setting to either strict or standard
+    extra_keys:
+      etp_setting:
+       type: string
+       description: |
+         Records the protection level:
+         standard / strict
+      etp_enabled:
+       type: boolean
+       description: |
+         Records the state
+         true / false
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
 widget:
