@@ -700,7 +700,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         super.viewWillTransition(to: size, with: coordinator)
 
         dismissVisibleMenus()
-        contentContainer.prepareForRotation()
 
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
@@ -711,7 +710,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
             }
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
-            self.contentContainer.rotationEnded()
         })
     }
 

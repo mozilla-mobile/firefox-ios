@@ -48,13 +48,22 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
 
     // MARK: - Rotation
     /// Screentime needs to be added on top of a webview to work, but on rotation it results in a black flash #15432
-    /// We remove it on rotation and then add it back to solve this issue
+    /// We remove it on rotation and then add it back when rotation is done to solve this issue
 
-    func prepareForRotation() {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        prepareForRotation()
+
+        coordinator.animate(alongsideTransition: nil) { _ in
+            self.rotationEnded()
+        }
+    }
+
+    private func prepareForRotation() {
         removeScreenTimeController()
     }
 
-    func rotationEnded() {
+    private func rotationEnded() {
         setupScreenTimeController()
     }
 

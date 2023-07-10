@@ -66,18 +66,6 @@ class ContentContainer: UIView {
         saveContentType(content: content)
     }
 
-    // MARK: - Rotation handling
-
-    func prepareForRotation() {
-        guard let contentController = contentController as? WebviewViewController else { return }
-        contentController.prepareForRotation()
-    }
-
-    func rotationEnded() {
-        guard let contentController = contentController as? WebviewViewController else { return }
-        contentController.rotationEnded()
-    }
-
     // MARK: - Private
 
     private func removePreviousContent() {
