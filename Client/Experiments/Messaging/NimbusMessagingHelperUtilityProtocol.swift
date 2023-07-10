@@ -15,6 +15,7 @@ protocol NimbusMessagingHelperUtilityProtocol {
 /// Responsible for creating a ``NimbusMessagingHelper`` with appropriate context.
 class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
     private var logger: Logger
+    private let nimbus: NimbusMessagingProtocol = Experiments.shared
 
     required init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
@@ -25,7 +26,7 @@ class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
 
         do {
             // Attempt to create our message helper
-            return try Experiments.shared.createMessageHelper(
+            return try nimbus.createMessageHelper(
                 additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
             // If we're here, then all of Messaging is in limbo!

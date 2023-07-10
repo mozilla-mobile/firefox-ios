@@ -23,38 +23,6 @@ class GleanPlumbMessageTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Test isUnderExperimentWith
-    func testMessageIsUnderExperiment_BadExperimentKey_fails() {
-        subject = createMessage(messageId: messageID)
-
-        XCTAssertFalse(subject.isUnderExperimentWith(key: nil))
-    }
-
-    func testMessageIsUnderExperiment_isControlIsTrue_passes() {
-        subject = createMessage(messageId: messageID,
-                                mockData: MockMessageData(isControl: true))
-
-        XCTAssertTrue(subject.isUnderExperimentWith(key: experimentKey))
-    }
-
-    func testMessageIsUnderExperiment_idContainsExperimentID_isTrue() {
-        subject = createMessage(messageId: messageID)
-
-        XCTAssertTrue(subject.isUnderExperimentWith(key: experimentKey))
-    }
-
-    func testMessageIsUnderExperiment_idContainsExperimentID_isFalse() {
-        subject = createMessage(messageId: messageID)
-
-        XCTAssertFalse(subject.isUnderExperimentWith(key: "a-bad-experiment-id"))
-    }
-
-    func testMessageIsUnderExperiment_idDoesNotContainExperimentID_ButMatches() {
-        subject = createMessage(messageId: messageID)
-
-        XCTAssertTrue(subject.isUnderExperimentWith(key: messageID))
-    }
-
     // MARK: - Helpers
     private func createMessage(
         messageId: String,

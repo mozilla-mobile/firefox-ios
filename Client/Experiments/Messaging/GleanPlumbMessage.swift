@@ -10,6 +10,7 @@ protocol MessageDataProtocol {
     var title: String? { get }
     var text: String { get }
     var buttonLabel: String? { get }
+    var experiment: String? { get }
 }
 
 extension MessageData: MessageDataProtocol {}
@@ -43,18 +44,6 @@ struct GleanPlumbMessage {
 
     var isExpired: Bool {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
-    }
-
-    func isUnderExperimentWith(key experimentKey: String?) -> Bool {
-        guard let experimentKey = experimentKey else { return false }
-
-        if data.isControl { return true }
-
-        if experimentKey.hasSuffix("-") {
-            return id.hasPrefix(experimentKey)
-        }
-
-        return id == experimentKey
     }
 }
 
