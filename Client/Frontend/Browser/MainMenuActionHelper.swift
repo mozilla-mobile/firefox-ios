@@ -800,6 +800,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: ImageIdentifiers.key,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                self.navigationHandler?.show(settings: .password)
+                return
+            }
+
             let navigationHandler: NavigationHandlerType = { url in
                 UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
