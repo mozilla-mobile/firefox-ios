@@ -38,6 +38,19 @@ app_cycle:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+# App icon
+app_icon:
+  new_private_tab_tapped:
+    type: event
+    description: |
+      A user opened a new private tab from long pressing the app icon
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-07-06"
 # Accessibility
 accessibility:
   voice_over:

@@ -531,6 +531,7 @@ extension TelemetryWrapper {
 
     public enum EventValue: String {
         case activityStream = "activity-stream"
+        case appIcon = "app-icon"
         case appMenu = "app-menu"
         case browser = "browser"
         case contextMenu = "context-menu"
@@ -1125,6 +1126,9 @@ extension TelemetryWrapper {
             Experiments.shared.recordEvent("app_cycle.foreground")
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
+        // MARK: App icon
+        case (.action, .tap, .newPrivateTab, .appIcon, _):
+            GleanMetrics.AppIcon.newPrivateTabTapped.record()
         // MARK: Accessibility
         case(.action, .voiceOver, .app, _, let extras):
             if let isRunning = extras?[EventExtraKey.isVoiceOverRunning.rawValue] as? String {
