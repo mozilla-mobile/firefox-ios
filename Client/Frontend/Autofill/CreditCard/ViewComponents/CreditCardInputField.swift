@@ -247,6 +247,7 @@ struct CreditCardInputField: View {
             }
 
             viewModel.nameOnCard = newValue
+            viewModel.nameIsValid = true
         case .number:
             // Do not process concealed numbers
             guard shouldReveal else { return }
@@ -260,6 +261,7 @@ struct CreditCardInputField: View {
             let formattedText = inputFieldHelper.addCreditCardDelimiter(sanitizedCCNum: val)
             text = formattedText
             viewModel.cardNumber = "\(val)"
+            viewModel.numberIsValid = true
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
             let newSanitizedValue = inputFieldHelper.sanitizeInputOn(newValue)
@@ -279,6 +281,7 @@ struct CreditCardInputField: View {
             let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
             viewModel.expirationDate = formattedText
             text = formattedText
+            viewModel.expirationIsValid = true
         }
         viewModel.isRightBarButtonEnabled = viewModel.areFieldValuesValid()
     }

@@ -286,9 +286,21 @@ class CreditCardInputViewModel: ObservableObject {
         cardNumber = autofill.decryptCreditCardNumber(
             encryptedCCNum: creditCard.ccNumberEnc) ?? ""
         let month = creditCard.ccExpMonth
+        isRightBarButtonEnabled = checkIfShouldEnableRightButtonOnAppear()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
 
         expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear % 100)"
+    }
+
+    func checkIfShouldEnableRightButtonOnAppear() -> Bool {
+        switch state {
+        case .add:
+            return false
+        case .edit:
+            return areFieldValuesValid()
+        case .view:
+            return true
+        }
     }
 
     func getDisplayedCCValues() -> UnencryptedCreditCardFields? {
