@@ -580,9 +580,7 @@ extension TopSitesDataAdaptorTests {
         let googleManager = GoogleTopSiteManager(prefs: profile.prefs)
         let dispatchGroup = MockDispatchGroup()
 
-        let defaultEngine = searchEngines != nil ? searchEngines.defaultEngine: nil
         let subject = TopSitesDataAdaptorImplementation(profile: profile,
-                                                        defaultSearchEngine: defaultEngine,
                                                         topSiteHistoryManager: historyStub,
                                                         googleTopSiteManager: googleManager,
                                                         contileProvider: contileProviderMock,
@@ -598,11 +596,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        mockSearchEngineProvider = MockSearchEngineProvider()
-        mockSearchEngineProvider.mockEngines.insert(searchEngine, at: 0)
-        searchEngines = SearchEngines(prefs: profile.prefs,
-                                      files: profile.files,
-                                      engineProvider: mockSearchEngineProvider)
+        profile.searchEngines.defaultEngine = searchEngine
     }
 }
 
