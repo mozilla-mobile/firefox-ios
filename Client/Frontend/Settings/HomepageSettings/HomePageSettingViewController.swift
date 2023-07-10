@@ -115,9 +115,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     private func customizeFirefoxSettingSection() -> SettingSection {
         // Setup
         var sectionItems = [Setting]()
+
+        let pocketStatusText = String(
+            format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
+            PocketAppName.shortName.rawValue)
         let pocketSetting = BoolSetting(
             with: .pocket,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Pocket)) { [weak self] _ in
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories),
+            statusText: NSAttributedString(string: pocketStatusText)) { [weak self] _ in
                 self?.tableView.reloadData()
             }
 
