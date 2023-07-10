@@ -33,10 +33,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     init(
         viewModel: HomepageViewModel,
-        toastContainer: UIView? = nil
+        toastContainer: UIView
     ) {
         self.viewModel = viewModel
-        self.toastContainer = toastContainer ?? UIView()
+        self.toastContainer = toastContainer
     }
 
     func presentContextMenu(for site: Site,

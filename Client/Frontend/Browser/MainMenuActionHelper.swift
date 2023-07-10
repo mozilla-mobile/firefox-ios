@@ -79,7 +79,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
-         toastContainer: UIView? = nil,
+         toastContainer: UIView,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
@@ -87,7 +87,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
-        self.toastContainer = toastContainer ?? UIView()
+        self.toastContainer = toastContainer
         self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab

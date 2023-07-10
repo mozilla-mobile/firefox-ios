@@ -96,7 +96,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              sendToDeviceDelegate: subject.browserViewController,
                              overlayManager: overlayModeManager)
 
-        let secondHomepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let secondHomepage = HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)

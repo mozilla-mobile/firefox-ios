@@ -30,14 +30,14 @@ final class ContentContainerTests: XCTestCase {
 
     func testCanAddHomepage() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let homepage = createHomepage()
 
         XCTAssertTrue(subject.canAdd(content: homepage))
     }
 
     func testCanAddHomepageOnceOnly() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let homepage = createHomepage()
 
         subject.add(content: homepage)
         XCTAssertFalse(subject.canAdd(content: homepage))
@@ -62,7 +62,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasHomepage_trueWhenHomepage() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let homepage = createHomepage()
         subject.add(content: homepage)
 
         XCTAssertTrue(subject.hasHomepage)
@@ -90,14 +90,14 @@ final class ContentContainerTests: XCTestCase {
 
     func testContentView_hasContentHomepage_viewIsNotNil() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let homepage = createHomepage()
         subject.add(content: homepage)
         XCTAssertNotNil(subject.contentView)
     }
 
     func testContentType_needTopContentExtended_trueWithHomepage() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        let homepage = createHomepage()
         subject.add(content: homepage)
         XCTAssertTrue(subject.type!.needTopContentExtended)
     }
@@ -113,5 +113,9 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: webview)
 
         XCTAssertFalse(subject.type!.needTopContentExtended)
+    }
+
+    private func createHomepage() -> HomepageViewController {
+        HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
     }
 }

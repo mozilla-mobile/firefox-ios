@@ -22,11 +22,13 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
         }
     }
+
     weak var browserNavigationHandler: BrowserNavigationHandler? {
         didSet {
             contextMenuHelper.browserNavigationHandler = browserNavigationHandler
         }
     }
+
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
@@ -64,7 +66,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
-         toastContainer: UIView? = nil,
+         toastContainer: UIView,
          tabManager: TabManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
