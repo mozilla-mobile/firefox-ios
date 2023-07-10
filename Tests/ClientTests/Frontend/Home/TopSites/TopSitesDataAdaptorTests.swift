@@ -12,8 +12,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
-    private var searchEngines: SearchEngines!
-    private var mockSearchEngineProvider: MockSearchEngineProvider!
 
     override func setUp() {
         super.setUp()
@@ -35,8 +33,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
-        mockSearchEngineProvider = nil
-        searchEngines = nil
     }
 
     func testData_whenNotLoaded() {
@@ -580,9 +576,7 @@ extension TopSitesDataAdaptorTests {
         let googleManager = GoogleTopSiteManager(prefs: profile.prefs)
         let dispatchGroup = MockDispatchGroup()
 
-        let defaultEngine = searchEngines != nil ? searchEngines.defaultEngine: nil
         let subject = TopSitesDataAdaptorImplementation(profile: profile,
-                                                        defaultSearchEngine: defaultEngine,
                                                         topSiteHistoryManager: historyStub,
                                                         googleTopSiteManager: googleManager,
                                                         contileProvider: contileProviderMock,
@@ -598,11 +592,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        mockSearchEngineProvider = MockSearchEngineProvider()
-        mockSearchEngineProvider.mockEngines.insert(searchEngine, at: 0)
-        searchEngines = SearchEngines(prefs: profile.prefs,
-                                      files: profile.files,
-                                      engineProvider: mockSearchEngineProvider)
+        profile.searchEngines.defaultEngine = searchEngine
     }
 }
 

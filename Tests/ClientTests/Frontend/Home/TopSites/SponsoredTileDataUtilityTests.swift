@@ -23,6 +23,12 @@ class SponsoredTileDataUtilityTests: XCTestCase {
                                                        searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                                        suggestTemplate: nil,
                                                        isCustomEngine: false)
+    let tldIncludedSearchEngine = OpenSearchEngine(engineID: "Test.com",
+                                                   shortName: "Test.com",
+                                                   image: UIImage(),
+                                                   searchTemplate: "http://firefox.com/find?q={searchTerm}",
+                                                   suggestTemplate: nil,
+                                                   isCustomEngine: false)
 
     override func setUp() {
         super.setUp()
@@ -50,6 +56,12 @@ class SponsoredTileDataUtilityTests: XCTestCase {
     func testShouldAdd_filterSite_whenCaseInsentiveIsUsed() {
         let siteToFilter = Site(url: "https://www.test.com", title: "test", bookmarked: false, guid: nil)
         let shouldAdd = subject.shouldAdd(site: siteToFilter, with: caseInsensitiveSearchEngine)
+        XCTAssertFalse(shouldAdd)
+    }
+
+    func testShouldAdd_filterSite_whenTldIsIncluded() {
+        let siteToFilter = Site(url: "https://www.test.com", title: "test", bookmarked: false, guid: nil)
+        let shouldAdd = subject.shouldAdd(site: siteToFilter, with: tldIncludedSearchEngine)
         XCTAssertFalse(shouldAdd)
     }
 }
