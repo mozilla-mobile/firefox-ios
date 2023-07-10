@@ -800,14 +800,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: ImageIdentifiers.key,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
-<<<<<<< HEAD
-=======
             if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
                 self.navigationHandler?.show(settings: .password)
                 return
             }
 
->>>>>>> 630bb6a4f (Bugfix FXIOS-6947 [v116] Fix guard for password flow (#15447))
             let navigationHandler: NavigationHandlerType = { url in
                 UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
