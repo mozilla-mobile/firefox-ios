@@ -579,6 +579,8 @@ extension TelemetryWrapper {
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case historyHighlightsGroupOpen = "history-highlights-group-open"
+        case topSite = "top-site"
+        case pocketSite = "pocket-site"
         case customizeHomepageButton = "customize-homepage-button"
         case wallpaperSelected = "wallpaper-selected"
         case dismissCFRFromButton = "dismiss-cfr-from-button"
@@ -743,7 +745,7 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .tap, .newPrivateTab, _, _):
+        case (.action, .tap, .newPrivateTab, .topSite, _):
             GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
@@ -1080,6 +1082,8 @@ extension TelemetryWrapper {
             }
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
+        case (.action, .tap, .newPrivateTab, .pocketSite, _):
+            GleanMetrics.Pocket.openInPrivateTab.record()
 
         // MARK: Library Panel
         case (.action, .tap, .libraryPanel, let type?, _):

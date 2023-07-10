@@ -78,10 +78,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Default actions
 
-    func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+    func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab)
+            if sectionType == .topSites {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .topSite)
+            } else {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .pocketSite)
+            }
         }.items
     }
 
@@ -102,7 +106,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         guard let siteURL = site.url.asURL else { return nil }
 
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .pocket)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
@@ -228,15 +232,15 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let topSiteActions: [PhotonRowActions]
         if let site = site as? PinnedSite {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         } else if site as? SponsoredTile != nil {
-            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
+            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction()]
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         }
         return topSiteActions
