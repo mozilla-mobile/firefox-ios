@@ -12,8 +12,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
-    private var searchEngines: SearchEngines!
-    private var mockSearchEngineProvider: MockSearchEngineProvider!
 
     override func setUp() {
         super.setUp()
@@ -35,8 +33,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
-        mockSearchEngineProvider = nil
-        searchEngines = nil
     }
 
     func testData_whenNotLoaded() {
