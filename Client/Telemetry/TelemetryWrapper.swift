@@ -743,7 +743,8 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
+        case (.action, .tap, .newPrivateTab, _, _):
+            GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?[EventExtraKey.preference.rawValue] as? String,

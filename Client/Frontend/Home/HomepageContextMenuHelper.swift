@@ -81,6 +81,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
         return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab)
         }.items
     }
 

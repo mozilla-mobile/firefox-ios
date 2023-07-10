@@ -1080,7 +1080,17 @@ top_sites:
     metadata:
       tags:
         - TopSites
-
+  open_in_private_tab:
+    type: event
+    description: |
+      A user opens a new private tab based on a top site item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-07-06"
 # HomePage
 firefox_home_page:
   open_from_menu_home_button:
