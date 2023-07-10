@@ -208,11 +208,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     // MARK: Button Actions
     @objc
     private func didTapYes() {
-        let eventObject: TelemetryWrapper.EventObject = viewModel.state == .save ? .creditCardBottomSheetSave : .creditCardBottomSheetUpdate
         self.viewModel.didTapMainButton { [weak self] error in
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: eventObject)
             DispatchQueue.main.async { [weak self] in
                 self?.dismissVC()
                 self?.didTapYesClosure?(error)
@@ -222,13 +218,11 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     @objc
     private func didTapManageCards() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetManageCards)
         didTapManageCardsClosure?()
     }
 
     // MARK: BottomSheet Delegate
     func willDismiss() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardBottomSheetDismiss)
     }
 
     // MARK: UITableViewDelegate
