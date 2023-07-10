@@ -800,7 +800,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: ImageIdentifiers.Large.login,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
-            guard CoordinatorFlagManager.isSettingsCoordinatorEnabled else {
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
                 self.navigationHandler?.show(settings: .password)
                 return
             }
