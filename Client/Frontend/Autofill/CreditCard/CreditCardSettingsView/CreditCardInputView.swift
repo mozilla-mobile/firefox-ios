@@ -158,7 +158,7 @@ struct CreditCardInputView: View {
         }
         .foregroundColor(viewModel.isRightBarButtonEnabled ? barButtonColor : saveButtonDisabledColor)
         .onAppear {
-            viewModel.isRightBarButtonEnabled = viewModel.shouldEnableTopRightButton()
+            viewModel.isRightBarButtonEnabled = viewModel.initialStateToEnableTopRightButton()
         }
     }
 
