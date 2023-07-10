@@ -11,6 +11,12 @@ class PerformanceTests: BaseTestCase {
                     "testPerfTabs_4_1280tabTray": "tabsState1280.archive",
                     "testPerfHistory100startUp": "testHistoryDatabase100-places.db",
                     "testPerfHistory100openMenu": "testHistoryDatabase100-places.db",
+                    "testPerfHistory1000startUp": "testHistoryDatabase1000-places.db",
+                    "testPerfHistory1000openMenu": "testHistoryDatabase1000-places.db",
+                    "testPerfBookmarks1startUp": "testBookmarksDatabase1-places.db",
+                    "testPerfBookmarks1openMenu": "testBookmarksDatabase1-places.db",
+                    "testPerfBookmarks100startUp": "testBookmarksDatabase100-places.db",
+                    "testPerfBookmarks100openMenu": "testBookmarksDatabase100-places.db",
                     "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db",
                     "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
 
@@ -169,38 +175,9 @@ class PerformanceTests: BaseTestCase {
         }
     }
 
-    func testPerfHistory1000startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory1000openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let loaded = NSPredicate(format: "count == 1000")
-                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-                waitForExpectations(timeout: TIMEOUT, handler: nil)
-        }
-    }
-
     func testPerfBookmarks1startUp() {
         waitForTabsButton()
-        app.terminate()
+//        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -215,6 +192,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfBookmarks1openMenu() {
         waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -222,11 +200,10 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
                 // activity measurement here
-                navigator.goto(LibraryPanel_Bookmarks)
-                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
-                let loaded = NSPredicate(format: "count == 1")
-                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-                waitForExpectations(timeout: 60, handler: nil)
+                let bookmarkTable = app.tables["Bookmarks List"]
+                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                let expectedCount = 2
+                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
         }
     }
 
@@ -247,6 +224,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfBookmarks100openMenu() {
         waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -254,11 +232,10 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
                 // activity measurement here
-                navigator.goto(LibraryPanel_Bookmarks)
-                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
-                let loaded = NSPredicate(format: "count == 100")
-                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-                waitForExpectations(timeout: 60, handler: nil)
+                let bookmarkTable = app.tables["Bookmarks List"]
+                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                let expectedCount = 101
+                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
         }
     }
 
@@ -279,6 +256,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfBookmarks1000openMenu() {
         waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -286,11 +264,10 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
                 // activity measurement here
-                navigator.goto(LibraryPanel_Bookmarks)
-                waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
-                let loaded = NSPredicate(format: "count == 1001")
-                expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-                waitForExpectations(timeout: 60, handler: nil)
+                let bookmarkTable = app.tables["Bookmarks List"]
+                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                let expectedCount = 1001
+                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
         }
     }
 }
