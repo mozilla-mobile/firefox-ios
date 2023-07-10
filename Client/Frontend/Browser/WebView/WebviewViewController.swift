@@ -14,9 +14,8 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
 
     init(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
-        // Usage recording is suppressed if the navigation is set to incognito mode.
-        screenTimeController.suppressUsageRecording = isPrivate
         super.init(nibName: nil, bundle: nil)
+        setScreenTimeUsage(isPrivate: isPrivate)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -40,6 +39,36 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         ])
     }
 
+    func update(webView: WKWebView, isPrivate: Bool = false) {
+        self.webView = webView
+        setupWebView()
+        setupScreenTimeController()
+        setScreenTimeUsage(isPrivate: isPrivate)
+    }
+
+    // MARK: - Rotation
+    /// Screentime needs to be added on top of a webview to work, but on rotation it results in a black flash #15432
+    /// We remove it on rotation and then add it back when rotation is done to solve this issue
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        prepareForRotation()
+
+        coordinator.animate(alongsideTransition: nil) { _ in
+            self.rotationEnded()
+        }
+    }
+
+    private func prepareForRotation() {
+        removeScreenTimeController()
+    }
+
+    private func rotationEnded() {
+        setupScreenTimeController()
+    }
+
+    // MARK: - ScreenTime
+
     private func setupScreenTimeController() {
         addChild(screenTimeController)
         view.addSubview(screenTimeController.view)
@@ -54,10 +83,13 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         screenTimeController.url = webView.url
     }
 
-    func update(webView: WKWebView, isPrivate: Bool = false) {
-        self.webView = webView
-        setupWebView()
-        setupScreenTimeController()
+    private func removeScreenTimeController() {
+        screenTimeController.willMove(toParent: nil)
+        screenTimeController.view.removeFromSuperview()
+        screenTimeController.removeFromParent()
+    }
+
+    private func setScreenTimeUsage(isPrivate: Bool) {
         // Usage recording is suppressed if the navigation is set to incognito mode.
         screenTimeController.suppressUsageRecording = isPrivate
     }
