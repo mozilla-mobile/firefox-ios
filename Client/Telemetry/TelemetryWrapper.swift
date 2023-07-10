@@ -422,10 +422,6 @@ extension TelemetryWrapper {
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
         // MARK: Credit Card
-        case creditCardBottomSheetUpdate = "creditCardBottomSheetUpdate"
-        case creditCardBottomSheetSave = "creditCardBottomSheetSave"
-        case creditCardBottomSheetManageCards = "creditCardBottomSheetManageCards"
-        case creditCardBottomSheetDismiss = "creditCardBottomSheetDismiss"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case creditCardFormDetected = "creditCardFormDetected"
         case creditCardAutofilled = "creditCardAutofilled"
