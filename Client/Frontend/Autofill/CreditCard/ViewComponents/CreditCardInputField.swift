@@ -172,7 +172,7 @@ struct CreditCardInputField: View {
     }
 
     private func getTextField(editMode: Bool) -> some View {
-        // TODO: to be replaced with FocusState once iOS 14 is dropped
+        // TODO: FXIOS-6984 - use FocusState when iOS 14 is dropped
         TextField(text, text: $text, onEditingChanged: { (changed) in
             if !changed {
                 self.handleDidEndEditing()
