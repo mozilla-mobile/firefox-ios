@@ -36,6 +36,7 @@ class HomePageSettingsUITests: BaseTestCase {
         }
         super.setUp()
     }
+
     func testCheckHomeSettingsByDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -58,8 +59,11 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", recentlySaved as? String)
         let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
         XCTAssertEqual("1", recentlyVisited as? String)
+<<<<<<< HEAD
         let recommendedByPocket = app.tables.cells.switches["Recommended by Pocket"].value
         XCTAssertEqual("1", recommendedByPocket as? String)
+=======
+>>>>>>> 71e5584e3 (Refactor FXIOS-4762 [v116] Update Pocket branding in settings (#15289))
         let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
@@ -304,6 +308,6 @@ class HomePageSettingsUITests: BaseTestCase {
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
         XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
-        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recommendedByPocket].value as! String, "1")
+        XCTAssertEqual(app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String, "1")
     }
 }
