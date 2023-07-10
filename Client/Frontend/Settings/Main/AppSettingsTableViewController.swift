@@ -131,6 +131,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
         checkForDeeplinkSetting()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        askedToReload()
+    }
+
     @objc
     private func done() {
         settingsDelegate?.didFinish()
