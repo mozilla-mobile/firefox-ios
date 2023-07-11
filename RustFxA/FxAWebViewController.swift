@@ -82,10 +82,6 @@ class FxAWebViewController: UIViewController {
         view = webView
         webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
         viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
-            if let method = telemetryEventMethod {
-                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
-            }
-
             self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
         }
 

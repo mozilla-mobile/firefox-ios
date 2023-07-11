@@ -415,8 +415,6 @@ extension TelemetryWrapper {
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
         case chinaServerSwitch = "china-server-switch"
-        case accountConnected = "connected"
-        case accountDisconnected = "disconnected"
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
