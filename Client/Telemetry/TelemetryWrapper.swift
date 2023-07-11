@@ -643,7 +643,7 @@ extension TelemetryWrapper {
         var description: String {
             return self.rawValue
         }
-        
+
         // Tracking Protection
         case etpSetting = "etp_setting"
         case etpEnabled = "etp_enabled"
