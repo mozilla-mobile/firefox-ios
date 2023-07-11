@@ -79,11 +79,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - BrowserDelegate
 
     func showHomepage(inline: Bool,
+                      toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
+                                             toastContainer: toastContainer,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
                                              sendToDeviceDelegate: sendToDeviceDelegate,
@@ -120,6 +122,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     private func getHomepage(inline: Bool,
+                             toastContainer: UIView,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
                              sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
@@ -130,11 +133,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             let homepageViewController = HomepageViewController(
                 profile: profile,
                 isZeroSearch: inline,
-                overlayManager: overlayManager
-            )
+                toastContainer: toastContainer,
+                overlayManager: overlayManager)
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                homepageViewController.browserNavigationHandler = self
+            }
             return homepageViewController
         }
     }

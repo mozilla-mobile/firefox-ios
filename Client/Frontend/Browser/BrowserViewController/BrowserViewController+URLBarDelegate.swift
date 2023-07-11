@@ -93,11 +93,19 @@ extension BrowserViewController: URLBarDelegate {
                                      extras: nil)
 
         if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
-            presentShareSheet(tabUrl,
-                              tab: selectedtab,
-                              sourceView: shareView,
-                              sourceRect: CGRect.null,
-                              arrowDirection: isBottomSearchBar ? .down : .up)
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                navigationHandler?.showShareExtension(
+                    url: tabUrl,
+                    sourceView: shareView,
+                    toastContainer: alertContainer,
+                    popoverArrowDirection: isBottomSearchBar ? .down : .up)
+            } else {
+                presentShareSheet(tabUrl,
+                                  tab: selectedtab,
+                                  sourceView: shareView,
+                                  sourceRect: CGRect.null,
+                                  arrowDirection: isBottomSearchBar ? .down : .up)
+            }
         }
     }
 
