@@ -164,7 +164,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
-            await tabDataStore.saveWindowData(window: windowData, forced: false)
+            await tabDataStore.saveWindowData(window: windowData, forced: forced)
         }
     }
 
