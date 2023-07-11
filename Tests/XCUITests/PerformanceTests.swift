@@ -177,7 +177,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfBookmarks1startUp() {
         waitForTabsButton()
-//        app.terminate()
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
