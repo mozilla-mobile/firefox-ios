@@ -17,6 +17,8 @@ protocol TabManager: AnyObject {
     var selectedTab: Tab? { get }
     var backupCloseTab: BackupCloseTab? { get set }
     var normalTabs: [Tab] { get }
+    var normalActiveTabs: [Tab] { get }
+    var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
     var tabDisplayType: TabDisplayType { get set }
     subscript(index: Int) -> Tab? { get }

@@ -12,10 +12,16 @@ struct TabsQuantityTelemetry {
                                      object: .tabPrivateQuantity,
                                      extras: privateExtra)
 
-        let normalExtra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.normalTabs.count)]
+        let normalExtra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.normalActiveTabs.count)]
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .background,
                                      object: .tabNormalQuantity,
                                      extras: normalExtra)
+
+        let inactiveExtra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.inactiveTabs.count)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .background,
+                                     object: .tabInactiveQuantity,
+                                     extras: inactiveExtra)
     }
 }

@@ -2530,6 +2530,20 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
     unit: quantity of private tabs
+  inactive_tabs_count:
+    type: quantity
+    description: |
+      A quantity that indicates how many INACTIVE tabs a user
+      currently has open. This is reported when the user backgrounds
+      the app.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+    unit: quantity of inactive tabs
   cumulative_count:
     type: counter
     description: |

@@ -46,4 +46,19 @@ class TabsQuantityTelemetryTests: XCTestCase {
                                   expectedValue: 0,
                                   failureMessage: "Should have 0 normal tabs")
     }
+
+    func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
+        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
+        tabManager.addTab()
+
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
+                                  expectedValue: 0,
+                                  failureMessage: "Should have 0 private tabs")
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.inactiveTabsCount,
+                                  expectedValue: 0,
+                                  failureMessage: "Should have no inactive tabs, since a new tab was just created.")
+    }
 }

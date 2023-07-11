@@ -393,6 +393,7 @@ extension TelemetryWrapper {
         case tabTray = "tab-tray"
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
+        case tabInactiveQuantity = "inactive-tab-quantity"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -797,17 +798,21 @@ extension TelemetryWrapper {
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
-        // MARK: - QR Codes
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
         case(.information, .background, .tabPrivateQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.information, .background, .tabInactiveQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.inactiveTabsCount.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
