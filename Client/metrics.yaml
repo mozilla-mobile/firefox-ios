@@ -47,7 +47,7 @@ app_icon:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-06"
@@ -1087,7 +1087,7 @@ top_sites:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-06"
@@ -1967,7 +1967,7 @@ pocket:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-06"
@@ -2947,7 +2947,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-07-06"
@@ -3193,7 +3193,7 @@ tabs_tray:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-07-06"
@@ -3204,7 +3204,7 @@ tabs_tray:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-07-06"
