@@ -165,6 +165,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var title: String? = "Test"
     var text: String = "This is a test"
     var buttonLabel: String?
+    var experiment: String?
 }
 
 // MARK: - MockStyleDataProtocol
@@ -181,7 +182,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     var recordedSurface: MessageSurfaceId?
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         recordedSurface = surface
-        if message?.data.surface == recordedSurface { return message }
+        if message?.surface == recordedSurface { return message }
 
         return nil
     }

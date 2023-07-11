@@ -25,7 +25,7 @@ class MockNimbusTargetingHelper: NimbusTargetingHelperProtocol {
 
 class MockNimbusStringHelper: NimbusStringHelperProtocol {
     func stringFormat(template: String, uuid: String?) -> String {
-        return ""
+        return template
     }
 
     func getUuid(template: String) -> String? {

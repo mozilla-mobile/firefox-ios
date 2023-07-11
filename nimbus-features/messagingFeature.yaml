@@ -1,16 +1,12 @@
 features:
   messaging:
     description: >
-      Configuration for the messaging system.
+      The in-app messaging system
 
-      In practice this is a set of growable lookup tables for the
-      message controller to piece together.
+    # Allow the feature to be enrolled in more than one experiment at the same time.
+    allow-coenrollment: true
 
     variables:
-      message-under-experiment:
-        description: Id or prefix of the message under experiment.
-        type: Option<String>
-        default: null
 
       messages:
         description: >
@@ -186,6 +182,10 @@ objects:
         type: MessageSurfaceId
         description: Each message will tell us the surface it is targeting with this.
         default: Unknown
+      experiment:
+        type: Option<String>
+        description: The experiment slug that this message is involved in.
+        default: null
 
   StyleData:
     description: >

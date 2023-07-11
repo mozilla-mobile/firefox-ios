@@ -155,6 +155,7 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var title: String? = "title label test"
     var text: String = "text label test"
     var buttonLabel: String? = "button label test"
+    var experiment: String?
 
     init(surface: MessageSurfaceId = .survey) {
         self.surface = surface
