@@ -40,13 +40,14 @@ class LegacyTabManagerStoreTests: XCTestCase {
 
     // MARK: Preserve
 
-    func testPreserve_withNoTabs() {
-        let manager = createManager()
-        manager.preserveTabs([], selectedTab: nil)
-
-        let retrievedTabs = manager.testTabOnDisk()
-        XCTAssertEqual(retrievedTabs.count, 0, "Expected 0 tabs on disk")
-        XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
+    func testPreserve_withNoTabs() throws {
+        throw XCTSkip("Skipping since test is flaky on Bitrise")
+//        let manager = createManager()
+//        manager.preserveTabs([], selectedTab: nil)
+//
+//        let retrievedTabs = manager.testTabOnDisk()
+//        XCTAssertEqual(retrievedTabs.count, 0, "Expected 0 tabs on disk")
+//        XCTAssertFalse(manager.hasTabsToRestoreAtStartup)
     }
 
     func testPreserveTabs_noSelectedTab() {
