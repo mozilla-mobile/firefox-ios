@@ -7,21 +7,22 @@ import Sync
 import Storage
 import XCTest
 
-class MockBrowserProfile: BrowserProfile {}
-
 class RustSyncManagerTests: XCTestCase {
-    let bookmarksStateChangedPrefKey = "sync.engine.bookmarks.enabledStateChanged"
-    let bookmarksEnabledPrefKey = "sync.engine.bookmarks.enabled"
-    let creditcardsStateChangedPrefKey = "sync.engine.creditcards.enabledStateChanged"
-    let creditcardsEnabledPrefKey = "sync.engine.creditcards.enabled"
-    let historyStateChangedPrefKey = "sync.engine.history.enabledStateChanged"
-    let historyEnabledPrefKey = "sync.engine.history.enabled"
-    let passwordsStateChangedPrefKey = "sync.engine.passwords.enabledStateChanged"
-    let passwordsEnabledPrefKey = "sync.engine.passwords.enabled"
-    let tabsStateChangedPrefKey = "sync.engine.tabs.enabledStateChanged"
-    let tabsEnabledPrefKey = "sync.engine.tabs.enabled"
-    var rustSyncManager: RustSyncManager!
-    var profile: MockBrowserProfile!
+    struct Keys {
+        static let bookmarksStateChangedPrefKey = "sync.engine.bookmarks.enabledStateChanged"
+        static let bookmarksEnabledPrefKey = "sync.engine.bookmarks.enabled"
+        static let creditcardsStateChangedPrefKey = "sync.engine.creditcards.enabledStateChanged"
+        static let creditcardsEnabledPrefKey = "sync.engine.creditcards.enabled"
+        static let historyStateChangedPrefKey = "sync.engine.history.enabledStateChanged"
+        static let historyEnabledPrefKey = "sync.engine.history.enabled"
+        static let passwordsStateChangedPrefKey = "sync.engine.passwords.enabledStateChanged"
+        static let passwordsEnabledPrefKey = "sync.engine.passwords.enabled"
+        static let tabsStateChangedPrefKey = "sync.engine.tabs.enabledStateChanged"
+        static let tabsEnabledPrefKey = "sync.engine.tabs.enabled"
+    }
+
+    private var rustSyncManager: RustSyncManager!
+    private var profile: MockBrowserProfile!
 
     override func setUp() {
         super.setUp()
@@ -38,16 +39,16 @@ class RustSyncManagerTests: XCTestCase {
         super.tearDown()
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
-        profile.prefs.removeObjectForKey(bookmarksStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(bookmarksEnabledPrefKey)
-        profile.prefs.removeObjectForKey(creditcardsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(creditcardsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(historyStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(historyEnabledPrefKey)
-        profile.prefs.removeObjectForKey(passwordsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(passwordsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(tabsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(tabsEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.removeObjectForKey(Keys.bookmarksEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.creditcardsStateChangedPrefKey)
+        profile.prefs.removeObjectForKey(Keys.creditcardsEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.historyStateChangedPrefKey)
+        profile.prefs.removeObjectForKey(Keys.historyEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.passwordsStateChangedPrefKey)
+        profile.prefs.removeObjectForKey(Keys.passwordsEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.tabsStateChangedPrefKey)
+        profile.prefs.removeObjectForKey(Keys.tabsEnabledPrefKey)
         profile = nil
     }
 
@@ -90,49 +91,80 @@ class RustSyncManagerTests: XCTestCase {
     }
 
     func testGetEngineEnablementChangesForAccountWithNoRecentChanges() {
-        profile.prefs.setBool(true, forKey: bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
 
         let changes = rustSyncManager.getEngineEnablementChangesForAccount()
         XCTAssertTrue(changes.isEmpty)
     }
 
     func testGetEngineEnablementChangesForAccountWithRecentChanges() {
-        profile.prefs.setBool(true, forKey: bookmarksStateChangedPrefKey)
-        profile.prefs.setBool(true, forKey: bookmarksEnabledPrefKey)
-        profile.prefs.setBool(true, forKey: creditcardsStateChangedPrefKey)
-        profile.prefs.setBool(false, forKey: creditcardsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.creditcardsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.creditcardsEnabledPrefKey)
 
         let changes = rustSyncManager.getEngineEnablementChangesForAccount()
         XCTAssertTrue(changes["bookmarks"]!)
         XCTAssertFalse(changes["creditcards"]!)
     }
 
-    func testUpdateEnginePrefs() {
-        profile.prefs.setBool(true, forKey: bookmarksEnabledPrefKey)
-        profile.prefs.setBool(true, forKey: creditcardsEnabledPrefKey)
-        profile.prefs.setBool(true, forKey: historyEnabledPrefKey)
-        profile.prefs.setBool(false, forKey: passwordsEnabledPrefKey)
-        profile.prefs.setBool(false, forKey: tabsEnabledPrefKey)
-
-        profile.prefs.setBool(true, forKey: bookmarksStateChangedPrefKey)
-        profile.prefs.setBool(true, forKey: creditcardsStateChangedPrefKey)
-        profile.prefs.setBool(false, forKey: historyStateChangedPrefKey)
-        profile.prefs.setBool(false, forKey: passwordsStateChangedPrefKey)
-        profile.prefs.setBool(true, forKey: tabsStateChangedPrefKey)
+    func testUpdateEnginePrefs_bookmarksEnabled() throws {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
 
         let declined = ["bookmarks", "creditcards", "passwords"]
         rustSyncManager.updateEnginePrefs(declined: declined)
 
-        XCTAssertFalse(profile.prefs.boolForKey(bookmarksEnabledPrefKey)!)
-        XCTAssertFalse(profile.prefs.boolForKey(creditcardsEnabledPrefKey)!)
-        XCTAssertTrue(profile.prefs.boolForKey(historyEnabledPrefKey)!)
-        XCTAssertFalse(profile.prefs.boolForKey(passwordsEnabledPrefKey)!)
-        XCTAssertTrue(profile.prefs.boolForKey(tabsEnabledPrefKey)!)
+        let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey))
+        XCTAssertFalse(key)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey))
+    }
 
-        XCTAssertNil(profile.prefs.boolForKey(bookmarksStateChangedPrefKey))
-        XCTAssertNil(profile.prefs.boolForKey(creditcardsStateChangedPrefKey))
-        XCTAssertNil(profile.prefs.boolForKey(historyStateChangedPrefKey))
-        XCTAssertNil(profile.prefs.boolForKey(passwordsStateChangedPrefKey))
-        XCTAssertNil(profile.prefs.boolForKey(tabsStateChangedPrefKey))
+    func testUpdateEnginePrefs_creditCardEnabled() throws {
+        profile.prefs.setBool(true, forKey: Keys.creditcardsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.creditcardsStateChangedPrefKey)
+
+        let declined = ["bookmarks", "creditcards", "passwords"]
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey))
+        XCTAssertFalse(key)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.creditcardsStateChangedPrefKey))
+    }
+
+    func testUpdateEnginePrefs_historyEnabled() throws {
+        profile.prefs.setBool(true, forKey: Keys.historyEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.historyStateChangedPrefKey)
+
+        let declined = ["bookmarks", "creditcards", "passwords"]
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.historyEnabledPrefKey))
+        XCTAssertTrue(key)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.historyStateChangedPrefKey))
+    }
+
+    func testUpdateEnginePrefs_passwordsEnabled() throws {
+        profile.prefs.setBool(false, forKey: Keys.passwordsEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.passwordsStateChangedPrefKey)
+
+        let declined = ["bookmarks", "creditcards", "passwords"]
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey))
+        XCTAssertFalse(key)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.passwordsStateChangedPrefKey))
+    }
+
+    func testUpdateEnginePrefs_tabsEnabled() throws {
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+
+        let declined = ["bookmarks", "creditcards", "passwords"]
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey))
+        XCTAssertTrue(key)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
     }
 }
