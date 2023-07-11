@@ -150,8 +150,8 @@ class CreditCardHelper: TabContentScript {
             }
 
             let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields(\(jsonDataVal))"
-            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, err in
-                guard let err = err else {
+            webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
+                guard let error = error else {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .tap,
                                                  object: .creditCardAutofilled)
@@ -161,8 +161,8 @@ class CreditCardHelper: TabContentScript {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
                                              object: .creditCardAutofillFailed)
-                completion(err)
-                logger.log("Credit card script error \(err)",
+                completion(error)
+                logger.log("Credit card script error \(error)",
                            level: .debug,
                            category: .webview)
             }
@@ -174,14 +174,15 @@ class CreditCardHelper: TabContentScript {
     }
 
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
+        let sanitizedName = card.ccName.htmlEntityEncodedString
+        let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
         let injectionJSON: [String: Any] = [
-                "cc-name": card.ccName,
-                "cc-number": card.ccNumber,
+                "cc-name": sanitizedName,
+                "cc-number": sanitizedNumber,
                 "cc-exp-month": "\(card.ccExpMonth)",
                 "cc-exp-year": "\(card.ccExpYear)",
                 "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
-
         return injectionJSON
     }
 

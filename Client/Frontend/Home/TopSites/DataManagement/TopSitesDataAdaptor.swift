@@ -39,7 +39,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // Raw data to build top sites with
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
-    private var defaultSearchEngine: OpenSearchEngine?
 
     var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
@@ -54,7 +53,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private static let defaultTopSitesRowCount = 8
 
     init(profile: Profile,
-         defaultSearchEngine: OpenSearchEngine?,
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
@@ -62,7 +60,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile
-        self.defaultSearchEngine = defaultSearchEngine
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
@@ -74,7 +71,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
                            observing: [.FirefoxAccountChanged,
                                        .PrivateDataClearedHistory,
                                        .ProfileDidFinishSyncing,
-                                       .TopSitesUpdated])
+                                       .TopSitesUpdated,
+                                       .DefaultSearchEngineUpdated])
 
         loadTopSitesData()
     }
@@ -176,7 +174,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
                                     maxNumberOfSponsoredTile: maxNumberOfTiles,
-                                    defaultSearchEngine: defaultSearchEngine)
+                                    defaultSearchEngine: profile.searchEngines.defaultEngine)
         }
     }
 
@@ -294,7 +292,8 @@ extension TopSitesDataAdaptorImplementation: Notifiable {
         case .ProfileDidFinishSyncing,
                 .PrivateDataClearedHistory,
                 .FirefoxAccountChanged,
-                .TopSitesUpdated:
+                .TopSitesUpdated,
+                .DefaultSearchEngineUpdated:
             self.didInvalidateDataSource(forceRefresh: true)
         default:
             break

@@ -57,13 +57,13 @@ class TopTabsTest: BaseTestCase {
         // Open tab tray to check that both tabs are there
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         waitForExistence(app.cells.staticTexts["Example Domain"])
-        if !app.cells.staticTexts["IANA — IANA-managed Reserved Domains"].exists {
+        if !app.cells.staticTexts["Example Domains"].exists {
             navigator.goto(TabTray)
-            app.cells.staticTexts["Example Domain"].firstMatch.tap()
+            app.cells.staticTexts["Examples Domain"].firstMatch.tap()
             waitUntilPageLoad()
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
-            waitForExistence(app.otherElements.cells.staticTexts["IANA-managed Reserved Domains"])
+            waitForExistence(app.otherElements.cells.staticTexts["Examples Domains"])
         }
     }
 

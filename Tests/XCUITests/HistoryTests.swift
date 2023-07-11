@@ -238,6 +238,7 @@ class HistoryTests: BaseTestCase {
         app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
 
         // The page is opened on the new tab
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         if isTablet {
             waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -263,6 +264,7 @@ class HistoryTests: BaseTestCase {
         app.tables.otherElements[ImageIdentifiers.Large.privateMode].tap()
 
         // The page is opened only on the new private tab
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         if isTablet {
             waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])

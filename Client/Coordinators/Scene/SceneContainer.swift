@@ -5,4 +5,9 @@
 import UIKit
 
 // The root view controller of the application
-class SceneContainer: UIViewController {}
+class SceneContainer: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .clear
+    }
+}

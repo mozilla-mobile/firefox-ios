@@ -84,7 +84,7 @@ if [ -z "$number_string" ]; then
     # We try to resolve that, and find the version from the Package.swift file in that local directory.
     # https://github.com/mozilla-mobile/firefox-ios/issues/12243
     rust_components_path=$(grep -A 3 $'XCRemoteSwiftPackageReference "rust-components-swift"' "$SOURCE_ROOT/$PROJECT.xcodeproj/project.pbxproj" | grep 'repositoryURL = "file://' | grep -o -E '/\w[^"]+')
-    number_string=$(grep 'let version =' "$rust_components_path/Package.swift" | grep -E -o "\d+\.\d+" | sed 's/\./\.0\./g')
+    number_string=$(grep 'let version =' "$rust_components_path/Package.swift" | grep -E -o "\d+\.0.\d+")
 
     if [ -z "$number_string" ]; then
         echo "Error: No https://github.com/mozilla/rust-components-swift package was detected."

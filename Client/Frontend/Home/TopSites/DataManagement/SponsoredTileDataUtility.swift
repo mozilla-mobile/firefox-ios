@@ -14,7 +14,7 @@ struct SponsoredTileDataUtility: SponsoredTileDataUtilityInterface {
         guard let defaultSearchEngine = searchEngine,
               let secondLevelDomain = site.secondLevelDomain else { return true }
 
-        let hasMatchedEngine = defaultSearchEngine.shortName.caseInsensitiveCompare(secondLevelDomain) == .orderedSame
+        let hasMatchedEngine = defaultSearchEngine.shortName.localizedCaseInsensitiveContains(secondLevelDomain)
         return !hasMatchedEngine
     }
 }

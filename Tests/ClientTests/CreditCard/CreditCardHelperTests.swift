@@ -99,6 +99,66 @@ class CreditCardHelperTests: XCTestCase {
 
     // MARK: Parsing
 
+    func testInjectionJsonBuilder_noSpecialCharacters() {
+        let card = UnencryptedCreditCardFields(ccName: "John Doe",
+                                               ccNumber: "1234567812345678",
+                                               ccNumberLast4: "5678",
+                                               ccExpMonth: 12,
+                                               ccExpYear: 2023,
+                                               ccType: "VISA")
+        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        XCTAssertEqual(json["cc-name"] as? String, "John Doe")
+        XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
+        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
+        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
+    }
+
+    func testInjectionJsonBuilder_withSpecialCharacters() {
+        let card = UnencryptedCreditCardFields(ccName: "<John Doe>",
+                                               ccNumber: "1234567812345678",
+                                               ccNumberLast4: "5678",
+                                               ccExpMonth: 12,
+                                               ccExpYear: 2023,
+                                               ccType: "VISA")
+        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        XCTAssertEqual(json["cc-name"] as? String, "&lt;John Doe&gt;")
+        XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
+        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
+        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
+    }
+
+    func testInjectionJsonBuilder_withXssPayload() {
+        let card = UnencryptedCreditCardFields(ccName: "<script>alert('XSS')</script>",
+                                               ccNumber: "1234567812345678",
+                                               ccNumberLast4: "5678",
+                                               ccExpMonth: 12,
+                                               ccExpYear: 2023,
+                                               ccType: "VISA")
+        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        XCTAssertEqual(json["cc-name"] as? String, "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;")
+        XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
+        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
+        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
+    }
+
+    func testInjectionJsonBuilder_withHtmlEntities() {
+        let card = UnencryptedCreditCardFields(ccName: "&quot;John Doe&quot;",
+                                               ccNumber: "1234567812345678",
+                                               ccNumberLast4: "5678",
+                                               ccExpMonth: 12,
+                                               ccExpYear: 2023,
+                                               ccType: "VISA")
+        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        XCTAssertEqual(json["cc-name"] as? String, "&amp;quot;John Doe&amp;quot;")
+        XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
+        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
+        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
+    }
+
     func test_getValidPayloadData() {
         XCTAssertNotNil(creditCardHelper.getValidPayloadData(from: validMockWKMessage))
         XCTAssertNotNil(creditCardHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage))

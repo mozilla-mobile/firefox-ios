@@ -10,6 +10,7 @@ protocol MessageDataProtocol {
     var title: String? { get }
     var text: String { get }
     var buttonLabel: String? { get }
+    var experiment: String? { get }
 }
 
 extension MessageData: MessageDataProtocol {}
@@ -27,7 +28,7 @@ struct GleanPlumbMessage {
     let id: String
 
     /// An access point to MessageData from Nimbus Messaging.
-    let data: MessageDataProtocol
+    internal let data: MessageDataProtocol
 
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
@@ -39,22 +40,26 @@ struct GleanPlumbMessage {
     let style: StyleDataProtocol
 
     /// The minimal data about a message that we should persist.
-    var metadata: GleanPlumbMessageMetaData
+    internal var metadata: GleanPlumbMessageMetaData
 
     var isExpired: Bool {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
     }
 
-    func isUnderExperimentWith(key experimentKey: String?) -> Bool {
-        guard let experimentKey = experimentKey else { return false }
+    var buttonLabel: String? {
+        data.buttonLabel
+    }
 
-        if data.isControl { return true }
+    var text: String {
+        data.text
+    }
 
-        if experimentKey.hasSuffix("-") {
-            return id.hasPrefix(experimentKey)
-        }
+    var title: String? {
+        data.title
+    }
 
-        return id == experimentKey
+    var surface: MessageSurfaceId {
+        data.surface
     }
 }
 

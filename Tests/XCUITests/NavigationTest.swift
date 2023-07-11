@@ -255,6 +255,12 @@ class NavigationTest: BaseTestCase {
     }
 
     private func longPressLinkOptions(optionSelected: String) {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        app.cells.switches["Downloaded Files"].tap()
+        navigator.performAction(Action.AcceptClearPrivateData)
+
+        navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -272,12 +278,12 @@ class NavigationTest: BaseTestCase {
         // There should be one item downloaded. It's name and size should be shown
         let downloadedList = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(downloadedList, 1, "The number of items in the downloads table is not correct")
-        XCTAssertTrue(app.tables.cells.staticTexts["reserved.html"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["example-domains.html"].exists)
 
         // Tap on the just downloaded link to check that the web page is loaded
-        app.tables.cells.staticTexts["reserved.html"].tap()
+        app.tables.cells.staticTexts["example-domains.html"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "reserved.html")
+        waitForValueContains(app.textFields["url"], value: "example-domains.html")
     }
 
     func testShareLink() {
