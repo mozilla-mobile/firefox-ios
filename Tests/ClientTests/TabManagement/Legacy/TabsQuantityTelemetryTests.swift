@@ -9,16 +9,26 @@ import XCTest
 import Common
 
 class TabsQuantityTelemetryTests: XCTestCase {
+    var profile: Profile!
+
     override func setUp() {
         super.setUp()
 
+        profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
         DependencyHelperMock().bootstrapDependencies()
     }
 
+    override func tearDown() {
+        super.tearDown()
+
+        profile = nil
+    }
+
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         tabManager.addTab()
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -33,7 +43,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         tabManager.addTab(isPrivate: true)
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -48,7 +58,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         tabManager.addTab()
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
