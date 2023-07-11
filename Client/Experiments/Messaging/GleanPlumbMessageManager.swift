@@ -91,12 +91,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onStartup() { }
 
     /// Returns the next valid and triggered message for the surface, if one exists.
-    func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
+    public func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
         return getNextMessage(for: surface, availableMessages: getMessages(messagingFeature.value()))
     }
 
-    func getNextMessage(for surface: MessageSurfaceId, availableMessages: [GleanPlumbMessage]) -> GleanPlumbMessage? {
+    public func getNextMessage(for surface: MessageSurfaceId, availableMessages: [GleanPlumbMessage]) -> GleanPlumbMessage? {
         // If `NimbusMessagingHelper` creation fails, we cannot continue with this
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.
@@ -111,7 +111,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                               jexlCache: &jexlCache)
     }
 
-    func getNextMessage(
+    // TODO: inout removal ticket https://mozilla-hub.atlassian.net/browse/FXIOS-6572
+    private func getNextMessage(
             for surface: MessageSurfaceId,
             availableMessages: [GleanPlumbMessage],
             excluded: inout Set<String>,
@@ -119,36 +120,34 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             jexlCache: inout [String: Bool]
     ) -> GleanPlumbMessage? {
         let feature = messagingFeature.value()
-        let message = availableMessages
-            .first { message in
-                guard message.data.surface == surface &&
-                        !excluded.contains(message.id) else {
-                    return false
-                }
-                do {
-                    return try evaluationUtility.isMessageEligible(message,
-                                                                   messageHelper: messagingHelper,
-                                                                   jexlCache: &jexlCache)
-                } catch {
-                    return false
-                }
+        let message = availableMessages.first { message in
+            guard message.surface == surface &&
+                    !excluded.contains(message.id) else {
+                return false
             }
-        guard let message = message else {
-            return nil
+            do {
+                return try evaluationUtility.isMessageEligible(message,
+                                                               messageHelper: messagingHelper,
+                                                               jexlCache: &jexlCache)
+            } catch {
+                return false
+            }
         }
+        guard let message = message else { return nil }
 
-        // If it's a message under experiment, we need to react to whether it's a control or not.
-        guard let slug = message.data.experiment else {
-            return message
-        }
+        // If it's a message under experiment, we need to:
+        guard let slug = message.data.experiment else { return message }
 
+        // 1. record an exposure event. We can tie the message directly to the experiment
         messagingFeature.recordExperimentExposure(slug: slug)
 
+        // 2. handle control messages appropriately.
         if !message.data.isControl {
             return message
         }
 
-        // control messages need to do the bookkeeping here, rather than from where they're displayed.
+        // Control messages need to do the bookkeeping *here*, rather than from where they're displayed,
+        // because they're not displayed.
         messagingStore.onMessageDisplayed(message)
 
         switch feature.onControl {
@@ -189,7 +188,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
         guard let url = URL(string: urlString) else {
-            self.onMalformedMessage(id: message.id, surface: message.data.surface)
+            self.onMalformedMessage(id: message.id, surface: message.surface)
             return
         }
 
@@ -320,6 +319,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     private func baseTelemetryExtras(using message: GleanPlumbMessage) -> [String: String] {
         return [MessagingKey.messageKey.rawValue: message.id,
-                MessagingKey.messageSurface.rawValue: message.data.surface.rawValue]
+                MessagingKey.messageSurface.rawValue: message.surface.rawValue]
     }
 }

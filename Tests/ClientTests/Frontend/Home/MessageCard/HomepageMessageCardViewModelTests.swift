@@ -182,7 +182,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     var recordedSurface: MessageSurfaceId?
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         recordedSurface = surface
-        if message?.data.surface == recordedSurface { return message }
+        if message?.surface == recordedSurface { return message }
 
         return nil
     }

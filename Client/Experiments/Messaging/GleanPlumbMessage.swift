@@ -28,7 +28,7 @@ struct GleanPlumbMessage {
     let id: String
 
     /// An access point to MessageData from Nimbus Messaging.
-    let data: MessageDataProtocol
+    internal let data: MessageDataProtocol
 
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
@@ -40,10 +40,26 @@ struct GleanPlumbMessage {
     let style: StyleDataProtocol
 
     /// The minimal data about a message that we should persist.
-    var metadata: GleanPlumbMessageMetaData
+    internal var metadata: GleanPlumbMessageMetaData
 
     var isExpired: Bool {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
+    }
+
+    var buttonLabel: String? {
+        data.buttonLabel
+    }
+
+    var text: String {
+        data.text
+    }
+
+    var title: String? {
+        data.title
+    }
+
+    var surface: MessageSurfaceId {
+        data.surface
     }
 }
 

@@ -9,16 +9,16 @@ import MozillaAppServices
 
 protocol NimbusMessagingHelperUtilityProtocol {
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol?
-    init(logger: Logger)
 }
 
 /// Responsible for creating a ``NimbusMessagingHelper`` with appropriate context.
 class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
     private var logger: Logger
-    private let nimbus: NimbusMessagingProtocol = Experiments.shared
+    private let nimbus: NimbusMessagingProtocol
 
-    required init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared, nimbus: NimbusMessagingProtocol = Experiments.shared) {
         self.logger = logger
+        self.nimbus = nimbus
     }
 
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol? {
