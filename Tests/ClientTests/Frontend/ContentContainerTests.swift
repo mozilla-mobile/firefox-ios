@@ -116,6 +116,6 @@ final class ContentContainerTests: XCTestCase {
     }
 
     private func createHomepage() -> HomepageViewController {
-        HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
+        return HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
     }
 }
