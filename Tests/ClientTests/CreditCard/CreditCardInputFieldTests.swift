@@ -72,6 +72,36 @@ class CreditCardInputFieldTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
+    func testIsNameValid() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+        XCTAssertTrue(inputField.isNameValid(val: "Test Name"))
+        XCTAssertFalse(inputField.isNameValid(val: ""))
+    }
+
+    func testIsNumberValid() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+        XCTAssertTrue(inputField.isNumberValid(val: "4242123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "1234123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "1234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242 1234 1234 1234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242x123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "42421234123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242"))
+    }
+
+    func testIsExpirationValid() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+        XCTAssertFalse(inputField.isExpirationValid(val: "123"))
+        XCTAssertFalse(inputField.isExpirationValid(val: "3434"))
+        XCTAssertTrue(inputField.isExpirationValid(val: "1234"))
+    }
+
     func testBlankNameInput() {
         let inputField = CreditCardInputField(inputType: .name,
                                               showError: false,
