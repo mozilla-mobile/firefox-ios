@@ -195,6 +195,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.state = .add
         self.creditCardValidator = creditCardValidator
         self.logger = logger
+        self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -213,6 +214,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.creditCard = creditCard
         self.state = state
         self.creditCardValidator = creditCardValidator
+        self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
 
     // MARK: - Helpers
@@ -301,6 +303,10 @@ class CreditCardInputViewModel: ObservableObject {
         case .view:
             return true
         }
+    }
+
+    func updateRightButtonState() {
+        isRightBarButtonEnabled = areFieldValuesValid()
     }
 
     func getDisplayedCCValues() -> UnencryptedCreditCardFields? {

@@ -188,6 +188,7 @@ struct CreditCardInputField: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .onChange(of: text) { [oldValue = text] newValue in
             handleTextInputWith(oldValue, and: newValue)
+            viewModel.updateRightButtonState()
         }
     }
 
@@ -271,13 +272,14 @@ struct CreditCardInputField: View {
 
             guard numbersCount % 4 == 0 else {
                 text = newSanitizedValue.removingOccurrences(of: " / ")
+                viewModel.expirationDate = text
                 return
             }
+
             let formattedText = inputFieldHelper.formatExpiration(for: newSanitizedValue.removingOccurrences(of: " / "))
             viewModel.expirationDate = formattedText
             text = formattedText
         }
-        viewModel.isRightBarButtonEnabled = viewModel.areFieldValuesValid()
     }
 
     func concealedCardNum() -> String {
