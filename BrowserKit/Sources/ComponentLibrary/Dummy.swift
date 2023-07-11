@@ -2,13 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
-import Shared
 
-class SeparatorTableViewCell: OneLineTableViewCell {
-    override func applyTheme(theme: Theme) {
-        super.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer5
-    }
+// Something needs to be in the target, this will be removed in the rest of FXIOS-6864
+struct Foo {
+    var bar = 1
 }

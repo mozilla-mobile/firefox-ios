@@ -10,5 +10,9 @@ public struct Gradient {
     public var cgColors: [CGColor] {
         return colors.map { $0.cgColor }
     }
+
+    public init(colors: [UIColor]) {
+        self.colors = colors
+    }
 }
 
