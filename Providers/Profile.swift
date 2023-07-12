@@ -592,7 +592,11 @@ open class BrowserProfile: Profile {
         // overwhelm FxA
         let lastPoll = self.prefs.timestampForKey(PrefsKeys.PollCommandsTimestamp)
         let now = Date.now()
-        if let lastPoll = lastPoll, lastPoll != 0, !forcePoll, now - lastPoll < AppConstants.fxaCommandsInterval {
+        if let lastPoll = lastPoll,
+           lastPoll != 0,
+           lastPoll < now,
+           !forcePoll,
+           now - lastPoll < AppConstants.fxaCommandsInterval {
             return
         }
         self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
