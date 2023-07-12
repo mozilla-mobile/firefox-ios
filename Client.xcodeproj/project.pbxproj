@@ -665,7 +665,6 @@
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A9AC465276CEC4E0047F5B0 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */; };
 		8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */; };
-		8A9CB41E2846F0BF00CC3A16 /* FadeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */; };
 		8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
@@ -4809,7 +4808,6 @@
 		8A99DB9C27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModel.swift; sourceTree = "<group>"; };
-		8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollView.swift; sourceTree = "<group>"; };
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModelTests.swift; sourceTree = "<group>"; };
@@ -8488,7 +8486,6 @@
 				E17496362991A2480096900A /* SwiftUI */,
 				8AB5958B28414DF60090F4AE /* ActionButton.swift */,
 				8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */,
-				8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */,
 				43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */,
 				217AEF7728480844004EED37 /* ResizableButton.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
@@ -12454,7 +12451,6 @@
 				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */,
-				8A9CB41E2846F0BF00CC3A16 /* FadeScrollView.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,

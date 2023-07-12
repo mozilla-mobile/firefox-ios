@@ -2,11 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
 
-// A scroll view that adds a fade at top or bottom when it scroll
-// to indicate more content is available to user
-class FadeScrollView: UIScrollView, UIScrollViewDelegate {
+/// A scroll view that adds a fade at top or bottom when it scroll
+/// to indicate more content is available to user
+public class FadeScrollView: UIScrollView, UIScrollViewDelegate {
     private let fadePercentage: Double = 0.1
     private let gradientLayer = CAGradientLayer()
     private let transparentColor = UIColor.clear.cgColor
@@ -34,7 +34,7 @@ class FadeScrollView: UIScrollView, UIScrollViewDelegate {
         return UIColor(white: 0, alpha: alpha).cgColor
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         self.delegate = self
@@ -55,7 +55,7 @@ class FadeScrollView: UIScrollView, UIScrollViewDelegate {
         layer.mask = maskLayer
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         gradientLayer.colors = [topOpacity, opaqueColor, opaqueColor, bottomOpacity]
     }
 }
