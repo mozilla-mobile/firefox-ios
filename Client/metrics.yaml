@@ -50,7 +50,7 @@ app_icon:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-07-06"
+    expires: "2024-07-06"
 # Accessibility
 accessibility:
   voice_over:
@@ -1090,7 +1090,7 @@ top_sites:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-07-06"
+    expires: "2024-07-06"
 # HomePage
 firefox_home_page:
   open_from_menu_home_button:
@@ -1970,7 +1970,7 @@ pocket:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-07-06"
+    expires: "2024-07-06"
 # Preference metrics
 preferences:
   changed:
