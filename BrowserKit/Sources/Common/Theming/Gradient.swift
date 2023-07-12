@@ -15,4 +15,3 @@ public struct Gradient {
         self.colors = colors
     }
 }
-
