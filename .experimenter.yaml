@@ -47,6 +47,17 @@ etp-coordinator-refactor:
     enabled:
       type: boolean
       description: "Enables the feature\n"
+fakespot-feature:
+  description: "The configuration setting for the status of the Fakespot feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    config:
+      type: json
+      description: "Product configuration\n"
+    status:
+      type: boolean
+      description: "Whether the Fakespot feature is enabled or disabled\n"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true

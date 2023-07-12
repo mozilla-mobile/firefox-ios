@@ -1,0 +1,75 @@
+# The configuration for the Fakespot feature
+features:
+  fakespot-feature:
+    description: >
+      The configuration setting for the status of the Fakespot feature
+    variables:
+      status:
+        description: >
+          Whether the Fakespot feature is enabled or disabled
+        type: Boolean
+        default: false
+      config:
+        type: ProductConfig
+        description: >
+          Product configuration
+        default:
+          {
+           "amazon":
+             {
+             "productIdFromURLRegex": "/(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)/",
+             "validTLDs": ["com"]
+            },
+            "walmart":
+             {
+             "productIdFromURLRegex": "/\\\\/ip\\\\/(?:[A-Za-z0-9-]{1,320}\\\\/)?(?<productId>[0-9]{3,13})/",
+             "validTLDs": ["com"]
+            },
+            "bestbuy":
+             {
+             "productIdFromURLRegex": "/\\\\/(?<productId>\\\\d+\\\\.p)/",
+             "validTLDs": ["com"]
+            }
+          }
+    defaults:
+      - channel: beta
+        value:
+          status: false
+      - channel: developer
+        value:
+          status: true
+
+objects:
+  ProductConfig:
+    description: >
+      It represents a configuration for different e-commerce websites and includes regular expressions for extracting product IDs from their respective URLs
+    fields:
+      amazon:
+        type: WebsiteConfig
+        description: >
+          It represents the Amazon website configuration
+        default: {}
+      walmart:
+        type: WebsiteConfig
+        description: >
+          It represents the Walmart website configuration
+        default: {}
+      bestbuy:
+        type: WebsiteConfig
+        description: >
+          It represents the Bestbuy website configuration
+        default: {}
+  WebsiteConfig:
+    description: >
+      It represents the website configuration
+    fields:
+      productIdFromURLRegex:
+        type: String
+        description: >
+          It represents the product ID extracted from a regex query
+        default: ""
+      validTLDs:
+        type: List<String>
+        description: >
+          Valid Top Level Domains
+        default: []
