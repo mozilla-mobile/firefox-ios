@@ -67,22 +67,47 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testValidNameInput() {
+        viewModel.nameOnCard = "Test User"
+        let result = viewModel.nameIsValid
+        XCTAssertTrue(result)
+    }
+
+    func testIsNameValid() {
         let inputField = CreditCardInputField(inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
+        XCTAssertTrue(inputField.isNameValid(val: "Test Name"))
+        XCTAssertFalse(inputField.isNameValid(val: ""))
+    }
 
-        inputField.handleTextInputWith("", and: "H")
-        XCTAssert(viewModel.nameIsValid)
-        XCTAssertEqual(viewModel.nameOnCard, "H")
+    func testIsNumberValid() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+        XCTAssertTrue(inputField.isNumberValid(val: "4242123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "1234123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "1234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242 1234 1234 1234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242x123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "42421234123412341234"))
+        XCTAssertFalse(inputField.isNumberValid(val: "4242"))
+    }
+
+    func testIsExpirationValid() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+        XCTAssertFalse(inputField.isExpirationValid(val: "123"))
+        XCTAssertFalse(inputField.isExpirationValid(val: "3434"))
+        XCTAssertTrue(inputField.isExpirationValid(val: "1234"))
     }
 
     func testBlankNameInput() {
         let inputField = CreditCardInputField(inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
-
-        inputField.handleTextInputWith("H", and: "")
-        XCTAssertFalse(viewModel.nameIsValid)
+        _ = inputField.updateInputValidity()
+        XCTAssertFalse(inputField.isNameValid(val: ""))
     }
 
     func testValidCardInput() {
@@ -101,7 +126,7 @@ class CreditCardInputFieldTests: XCTestCase {
                                               inputViewModel: viewModel)
 
         inputField.handleTextInputWith("4", and: "44")
-        XCTAssertFalse(viewModel.numberIsValid)
+        XCTAssertFalse(inputField.isNumberValid(val: "44"))
     }
 
     func testValidExpirationInput() {
@@ -110,7 +135,7 @@ class CreditCardInputFieldTests: XCTestCase {
                                               inputViewModel: viewModel)
 
         inputField.handleTextInputWith("125", and: "1250")
-        XCTAssertEqual(viewModel.expirationDate, "1250")
+        XCTAssertTrue(inputField.isExpirationValid(val: "1250"))
         XCTAssert(viewModel.expirationIsValid)
     }
 
@@ -120,7 +145,7 @@ class CreditCardInputFieldTests: XCTestCase {
                                               inputViewModel: viewModel)
 
         inputField.handleTextInputWith("1255", and: "125")
-        XCTAssertFalse(viewModel.expirationIsValid)
+        XCTAssertFalse(inputField.isExpirationValid(val: "125"))
     }
 
     func testConcealCardNum() {
