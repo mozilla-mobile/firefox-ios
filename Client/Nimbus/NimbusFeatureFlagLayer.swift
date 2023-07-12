@@ -29,8 +29,7 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .contextualHintForToolbar,
-                .contextualHintForJumpBackInSyncedTab:
+        case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .coordinatorsRefactor:
@@ -172,7 +171,6 @@ final class NimbusFeatureFlagLayer {
         var nimbusID: ContextualHint
 
         switch featureID {
-        case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
         case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarHint
         default: return false
         }
