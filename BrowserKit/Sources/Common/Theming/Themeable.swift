@@ -2,10 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import UIKit
-import Common
-import SwiftUI
 
 public protocol Themeable: AnyObject {
     var themeManager: ThemeManager { get }
@@ -39,9 +36,4 @@ extension Themeable {
         }
         return firstLevelSubviews + secondLevelSubviews
     }
-}
-
-// Used to pass in a theme to a view or cell to apply a theme
-public protocol ThemeApplicable {
-    func applyTheme(theme: Theme)
 }
