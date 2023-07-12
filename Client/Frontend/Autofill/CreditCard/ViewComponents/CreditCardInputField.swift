@@ -175,7 +175,7 @@ struct CreditCardInputField: View {
         // TODO: FXIOS-6984 - use FocusState when iOS 14 is dropped
         TextField(text, text: $text, onEditingChanged: { (changed) in
             if !changed {
-                self.updateInputValidity()
+                _ = self.updateInputValidity()
             }
         })
         .preferredBodyFont(size: 17)
