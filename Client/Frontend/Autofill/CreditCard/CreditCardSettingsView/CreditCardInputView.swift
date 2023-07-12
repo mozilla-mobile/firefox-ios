@@ -155,7 +155,11 @@ struct CreditCardInputView: View {
                     }
                 }
             }
-        }.foregroundColor(viewModel.isRightBarButtonEnabled ? barButtonColor : saveButtonDisabledColor)
+        }
+        .foregroundColor(viewModel.isRightBarButtonEnabled ? barButtonColor : saveButtonDisabledColor)
+        .onDisappear {
+            viewModel.isRightBarButtonEnabled = false
+        }
     }
 
     func leftBarButton() -> some View {
