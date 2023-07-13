@@ -40,10 +40,27 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
     }
 
     func start() {
-        router.push(enhancedTrackingProtectionMenuVC)
+        enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+        enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}
+        if var topController = keyWindow.first?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            topController.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+        }
     }
 
     func didFinish() {
         parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
+    }
+}
+
+extension EnhancedTrackingProtectionCoordinator: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        return SlideOverPresentationController(presentedViewController: presented,
+                                               presenting: presenting,
+                                               withGlobalETPStatus: globalETPStatus)
     }
 }
