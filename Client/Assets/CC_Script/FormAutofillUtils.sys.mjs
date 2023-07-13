@@ -270,7 +270,7 @@ FormAutofillUtils = {
   },
 
   isCCNumber(ccNumber) {
-    return lazy.CreditCard.isValidNumber(ccNumber);
+    return ccNumber && lazy.CreditCard.isValidNumber(ccNumber);
   },
 
   ensureLoggedIn(promptMessage) {
