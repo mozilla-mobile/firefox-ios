@@ -17,17 +17,17 @@ features:
           {
            "amazon":
              {
-             "productIdFromURLRegex": "/(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)/",
+             "productIdFromURLRegex": "(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)",
              "validTLDs": ["com"]
             },
             "walmart":
              {
-             "productIdFromURLRegex": "/\\\\/ip\\\\/(?:[A-Za-z0-9-]{1,320}\\\\/)?(?<productId>[0-9]{3,13})/",
+             "productIdFromURLRegex": "\\\\/ip\\\\/(?:[A-Za-z0-9-]{1,320}\\\\/)?(?<productId>[0-9]{3,13})",
              "validTLDs": ["com"]
             },
             "bestbuy":
              {
-             "productIdFromURLRegex": "/\\\\/(?<productId>\\\\d+\\\\.p)/",
+             "productIdFromURLRegex": "\\\\/(?<productId>\\\\d+\\\\.p)",
              "validTLDs": ["com"]
             }
           }
