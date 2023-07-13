@@ -71,6 +71,19 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return tabs.filter { !$0.isPrivate }
     }
 
+    var normalActiveTabs: [Tab] {
+        return InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
+                                                              profile: profile)
+    }
+
+    var inactiveTabs: [Tab] {
+        let normalTabs = Set(normalTabs)
+        let normalActiveTabs = Set(normalActiveTabs)
+
+        let inactiveTabs = normalTabs.subtracting(normalActiveTabs)
+        return Array(inactiveTabs)
+    }
+
     var privateTabs: [Tab] {
         return tabs.filter { $0.isPrivate }
     }

@@ -417,8 +417,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
-        guard syncTabContextualHintViewController.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForJumpBackInSyncedTab, checking: .buildOnly)
+        guard syncTabContextualHintViewController.shouldPresentHint()
         else {
             syncTabContextualHintViewController.unconfigure()
             return

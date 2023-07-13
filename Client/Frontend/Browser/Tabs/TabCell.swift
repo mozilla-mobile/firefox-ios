@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UIKit
 import Shared
@@ -165,8 +166,8 @@ class TabCell: UICollectionViewCell,
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
         favicon.image = UIImage(named: ImageIdentifiers.Large.globe)
-        if !tab.isFxHomeTab {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
+        if !tab.isFxHomeTab, let tabURL = tab.url?.absoluteString {
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
         }
 
         if selected {
@@ -198,9 +199,12 @@ class TabCell: UICollectionViewCell,
 
         // Favicon or letter image when tab screenshot isn't available
         } else {
-            smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
             faviconBG.isHidden = false
             screenshotView.image = nil
+
+            if let tabURL = tab.url?.absoluteString {
+                smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
+            }
         }
     }
 

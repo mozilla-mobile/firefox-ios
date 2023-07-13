@@ -317,7 +317,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             let notificationObject = [Tab.privateModeKey: isPrivate]
             NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
         }
-
+        if isPrivate {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .privateBrowsingIcon,
+                                         value: .tabTray,
+                                         extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "add"] )
+        }
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
@@ -350,6 +356,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
                     self.tabManager.cleanupClosedTabs(recentlyClosedTabs,
                                                       previous: previousTab,
                                                       isPrivate: isPrivateState)
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .privateBrowsingIcon,
+                                                 value: .tabTray,
+                                                 extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "close_all_tabs"] )
                 } else {
                     self.tabManager.makeToastFromRecentlyClosedUrls(recentlyClosedTabs,
                                                                     isPrivate: isPrivateState,

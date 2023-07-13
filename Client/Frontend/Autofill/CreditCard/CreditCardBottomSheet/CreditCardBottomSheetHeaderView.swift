@@ -44,6 +44,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
             withTextStyle: .headline,
             size: UX.titleLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityTraits = .header
     }
 
     private var headerLabel: UILabel = .build { label in
@@ -57,6 +58,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
             withTextStyle: .body,
             size: UX.headerLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityTraits = .staticText
     }
 
     let mainContainerStackView: UIStackView = .build { stack in

@@ -79,7 +79,12 @@ class TrackingProtectionTests: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
-        let switchValue = app.switches.firstMatch.value!
+        var switchValue = app.switches.firstMatch.value!
+        // Need to make sure first the setting was not turned off previously
+        if switchValue as! String == "0" {
+            app.switches.firstMatch.tap()
+        }
+        switchValue = app.switches.firstMatch.value!
         XCTAssertEqual(switchValue as! String, "1")
 
         app.switches.firstMatch.tap()
@@ -93,10 +98,12 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(switchSettingsValue as! String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
         // Disable ETP from setting and check that it applies to the site
-        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.buttons["Settings"].tap()
+        app.buttons["Done"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForNoExistence(app.switches.firstMatch)
+        waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
+        XCTAssertFalse(app.switches.element.exists)
     }
 
     func testBasicMoreInfo() {
