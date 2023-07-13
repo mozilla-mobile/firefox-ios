@@ -59,6 +59,7 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        app.buttons["Settings"].tap()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
@@ -215,10 +216,10 @@ class SaveLoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         // This only appears the first time
         sleep(2)
+        unlockLoginsView()
         if app.otherElements.buttons["Continue"].exists {
             app.otherElements.buttons["Continue"].tap()
         }
-        unlockLoginsView()
         waitForExistence(app.tables["Login List"], timeout: 15)
         app.buttons["Add"].tap()
         waitForExistence(app.tables["Add Credential"], timeout: 15)
