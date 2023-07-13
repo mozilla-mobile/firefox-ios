@@ -156,6 +156,10 @@ struct QuickActionsImplementation: QuickActions {
         case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
         case .newPrivateTab:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .newPrivateTab,
+                                         value: .appIcon)
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
         case .openLastBookmark:
             if let urlToOpen = (userData?[QuickActionInfos.tabURLKey] as? String)?.asURL {

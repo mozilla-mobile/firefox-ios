@@ -38,6 +38,19 @@ app_cycle:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+# App icon
+app_icon:
+  new_private_tab_tapped:
+    type: event
+    description: |
+      A user opened a new private tab from long pressing the app icon
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # Accessibility
 accessibility:
   voice_over:
@@ -1067,7 +1080,17 @@ top_sites:
     metadata:
       tags:
         - TopSites
-
+  open_in_private_tab:
+    type: event
+    description: |
+      A user opens a new private tab based on a top site item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # HomePage
 firefox_home_page:
   open_from_menu_home_button:
@@ -1937,7 +1960,17 @@ pocket:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
-
+  open_in_private_tab:
+    type: event
+    description: |
+      A user opens a new private tab based on a pocket story item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # Preference metrics
 preferences:
   changed:
@@ -2895,7 +2928,29 @@ tracking_protection:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
-
+  etp_setting_changed:
+    type: event
+    description: |
+      A user changed their tracking protection
+      level setting to either strict or standard
+    extra_keys:
+      etp_setting:
+       type: string
+       description: |
+         Records the protection level:
+         standard / strict
+      etp_enabled:
+       type: boolean
+       description: |
+         Records the state
+         true / false
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
 widget:
@@ -3123,6 +3178,36 @@ cfr_analytics:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
 
+# Tabs Tray metrics
+tabs_tray:
+  private_browsing_icon_tapped:
+    type: event
+    description: |
+      A user has tapped on the private browsing icon in tabs tray.
+    extra_keys:
+      action:
+       type: string
+       description: |
+         Records the action:
+         close_all_tabs / add / done
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
+  new_private_tab_tapped:
+    type: event
+    description: |
+      A user opened a new private tab from the tab tray
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-06"
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:

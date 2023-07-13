@@ -8,25 +8,20 @@ features:
           specific contextual hints are enabled.
         type: Map<ContextualHint, Boolean>
         default:
-           jump-back-in-synced-tab-contextual-hint: true
            toolbar-hint: true
     defaults:
       - channel: developer
         value:
            features-enabled:
-             jump-back-in-synced-tab-contextual-hint : false
              toolbar-hint: true
       - channel: beta
         value:
            features-enabled:
-            jump-back-in-synced-tab-contextual-hint: true
             toolbar-hint: true
 
 enums:
   ContextualHint:
     description: The identifiers for a individual contextual hints.
     variants:
-      jump-back-in-synced-tab-contextual-hint:
-        description: The contextual hint bubble that appears to indicate a synced tab has appeared within the Jump Back In section.
       toolbar-hint:
         description: The contextual hint bubble that appears to provide a hint about the toolbar.

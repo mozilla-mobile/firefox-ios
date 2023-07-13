@@ -86,11 +86,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
-                                              buttonView: button)
+                                              buttonView: button,
+                                              toastContainer: alertContainer)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled || CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
             menuHelper.navigationHandler = navigationHandler
         }
 
@@ -152,6 +153,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
         }.items
 
         let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,

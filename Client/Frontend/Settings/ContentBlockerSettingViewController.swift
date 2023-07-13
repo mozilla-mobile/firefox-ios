@@ -210,6 +210,15 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
                     if option == .strict {
                         self.button.isHidden = true
+                        TelemetryWrapper.recordEvent(category: .action,
+                                                     method: .tap,
+                                                     object: .trackingProtectionMenu,
+                                                     extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue])
+                    } else {
+                        TelemetryWrapper.recordEvent(category: .action,
+                                                     method: .tap,
+                                                     object: .trackingProtectionMenu,
+                                                     extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"])
                     }
             })
 
@@ -235,6 +244,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     item.enabled = enabled
                 }
                 self?.tableView.reloadData()
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .trackingProtectionMenu,
+                                             extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
         }
 
         let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])

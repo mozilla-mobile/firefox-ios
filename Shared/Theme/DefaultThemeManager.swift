@@ -5,18 +5,6 @@
 import UIKit
 import Common
 
-public protocol ThemeManager {
-    var currentTheme: Theme { get }
-    var window: UIWindow? { get set }
-
-    func getInterfaceStyle() -> UIUserInterfaceStyle
-    func changeCurrentTheme(_ newTheme: ThemeType)
-    func systemThemeChanged()
-    func setSystemTheme(isOn: Bool)
-    func setAutomaticBrightness(isOn: Bool)
-    func setAutomaticBrightnessValue(_ value: Float)
-}
-
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 final public class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility

@@ -57,6 +57,7 @@ class HomepageViewControllerTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let firefoxHomeViewController = HomepageViewController(profile: profile,
+                                                               toastContainer: UIView(),
                                                                tabManager: tabManager,
                                                                overlayManager: overlayManager)
 

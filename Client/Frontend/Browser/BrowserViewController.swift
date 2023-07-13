@@ -1055,6 +1055,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
 
         browserDelegate?.showHomepage(inline: inline,
+                                      toastContainer: alertContainer,
                                       homepanelDelegate: self,
                                       libraryPanelDelegate: self,
                                       sendToDeviceDelegate: self,
@@ -1118,11 +1119,15 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     private func createHomepage(inline: Bool) {
         let homepageViewController = HomepageViewController(
             profile: profile,
+            toastContainer: alertContainer,
             tabManager: tabManager,
             overlayManager: overlayManager)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
         homepageViewController.sendToDeviceDelegate = self
+        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+            homepageViewController.browserNavigationHandler = navigationHandler
+        }
         self.homepageViewController = homepageViewController
         addChild(homepageViewController)
         view.addSubview(homepageViewController.view)

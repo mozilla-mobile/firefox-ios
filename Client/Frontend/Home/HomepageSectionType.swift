@@ -56,4 +56,20 @@ enum HomepageSectionType: Int, CaseIterable {
     init(_ section: Int) {
         self.init(rawValue: section)!
     }
+
+    func newPrivateTabActionTelemetry() {
+        switch self {
+        case .topSites:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .newPrivateTab,
+                                         value: .topSite)
+        case .pocket:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .newPrivateTab,
+                                         value: .pocketSite)
+        default: return
+        }
+    }
 }

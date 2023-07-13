@@ -53,6 +53,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private let isHomePage: Bool
     private let buttonView: UIButton
+    private let toastContainer: UIView
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
@@ -73,10 +74,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     ///   - profile: the user's profile
     ///   - tabManager: the tab manager
     ///   - buttonView: the view from which the menu will be shown
+    ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
+         toastContainer: UIView,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
@@ -84,6 +87,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
+        self.toastContainer = toastContainer
         self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab
@@ -603,7 +607,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
 
             guard let temporaryDocument = tab.temporaryDocument else {
-                self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                    self.navigationHandler?.showShareExtension(
+                        url: url,
+                        sourceView: self.buttonView,
+                        toastContainer: self.toastContainer,
+                        popoverArrowDirection: .any)
+                } else {
+                    self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                }
                 return
             }
 
@@ -616,7 +628,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                        let presentableVC = self.menuActionDelegate as? PresentableVC {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
                     } else {
-                        self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                            self.navigationHandler?.showShareExtension(
+                                url: url,
+                                sourceView: self.buttonView,
+                                toastContainer: self.toastContainer,
+                                popoverArrowDirection: .any)
+                        } else {
+                            self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                        }
                     }
                 }
             }
@@ -625,16 +645,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
-        let controller = helper.createActivityViewController { _, _ in }
+        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+            navigationHandler?.showShareExtension(
+                url: fileURL,
+                sourceView: buttonView,
+                toastContainer: toastContainer,
+                popoverArrowDirection: .any)
+        } else {
+            let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
+            let controller = helper.createActivityViewController { _, _ in }
 
-        if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = buttonView
-            popoverPresentationController.sourceRect = buttonView.bounds
-            popoverPresentationController.permittedArrowDirections = .up
+            if let popoverPresentationController = controller.popoverPresentationController {
+                popoverPresentationController.sourceView = buttonView
+                popoverPresentationController.sourceRect = buttonView.bounds
+                popoverPresentationController.permittedArrowDirections = .up
+            }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+            delegate?.showViewController(viewController: controller)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-        delegate?.showViewController(viewController: controller)
     }
 
     // MARK: Reading list

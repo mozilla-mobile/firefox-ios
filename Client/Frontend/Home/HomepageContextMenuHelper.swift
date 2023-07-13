@@ -25,13 +25,18 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
+    private let toastContainer: UIView
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
-
+    weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
 
-    init(viewModel: HomepageViewModel) {
+    init(
+        viewModel: HomepageViewModel,
+        toastContainer: UIView
+    ) {
         self.viewModel = viewModel
+        self.toastContainer = toastContainer
     }
 
     func presentContextMenu(for site: Site,
@@ -78,9 +83,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Default actions
 
-    func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+    func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.Large.privateMode) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            sectionType.newPrivateTabActionTelemetry()
         }.items
     }
 
@@ -101,7 +107,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         guard let siteURL = site.url.asURL else { return nil }
 
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .pocket)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
@@ -176,27 +182,35 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             guard let url = URL(string: site.url) else { return }
 
-            let helper = ShareExtensionHelper(url: url, tab: nil)
-            let controller = helper.createActivityViewController { (_, activityType) in
-                switch activityType {
-                case CustomActivityAction.sendToDevice.actionType:
-                    self.showSendToDevice(site: site)
-                case CustomActivityAction.copyLink.actionType:
-                    self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
-                default: break
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                self.browserNavigationHandler?.showShareExtension(
+                    url: url,
+                    sourceView: sourceView ?? UIView(),
+                    toastContainer: self.toastContainer,
+                    popoverArrowDirection: [.up, .down, .left])
+            } else {
+                let helper = ShareExtensionHelper(url: url, tab: nil)
+                let controller = helper.createActivityViewController { (_, activityType) in
+                    switch activityType {
+                    case CustomActivityAction.sendToDevice.actionType:
+                        self.showSendToDevice(site: site)
+                    case CustomActivityAction.copyLink.actionType:
+                        self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
+                    default: break
+                    }
                 }
-            }
 
-            if UIDevice.current.userInterfaceIdiom == .pad,
-               let popoverController = controller.popoverPresentationController,
-               let getSourceRect = self.getPopoverSourceRect {
-                popoverController.sourceView = sourceView
-                popoverController.sourceRect = getSourceRect(sourceView)
-                popoverController.permittedArrowDirections = [.up, .down, .left]
-                popoverController.delegate = self.delegate
-            }
+                if UIDevice.current.userInterfaceIdiom == .pad,
+                   let popoverController = controller.popoverPresentationController,
+                   let getSourceRect = self.getPopoverSourceRect {
+                    popoverController.sourceView = sourceView
+                    popoverController.sourceRect = getSourceRect(sourceView)
+                    popoverController.permittedArrowDirections = [.up, .down, .left]
+                    popoverController.delegate = self.delegate
+                }
 
-            self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
+                self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
+            }
         }).items
     }
 
@@ -227,15 +241,15 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let topSiteActions: [PhotonRowActions]
         if let site = site as? PinnedSite {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         } else if site as? SponsoredTile != nil {
-            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
+            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction()]
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         }
         return topSiteActions
