@@ -34,7 +34,6 @@ class MockBrowserViewController: BrowserViewController {
     var handleQueryCount = 0
     var showLibraryCount = 0
     var openURLInNewTabCount = 0
-
     var presentSignInFxaOptions: FxALaunchParams?
     var presentSignInFlowType: FxAPageType?
     var presentSignInReferringPage: ReferringPage?

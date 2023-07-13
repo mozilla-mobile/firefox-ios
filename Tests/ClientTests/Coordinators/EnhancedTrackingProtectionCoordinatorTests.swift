@@ -13,6 +13,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
     private var glean: MockGleanWrapper!
+    private var delegate: MockEnhancedTrackingProtectionCoordinatorDelegate!
 
     override func setUp() {
         super.setUp()
@@ -23,6 +24,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         self.routeBuilder = RouteBuilder()
         self.tabManager = MockTabManager()
         self.glean = MockGleanWrapper()
+        self.delegate = MockEnhancedTrackingProtectionCoordinatorDelegate()
     }
 
     override func tearDown() {
@@ -32,7 +34,25 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         self.profile = nil
         self.tabManager = nil
         self.glean = nil
+        self.delegate = nil
         AppContainer.shared.reset()
+    }
+
+    func testParentCoordinatorDelegate_calledWithPage() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+        subject.settingsOpenPage(settings: .contentBlocker)
+
+        XCTAssertEqual(delegate.settingsOpenPageCalled, 1)
+        XCTAssertEqual(delegate.didFinishEnhancedTrackingProtectionCalled, 1)
+    }
+
+    func testParentCoordinatorDelegate_calledDidFinish() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+        subject.didFinish()
+
+        XCTAssertEqual(delegate.didFinishEnhancedTrackingProtectionCalled, 1)
     }
 
     func testEmptyChilds_whenCreated() {
@@ -44,5 +64,19 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         let subject = EnhancedTrackingProtectionCoordinator(router: mockRouter)
         trackForMemoryLeaks(subject)
         return subject
+    }
+}
+
+// MARK: - MockSettingsCoordinatorDelegate
+class MockEnhancedTrackingProtectionCoordinatorDelegate: EnhancedTrackingProtectionCoordinatorDelegate {
+    var settingsOpenPageCalled = 0
+    var didFinishEnhancedTrackingProtectionCalled = 0
+
+    func settingsOpenPage(settings: Route.SettingsSection) {
+        settingsOpenPageCalled += 1
+    }
+
+    func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
+        didFinishEnhancedTrackingProtectionCalled += 1
     }
 }
