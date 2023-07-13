@@ -67,7 +67,8 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
                                                          mainSubscription: Subscription<State>,
                                                          transformedSubscription: Subscription<SubState>?) {
-        let subscriptionWrapper = SubscriptionWrapper(subscription: mainSubscription,
+        let subscriptionWrapper = SubscriptionWrapper(originalSubscription: mainSubscription,
+                                                      transformedSubscription: transformedSubscription,
                                                       subscriber: subscriber)
         subscriptions.update(with: subscriptionWrapper)
         mainSubscription.newValues(oldState: nil, newState: state)

@@ -5,7 +5,7 @@
 import Foundation
 
 class SubscriptionWrapper<State>: Hashable {
-    private let subscription: Subscription<State>
+    private let originalSubscription: Subscription<State>
     weak var subscriber: AnyStoreSubscriber?
     private let objectIdentifier: ObjectIdentifier
 
@@ -13,19 +13,26 @@ class SubscriptionWrapper<State>: Hashable {
         hasher.combine(self.objectIdentifier)
     }
 
-    init(subscription: Subscription<State>,
-         subscriber: AnyStoreSubscriber) {
-        self.subscription = subscription
+    init<T>(originalSubscription: Subscription<State>,
+            transformedSubscription: Subscription<T>?,
+            subscriber: AnyStoreSubscriber) {
+        self.originalSubscription = originalSubscription
         self.subscriber = subscriber
         self.objectIdentifier = ObjectIdentifier(subscriber)
 
-        subscription.observer = { [unowned self] _, newState in
-            self.subscriber?.newState(state: newState as Any)
+        if let transformedSubscription = transformedSubscription {
+            transformedSubscription.observer = { [unowned self] _, newState in
+                self.subscriber?.newState(state: newState as Any)
+            }
+        } else {
+            originalSubscription.observer = { [unowned self] _, newState in
+                self.subscriber?.newState(state: newState as Any)
+            }
         }
     }
 
     func newValues(oldState: State, newState: State) {
-        self.subscription.newValues(oldState: oldState, newState: newState)
+        originalSubscription.newValues(oldState: oldState, newState: newState)
     }
 
     static func == (left: SubscriptionWrapper<State>,
