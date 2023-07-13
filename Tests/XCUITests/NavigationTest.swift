@@ -188,6 +188,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
+        waitForExistence(app.buttons["Go"])
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -256,6 +257,7 @@ class NavigationTest: BaseTestCase {
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.nowAt(NewTabScreen)
+        app.buttons["Done"].tap()
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)
