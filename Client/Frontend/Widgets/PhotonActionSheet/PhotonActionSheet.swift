@@ -39,6 +39,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
+    private var backgroundBlurView: UIVisualEffectView?
     let viewModel: PhotonActionSheetViewModel
     private var constraints = [NSLayoutConstraint]()
     var notificationCenter: NotificationProtocol
@@ -52,10 +53,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
-
-    private lazy var blurredImageView: UIImageView = .build { _ in }
-
-    private var windowScreenshot: UIImage?
 
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
@@ -77,14 +74,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
-
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            if CoordinatorFlagManager.isCoordinatorEnabled, let screenshot = sceneDelegate.sceneCoordinator?.window?.screenshot() {
-                windowScreenshot = screenshot
-            } else if let screenshot = sceneDelegate.window?.screenshot() {
-                windowScreenshot = screenshot
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -94,6 +83,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
+        tableView.removeFromSuperview()
         notificationCenter.removeObserver(self)
     }
 
@@ -191,8 +181,6 @@ class PhotonActionSheet: UIViewController, Themeable {
             setupCenteredStyle()
         }
 
-        view.insertSubview(blurredImageView, belowSubview: tableView)
-
         tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
         tableViewHeightConstraint?.isActive = true
         NSLayoutConstraint.activate(constraints)
@@ -243,6 +231,22 @@ class PhotonActionSheet: UIViewController, Themeable {
         constraints.append(contentsOf: tableViewConstraints)
     }
 
+    private func setupBackgroundBlur() {
+        guard backgroundBlurView == nil else { return }
+
+        let blur = UIBlurEffect(style: .systemMaterialDark)
+        let backgroundBlurView = IntensityVisualEffectView(effect: blur, intensity: 0.2)
+        view.insertSubview(backgroundBlurView, belowSubview: tableView)
+        backgroundBlurView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundBlurView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.backgroundBlurView = backgroundBlurView
+    }
+
     // The width used for the .centered and .bottom style
     private var centeredAndBottomWidth: CGFloat {
         let minimumWidth = min(view.frame.size.width, UX.maxWidth)
@@ -257,35 +261,26 @@ class PhotonActionSheet: UIViewController, Themeable {
         applyTheme()
     }
 
-    private func applyBackgroundBlur() {
-        guard let screenshot = windowScreenshot else { return }
-
-        let blurType: BlurType = UIAccessibility.isReduceTransparencyEnabled ? NOBLUR : BOXFILTER
-        let blurredImage = screenshot.applyBlur(withRadius: 5,
-                                                blurType: blurType,
-                                                tintColor: UIColor.black.withAlphaComponent(0.2),
-                                                saturationDeltaFactor: 1.8,
-                                                maskImage: nil)
-        blurredImageView.image = blurredImage
-    }
-
     func applyTheme() {
         let theme = themeManager.currentTheme
 
-        if viewModel.presentationStyle != .bottom, viewModel.presentationStyle != .popover {
-            // update background blur
-            applyBackgroundBlur()
+        if viewModel.presentationStyle == .centered {
+            setupBackgroundBlur()
         }
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
             view.backgroundColor = theme.colors.layer1
         } else if UIAccessibility.isReduceTransparencyEnabled {
+            backgroundBlurView?.alpha = 0.0
+
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
             tableView.backgroundView?.backgroundColor = theme.colors.layer1
             tableView.backgroundColor = theme.colors.layer1
         } else {
+            backgroundBlurView?.alpha = 1.0
+
             tableView.backgroundColor = .clear
             let blurEffect = UIBlurEffect(style: .regular)
 
