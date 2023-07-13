@@ -166,8 +166,8 @@ class TabCell: UICollectionViewCell,
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
         favicon.image = UIImage(named: ImageIdentifiers.Large.globe)
-        if !tab.isFxHomeTab {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
+        if !tab.isFxHomeTab, let tabURL = tab.url?.absoluteString {
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
         }
 
         if selected {
@@ -199,9 +199,12 @@ class TabCell: UICollectionViewCell,
 
         // Favicon or letter image when tab screenshot isn't available
         } else {
-            smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
             faviconBG.isHidden = false
             screenshotView.image = nil
+
+            if let tabURL = tab.url?.absoluteString {
+                smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
+            }
         }
     }
 
