@@ -295,46 +295,6 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func resetBookmarksMetadata() -> Success {
-        let deferred = Success()
-
-        writerQueue.async {
-            guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
-                return
-            }
-
-            do {
-                try self.api?.resetBookmarkSyncMetadata()
-                deferred.fill(Maybe(success: ()))
-            } catch let error {
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-            }
-        }
-
-        return deferred
-    }
-
-    public func resetHistoryMetadata() -> Success {
-         let deferred = Success()
-
-         writerQueue.async {
-             guard self.isOpen else {
-                 deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
-                 return
-             }
-
-             do {
-                 try self.api?.resetHistorySyncMetadata()
-                 deferred.fill(Maybe(success: ()))
-             } catch let error {
-                 deferred.fill(Maybe(failure: error as MaybeErrorType))
-             }
-         }
-
-         return deferred
-     }
-
     public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.getHistoryMetadataSince(since: since)
