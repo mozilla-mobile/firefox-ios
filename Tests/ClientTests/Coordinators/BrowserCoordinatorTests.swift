@@ -644,18 +644,18 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
 
         subject.settingsOpenPage(settings: .contentBlocker)
-        XCTAssertEqual(mbvc.settingsOpenPageCount, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
     }
 
     func testEnhancedTrackingProtectionCoordinatorDelegate_didFinishETP_removesChild() {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.browserHasLoaded()
 
-        let result = subject.handle(route: .settings(section: .contentBlocker))
+        subject.showEnhancedTrackingProtection()
         let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
         subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
 
-        XCTAssertTrue(result)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }

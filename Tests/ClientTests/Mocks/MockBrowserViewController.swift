@@ -34,8 +34,6 @@ class MockBrowserViewController: BrowserViewController {
     var handleQueryCount = 0
     var showLibraryCount = 0
     var openURLInNewTabCount = 0
-    var settingsOpenPageCount = 0
-
     var presentSignInFxaOptions: FxALaunchParams?
     var presentSignInFlowType: FxAPageType?
     var presentSignInReferringPage: ReferringPage?
@@ -95,10 +93,6 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabCount += 1
         return Tab(profile: MockProfile(), configuration: .init())
     }
-
-    override func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-         settingsOpenPageCount += 1
-     }
 
     override func handleQRCode() {
         qrCodeCount += 1
