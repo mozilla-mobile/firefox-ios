@@ -41,17 +41,21 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
-        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle, iconString: ImageIdentifiers.pasteAndGo) { _ in
+        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle,
+                                                  iconString: ImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
-        }.items
+        }
+        pasteGoAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAndGoAction
 
-        let pasteAction = SingleActionViewModel(title: .PasteTitle, iconString: ImageIdentifiers.paste) { _ in
+        let pasteAction = SingleActionViewModel(title: .PasteTitle,
+                                                iconString: ImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
-        }.items
+        }
+        pasteAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAction
 
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle,
                                                       iconString: ImageIdentifiers.Large.link) { _ in
@@ -61,12 +65,12 @@ extension PhotonActionSheetProtocol {
                                                 bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             }
-        }.items
+        }
 
         if UIPasteboard.general.string != nil {
-            return [pasteGoAction, pasteAction, copyAddressAction]
+            return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
         } else {
-            return [copyAddressAction]
+            return [copyAddressAction.items]
         }
     }
 

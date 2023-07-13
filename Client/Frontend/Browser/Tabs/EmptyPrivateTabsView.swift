@@ -53,7 +53,7 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private let iconImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.largePrivateTabsMask)
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.privateMode)
     }
 
     // MARK: - Inits

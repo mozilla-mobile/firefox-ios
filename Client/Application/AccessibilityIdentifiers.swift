@@ -334,6 +334,8 @@ public struct AccessibilityIdentifiers {
         static let closeButton = "PhotonMenu.close"
         static let view = "Action Sheet"
         static let tableView = "Context Menu"
+        static let pasteAction = "pasteAction"
+        static let pasteAndGoAction = "pasteAndGoAction"
     }
 
     struct Alert {

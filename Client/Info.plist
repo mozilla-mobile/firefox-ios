@@ -147,7 +147,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_private_tab</string>
+			<string>privateModeLarge</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>New Private Tab</string>
 			<key>UIApplicationShortcutItemType</key>
@@ -155,7 +155,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>menu-ScanQRCode</string>
+			<string>qrCodeLarge</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Scan QR Code</string>
 			<key>UIApplicationShortcutItemType</key>
