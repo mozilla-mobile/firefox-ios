@@ -211,7 +211,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         subtitleLabel.text = item.text
         subtitleLabel.isHidden = item.text == nil
 
-        accessibilityIdentifier = item.iconString ?? item.accessibilityId
+        accessibilityIdentifier = item.accessibilityId ?? item.iconString
         accessibilityLabel = item.currentTitle
 
         if item.isFlipped {

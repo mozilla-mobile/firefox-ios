@@ -173,7 +173,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.Large.clipboard].tap()
+        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -187,7 +187,7 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.textFields["url"])
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.otherElements[ImageIdentifiers.Large.clipboard].tap()
+        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
