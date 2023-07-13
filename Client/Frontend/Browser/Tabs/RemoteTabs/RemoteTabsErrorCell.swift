@@ -60,6 +60,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
                                                 left: UX.buttonVerticalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonVerticalInset)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncDataButton
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

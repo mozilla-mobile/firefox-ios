@@ -126,6 +126,7 @@ public struct AccessibilityIdentifiers {
         static let doneButton = "doneButtonTabTray"
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
+        static let syncDataButton = "syncDataButton"
     }
 
     struct LibraryPanels {
