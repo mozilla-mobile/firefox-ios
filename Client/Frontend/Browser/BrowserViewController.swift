@@ -2095,12 +2095,6 @@ extension BrowserViewController: SettingsDelegate {
     }
 }
 
-extension BrowserViewController: EnhancedTrackingProtectionMenuDelegate {
-    func settingsOpenPage(settings: Route.SettingsSection) {
-        self.homePanelDidRequestToOpenSettings(at: .contentBlocker)
-    }
-}
-
 extension BrowserViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         self.dismiss(animated: animated, completion: nil)
