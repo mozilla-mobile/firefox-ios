@@ -107,8 +107,8 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        waitForExistence(app.buttons["EmailSignIn.button"], timeout: TIMEOUT)
-        app.buttons["EmailSignIn.button"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton], timeout: TIMEOUT)
+        app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton].tap()
         checkFirefoxSyncScreenShown()
     }
 
