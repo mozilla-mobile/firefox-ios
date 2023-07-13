@@ -17,17 +17,6 @@ HTMLInputElement.prototype.setUserInput = function (value) {
   this.dispatchEvent(new Event("input", { bubbles: true }));
 };
 
-// TODO: Bug 1828408.
-// Use  WeakRef API directly in our codebase instead of legacy Cu.getWeakReference.
-window.Cu = class {
-  static getWeakReference(elements) {
-    const elementsWeakRef = new WeakRef(elements);
-    return {
-      get: () => elementsWeakRef.deref(),
-    };
-  }
-};
-
 // Mimic the behavior of .getAutocompleteInfo()
 // It should return an object with a fieldName property matching the autocomplete attribute
 // only if it's a valid value from this list https://searchfox.org/mozilla-central/source/dom/base/AutocompleteFieldList.h#89-149

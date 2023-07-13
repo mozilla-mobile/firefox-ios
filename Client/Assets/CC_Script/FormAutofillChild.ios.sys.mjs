@@ -26,11 +26,11 @@ export class FormAutofillChild {
       this.fieldDetailsManager.identifyAutofillFields(element);
 
     // Only ping swift if current field is a cc field
-    if (validDetails?.find(field => field.elementWeakRef.get() === element)) {
+    if (validDetails?.find(field => field.element === element)) {
       const fieldNamesWithValues = validDetails?.reduce(
         (acc, field) => ({
           ...acc,
-          [field.fieldName]: field.elementWeakRef.get().value,
+          [field.fieldName]: field.element.value,
         }),
         {}
       );
