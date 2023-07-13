@@ -110,6 +110,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
             mainContainerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             mainContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing),
         ])
+        titleLabel.accessibilityFrame = titleLabel.frame.updateWidth(byPercentage: 80)
     }
 
     private func setupContent() {
