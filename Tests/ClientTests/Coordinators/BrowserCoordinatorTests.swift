@@ -638,6 +638,28 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testETPCoordinatorDelegate_settingsOpenPage() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.settingsOpenPage(settings: .contentBlocker)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+    }
+
+    func testEnhancedTrackingProtectionCoordinatorDelegate_didFinishETP_removesChild() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
+
+        subject.showEnhancedTrackingProtection()
+        let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
+        subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     // MARK: - Sign in route
 
     func testHandleFxaSignIn_returnsTrue() {

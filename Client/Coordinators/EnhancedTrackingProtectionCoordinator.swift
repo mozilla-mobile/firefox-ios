@@ -9,9 +9,11 @@ import Shared
 
 protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator)
+    func settingsOpenPage(settings: Route.SettingsSection)
 }
 
-class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
+class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
+                                             EnhancedTrackingProtectionMenuDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private let enhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC
@@ -37,10 +39,17 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator {
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
+        enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
     }
 
     func start() {
         router.push(enhancedTrackingProtectionMenuVC)
+    }
+
+    // MARK: - EnhancedTrackingProtectionMenuDelegate
+    func settingsOpenPage(settings: Route.SettingsSection) {
+        parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
+        parentCoordinator?.settingsOpenPage(settings: settings)
     }
 
     func didFinish() {
