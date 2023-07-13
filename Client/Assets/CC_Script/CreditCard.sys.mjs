@@ -189,9 +189,9 @@ export class CreditCard {
     }
 
     // Remove dashes and whitespace
-    let number = this._number.replace(/[\-\s]/g, "");
+    const number = CreditCard.normalizeCardNumber(this._number);
 
-    let len = number.length;
+    const len = number.length;
     if (len < 12 || len > 19) {
       return false;
     }
