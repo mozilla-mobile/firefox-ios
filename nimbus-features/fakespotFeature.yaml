@@ -10,27 +10,45 @@ features:
         type: Boolean
         default: false
       config:
-        type: ProductConfig
+        type: List<ProductConfig>
         description: >
-          Product configuration
+          A List of products configurations
         default:
+        [
           {
-           "amazon":
-             {
-             "productIdFromURLRegex": "(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)",
-             "validTLDs": ["com"]
-            },
-            "walmart":
-             {
-             "productIdFromURLRegex": "\\\\/ip\\\\/(?:[A-Za-z0-9-]{1,320}\\\\/)?(?<productId>[0-9]{3,13})",
-             "validTLDs": ["com"]
-            },
-            "bestbuy":
-             {
-             "productIdFromURLRegex": "\\\\/(?<productId>\\\\d+\\\\.p)",
-             "validTLDs": ["com"]
+            "websiteName": amazon,
+            "websiteConfig":
+            {
+            "amazon":
+              {
+              "productIdFromURLRegex": "(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)",
+              "validTLDs": ["com"]
+              }
             }
-          }
+            },
+            {
+            "websiteName": walmart,
+            "websiteConfig":
+            {
+            "walmart":
+              {
+              "productIdFromURLRegex": "\\\\/ip\\\\/(?:[A-Za-z0-9-]{1,320}\\\\/)?(?<productId>[0-9]{3,13})",
+              "validTLDs": ["com"]
+              }
+            }
+            },
+            {
+            "websiteName": bestbuy,
+            "websiteConfig":
+            {
+            "bestbuy":
+              {
+              "productIdFromURLRegex": "\\\\/(?<productId>\\\\d+\\\\.p)",
+              "validTLDs": ["com"]
+              }
+            }
+            }
+        ]
     defaults:
       - channel: beta
         value:
@@ -44,21 +62,16 @@ objects:
     description: >
       It represents a configuration for different e-commerce websites and includes regular expressions for extracting product IDs from their respective URLs
     fields:
-      amazon:
-        type: WebsiteConfig
+      websiteConfig:
+        type: Map<String, WebsiteConfig>
         description: >
-          It represents the Amazon website configuration
+          It represents a map with the website key and configuration
         default: {}
-      walmart:
-        type: WebsiteConfig
+      websiteName:
+        type: WebsiteName
         description: >
-          It represents the Walmart website configuration
-        default: {}
-      bestbuy:
-        type: WebsiteConfig
-        description: >
-          It represents the Bestbuy website configuration
-        default: {}
+          It represents the name of the website
+        default: amazon
   WebsiteConfig:
     description: >
       It represents the website configuration
@@ -73,3 +86,14 @@ objects:
         description: >
           Valid Top Level Domains
         default: []
+
+enums:
+    WebsiteName:
+      description: The identifiers for different types of websites.
+      variants:
+        amazon:
+          description: The name of the amazon website
+        walmart:
+          description: The name of the walmart website
+        bestbuy:
+          description: The name of the walmart website
