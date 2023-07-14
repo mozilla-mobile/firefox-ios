@@ -882,7 +882,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         // Make sure that we have a height to actually base our calculations on
         guard urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
-        let heightWithPadding = locationViewHeight + 10
+        let padding: CGFloat = CoordinatorFlagManager.isCoordinatorEnabled ? 12 : 10
+        let heightWithPadding = locationViewHeight + padding
 
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
