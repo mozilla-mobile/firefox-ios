@@ -10,6 +10,6 @@ enum AppScreen {
 }
 
 enum ActiveScreensStateAction: Action {
-    case showThemeSettings(AppScreen)
-    case closeThemeSettings(AppScreen)
+    case showScreen(AppScreen)
+    case closeScreen(AppScreen)
 }

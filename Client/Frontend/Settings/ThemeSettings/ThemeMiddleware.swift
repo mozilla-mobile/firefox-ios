@@ -20,7 +20,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     init(themeManager: LegacyThemeManager = LegacyThemeManager.instance) {
-        // TODO: Add support for themeManager
+        // TODO: Add support for LegacyThemeManager
         self.themeManager = themeManager
     }
 
