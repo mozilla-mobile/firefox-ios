@@ -338,7 +338,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func settingsOpenPage(settings: Route.SettingsSection) {
-        handleSettings(with: settings)
+        _ = handleSettings(with: settings)
     }
 
     // MARK: - BrowserNavigationHandler
