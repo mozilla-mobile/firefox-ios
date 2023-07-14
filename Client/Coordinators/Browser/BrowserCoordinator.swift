@@ -267,7 +267,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
 
         let navigationController = ThemedNavigationController()
-        navigationController.modalPresentationStyle = .formSheet
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
