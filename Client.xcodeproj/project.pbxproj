@@ -220,6 +220,7 @@
 		396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905B4D41E8E7A6B0027D953 /* FxAPushMessageHandler.swift */; };
 		397848DE1ED86605004C0C0B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397848DD1ED86605004C0C0B /* NotificationService.swift */; };
 		397848E21ED86605004C0C0B /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 397848DB1ED86605004C0C0B /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		399341742A61945C0012EF71 /* ArgumentProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399341732A61945C0012EF71 /* ArgumentProcessor.swift */; };
 		39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */; };
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
 		39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39AF317329DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift */; };
@@ -2386,6 +2387,7 @@
 		397848DB1ED86605004C0C0B /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		397848DD1ED86605004C0C0B /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		397848DF1ED86605004C0C0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		399341732A61945C0012EF71 /* ArgumentProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentProcessor.swift; sourceTree = "<group>"; };
 		39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserActivityHandler.swift; path = Helpers/UserActivityHandler.swift; sourceTree = "<group>"; };
 		39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SpotlightHelper.js; sourceTree = "<group>"; };
 		39AD454C88A908D41BA13329 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/Today.strings; sourceTree = "<group>"; };
@@ -9052,6 +9054,7 @@
 		C87D8B7E2818331900A6307D /* Nimbus */ = {
 			isa = PBXGroup;
 			children = (
+				399341732A61945C0012EF71 /* ArgumentProcessor.swift */,
 				C87D8B7F2818333F00A6307D /* NimbusManager.swift */,
 				8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */,
 				C825E9822832A425006CB811 /* NimbusSearchBarLayer.swift */,
@@ -12345,6 +12348,7 @@
 				8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* GridTabViewController.swift in Sources */,
 				EB9A179B20E69A7F00B12184 /* LegacyThemeManager.swift in Sources */,
+				399341742A61945C0012EF71 /* ArgumentProcessor.swift in Sources */,
 				EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */,
 				21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */,
 				C8A012F126AB07D70096A7A7 /* JumpBackInViewModel.swift in Sources */,
