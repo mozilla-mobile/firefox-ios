@@ -257,7 +257,9 @@ class NavigationTest: BaseTestCase {
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.nowAt(NewTabScreen)
-        app.buttons["Done"].tap()
+        if app.buttons["Done"].exists {
+            app.buttons["Done"].tap()
+        }
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)
