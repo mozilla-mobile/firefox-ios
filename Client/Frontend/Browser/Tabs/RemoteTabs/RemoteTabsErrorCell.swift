@@ -85,7 +85,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         instructionsLabel.text = error.localizedString()
 
         // Show signIn button only for notLoggedIn case
-        if error == .notLoggedIn {
+        if error == .notLoggedIn || error == .syncDisabledByUser {
             signInButton.isHidden = false
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
         }
