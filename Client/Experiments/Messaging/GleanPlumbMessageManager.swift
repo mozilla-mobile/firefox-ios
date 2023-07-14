@@ -135,11 +135,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
         guard let message = message else { return nil }
 
-        // If it's a message under experiment, we need to:
-        guard let slug = message.data.experiment else { return message }
-
         // 1. record an exposure event. We can tie the message directly to the experiment
-        messagingFeature.recordExperimentExposure(slug: slug)
+        if let slug = message.data.experiment {
+            messagingFeature.recordExperimentExposure(slug: slug)
+        } else if message.data.isControl {
+            onMalformedMessage(id: message.id, surface: surface)
+        }
 
         // 2. handle control messages appropriately.
         if !message.data.isControl {
