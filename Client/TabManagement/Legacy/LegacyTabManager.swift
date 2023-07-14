@@ -298,7 +298,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
-    private func shouldClearPrivateTabs() -> Bool {
+    func shouldClearPrivateTabs() -> Bool {
         return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
@@ -358,7 +358,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         // If tabToSelect is nil after restoration, force selection of first tab normal tab
         if tabToSelect == nil {
-            tabToSelect = tabs.first(where: { $0.isPrivate == false })
+            tabToSelect = tabs.first(where: { !$0.isPrivate })
 
             // If tabToSelect is still nil, create a new tab
             if tabToSelect == nil {
