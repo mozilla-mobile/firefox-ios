@@ -8,13 +8,6 @@ import Storage
 import MozillaAppServices
 import Common
 
-// laurie - put this in its own file/place
-protocol StatusBarScrollDelegate: AnyObject {
-    func scrollViewDidScroll(_ scrollView: UIScrollView,
-                             statusBarFrame: CGRect?,
-                             theme: Theme)
-}
-
 class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
                                 SearchBarLocationProvider {
     // MARK: - Typealiases
