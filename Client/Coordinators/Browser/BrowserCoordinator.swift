@@ -263,7 +263,72 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         browserViewController.openURLInNewTab(url)
     }
 
+<<<<<<< HEAD
     // Will be removed with FXIOS-6529
+=======
+    func didFinishSettings(from coordinator: SettingsCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
+
+    // MARK: - LibraryCoordinatorDelegate
+
+    func didFinishLibrary(from coordinator: LibraryCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
+    // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
+
+    func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
+    }
+
+    func settingsOpenPage(settings: Route.SettingsSection) {
+        _ = handleSettings(with: settings)
+    }
+
+    // MARK: - BrowserNavigationHandler
+
+    func show(settings: Route.SettingsSection) {
+        presentWithModalDismissIfNeeded {
+            _ = self.handleSettings(with: settings)
+        }
+    }
+
+    /// Not all flows are handled by coordinators at the moment so we can't call router.dismiss for all
+    /// This bridges to use the presentWithModalDismissIfNeeded method we have in older flows
+    private func presentWithModalDismissIfNeeded(completion: @escaping () -> Void) {
+        if let presentedViewController = router.navigationController.presentedViewController {
+            presentedViewController.dismiss(animated: false, completion: {
+                completion()
+            })
+        } else {
+            completion()
+        }
+    }
+
+    func show(homepanelSection: Route.HomepanelSection) {
+        showLibrary(with: homepanelSection)
+    }
+
+    func showEnhancedTrackingProtection() {
+        showETPMenu()
+    }
+
+    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+        guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
+        else {
+            // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
+            return
+        }
+        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
+        add(child: shareExtensionCoordinator)
+        shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
+    }
+
+    // MARK: - To be removed with FXIOS-6529
+>>>>>>> 8e6877e61 (Bugfix [v117] Fix build warning (#15577))
     private func handle(settingsSection: Route.SettingsSection) {
         let baseSettingsVC = AppSettingsTableViewController(
             with: profile,
