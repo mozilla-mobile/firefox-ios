@@ -33,6 +33,12 @@ struct ViewControllerConsts {
 }
 
 extension UIViewController {
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+    
     /// Determines whether, based on size class, the particular view controller should
     /// use iPad setup, as defined by design requirements. All iPad devices use a
     /// combination of either (.compact, .regular) or (.regular, .regular) size class

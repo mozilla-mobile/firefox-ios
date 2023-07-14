@@ -8,6 +8,13 @@ import Storage
 import MozillaAppServices
 import Common
 
+// laurie - put this in its own file/place
+protocol StatusBarScrollDelegate: AnyObject {
+    func scrollViewDidScroll(_ scrollView: UIScrollView,
+                             statusBarFrame: CGRect?,
+                             theme: Theme)
+}
+
 class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
                                 SearchBarLocationProvider {
     // MARK: - Typealiases
@@ -28,6 +35,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextMenuHelper.browserNavigationHandler = browserNavigationHandler
         }
     }
+
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
 
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
@@ -335,12 +344,20 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
-        updateStatusBar(theme: theme)
+
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: theme)
+        }
     }
 
     func scrollToTop(animated: Bool = false) {
-        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
-        collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            collectionView?.setContentOffset(.zero, animated: animated)
+            scrollViewDidScroll(collectionView)
+        } else {
+            let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
+            collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        }
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -355,7 +372,13 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateStatusBar(theme: themeManager.currentTheme)
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: themeManager.currentTheme)
+        } else {
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: themeManager.currentTheme)
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -732,12 +755,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 // MARK: - Status Bar Background
 
 extension HomepageViewController {
-    var statusBarFrame: CGRect? {
-        guard let keyWindow = UIWindow.keyWindow else { return nil }
-
-        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
-    }
-
     // Returns a value between 0 and 1 which indicates how far the user has scrolled.
     // This is used as the alpha of the status bar background.
     // 0 = no status bar background shown

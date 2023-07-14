@@ -524,6 +524,7 @@
 		8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */; };
 		8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */; };
 		8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */; };
+		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
 		8A0F2A7E286DFCC800D84CC6 /* PushRemoteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A7D286DFCC800D84CC6 /* PushRemoteError.swift */; };
 		8A0F2A80286DFD2B00D84CC6 /* PushClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A7F286DFD2B00D84CC6 /* PushClientError.swift */; };
 		8A0F2A82286DFD9800D84CC6 /* PushRegistrationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A81286DFD9800D84CC6 /* PushRegistrationAPI.swift */; };
@@ -4643,6 +4644,7 @@
 		8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsFlowDelegate.swift; sourceTree = "<group>"; };
 		8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsDelegate.swift; sourceTree = "<group>"; };
+		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
 		8A0F2A7D286DFCC800D84CC6 /* PushRemoteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRemoteError.swift; sourceTree = "<group>"; };
 		8A0F2A7F286DFD2B00D84CC6 /* PushClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushClientError.swift; sourceTree = "<group>"; };
 		8A0F2A81286DFD9800D84CC6 /* PushRegistrationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRegistrationAPI.swift; sourceTree = "<group>"; };
@@ -8478,6 +8480,7 @@
 				217AEF7728480844004EED37 /* ResizableButton.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
+				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -12450,6 +12453,7 @@
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
+				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
