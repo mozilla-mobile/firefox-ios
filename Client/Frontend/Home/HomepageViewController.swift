@@ -748,6 +748,12 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 // MARK: - Status Bar Background
 
 extension HomepageViewController {
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
     // Returns a value between 0 and 1 which indicates how far the user has scrolled.
     // This is used as the alpha of the status bar background.
     // 0 = no status bar background shown
