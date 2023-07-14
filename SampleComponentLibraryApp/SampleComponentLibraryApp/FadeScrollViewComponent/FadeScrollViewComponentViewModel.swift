@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-struct ExampleComponentViewModel: ComponentViewModel {
-    var title = "Example"
-    var viewController: UIViewController = ExampleViewController()
+struct FadeScrollViewComponentViewModel: ComponentViewModel {
+    var title = "FadeScrollView"
+    var viewController: UIViewController = FadeScrollViewViewController()
 }
