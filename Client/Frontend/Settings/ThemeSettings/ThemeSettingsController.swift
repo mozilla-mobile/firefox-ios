@@ -64,7 +64,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     func newState(state: ThemeSettingsState) {
-        print("YRD newState \(state.systemBrightnessValue)")
+        print("YRD newState received \(state.useSystemAppearance)")
+
+        // update UI
     }
 
     @objc
@@ -131,13 +133,14 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        if isReduxIntegrationEnabled {
+        guard !isReduxIntegrationEnabled else {
             print("YRD value \(control.isOn)")
             store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
-        } else {
-            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-            themeManager.setSystemTheme(isOn: control.isOn)
+            return
         }
+
+        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+        themeManager.setSystemTheme(isOn: control.isOn)
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme

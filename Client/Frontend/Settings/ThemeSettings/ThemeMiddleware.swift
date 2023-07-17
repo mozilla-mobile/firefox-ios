@@ -28,9 +28,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         switch action {
         case ThemeSettingsAction.enableSystemAppearance(let enabled):
             self.themeManager.systemThemeIsOn = enabled
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(enabled))
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
         case ThemeSettingsAction.fetchThemeManagerValues:
-            // TODO: Get the values from the manager and build into the state
             let currentThemeState = self.getThemeManagerCurrentState()
             store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         default:
@@ -53,7 +52,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     func getThemeManagerCurrentState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
                            switchMode: .manual(.dark),
-                           manualThemeMode: .dark,
                            systemBrightnessValue: 0,
                            userBrightnessThreshold: 0)
     }
