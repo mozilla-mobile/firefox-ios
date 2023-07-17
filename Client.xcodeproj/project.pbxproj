@@ -528,6 +528,7 @@
 		8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */; };
 		8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */; };
 		8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */; };
+		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
 		8A0F2A7E286DFCC800D84CC6 /* PushRemoteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A7D286DFCC800D84CC6 /* PushRemoteError.swift */; };
 		8A0F2A80286DFD2B00D84CC6 /* PushClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A7F286DFD2B00D84CC6 /* PushClientError.swift */; };
 		8A0F2A82286DFD9800D84CC6 /* PushRegistrationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F2A81286DFD9800D84CC6 /* PushRegistrationAPI.swift */; };
@@ -664,7 +665,11 @@
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A9AC465276CEC4E0047F5B0 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */; };
 		8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */; };
+<<<<<<< HEAD
 		8A9CB41E2846F0BF00CC3A16 /* FadeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */; };
+=======
+		8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */; };
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
 		8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
@@ -4629,6 +4634,7 @@
 		8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsFlowDelegate.swift; sourceTree = "<group>"; };
 		8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsDelegate.swift; sourceTree = "<group>"; };
+		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
 		8A0F2A7D286DFCC800D84CC6 /* PushRemoteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRemoteError.swift; sourceTree = "<group>"; };
 		8A0F2A7F286DFD2B00D84CC6 /* PushClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushClientError.swift; sourceTree = "<group>"; };
 		8A0F2A81286DFD9800D84CC6 /* PushRegistrationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRegistrationAPI.swift; sourceTree = "<group>"; };
@@ -4787,7 +4793,11 @@
 		8A99DB9C27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModel.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollView.swift; sourceTree = "<group>"; };
+=======
+		8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatusBarScrollDelegate.swift; sourceTree = "<group>"; };
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModelTests.swift; sourceTree = "<group>"; };
@@ -8460,6 +8470,11 @@
 				43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */,
 				217AEF7728480844004EED37 /* ResizableButton.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
+<<<<<<< HEAD
+=======
+				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
+				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -9118,6 +9133,11 @@
 				8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */,
 				8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */,
 				8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */,
+<<<<<<< HEAD
+=======
+				8A5038132A5DFCE000A1B02A /* MockBrowserProfile.swift */,
+				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -12467,6 +12487,7 @@
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
+				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
@@ -13012,6 +13033,7 @@
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
+				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,

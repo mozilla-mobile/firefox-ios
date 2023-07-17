@@ -8,7 +8,18 @@ import WebKit
 import Shared
 import Storage
 
+<<<<<<< HEAD
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate {
+=======
+class BrowserCoordinator: BaseCoordinator,
+                          LaunchCoordinatorDelegate,
+                          BrowserDelegate,
+                          SettingsCoordinatorDelegate,
+                          BrowserNavigationHandler,
+                          LibraryCoordinatorDelegate,
+                          EnhancedTrackingProtectionCoordinatorDelegate,
+                          ParentCoordinatorDelegate {
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -82,11 +93,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                      statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
                                              sendToDeviceDelegate: sendToDeviceDelegate,
+                                             statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
         guard browserViewController.embedContent(homepageController) else { return }
@@ -123,6 +136,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
                              sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                             statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
             return homepageViewController
@@ -135,6 +149,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+<<<<<<< HEAD
+=======
+            homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                homepageViewController.browserNavigationHandler = self
+            }
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
             return homepageViewController
         }
     }

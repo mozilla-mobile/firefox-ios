@@ -95,6 +95,7 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertNotNil(subject.contentView)
     }
 
+<<<<<<< HEAD
     func testContentType_needTopContentExtended_trueWithHomepage() {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
@@ -113,5 +114,9 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: webview)
 
         XCTAssertFalse(subject.type!.needTopContentExtended)
+=======
+    private func createHomepage() -> HomepageViewController {
+        return HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
+>>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
     }
 }

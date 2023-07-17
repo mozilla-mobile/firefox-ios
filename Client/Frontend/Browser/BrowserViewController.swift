@@ -14,7 +14,10 @@ import MobileCoreServices
 import Telemetry
 import Common
 
-class BrowserViewController: UIViewController, SearchBarLocationProvider, Themeable, LibraryPanelDelegate {
+class BrowserViewController: UIViewController,
+                             SearchBarLocationProvider,
+                             Themeable,
+                             LibraryPanelDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -41,7 +44,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    var statusBarOverlay = UIView()
+    var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
@@ -52,7 +55,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -473,6 +475,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
+        statusBarOverlay.applyTheme(theme: theme)
 
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
@@ -570,7 +573,6 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         view.addSubview(topTouchArea)
 
         // Work around for covering the non-clipped web view content
-        statusBarOverlay = UIView()
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
@@ -742,8 +744,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
 
         if CoordinatorFlagManager.isCoordinatorEnabled {
             NSLayoutConstraint.activate([
-                contentContainer.topAnchor.constraint(equalTo: statusBarOverlay.bottomAnchor, priority: .init(998)),
-                contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor, priority: .init(999)),
+                contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
                 contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
@@ -756,7 +757,8 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     private func updateHeaderConstraints() {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.left.right.top.equalTo(view)
+                make.left.right.equalTo(view)
+                make.top.equalTo(view.safeArea.top)
                 if CoordinatorFlagManager.isCoordinatorEnabled {
                     // The status bar is covered by the statusBarOverlay,
                     // if we don't have the URL bar at the top then header height is 0
@@ -1011,15 +1013,13 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         [header, overKeyboardContainer].forEach { view in
             view?.transform = .identity
         }
-
-        statusBarOverlay.isHidden = false
     }
 
     // MARK: - Manage embedded content
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        manageStatusBarEmbedded()
+        statusBarOverlay.resetState()
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1031,19 +1031,10 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        manageStatusBarEmbedded()
+        statusBarOverlay.resetState()
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
-    }
-
-    /// Status bar overlay needs to be at the back for some content type that need extended content
-    private func manageStatusBarEmbedded() {
-        if let type = contentContainer.type, type.needTopContentExtended {
-            view.sendSubviewToBack(statusBarOverlay)
-        } else {
-            view.bringSubviewToFront(statusBarOverlay)
-        }
     }
 
     /// Show the home page embedded in the contentContainer
@@ -1060,6 +1051,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
                                       homepanelDelegate: self,
                                       libraryPanelDelegate: self,
                                       sendToDeviceDelegate: self,
+                                      statusBarScrollDelegate: statusBarOverlay,
                                       overlayManager: overlayManager)
     }
 
@@ -1984,8 +1976,7 @@ class BrowserViewController: UIViewController, SearchBarLocationProvider, Themea
     // MARK: Themeable
     func applyTheme() {
         let currentTheme = themeManager.currentTheme
-        let hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
-        statusBarOverlay.backgroundColor = hasTopTabs ? currentTheme.colors.layer3 : currentTheme.colors.layer1
+        statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         setNeedsStatusBarAppearanceUpdate()
 

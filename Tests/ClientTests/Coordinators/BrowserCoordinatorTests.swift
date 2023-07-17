@@ -17,6 +17,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
+    private var scrollDelegate: MockStatusBarScrollDelegate!
 
     override func setUp() {
         super.setUp()
@@ -31,6 +32,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
         self.wallpaperManager = WallpaperManagerMock()
+        self.scrollDelegate = MockStatusBarScrollDelegate()
     }
 
     override func tearDown() {
@@ -44,6 +46,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.applicationHelper = nil
         self.glean = nil
         self.wallpaperManager = nil
+        self.scrollDelegate = nil
         AppContainer.shared.reset()
     }
 
@@ -93,6 +96,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
         let secondHomepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
@@ -107,6 +111,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
@@ -115,6 +120,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
