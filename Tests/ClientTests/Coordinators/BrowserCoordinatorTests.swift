@@ -173,7 +173,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
-        let subject = createSubject()
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.show(settings: .general)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
