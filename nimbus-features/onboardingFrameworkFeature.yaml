@@ -287,15 +287,18 @@ enums:
       sync-devices-ctd:
         description: >
           Corresponding to the sync image for CTD
-      welcome-globe:
-        description: >
-          Corresponding to the fox world image
       notifications:
         description: >
           Corresponding to the notifications image
       sync-devices:
         description: >
           Corresponding to the sync-devices image
+      set-to-dock:
+        description: >
+          Corresponding to the set to dock image
+      welcome-globe:
+        description: >
+          Corresponding to the fox world image
   OnboardingType:
     description: >
       The identifiers for the different types of onboarding cards.
