@@ -12,7 +12,7 @@ features:
       config:
         type: Map<String, WebsiteConfig>
         description: >
-          A List of products configurations
+          A Map of website configurations
         default:
           amazon:
             productIdFromURLRegex: "(?:[\\\\/]|$|%2F)(?<productId>[A-Z0-9]{10})(?:[\\\\/]|$|\\\\#|\\\\?|%2F)"
