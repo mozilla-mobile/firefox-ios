@@ -504,7 +504,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.newTab
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is NewTabContentSettingsViewController)
         }
     }
@@ -513,7 +513,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.homePage
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is HomePageSettingViewController)
         }
     }
@@ -522,7 +522,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.mailto
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is OpenWithSettingsViewController)
         }
     }
@@ -531,7 +531,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.search
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is SearchSettingsTableViewController)
         }
     }
@@ -540,7 +540,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.clearPrivateData
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is ClearPrivateDataTableViewController)
         }
     }
@@ -549,7 +549,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.fxa
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is SyncContentSettingsViewController)
         }
     }
@@ -558,7 +558,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.theme
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is ThemeSettingsController)
         }
     }
@@ -568,7 +568,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is WallpaperSettingsViewController)
         }
     }
@@ -578,7 +578,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertNil(result)
         }
     }
