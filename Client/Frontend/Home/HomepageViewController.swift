@@ -23,17 +23,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         }
     }
 
-<<<<<<< HEAD
-=======
-    weak var browserNavigationHandler: BrowserNavigationHandler? {
-        didSet {
-            contextMenuHelper.browserNavigationHandler = browserNavigationHandler
-        }
-    }
-
     weak var statusBarScrollDelegate: StatusBarScrollDelegate?
 
->>>>>>> 5cbdf5f0a (Bugfix FXIOS-6785 [v116] Page extent and content container (#15594))
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
