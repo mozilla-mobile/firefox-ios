@@ -8,7 +8,13 @@ import WebKit
 import Shared
 import Storage
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate {
+class BrowserCoordinator: BaseCoordinator,
+                          LaunchCoordinatorDelegate,
+                          BrowserDelegate,
+                          SettingsCoordinatorDelegate,
+                          BrowserNavigationHandler,
+                          LibraryCoordinatorDelegate,
+                          EnhancedTrackingProtectionCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -82,11 +88,13 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                      statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
                                              sendToDeviceDelegate: sendToDeviceDelegate,
+                                             statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
         guard browserViewController.embedContent(homepageController) else { return }
@@ -123,6 +131,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
                              sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                             statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
             return homepageViewController
@@ -135,6 +144,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+            homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             return homepageViewController
         }
     }

@@ -12,11 +12,13 @@ protocol BrowserDelegate: AnyObject {
     ///   - homepanelDelegate: The homepanel delegate for the homepage
     ///   - libraryPanelDelegate:  The library panel delegate for the homepage
     ///   - sendToDeviceDelegate: The send to device delegate for the homepage
+    ///   - statusBarScrollDelegate: The delegate that takes care of the status bar overlay scroll
     ///   - overlayManager: The overlay manager for the homepage
     func showHomepage(inline: Bool,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                      statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager)
 
     /// Show the webview to navigate

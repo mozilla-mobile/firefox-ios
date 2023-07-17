@@ -23,6 +23,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         }
     }
 
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
+
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
@@ -327,12 +329,20 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
-        updateStatusBar(theme: theme)
+
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: theme)
+        }
     }
 
     func scrollToTop(animated: Bool = false) {
-        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
-        collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            collectionView?.setContentOffset(.zero, animated: animated)
+            scrollViewDidScroll(collectionView)
+        } else {
+            let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
+            collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        }
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -347,7 +357,13 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateStatusBar(theme: themeManager.currentTheme)
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: themeManager.currentTheme)
+        } else {
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: themeManager.currentTheme)
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {

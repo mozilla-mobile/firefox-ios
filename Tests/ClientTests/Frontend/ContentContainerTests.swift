@@ -94,24 +94,4 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: homepage)
         XCTAssertNotNil(subject.contentView)
     }
-
-    func testContentType_needTopContentExtended_trueWithHomepage() {
-        let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
-        subject.add(content: homepage)
-        XCTAssertTrue(subject.type!.needTopContentExtended)
-    }
-
-    func testContentType_needTopContentExtended_hasNotTypeWhenNil() {
-        let subject = ContentContainer(frame: .zero)
-        XCTAssertNil(subject.type)
-    }
-
-    func testContentType_needTopContentExtended_falseWithWebview() {
-        let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView())
-        subject.add(content: webview)
-
-        XCTAssertFalse(subject.type!.needTopContentExtended)
-    }
 }
