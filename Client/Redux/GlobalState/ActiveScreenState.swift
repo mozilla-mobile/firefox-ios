@@ -31,8 +31,8 @@ struct ActiveScreensState: Equatable {
 
         if let action = action as? ActiveScreensStateAction {
             switch action {
-            case .showScreen(.themeSettings):
-                screens += [.themeSettings(ThemeSettingsState())]
+            case .showScreen(.themeSettings(let state)):
+                screens += [.themeSettings(state)]
             case .closeScreen(let screen): break // screens = screens.filter { $0 != screen }
             }
         }

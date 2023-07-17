@@ -45,6 +45,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings(themeState: ThemeSettingsState())))
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
