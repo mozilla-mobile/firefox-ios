@@ -184,7 +184,7 @@ class BrowserCoordinator: BaseCoordinator,
             if isSettingsCoordinatorEnabled {
                 return handleSettings(with: section)
             } else {
-                handle(settingsSection: section)
+                legacyHandle(settingsSection: section)
                 return true
             }
 
@@ -347,7 +347,11 @@ class BrowserCoordinator: BaseCoordinator,
 
     func show(settings: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
-            _ = self.handleSettings(with: settings)
+            if self.isSettingsCoordinatorEnabled {
+                _ = self.handleSettings(with: settings)
+            } else {
+                self.legacyHandle(settingsSection: settings)
+            }
         }
     }
 
@@ -372,7 +376,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - To be removed with FXIOS-6529
-    private func handle(settingsSection: Route.SettingsSection) {
+    private func legacyHandle(settingsSection: Route.SettingsSection) {
         // Temporary bugfix for #14954, real fix is with settings coordinator
         if let subNavigationController = router.navigationController.presentedViewController as? ThemedNavigationController,
            let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController {
@@ -395,15 +399,15 @@ class BrowserCoordinator: BaseCoordinator,
         controller.modalPresentationStyle = .formSheet
         router.present(controller)
 
-        getSettingsViewController(settingsSection: settingsSection) { viewController in
+        legacyGetSettingsViewController(settingsSection: settingsSection) { viewController in
             guard let viewController else { return }
             controller.pushViewController(viewController, animated: true)
         }
     }
 
     // Will be removed with FXIOS-6529
-    func getSettingsViewController(settingsSection section: Route.SettingsSection,
-                                   completion: @escaping (UIViewController?) -> Void) {
+    func legacyGetSettingsViewController(settingsSection section: Route.SettingsSection,
+                                         completion: @escaping (UIViewController?) -> Void) {
         switch section {
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
