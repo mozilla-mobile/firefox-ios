@@ -156,7 +156,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 0)
 
         let expectedId = "infoCard"
-        let experiment = "my-experiment"
         let messages = [
             createMessage(messageId: "control", surface: .newTabCard, isControl: true),
             createMessage(messageId: expectedId, surface: .newTabCard)
