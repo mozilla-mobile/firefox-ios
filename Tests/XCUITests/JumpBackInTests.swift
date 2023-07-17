@@ -85,8 +85,8 @@ class JumpBackInTests: BaseTestCase {
         waitForExistence(app.staticTexts["Test3"])
     }
 
-    func testPrivateTab() {
-        XCTSkip("This test is flaky")
+    func testPrivateTab() throws {
+        throw XCTSkip("This test is flaky")
 //        // Visit https://www.twitter.com
 //        navigator.openURL("https://www.twitter.com")
 //        waitUntilPageLoad()
