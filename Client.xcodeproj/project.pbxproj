@@ -662,6 +662,7 @@
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A9AC465276CEC4E0047F5B0 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */; };
 		8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */; };
+		8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */; };
 		8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
@@ -4803,6 +4804,7 @@
 		8A99DB9C27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModel.swift; sourceTree = "<group>"; };
+		8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatusBarScrollDelegate.swift; sourceTree = "<group>"; };
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModelTests.swift; sourceTree = "<group>"; };
@@ -9140,6 +9142,7 @@
 				8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */,
 				8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */,
 				8A5038132A5DFCE000A1B02A /* MockBrowserProfile.swift */,
+				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -13002,6 +13005,7 @@
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
+				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
