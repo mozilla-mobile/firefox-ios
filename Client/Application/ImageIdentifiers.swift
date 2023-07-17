@@ -88,8 +88,12 @@ public struct ImageIdentifiers {
     public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
     public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
     public static let onboardingSyncCTD = "onboardingSyncCTD"
+<<<<<<< HEAD
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
+=======
+    public static let onboardingSetToDock = "onboardingDock"
+>>>>>>> aa74c92e6 (Add FXIOS-7018 [v116] Add image for setting Fx to dock (#15608))
     public static let pinSmall = "pin_small"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
