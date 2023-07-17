@@ -112,8 +112,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // MARK: - Inits
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
-    ) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
