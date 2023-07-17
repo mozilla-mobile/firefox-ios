@@ -5,10 +5,12 @@
 import Redux
 
 enum ThemeSettingsAction: Action {
+    case fetchThemeManagerValues
+    case receivedThemeManagerValues(ThemeSettingsState)
     case enableSystemAppearance(Bool)
     case systemThemeChanged(Bool)
-    case toggleSwitchMode(SwitchMode)
-    case selectManualMode(ThemePicker)
-    case brightnessValueChanged(Float)
-    case updateUserBrightnessThreshold(Float)
+//    case toggleSwitchMode(SwitchMode)
+//    case selectManualMode(ThemePicker)
+//    case brightnessValueChanged(Float)
+//    case updateUserBrightnessThreshold(Float)
 }

@@ -7,9 +7,9 @@ import Redux
 
 protocol ThemeManagerProvider {
     var systemThemeIsOn: Bool { get }
-    func setSystemTheme(isOn: Bool)
-    func setAutomaticBrightness(isOn: Bool)
-    func brightnessChanged(_ value: Float)
+//    func setSystemTheme(isOn: Bool)
+//    func setAutomaticBrightness(isOn: Bool)
+//    func brightnessChanged(_ value: Float)
 }
 
 class ThemeManagerMiddleware: ThemeManagerProvider {
@@ -29,20 +29,32 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         case ThemeSettingsAction.enableSystemAppearance(let enabled):
             self.themeManager.systemThemeIsOn = enabled
             store.dispatch(ThemeSettingsAction.systemThemeChanged(enabled))
+        case ThemeSettingsAction.fetchThemeManagerValues:
+            // TODO: Get the values from the manager and build into the state
+            let currentThemeState = self.getThemeManagerCurrentState()
+            store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         default:
             break
         }
     }
 
-    func setSystemTheme(isOn: Bool) {
-        themeManager.systemThemeIsOn = isOn
-    }
+//    func setSystemTheme(isOn: Bool) {
+//        themeManager.systemThemeIsOn = isOn
+//    }
+//
+//    func setAutomaticBrightness(isOn: Bool) {
+//        themeManager.automaticBrightnessIsOn = isOn
+//    }
+//
+//    func brightnessChanged(_ value: Float) {
+//        themeManager.automaticBrightnessValue = value
+//    }
 
-    func setAutomaticBrightness(isOn: Bool) {
-        themeManager.automaticBrightnessIsOn = isOn
-    }
-
-    func brightnessChanged(_ value: Float) {
-        themeManager.automaticBrightnessValue = value
+    func getThemeManagerCurrentState() -> ThemeSettingsState {
+        ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
+                           switchMode: .manual(.dark),
+                           manualThemeMode: .dark,
+                           systemBrightnessValue: 0,
+                           userBrightnessThreshold: 0)
     }
 }
