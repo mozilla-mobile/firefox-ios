@@ -562,7 +562,6 @@ extension TelemetryWrapper {
         case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
-        case systemThemeSwitch = "system-theme-switch"
         case themeModeManually = "theme-manually"
         case themeModeAutomatically = "theme-automatically"
         case themeLight = "theme-light"
