@@ -300,18 +300,11 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
     }
 
-    private func showETPMenu() {
-        let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
-        let etpRouter = DefaultRouter(navigationController: navigationController)
-        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: etpRouter)
+    private func showETPMenu(sourceView: UIView) {
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
-        enhancedTrackingProtectionCoordinator.start()
-
-        router.present(navigationController) { [weak self] in
-            self?.didFinishEnhancedTrackingProtection(from: enhancedTrackingProtectionCoordinator)
-        }
+        enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
     }
 
     // MARK: - SettingsCoordinatorDelegate
@@ -365,8 +358,8 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         showLibrary(with: homepanelSection)
     }
 
-    func showEnhancedTrackingProtection() {
-        showETPMenu()
+    func showEnhancedTrackingProtection(sourceView: UIView) {
+        showETPMenu(sourceView: sourceView)
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {

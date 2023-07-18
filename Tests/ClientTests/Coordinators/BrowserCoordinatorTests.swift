@@ -190,7 +190,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testShowEnhancedTrackingProtection() throws {
         let subject = createSubject()
-        subject.showEnhancedTrackingProtection()
+        subject.showEnhancedTrackingProtection(sourceView: UIView())
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)

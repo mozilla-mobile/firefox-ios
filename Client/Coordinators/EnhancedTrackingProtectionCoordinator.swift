@@ -42,16 +42,17 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
     }
 
-    func start() {
-        enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
-        enhancedTrackingProtectionMenuVC.transitioningDelegate = self
-        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}
-        if var topController = keyWindow.first?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
-            }
-            topController.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+    func start(sourceView: UIView) {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+            enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+        } else {
+            enhancedTrackingProtectionMenuVC.asPopover = true
+            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
+            enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
+            enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
         }
+        router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
     }
 
     // MARK: - EnhancedTrackingProtectionMenuDelegate
