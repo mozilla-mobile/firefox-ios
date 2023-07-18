@@ -84,14 +84,13 @@ extension BrowserViewController: WKUIDelegate {
     ) {
         let textInputAlert = TextInputAlert(message: prompt,
                                             frame: frame,
-                                            defaultText: defaultText)
+                                            defaultText: defaultText) { confirm in
+            completionHandler(confirm)
+        }
         if shouldDisplayJSAlertForWebView(webView) {
-            present(textInputAlert.alertController(), animated: true) {
-                completionHandler(defaultText)
-            }
+            present(textInputAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
-            completionHandler(nil)
         }
     }
 
