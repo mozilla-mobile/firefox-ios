@@ -19,6 +19,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         static let logoSize: CGFloat = 36.0
         static let closeButtonMarginAndWidth = 46.0
     }
+    public var titleLabelTrailingConstraint: NSLayoutConstraint!
 
     // MARK: Views
     public var viewModel: CreditCardBottomSheetViewModel? {
@@ -93,7 +94,9 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         mainContainerStackView.addArrangedSubview(headerLabel)
 
         addSubview(mainContainerStackView)
-        let isCloseButtonOverlapping = UIScreen.main.traitCollection.horizontalSizeClass != .regular
+        let isCloseButtonOverlapping = traitCollection.horizontalSizeClass != .regular
+        titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(equalTo: firstRowContainerView.trailingAnchor, constant: isCloseButtonOverlapping ? -UX.closeButtonMarginAndWidth : 0)
+
         NSLayoutConstraint.activate([
             firstRowContainerView.heightAnchor.constraint(equalToConstant: UX.logoSize),
             firefoxLogoImage.widthAnchor.constraint(equalToConstant: UX.logoSize),
@@ -102,7 +105,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
             firefoxLogoImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
 
             titleLabel.leadingAnchor.constraint(equalTo: firefoxLogoImage.trailingAnchor, constant: UX.headerElementsSpacing),
-            titleLabel.trailingAnchor.constraint(equalTo: firstRowContainerView.trailingAnchor, constant: isCloseButtonOverlapping ? UX.closeButtonMarginAndWidth : 0),
+            titleLabelTrailingConstraint,
             titleLabel.topAnchor.constraint(equalTo: firstRowContainerView.topAnchor, constant: 0),
             titleLabel.bottomAnchor.constraint(equalTo: firstRowContainerView.bottomAnchor, constant: 0),
 
