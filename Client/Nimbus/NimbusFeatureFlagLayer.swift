@@ -46,9 +46,6 @@ final class NimbusFeatureFlagLayer {
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
-        case .jumpBackInSyncedTab:
-            return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
-
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
@@ -157,10 +154,6 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
-    }
-
-    private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
     }
 
     private func checkNimbusForContextualHintsFeature(
