@@ -47,14 +47,6 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
 
-    // Background for status bar
-    private lazy var statusBarView: UIView = {
-        let statusBarFrame = statusBarFrame ?? CGRect.zero
-        let statusBarView = UIView(frame: statusBarFrame)
-        view.addSubview(statusBarView)
-        return statusBarView
-    }()
-
     // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
@@ -226,11 +218,9 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
-        var wallpaperTopConstant: CGFloat = 0
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            // Constraint so wallpaper appears under the status bar
-            wallpaperTopConstant = statusBarFrame?.height ?? 0
-        }
+
+        // Constraint so wallpaper appears under the status bar
+        let wallpaperTopConstant: CGFloat = statusBarFrame?.height ?? 0
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -337,20 +327,11 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
-
-        if !CoordinatorFlagManager.isCoordinatorEnabled {
-            updateStatusBar(theme: theme)
-        }
     }
 
     func scrollToTop(animated: Bool = false) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            collectionView?.setContentOffset(.zero, animated: animated)
-            scrollViewDidScroll(collectionView)
-        } else {
-            let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
-            collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
-        }
+        collectionView?.setContentOffset(.zero, animated: animated)
+        scrollViewDidScroll(collectionView)
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -365,13 +346,9 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !CoordinatorFlagManager.isCoordinatorEnabled {
-            updateStatusBar(theme: themeManager.currentTheme)
-        } else {
-            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                         statusBarFrame: statusBarFrame,
-                                                         theme: themeManager.currentTheme)
-        }
+        statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                     statusBarFrame: statusBarFrame,
+                                                     theme: themeManager.currentTheme)
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -404,11 +381,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     // Check if we already present something on top of the homepage,
     // if the homepage is actually being shown to the user and if the page is shown from a loaded webpage (zero search).
     private var canModalBePresented: Bool {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            return presentedViewController == nil && !viewModel.isZeroSearch
-        } else {
-            return presentedViewController == nil && view.alpha == 1 && !viewModel.isZeroSearch
-        }
+        return presentedViewController == nil && !viewModel.isZeroSearch
     }
 
     // MARK: - Contextual hint
@@ -752,44 +725,6 @@ extension HomepageViewController {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
 
         return keyWindow.windowScene?.statusBarManager?.statusBarFrame
-    }
-
-    // Returns a value between 0 and 1 which indicates how far the user has scrolled.
-    // This is used as the alpha of the status bar background.
-    // 0 = no status bar background shown
-    // 1 = status bar background is opaque
-    var scrollOffset: CGFloat {
-        // Status bar height can be 0 on iPhone in landscape mode.
-        guard let scrollView = collectionView,
-              isBottomSearchBar,
-              let statusBarHeight: CGFloat = statusBarFrame?.height,
-              statusBarHeight > 0
-        else { return 0 }
-
-        // The scrollview content offset is automatically adjusted to account for the status bar.
-        // We want to start showing the status bar background as soon as the user scrolls.
-        var offset: CGFloat
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            offset = scrollView.contentOffset.y / statusBarHeight
-        } else {
-            offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
-        }
-
-        if offset > 1 {
-            offset = 1
-        } else if offset < 0 {
-            offset = 0
-        }
-        return offset
-    }
-
-    func updateStatusBar(theme: Theme) {
-        let backgroundColor = theme.colors.layer1
-        statusBarView.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
-
-        if let statusBarFrame = statusBarFrame {
-            statusBarView.frame = statusBarFrame
-        }
     }
 }
 

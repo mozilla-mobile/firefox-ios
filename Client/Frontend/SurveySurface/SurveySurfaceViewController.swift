@@ -221,21 +221,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     @objc
     func takeSurveyAction() {
         viewModel.didTapTakeSurvey()
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            delegate?.didFinish()
-        } else {
-            dismiss(animated: true)
-        }
+        delegate?.didFinish()
     }
 
     @objc
     func dismissAction() {
         viewModel.didTapDismissSurvey()
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            delegate?.didFinish()
-        } else {
-            dismiss(animated: true)
-        }
+        delegate?.didFinish()
     }
 
     // MARK: - Themable

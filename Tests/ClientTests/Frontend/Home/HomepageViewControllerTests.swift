@@ -30,24 +30,6 @@ class HomepageViewControllerTests: XCTestCase {
         XCTAssertNil(browserViewController.homepageViewController, "Homepage is nil on creation")
     }
 
-    func testHomepageViewController_creationFromBVC_hideDoesntNil() {
-        guard !CoordinatorFlagManager.isCoordinatorEnabled else { return }
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
-
-        browserViewController.addSubviews()
-        browserViewController.showHomepage(inline: true)
-
-        let expectation = self.expectation(description: "Firefox home page has finished animation")
-
-        browserViewController.hideHomepage {
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
-        XCTAssertNotNil(browserViewController.homepageViewController, "Homepage isn't nil after hiding it")
-    }
-
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let urlBar = URLBarView(profile: profile)
@@ -74,18 +56,6 @@ class HomepageViewControllerTests: XCTestCase {
         browserViewController.updateInContentHomePanel(nil)
 
         XCTAssertNil(browserViewController.homepageViewController, "Homepage isn't shown")
-    }
-
-    func testUpdateInContentHomePanel_homeURL_showHomepage() {
-        guard !CoordinatorFlagManager.isCoordinatorEnabled else { return }
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
-        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
-        browserViewController.addSubviews()
-
-        let aboutHomeURL = URL(string: "internal://local/sessionrestore?url=internal://local/about/home")!
-        browserViewController.updateInContentHomePanel(aboutHomeURL)
-
-        XCTAssertNotNil(browserViewController.homepageViewController, "Homepage is shown")
     }
 
     func testUpdateInContentHomePanel_notHomeURL_doesntShowHomepage() {

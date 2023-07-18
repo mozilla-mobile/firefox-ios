@@ -13,7 +13,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case autopushFeature
     case bottomSearchBar
     case contextualHintForToolbar
-    case coordinatorsRefactor
     case creditCardAutofillStatus
     case etpCoordinatorRefactor
     case fakespotFeature
@@ -96,7 +95,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
-                .coordinatorsRefactor,
                 .creditCardAutofillStatus,
                 .etpCoordinatorRefactor,
                 .fakespotFeature,
