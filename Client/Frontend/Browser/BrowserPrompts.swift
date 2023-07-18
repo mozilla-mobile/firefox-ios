@@ -64,7 +64,7 @@ struct ConfirmPanelAlert: JSAlertInfo {
             self.completionHandler(true)
         })
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            completionHandler(false)
+            self.completionHandler(false)
         })
         alertController.alertInfo = self
         return alertController
