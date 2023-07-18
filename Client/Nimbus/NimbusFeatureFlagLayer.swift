@@ -43,6 +43,9 @@ final class NimbusFeatureFlagLayer {
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
+        case .fakespotFeature:
+            return checkFakespotFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -315,6 +318,12 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.fakespotFeature.value()
+
+        return config.status
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {

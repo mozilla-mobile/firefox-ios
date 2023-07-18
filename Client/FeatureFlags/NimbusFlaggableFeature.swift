@@ -16,6 +16,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case coordinatorsRefactor
     case creditCardAutofillStatus
     case etpCoordinatorRefactor
+    case fakespotFeature
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -98,6 +99,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .coordinatorsRefactor,
                 .creditCardAutofillStatus,
                 .etpCoordinatorRefactor,
+                .fakespotFeature,
                 .jumpBackInSyncedTab,
                 .libraryCoordinatorRefactor,
                 .notificationSettings,
