@@ -7,7 +7,7 @@ import UIKit
 import Shared
 
 class SensitiveViewController: UIViewController {
-    private var blurredOverlay: UIImageView?
+    private var backgroundBlurView: UIVisualEffectView?
     private var isAuthenticated = false
     private var willEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
@@ -54,31 +54,22 @@ class SensitiveViewController: UIViewController {
 
 extension SensitiveViewController {
     private func installBlurredOverlay() {
-        if blurredOverlay == nil {
-            if let snapshot = view.screenshot() {
-                let blurredSnapshot = snapshot.applyBlur(withRadius: 10,
-                                                         blurType: BOXFILTER,
-                                                         tintColor: UIColor(white: 1, alpha: 0.3),
-                                                         saturationDeltaFactor: 1.8,
-                                                         maskImage: nil)
-                let blurredOverlay: UIImageView = .build { $0.image = blurredSnapshot }
-                self.blurredOverlay = blurredOverlay
-                view.addSubview(blurredOverlay)
-
-                NSLayoutConstraint.activate([
-                    blurredOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    blurredOverlay.topAnchor.constraint(equalTo: view.topAnchor),
-                    blurredOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                    blurredOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                ])
-
-                view.layoutIfNeeded()
-            }
-        }
+        guard backgroundBlurView == nil else { return }
+        let blur = UIBlurEffect(style: .systemMaterialDark)
+        let backgroundBlurView = IntensityVisualEffectView(effect: blur, intensity: 0.2)
+        view.addSubview(backgroundBlurView)
+        backgroundBlurView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundBlurView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.backgroundBlurView = backgroundBlurView
     }
 
     private func removedBlurredOverlay() {
-        blurredOverlay?.removeFromSuperview()
-        blurredOverlay = nil
+        backgroundBlurView?.removeFromSuperview()
+        backgroundBlurView = nil
     }
 }
