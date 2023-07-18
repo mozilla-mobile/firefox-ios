@@ -10,7 +10,9 @@ enum SwitchMode: Equatable {
     case automatic
 }
 
-struct ThemeSettingsState: Equatable {
+protocol ReduxState {}
+
+struct ThemeSettingsState: ReduxState, Equatable {
     var useSystemAppearance: Bool
     var switchMode: SwitchMode
     var systemBrightnessValue: Float
@@ -22,7 +24,9 @@ struct ThemeSettingsState: Equatable {
 //            self.init()
 //            return
 //        }
-        let themeState: ThemeSettingsState = store.state.screenState(for: .themeSettings) as! ThemeSettingsState
+        // laurie
+        let fun = store.state.screenState(ThemeSettingsState.self, for: .themeSettings)
+//        let themeState: ThemeSettingsState = store.state.screenState<ThemeSettingsState>(for: .themeSettings) as! ThemeSettingsState
 
 //        self.useSystemAppearance = false
 //        self.switchMode = .manual(ThemeType.light)
