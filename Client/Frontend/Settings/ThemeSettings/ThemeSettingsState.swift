@@ -17,10 +17,18 @@ struct ThemeSettingsState: Equatable {
     var userBrightnessThreshold: Float
 
     init(_ appState: AppState) {
-        self.useSystemAppearance = false
-        self.switchMode = .manual(ThemeType.light)
-        self.systemBrightnessValue =  1
-        self.userBrightnessThreshold = 0.1
+        print("screens \(store.state.activeScreens.screens)")
+//        guard let themeState = appState.screenState(for: .themeSettings) as? ThemeSettingsState else {
+//            self.init()
+//            return
+//        }
+        let themeState: ThemeSettingsState = store.state.screenState(for: .themeSettings) as! ThemeSettingsState
+
+//        self.useSystemAppearance = false
+//        self.switchMode = .manual(ThemeType.light)
+//        self.systemBrightnessValue =  1
+//        self.userBrightnessThreshold = 0.1
+        self.init()
     }
 
     init() {
