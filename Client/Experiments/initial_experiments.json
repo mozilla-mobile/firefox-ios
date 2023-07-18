@@ -2,6 +2,7 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
+<<<<<<< HEAD
       "slug": "ios-on-boarding-challenge-the-default-copy",
       "id": "ios-on-boarding-challenge-the-default-copy",
       "arguments": {},
@@ -186,6 +187,8 @@
     },
     {
       "schemaVersion": "1.12.0",
+=======
+>>>>>>> 403dbf61b (Refactor [v115.2] Update initial experiments JSON for Nimbus (#15630))
       "slug": "ios-search-bar-placement-v2-treatment-a-rollout",
       "id": "ios-search-bar-placement-v2-treatment-a-rollout",
       "arguments": {},
@@ -241,6 +244,7 @@
     },
     {
       "schemaVersion": "1.12.0",
+<<<<<<< HEAD
       "slug": "ios-set-to-default-in-onboarding-final",
       "id": "ios-set-to-default-in-onboarding-final",
       "arguments": {},
@@ -584,6 +588,8 @@
     },
     {
       "schemaVersion": "1.12.0",
+=======
+>>>>>>> 403dbf61b (Refactor [v115.2] Update initial experiments JSON for Nimbus (#15630))
       "slug": "release-ios-on-boarding-challenge-the-default-copy",
       "id": "release-ios-on-boarding-challenge-the-default-copy",
       "arguments": {},
@@ -908,7 +914,7 @@
       "channel": "release",
       "userFacingName": "[release] iOS set to default instructions / no X",
       "userFacingDescription": "Onboarding experiment with showing instructions for how to set to default and removing X",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
