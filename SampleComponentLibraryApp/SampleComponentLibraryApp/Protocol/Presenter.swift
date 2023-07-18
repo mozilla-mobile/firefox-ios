@@ -11,6 +11,6 @@ protocol Presenter: AnyObject {
 
 extension Presenter where Self: UIViewController {
     func present(viewController: UIViewController) {
-        present(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }

@@ -107,8 +107,8 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        waitForExistence(app.buttons["EmailSignIn.button"], timeout: TIMEOUT)
-        app.buttons["EmailSignIn.button"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton], timeout: TIMEOUT)
+        app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton].tap()
         checkFirefoxSyncScreenShown()
     }
 
@@ -257,7 +257,9 @@ class NavigationTest: BaseTestCase {
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.nowAt(NewTabScreen)
-        app.buttons["Done"].tap()
+        if app.buttons["Done"].exists {
+            app.buttons["Done"].tap()
+        }
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)

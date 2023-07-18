@@ -31,14 +31,6 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
-engagement-notification-feature:
-  description: "The feature that controls the engagement notifications.\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    engagement-notification-feature-status:
-      type: boolean
-      description: "If true, we will allow user to use the engagement notification feature"
 etp-coordinator-refactor:
   description: "This feature is for managing the roll out of the ETP coordinator code as part of the changes on the navigation in the app\n"
   hasExposure: true
@@ -47,6 +39,17 @@ etp-coordinator-refactor:
     enabled:
       type: boolean
       description: "Enables the feature\n"
+fakespot-feature:
+  description: "The configuration setting for the status of the Fakespot feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    config:
+      type: json
+      description: "A List of products configurations\n"
+    status:
+      type: boolean
+      description: "Whether the Fakespot feature is enabled or disabled\n"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true

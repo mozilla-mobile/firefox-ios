@@ -43,6 +43,9 @@ final class NimbusFeatureFlagLayer {
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
+        case .fakespotFeature:
+            return checkFakespotFeature(from: nimbus)
+
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -88,9 +91,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-
-        case .engagementNotificationStatus:
-            return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
 
         case .notificationSettings:
             return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
@@ -250,17 +250,6 @@ final class NimbusFeatureFlagLayer {
             }
     }
 
-    public func checkNimbusForEngagementNotification(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.engagementNotificationFeature.value()
-
-            switch featureID {
-            case .engagementNotificationStatus: return config.engagementNotificationFeatureStatus
-            default: return false
-            }
-    }
-
     public func checkNimbusForNotificationSettings(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
@@ -329,6 +318,12 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.fakespotFeature.value()
+
+        return config.status
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {

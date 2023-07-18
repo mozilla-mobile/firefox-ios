@@ -8,7 +8,14 @@ import WebKit
 import Shared
 import Storage
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate, SettingsCoordinatorDelegate, BrowserNavigationHandler, LibraryCoordinatorDelegate, EnhancedTrackingProtectionCoordinatorDelegate, ParentCoordinatorDelegate {
+class BrowserCoordinator: BaseCoordinator,
+                          LaunchCoordinatorDelegate,
+                          BrowserDelegate,
+                          SettingsCoordinatorDelegate,
+                          BrowserNavigationHandler,
+                          LibraryCoordinatorDelegate,
+                          EnhancedTrackingProtectionCoordinatorDelegate,
+                          ParentCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -83,12 +90,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                      statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              toastContainer: toastContainer,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
                                              sendToDeviceDelegate: sendToDeviceDelegate,
+                                             statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
         guard browserViewController.embedContent(homepageController) else { return }
@@ -126,6 +135,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
                              sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
+                             statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
             return homepageViewController
@@ -138,6 +148,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+            homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
                 homepageViewController.browserNavigationHandler = self
             }
@@ -180,7 +191,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
             if isSettingsCoordinatorEnabled {
                 return handleSettings(with: section)
             } else {
-                handle(settingsSection: section)
+                legacyHandle(settingsSection: section)
                 return true
             }
 
@@ -267,7 +278,9 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         }
 
         let navigationController = ThemedNavigationController()
-        navigationController.modalPresentationStyle = .formSheet
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
         let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
@@ -331,14 +344,18 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     func settingsOpenPage(settings: Route.SettingsSection) {
-        handleSettings(with: settings)
+        _ = handleSettings(with: settings)
     }
 
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
-            _ = self.handleSettings(with: settings)
+            if self.isSettingsCoordinatorEnabled {
+                _ = self.handleSettings(with: settings)
+            } else {
+                self.legacyHandle(settingsSection: settings)
+            }
         }
     }
 
@@ -374,7 +391,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     }
 
     // MARK: - To be removed with FXIOS-6529
-    private func handle(settingsSection: Route.SettingsSection) {
+    private func legacyHandle(settingsSection: Route.SettingsSection) {
         // Temporary bugfix for #14954, real fix is with settings coordinator
         if let subNavigationController = router.navigationController.presentedViewController as? ThemedNavigationController,
            let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController {
@@ -397,15 +414,15 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         controller.modalPresentationStyle = .formSheet
         router.present(controller)
 
-        getSettingsViewController(settingsSection: settingsSection) { viewController in
+        legacyGetSettingsViewController(settingsSection: settingsSection) { viewController in
             guard let viewController else { return }
             controller.pushViewController(viewController, animated: true)
         }
     }
 
     // Will be removed with FXIOS-6529
-    func getSettingsViewController(settingsSection section: Route.SettingsSection,
-                                   completion: @escaping (UIViewController?) -> Void) {
+    func legacyGetSettingsViewController(settingsSection section: Route.SettingsSection,
+                                         completion: @escaping (UIViewController?) -> Void) {
         switch section {
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)

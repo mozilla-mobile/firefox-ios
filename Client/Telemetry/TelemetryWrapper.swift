@@ -31,7 +31,7 @@ extension TelemetryWrapperProtocol {
     }
 }
 
-class TelemetryWrapper: TelemetryWrapperProtocol {
+class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
@@ -312,6 +312,23 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             // Need to lowercase the name for labeled counter. Ref:
             // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
+        }
+
+        // Homepage section preferences
+        let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser)
+        GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
+
+        let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
+        GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
+
+        let isRecentlySavedEnabled = featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
+
+        let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        GleanMetrics.Preferences.pocket.set(isPocketEnabled)
+
+        if let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) {
+            GleanMetrics.Preferences.openingScreen.set(startAtHomeSetting.rawValue)
         }
     }
 

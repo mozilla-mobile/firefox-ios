@@ -2106,6 +2106,66 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  jump_back_in:
+    type: boolean
+    description: |
+      An indication of whether the Jump back in section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  recently_visited:
+    type: boolean
+    description: |
+      An indication of whether the Recently visited section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  recently_saved:
+    type: boolean
+    description: |
+      An indication of whether the recently saved section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  pocket:
+    type: boolean
+    description: |
+      An indication of whether Pocket is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  opening_screen:
+    type: string
+    description: |
+      What opening screen preference the user has selected under
+      "Customize Home". "homepage," "last tab," or
+      "homepage after 4 hours" default: "homepage after 4 hours".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
   private_browsing_button_tapped:
     type: event
     description: |

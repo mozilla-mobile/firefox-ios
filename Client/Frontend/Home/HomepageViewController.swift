@@ -29,6 +29,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         }
     }
 
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
+
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
@@ -246,6 +248,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
+            self.logger.log("Section \(viewModel.sectionType) is going to show", level: .debug, category: .homepage)
             return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
@@ -308,8 +311,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
         // Force the entire collection view to re-layout
         viewModel.refreshData(for: traitCollection, size: newSize)
-        collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
 
         // This pushes a reload to the end of the main queue after all the work associated with
         // rotating has been completed. This is important because some of the cells layout are
@@ -334,12 +337,20 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let theme = themeManager.currentTheme
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
-        updateStatusBar(theme: theme)
+
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: theme)
+        }
     }
 
     func scrollToTop(animated: Bool = false) {
-        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
-        collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        if CoordinatorFlagManager.isCoordinatorEnabled {
+            collectionView?.setContentOffset(.zero, animated: animated)
+            scrollViewDidScroll(collectionView)
+        } else {
+            let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
+            collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
+        }
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -354,7 +365,13 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateStatusBar(theme: themeManager.currentTheme)
+        if !CoordinatorFlagManager.isCoordinatorEnabled {
+            updateStatusBar(theme: themeManager.currentTheme)
+        } else {
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: themeManager.currentTheme)
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -808,11 +825,11 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
+            self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.reloadData()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
                             category: .homepage)
-            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 }
