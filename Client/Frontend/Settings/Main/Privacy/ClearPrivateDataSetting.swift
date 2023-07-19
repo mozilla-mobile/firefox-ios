@@ -32,9 +32,7 @@ class ClearPrivateDataSetting: Setting {
             return
         }
 
-        let viewController = ClearPrivateDataTableViewController()
-        viewController.profile = profile
-        viewController.tabManager = tabManager
+        let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

@@ -4008,7 +4008,6 @@ extension String {
         tableName: nil,
         value: "This action will clear the selected items. It cannot be undone.",
         comment: "Description of the confirmation dialog shown when a user tries to clear some of their private data.")
-    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearWebsiteDataAlertCancel = MZLocalizedString(
         key: "Cancel",
         tableName: "ClearPrivateDataConfirm",
@@ -4028,7 +4027,6 @@ extension String {
         tableName: "ClearHistoryConfirm",
         value: nil,
         comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
-    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearSyncedHistoryAlertCancel = MZLocalizedString(
         key: "Cancel",
         tableName: "ClearHistoryConfirm",

@@ -450,9 +450,7 @@ class BrowserCoordinator: BaseCoordinator,
             completion(viewController)
 
         case .clearPrivateData:
-            let viewController = ClearPrivateDataTableViewController()
-            viewController.profile = profile
-            viewController.tabManager = tabManager
+            let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
             completion(viewController)
 
         case .fxa:
