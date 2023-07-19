@@ -48,6 +48,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
 
+        // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
+        if let url = connectionOptions.urlContexts.first?.url {
+            Experiments.shared.initializeTooling(url: url)
+        }
+
         routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
                                prefs: profile.prefs)
 
