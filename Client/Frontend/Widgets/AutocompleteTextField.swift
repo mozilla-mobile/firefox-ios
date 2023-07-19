@@ -233,8 +233,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
-        autocompleteTextLabel = nil
         autocompleteTextLabel?.removeFromSuperview()
+        autocompleteTextLabel = nil
 
         if let theme {
             let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
@@ -384,9 +384,10 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
         textColor = theme.colors.textPrimary
         tintColor = theme.colors.actionPrimary
 
+        // Only refresh if an autocomplete label is presented to the user
         if autocompleteTextLabel?.attributedText != nil {
-            autocompleteTextLabel?.backgroundColor = backgroundColor
-            autocompleteTextLabel?.textColor = textColor
+            autocompleteTextLabel?.backgroundColor = theme.colors.layer3
+            autocompleteTextLabel?.textColor = theme.colors.textPrimary
         }
     }
 }
