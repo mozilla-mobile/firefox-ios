@@ -46,3 +46,6 @@
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "保存并自动填充信用卡信息";
 
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "查看信用卡";
+

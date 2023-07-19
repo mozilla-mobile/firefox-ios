@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 public struct DarkTheme: Theme {
     public var type: ThemeType = .dark

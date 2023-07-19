@@ -1,6 +1,9 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Description.v108" = "Dibab Firefox evel merdeer dre ziouer a dalv kement ha votiñ evit un internet digor hag aes.";
 
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Un internet gwelloc’h dre ziouer";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Gouzout penaos";
 
@@ -15,6 +18,9 @@
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "Bep miz e vez stanket ouzhpenn 3,000 heulier dre implijer gant Firefox. Dibabit ac'hanomp evel merdeer dre ziouer evit chom dinec'h en ho prevezded.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Gant Firefox eo prevez ho puhez";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cheñch ho merdeer dre ziouer";

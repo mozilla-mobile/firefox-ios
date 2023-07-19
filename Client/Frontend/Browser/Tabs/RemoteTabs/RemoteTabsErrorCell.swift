@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
@@ -59,6 +60,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
                                                 left: UX.buttonVerticalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonVerticalInset)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncDataButton
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -83,7 +85,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         instructionsLabel.text = error.localizedString()
 
         // Show signIn button only for notLoggedIn case
-        if error == .notLoggedIn {
+        if error == .notLoggedIn || error == .syncDisabledByUser {
             signInButton.isHidden = false
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
         }

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Foundation
 import Shared
@@ -52,7 +53,7 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private let iconImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.largePrivateTabsMask)
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.privateMode)
     }
 
     // MARK: - Inits

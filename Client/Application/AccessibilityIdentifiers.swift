@@ -126,6 +126,7 @@ public struct AccessibilityIdentifiers {
         static let doneButton = "doneButtonTabTray"
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
+        static let syncDataButton = "syncDataButton"
     }
 
     struct LibraryPanels {
@@ -334,6 +335,8 @@ public struct AccessibilityIdentifiers {
         static let closeButton = "PhotonMenu.close"
         static let view = "Action Sheet"
         static let tableView = "Context Menu"
+        static let pasteAction = "pasteAction"
+        static let pasteAndGoAction = "pasteAndGoAction"
     }
 
     struct Alert {

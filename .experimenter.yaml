@@ -31,14 +31,6 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
-engagement-notification-feature:
-  description: "The feature that controls the engagement notifications.\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    engagement-notification-feature-status:
-      type: boolean
-      description: "If true, we will allow user to use the engagement notification feature"
 etp-coordinator-refactor:
   description: "This feature is for managing the roll out of the ETP coordinator code as part of the changes on the navigation in the app\n"
   hasExposure: true
@@ -98,16 +90,13 @@ library-coordinator-refactor:
       type: boolean
       description: "Enables the feature\n"
 messaging:
-  description: "Configuration for the messaging system.\nIn practice this is a set of growable lookup tables for the message controller to piece together.\n"
+  description: "The in-app messaging system\n"
   hasExposure: true
   exposureDescription: ""
   variables:
     actions:
       type: json
       description: A growable map of action URLs.
-    message-under-experiment:
-      type: string
-      description: Id or prefix of the message under experiment.
     messages:
       type: json
       description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.\n"

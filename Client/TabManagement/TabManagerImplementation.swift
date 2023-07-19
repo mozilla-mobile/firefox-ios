@@ -107,7 +107,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     /// Creates the webview so needs to live on the main thread
     @MainActor
     private func generateTabs(from windowData: WindowData) async {
-        for tabData in windowData.tabData {
+        let filteredTabs = filterPrivateTabs(from: windowData,
+                                             clearPrivateTabs: shouldClearPrivateTabs())
+
+        for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
             newTab.url = URL(string: tabData.siteUrl)
             newTab.lastTitle = tabData.title
@@ -130,6 +133,25 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 selectTab(newTab)
             }
         }
+
+        // If tabToSelect is nil after restoration, force selection of first tab normal tab
+        if selectedTab == nil {
+            guard let tabToSelect = tabs.first(where: { !$0.isPrivate }) else {
+                selectTab(addTab())
+                return
+            }
+
+            selectTab(tabToSelect)
+        }
+    }
+
+    private func filterPrivateTabs(from windowData: WindowData, clearPrivateTabs: Bool) -> [TabData] {
+        var savedTabs = windowData.tabData
+        if clearPrivateTabs {
+            savedTabs = windowData.tabData.filter { !$0.isPrivate }
+        }
+
+        return savedTabs
     }
 
     /// Creates the webview so needs to live on the main thread
@@ -164,7 +186,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
-            await tabDataStore.saveWindowData(window: windowData, forced: false)
+            await tabDataStore.saveWindowData(window: windowData, forced: forced)
         }
     }
 

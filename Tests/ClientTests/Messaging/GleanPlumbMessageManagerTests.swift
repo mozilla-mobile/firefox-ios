@@ -6,6 +6,7 @@ import XCTest
 import Glean
 
 @testable import Client
+import MozillaAppServices
 
 class GleanPlumbMessageManagerTests: XCTestCase {
     var subject: GleanPlumbMessageManager!
@@ -20,7 +21,12 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         applicationHelper = MockApplicationHelper()
-        subject = GleanPlumbMessageManager(messagingStore: messagingStore, applicationHelper: applicationHelper)
+        subject = GleanPlumbMessageManager(
+            helperUtility: MockNimbusMessagingHelperUtility(),
+            messagingStore: messagingStore,
+            applicationHelper: applicationHelper,
+            messagingFeature: FxNimbus.shared.features.messaging
+        )
     }
 
     override func tearDown() {
@@ -30,12 +36,24 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         subject = nil
     }
 
-    func testManagerHasMessage() {
-        let messageForSurface = subject.hasMessage(for: .newTabCard)
-        XCTAssertTrue(messageForSurface)
+    func testMessagingFeatureIsCoenrolling() {
+        XCTAssertTrue(FxNimbus.shared.getCoenrollingFeatureIds().contains("messaging"))
     }
 
     func testManagerGetMessage() {
+        let hardcodedNimbusFeatures =
+            HardcodedNimbusFeatures(with: [
+                "messaging": [
+                    "messages": [
+                        "default-browser": [
+                            "trigger": ["ALWAYS"]
+                        ]
+                    ]
+                ]
+            ]
+        )
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
         guard let message = subject.getNextMessage(for: .newTabCard) else {
             XCTFail("Expected to retrieve message")
             return
@@ -43,6 +61,141 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
         subject.onMessageDisplayed(message)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.shown)
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
+    }
+
+    func testManagerGetMessage_happyPath_bySurface() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        let expectedId = "infoCard"
+        let messages = [
+            createMessage(messageId: "notification", surface: .notification),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
+    }
+
+    func testManagerGetMessage_happyPath_byTrigger() throws {
+        let expectedId = "infoCard"
+        let messages = [
+            createMessage(messageId: "infoCard-notyet", surface: .newTabCard, trigger: ["false"]),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+    }
+
+    func testManagerGetMessage_happyPath_byMultipleTriggers() throws {
+        let expectedId = "infoCard"
+        let messages = [
+            // The  trigger expressions _all_ have to be true in order for the messsage to be shown.
+            createMessage(messageId: "infoCard-notyet", surface: .newTabCard, trigger: ["true", "false"]),
+            createMessage(messageId: expectedId, surface: .newTabCard, trigger: ["true", "true"])
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+    }
+
+    func testManagerGetMessage_experiments_exposureEvents() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        let expectedId = "infoCard"
+        let experiment = "my-experiment"
+        let messages = [
+            createMessage(messageId: expectedId, surface: .newTabCard, experiment: experiment)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)
+    }
+
+    func testManagerGetMessage_experiments_controlMessages() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 0)
+
+        let expectedId = "infoCard"
+        let experiment = "my-experiment"
+        let messages = [
+            createMessage(messageId: "control", surface: .newTabCard, experiment: experiment, isControl: true),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 1)
+
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)
+    }
+
+    func testManagerGetMessage_experiments_malformedControlMessages() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 0)
+
+        let expectedId = "infoCard"
+        let messages = [
+            createMessage(messageId: "control", surface: .newTabCard, isControl: true),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 1)
+
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
+        XCTAssertEqual(hardcodedNimbusFeatures.getMalformed(for: "messaging"), "control")
+    }
+
+    func testManagerGetMessage_experiments_multiplControlMessages() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control-1").impressions, 0)
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control-2").impressions, 0)
+
+        let expectedId = "infoCard"
+        let experiment = "my-experiment"
+        let messages = [
+            createMessage(messageId: "control-1", surface: .newTabCard, experiment: experiment, isControl: true),
+            createMessage(messageId: "control-2", surface: .newTabCard, experiment: experiment, isControl: true),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control-1").impressions, 1)
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control-2").impressions, 1)
+
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 2)
     }
 
     func testManagerOnMessageDisplayed() {
@@ -55,7 +208,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     func testManagerOnMessagePressed() {
-        let message = createMessage(messageId: messageId)
+        let message = createMessage(messageId: messageId, action: "://test-action")
         subject.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
@@ -70,7 +223,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
         XCTAssertNotNil(applicationHelper.lastOpenURL)
-        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.hasPrefix(URL.mozInternalScheme))
+        XCTAssertEqual(applicationHelper.lastOpenURL?.absoluteString.hasPrefix(URL.mozInternalScheme), true)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
@@ -96,17 +249,34 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     // MARK: - Helper function
 
     private func createMessage(messageId: String,
-                               action: String = "MAKE_DEFAULT_BROWSER") -> GleanPlumbMessage {
-        let styleData = MockStyleData(priority: 50, maxDisplayCount: 3)
+                               action: String = "MAKE_DEFAULT_BROWSER",
+                               surface: MessageSurfaceId = .newTabCard,
+                               trigger: [String] = ["true"],
+                               experiment: String? = nil,
+                               isControl: Bool = false,
+                               maxDisplayCount: Int = 3
+    ) -> GleanPlumbMessage {
+        let styleData = MockStyleData(priority: 50, maxDisplayCount: maxDisplayCount)
 
         let messageMetadata = GleanPlumbMessageMetaData(id: messageId,
                                                         impressions: 0,
                                                         dismissals: 0,
                                                         isExpired: false)
+        let data = MessageData(
+            action: action,
+            buttonLabel: "buttonLabel-\(messageId)",
+            experiment: experiment,
+            isControl: isControl,
+            style: "DEFAULT",
+            surface: surface,
+            text: "text-\(messageId)",
+            title: "title-\(messageId)",
+            trigger: trigger)
+
         return GleanPlumbMessage(id: messageId,
-                                 data: MockMessageData(),
+                                 data: data,
                                  action: action,
-                                 triggers: ["ALWAYS"],
+                                 triggers: trigger,
                                  style: styleData,
                                  metadata: messageMetadata)
     }
@@ -114,41 +284,56 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
 // MARK: - MockGleanPlumbMessageStore
 class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
-    private var metadata: GleanPlumbMessageMetaData
+    private var metadatas = [String: GleanPlumbMessageMetaData]()
     var messageId: String
 
     var maxImpression = 3
 
     init(messageId: String) {
         self.messageId = messageId
-        metadata = GleanPlumbMessageMetaData(id: messageId,
-                                             impressions: 0,
-                                             dismissals: 0,
-                                             isExpired: false)
+    }
+
+    func metadata(for message: GleanPlumbMessage) -> GleanPlumbMessageMetaData {
+        return metadata(for: message.id)
+    }
+
+    func metadata(for id: String) -> GleanPlumbMessageMetaData {
+        if let data = metadatas[id] {
+            return data
+        }
+        metadatas[id] = GleanPlumbMessageMetaData(
+            id: messageId,
+            impressions: 0,
+            dismissals: 0,
+            isExpired: false)
+        return metadata(for: id)
     }
 
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {
-        return metadata
+        return metadata(for: messageId)
     }
 
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
+        let metadata = metadata(for: message)
         metadata.impressions += 1
 
         if metadata.impressions > maxImpression {
-            onMessageExpired(metadata, surface: message.data.surface, shouldReport: true)
+            onMessageExpired(metadata, surface: message.surface, shouldReport: true)
         }
     }
 
     func onMessagePressed(_ message: GleanPlumbMessage) {
-        onMessageExpired(metadata, surface: message.data.surface, shouldReport: false)
+        let metadata = metadata(for: message)
+        onMessageExpired(metadata, surface: message.surface, shouldReport: false)
     }
 
     func onMessageDismissed(_ message: GleanPlumbMessage) {
+        let metadata = metadata(for: message)
         metadata.dismissals += 1
-        onMessageExpired(metadata, surface: message.data.surface, shouldReport: false)
+        onMessageExpired(metadata, surface: message.surface, shouldReport: false)
     }
 
-    func onMessageExpired(_ message: GleanPlumbMessageMetaData, surface: MessageSurfaceId, shouldReport: Bool) {
+    func onMessageExpired(_ metadata: GleanPlumbMessageMetaData, surface: MessageSurfaceId, shouldReport: Bool) {
         metadata.isExpired = true
     }
 }

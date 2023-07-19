@@ -107,8 +107,8 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        waitForExistence(app.buttons["EmailSignIn.button"], timeout: TIMEOUT)
-        app.buttons["EmailSignIn.button"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton], timeout: TIMEOUT)
+        app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton].tap()
         checkFirefoxSyncScreenShown()
     }
 
@@ -173,7 +173,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
+        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -187,7 +187,8 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.textFields["url"])
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
+        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
+        waitForExistence(app.buttons["Go"])
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -256,6 +257,9 @@ class NavigationTest: BaseTestCase {
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.nowAt(NewTabScreen)
+        if app.buttons["Done"].exists {
+            app.buttons["Done"].tap()
+        }
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)

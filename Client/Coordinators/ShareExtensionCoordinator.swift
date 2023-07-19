@@ -41,7 +41,7 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         let shareExtension = ShareExtensionHelper(url: url, tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController { [weak self] completed, activityType in
             guard let self = self else { return }
-            self.handleShareExtensionCompletion(activityType: activityType)
+            self.handleShareExtensionCompletion(activityType: activityType, url: url)
         }
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
@@ -49,13 +49,19 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
             popoverPresentationController.permittedArrowDirections = popoverArrowDirection
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-        router.present(controller)
+        if let presentedViewController = router.navigationController.presentedViewController {
+            presentedViewController.dismiss(animated: true) { [weak self] in
+                self?.router.present(controller)
+            }
+        } else {
+            router.present(controller)
+        }
     }
 
-    private func handleShareExtensionCompletion(activityType: UIActivity.ActivityType?) {
+    private func handleShareExtensionCompletion(activityType: UIActivity.ActivityType?, url: URL) {
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
-            showSendToDevice()
+            showSendToDevice(url: url)
         case CustomActivityAction.copyLink.actionType:
             SimpleToast().showAlertWithText(
                 .AppMenu.AppMenuCopyURLConfirmMessage,
@@ -67,17 +73,18 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         }
     }
 
-    private func showSendToDevice() {
-        guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.canonicalURL?.displayURL
-        else { return }
+    private func showSendToDevice(url: URL) {
+        var shareItem: ShareItem!
+        if let selectedTab = tabManager.selectedTab, let url = selectedTab.canonicalURL?.displayURL {
+            shareItem = ShareItem(url: url.absoluteString, title: selectedTab.title)
+        } else {
+            shareItem = ShareItem(url: url.absoluteString, title: nil)
+        }
 
         let themeColors = themeManager.currentTheme.colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: url.absoluteString,
-                                  title: selectedTab.title)
 
         let helper = SendToDeviceHelper(
             shareItem: shareItem,

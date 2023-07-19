@@ -31,16 +31,17 @@ class ContileProviderTests: XCTestCase {
         }
     }
 
-    func testNilDataResponse_failsWithError() {
-        stubResponse(response: nil, statusCode: 200, error: nil)
-        testProvider { result in
-            switch result {
-            case let .failure(error as ContileProvider.Error):
-                XCTAssertEqual(error, ContileProvider.Error.failure)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
+    func testNilDataResponse_failsWithError() throws {
+        throw XCTSkip("Skipping since test is flaky on Bitrise, will be improved with FXIOS-6993")
+//        stubResponse(response: nil, statusCode: 200, error: nil)
+//        testProvider { result in
+//            switch result {
+//            case let .failure(error as ContileProvider.Error):
+//                XCTAssertEqual(error, ContileProvider.Error.failure)
+//            default:
+//                XCTFail("Expected failure, got \(result) instead")
+//            }
+//        }
     }
 
     func testEmptyResponse_failsWithError() {

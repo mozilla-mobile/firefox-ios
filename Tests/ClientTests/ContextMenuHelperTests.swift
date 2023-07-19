@@ -31,7 +31,7 @@ class ContextMenuHelperTests: XCTestCase {
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           theme: LightTheme())
-        let helper = HomepageContextMenuHelper(viewModel: viewModel)
+        let helper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: UIView())
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)
 

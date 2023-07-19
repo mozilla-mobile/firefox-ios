@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
 @testable import Client
@@ -165,6 +166,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var title: String? = "Test"
     var text: String = "This is a test"
     var buttonLabel: String?
+    var experiment: String?
 }
 
 // MARK: - MockStyleDataProtocol
@@ -181,7 +183,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     var recordedSurface: MessageSurfaceId?
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         recordedSurface = surface
-        if message?.data.surface == recordedSurface { return message }
+        if message?.surface == recordedSurface { return message }
 
         return nil
     }

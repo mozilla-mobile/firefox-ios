@@ -57,7 +57,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let helperUtility: NimbusMessagingHelperUtilityProtocol
     private let evaluationUtility: NimbusMessagingEvaluationUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
-    private let messagingFeature = FxNimbus.shared.features.messaging
+    private let messagingFeature: FeatureHolder<Messaging>
     private let applicationHelper: ApplicationHelper
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
@@ -73,12 +73,14 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
         messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
-        applicationHelper: ApplicationHelper = DefaultApplicationHelper()
+        applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+        messagingFeature: FeatureHolder<Messaging> = FxNimbus.shared.features.messaging
     ) {
         self.helperUtility = helperUtility
         self.evaluationUtility = messagingUtility
         self.messagingStore = messagingStore
         self.applicationHelper = applicationHelper
+        self.messagingFeature = messagingFeature
 
         onStartup()
     }
@@ -88,39 +90,78 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Perform any startup setup if necessary.
     func onStartup() { }
 
-    func hasMessage(for surface: MessageSurfaceId) -> Bool {
-        return getNextMessage(for: surface) != nil
+    /// Returns the next valid and triggered message for the surface, if one exists.
+    public func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
+        // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
+        return getNextMessage(for: surface, availableMessages: getMessages(messagingFeature.value()))
     }
 
-    /// Returns the next valid and triggered message for the surface, if one exists.
-    func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
-        // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
-        let feature = messagingFeature.value()
-        let messages = getMessages(feature)
-            .filter {
-                $0.data.surface == surface
-            }
-
+    public func getNextMessage(for surface: MessageSurfaceId, availableMessages: [GleanPlumbMessage]) -> GleanPlumbMessage? {
         // If `NimbusMessagingHelper` creation fails, we cannot continue with this
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.
         guard let messagingHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
+        var jexlCache = [String: Bool]()
 
-        // Take the first triggered message.
-        guard let message = getNextTriggeredMessage(messages, messagingHelper) else { return nil }
+        var excluded: Set<String> = []
+        return getNextMessage(for: surface,
+                              availableMessages: availableMessages,
+                              excluded: &excluded,
+                              messagingHelper: messagingHelper,
+                              jexlCache: &jexlCache)
+    }
 
-        // If it's a message under experiment, we need to react to whether it's a control or not.
-        if message.isUnderExperimentWith(key: feature.messageUnderExperiment) {
-            guard let nextTriggeredMessage = handleMessageUnderExperiment(message,
-                                                                          messages,
-                                                                          messagingHelper,
-                                                                          feature.onControl)
-            else { return nil }
+    // TODO: inout removal ticket https://mozilla-hub.atlassian.net/browse/FXIOS-6572
+    private func getNextMessage(
+            for surface: MessageSurfaceId,
+            availableMessages: [GleanPlumbMessage],
+            excluded: inout Set<String>,
+            messagingHelper: NimbusMessagingHelperProtocol,
+            jexlCache: inout [String: Bool]
+    ) -> GleanPlumbMessage? {
+        let feature = messagingFeature.value()
+        let message = availableMessages.first { message in
+            guard message.surface == surface &&
+                    !excluded.contains(message.id) else {
+                return false
+            }
+            do {
+                return try evaluationUtility.isMessageEligible(message,
+                                                               messageHelper: messagingHelper,
+                                                               jexlCache: &jexlCache)
+            } catch {
+                return false
+            }
+        }
+        guard let message = message else { return nil }
 
-            return nextTriggeredMessage
+        // 1. record an exposure event. We can tie the message directly to the experiment
+        if let slug = message.data.experiment {
+            messagingFeature.recordExperimentExposure(slug: slug)
+        } else if message.data.isControl {
+            onMalformedMessage(id: message.id, surface: surface)
         }
 
-        return message
+        // 2. handle control messages appropriately.
+        if !message.data.isControl {
+            return message
+        }
+
+        // Control messages need to do the bookkeeping *here*, rather than from where they're displayed,
+        // because they're not displayed.
+        messagingStore.onMessageDisplayed(message)
+
+        switch feature.onControl {
+        case .showNone:
+            return nil
+        case .showNextMessage:
+            excluded.insert(message.id)
+            return getNextMessage(for: surface,
+                                  availableMessages: availableMessages,
+                                  excluded: &excluded,
+                                  messagingHelper: messagingHelper,
+                                  jexlCache: &jexlCache)
+        }
     }
 
     /// Handle impression reporting and bookkeeping.
@@ -148,7 +189,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
         guard let url = URL(string: urlString) else {
-            self.onMalformedMessage(id: message.id, surface: message.data.surface)
+            self.onMalformedMessage(id: message.id, surface: message.surface)
             return
         }
 
@@ -185,6 +226,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     }
 
     func onMalformedMessage(id: String, surface: MessageSurfaceId) {
+        messagingFeature.recordMalformedConfiguration(with: id)
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .application,
@@ -276,62 +318,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         )
     }
 
-    /// From the list of messages that are well-formed and non-expired, we return the next / first triggered message.
-    ///
-    /// - Returns: The next triggered message, if one exists.
-    private func getNextTriggeredMessage(_ messages: [GleanPlumbMessage], _ helper: NimbusMessagingHelperProtocol) -> GleanPlumbMessage? {
-        var jexlCache = [String: Bool]()
-        return messages.first { message in
-            do {
-                return try evaluationUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
-            } catch {
-                return false
-            }
-        }
-    }
-
-    /// If a message is under experiment, we need to handle it a certain way.
-    ///
-    /// First, messages under experiment should always report exposure.
-    ///
-    /// Second, for messages under experiment, there's a chance we may encounter a "control message." If a message
-    /// under experiment IS a control message, we're told how the surface should handle it.
-    ///
-    /// How we handle a control message is provided by `nimbus.fml.yaml`.
-    ///
-    /// The only two options are:
-    /// - showNextMessage
-    /// - showNone
-    ///
-    /// - Returns: The next triggered message, if one exists.
-    private func handleMessageUnderExperiment(_ message: GleanPlumbMessage,
-                                              _ messages: [GleanPlumbMessage],
-                                              _ helper: NimbusMessagingHelperProtocol,
-                                              _ onControl: ControlMessageBehavior) -> GleanPlumbMessage? {
-        messagingFeature.recordExposure()
-        let onControlActions = onControl
-
-        if !message.data.isControl { return message }
-
-        switch onControlActions {
-        case .showNone:
-            return nil
-        case .showNextMessage:
-            var jexlCache = [String: Bool]()
-            return messages.first { message in
-                do {
-                    return try evaluationUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
-                    && !message.data.isControl
-                } catch {
-                    onMalformedMessage(id: message.id, surface: message.data.surface)
-                    return false
-                }
-            }
-        }
-    }
-
     private func baseTelemetryExtras(using message: GleanPlumbMessage) -> [String: String] {
         return [MessagingKey.messageKey.rawValue: message.id,
-                MessagingKey.messageSurface.rawValue: message.data.surface.rawValue]
+                MessagingKey.messageSurface.rawValue: message.surface.rawValue]
     }
 }

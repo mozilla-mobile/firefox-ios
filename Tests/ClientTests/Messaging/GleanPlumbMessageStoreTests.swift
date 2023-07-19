@@ -73,6 +73,7 @@ class MockMessageData: MessageDataProtocol {
     var title: String?
     var text: String
     var buttonLabel: String?
+    var experiment: String?
 
     init(
         surface: MessageSurfaceId = .newTabCard,
