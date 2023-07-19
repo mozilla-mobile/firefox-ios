@@ -46,7 +46,7 @@ fakespot-feature:
   variables:
     config:
       type: json
-      description: "A List of products configurations\n"
+      description: "A Map of website configurations\n"
     status:
       type: boolean
       description: "Whether the Fakespot feature is enabled or disabled\n"
