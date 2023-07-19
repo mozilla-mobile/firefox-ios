@@ -11,7 +11,11 @@ protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
 
-class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
+protocol LibraryNavigationHandler: AnyObject {
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+}
+
+class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigationHandler {
     private let profile: Profile
     private let tabManager: TabManager
     private let libraryViewController: LibraryViewController
@@ -32,10 +36,41 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate {
     func start(with homepanelSection: Route.HomepanelSection) {
         libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.delegate = self
+        libraryViewController.navigationHandler = self
         libraryViewController.resetHistoryPanelPagination()
     }
 
-    // MARK: - LibraryCoordinatorDelegate
+    // MARK: - LibraryNavigationHandler
+
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController) {
+        switch panelType {
+        case .bookmarks:
+            makeBookmarksCoordinator(navigationController: navigationController)
+        case .history:
+            // HistoryCoordinator will be implemented with FXIOS-6978
+            break
+        case .downloads:
+            // DownloadsCoordinator will be implemented with FXIOS-6978
+            break
+        case .readingList:
+            // ReadingListCoordinator will be implemented with FXIOS-6978
+            break
+        }
+    }
+
+    private func makeBookmarksCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
+        let router = DefaultRouter(navigationController: navigationController)
+        let bookmarksCoordinator = BookmarksCoordinator(
+            router: router,
+            profile: profile,
+            parentCoordinator: parentCoordinator
+        )
+        add(child: bookmarksCoordinator)
+        (navigationController.topViewController as? BookmarksPanel)?.bookmarkCoordinatorDelegate = bookmarksCoordinator
+    }
+
+    // MARK: - LibraryPanelDelegate
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         parentCoordinator?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)

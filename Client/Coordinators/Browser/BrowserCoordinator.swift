@@ -344,6 +344,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
     }
+
     // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
 
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
@@ -511,10 +512,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+        router.dismiss()
     }
 
     func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
+        router.dismiss()
     }
 
     // MARK: - ParentCoordinatorDelegate

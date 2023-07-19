@@ -830,6 +830,8 @@
 		C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */; };
 		C23889E32A50319A00429673 /* ShareExtensionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */; };
 		C23889E52A50329200429673 /* MockParentCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinatorDelegate.swift */; };
+		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
+		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
 		C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */; };
 		C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */; };
 		C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B982A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift */; };
@@ -5414,6 +5416,8 @@
 		C2A943CF800ADCD8E96ACA5B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
+		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewCell.swift; sourceTree = "<group>"; };
 		C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedSubtitleTableViewCell.swift; sourceTree = "<group>"; };
 		C2D71B982A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedLeftAlignedTableViewCell.swift; sourceTree = "<group>"; };
@@ -8231,13 +8235,13 @@
 				8AF99B5029EF1BB600108DEC /* Browser */,
 				8AFCE50229DDC96B00B1B253 /* LaunchView */,
 				8A832A8E29DC96AD0025D5DD /* Launch */,
+				C2D1A10B2A66C61600205DCC /* Library */,
 				8AF10D8D29D773FC0086351D /* Scene */,
 				8A93F86E29D3A147004159D9 /* Router */,
 				8A1E93E92A3CDC6100DD540A /* BaseCoordinator.swift */,
 				8A93F85D29D36DA9004159D9 /* Coordinator.swift */,
 				8A76B01329F6E45600A82607 /* CoordinatorFlagManager.swift */,
 				8A83B7452A264FA0002FF9AC /* SettingsCoordinator.swift */,
-				8A83B7472A264FB7002FF9AC /* LibraryCoordinator.swift */,
 				F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */,
 				5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */,
 				C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */,
@@ -8252,6 +8256,7 @@
 				5AE371802A4DD0CE0092A760 /* Mocks */,
 				8AFCE50329DDCD3F00B1B253 /* LaunchView */,
 				8AF10D8829D713E70086351D /* Launch */,
+				C2D1A10E2A67E71300205DCC /* Library */,
 				8A93F86429D37331004159D9 /* DefaultRouterTests.swift */,
 				8A93F86929D37FC9004159D9 /* BaseCoordinatorTests.swift */,
 				C8EDDBEF29DD83FC003A4C07 /* RouteTests.swift */,
@@ -8261,7 +8266,6 @@
 				8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */,
 				C81C66C329F00D1000F6422F /* UserActivityRouteTests.swift */,
 				8A83B7492A265044002FF9AC /* SettingsCoordinatorTests.swift */,
-				8A83B74B2A265061002FF9AC /* LibraryCoordinatorTests.swift */,
 				F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */,
 				5A81C5DC2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift */,
 				C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */,
@@ -8688,6 +8692,24 @@
 				6669B5E1211418A200CA117B /* WebsiteDataSearchResultsViewController.swift */,
 			);
 			path = WebsiteDataManagement;
+			sourceTree = "<group>";
+		};
+		C2D1A10B2A66C61600205DCC /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				8A83B7472A264FB7002FF9AC /* LibraryCoordinator.swift */,
+				C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		C2D1A10E2A67E71300205DCC /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				8A83B74B2A265061002FF9AC /* LibraryCoordinatorTests.swift */,
+				C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */,
+			);
+			path = Library;
 			sourceTree = "<group>";
 		};
 		C2D71B932A384EF6003DEC7A /* ThemedTableViewCells */ = {
@@ -12263,6 +12285,7 @@
 				8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */,
 				8A5D1CA82A30D6D3005AD35C /* HomeSetting.swift in Sources */,
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
+				C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */,
@@ -12988,6 +13011,7 @@
 				F98CB66E2A4123F1005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift in Sources */,
 				8A2366FA28A302E500846D1B /* MockSponsoredPocketAPI.swift in Sources */,
 				DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */,
+				C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */,
 				8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */,
