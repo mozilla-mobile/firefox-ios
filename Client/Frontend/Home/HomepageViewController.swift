@@ -301,8 +301,8 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
         // Force the entire collection view to re-layout
         viewModel.refreshData(for: traitCollection, size: newSize)
-        collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
+        collectionView.collectionViewLayout.invalidateLayout()
 
         // This pushes a reload to the end of the main queue after all the work associated with
         // rotating has been completed. This is important because some of the cells layout are
@@ -760,8 +760,8 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
-            self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.reloadData()
+            self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
                             category: .homepage)
