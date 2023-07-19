@@ -24,15 +24,14 @@ import Shared
  
  */
 
-class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
-    struct UX {
+class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable, Themeable {
+    private struct UX {
         static let textOffset: CGFloat = 20
         static let textOffsetSmall: CGFloat = 13
         static let titleSize: CGFloat = 28
         static let titleSizeSmall: CGFloat = 24
         static let titleSizeLarge: CGFloat = 34
         static let ctaButtonCornerRadius: CGFloat = 10
-        static let ctaButtonColor = UIColor.Photon.Blue50
         static let ctaButtonWidth: CGFloat = 350
         static let ctaButtonWidthSmall: CGFloat = 300
         static let ctaButtonBottomSpace: CGFloat = 60
@@ -41,11 +40,13 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     // MARK: - Properties
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     var onViewDismissed: (() -> Void)?
 
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-    let theme = LegacyThemeManager.instance
 
     // Private vars
     private var titleFontSize: CGFloat {
@@ -110,7 +111,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // MARK: - Inits
 
-    init() {
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -121,7 +125,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
+
         initialViewSetup()
+        listenForThemeChange(view)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -154,14 +161,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         closeButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
         goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
 
-        updateTheme()
         setupLayout()
-
-        // Theme change notification
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTheme),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
     }
 
     private func setupLayout() {
@@ -269,25 +269,21 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         }
     }
 
-    // Theme
-    @objc
-    func updateTheme() {
-        let textColor: UIColor = theme.currentName == .dark ? .white : .black
+    // MARK: Themeable
+    func applyTheme() {
+        let theme = themeManager.currentTheme
 
-        view.backgroundColor = .systemBackground
-        titleLabel.textColor = textColor
+        view.backgroundColor = theme.colors.layer1
+        titleLabel.textColor = theme.colors.textPrimary
 
-        descriptionText.textColor = textColor
-        descriptionLabel1.textColor = textColor
-        descriptionLabel2.textColor = textColor
-        descriptionLabel3.textColor = textColor
+        descriptionText.textColor = theme.colors.textPrimary
+        descriptionLabel1.textColor = theme.colors.textPrimary
+        descriptionLabel2.textColor = theme.colors.textPrimary
+        descriptionLabel3.textColor = theme.colors.textPrimary
 
-        goToSettingsButton.backgroundColor = UX.ctaButtonColor
-        goToSettingsButton.setTitleColor(.white, for: .normal)
-        closeButton.tintColor = .secondaryLabel
-    }
+        goToSettingsButton.backgroundColor = theme.colors.actionPrimary
+        goToSettingsButton.setTitleColor(theme.colors.textInverted, for: .normal)
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+        closeButton.tintColor = theme.colors.textSecondary
     }
 }
