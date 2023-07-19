@@ -17,9 +17,11 @@ protocol StatusBarScrollDelegate: AnyObject {
 class StatusBarOverlay: UIView,
                         ThemeApplicable,
                         StatusBarScrollDelegate,
-                        SearchBarLocationProvider {
+                        SearchBarLocationProvider,
+                        Notifiable {
     private var savedBackgroundColor: UIColor?
     var hasTopTabs = false
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
@@ -27,8 +29,24 @@ class StatusBarOverlay: UIView,
     /// 1 = status bar background is opaque
     private var scrollOffset: CGFloat = 0
 
+    // MARK: Initializer
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupNotifications(forObserver: self,
+                           observing: [.WallpaperDidChange])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     func resetState() {
-        scrollOffset = 1
+        scrollOffset = WallpaperManager().currentWallpaper.type == .defaultWallpaper ? 1 : 0
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 
@@ -68,5 +86,17 @@ class StatusBarOverlay: UIView,
             offset = 0
         }
         scrollOffset = offset
+    }
+
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .WallpaperDidChange:
+            ensureMainThread {
+                self.resetState()
+            }
+        default: break
+        }
     }
 }
