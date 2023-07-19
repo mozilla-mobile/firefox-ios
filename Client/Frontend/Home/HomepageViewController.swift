@@ -346,9 +346,12 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                     statusBarFrame: statusBarFrame,
-                                                     theme: themeManager.currentTheme)
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: themeManager.currentTheme)
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
