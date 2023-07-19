@@ -7,9 +7,6 @@ import Redux
 
 protocol ThemeManagerProvider {
     var systemThemeIsOn: Bool { get }
-//    func setSystemTheme(isOn: Bool)
-//    func setAutomaticBrightness(isOn: Bool)
-//    func brightnessChanged(_ value: Float)
 }
 
 class ThemeManagerMiddleware: ThemeManagerProvider {
@@ -26,33 +23,25 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     lazy var setSystemTheme: Middleware<AppState> = { state, action in
         switch action {
-        case ThemeSettingsAction.enableSystemAppearance(let enabled):
-            self.themeManager.systemThemeIsOn = enabled
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
         case ThemeSettingsAction.fetchThemeManagerValues:
             let currentThemeState = self.getThemeManagerCurrentState()
-            store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
+            }
+        case ThemeSettingsAction.enableSystemAppearance(let enabled):
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.themeManager.systemThemeIsOn = enabled
+                store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
+            }
         default:
             break
         }
     }
 
-//    func setSystemTheme(isOn: Bool) {
-//        themeManager.systemThemeIsOn = isOn
-//    }
-//
-//    func setAutomaticBrightness(isOn: Bool) {
-//        themeManager.automaticBrightnessIsOn = isOn
-//    }
-//
-//    func brightnessChanged(_ value: Float) {
-//        themeManager.automaticBrightnessValue = value
-//    }
-
     func getThemeManagerCurrentState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
                            switchMode: .manual(.dark),
-                           systemBrightnessValue: 0,
-                           userBrightnessThreshold: 0)
+                           systemBrightnessValue: 0.5,
+                           userBrightnessThreshold: 0.6)
     }
 }

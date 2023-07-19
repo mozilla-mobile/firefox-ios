@@ -45,9 +45,15 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: Needs to be trigger before
-        store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
-        store.dispatch(ThemeSettingsAction.fetchThemeManagerValues)
+
+        if isReduxIntegrationEnabled {
+            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
+            store.dispatch(ThemeSettingsAction.fetchThemeManagerValues)
+            store.subscribe(self, transform: {
+                $0.select(ThemeSettingsState.init)
+            })
+        }
+
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
@@ -58,9 +64,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                selector: #selector(brightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
-        store.subscribe(self, transform: {
-            $0.select(ThemeSettingsState.init)
-        })
     }
 
     func newState(state: ThemeSettingsState) {

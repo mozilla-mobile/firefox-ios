@@ -55,11 +55,10 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        print("YRD action \(action)")
         let newState = reducer(state, action)
 
         middlewares.forEach { middleware in
-            middleware(state, action)
+            middleware(newState, action)
         }
 
         state = newState

@@ -12,21 +12,6 @@ struct AppState: StateType {
         AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
-//    func getData<S: State>(for screen: AppScreen) -> S {
-//        return activeScreens.screens
-//            .compactMap {
-//                switch ($0, screen) {
-//                case (.themeSettings(let state), .themeSettings): return state as? State
-//                }
-//            }
-//            .first
-//    }
-
-    // laurie
-//    func viewFactory<T: UIView>(_ t: T.Type, numberOfView: Int) -> [T] {
-//        return Array(repeating: T(), count: numberOfView)
-//    }
-
     func screenState<S: ReduxState>(_ s: S.Type, for screen: AppScreen) -> S? {
         return activeScreens.screens
             .compactMap {
