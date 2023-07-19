@@ -249,12 +249,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Button Actions
     @objc
     private func dismissAnimated() {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            // Note: this could be one closure only and not two with goToSettings
-            viewModel.didAskToDismissView?()
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
+        viewModel.didAskToDismissView?()
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
 
@@ -264,9 +259,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
 
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            DefaultApplicationHelper().openSettings()
-        }
+        DefaultApplicationHelper().openSettings()
     }
 
     // MARK: Themeable

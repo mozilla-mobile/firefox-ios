@@ -16,14 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var logger: Logger = DefaultLogger.shared
 
-    /// Do not use, this will be removed as part of FXIOS-6036
-    var browserViewController: BrowserViewController!
-
     /// This is a temporary work around until we have the architecture to properly replace the use cases where this code is used
     /// Do not use in new code under any circumstances
     var coordinatorBrowserViewController: BrowserViewController {
-        if CoordinatorFlagManager.isCoordinatorEnabled,
-           let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
+        if let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
             return browserCoordinator.browserViewController
         } else {
             logger.log("BrowserViewController couldn't be retrieved", level: .fatal, category: .lifecycle)
@@ -57,32 +53,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Experiments.shared.initializeTooling(url: url)
         }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
-                                   prefs: profile.prefs)
+        routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
+                               prefs: profile.prefs)
 
-            sceneCoordinator = SceneCoordinator(scene: scene)
-            sceneCoordinator?.start()
+        sceneCoordinator = SceneCoordinator(scene: scene)
+        sceneCoordinator?.start()
 
-            // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
-            // This is a hacky fix and a long term solution will be add in FXIOS-6828
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.handle(connectionOptions: connectionOptions)
-            }
-        } else {
-            let window = configureWindowFor(scene)
-            let rootVC = configureRootViewController()
-
-            window.rootViewController = rootVC
-            window.makeKeyAndVisible()
-
-            self.window = window
-
-            // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
-            // This is a hacky fix and a long term solution will be add in FXIOS-6828
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
-            }
+        // Adding a half second delay to ensure start up actions have resolved prior to attempting deeplink actions
+        // This is a hacky fix and a long term solution will be add in FXIOS-6828
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.handle(connectionOptions: connectionOptions)
         }
     }
 
@@ -118,29 +98,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            guard let url = URLContexts.first?.url,
-                  let route = routeBuilder.makeRoute(url: url) else { return }
-            sceneCoordinator?.findAndHandle(route: route)
-        } else {
-            guard let url = URLContexts.first?.url,
-                  let routerPath = NavigationPath(url: url) else { return }
-
-            if profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
-                profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-
-                var object = TelemetryWrapper.EventObject.url
-                if case .text = routerPath {
-                    object = .searchText
-                }
-
-                TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
-            }
-
-            DispatchQueue.main.async {
-                NavigationPath.handle(nav: routerPath, with: self.browserViewController)
-            }
-        }
+        guard let url = URLContexts.first?.url,
+              let route = routeBuilder.makeRoute(url: url) else { return }
+        sceneCoordinator?.findAndHandle(route: route)
 
         sessionManager.launchSessionProvider.openedFromExternalSource = true
     }
@@ -149,30 +109,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
-            sceneCoordinator?.findAndHandle(route: route)
-        } else {
-            if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-                browserViewController.openBlankNewTab(focusLocationField: false)
-            }
-
-            // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
-            // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
-            if let url = userActivity.webpageURL {
-                browserViewController.switchToTabForURLOrOpen(url)
-            }
-
-            // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
-            // open a new one.
-            if userActivity.activityType == CSSearchableItemActionType {
-                if let userInfo = userActivity.userInfo,
-                   let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                   let url = URL(string: urlString) {
-                    browserViewController.switchToTabForURLOrOpen(url)
-                }
-            }
-        }
+        guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
+        sceneCoordinator?.findAndHandle(route: route)
     }
 
     // MARK: - Performing Tasks
@@ -187,67 +125,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
-            guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) else { return }
-            sceneCoordinator?.findAndHandle(route: route)
-        } else {
-            QuickActionsImplementation().handleShortCutItem(
-                shortcutItem,
-                withBrowserViewController: browserViewController,
-                completionHandler: completionHandler
-            )
-        }
+        guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
+                                                 tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
+        else { return }
+        sceneCoordinator?.findAndHandle(route: route)
     }
 
     // MARK: - Misc. Helpers
-
-    private func configureWindowFor(_ scene: UIScene) -> UIWindow {
-        guard let windowScene = (scene as? UIWindowScene) else {
-            return UIWindow(frame: UIScreen.main.bounds)
-        }
-
-        windowScene.screenshotService?.delegate = self
-
-        let window = UIWindow(windowScene: windowScene)
-
-        // Setting the initial theme correctly as we don't have a window attached yet to let ThemeManager set it
-        var themeManager: ThemeManager = AppContainer.shared.resolve()
-        themeManager.window = window
-        window.overrideUserInterfaceStyle = themeManager.currentTheme.type.getInterfaceStyle()
-
-        return window
-    }
-
-    private func configureRootViewController() -> UINavigationController {
-        let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
-
-        // TODO: When we begin to support multiple scenes, remove this line and the reference to BVC in SceneDelegate.
-        self.browserViewController = browserViewController
-
-        let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-
-        return navigationController
-    }
-
-    /// Handling either deeplinks or shortcuts at launch is slightly different than when the scene has been backgrounded.
-    private func handleDeeplinkOrShortcutsAtLaunch(
-        with connectionOptions: UIScene.ConnectionOptions,
-        on scene: UIScene
-    ) {
-        if !connectionOptions.urlContexts.isEmpty {
-            self.scene(scene, openURLContexts: connectionOptions.urlContexts)
-        }
-
-        if let shortcutItem = connectionOptions.shortcutItem {
-            QuickActionsImplementation().handleShortCutItem(
-                shortcutItem,
-                withBrowserViewController: browserViewController,
-                completionHandler: { _ in }
-            )
-        }
-    }
 
     private func handle(connectionOptions: UIScene.ConnectionOptions) {
         if let context = connectionOptions.urlContexts.first,
@@ -264,34 +148,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
            let route = routeBuilder.makeRoute(shortcutItem: shortcut,
                                               tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
             sceneCoordinator?.findAndHandle(route: route)
-        }
-    }
-}
-
-@available(iOS 14, *)
-extension SceneDelegate: UIScreenshotServiceDelegate {
-    func screenshotService(_ screenshotService: UIScreenshotService,
-                           generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void) {
-        guard browserViewController.homepageViewController?.view.alpha != 1,
-              browserViewController.presentedViewController == nil,
-              let webView = tabManager.selectedTab?.currentWebView(),
-              let url = webView.url,
-              InternalURL(url) == nil else {
-            completionHandler(nil, 0, .zero)
-            return
-        }
-
-        var rect = webView.scrollView.frame
-        rect.origin.x = webView.scrollView.contentOffset.x
-        rect.origin.y = webView.scrollView.contentSize.height - rect.height - webView.scrollView.contentOffset.y
-
-        webView.createPDF { result in
-            switch result {
-            case .success(let data):
-                completionHandler(data, 0, rect)
-            case .failure:
-                completionHandler(nil, 0, .zero)
-            }
         }
     }
 }
