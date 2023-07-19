@@ -26,7 +26,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         // 24 is the spacing needed between the header and the table cell, left in this form so it's not overlooked
         static let headerPreferredHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 + 24 : 84 + 24
         static let estimatedRowHeight: CGFloat = 86
-        static let closeButtonMarginAndWidth = 46.0
+        static let closeButtonMarginAndWidth: CGFloat = 46.0
     }
 
     var notificationCenter: NotificationProtocol
