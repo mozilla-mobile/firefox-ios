@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-class CardComponent: UIView, ThemeApplicable {
+class CardContainer: UIView, ThemeApplicable {
     struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
