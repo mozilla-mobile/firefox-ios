@@ -34,7 +34,8 @@ class StatusBarOverlay: UIView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange])
+                           observing: [.WallpaperDidChange,
+                                       .SearchBarPositionDidChange])
     }
 
     required init?(coder: NSCoder) {
@@ -46,7 +47,8 @@ class StatusBarOverlay: UIView,
     }
 
     func resetState() {
-        scrollOffset = WallpaperManager().currentWallpaper.type == .defaultWallpaper ? 1 : 0
+        let needsOpaque = WallpaperManager().currentWallpaper.type == .defaultWallpaper || !isBottomSearchBar
+        scrollOffset = needsOpaque ? 1 : 0
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 
@@ -92,7 +94,7 @@ class StatusBarOverlay: UIView,
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .WallpaperDidChange:
+        case .WallpaperDidChange, .SearchBarPositionDidChange:
             ensureMainThread {
                 self.resetState()
             }
