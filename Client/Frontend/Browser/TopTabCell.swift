@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import SiteImageView
+import UIKit
 
 class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCell {
     struct UX {

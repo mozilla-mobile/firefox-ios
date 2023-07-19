@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Storage
 import Shared
+import UIKit
 
 // MARK: - PhotonActionSheetViewDelegate
 protocol PhotonActionSheetViewDelegate: AnyObject {

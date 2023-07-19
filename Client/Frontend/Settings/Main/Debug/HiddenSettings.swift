@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /// Used for only for debugging purposes. These settings are hidden behind a
 /// 5-tap gesture on the Firefox version cell in the Settings Menu

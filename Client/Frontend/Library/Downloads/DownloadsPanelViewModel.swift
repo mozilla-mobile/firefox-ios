@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 class DownloadsPanelViewModel {
     private var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()

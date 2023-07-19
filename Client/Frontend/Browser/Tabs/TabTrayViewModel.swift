@@ -4,6 +4,7 @@
 
 import Shared
 import Storage
+import UIKit
 
 class TabTrayViewModel {
     enum Segment: Int, CaseIterable {

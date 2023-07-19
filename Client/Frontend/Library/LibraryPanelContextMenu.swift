@@ -4,6 +4,7 @@
 
 import Storage
 import Shared
+import UIKit
 
 protocol LibraryPanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?

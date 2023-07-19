@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
     func didClick(item: SingleActionViewModel?)

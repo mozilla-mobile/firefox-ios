@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)

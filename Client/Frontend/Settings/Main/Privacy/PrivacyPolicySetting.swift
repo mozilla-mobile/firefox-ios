@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 class PrivacyPolicySetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?

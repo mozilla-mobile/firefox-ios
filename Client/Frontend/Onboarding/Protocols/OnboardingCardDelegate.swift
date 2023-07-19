@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 /// The ``OnboardingCardDelegate`` is responsible for handling a variety of
 /// functions relating to onboarding actions taken by the user that are

@@ -6,6 +6,7 @@ import Foundation
 import AVFoundation
 import Shared
 import Common
+import UIKit
 
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)

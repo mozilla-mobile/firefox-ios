@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 protocol OnboardingViewControllerProtocol {
     var pageController: UIPageViewController { get }

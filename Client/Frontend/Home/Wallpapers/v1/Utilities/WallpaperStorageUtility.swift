@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 enum WallpaperStorageError: Error {
     case fileDoesNotExistError

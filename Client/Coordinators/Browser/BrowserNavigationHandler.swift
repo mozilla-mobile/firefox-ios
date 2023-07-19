@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 protocol BrowserNavigationHandler: AnyObject {
     /// Asks to show a settings page, can be a general settings page or a child page

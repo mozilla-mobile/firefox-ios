@@ -87,7 +87,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
                                               buttonView: button,
-                                              toastContainer: alertContainer)
+                                              toastContainer: contentContainer)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
@@ -223,7 +223,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             show(toast: toast)
         default:
             SimpleToast().showAlertWithText(message,
-                                            bottomContainer: alertContainer,
+                                            bottomContainer: contentContainer,
                                             theme: themeManager.currentTheme)
         }
     }

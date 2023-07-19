@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 struct SimpleToast: ThemeApplicable {
     private let toastLabel: UILabel = .build { label in

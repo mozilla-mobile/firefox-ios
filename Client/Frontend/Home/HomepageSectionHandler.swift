@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 // Protocol for each section in Firefox Home page view controller
 // to handle click and cell setup

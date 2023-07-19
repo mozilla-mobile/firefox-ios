@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 class CopyLinkActivity: CustomAppActivity {
     // Copy link is only available for URL that are not files

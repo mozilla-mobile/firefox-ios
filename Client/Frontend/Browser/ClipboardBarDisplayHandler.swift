@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)

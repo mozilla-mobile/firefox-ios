@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /**
  * A specialized version of UIButton for use in SnackBars. These are displayed evenly

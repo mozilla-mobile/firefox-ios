@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /**
  * A special version of a snackbar that persists for at least a timeout. After that

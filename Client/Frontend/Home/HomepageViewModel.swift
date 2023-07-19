@@ -5,6 +5,7 @@
 import Common
 import MozillaAppServices
 import Shared
+import UIKit
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadView()

@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Shared
 import Storage
+import UIKit
 
 protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()

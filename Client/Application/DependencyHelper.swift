@@ -5,6 +5,7 @@
 import Storage
 import Shared
 import Common
+import UIKit
 
 class DependencyHelper {
     func bootstrapDependencies() {

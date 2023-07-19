@@ -31,12 +31,6 @@ features:
           stories appear on the homepage.
         type: Boolean
         default: false
-      jump-back-in-synced-tab:
-        description: >
-          This property defines whether the synced tab card
-          appears on the homepage in the jump back in section.
-        type: Boolean
-        default: true
     defaults:
       - channel: developer
         value: {
@@ -51,8 +45,7 @@ features:
             "status": true,
             "max-number-of-tiles": 2
           },
-          "pocket-sponsored-stories": true,
-          "jump-back-in-synced-tab": true
+          "pocket-sponsored-stories": true
         }
       - channel: beta
         value: {
@@ -67,8 +60,7 @@ features:
             "status": true,
             "max-number-of-tiles": 1
           },
-          "pocket-sponsored-stories": false,
-          "jump-back-in-synced-tab": true
+          "pocket-sponsored-stories": false
         }
 
 objects:

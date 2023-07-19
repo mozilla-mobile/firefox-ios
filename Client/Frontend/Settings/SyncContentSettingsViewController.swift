@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import Sync
 import Account
+import UIKit
 
 class ManageFxAccountSetting: Setting {
     let profile: Profile

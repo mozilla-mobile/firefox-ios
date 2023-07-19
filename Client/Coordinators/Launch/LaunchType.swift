@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import Shared
+import UIKit
 
 enum LaunchCoordinatorType {
     case SceneCoordinator, BrowserCoordinator

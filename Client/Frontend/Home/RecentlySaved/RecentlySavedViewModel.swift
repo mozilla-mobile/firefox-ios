@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Storage
 import Shared
+import UIKit
 
 struct RecentlySavedCellViewModel {
     let site: Site

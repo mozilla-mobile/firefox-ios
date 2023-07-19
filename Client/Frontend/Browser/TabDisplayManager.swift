@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import Common
+import UIKit
 
 extension UIGestureRecognizer {
     func cancel() {

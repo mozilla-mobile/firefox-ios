@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 
 class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate {
     private lazy var launchScreen = LaunchScreenView.fromNib()

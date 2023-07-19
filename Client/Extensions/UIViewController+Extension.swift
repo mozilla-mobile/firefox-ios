@@ -4,6 +4,7 @@
 
 import Shared
 import Common
+import UIKit
 
 enum NavigationItemLocation {
     case Left

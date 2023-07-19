@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishLaunch(from coordinator: LaunchCoordinator)

@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 // App-specific share sheet actions
 enum CustomActivityAction {

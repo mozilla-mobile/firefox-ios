@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 class SentryIDSetting: HiddenSetting {
     private weak var settingsDelegate: SharedSettingsDelegate?

@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Storage
+import UIKit
 
 class EnhancedTrackingProtectionMenuVM {
     // MARK: - Variables

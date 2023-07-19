@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 
 class ChangeToChinaSetting: HiddenSetting {
     override var title: NSAttributedString? {

@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 enum ThemedTableViewCellType {
     case standard, actionPrimary, destructive, disabled

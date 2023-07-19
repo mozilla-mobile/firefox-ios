@@ -6,6 +6,7 @@ import Foundation
 import SnapKit
 import Shared
 import Common
+import UIKit
 
 class TabsButton: UIButton, ThemeApplicable {
     struct UX {

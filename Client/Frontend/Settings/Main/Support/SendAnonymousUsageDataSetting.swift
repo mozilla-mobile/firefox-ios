@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 class SendAnonymousUsageDataSetting: BoolSetting {
     private weak var settingsDelegate: SupportSettingsDelegate?

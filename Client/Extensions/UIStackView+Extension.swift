@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 extension UIStackView {
     func toggleStackViewVisibility(show: Bool) {

@@ -5,6 +5,7 @@
 import Common
 import Shared
 import SiteImageView
+import UIKit
 
 enum OneLineTableViewCustomization {
     case regular

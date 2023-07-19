@@ -6,6 +6,7 @@ import Account
 import Common
 import Foundation
 import Shared
+import UIKit
 
 class ChinaSyncServiceSetting: Setting {
     private weak var settingsDelegate: SharedSettingsDelegate?

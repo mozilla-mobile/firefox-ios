@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 // MARK: - UISearchBarDelegate
 extension HistoryPanel: UISearchBarDelegate {

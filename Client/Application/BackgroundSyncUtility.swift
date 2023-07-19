@@ -5,6 +5,7 @@
 import Foundation
 import BackgroundTasks
 import Common
+import UIKit
 
 class BackgroundSyncUtility: BackgroundUtilityProtocol {
     let profile: Profile

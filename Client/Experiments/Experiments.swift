@@ -6,6 +6,7 @@ import Common
 import Foundation
 import MozillaAppServices
 import Shared
+import UIKit
 
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"

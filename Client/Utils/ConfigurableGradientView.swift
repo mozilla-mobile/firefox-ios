@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /// A view whose primary modifiable layer is a gradient layer
 public class ConfigurableGradientView: UIView {
