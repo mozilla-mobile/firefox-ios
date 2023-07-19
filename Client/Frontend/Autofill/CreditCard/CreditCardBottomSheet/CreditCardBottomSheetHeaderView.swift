@@ -17,7 +17,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         static let mainContainerElementsSpacing: CGFloat = 7.0
         static let bottomSpacing: CGFloat = 24.0
         static let logoSize: CGFloat = 36.0
-        static let closeButtonMarginAndWidth = 46.0
+        static let closeButtonMarginAndWidth: CGFloat = 46.0
     }
     public var titleLabelTrailingConstraint: NSLayoutConstraint!
 
