@@ -138,7 +138,6 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testMaxJumpBackInItemsToDisplay_compactSyncedTab() async {
         let subject = createSubject()
-        subject.featureFlags.set(feature: .jumpBackInSyncedTab, to: true)
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
 
         // iPhone layout portrait
@@ -157,7 +156,6 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testMaxJumpBackInItemsToDisplay_compactJumpBackInAndSyncedTab() async {
         let subject = createSubject()
-        subject.featureFlags.set(feature: .jumpBackInSyncedTab, to: true)
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         await adaptor.setRecentTabs(recentTabs: [tab1])

@@ -69,7 +69,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Public interface
 
     func hasSyncedTabFeatureEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) && hasSyncAccount ?? false
+        return hasSyncAccount ?? false
     }
 
     func getRecentTabData() -> [Tab] {
@@ -149,10 +149,6 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Synced tab data
 
     private func getHasSyncAccount() async -> Bool {
-        guard featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) else {
-            return false
-        }
-
         return await withCheckedContinuation { continuation in
             profile.hasSyncAccount { hasSync in
                 continuation.resume(returning: hasSync)
