@@ -161,7 +161,9 @@ def create_and_clean_database(db_new_name, db_path):
 
     # Create the full path for the new database
     db_new_path = os.path.join(script_dir, db_new_name)
-
+    print("db_new_name: ", db_new_name)
+    print("db_path: ", db_path)
+    print("db_new_path: ", db_new_path)
     try:
         # Copy the database file
         shutil.copyfile(db_path, db_new_path)
@@ -221,6 +223,9 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
                 guid = generate_guid()
                 url = f"https://{row[1]}"
                 title = row[1]
+
+                if history_count == 0 and bookmark_count == 0:
+                    break
 
                 # a record must first be created in moz_places as a parent key before either history or bookmarks
                 insert_into_moz_places(db_cursor, url, title, age_option, guid)
