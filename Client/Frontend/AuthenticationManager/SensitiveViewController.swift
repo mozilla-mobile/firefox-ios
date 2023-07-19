@@ -55,17 +55,7 @@ class SensitiveViewController: UIViewController {
 extension SensitiveViewController {
     private func installBlurredOverlay() {
         guard backgroundBlurView == nil else { return }
-        let blur = UIBlurEffect(style: .systemMaterialDark)
-        let backgroundBlurView = IntensityVisualEffectView(effect: blur, intensity: 0.2)
-        view.addSubview(backgroundBlurView)
-        backgroundBlurView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundBlurView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        self.backgroundBlurView = backgroundBlurView
+        backgroundBlurView?.addBlurEffect(using: .systemMaterialDark)
     }
 
     private func removedBlurredOverlay() {
