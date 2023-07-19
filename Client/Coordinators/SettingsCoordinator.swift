@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Redux
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
@@ -257,6 +258,9 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
+        if ReduxFlagManager.isReduxEnabled {
+            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
+        }
         router.push(ThemeSettingsController())
     }
 

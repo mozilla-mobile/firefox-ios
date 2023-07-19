@@ -47,7 +47,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         super.viewDidLoad()
 
         if isReduxIntegrationEnabled {
-            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
             store.dispatch(ThemeSettingsAction.fetchThemeManagerValues)
             store.subscribe(self, transform: {
                 $0.select(ThemeSettingsState.init)
@@ -67,9 +66,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     func newState(state: ThemeSettingsState) {
-        print("YRD newState received \(state.useSystemAppearance)")
-
-        // update UI
+        tableView.reloadData()
     }
 
     @objc
@@ -293,12 +290,18 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             themeManager.setAutomaticBrightness(isOn: indexPath.row != 0)
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .press,
+                                         object: .setting,
+                                         value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             LegacyThemeManager.instance.current = indexPath.row == 0 ? LegacyNormalTheme() : LegacyDarkTheme()
             themeManager.changeCurrentTheme(indexPath.row == 0 ? .light : .dark)
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .press,
+                                         object: .setting,
+                                         value: indexPath.row == 0 ? .themeLight : .themeDark)
         }
         applyTheme()
     }
