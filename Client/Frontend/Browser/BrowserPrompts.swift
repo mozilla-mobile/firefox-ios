@@ -55,12 +55,17 @@ struct MessageAlert: JSAlertInfo {
 struct ConfirmPanelAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
+    let completionHandler: (Bool) -> Void
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
+            self.completionHandler(true)
+        })
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
+            self.completionHandler(false)
+        })
         alertController.alertInfo = self
         return alertController
     }
@@ -70,6 +75,7 @@ struct TextInputAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
     let defaultText: String?
+    let completionHandler: (String?) -> Void
 
     var input: UITextField!
 
@@ -82,8 +88,12 @@ struct TextInputAlert: JSAlertInfo {
             input = textField
             input.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
+            self.completionHandler(input.text)
+         })
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
+            self.completionHandler(nil)
+         })
         alertController.alertInfo = self
         return alertController
     }
