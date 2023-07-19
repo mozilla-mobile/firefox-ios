@@ -23,6 +23,7 @@ The script currently doesn't support modifications to:
 though it may in the future.
 """
 
+import argparse
 import csv
 import sqlite3
 import random
@@ -181,7 +182,7 @@ def create_and_clean_database(db_new_name, db_path):
     return db_connection, db_cursor
 
 
-def read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count):
+def read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count, age_option):
     """
     Read URLs from websites.csv and insert records into the database.
 
@@ -210,20 +211,26 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
 
         while history_count > 0 or bookmark_count > 0:
             for row in reader:
-                current_time_milliseconds = int(time.time() * 1000)
+                current_time_milliseconds = int(time.time() * 1000 - 86400000)
+                one_day_milliseconds = 86400000
+                today = current_time_milliseconds
+                yesterday = current_time_milliseconds - one_day_milliseconds
+                week = current_time_milliseconds - (one_day_milliseconds * 6)
+                month = current_time_milliseconds - (one_day_milliseconds * 30)
+                older = current_time_milliseconds - (one_day_milliseconds * 31)
                 guid = generate_guid()
                 url = f"https://{row[1]}"
                 title = row[1]
 
                 # a record must first be created in moz_places as a parent key before either history or bookmarks
-                insert_into_moz_places(db_cursor, url, title, current_time_milliseconds, guid)
+                insert_into_moz_places(db_cursor, url, title, age_option, guid)
 
                 if history_count > 0:
-                    insert_into_moz_historyvisits(db_cursor, 1, place_id, current_time_milliseconds, 1)
+                    insert_into_moz_historyvisits(db_cursor, 1, place_id, age_option, 1)
                     history_count -= 1
 
                 if bookmark_count > 0:
-                    insert_into_moz_bookmarks(db_cursor, place_id, 1, 5, bookmarks_position, title, current_time_milliseconds, current_time_milliseconds, guid)
+                    insert_into_moz_bookmarks(db_cursor, place_id, 1, 5, bookmarks_position, title, age_option, age_option, guid)
                     bookmark_count -= 1
 
                 place_id += 1
@@ -251,28 +258,61 @@ def main():
 
     _init_logging()
 
+    parser = argparse.ArgumentParser(description='Script to manage the process of creating and modifying a database in the context of a simulated iOS environment.')
+    parser.add_argument('-history', type=int, help='Number of history entries to add to the database')
+    parser.add_argument('-bookmarks', type=int, help='Number of history entries to add to the database')
+    parser.add_argument('-today', action='store_true', help='Include history entries for today')
+    parser.add_argument('-yesterday', action='store_true', help='Include history entries for yesterday')
+    parser.add_argument('-week', action='store_true', help='Include history entries for the past week')
+    parser.add_argument('-month', action='store_true', help='Include history entries for the past month')
+    parser.add_argument('-older', action='store_true', help='Include history entries older than a month')
+    parser.add_argument('-db_name', help='Name of the new database file (without the .db extension)')
+    args = parser.parse_args()
+
+    age_options = {
+        'today': args.today,
+        'yesterday': args.yesterday,
+        'week': args.week,
+        'month': args.month,
+        'older': args.older,
+    }
+
     db_connection = None  # Initialize db_connection here
     try:
-        # User inputs for number of records to create for history and bookmarks
-        history_count = int(input("Enter the number of records to create for history: "))
-        bookmark_count = int(input("Enter the number of records to create for bookmarks: "))
-        db_new_name = input("Enter the name of the new database file (without the .db extension): ").strip()
 
-        # If the user didn't provide a new name, or if the name has forbidden characters, use a default name
-        if not db_new_name or not all(char.isalnum() or char in '._-' for char in db_new_name):
-            db_new_name = 'places.copy'
+        history_count = args.history if args.history is not None else int(input("Enter the number of records to create for history: "))
+        bookmark_count = args.bookmarks if args.bookmarks is not None else int(input("Enter the number of records to create for bookmarks: "))
+
+
+        db_new_name = args.db_name 
+        if db_new_name is None:
+            db_new_name = input("Enter the name of the new database file (without the .db extension): ").strip()
+            db_path = get_db_path(BUNDLE_ID, APP_GROUP_ID)
+        else:
+            temp_db_path = os.path.dirname(os.path.abspath(__file__))
+            db_path = os.path.join(temp_db_path, "places.db")
 
         # Append .db to the database name
         db_new_name += '.db'
 
-        # Get the path to the places.db file
-        db_path = get_db_path(BUNDLE_ID, APP_GROUP_ID)
+        print("current db_path: ", db_path)
+        print("db_new_name: ", db_new_name)
 
         # Create a new database and clean it
         db_connection, db_cursor = create_and_clean_database(db_new_name, db_path)
 
-        # Read websites from CSV and insert records
-        read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count)
+        if args.history is not None and not any(age_options.values()):
+            age_options['today'] = True
+
+        for age_option, count in age_options.items():
+            print(age_option, count)
+            if count:
+
+                read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count, age_option)
+
+
+        # # Read websites from CSV and insert records
+        # read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count)
 
     except sqlite3.Error as e:
         logging.error(f"SQLite error occurred: {str(e)}")
