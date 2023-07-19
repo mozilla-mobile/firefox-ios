@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Common
 import Redux
 
 protocol ThemeManagerProvider {
@@ -10,14 +10,17 @@ protocol ThemeManagerProvider {
 }
 
 class ThemeManagerMiddleware: ThemeManagerProvider {
-    var themeManager: LegacyThemeManager
+    var legacyThemeManager: LegacyThemeManager
+    var themeManager: ThemeManager
 
     var systemThemeIsOn: Bool {
-        themeManager.systemThemeIsOn
+        legacyThemeManager.systemThemeIsOn
     }
 
-    init(themeManager: LegacyThemeManager = LegacyThemeManager.instance) {
+    init(legacyThemeManager: LegacyThemeManager = LegacyThemeManager.instance,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: Add support for LegacyThemeManager
+        self.legacyThemeManager = legacyThemeManager
         self.themeManager = themeManager
     }
 
@@ -30,8 +33,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             }
         case ThemeSettingsAction.enableSystemAppearance(let enabled):
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.themeManager.systemThemeIsOn = enabled
-                store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
+                self.toggleUseSystemAppearance(enabled)
+                store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
             }
         default:
             break
@@ -39,9 +42,14 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func getThemeManagerCurrentState() -> ThemeSettingsState {
-        ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
+        ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
                            switchMode: .manual(.dark),
                            systemBrightnessValue: 0.5,
                            userBrightnessThreshold: 0.6)
+    }
+
+    func toggleUseSystemAppearance(_ enabled: Bool) {
+        legacyThemeManager.systemThemeIsOn = enabled
+        themeManager.setSystemTheme(isOn: enabled)
     }
 }

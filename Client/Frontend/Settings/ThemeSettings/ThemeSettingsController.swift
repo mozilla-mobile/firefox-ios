@@ -137,7 +137,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
         guard !isReduxIntegrationEnabled else {
-            print("YRD value \(control.isOn)")
             store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
             return
         }

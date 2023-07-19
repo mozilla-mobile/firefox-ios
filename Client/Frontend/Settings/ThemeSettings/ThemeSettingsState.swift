@@ -19,15 +19,17 @@ struct ThemeSettingsState: ReduxState, Equatable {
     var userBrightnessThreshold: Float
 
     init(_ appState: AppState) {
-        let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings)
-            print("YRD themeSettings stat failed")
+        guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
+            print("YRD themeSettings state failed")
+            self.init()
+            return
+        }
 
         print("YRD themeState \(themeState)")
-
-        self.useSystemAppearance = themeState?.useSystemAppearance ?? false
-        self.switchMode = .manual(.dark)
-        self.systemBrightnessValue =  0.1
-        self.userBrightnessThreshold = 0.2
+        self.init(useSystemAppearance: themeState.useSystemAppearance,
+                  switchMode: themeState.switchMode,
+                  systemBrightnessValue: themeState.systemBrightnessValue,
+                  userBrightnessThreshold: themeState.userBrightnessThreshold)
     }
 
     init() {
