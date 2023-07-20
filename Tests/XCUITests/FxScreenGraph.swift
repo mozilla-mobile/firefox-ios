@@ -561,6 +561,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
             app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title].tap()
         }
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
 
         screenState.backAction = navigationControllerBackAction
     }
@@ -945,6 +946,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LoginsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
+        screenState.tap(app.buttons["Settings"], to: SettingsScreen)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in

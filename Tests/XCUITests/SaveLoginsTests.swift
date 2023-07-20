@@ -59,6 +59,7 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        navigator.goto(HomePanelsScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
