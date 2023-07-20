@@ -16,13 +16,6 @@ features:
           {
             "status": false
           }
-      shake-to-restore:
-        description: "This property defines whether or not the feature is enabled"
-        type: GeneralFeature
-        default:
-          {
-            "status": false
-          }
     defaults:
       - channel: beta
         value: {
@@ -30,9 +23,6 @@ features:
             "status": true
           },
           "report-site-issue": {
-            "status": true
-          },
-          "shake-to-restore": {
             "status": true
           }
         }
@@ -42,9 +32,6 @@ features:
             "status": true
           },
           "report-site-issue": {
-            "status": true
-          },
-          "shake-to-restore": {
             "status": true
           }
         }

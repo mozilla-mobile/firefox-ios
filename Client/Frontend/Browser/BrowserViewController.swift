@@ -2788,41 +2788,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 }
 
-// MARK: - Reopen last closed tab
-
-extension BrowserViewController: FeatureFlaggable {
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
-            homePanelDidRequestToRestoreClosedTab(motion)
-        }
-    }
-
-    func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {
-        guard motion == .motionShake,
-              !topTabsVisible,
-              !urlBar.inOverlayMode,
-              let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
-              let selectedTab = tabManager.selectedTab
-        else { return }
-
-        let alertTitleText: String = .ReopenLastTabAlertTitle
-        let reopenButtonText: String = .ReopenLastTabButtonText
-        let cancelButtonText: String = .ReopenLastTabCancelText
-
-        func reopenLastTab(_ action: UIAlertAction) {
-            let request = URLRequest(url: lastClosedURL)
-            let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)
-            tabManager.selectTab(closedTab)
-        }
-
-        let alert = AlertController(title: alertTitleText, message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: reopenButtonText, style: .default, handler: reopenLastTab), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.ReopenButton")
-        alert.addAction(UIAlertAction(title: cancelButtonText, style: .cancel, handler: nil), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.CancelButton")
-
-        self.present(alert, animated: true, completion: nil)
-    }
-}
-
 extension BrowserViewController {
     /// This method now returns the BrowserViewController associated with the scene.
     /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.

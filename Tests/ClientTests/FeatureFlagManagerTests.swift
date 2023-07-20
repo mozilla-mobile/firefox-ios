@@ -54,8 +54,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.recentlySaved, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.shakeToRestore, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly))
