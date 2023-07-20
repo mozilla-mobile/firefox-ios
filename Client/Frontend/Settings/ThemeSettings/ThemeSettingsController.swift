@@ -22,20 +22,24 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         case lightDarkPicker
     }
 
+    private var themeState: ThemeSettingsState
+
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
     lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     var isAutoBrightnessOn: Bool {
-        return LegacyThemeManager.instance.automaticBrightnessIsOn
+        return isReduxIntegrationEnabled ? themeState.isAutomaticBrightnessEnable
+         : LegacyThemeManager.instance.automaticBrightnessIsOn
     }
 
     var isSystemThemeOn: Bool {
-        return LegacyThemeManager.instance.systemThemeIsOn
+        return isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
     }
 
     init() {
+        self.themeState = ThemeSettingsState()
         super.init(style: .grouped)
     }
 
@@ -45,7 +49,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.fetchThemeManagerValues)
             store.subscribe(self, transform: {
@@ -66,7 +69,40 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     func newState(state: ThemeSettingsState) {
+        themeState = state
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+    }
+
+    // MARK: - UI actions
+    @objc
+    func systemThemeSwitchValueChanged(control: UISwitch) {
+        guard !isReduxIntegrationEnabled else {
+            store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
+            return
+        }
+
+        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+        themeManager.setSystemTheme(isOn: control.isOn)
+
+        if control.isOn {
+            // Reset the user interface style to the default before choosing our theme
+            UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        }
+
+        // Switch animation must begin prior to scheduling table view update animation
+        // (or the switch will be auto-synchronized to the slower tableview animation
+        // and makes the switch behaviour feel slow and non-standard).
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
+        }
     }
 
     @objc
@@ -76,10 +112,37 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         applyTheme()
     }
 
-    override func applyTheme() {
-        super.applyTheme()
+    @objc
+    func sliderValueChanged(control: UISlider, event: UIEvent) {
+        guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
+
+        themeManager.setAutomaticBrightnessValue(control.value)
+        LegacyThemeManager.instance.automaticBrightnessValue = control.value
+        brightnessChanged()
     }
 
+    private func makeSlider(parent: UIView) -> UISlider {
+        let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
+        let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
+            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
+        }
+
+        let slider: UISlider = .build { slider in
+            slider.minimumValueImage = images[0]
+            slider.maximumValueImage = images[1]
+        }
+        parent.addSubview(slider)
+
+        NSLayoutConstraint.activate([
+            slider.topAnchor.constraint(equalTo: parent.topAnchor, constant: 4),
+            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor, constant: -4),
+            slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
+            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
+        ])
+        return slider
+    }
+
+    // MARK: - UITableView
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
 
@@ -131,63 +194,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         return 120
     }
 
-    @objc
-    func systemThemeSwitchValueChanged(control: UISwitch) {
-        guard !isReduxIntegrationEnabled else {
-            store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
-            return
-        }
-
-        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-        themeManager.setSystemTheme(isOn: control.isOn)
-
-        if control.isOn {
-            // Reset the user interface style to the default before choosing our theme
-            UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
-            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
-        }
-
-        // Switch animation must begin prior to scheduling table view update animation
-        // (or the switch will be auto-synchronized to the slower tableview animation
-        // and makes the switch behaviour feel slow and non-standard).
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
-        }
-    }
-
-    @objc
-    func sliderValueChanged(control: UISlider, event: UIEvent) {
-        guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
-
-        themeManager.setAutomaticBrightnessValue(control.value)
-        LegacyThemeManager.instance.automaticBrightnessValue = control.value
-        brightnessChanged()
-    }
-
-    private func makeSlider(parent: UIView) -> UISlider {
-        let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
-        let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
-            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
-        }
-
-        let slider: UISlider = .build { slider in
-            slider.minimumValueImage = images[0]
-            slider.maximumValueImage = images[1]
-        }
-        parent.addSubview(slider)
-
-        NSLayoutConstraint.activate([
-            slider.topAnchor.constraint(equalTo: parent.topAnchor, constant: 4),
-            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor, constant: -4),
-            slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
-            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
-        ])
-        return slider
-    }
-
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.selectionStyle = .none
@@ -202,56 +208,18 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            control.isOn = LegacyThemeManager.instance.systemThemeIsOn
+            if isReduxIntegrationEnabled {
+                control.isOn = themeState.useSystemAppearance
+            } else {
+                control.isOn = LegacyThemeManager.instance.systemThemeIsOn
+            }
 
             cell.accessoryView = control
         case .automaticBrightness:
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .DisplayThemeManualSwitchTitle
-                cell.detailTextLabel?.text = .DisplayThemeManualSwitchSubtitle
-            } else {
-                cell.textLabel?.text = .DisplayThemeAutomaticSwitchTitle
-                cell.detailTextLabel?.text = .DisplayThemeAutomaticSwitchSubtitle
-            }
-            cell.detailTextLabel?.numberOfLines = 2
-            cell.detailTextLabel?.minimumScaleFactor = 0.5
-            cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
-            if (indexPath.row == 0 && !isAutoBrightnessOn) ||
-                (indexPath.row == 1 && isAutoBrightnessOn) {
-                cell.accessoryType = .checkmark
-                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-            } else {
-                cell.accessoryType = .none
-            }
+            configureAutomaticBrightness(indexPath: indexPath, cell: cell)
 
         case .lightDarkPicker:
-            if isAutoBrightnessOn {
-                let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
-                let slider = makeSlider(parent: cell.contentView)
-                slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-                slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
-                deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
-                deviceBrightnessIndicator.isUserInteractionEnabled = false
-                deviceBrightnessIndicator.minimumTrackTintColor = .clear
-                deviceBrightnessIndicator.maximumTrackTintColor = .clear
-                deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
-                self.slider = (slider, deviceBrightnessIndicator)
-            } else {
-                if indexPath.row == 0 {
-                    cell.textLabel?.text = .DisplayThemeOptionLight
-                } else {
-                    cell.textLabel?.text = .DisplayThemeOptionDark
-                }
-
-                let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-                if (indexPath.row == 0 && theme == .normal) ||
-                    (indexPath.row == 1 && theme == .dark) {
-                    cell.accessoryType = .checkmark
-                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                } else {
-                    cell.accessoryType = .none
-                }
-            }
+            configureLightDarkTheme(indexPath: indexPath, cell: cell)
         }
         cell.applyTheme(theme: themeManager.currentTheme)
 
@@ -286,23 +254,91 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == Section.automaticBrightness.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            LegacyThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
-            themeManager.setAutomaticBrightness(isOn: indexPath.row != 0)
-            tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
-            tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .press,
-                                         object: .setting,
-                                         value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
+            toggleAutomaticBrightness(isOn: indexPath.row != 0)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            LegacyThemeManager.instance.current = indexPath.row == 0 ? LegacyNormalTheme() : LegacyDarkTheme()
-            themeManager.changeCurrentTheme(indexPath.row == 0 ? .light : .dark)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .press,
-                                         object: .setting,
-                                         value: indexPath.row == 0 ? .themeLight : .themeDark)
+            changeManualTheme(isLightTheme: indexPath.row == 0)
         }
         applyTheme()
+    }
+
+    // MARK: - Helper functions
+    private func toggleAutomaticBrightness(isOn: Bool) {
+        if isReduxIntegrationEnabled {
+            // TODO: trigger action to update state
+        } else {
+            LegacyThemeManager.instance.automaticBrightnessIsOn = isOn
+            themeManager.setAutomaticBrightness(isOn: isOn)
+        }
+
+        tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
+        tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .setting,
+                                     value: isOn ? .themeModeManually : .themeModeAutomatically)
+    }
+
+    private func changeManualTheme(isLightTheme: Bool) {
+        // TODO: Implement redux action in next PR
+        if !isReduxIntegrationEnabled {
+            LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
+            themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
+        }
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .setting,
+                                     value: isLightTheme ? .themeLight : .themeDark)
+    }
+
+    private func configureAutomaticBrightness(indexPath: IndexPath, cell: ThemedTableViewCell) {
+        let isManualOption = indexPath.row == 0
+        if isManualOption {
+            cell.textLabel?.text = .DisplayThemeManualSwitchTitle
+            cell.detailTextLabel?.text = .DisplayThemeManualSwitchSubtitle
+        } else {
+            cell.textLabel?.text = .DisplayThemeAutomaticSwitchTitle
+            cell.detailTextLabel?.text = .DisplayThemeAutomaticSwitchSubtitle
+        }
+        cell.detailTextLabel?.numberOfLines = 2
+        cell.detailTextLabel?.minimumScaleFactor = 0.5
+        cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
+        if (isManualOption && !isAutoBrightnessOn) ||
+            (!isManualOption && isAutoBrightnessOn) {
+            cell.accessoryType = .checkmark
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+        } else {
+            cell.accessoryType = .none
+        }
+    }
+
+    private func configureLightDarkTheme(indexPath: IndexPath, cell: ThemedTableViewCell) {
+        if isAutoBrightnessOn {
+            let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
+            let slider = makeSlider(parent: cell.contentView)
+            slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
+            deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
+            deviceBrightnessIndicator.isUserInteractionEnabled = false
+            deviceBrightnessIndicator.minimumTrackTintColor = .clear
+            deviceBrightnessIndicator.maximumTrackTintColor = .clear
+            deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
+            self.slider = (slider, deviceBrightnessIndicator)
+        } else {
+            if indexPath.row == 0 {
+                cell.textLabel?.text = .DisplayThemeOptionLight
+            } else {
+                cell.textLabel?.text = .DisplayThemeOptionDark
+            }
+
+            let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+            if (indexPath.row == 0 && theme == .normal) ||
+                (indexPath.row == 1 && theme == .dark) {
+                cell.accessoryType = .checkmark
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else {
+                cell.accessoryType = .none
+            }
+        }
     }
 }
