@@ -6,28 +6,25 @@ import UIKit
 import Shared
 import Common
 
-private let SectionArrow = 0
-private let SectionToggles = 1
-private let SectionButton = 2
-private let NumberOfSections = 3
-private let TogglesPrefKey = "clearprivatedata.toggles"
-
-private let HistoryClearableIndex = 0
-
 class ClearPrivateDataTableViewController: ThemedTableViewController {
-    fileprivate var clearButton: UITableViewCell?
+    private var clearButton: UITableViewCell?
 
-    var profile: Profile!
-    var tabManager: TabManager!
-    private let logger: Logger
+    private let sectionArrow = 0
+    private let sectionToggles = 1
+    private let sectionButton = 2
+    private let numberOfSections = 3
+    private let historyClearableIndex = 0
 
-    fileprivate typealias DefaultCheckedState = Bool
+    private enum Keys: String {
+        case keyTogglesPref = "clearprivatedata.toggles"
+    }
 
-    // TODO: The next person to add a new clearable in the UI here needs to
-    // refactor how we store the saved values. We currently save an array of
-    // `Bool`s which is highly insufficient.
-    // Bug 1445687 -- https://bugzilla.mozilla.org/show_bug.cgi?id=1445687
-    fileprivate lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
+    private var profile: Profile
+    private var tabManager: TabManager
+
+    private typealias DefaultCheckedState = Bool
+
+    private lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
         var items: [(clearable: Clearable, checked: DefaultCheckedState)] = [
             (HistoryClearable(profile: profile, tabManager: tabManager), true),
             (CacheClearable(), true),
@@ -45,24 +42,27 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         return items
     }()
 
-    fileprivate lazy var toggles: [Bool] = {
+    private lazy var toggles: [Bool] = {
         // If the number of saved toggles doesn't match the number of clearables, just reset
         // and return the default values for the clearables.
-        if let savedToggles = self.profile.prefs.arrayForKey(TogglesPrefKey) as? [Bool], savedToggles.count == self.clearables.count {
+        if let savedToggles = self.profile.prefs.arrayForKey(Keys.keyTogglesPref.rawValue) as? [Bool],
+            savedToggles.count == self.clearables.count {
             return savedToggles
         }
 
         return self.clearables.map { $0.checked }
     }()
 
-    fileprivate var clearButtonEnabled = true {
+    private var clearButtonEnabled = true {
         didSet {
             clearButton?.textLabel?.textColor = clearButtonEnabled ? themeManager.currentTheme.colors.textWarning : themeManager.currentTheme.colors.textDisabled
         }
     }
 
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
+    init(profile: Profile,
+         tabManager: TabManager) {
+        self.profile = profile
+        self.tabManager = tabManager
 
         super.init()
     }
@@ -89,12 +89,12 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: themeManager.currentTheme)
 
-        if indexPath.section == SectionArrow {
+        if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
-            cell.accessibilityIdentifier = "WebsiteData"
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.websiteDataSection
             clearButton = cell
-        } else if indexPath.section == SectionToggles {
+        } else if indexPath.section == sectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
             let control = UISwitch()
@@ -105,14 +105,11 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.selectionStyle = .none
             control.tag = indexPath.item
         } else {
-            assert(indexPath.section == SectionButton)
-            logger.log("We had to fallback to this setup!", level: .warning, category: .unlabeled)
-
             cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = "ClearPrivateData"
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection
             clearButton = cell
         }
 
@@ -120,83 +117,69 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return NumberOfSections
+        return numberOfSections
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == SectionArrow {
+        if section == sectionArrow {
             return 1
-        } else if section == SectionToggles {
+        } else if section == sectionToggles {
             return clearables.count
-        }
-
-        assert(section == SectionButton)
-        if section != SectionButton {
-            logger.log("We've hit a case where the section isn't supported.",
-                       level: .warning,
-                       category: .unlabeled)
         }
 
         return 1
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == SectionButton {
+        if indexPath.section == sectionButton {
             // Highlight the button only if it's enabled.
             return clearButtonEnabled
-        }
-        if indexPath.section == SectionArrow {
+        } else if indexPath.section == sectionArrow {
             return true
         }
         return false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == SectionArrow {
+        if indexPath.section == sectionArrow {
             let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
-        } else if indexPath.section == SectionButton {
-            // We have been asked to clear history and we have an account.
-            // (Whether or not it's in a good state is irrelevant.)
-            func clearPrivateData(_ action: UIAlertAction) {
-                let toggles = self.toggles
-                self.clearables
-                    .enumerated()
-                    .compactMap { (i, pair) in
-                        guard toggles[i] else { return nil }
-                        return pair.clearable.clear()
-                    }
-                    .allSucceed()
-                    .uponQueue(.main) { result in
-                        guard result.isSuccess else {
-                            DefaultLogger.shared.log("Private data was not cleared.", level: .debug, category: .storage)
-                            return
-                        }
-
-                        self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
-
-                        // Disable the Clear Private Data button after it's clicked.
-                        self.clearButtonEnabled = false
-                        self.tableView.deselectRow(at: indexPath, animated: true)
-                }
-            }
-
+        } else if indexPath.section == sectionButton {
             let alert: UIAlertController
-            if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
-                alert = UIAlertController.clearSyncedHistoryAlert(okayCallback: clearPrivateData)
+            if self.toggles[historyClearableIndex] && profile.hasAccount() {
+                alert = clearSyncedHistoryAlert(okayCallback: clearPrivateData)
             } else {
-                alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+                alert = clearPrivateDataAlert(okayCallback: clearPrivateData)
             }
-            self.present(alert, animated: true, completion: nil)
+            present(alert, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
+    private func clearPrivateData(_ action: UIAlertAction) {
+        let toggles = self.toggles
+        self.clearables
+            .enumerated()
+            .compactMap { (i, pair) in
+                guard toggles[i] else { return nil }
+                return pair.clearable.clear()
+            }
+            .allSucceed()
+            .uponQueue(.main) { result in
+                self.profile.prefs.setObject(self.toggles, forKey: Keys.keyTogglesPref.rawValue)
+
+                // Disable the Clear Private Data button after it's clicked.
+                self.clearButtonEnabled = false
+            }
+    }
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView
+            .dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+        else { return nil }
 
         var sectionTitle: String?
-        if section == SectionToggles {
+        if section == sectionToggles {
             sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
@@ -210,10 +193,60 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     @objc
-    func switchValueChanged(_ toggle: UISwitch) {
+    private func switchValueChanged(_ toggle: UISwitch) {
         toggles[toggle.tag] = toggle.isOn
 
         // Dim the clear button if no clearables are selected.
         clearButtonEnabled = toggles.contains(true)
+
+        profile.prefs.setObject(toggles, forKey: Keys.keyTogglesPref.rawValue)
+    }
+
+    private func clearPrivateDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: .ClearPrivateDataAlertMessage,
+            preferredStyle: .alert
+        )
+
+        let noOption = UIAlertAction(
+            title: .ClearPrivateDataAlertCancel,
+            style: .cancel,
+            handler: nil
+        )
+
+        let okayOption = UIAlertAction(
+            title: .ClearPrivateDataAlertOk,
+            style: .destructive,
+            handler: okayCallback
+        )
+
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
+    }
+
+    private func clearSyncedHistoryAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: .ClearSyncedHistoryAlertMessage,
+            preferredStyle: .alert
+        )
+
+        let noOption = UIAlertAction(
+            title: .ClearSyncedHistoryAlertCancel,
+            style: .cancel,
+            handler: nil
+        )
+
+        let okayOption = UIAlertAction(
+            title: .ClearSyncedHistoryAlertOk,
+            style: .destructive,
+            handler: okayCallback
+        )
+
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
     }
 }

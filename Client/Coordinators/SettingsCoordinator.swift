@@ -85,9 +85,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .clearPrivateData:
-            let viewController = ClearPrivateDataTableViewController()
-            viewController.profile = profile
-            viewController.tabManager = tabManager
+            let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
             return viewController
 
         case .fxa:
@@ -188,9 +186,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedClearPrivateData() {
-        let viewController = ClearPrivateDataTableViewController()
-        viewController.profile = profile
-        viewController.tabManager = tabManager
+        let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
         router.push(viewController)
     }
 
