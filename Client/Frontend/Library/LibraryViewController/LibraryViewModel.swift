@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 class LibraryViewModel {
@@ -25,9 +26,9 @@ class LibraryViewModel {
     }
 
     var segmentedControlItems: [UIImage] {
-        [UIImage(named: ImageIdentifiers.Large.bookmarkTrayFill) ?? UIImage(),
-         UIImage(named: ImageIdentifiers.Large.history) ?? UIImage(),
-         UIImage(named: ImageIdentifiers.Large.download) ?? UIImage(),
+        [UIImage(named: StandardImageIdentifiers.Large.bookmarkTrayFill) ?? UIImage(),
+         UIImage(named: StandardImageIdentifiers.Large.history) ?? UIImage(),
+         UIImage(named: StandardImageIdentifiers.Large.download) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
     }
 

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import Storage
@@ -172,7 +173,7 @@ class LoginsHelper: TabContentScript {
             tab?.removeSnackbar(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: ImageIdentifiers.Large.login))
+        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: StandardImageIdentifiers.Large.login))
         let dontSave = SnackButton(title: .LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
@@ -203,7 +204,7 @@ class LoginsHelper: TabContentScript {
             tab?.removeSnackbar(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: ImageIdentifiers.Large.login))
+        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: StandardImageIdentifiers.Large.login))
         let dontSave = SnackButton(title: .LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil

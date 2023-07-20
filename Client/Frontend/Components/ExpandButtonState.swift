@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 enum ExpandButtonState {
@@ -11,11 +12,11 @@ enum ExpandButtonState {
     var image: UIImage? {
         switch self {
         case .trailing:
-            return UIImage(named: ImageIdentifiers.Large.chevronRight)?
+            return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
                 .withRenderingMode(.alwaysTemplate)
                 .imageFlippedForRightToLeftLayoutDirection()
         case .down:
-            return UIImage(named: ImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
+            return UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         }
     }
 }

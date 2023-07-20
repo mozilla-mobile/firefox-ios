@@ -31,7 +31,7 @@ struct CreditCardSettingsEmptyView: View {
                         .background(Color.white)
                         .padding(.top, 25)
                         Spacer()
-                        Image(ImageIdentifiers.Large.creditCard)
+                        Image(StandardImageIdentifiers.Large.creditCard)
                             .resizable()
                             .renderingMode(.template)
                             .foregroundColor(imageColor)

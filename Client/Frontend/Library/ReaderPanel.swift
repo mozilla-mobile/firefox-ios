@@ -439,7 +439,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                                 iconString: ImageIdentifiers.Large.cross,
+                                                 iconString: StandardImageIdentifiers.Large.cross,
                                                  tapHandler: { _ in
             self.deleteItem(atIndex: indexPath)
         }).items

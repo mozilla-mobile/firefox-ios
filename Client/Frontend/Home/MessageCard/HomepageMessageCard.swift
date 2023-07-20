@@ -76,7 +76,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: ImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
         button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
     }
