@@ -144,3 +144,4 @@ class FXColors {
     static let Ink80 = UIColor(rgb: 0x20123a)
     static let Ink90 = UIColor(rgb: 0x1d1133)
 }
+
