@@ -265,7 +265,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - Helper functions
     private func toggleAutomaticBrightness(isOn: Bool) {
         if isReduxIntegrationEnabled {
-            // TODO: trigger action to update state
+            store.dispatch(ThemeSettingsAction.enableAutomaticBrightness(isOn))
         } else {
             LegacyThemeManager.instance.automaticBrightnessIsOn = isOn
             themeManager.setAutomaticBrightness(isOn: isOn)

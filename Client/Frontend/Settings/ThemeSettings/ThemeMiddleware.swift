@@ -19,7 +19,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     init(legacyThemeManager: LegacyThemeManager = LegacyThemeManager.instance,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        // TODO: Add support for LegacyThemeManager
         self.legacyThemeManager = legacyThemeManager
         self.themeManager = themeManager
     }
@@ -27,7 +26,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     lazy var setSystemTheme: Middleware<AppState> = { state, action in
         switch action {
         case ThemeSettingsAction.fetchThemeManagerValues:
-            let currentThemeState = self.getThemeManagerCurrentState()
+            let currentThemeState = self.getCurrentThemeManagerState()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
             }
@@ -36,20 +35,30 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 self.toggleUseSystemAppearance(enabled)
                 store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
             }
+        case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.toggleAutomaticBrightness(enabled)
+                store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
+            }
         default:
             break
         }
     }
 
-    func getThemeManagerCurrentState() -> ThemeSettingsState {
+    func getCurrentThemeManagerState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
-                           switchMode: .manual(.dark),
-                           systemBrightnessValue: 0.5,
-                           userBrightnessThreshold: 0.6)
+                           isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
+                           manualThemeSelected: legacyThemeManager.currentName,
+                           userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue)
     }
 
     func toggleUseSystemAppearance(_ enabled: Bool) {
         legacyThemeManager.systemThemeIsOn = enabled
         themeManager.setSystemTheme(isOn: enabled)
+    }
+
+    func toggleAutomaticBrightness(_ enabled: Bool) {
+        self.legacyThemeManager.automaticBrightnessIsOn = enabled
+        self.themeManager.setAutomaticBrightness(isOn: enabled)
     }
 }
