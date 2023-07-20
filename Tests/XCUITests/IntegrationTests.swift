@@ -70,7 +70,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT_LONG)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
         sleep(5)
         if app.tables.staticTexts["Sync Now"].exists {
@@ -198,13 +198,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        app.buttons["Continue"].tap()
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
@@ -250,13 +250,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        app.buttons["Continue"].tap()
         waitForExistence(app.tables["Login List"], timeout: 3)
         // Verify the login
         waitForExistence(app.staticTexts["https://accounts.google.com"])
@@ -284,6 +284,8 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons.element(boundBy: 0).tap()
 
         navigator.nowAt(SettingsScreen)
+        waitForExistence(app.staticTexts["GENERAL"])
+        app.swipeDown()
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
 
