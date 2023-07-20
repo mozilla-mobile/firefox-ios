@@ -138,6 +138,7 @@ class BrowserCoordinator: BaseCoordinator,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
+            homepageViewController.configure(isZeroSearch: inline)
             return homepageViewController
         } else {
             let homepageViewController = HomepageViewController(
