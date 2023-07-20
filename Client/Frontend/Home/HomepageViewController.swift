@@ -220,7 +220,9 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         view.addSubview(wallpaperView)
 
         // Constraint so wallpaper appears under the status bar
-        let wallpaperTopConstant: CGFloat = statusBarFrame?.height ?? 0
+        let window = UIApplication.shared.windows.first
+        let wallpaperTopConstant: CGFloat = window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -346,9 +348,12 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                     statusBarFrame: statusBarFrame,
-                                                     theme: themeManager.currentTheme)
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: themeManager.currentTheme)
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
