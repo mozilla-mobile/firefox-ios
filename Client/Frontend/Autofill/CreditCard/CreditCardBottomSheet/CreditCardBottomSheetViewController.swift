@@ -133,7 +133,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateHeightConstraints()
+        updateConstraints()
     }
 
     deinit {
@@ -187,17 +187,20 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         ])
     }
 
-    func updateHeightConstraints() {
+    func updateConstraints() {
         let buttonsHeight = buttonsContainerStackView.frame.height
         let estimatedContentHeight = cardTableView.contentSize.height + buttonsHeight + UX.bottomSpacing
         let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
         contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
+
+        let contentViewWidth = UX.contentViewWidth > view.frame.size.width ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
+        contentWidthConstraint.constant = contentViewWidth
     }
 
     // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateHeightConstraints()
+        updateConstraints()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
