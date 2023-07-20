@@ -16,7 +16,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         }
 
         struct TextImage {
-            static let imageWidth: CGFloat = 165.5
+            static let imageWidth: CGFloat = 70
             static let imageHeight: CGFloat = 17.5
             static let leadingConstant: CGFloat = 9
             static let trailingConstant: CGFloat = -15
@@ -39,6 +39,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     private var userDefaults = UserDefaults.standard
+    private let wallpaperManager = WallpaperManager()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -79,7 +80,6 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 // MARK: - ThemeApplicable
 extension HomeLogoHeaderCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        let wallpaperManager = WallpaperManager()
         if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
