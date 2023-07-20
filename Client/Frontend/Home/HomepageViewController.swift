@@ -219,19 +219,14 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
-<<<<<<< HEAD
+
         var wallpaperTopConstant: CGFloat = 0
         if CoordinatorFlagManager.isCoordinatorEnabled {
             // Constraint so wallpaper appears under the status bar
-            wallpaperTopConstant = statusBarFrame?.height ?? 0
+            let window = UIApplication.shared.windows.first
+            wallpaperTopConstant = window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
         }
-=======
 
-        // Constraint so wallpaper appears under the status bar
-        let window = UIApplication.shared.windows.first
-        let wallpaperTopConstant: CGFloat = window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
-
->>>>>>> 32768d767 (Bugfix FXIOS-6785 [v116] Status bar overlay adjustments (#15667))
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -365,14 +360,9 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-<<<<<<< HEAD
         if !CoordinatorFlagManager.isCoordinatorEnabled {
             updateStatusBar(theme: themeManager.currentTheme)
-        } else {
-=======
-        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
->>>>>>> 32768d767 (Bugfix FXIOS-6785 [v116] Status bar overlay adjustments (#15667))
+        } else if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
                                                          theme: themeManager.currentTheme)
