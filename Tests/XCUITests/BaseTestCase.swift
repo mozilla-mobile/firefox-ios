@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import MappaMundi
 import XCTest
 
@@ -135,15 +136,15 @@ class BaseTestCase: XCTestCase {
     func bookmark() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
-        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
     }
 

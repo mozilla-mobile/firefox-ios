@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let testFileName = "Download smallZip.zip"
@@ -29,8 +30,8 @@ class DownloadFilesTests: BaseTestCase {
                 for _ in 0...list-1 {
                     waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                     app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                    waitForExistence(app.tables.cells.buttons[ImageIdentifiers.Large.delete])
-                    app.tables.cells.buttons[ImageIdentifiers.Large.delete].tap()
+                    waitForExistence(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete])
+                    app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
                 }
             }
         }
@@ -39,8 +40,8 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
-        waitForExistence(app.tables.cells.buttons[ImageIdentifiers.Large.delete], timeout: TIMEOUT)
-        app.tables.cells.buttons[ImageIdentifiers.Large.delete].tap()
+        waitForExistence(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
     }
 
     func testDownloadFilesAppMenuFirstTime() {
@@ -65,7 +66,7 @@ class DownloadFilesTests: BaseTestCase {
 
         waitForExistence(app.tables["Context Menu"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].exists)
+        XCTAssertTrue(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].exists)
         app.buttons["Cancel"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -122,7 +123,7 @@ class DownloadFilesTests: BaseTestCase {
         } else {
             app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
             XCTAssertTrue(app.tables.buttons.staticTexts["Share"].exists)
-            XCTAssertTrue(app.tables.buttons.staticTexts[ImageIdentifiers.Large.delete].exists)
+            XCTAssertTrue(app.tables.buttons.staticTexts[StandardImageIdentifiers.Large.delete].exists)
         }
     }
 
@@ -154,8 +155,8 @@ class DownloadFilesTests: BaseTestCase {
 
             app.webViews.links[testFileName].firstMatch.tap()
 
-            waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download], timeout: TIMEOUT)
-            app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].tap()
+            waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download], timeout: TIMEOUT)
+            app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
         }
     }
 

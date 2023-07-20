@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let url_1 = "test-example.html"
@@ -14,7 +15,7 @@ let url_4 = "test-password-2.html"
 class BookmarkingTests: BaseTestCase {
     private func checkBookmarked() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -25,8 +26,8 @@ class BookmarkingTests: BaseTestCase {
 
     private func undoBookmarkRemoval() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
-        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["Undo"], timeout: 3)
         app.buttons["Undo"].tap()
@@ -34,7 +35,7 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkUnbookmarked() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark])
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -171,7 +172,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        waitForExistence(app.buttons[ImageIdentifiers.Large.delete])
+        waitForExistence(app.buttons[StandardImageIdentifiers.Large.delete])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -186,7 +187,7 @@ class BookmarkingTests: BaseTestCase {
         // Remove it
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        waitForExistence(app.buttons[ImageIdentifiers.Large.delete])
+        waitForExistence(app.buttons[StandardImageIdentifiers.Large.delete])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -195,7 +196,7 @@ class BookmarkingTests: BaseTestCase {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons[ImageIdentifiers.Large.delete].tap()
+        app.buttons[StandardImageIdentifiers.Large.delete].tap()
         checkItemsInBookmarksList(items: 0)
     }
 
@@ -204,7 +205,7 @@ class BookmarkingTests: BaseTestCase {
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells[ImageIdentifiers.Large.bookmarkSlash].tap()
+        app.tables["Context Menu"].cells[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         checkItemsInBookmarksList(items: 0)
     }*/
 
@@ -276,7 +277,7 @@ class BookmarkingTests: BaseTestCase {
             app.tables.otherElements["Remove Bookmark"].tap()
         } else {
             app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-            app.buttons[ImageIdentifiers.Large.delete].tap()
+            app.buttons[StandardImageIdentifiers.Large.delete].tap()
         }
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
