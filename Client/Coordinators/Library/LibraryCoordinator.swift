@@ -34,9 +34,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
-        libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.delegate = self
         libraryViewController.navigationHandler = self
+        libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.resetHistoryPanelPagination()
     }
 
