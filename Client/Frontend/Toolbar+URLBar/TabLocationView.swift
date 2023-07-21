@@ -49,7 +49,8 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
-            shoppingCartButton.isHidden = !isShoppingCartButtonVisible
+            let product = url.flatMap(ShoppingProduct.init)
+            shoppingCartButton.isHidden = !(product?.isShoppingCartButtonVisible ?? false)
             setNeedsUpdateConstraints()
         }
     }
@@ -59,22 +60,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             return false
         }
         return true
-    }
-
-    private var isFakespotFeatureEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else {
-            return false
-        }
-        return true
-    }
-
-    private var isShoppingCartButtonVisible: Bool {
-        guard let url else { return false }
-        let regexProductIDPatterns = NimbusFakespotFeatureLayer().getRegexProductIDPatterns()
-        let hasMatchingPattern = regexProductIDPatterns.contains { regexPattern in
-            !url.absoluteString.match(regexPattern).isEmpty
-        }
-        return hasMatchingPattern && isFakespotFeatureEnabled
     }
 
     var readerModeState: ReaderModeState {
@@ -328,7 +313,8 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable) || isShoppingCartButtonVisible
+        let product = url.flatMap(ShoppingProduct.init)
+        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable) || (product?.isShoppingCartButtonVisible ?? false)
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
