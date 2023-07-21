@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Storage
 import Shared
@@ -86,7 +87,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
         return disclosureIndicator
     }()
 
@@ -210,7 +211,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         subtitleLabel.text = item.text
         subtitleLabel.isHidden = item.text == nil
 
-        accessibilityIdentifier = item.iconString ?? item.accessibilityId
+        accessibilityIdentifier = item.accessibilityId ?? item.iconString
         accessibilityLabel = item.currentTitle
 
         if item.isFlipped {

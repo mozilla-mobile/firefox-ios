@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
@@ -36,7 +37,7 @@ class LockButton: UIButton {
         super.init(frame: frame)
 
         clipsToBounds = false
-        setImage(UIImage.templateImageNamed(ImageIdentifiers.lockVerifed), for: .normal)
+        setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.lock), for: .normal)
         imageView?.contentMode = .scaleAspectFill
         adjustsImageWhenHighlighted = false
     }

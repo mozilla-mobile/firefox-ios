@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import SwiftUI
 import Storage
@@ -103,7 +104,7 @@ struct CreditCardItemRow: View {
     }
 
     func getImage(creditCard: CreditCard) -> Image {
-        let defaultImage = Image(ImageIdentifiers.Large.creditCard)
+        let defaultImage = Image(StandardImageIdentifiers.Large.creditCard)
 
         guard let type = CreditCardType(rawValue: creditCard.ccType.uppercased()),
               let image = type.image else {

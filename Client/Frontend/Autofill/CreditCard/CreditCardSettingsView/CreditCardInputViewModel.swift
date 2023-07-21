@@ -119,11 +119,7 @@ class CreditCardInputViewModel: ObservableObject {
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var expirationIsValid = true
-    @Published var nameOnCard: String = "" {
-        didSet (val) {
-            nameIsValid = !nameOnCard.isEmpty
-        }
-    }
+    @Published var nameOnCard: String = ""
 
     @Published var expirationDate: String = "" {
         didSet {
@@ -132,7 +128,6 @@ class CreditCardInputViewModel: ObservableObject {
                 // We should cleanup the date before passing for validity check
                 dateVal = dateVal.filter { "0123456789".contains($0) }
             }
-            expirationIsValid = creditCardValidator.isExpirationValidFor(date: dateVal)
         }
     }
 
@@ -140,22 +135,19 @@ class CreditCardInputViewModel: ObservableObject {
         willSet {
             // Set the card type
             self.cardType = creditCardValidator.cardTypeFor(newValue)
-            numberIsValid = creditCardValidator.isCardNumberValidFor(card: newValue)
         }
     }
 
     // MARK: Business logic
+    func areFieldValuesValid() -> Bool {
+        let isExpirationValid = creditCardValidator.isExpirationValidFor(date: getCopyValueFor(.expiration))
+        let numberIsValid = creditCardValidator.isCardNumberValidFor(card: getCopyValueFor(.number))
+        let nameIsValid = !getCopyValueFor(.name).isEmpty
 
-    var isRightBarButtonEnabled: Bool {
-        let viewMode = state == .view && state.rightBarBtn == .edit
-        let saveMode = state.rightBarBtn == .save && (nameIsValid &&
-                                       !nameOnCard.isEmpty &&
-                                       numberIsValid &&
-                                       !cardNumber.isEmpty &&
-                                       expirationIsValid &&
-                                       !expirationDate.isEmpty)
-        return viewMode || saveMode
+        return isExpirationValid && numberIsValid && nameIsValid
     }
+
+    @Published var isRightBarButtonEnabled = false
 
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
@@ -203,6 +195,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.state = .add
         self.creditCardValidator = creditCardValidator
         self.logger = logger
+        self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -221,6 +214,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.creditCard = creditCard
         self.state = state
         self.creditCardValidator = creditCardValidator
+        self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
 
     // MARK: - Helpers
@@ -294,9 +288,25 @@ class CreditCardInputViewModel: ObservableObject {
         cardNumber = autofill.decryptCreditCardNumber(
             encryptedCCNum: creditCard.ccNumberEnc) ?? ""
         let month = creditCard.ccExpMonth
+        isRightBarButtonEnabled = initialStateToEnableTopRightButton()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
 
         expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear % 100)"
+    }
+
+    func initialStateToEnableTopRightButton() -> Bool {
+        switch state {
+        case .add:
+            return false
+        case .edit:
+            return areFieldValuesValid()
+        case .view:
+            return true
+        }
+    }
+
+    func updateRightButtonState() {
+        isRightBarButtonEnabled = areFieldValuesValid()
     }
 
     func getDisplayedCCValues() -> UnencryptedCreditCardFields? {

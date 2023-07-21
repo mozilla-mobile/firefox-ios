@@ -6,8 +6,6 @@ import Foundation
 
 struct ComponentData {
     var data: [ComponentViewModel] {
-        return [ExampleComponentViewModel(),
-                ExampleComponentViewModel(),
-                ExampleComponentViewModel()]
+        return [FadeScrollViewComponentViewModel()]
     }
 }

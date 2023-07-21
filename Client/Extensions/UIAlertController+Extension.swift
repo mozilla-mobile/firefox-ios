@@ -88,30 +88,6 @@ extension UIAlertController {
         return alert
     }
 
-    class func clearPrivateDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
-        let alert = UIAlertController(
-            title: "",
-            message: .ClearPrivateDataAlertMessage,
-            preferredStyle: .alert
-        )
-
-        let noOption = UIAlertAction(
-            title: .ClearPrivateDataAlertCancel,
-            style: .cancel,
-            handler: nil
-        )
-
-        let okayOption = UIAlertAction(
-            title: .ClearPrivateDataAlertOk,
-            style: .destructive,
-            handler: okayCallback
-        )
-
-        alert.addAction(okayOption)
-        alert.addAction(noOption)
-        return alert
-    }
-
     class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
@@ -151,38 +127,6 @@ extension UIAlertController {
 
         let okayOption = UIAlertAction(
             title: .ClearWebsiteDataAlertOk,
-            style: .destructive,
-            handler: okayCallback
-        )
-
-        alert.addAction(okayOption)
-        alert.addAction(noOption)
-        return alert
-    }
-
-    /**
-     Builds the Alert view that asks if the users wants to also delete history stored on their other devices.
-
-     - parameter okayCallback: Okay option handler.
-
-     - returns: UIAlertController for asking the user to restore tabs after a crash
-     */
-
-    class func clearSyncedHistoryAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
-        let alert = UIAlertController(
-            title: "",
-            message: .ClearSyncedHistoryAlertMessage,
-            preferredStyle: .alert
-        )
-
-        let noOption = UIAlertAction(
-            title: .ClearSyncedHistoryAlertCancel,
-            style: .cancel,
-            handler: nil
-        )
-
-        let okayOption = UIAlertAction(
-            title: .ClearSyncedHistoryAlertOk,
             style: .destructive,
             handler: okayCallback
         )

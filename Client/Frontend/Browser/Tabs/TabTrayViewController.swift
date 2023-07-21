@@ -45,28 +45,28 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // Buttons & Menus
     private lazy var deleteButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var deleteButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
@@ -302,6 +302,7 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private func changePanel() {
         let segment = TabTrayViewModel.Segment(rawValue: segmentedControlIphone.selectedSegmentIndex)
+        viewModel.segmentToFocus = segment
         switch segment {
         case .tabs:
             switchBetweenLocalPanels(withPrivateMode: false)
@@ -574,6 +575,13 @@ extension TabTrayViewController {
         // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
         updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
+        if viewModel.segmentToFocus == .privateTabs {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .privateBrowsingIcon,
+                                         value: .tabTray,
+                                         extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "done"] )
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }

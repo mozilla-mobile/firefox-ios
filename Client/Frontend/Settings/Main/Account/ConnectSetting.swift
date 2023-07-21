@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
@@ -42,7 +43,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        cell.imageView?.image = UIImage.templateImageNamed(ImageIdentifiers.Large.logoFirefox)
+        cell.imageView?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.logoFirefox)
         cell.imageView?.tintColor = theme.colors.textDisabled
         cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
         cell.imageView?.layer.masksToBounds = true

@@ -183,6 +183,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .notificationsCtd: return ImageIdentifiers.onboardingNotificationsCTD
         case .welcomeCtd: return ImageIdentifiers.onboardingWelcomeCTD
         case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
+        case .setToDock: return ImageIdentifiers.onboardingSetToDock
         }
     }
 

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import Storage
@@ -83,9 +84,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Default actions
 
-    func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+    func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
+        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.privateMode) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            sectionType.newPrivateTabActionTelemetry()
         }.items
     }
 
@@ -93,7 +95,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
         return [SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                      iconString: ImageIdentifiers.Large.cross,
+                                      iconString: StandardImageIdentifiers.Large.cross,
                                       tapHandler: { _ in
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
             self.sendHistoryHighlightContextualTelemetry(type: .remove)
@@ -106,7 +108,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         guard let siteURL = site.url.asURL else { return nil }
 
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .pocket)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
@@ -114,7 +116,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.Large.plus) { _ in
+        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {
@@ -139,7 +141,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
-                                     iconString: ImageIdentifiers.Large.bookmarkSlash,
+                                     iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      tapHandler: { _ in
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                 site.setBookmarked(false)
@@ -151,7 +153,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
-                                     iconString: ImageIdentifiers.Large.bookmark,
+                                     iconString: StandardImageIdentifiers.Large.bookmark,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
             // Add new mobile bookmark at the top of the list
@@ -240,15 +242,15 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let topSiteActions: [PhotonRowActions]
         if let site = site as? PinnedSite {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         } else if site as? SponsoredTile != nil {
-            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
+            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction()]
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         }
         return topSiteActions
@@ -257,7 +259,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     // Removes the site out of the top sites. If site is pinned it removes it from pinned and remove
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                     iconString: ImageIdentifiers.Large.cross,
+                                     iconString: StandardImageIdentifiers.Large.cross,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
@@ -296,7 +298,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getSponsoredContentAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
-                                     iconString: ImageIdentifiers.Large.helpCircle,
+                                     iconString: StandardImageIdentifiers.Large.helpCircle,
                                      tapHandler: { _ in
             guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)

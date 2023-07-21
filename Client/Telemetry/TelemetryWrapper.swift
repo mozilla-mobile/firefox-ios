@@ -31,7 +31,7 @@ extension TelemetryWrapperProtocol {
     }
 }
 
-class TelemetryWrapper: TelemetryWrapperProtocol {
+class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
@@ -313,6 +313,23 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
+
+        // Homepage section preferences
+        let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser)
+        GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
+
+        let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
+        GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
+
+        let isRecentlySavedEnabled = featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
+
+        let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        GleanMetrics.Preferences.pocket.set(isPocketEnabled)
+
+        if let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) {
+            GleanMetrics.Preferences.openingScreen.set(startAtHomeSetting.rawValue)
+        }
     }
 
     @objc
@@ -393,6 +410,7 @@ extension TelemetryWrapper {
         case tabTray = "tab-tray"
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
+        case tabInactiveQuantity = "inactive-tab-quantity"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -409,6 +427,8 @@ extension TelemetryWrapper {
         case dismissETPCoverSheetAndStartBrowsing = "dismissed-etp-cover-sheet-and-start-browsing"
         case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
         case privateBrowsingButton = "private-browsing-button"
+        case privateBrowsingIcon = "private-browsing-icon"
+        case newPrivateTab = "new-private-tab"
         case startSearchButton = "start-search-button"
         case addNewTabButton = "add-new-tab-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
@@ -523,6 +543,7 @@ extension TelemetryWrapper {
 
     public enum EventValue: String {
         case activityStream = "activity-stream"
+        case appIcon = "app-icon"
         case appMenu = "app-menu"
         case browser = "browser"
         case contextMenu = "context-menu"
@@ -541,7 +562,6 @@ extension TelemetryWrapper {
         case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
-        case systemThemeSwitch = "system-theme-switch"
         case themeModeManually = "theme-manually"
         case themeModeAutomatically = "theme-automatically"
         case themeLight = "theme-light"
@@ -570,6 +590,8 @@ extension TelemetryWrapper {
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case historyHighlightsGroupOpen = "history-highlights-group-open"
+        case topSite = "top-site"
+        case pocketSite = "pocket-site"
         case customizeHomepageButton = "customize-homepage-button"
         case wallpaperSelected = "wallpaper-selected"
         case dismissCFRFromButton = "dismiss-cfr-from-button"
@@ -632,6 +654,13 @@ extension TelemetryWrapper {
         var description: String {
             return self.rawValue
         }
+
+        // Tracking Protection
+        case etpSetting = "etp_setting"
+        case etpEnabled = "etp_enabled"
+
+        // Tabs Tray
+        case done = "done"
 
         // Inactive Tab
         case inactiveTabsCollapsed = "collapsed"
@@ -731,7 +760,8 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
+        case (.action, .tap, .newPrivateTab, .topSite, _):
+            GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
@@ -795,17 +825,21 @@ extension TelemetryWrapper {
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
-        // MARK: - QR Codes
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
         case(.information, .background, .tabPrivateQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.information, .background, .tabInactiveQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.inactiveTabsCount.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -1067,6 +1101,8 @@ extension TelemetryWrapper {
             }
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
+        case (.action, .tap, .newPrivateTab, .pocketSite, _):
+            GleanMetrics.Pocket.openInPrivateTab.record()
 
         // MARK: Library Panel
         case (.action, .tap, .libraryPanel, let type?, _):
@@ -1114,6 +1150,9 @@ extension TelemetryWrapper {
             Experiments.shared.recordEvent("app_cycle.foreground")
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
+        // MARK: App icon
+        case (.action, .tap, .newPrivateTab, .appIcon, _):
+            GleanMetrics.AppIcon.newPrivateTabTapped.record()
         // MARK: Accessibility
         case(.action, .voiceOver, .app, _, let extras):
             if let isRunning = extras?[EventExtraKey.isVoiceOverRunning.rawValue] as? String {
@@ -1244,6 +1283,27 @@ extension TelemetryWrapper {
         case (.action, .tap, .createNewTab, _, _):
             GleanMetrics.PageActionMenu.createNewTab.add()
 
+        // MARK: Tracking Protection
+        case (.action, .tap, .trackingProtectionMenu, _, let extras):
+            if let action = extras?[EventExtraKey.etpSetting.rawValue] as? String {
+                let actionExtra = GleanMetrics.TrackingProtection.EtpSettingChangedExtra(etpSetting: action)
+                GleanMetrics.TrackingProtection.etpSettingChanged.record(actionExtra)
+            } else if let action = extras?[EventExtraKey.etpEnabled.rawValue] as? Bool {
+                let actionExtra = GleanMetrics.TrackingProtection.EtpSettingChangedExtra(etpEnabled: action)
+                GleanMetrics.TrackingProtection.etpSettingChanged.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        // MARK: Tabs Tray
+        case (.action, .tap, .privateBrowsingIcon, .tabTray, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.TabsTray.PrivateBrowsingIconTappedExtra(action: action)
+                GleanMetrics.TabsTray.privateBrowsingIconTapped.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .newPrivateTab, .tabTray, _):
+            GleanMetrics.TabsTray.newPrivateTabTapped.record()
         // MARK: Inactive Tab Tray
         case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
             GleanMetrics.InactiveTabsTray.openInactiveTab.add()

@@ -51,12 +51,6 @@ protocol QuickActions {
         _ type: ShortcutType,
         fromApplication application: UIApplication
     )
-
-    func handleShortCutItem(
-        _ shortcutItem: UIApplicationShortcutItem,
-        withBrowserViewController bvc: BrowserViewController,
-        completionHandler: @escaping (Bool) -> Void
-    )
 }
 
 extension QuickActions {
@@ -104,7 +98,7 @@ struct QuickActionsImplementation: QuickActions {
                 type: ShortcutType.openLastBookmark.type,
                 localizedTitle: .QuickActionsLastBookmarkTitle,
                 localizedSubtitle: userData[QuickActionInfos.tabTitleKey],
-                icon: UIApplicationShortcutIcon(templateImageName: ImageIdentifiers.Large.bookmarkFill),
+                icon: UIApplicationShortcutIcon(templateImageName: StandardImageIdentifiers.Large.bookmarkFill),
                 userInfo: userData as [String: NSSecureCoding]
             )
 
@@ -127,70 +121,5 @@ struct QuickActionsImplementation: QuickActions {
 
         dynamicShortcutItems.remove(at: index)
         application.shortcutItems = dynamicShortcutItems
-    }
-
-    // MARK: - Handling Quick Actions
-
-    func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem,
-                            withBrowserViewController bvc: BrowserViewController,
-                            completionHandler: @escaping (Bool) -> Void) {
-        // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
-        guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else {
-            completionHandler(false)
-            return
-        }
-
-        DispatchQueue.main.async {
-            self.handleShortCutItemOfType(shortCutType,
-                                          userData: shortcutItem.userInfo,
-                                          browserViewController: bvc)
-            completionHandler(true)
-        }
-    }
-
-    // MARK: - Private
-
-    private func handleShortCutItemOfType(_ type: ShortcutType, userData: [String: NSSecureCoding]?,
-                                          browserViewController: BrowserViewController) {
-        switch type {
-        case .newTab:
-            handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
-        case .newPrivateTab:
-            handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
-        case .openLastBookmark:
-            if let urlToOpen = (userData?[QuickActionInfos.tabURLKey] as? String)?.asURL {
-                handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
-            }
-        case .qrCode:
-            handleQRCode(with: browserViewController)
-        }
-    }
-
-    private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController,
-                                  isPrivate: Bool) {
-        // Should not focus if New tab settings is Custom URL
-        let shouldFocus = bvc.newTabSettings != .homePage
-        bvc.openBlankNewTab(focusLocationField: shouldFocus, isPrivate: isPrivate)
-        bvc.overlayManager.openNewTab(url: nil,
-                                      newTabSettings: bvc.newTabSettings)
-    }
-
-    private func handleOpenURL(withBrowserViewController bvc: BrowserViewController,
-                               urlToOpen: URL) {
-        // open bookmark in a non-private browsing tab
-        bvc.switchToPrivacyMode(isPrivate: false)
-
-        // find out if bookmarked URL is currently open
-        // if so, open to that tab,
-        // otherwise, create a new tab with the bookmarked URL
-        bvc.switchToTabForURLOrOpen(urlToOpen)
-    }
-
-    private func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = vc
-        let controller = UINavigationController(rootViewController: qrCodeViewController)
-        vc.presentedViewController?.dismiss(animated: true)
-        vc.present(controller, animated: true, completion: nil)
     }
 }

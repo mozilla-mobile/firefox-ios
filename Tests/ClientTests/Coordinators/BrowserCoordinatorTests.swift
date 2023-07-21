@@ -17,6 +17,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
+    private var scrollDelegate: MockStatusBarScrollDelegate!
 
     override func setUp() {
         super.setUp()
@@ -31,6 +32,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
         self.wallpaperManager = WallpaperManagerMock()
+        self.scrollDelegate = MockStatusBarScrollDelegate()
     }
 
     override func tearDown() {
@@ -44,6 +46,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.applicationHelper = nil
         self.glean = nil
         self.wallpaperManager = nil
+        self.scrollDelegate = nil
         AppContainer.shared.reset()
     }
 
@@ -94,6 +97,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
         let secondHomepage = HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
@@ -109,6 +113,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
@@ -118,6 +123,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              sendToDeviceDelegate: subject.browserViewController,
+                             statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
@@ -167,7 +173,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
-        let subject = createSubject()
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.show(settings: .general)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -498,7 +504,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.newTab
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is NewTabContentSettingsViewController)
         }
     }
@@ -507,7 +513,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.homePage
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is HomePageSettingViewController)
         }
     }
@@ -516,7 +522,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.mailto
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is OpenWithSettingsViewController)
         }
     }
@@ -525,7 +531,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.search
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is SearchSettingsTableViewController)
         }
     }
@@ -534,7 +540,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.clearPrivateData
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is ClearPrivateDataTableViewController)
         }
     }
@@ -543,7 +549,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.fxa
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is SyncContentSettingsViewController)
         }
     }
@@ -552,7 +558,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.theme
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is ThemeSettingsController)
         }
     }
@@ -562,7 +568,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertTrue(result is WallpaperSettingsViewController)
         }
     }
@@ -572,7 +578,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let route = Route.SettingsSection.wallpaper
         let subject = createSubject()
 
-        subject.getSettingsViewController(settingsSection: route) { result in
+        subject.legacyGetSettingsViewController(settingsSection: route) { result in
             XCTAssertNil(result)
         }
     }
@@ -634,6 +640,28 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.didFinishSettings(from: settingsCoordinator)
 
         XCTAssertTrue(result)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testETPCoordinatorDelegate_settingsOpenPage() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.settingsOpenPage(settings: .contentBlocker)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+    }
+
+    func testEnhancedTrackingProtectionCoordinatorDelegate_didFinishETP_removesChild() {
+        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        subject.browserHasLoaded()
+
+        subject.showEnhancedTrackingProtection()
+        let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
+        subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
+
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }

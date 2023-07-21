@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import SiteImageView
@@ -42,7 +43,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
     let favicon: FaviconImageView = .build { _ in }
 
     let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageEdgeInsets = UIEdgeInsets(top: 15,
                                               left: UX.tabTitlePadding,
                                               bottom: 15,
@@ -72,7 +73,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {

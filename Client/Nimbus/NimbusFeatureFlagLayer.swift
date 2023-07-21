@@ -29,23 +29,20 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .contextualHintForToolbar,
-                .contextualHintForJumpBackInSyncedTab:
+        case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
-
-        case .coordinatorsRefactor:
-            return checkCoordinatorRefactorFeature(from: nimbus)
 
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
 
         case .settingsCoordinatorRefactor:
             return checkSettingsCoordinatorRefactorFeature(from: nimbus)
+
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
-        case .jumpBackInSyncedTab:
-            return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
+        case .fakespotFeature:
+            return checkFakespotFeature(from: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
@@ -89,9 +86,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-
-        case .engagementNotificationStatus:
-            return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
 
         case .notificationSettings:
             return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
@@ -160,10 +154,6 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
-    }
-
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -172,18 +162,12 @@ final class NimbusFeatureFlagLayer {
         var nimbusID: ContextualHint
 
         switch featureID {
-        case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
         case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarHint
         default: return false
         }
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.coordinatorsRefactorFeature.value()
-        return config.enabled
     }
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
@@ -248,17 +232,6 @@ final class NimbusFeatureFlagLayer {
 
             switch featureID {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
-            default: return false
-            }
-    }
-
-    public func checkNimbusForEngagementNotification(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.engagementNotificationFeature.value()
-
-            switch featureID {
-            case .engagementNotificationStatus: return config.engagementNotificationFeatureStatus
             default: return false
             }
     }
@@ -331,6 +304,12 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.fakespotFeature.value()
+
+        return config.status
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {

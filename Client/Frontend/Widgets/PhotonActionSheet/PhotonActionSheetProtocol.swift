@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import Storage
@@ -40,32 +41,36 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
-        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle, iconString: ImageIdentifiers.pasteAndGo) { _ in
+        let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle,
+                                                  iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
-        }.items
+        }
+        pasteGoAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAndGoAction
 
-        let pasteAction = SingleActionViewModel(title: .PasteTitle, iconString: ImageIdentifiers.paste) { _ in
+        let pasteAction = SingleActionViewModel(title: .PasteTitle,
+                                                iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
-        }.items
+        }
+        pasteAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAction
 
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle,
-                                                      iconString: ImageIdentifiers.Large.link) { _ in
+                                                      iconString: StandardImageIdentifiers.Large.link) { _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
                                                 theme: themeManager.currentTheme)
             }
-        }.items
+        }
 
         if UIPasteboard.general.string != nil {
-            return [pasteGoAction, pasteAction, copyAddressAction]
+            return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
         } else {
-            return [copyAddressAction]
+            return [copyAddressAction.items]
         }
     }
 
@@ -81,7 +86,8 @@ extension PhotonActionSheetProtocol {
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
         }
-        let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle, iconString: ImageIdentifiers.Large.deviceDesktop) { _ in
+        let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,
+                                                      iconString: StandardImageIdentifiers.Large.deviceDesktop) { _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
                 Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)

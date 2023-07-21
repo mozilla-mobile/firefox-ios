@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
@@ -28,7 +29,7 @@ enum ReaderModeBarButtonType {
         case .markAsUnread: return "MarkAsUnread"
         case .settings: return "SettingsSerif"
         case .addToReadingList: return ImageIdentifiers.addToReadingList
-        case .removeFromReadingList: return ImageIdentifiers.Large.delete
+        case .removeFromReadingList: return StandardImageIdentifiers.Large.delete
         }
     }
 

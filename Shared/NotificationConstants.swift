@@ -54,11 +54,6 @@ extension Notification.Name {
 
     public static let FileDidDownload = Notification.Name("FileDidDownload")
 
-    public static let DisplayThemeChanged = Notification.Name("DisplayThemeChanged")
-
-    // This will eventually replace DisplayThemeChanged
-    public static let ThemeDidChange = Notification.Name("ThemeDidChange")
-
     public static let SearchBarPositionDidChange = Notification.Name("SearchBarPositionDidChange")
 
     public static let WallpaperDidChange = Notification.Name("WallpaperDidChange")

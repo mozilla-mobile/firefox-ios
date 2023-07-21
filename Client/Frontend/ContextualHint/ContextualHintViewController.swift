@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import ComponentLibrary
 import Foundation
 import UIKit
 import Shared
-import Common
 
 class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable {
     struct UX {
@@ -25,7 +26,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     }
 
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: ImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
+        button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UIKit
 import Shared
@@ -62,7 +63,7 @@ class TabCell: UICollectionViewCell,
     lazy var favicon: FaviconImageView = .build { _ in }
 
     lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabViewController.UX.closeButtonEdgeInset)
@@ -164,9 +165,9 @@ class TabCell: UICollectionViewCell,
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
-        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)
-        if !tab.isFxHomeTab {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
+        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)
+        if !tab.isFxHomeTab, let tabURL = tab.url?.absoluteString {
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
         }
 
         if selected {
@@ -188,7 +189,7 @@ class TabCell: UICollectionViewCell,
         // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
-            smallFaviconView.image = UIImage(named: ImageIdentifiers.Large.globe)
+            smallFaviconView.image = UIImage(named: StandardImageIdentifiers.Large.globe)
             faviconBG.isHidden = false
             screenshotView.image = nil
 
@@ -198,9 +199,12 @@ class TabCell: UICollectionViewCell,
 
         // Favicon or letter image when tab screenshot isn't available
         } else {
-            smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
             faviconBG.isHidden = false
             screenshotView.image = nil
+
+            if let tabURL = tab.url?.absoluteString {
+                smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
+            }
         }
     }
 

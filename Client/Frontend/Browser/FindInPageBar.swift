@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
@@ -87,14 +88,14 @@ class FindInPageBar: UIView {
         matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
-        previousButton.setImage(UIImage(named: ImageIdentifiers.Large.chevronUp), for: .normal)
+        previousButton.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
         previousButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         previousButton.accessibilityLabel = .FindInPagePreviousAccessibilityLabel
         previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
         previousButton.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findPreviousButton
         addSubview(previousButton)
 
-        nextButton.setImage(UIImage(named: ImageIdentifiers.Large.chevronDown), for: .normal)
+        nextButton.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
         nextButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         nextButton.accessibilityLabel = .FindInPageNextAccessibilityLabel
         nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
@@ -102,7 +103,7 @@ class FindInPageBar: UIView {
         addSubview(nextButton)
 
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: ImageIdentifiers.Medium.cross), for: .normal)
+        closeButton.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross), for: .normal)
         closeButton.setTitleColor(FindInPageUX.ButtonColor, for: .normal)
         closeButton.accessibilityLabel = .FindInPageDoneAccessibilityLabel
         closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 import Storage
@@ -78,7 +79,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isBookmarked && !isHomeTab {
                 actions.append(UIAction(title: .TabPeekAddToBookmarks,
-                                        image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
+                                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                                         identifier: nil) { [weak self] _ in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
@@ -91,7 +92,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 })
             }
             actions.append(UIAction(title: .TabPeekCopyUrl,
-                                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.link),
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                                     identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
 
@@ -100,7 +101,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab,
-                                image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
+                                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                                 identifier: nil) { [weak self] _ in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)

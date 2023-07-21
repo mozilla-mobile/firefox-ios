@@ -18,7 +18,6 @@ class LegacyThemeManager {
         didSet {
             ensureMainThread {
                 UserDefaults.standard.set(self.current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
-                NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
             }
         }
     }

@@ -47,11 +47,16 @@ class ETPSectionView: UIView {
     }
 }
 
+protocol EnhancedTrackingProtectionMenuDelegate: AnyObject {
+    func settingsOpenPage(settings: Route.SettingsSection)
+    func didFinish()
+}
+
 class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-
+    weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
     // MARK: UI components
 
     // Header View
@@ -60,7 +65,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private var favicon: FaviconImageView = .build { favicon in
-        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
     }
 
     private let siteDomainLabel: UILabel = .build { label in
@@ -92,7 +97,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        image.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 
@@ -357,7 +362,11 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     @objc
     func closeButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
+        if CoordinatorFlagManager.isEtpCoordinatorEnabled {
+            enhancedTrackingProtectionMenuDelegate?.didFinish()
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc
@@ -379,9 +388,13 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     @objc
     func protectionSettingsTapped() {
-        self.dismiss(animated: true) {
-            self.viewModel.onOpenSettingsTapped?()
-        }
+        if CoordinatorFlagManager.isEtpCoordinatorEnabled {
+             enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
+         } else {
+             self.dismiss(animated: true) {
+                 self.viewModel.onOpenSettingsTapped?()
+             }
+         }
     }
 
     // MARK: - Gesture Recognizer
@@ -408,7 +421,11 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         if sender.state == .ended {
             let dragVelocity = sender.velocity(in: view)
             if dragVelocity.y >= 1300 {
-                self.dismiss(animated: true, completion: nil)
+                if CoordinatorFlagManager.isEtpCoordinatorEnabled {
+                    enhancedTrackingProtectionMenuDelegate?.didFinish()
+                } else {
+                    self.dismiss(animated: true, completion: nil)
+                }
             } else {
                 // Set back to original position of the view controller
                 UIView.animate(withDuration: 0.3) {
@@ -426,7 +443,7 @@ extension EnhancedTrackingProtectionMenuVC {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: ImageIdentifiers.Medium.cross)?
+        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         connectionView.backgroundColor = theme.colors.layer2

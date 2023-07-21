@@ -157,6 +157,10 @@ final class RouteBuilder {
         case .newTab:
             return .search(url: nil, isPrivate: false, options: options)
         case .newPrivateTab:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .newPrivateTab,
+                                         value: .appIcon)
             return .search(url: nil, isPrivate: true, options: options)
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {

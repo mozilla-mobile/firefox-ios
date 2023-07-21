@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 class AuthenticationTests: KIFTestCase {
@@ -57,7 +58,7 @@ class AuthenticationTests: KIFTestCase {
 
         // Add a private tab.
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
-        tester().tapView(withAccessibilityLabel: "smallPrivateMask")
+        tester().tapView(withAccessibilityLabel: StandardImageIdentifiers.Large.privateMode)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.newTabButton)
         tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

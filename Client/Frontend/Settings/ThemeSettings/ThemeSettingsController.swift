@@ -131,11 +131,6 @@ class ThemeSettingsController: ThemedTableViewController {
         } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .setting,
-                                     value: .systemThemeSwitch,
-                                     extras: ["to": control.isOn])
 
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation

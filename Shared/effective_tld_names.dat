@@ -6719,7 +6719,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-06-16T15:12:40Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-07-08T15:13:18Z
 // This list is auto-generated, don't edit it manually.
 // aaa : 2015-02-26 American Automobile Association, Inc.
 aaa
@@ -8083,9 +8083,6 @@ hosting
 // hot : 2015-08-27 Amazon Registry Services, Inc.
 hot
 
-// hoteles : 2015-03-05 Travel Reservations SRL
-hoteles
-
 // hotels : 2016-04-07 Booking.com B.V.
 hotels
 
@@ -8827,9 +8824,6 @@ parts
 // party : 2014-09-11 Blue Sky Registry Limited
 party
 
-// passagens : 2015-03-05 Travel Reservations SRL
-passagens
-
 // pay : 2015-08-27 Amazon Registry Services, Inc.
 pay
 
@@ -9340,7 +9334,7 @@ spa
 // space : 2014-04-03 Radix FZC
 space
 
-// sport : 2017-11-16 Global Association of International Sports Federations (GAISF)
+// sport : 2017-11-16 SportAccord
 sport
 
 // spot : 2015-02-26 Amazon Registry Services, Inc.
@@ -9696,9 +9690,6 @@ voto
 
 // voyage : 2013-08-27 Binky Moon, LLC
 voyage
-
-// vuelos : 2015-03-05 Travel Reservations SRL
-vuelos
 
 // wales : 2014-05-08 Nominet UK
 wales

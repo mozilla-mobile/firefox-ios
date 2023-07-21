@@ -673,8 +673,9 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                let urlString = openedTab.url?.absoluteString ?? ""
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+                if let urlString = openedTab.url?.absoluteString {
+                    twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+                }
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -748,7 +749,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: ImageIdentifiers.Large.appendUp)
+        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUp)
 
         if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
             searchAppendImage = UIImage(

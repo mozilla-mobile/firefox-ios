@@ -233,8 +233,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
-        autocompleteTextLabel = nil
         autocompleteTextLabel?.removeFromSuperview()
+        autocompleteTextLabel = nil
 
         if let theme {
             let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
@@ -361,12 +361,16 @@ extension AutocompleteTextField: MenuHelperInterface {
 extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         isPrivateMode = isPrivate
-        let autocompleteText = NSMutableAttributedString(string: self.autocompleteTextLabel?.attributedText?.string ?? "")
-        let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
-        autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
-                                      value: color,
-                                      range: NSRange(location: 0, length: autocompleteText.length))
-        self.autocompleteTextLabel?.attributedText = autocompleteText
+
+        if autocompleteTextLabel?.attributedText != nil {
+            let autocompleteText = NSMutableAttributedString(string: self.autocompleteTextLabel?.attributedText?.string ?? "")
+            let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
+            autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
+                                          value: color,
+                                          range: NSRange(location: 0, length: autocompleteText.length))
+            self.autocompleteTextLabel?.attributedText = autocompleteText
+        }
+
         applyTheme(theme: theme)
     }
 
@@ -380,9 +384,10 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
         textColor = theme.colors.textPrimary
         tintColor = theme.colors.actionPrimary
 
+        // Only refresh if an autocomplete label is presented to the user
         if autocompleteTextLabel?.attributedText != nil {
-            autocompleteTextLabel?.backgroundColor = backgroundColor
-            autocompleteTextLabel?.textColor = textColor
+            autocompleteTextLabel?.backgroundColor = theme.colors.layer3
+            autocompleteTextLabel?.textColor = theme.colors.textPrimary
         }
     }
 }

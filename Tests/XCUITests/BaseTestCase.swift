@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import MappaMundi
 import XCTest
 
@@ -135,15 +136,15 @@ class BaseTestCase: XCTestCase {
     func bookmark() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmarkSlash])
-        app.otherElements[ImageIdentifiers.Large.bookmarkSlash].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
+        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
     }
 
@@ -207,7 +208,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+        app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30

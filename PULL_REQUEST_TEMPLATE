@@ -9,7 +9,7 @@
 You have to check all boxes before merging
 - [ ] Filled in the above information (tickets numbers and description of your work)
 - [ ] Updated the PR name to follow our [PR naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
-- [ ] Wrote unit tests and ensured the tests suite is passing
-- [ ] Implemented accessibility and tested on UI related work (minimum Dynamic Text and VoiceOver)
-- [ ] Updated documentation / comments for complex code and public methods if needed
+- [ ] Wrote unit tests and/or ensured the tests suite is passing
+- [ ] When working on UI, I checked and implemented accessibility (minimum Dynamic Text and VoiceOver)
+- [ ] If needed I updated documentation / comments for complex code and public methods
 

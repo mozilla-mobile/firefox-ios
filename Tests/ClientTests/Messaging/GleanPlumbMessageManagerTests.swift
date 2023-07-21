@@ -149,6 +149,29 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)
     }
 
+    func testManagerGetMessage_experiments_malformedControlMessages() throws {
+        let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 0)
+
+        let expectedId = "infoCard"
+        let messages = [
+            createMessage(messageId: "control", surface: .newTabCard, isControl: true),
+            createMessage(messageId: expectedId, surface: .newTabCard)
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+
+        XCTAssertEqual(messagingStore.getMessageMetadata(messageId: "control").impressions, 1)
+
+        XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
+        XCTAssertEqual(hardcodedNimbusFeatures.getMalformed(for: "messaging"), "control")
+    }
+
     func testManagerGetMessage_experiments_multiplControlMessages() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)

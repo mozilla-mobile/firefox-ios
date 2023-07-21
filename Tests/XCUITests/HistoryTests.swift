@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let webpage = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
@@ -218,8 +219,8 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.plus].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.plus].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].exists)
     }
 
     func testOpenInNewTabRecentlyClosedItem() {
@@ -235,7 +236,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.plus].tap()
 
         // The page is opened on the new tab
         navigator.nowAt(NewTabScreen)
@@ -261,7 +262,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.newPrivateTab].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)
@@ -381,10 +382,10 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
-            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
+            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         } else {
-            app.cells.buttons[ImageIdentifiers.Large.cross].firstMatch.tap()
-            // app.otherElements.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
+            // app.otherElements.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         }
     }
 
@@ -448,8 +449,8 @@ class HistoryTests: BaseTestCase {
             navigator.goto(LibraryPanel_History)
             waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
             app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-            waitForExistence(app.buttons[ImageIdentifiers.Large.delete], timeout: TIMEOUT)
-            app.buttons[ImageIdentifiers.Large.delete].tap()
+            waitForExistence(app.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
+            app.buttons[StandardImageIdentifiers.Large.delete].tap()
             waitForNoExistence(app.staticTexts["http://example.com"])
         }
     }

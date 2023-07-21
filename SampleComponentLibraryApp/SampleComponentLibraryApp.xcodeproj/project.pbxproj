@@ -17,10 +17,10 @@
 		8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE09A2A57317200B4D401 /* ComponentCell.swift */; };
 		8A6EE0A22A574ED500B4D401 /* ComponentLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8A6EE0A12A574ED500B4D401 /* ComponentLibrary */; };
 		8A6EE0A52A58642500B4D401 /* ComponentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0A42A58642500B4D401 /* ComponentDataSource.swift */; };
-		8A6EE0A82A58659900B4D401 /* ExampleComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0A72A58659900B4D401 /* ExampleComponentViewModel.swift */; };
+		8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0A72A58659900B4D401 /* FadeScrollViewComponentViewModel.swift */; };
 		8A6EE0AA2A5866C300B4D401 /* ComponentDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0A92A5866C300B4D401 /* ComponentDelegate.swift */; };
 		8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0AB2A5869BE00B4D401 /* Presenter.swift */; };
-		8A6EE0AF2A586A1B00B4D401 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0AE2A586A1B00B4D401 /* ExampleViewController.swift */; };
+		8A6EE0AF2A586A1B00B4D401 /* FadeScrollViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0AE2A586A1B00B4D401 /* FadeScrollViewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,10 +36,10 @@
 		8A6EE09A2A57317200B4D401 /* ComponentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentCell.swift; sourceTree = "<group>"; };
 		8A6EE09C2A574E3700B4D401 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A6EE0A42A58642500B4D401 /* ComponentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDataSource.swift; sourceTree = "<group>"; };
-		8A6EE0A72A58659900B4D401 /* ExampleComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleComponentViewModel.swift; sourceTree = "<group>"; };
+		8A6EE0A72A58659900B4D401 /* FadeScrollViewComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollViewComponentViewModel.swift; sourceTree = "<group>"; };
 		8A6EE0A92A5866C300B4D401 /* ComponentDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDelegate.swift; sourceTree = "<group>"; };
 		8A6EE0AB2A5869BE00B4D401 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
-		8A6EE0AE2A586A1B00B4D401 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
+		8A6EE0AE2A586A1B00B4D401 /* FadeScrollViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollViewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				8A6EE0AD2A5869C200B4D401 /* Protocol */,
-				8A6EE0A62A58658200B4D401 /* ExampleComponent */,
+				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
 				8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */,
 				8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */,
@@ -115,13 +115,13 @@
 			path = Component;
 			sourceTree = "<group>";
 		};
-		8A6EE0A62A58658200B4D401 /* ExampleComponent */ = {
+		8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */ = {
 			isa = PBXGroup;
 			children = (
-				8A6EE0A72A58659900B4D401 /* ExampleComponentViewModel.swift */,
-				8A6EE0AE2A586A1B00B4D401 /* ExampleViewController.swift */,
+				8A6EE0A72A58659900B4D401 /* FadeScrollViewComponentViewModel.swift */,
+				8A6EE0AE2A586A1B00B4D401 /* FadeScrollViewViewController.swift */,
 			);
-			path = ExampleComponent;
+			path = FadeScrollViewComponent;
 			sourceTree = "<group>";
 		};
 		8A6EE0AD2A5869C200B4D401 /* Protocol */ = {
@@ -228,7 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A6EE0AF2A586A1B00B4D401 /* ExampleViewController.swift in Sources */,
+				8A6EE0AF2A586A1B00B4D401 /* FadeScrollViewViewController.swift in Sources */,
 				8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */,
 				8A6EE0A52A58642500B4D401 /* ComponentDataSource.swift in Sources */,
 				8A6EE0AA2A5866C300B4D401 /* ComponentDelegate.swift in Sources */,
@@ -236,7 +236,7 @@
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
-				8A6EE0A82A58659900B4D401 /* ExampleComponentViewModel.swift in Sources */,
+				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
 				8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */,
 			);

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UIKit
 import Shared
@@ -40,7 +41,7 @@ class StatefulButton: UIButton {
             case .reload:
                 setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
             case .stop:
-                setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: .normal)
+                setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: .normal)
             case .disabled:
                 self.isHidden = true
             }

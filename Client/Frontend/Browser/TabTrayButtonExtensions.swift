@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
@@ -10,7 +11,7 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         super.init(frame: frame)
         accessibilityLabel = .TabTrayToggleAccessibilityLabel
         accessibilityHint = .TabTrayToggleAccessibilityHint
-        let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
+        let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
 

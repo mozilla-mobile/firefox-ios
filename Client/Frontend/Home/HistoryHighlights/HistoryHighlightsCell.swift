@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import SiteImageView
 import Shared
@@ -87,7 +88,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             let faviconViewModel = FaviconImageViewModel(siteURLString: url)
             imageView.setFavicon(faviconViewModel)
         } else {
-            imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.tabTray)
+            imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.tabTray)
         }
 
         applyTheme(theme: theme)

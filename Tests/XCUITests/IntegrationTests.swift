@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 private let testingURL = "example.com"
@@ -70,7 +71,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT_LONG)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
         sleep(5)
         if app.tables.staticTexts["Sync Now"].exists {
@@ -109,8 +110,8 @@ class IntegrationTests: BaseTestCase {
         navigator.openURL("example.com")
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.Large.bookmark], timeout: 15)
-        app.tables.otherElements[ImageIdentifiers.Large.bookmark].tap()
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: 15)
+        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
@@ -198,13 +199,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        app.buttons["Continue"].tap()
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
@@ -250,13 +251,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        app.buttons["Continue"].tap()
         waitForExistence(app.tables["Login List"], timeout: 3)
         // Verify the login
         waitForExistence(app.staticTexts["https://accounts.google.com"])
@@ -284,6 +285,8 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons.element(boundBy: 0).tap()
 
         navigator.nowAt(SettingsScreen)
+        waitForExistence(app.staticTexts["GENERAL"])
+        app.swipeDown()
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
 

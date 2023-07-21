@@ -7,16 +7,6 @@ import UIKit
 enum ContentType {
     case webview
     case homepage
-
-    /// Homepage wallpaper with bottom URL bar can be seen under the status bar, this means we need extended content at the top (unclipped)
-    var needTopContentExtended: Bool {
-        switch self {
-        case .homepage:
-            return true
-        default:
-            return false
-        }
-    }
 }
 
 protocol ContentContainable: UIViewController {

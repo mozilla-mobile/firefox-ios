@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 class ReaderViewTest: BaseTestCase {
@@ -188,7 +189,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Select to open in New Tab
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.Large.plus].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.plus].tap()
         updateScreenGraph()
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
@@ -206,7 +207,7 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.Large.cross].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.cross].tap()
 
         // Verify the item has been removed
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

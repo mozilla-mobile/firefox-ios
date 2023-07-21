@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Storage
 import Shared
 
@@ -37,11 +38,11 @@ extension LibraryPanelContextMenu {
     func getRecentlyClosedTabContexMenuActions(for site: Site, recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.Large.plus) { _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.privateMode) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: true)
         }
 
@@ -51,11 +52,11 @@ extension LibraryPanelContextMenu {
     func getRemoteTabContextMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.Large.plus) { _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.privateMode) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
@@ -66,12 +67,12 @@ extension LibraryPanelContextMenu {
         guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle,
-                                                       iconString: ImageIdentifiers.Large.plus) { _ in
+                                                       iconString: StandardImageIdentifiers.Large.plus) { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }.items
 
         let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle,
-                                                              iconString: ImageIdentifiers.newPrivateTab) { _ in
+                                                              iconString: StandardImageIdentifiers.Large.privateMode) { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
 

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Shared
 import Storage
 
@@ -52,7 +53,7 @@ class EnhancedTrackingProtectionMenuVM {
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         let insecureImageName = themeType.getThemedImageName(name: ImageIdentifiers.lockBlocked)
         if connectionSecure {
-            return UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
+            return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock).withRenderingMode(.alwaysTemplate)
         } else {
             return UIImage(imageLiteralResourceName: insecureImageName)
         }

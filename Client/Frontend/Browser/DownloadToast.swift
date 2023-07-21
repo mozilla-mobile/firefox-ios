@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Shared
 import UIKit
 
@@ -20,7 +21,7 @@ class DownloadToast: Toast {
     }
 
     private var imageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.Large.download)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.download)
     }
 
     private var labelStackView: UIStackView = .build { stackView in
@@ -42,7 +43,7 @@ class DownloadToast: Toast {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Medium.cross), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross), for: [])
         button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
     }
 
