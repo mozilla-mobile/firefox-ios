@@ -28,7 +28,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? configureRefreshControl() : nil
+            let pullToRefreshEnabled = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
+            configureRefreshControl(isEnabled: pullToRefreshEnabled)
         }
     }
 
@@ -205,8 +206,8 @@ private extension TabScrollingController {
             completion: nil)
     }
 
-    func configureRefreshControl() {
-        scrollView?.refreshControl = UIRefreshControl()
+    func configureRefreshControl(isEnabled: Bool) {
+        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
 
@@ -406,10 +407,12 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        configureRefreshControl(isEnabled: false)
         self.isUserZoom = true
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        configureRefreshControl(isEnabled: true)
         self.isUserZoom = false
     }
 
