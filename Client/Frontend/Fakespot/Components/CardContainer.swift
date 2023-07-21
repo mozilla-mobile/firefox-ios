@@ -19,7 +19,6 @@ class CardContainer: UIView, ThemeApplicable {
 
     // UI
     private lazy var rootView: UIView = .build { _ in }
-    lazy var containerView: UIView = .build { _ in }
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -44,8 +43,23 @@ class CardContainer: UIView, ThemeApplicable {
         setupShadow(theme: theme)
     }
 
+    func configure(_ view: UIView) {
+        rootView.subviews.map { $0.removeFromSuperview() }
+        rootView.addSubview(view)
+
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
+                                          constant: UX.horizontalPadding),
+            view.topAnchor.constraint(equalTo: rootView.topAnchor,
+                                      constant: UX.verticalPadding),
+            view.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
+                                           constant: -UX.horizontalPadding),
+            view.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
+                                         constant: -UX.verticalPadding),
+        ])
+    }
+
     private func setupLayout() {
-        rootView.addSubview(containerView)
         addSubview(rootView)
 
         NSLayoutConstraint.activate([
@@ -53,15 +67,6 @@ class CardContainer: UIView, ThemeApplicable {
             rootView.topAnchor.constraint(equalTo: topAnchor),
             rootView.trailingAnchor.constraint(equalTo: trailingAnchor),
             rootView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            containerView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
-                                                   constant: UX.horizontalPadding),
-            containerView.topAnchor.constraint(equalTo: rootView.topAnchor,
-                                               constant: UX.verticalPadding),
-            containerView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
-                                                    constant: -UX.horizontalPadding),
-            containerView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
-                                                  constant: -UX.verticalPadding),
         ])
     }
 
