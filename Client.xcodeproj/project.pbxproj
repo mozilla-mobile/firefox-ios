@@ -1284,6 +1284,8 @@
 		E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */; };
+		E1D3FFB22A66A9F5002D31EF /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D3FFB12A66A9F5002D31EF /* CardContainer.swift */; };
+		E1D3FFB42A66B726002D31EF /* FakespotBottomSheetChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D3FFB32A66B726002D31EF /* FakespotBottomSheetChildViewController.swift */; };
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
@@ -6402,6 +6404,8 @@
 		E1CD81C4290C6D5800124B27 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
+		E1D3FFB12A66A9F5002D31EF /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
+		E1D3FFB32A66B726002D31EF /* FakespotBottomSheetChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotBottomSheetChildViewController.swift; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
@@ -9836,6 +9840,23 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		E1D3FFAF2A66A9BD002D31EF /* Fakespot */ = {
+			isa = PBXGroup;
+			children = (
+				E1D3FFB02A66A9CC002D31EF /* Components */,
+				E1D3FFB32A66B726002D31EF /* FakespotBottomSheetChildViewController.swift */,
+			);
+			path = Fakespot;
+			sourceTree = "<group>";
+		};
+		E1D3FFB02A66A9CC002D31EF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E1D3FFB12A66A9F5002D31EF /* CardContainer.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
 			isa = PBXGroup;
 			children = (
@@ -10481,6 +10502,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				E1D3FFAF2A66A9BD002D31EF /* Fakespot */,
 				43D00490296FC44B00CB0F31 /* Autofill */,
 				C855728029AE7EF900AF32B0 /* SurveySurface */,
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
@@ -12268,6 +12290,7 @@
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
+				E1D3FFB22A66A9F5002D31EF /* CardContainer.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
@@ -12338,6 +12361,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
+				E1D3FFB42A66B726002D31EF /* FakespotBottomSheetChildViewController.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
