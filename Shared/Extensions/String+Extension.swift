@@ -122,8 +122,7 @@ public extension String {
     /// Find all matches within the given range of the string.
     /// The resulting matches are then transformed into an array of substrings and returned
     func match(_ regex: String) -> [String] {
-        let regex = try? NSRegularExpression(pattern: regex)
-        guard let regex else { return [] }
+        guard let regex = try? NSRegularExpression(pattern: regex) else { return [] }
         let nsString = self as NSString
         let range = NSRange(location: 0, length: nsString.length)
         return regex.matches(in: self, range: range)

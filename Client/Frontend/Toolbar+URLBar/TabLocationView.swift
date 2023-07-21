@@ -125,6 +125,8 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private lazy var shoppingCartButton: UIButton = .build { button in
+        // Temporary icon, will be updated
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-7039
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
     }
