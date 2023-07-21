@@ -232,10 +232,14 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     // MARK: - Button actions
     @objc
     func primaryAction() {
-        didTapButton = true
         switch viewModel.buttonAction {
-        case .openIosFxSettings: DefaultApplicationHelper().openSettings()
-        case .dismissAndNextCard: dismissDelegate?.dismissSheetViewController { self.buttonTappedFinishFlow?() }
+        case .openIosFxSettings:
+            didTapButton = true
+            DefaultApplicationHelper().openSettings()
+        case .dismissAndNextCard:
+            dismissDelegate?.dismissSheetViewController { self.buttonTappedFinishFlow?() }
+        case .dismiss:
+            dismissDelegate?.dismissSheetViewController(completion: nil)
         }
     }
 
