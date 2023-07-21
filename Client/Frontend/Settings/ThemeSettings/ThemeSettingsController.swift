@@ -70,6 +70,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     func newState(state: ThemeSettingsState) {
         themeState = state
+//        print("YRD newState \(themeState)")
         tableView.reloadData()
     }
 
@@ -107,6 +108,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func brightnessChanged() {
+        // TODO: YRD Add action here
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
         LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
@@ -116,8 +118,12 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func sliderValueChanged(control: UISlider, event: UIEvent) {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
-        themeManager.setAutomaticBrightnessValue(control.value)
-        LegacyThemeManager.instance.automaticBrightnessValue = control.value
+        if isReduxIntegrationEnabled {
+
+        } else {
+            themeManager.setAutomaticBrightnessValue(control.value)
+            LegacyThemeManager.instance.automaticBrightnessValue = control.value
+        }
         brightnessChanged()
     }
 
@@ -280,8 +286,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func changeManualTheme(isLightTheme: Bool) {
-        // TODO: Implement redux action in next PR
-        if !isReduxIntegrationEnabled {
+        if isReduxIntegrationEnabled {
+            let themeName: BuiltinThemeName = isLightTheme ? .normal : .dark
+            store.dispatch(ThemeSettingsAction.switchManualTheme(themeName))
+        } else {
             LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
             themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
         }
