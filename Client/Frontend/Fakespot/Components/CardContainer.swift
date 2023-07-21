@@ -44,7 +44,7 @@ class CardContainer: UIView, ThemeApplicable {
     }
 
     func configure(_ view: UIView) {
-        rootView.subviews.map { $0.removeFromSuperview() }
+        rootView.subviews.forEach { $0.removeFromSuperview() }
         rootView.addSubview(view)
 
         NSLayoutConstraint.activate([
