@@ -22,7 +22,7 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isCoordinatorEnabled {
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
             guard let url = self.url,
                   let title = self.title
             else { return }

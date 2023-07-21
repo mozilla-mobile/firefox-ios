@@ -726,7 +726,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
-        screenState.tap(app.cells["WebsiteData"], to: WebsiteDataSettings)
+        screenState.tap(app.cells[AccessibilityIdentifiers.Settings.ClearData.websiteDataSection], to: WebsiteDataSettings)
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
             app.tables.cells["ClearPrivateData"].tap()
             app.alerts.buttons["OK"].tap()

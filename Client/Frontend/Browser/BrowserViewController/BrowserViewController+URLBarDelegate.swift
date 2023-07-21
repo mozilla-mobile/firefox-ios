@@ -97,7 +97,7 @@ extension BrowserViewController: URLBarDelegate {
                 navigationHandler?.showShareExtension(
                     url: tabUrl,
                     sourceView: shareView,
-                    toastContainer: alertContainer,
+                    toastContainer: contentContainer,
                     popoverArrowDirection: isBottomSearchBar ? .down : .up)
             } else {
                 presentShareSheet(tabUrl,
@@ -223,7 +223,7 @@ extension BrowserViewController: URLBarDelegate {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: alertContainer,
+                                            bottomContainer: contentContainer,
                                             theme: themeManager.currentTheme)
         case .failure:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
@@ -266,7 +266,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let urlActions = self.getLongPressLocationBarActions(with: urlBar, alertContainer: alertContainer)
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar, alertContainer: contentContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -278,10 +278,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
         guard let selectedTab = tabManager.selectedTab else { return }
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            // Only scroll to top if we are not showing the home view controller
-            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
-        } else if homepageViewController == nil {
+        if !contentContainer.hasHomepage {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -381,11 +378,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            if !CoordinatorFlagManager.isCoordinatorEnabled {
-                showHomepage(inline: false)
-            } else {
-                showEmbeddedHomepage(inline: false)
-            }
+            showEmbeddedHomepage(inline: false)
         }
 
         urlBar.applyTheme(theme: themeManager.currentTheme)
