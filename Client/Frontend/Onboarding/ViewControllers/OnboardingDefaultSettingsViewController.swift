@@ -200,12 +200,17 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     // MARK: - Helper methods
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
-        let attributedStrings = viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize))
+        let attributedStrings = viewModel.getAttributedStrings(
+            with: DynamicFontHelper.defaultHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.numeratedTextFontSize))
         attributedStrings.forEach { attributedText in
             let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
                 label.textAlignment = .left
-                label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)
+                label.font = DynamicFontHelper.defaultHelper.preferredFont(
+                    withTextStyle: .subheadline,
+                    size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true
                 label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
                 label.attributedText = attributedText
@@ -218,16 +223,23 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     @objc
     func appDidEnterBackgroundNotification() {
         if didTapButton {
+            dismissWithFinishFlow()
+        }
+    }
+
+    private func dismissWithFinishFlow() {
             dismiss(animated: false)
             buttonTappedFinishFlow?()
-        }
     }
 
     // MARK: - Button actions
     @objc
     func primaryAction() {
         didTapButton = true
-        DefaultApplicationHelper().openSettings()
+        switch viewModel.buttonAction {
+        case .openIosFxSettings: DefaultApplicationHelper().openSettings()
+        case .dismiss: dismissWithFinishFlow()
+        }
     }
 
     // MARK: - Themeable

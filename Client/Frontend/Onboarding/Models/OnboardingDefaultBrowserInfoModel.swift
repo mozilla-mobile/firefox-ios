@@ -9,6 +9,7 @@ struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol 
     var title: String
     var instructionSteps: [String]
     var buttonTitle: String
+    var buttonAction: InstructionCardActions
     var a11yIdRoot: String
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
