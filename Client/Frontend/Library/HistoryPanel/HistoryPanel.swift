@@ -196,6 +196,14 @@ class HistoryPanel: UIViewController,
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .historyPanelOpened)
+    }
+
     // MARK: - Private helpers
 
     private func setupLayout() {
@@ -482,6 +490,10 @@ class HistoryPanel: UIViewController,
         } else {
             applySnapshot(animatingDifferences: true)
         }
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .swipe,
+                                     object: .historySingleItemRemoved)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
