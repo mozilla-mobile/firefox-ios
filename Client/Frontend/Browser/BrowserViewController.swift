@@ -1020,7 +1020,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1032,7 +1032,7 @@ class BrowserViewController: UIViewController,
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
