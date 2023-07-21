@@ -49,6 +49,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
+            shoppingCartButton.isHidden = !isShoppingCartButtonVisible
             setNeedsUpdateConstraints()
         }
     }
@@ -58,6 +59,22 @@ class TabLocationView: UIView, FeatureFlaggable {
             return false
         }
         return true
+    }
+
+    private var isFakespotFeatureEnabled: Bool {
+        guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else {
+            return false
+        }
+        return true
+    }
+
+    private var isShoppingCartButtonVisible: Bool {
+        guard let url else { return false }
+        let regexProductIDPatterns = NimbusFakespotFeatureLayer().getRegexProductIDPatterns()
+        let hasMatchingPattern = regexProductIDPatterns.contains { regexPattern in
+            !url.absoluteString.match(regexPattern).isEmpty
+        }
+        return hasMatchingPattern && isFakespotFeatureEnabled
     }
 
     var readerModeState: ReaderModeState {
@@ -107,6 +124,13 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
     }
 
+    private lazy var shoppingCartButton: UIButton = .build { button in
+        // Temporary icon, will be updated
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-7039
+        button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+    }
+
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
@@ -152,7 +176,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         let space1px = UIView.build()
         space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, shareButton, reloadButton]
+        let subviews = [trackingProtectionButton, space1px, urlTextField, shoppingCartButton, readerModeButton, shareButton, reloadButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -164,6 +188,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         NSLayoutConstraint.activate([
             trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            shoppingCartButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            shoppingCartButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             shareButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
@@ -302,7 +328,7 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
+        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable) || isShoppingCartButtonVisible
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
@@ -369,6 +395,7 @@ extension TabLocationView: ThemeApplicable {
         reloadButton.applyTheme(theme: theme)
         menuBadge.badge.tintBackground(color: theme.colors.layer3)
         setTrackingProtection(theme: theme)
+        shoppingCartButton.tintColor = theme.colors.iconSecondary
     }
 }
 
