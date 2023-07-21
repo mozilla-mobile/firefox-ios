@@ -582,6 +582,7 @@
 		8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */; };
 		8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */; };
 		8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */; };
+		8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
@@ -4734,6 +4735,7 @@
 		8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetContextualHints.swift; sourceTree = "<group>"; };
 		8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFiftyTabsDebugOption.swift; sourceTree = "<group>"; };
 		8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAccountSettings.swift; sourceTree = "<group>"; };
+		8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlayTests.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
@@ -10424,6 +10426,7 @@
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
+				8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -12998,6 +13001,7 @@
 				8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */,
 				8AA7347B28AEDB3100443D24 /* PocketViewModelTests.swift in Sources */,
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
+				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
