@@ -658,7 +658,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.browserHasLoaded()
 
-        subject.showEnhancedTrackingProtection()
+        subject.showEnhancedTrackingProtection(sourceView: UIView())
         let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
         subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
 
