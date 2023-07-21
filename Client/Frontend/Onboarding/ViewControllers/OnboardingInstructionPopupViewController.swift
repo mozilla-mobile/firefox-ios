@@ -235,7 +235,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         didTapButton = true
         switch viewModel.buttonAction {
         case .openIosFxSettings: DefaultApplicationHelper().openSettings()
-        case .dismissAndNextCard: dismissDelegate?.dismissSheetViewController()
+        case .dismissAndNextCard: dismissDelegate?.dismissSheetViewController { self.buttonTappedFinishFlow?() }
         }
     }
 

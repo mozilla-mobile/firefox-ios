@@ -13,7 +13,7 @@ protocol BottomSheetChild {
 }
 
 protocol BottomSheetDismissProtocol {
-    func dismissSheetViewController()
+    func dismissSheetViewController(completion: (() -> Void)?)
 }
 
 class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, Themeable {
@@ -120,7 +120,7 @@ class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, T
                                                   cornerRadius: viewModel.cornerRadius).cgPath
     }
 
-    public func dismissSheetViewController() {
+    public func dismissSheetViewController(completion: (() -> Void)? = nil) {
         childViewController.willDismiss()
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         UIView.animate(
@@ -129,7 +129,7 @@ class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, T
                 self.view.layoutIfNeeded()
                 self.view.backgroundColor = .clear
             }, completion: { _ in
-                self.dismiss(animated: false, completion: nil)
+                self.dismiss(animated: false, completion: completion)
             })
     }
 
