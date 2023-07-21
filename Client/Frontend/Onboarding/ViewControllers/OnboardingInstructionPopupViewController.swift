@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
+class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private enum UX {
         static let contentStackViewSpacing: CGFloat = 40
         static let textStackViewSpacing: CGFloat = 24
@@ -85,6 +85,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     private var contentViewHeightConstraint: NSLayoutConstraint!
     var didTapButton = false
     var buttonTappedFinishFlow: (() -> Void)?
+    var dismissDelegate: BottomSheetDismissProtocol?
 
     // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
@@ -223,13 +224,9 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     @objc
     func appDidEnterBackgroundNotification() {
         if didTapButton {
-            dismissWithFinishFlow()
-        }
-    }
-
-    private func dismissWithFinishFlow() {
             dismiss(animated: false)
             buttonTappedFinishFlow?()
+        }
     }
 
     // MARK: - Button actions
@@ -238,7 +235,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
         didTapButton = true
         switch viewModel.buttonAction {
         case .openIosFxSettings: DefaultApplicationHelper().openSettings()
-        case .dismiss: dismissWithFinishFlow()
+        case .dismissAndNextCard: dismissDelegate?.dismissSheetViewController()
         }
     }
 
@@ -255,6 +252,6 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 }
 
-extension OnboardingDefaultSettingsViewController: BottomSheetChild {
+extension OnboardingInstructionPopupViewController: BottomSheetChild {
     func willDismiss() { }
 }

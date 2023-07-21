@@ -110,7 +110,7 @@ features:
           instruction-popup:
             title: Onboarding/DefaultBrowserPopup.Title.v114
             button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-            button-action: dismiss
+            button-action: dismiss-and-next-card
             instructions:
               - Onboarding/DefaultBrowserPopup.FirstLabel.v114
               - Onboarding/DefaultBrowserPopup.SecondLabel.v114
@@ -289,7 +289,7 @@ enums:
         description: >
           Will take the user to the default browser settings
           in the iOS system settings
-      dismiss:
+      dismiss-and-next-card:
         description: >
           Will dismiss the card
   NimbusOnboardingImages:

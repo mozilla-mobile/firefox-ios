@@ -12,7 +12,11 @@ protocol BottomSheetChild {
     func willDismiss()
 }
 
-class BottomSheetViewController: UIViewController, Themeable {
+protocol BottomSheetDismissProtocol {
+    func dismissSheetViewController()
+}
+
+class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, Themeable {
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
@@ -116,7 +120,7 @@ class BottomSheetViewController: UIViewController, Themeable {
                                                   cornerRadius: viewModel.cornerRadius).cgPath
     }
 
-    public func dismissViewController() {
+    public func dismissSheetViewController() {
         childViewController.willDismiss()
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         UIView.animate(
@@ -240,7 +244,7 @@ private extension BottomSheetViewController {
                     self.sheetView.transform = .identity
                 })
             } else {
-                dismissViewController()
+                dismissSheetViewController()
             }
         default:
             break
@@ -249,7 +253,7 @@ private extension BottomSheetViewController {
 
     @objc
     func closeTapped() {
-        dismissViewController()
+        dismissSheetViewController()
     }
 }
 
