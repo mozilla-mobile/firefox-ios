@@ -78,7 +78,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private let zoomInButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.plus), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: [])
         button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)
@@ -87,7 +87,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.accessibilityLabel = .AppMenu.ZoomPageCloseAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
         button.setContentCompressionResistancePriority(.required, for: .horizontal)

@@ -38,7 +38,7 @@ class HistoryPanel: UIViewController,
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistorySheetProvider
     var keyboardState: KeyboardState?
-    var chevronImage = UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+    var chevronImage = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -89,7 +89,7 @@ class HistoryPanel: UIViewController,
     }()
 
     private lazy var bottomDeleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.delete),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.delete),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))
@@ -418,7 +418,7 @@ class HistoryPanel: UIViewController,
         cell.titleLabel.text = asGroup.displayTitle
         let imageView = UIImageView(image: chevronImage)
         cell.accessoryView = imageView
-        cell.leftImageView.image = UIImage(named: ImageIdentifiers.Large.tabTray)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
+        cell.leftImageView.image = UIImage(named: StandardImageIdentifiers.Large.tabTray)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
         cell.leftImageView.backgroundColor = themeManager.currentTheme.colors.layer5
         cell.applyTheme(theme: themeManager.currentTheme)
         return cell
@@ -552,7 +552,7 @@ class HistoryPanel: UIViewController,
         tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
         let tintColor = themeManager.currentTheme.colors.textPrimary
-        let searchBarImage = UIImage(named: ImageIdentifiers.Large.history)?
+        let searchBarImage = UIImage(named: StandardImageIdentifiers.Large.history)?
             .withRenderingMode(.alwaysTemplate)
             .tinted(withColor: tintColor)
         searchbar.setImage(searchBarImage, for: .search, state: .normal)

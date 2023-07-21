@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import GCDWebServers
 import Storage
@@ -226,7 +227,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         
         // if in private mode, close all tabs
-        tester.tapView(withAccessibilityLabel: ImageIdentifiers.Large.privateMode)
+        tester.tapView(withAccessibilityLabel: StandardImageIdentifiers.Large.privateMode)
 
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)

@@ -515,6 +515,8 @@
 		8A03309828C2691800286539 /* LegacyTabFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A03309428C2653600286539 /* LegacyTabFileManager.swift */; };
 		8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */; };
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
+		8A05B0052A69A0C40011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0042A69A0C40011B622 /* Common */; };
+		8A05B0072A69A25C0011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0062A69A25C0011B622 /* Common */; };
 		8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0621B729428FBD005D1EFD /* OpenTabNotificationObject.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
 		8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B334871BBF23F3004E2BFF /* iAd.framework */; };
@@ -6930,6 +6932,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */,
+				8A05B0052A69A0C40011B622 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6969,6 +6972,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A05B0072A69A25C0011B622 /* Common in Frameworks */,
 				E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */,
 				433F87D52788F01500693368 /* KIF in Frameworks */,
 				D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */,
@@ -10828,6 +10832,7 @@
 			name = XCUITests;
 			packageProductDependencies = (
 				43C6A47E27A0679300C79856 /* MappaMundi */,
+				8A05B0042A69A0C40011B622 /* Common */,
 			);
 			productName = XCUITests;
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
@@ -10905,6 +10910,7 @@
 			name = UITests;
 			packageProductDependencies = (
 				433F87D42788F01500693368 /* KIF */,
+				8A05B0062A69A25C0011B622 /* Common */,
 			);
 			productName = UITests;
 			productReference = D39FA15F1A83E0EC00EE869C /* UITests.xctest */;
@@ -19279,6 +19285,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		8A05B0042A69A0C40011B622 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
+		};
+		8A05B0062A69A25C0011B622 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
 		};
 		8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */ = {
 			isa = XCSwiftPackageProductDependency;

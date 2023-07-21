@@ -91,16 +91,16 @@ extension FxBookmarkNode {
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     }
 
     private var bookmarkFolderIconNormal: UIImage? {
-        return UIImage(named: ImageIdentifiers.Large.folder)?
+        return UIImage(named: StandardImageIdentifiers.Large.folder)?
             .tinted(withColor: UIColor.Photon.Grey90)
     }
 
     private var bookmarkFolderIconDark: UIImage? {
-        return UIImage(named: ImageIdentifiers.Large.folder)?
+        return UIImage(named: StandardImageIdentifiers.Large.folder)?
             .tinted(withColor: UIColor.Photon.Grey10)
     }
 }

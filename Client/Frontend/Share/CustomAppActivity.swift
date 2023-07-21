@@ -23,9 +23,9 @@ enum CustomActivityAction {
     var image: UIImage? {
         switch self {
         case .sendToDevice:
-            return UIImage(named: ImageIdentifiers.Large.deviceDesktopSend)
+            return UIImage(named: StandardImageIdentifiers.Large.deviceDesktopSend)
         case .copyLink:
-            return UIImage(named: ImageIdentifiers.Large.link)
+            return UIImage(named: StandardImageIdentifiers.Large.link)
         }
     }
 

@@ -209,7 +209,7 @@ extension BrowserViewController: WKUIDelegate {
                     actions.append(
                         UIAction(
                             title: .ContextMenuOpenInNewTab,
-                            image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
+                            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                             identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
                         ) { _ in
                             addTab(url, false)
@@ -219,7 +219,7 @@ extension BrowserViewController: WKUIDelegate {
                 actions.append(
                     UIAction(
                         title: .ContextMenuOpenInNewPrivateTab,
-                        image: UIImage.templateImageNamed(ImageIdentifiers.Large.privateMode),
+                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
                         identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
                     ) { _ in
                         addTab(url, true)
@@ -227,7 +227,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let addBookmarkAction = UIAction(
                     title: .ContextMenuBookmarkLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                     identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
                 ) { _ in
                     self.addBookmark(url: url.absoluteString, title: elements.title)
@@ -239,7 +239,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let removeAction = UIAction(
                     title: .RemoveBookmarkContextMenuTitle,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                     identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                 ) { _ in
                     self.removeBookmark(url: url.absoluteString)
@@ -252,7 +252,7 @@ extension BrowserViewController: WKUIDelegate {
                 let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
                 actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
+                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                     // This checks if download is a blob, if yes, begin blob download process
                     if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                         // if not a blob, set pendingDownloadWebView and load the request in
@@ -266,7 +266,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 actions.append(UIAction(
                     title: .ContextMenuCopyLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.link),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                     identifier: UIAction.Identifier("linkContextMenu.copyLink")
                 ) { _ in
                     UIPasteboard.general.url = url

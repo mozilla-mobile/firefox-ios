@@ -87,7 +87,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: ImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
         return disclosureIndicator
     }()
 
