@@ -98,7 +98,7 @@ struct QuickActionsImplementation: QuickActions {
                 type: ShortcutType.openLastBookmark.type,
                 localizedTitle: .QuickActionsLastBookmarkTitle,
                 localizedSubtitle: userData[QuickActionInfos.tabTitleKey],
-                icon: UIApplicationShortcutIcon(templateImageName: ImageIdentifiers.Large.bookmarkFill),
+                icon: UIApplicationShortcutIcon(templateImageName: StandardImageIdentifiers.Large.bookmarkFill),
                 userInfo: userData as [String: NSSecureCoding]
             )
 

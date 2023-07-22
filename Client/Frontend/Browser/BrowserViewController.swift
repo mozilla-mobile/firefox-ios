@@ -955,7 +955,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -967,7 +967,7 @@ class BrowserViewController: UIViewController,
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
@@ -2785,41 +2785,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                                                 theme: self.themeManager.currentTheme)
             }
         }
-    }
-}
-
-// MARK: - Reopen last closed tab
-
-extension BrowserViewController: FeatureFlaggable {
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
-            homePanelDidRequestToRestoreClosedTab(motion)
-        }
-    }
-
-    func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {
-        guard motion == .motionShake,
-              !topTabsVisible,
-              !urlBar.inOverlayMode,
-              let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
-              let selectedTab = tabManager.selectedTab
-        else { return }
-
-        let alertTitleText: String = .ReopenLastTabAlertTitle
-        let reopenButtonText: String = .ReopenLastTabButtonText
-        let cancelButtonText: String = .ReopenLastTabCancelText
-
-        func reopenLastTab(_ action: UIAlertAction) {
-            let request = URLRequest(url: lastClosedURL)
-            let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)
-            tabManager.selectTab(closedTab)
-        }
-
-        let alert = AlertController(title: alertTitleText, message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: reopenButtonText, style: .default, handler: reopenLastTab), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.ReopenButton")
-        alert.addAction(UIAlertAction(title: cancelButtonText, style: .cancel, handler: nil), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.CancelButton")
-
-        self.present(alert, animated: true, completion: nil)
     }
 }
 

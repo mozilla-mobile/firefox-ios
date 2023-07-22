@@ -106,7 +106,7 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
 
-            imageView.image = UIImage(named: ImageIdentifiers.Large.avatarCircle)?
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?
                 .createScaled(CGSize(width: 30, height: 30))
                 .tinted(withColor: theme.colors.iconPrimary)
 

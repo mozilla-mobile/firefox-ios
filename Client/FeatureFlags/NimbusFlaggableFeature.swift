@@ -31,7 +31,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reportSiteIssue
     case searchHighlights
     case settingsCoordinatorRefactor
-    case shakeToRestore
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
@@ -105,7 +104,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .searchHighlights,
                 .settingsCoordinatorRefactor,
-                .shakeToRestore,
                 .shareExtensionCoordinatorRefactor,
                 .shareSheetChanges,
                 .shareToolbarChanges,

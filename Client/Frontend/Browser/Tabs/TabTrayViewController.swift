@@ -45,28 +45,28 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // Buttons & Menus
     private lazy var deleteButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var deleteButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.delete,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {
-        return createButtonItem(imageName: ImageIdentifiers.Large.plus,
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(didTapAddTab(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)

@@ -41,7 +41,7 @@ class StatefulButton: UIButton {
             case .reload:
                 setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
             case .stop:
-                setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: .normal)
+                setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: .normal)
             case .disabled:
                 self.isHidden = true
             }

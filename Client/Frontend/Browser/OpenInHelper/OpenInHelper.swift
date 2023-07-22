@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MobileCoreServices
 import WebKit
@@ -125,7 +126,7 @@ class DownloadHelper: NSObject {
         }
 
         let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow,
-                                                     iconString: ImageIdentifiers.Large.download) { _ in
+                                                     iconString: StandardImageIdentifiers.Large.download) { _ in
             okAction(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
