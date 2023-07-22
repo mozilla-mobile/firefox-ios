@@ -79,7 +79,7 @@ const internalModuleResolvers = {
 // Define mock for XPCOMUtils
 export const XPCOMUtils = withNotImplementedError({
   defineLazyGetter: (obj, prop, getFn) => {
-    obj[prop] = getFn?.();
+    obj[prop] = getFn?.call(obj);
   },
   defineLazyPreferenceGetter: (
     obj,
