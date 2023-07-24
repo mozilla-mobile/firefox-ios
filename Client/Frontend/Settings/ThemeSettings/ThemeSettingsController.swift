@@ -70,7 +70,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     func newState(state: ThemeSettingsState) {
         themeState = state
-//        print("YRD newState \(themeState)")
         tableView.reloadData()
     }
 
@@ -108,7 +107,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func brightnessChanged() {
-        // TODO: YRD Add action here
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
         LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
@@ -119,7 +117,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
         if isReduxIntegrationEnabled {
-
+            store.dispatch(ThemeSettingsAction.updateUserBrightness(control.value))
         } else {
             themeManager.setAutomaticBrightnessValue(control.value)
             LegacyThemeManager.instance.automaticBrightnessValue = control.value

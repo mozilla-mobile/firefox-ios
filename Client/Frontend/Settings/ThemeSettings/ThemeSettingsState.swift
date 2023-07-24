@@ -66,6 +66,11 @@ struct ThemeSettingsState: ReduxState, Equatable {
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
                                       manualThemeSelected: theme,
                                       userBrightnessThreshold: state.userBrightnessThreshold)
+        case ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
+            return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
+                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
+                                      manualThemeSelected: state.manualThemeSelected,
+                                      userBrightnessThreshold: brightnessValue)
         default:
             return state
         }

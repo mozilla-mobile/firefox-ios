@@ -45,6 +45,11 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 self.updateManualTheme(theme)
                 store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
             }
+        case ThemeSettingsAction.updateUserBrightness(let value):
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.updateUserBrightness(value)
+                store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
+            }
         default:
             break
         }
@@ -71,5 +76,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         let isLightTheme = theme == .normal
         LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
         themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
+    }
+
+    func updateUserBrightness(_ value: Float) {
+        themeManager.setAutomaticBrightnessValue(value)
+        LegacyThemeManager.instance.automaticBrightnessValue = value
     }
 }

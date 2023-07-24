@@ -10,9 +10,11 @@ enum ThemeSettingsAction: Action {
     case enableSystemAppearance(Bool)
     case enableAutomaticBrightness(Bool)
     case switchManualTheme(BuiltinThemeName)
+    case updateUserBrightness(Float)
     // Middleware trigger actions
     case receivedThemeManagerValues(ThemeSettingsState)
     case systemThemeChanged(Bool)
     case automaticBrightnessChanged(Bool)
     case manualThemeChanged(BuiltinThemeName)
+    case userBrightnessChanged(Float)
 }
