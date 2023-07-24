@@ -45,7 +45,9 @@ class SaveLoginTest: BaseTestCase {
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
-        // This biometric screen only appears the first time
+        // This biometric screen only appears the first time.
+        // This if-statement is a temporary workaround for FXIOS-7033
+        // https://github.com/mozilla-mobile/firefox-ios/issues/15642
         sleep(2)
         if app.otherElements.buttons["Continue"].exists {
             app.otherElements.buttons["Continue"].tap()
