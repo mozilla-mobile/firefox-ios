@@ -9,6 +9,7 @@ protocol OnboardingCardInfoModelProtocol {
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel? { get set }
     var link: OnboardingLinkInfoModel? { get set }
     var buttons: OnboardingButtons { get set }
     var type: OnboardingType { get set }
@@ -26,6 +27,7 @@ protocol OnboardingCardInfoModelProtocol {
         buttons: OnboardingButtons,
         type: OnboardingType,
         a11yIdRoot: String,
-        imageID: String
+        imageID: String,
+        instructionsPopup: OnboardingInstructionsPopupInfoModel?
     )
 }

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol {
+struct OnboardingInstructionsPopupInfoModel: OnboardingDefaultBrowserModelProtocol {
     var title: String
     var instructionSteps: [String]
     var buttonTitle: String

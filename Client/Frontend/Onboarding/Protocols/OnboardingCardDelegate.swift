@@ -75,8 +75,15 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         from name: String,
         completionIfLastCard: (() -> Void)?
     ) {
+        guard let popupViewModel = viewModel
+            .availableCards
+            .first(where: { $0.viewModel.name == name })?
+            .viewModel
+            .instructionsPopup
+        else { return }
+
         let instructionsVC = OnboardingInstructionPopupViewController(
-            viewModel: viewModel.infoPopup,
+            viewModel: popupViewModel,
             buttonTappedFinishFlow: {
                 self.showNextPage(
                     from: name,
