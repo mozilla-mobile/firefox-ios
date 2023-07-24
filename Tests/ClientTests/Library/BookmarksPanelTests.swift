@@ -12,12 +12,13 @@ import Common
 class BookmarksPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
     }
 
     // MARK: Bottom left action
