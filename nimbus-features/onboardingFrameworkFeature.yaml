@@ -42,14 +42,6 @@ features:
                 primary:
                   title: Onboarding/Onboarding.Welcome.Action.v114
                   action: next-card
-              instructions-popup:
-                title: Onboarding/DefaultBrowserPopup.Title.v114
-                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-                button-action: open-ios-fx-settings
-                instructions:
-                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
               type: fresh-install
               prerequisites:
                 - ALWAYS
