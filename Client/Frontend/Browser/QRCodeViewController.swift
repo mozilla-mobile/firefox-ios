@@ -98,7 +98,7 @@ class QRCodeViewController: UIViewController {
 
         // Setup the NavigationItem
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: ImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
+            image: UIImage(named: StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
             style: .plain,
             target: self,
             action: #selector(goBack))

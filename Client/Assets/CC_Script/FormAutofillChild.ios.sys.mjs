@@ -5,6 +5,7 @@
 /* eslint-disable no-undef,mozilla/balanced-listeners */
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormStateManager } from "resource://gre/modules/shared/FormStateManager.sys.mjs";
+import { CreditCardRecord } from "resource://gre/modules/shared/CreditCardRecord.sys.mjs";
 
 export class FormAutofillChild {
   constructor(onSubmitCallback, onAutofillCallback) {
@@ -34,6 +35,9 @@ export class FormAutofillChild {
         }),
         {}
       );
+      // Normalize record format so we always get a consistent
+      // credit card record format: {cc-number, cc-name, cc-exp-month, cc-exp-year}
+      CreditCardRecord.normalizeFields(fieldNamesWithValues);
       this.onAutofillCallback(fieldNamesWithValues);
     }
   }

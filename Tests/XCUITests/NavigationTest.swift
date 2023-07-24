@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
@@ -107,8 +108,6 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton], timeout: TIMEOUT)
-        app.buttons[AccessibilityIdentifiers.TabTray.syncDataButton].tap()
         checkFirefoxSyncScreenShown()
     }
 
@@ -232,7 +231,7 @@ class NavigationTest: BaseTestCase {
             waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
             app.textFields["url"].press(forDuration: 3)
-            app.tables.otherElements[ImageIdentifiers.Large.link].tap()
+            app.tables.otherElements[StandardImageIdentifiers.Large.link].tap()
 
             sleep(2)
             app.textFields["url"].tap()
@@ -274,8 +273,8 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].exists)
-        app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.download].tap()
+        XCTAssertTrue(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].exists)
+        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
@@ -378,11 +377,11 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.bookmarkTrayFill].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.download].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.history].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.login].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)

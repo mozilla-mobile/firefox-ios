@@ -14,8 +14,7 @@ final class NimbusFeatureFlagLayer {
         case .autopushFeature:
             return checkAutopushFeature(from: nimbus)
         case .pullToRefresh,
-                .reportSiteIssue,
-                .shakeToRestore:
+                .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
@@ -112,7 +111,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
-        case .shakeToRestore: return config.shakeToRestore.status
         default: return false
         }
     }

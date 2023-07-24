@@ -1838,21 +1838,6 @@ extension String {
         tableName: nil,
         value: "Current Homepage",
         comment: "Title of the setting section containing the URL of the current home page.")
-    public static let ReopenLastTabAlertTitle = MZLocalizedString(
-        key: "ReopenAlert.Title",
-        tableName: nil,
-        value: "Reopen Last Closed Tab",
-        comment: "Reopen alert title shown at home page.")
-    public static let ReopenLastTabButtonText = MZLocalizedString(
-        key: "ReopenAlert.Actions.Reopen",
-        tableName: nil,
-        value: "Reopen",
-        comment: "Reopen button text shown in reopen-alert at home page.")
-    public static let ReopenLastTabCancelText = MZLocalizedString(
-        key: "ReopenAlert.Actions.Cancel",
-        tableName: nil,
-        value: "Cancel",
-        comment: "Cancel button text shown in reopen-alert at home page.")
 }
 
 // MARK: - Settings

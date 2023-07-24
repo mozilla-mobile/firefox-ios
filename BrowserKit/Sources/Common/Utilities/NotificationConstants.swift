@@ -5,6 +5,5 @@
 import Foundation
 
 extension Notification.Name {
-    // This will eventually replace DisplayThemeChanged notification
     public static let ThemeDidChange = Notification.Name("ThemeDidChange")
 }

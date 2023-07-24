@@ -25,7 +25,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     var creditCardTableViewController: CreditCardTableViewController
 
     private lazy var addCreditCardButton: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
+        return UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                                style: .plain,
                                target: self,
                                action: #selector(addCreditCard))

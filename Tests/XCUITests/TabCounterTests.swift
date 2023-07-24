@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 class TabCounterTests: BaseTestCase {
@@ -54,7 +55,7 @@ class TabCounterTests: BaseTestCase {
         navigator.goto(TabTray)
 
         if isTablet {
-            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
+            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         } else {
             let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
             waitForExistence(navBarTabTrayButton)
@@ -62,7 +63,7 @@ class TabCounterTests: BaseTestCase {
             let tabsOpenTabTray: String = navBarTabTrayButton.label
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
-            app.otherElements["Tabs Tray"].cells.element(boundBy: 0).buttons[ImageIdentifiers.Large.cross].tap()
+            app.otherElements["Tabs Tray"].cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         }
 
         app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()

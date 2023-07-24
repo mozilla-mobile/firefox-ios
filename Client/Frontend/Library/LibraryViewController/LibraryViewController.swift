@@ -51,7 +51,7 @@ class LibraryViewController: UIViewController, Themeable {
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
-            image: UIImage.templateImageNamed(ImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
             style: .plain,
             target: self,
             action: #selector(topLeftButtonAction))
@@ -255,10 +255,10 @@ class LibraryViewController: UIViewController, Themeable {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection()
+            topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
-            topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.Large.cross)
+            topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
             navigationItem.leftBarButtonItem = topLeftButton
         default:
             navigationItem.leftBarButtonItem = nil

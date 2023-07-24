@@ -65,7 +65,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private var favicon: FaviconImageView = .build { favicon in
-        favicon.image = UIImage(named: ImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
     }
 
     private let siteDomainLabel: UILabel = .build { label in
@@ -97,7 +97,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        image.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 
@@ -443,7 +443,7 @@ extension EnhancedTrackingProtectionMenuVC {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: ImageIdentifiers.Medium.cross)?
+        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         connectionView.backgroundColor = theme.colors.layer2

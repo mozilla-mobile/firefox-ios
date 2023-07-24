@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
@@ -50,7 +51,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
             if error == nil {
                 let viewModel = ButtonToastViewModel(labelText: download.filename,
-                                                     imageName: ImageIdentifiers.Large.checkmark,
+                                                     imageName: StandardImageIdentifiers.Large.checkmark,
                                                      buttonText: .DownloadsButtonTitle)
                 let downloadCompleteToast = ButtonToast(viewModel: viewModel,
                                                         theme: self.themeManager.currentTheme,

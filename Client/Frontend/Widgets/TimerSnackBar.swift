@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 /**
@@ -25,7 +26,7 @@ class TimerSnackBar: SnackBar {
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, completion: @escaping (Bool) -> Void) {
         let bar = TimerSnackBar(
             text: .ExternalLinkAppStoreConfirmationTitle,
-            img: UIImage(named: ImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal))
+            img: UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal))
         let openAppStore = SnackButton(title: .AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.open(appStoreURL, options: [:])

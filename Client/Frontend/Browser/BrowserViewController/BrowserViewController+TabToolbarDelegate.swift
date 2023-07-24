@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Shared
 import UIKit
 
@@ -143,13 +144,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: ImageIdentifiers.Large.plus, iconType: .Image) { _ in
+        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
+                                           iconString: StandardImageIdentifiers.Large.plus,
+                                           iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
-        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: ImageIdentifiers.Large.plus, iconType: .Image) { _ in
+        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                                  iconString: StandardImageIdentifiers.Large.plus,
+                                                  iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
@@ -157,7 +162,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }.items
 
         let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,
-                                             iconString: ImageIdentifiers.Large.cross,
+                                             iconString: StandardImageIdentifiers.Large.cross,
                                              iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
