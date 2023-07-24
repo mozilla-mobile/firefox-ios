@@ -17,11 +17,6 @@ features:
           The list of available cards for onboarding.
         type: Map<String, NimbusOnboardingCardData>
         default: {}
-      instruction-popup:
-        description: >
-          The contents of the instruction popup.
-        type: NimbusInstructionPopup
-        default: {}
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -107,14 +102,6 @@ features:
               type: upgrade
               prerequisites:
                 - ALWAYS
-          instruction-popup:
-            title: Onboarding/DefaultBrowserPopup.Title.v114
-            button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-            button-action: open-ios-fx-settings
-            instructions:
-              - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-              - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-              - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
           dismissable: true
 
 objects:
@@ -160,6 +147,14 @@ objects:
             title: Onboarding/Onboarding.Sync.Skip.Action.v114
             action: next-card
           secondary: null
+      instructions-popup:
+        type: Option<NimbusInstructionPopup>
+        description: >
+          The object describing the specific instruction popup
+          button for a card.
+          If left empty, the card will have no instruction
+          popup information
+        default: null
       prerequisites:
         type: List<String>
         description: >
@@ -274,10 +269,9 @@ enums:
       set-default-browser:
         description: >
           Will send the user to settings to set Firefox as their default browser
-      open-default-browser-popup:
+      open-instructions-popup:
         description: >
-          Will open up a popup with instructions for setting
-          Firefox as their default browser.
+          Will open up a popup with instructions for something
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
