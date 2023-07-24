@@ -21,6 +21,10 @@
 		8A6EE0AA2A5866C300B4D401 /* ComponentDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0A92A5866C300B4D401 /* ComponentDelegate.swift */; };
 		8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0AB2A5869BE00B4D401 /* Presenter.swift */; };
 		8A6EE0AF2A586A1B00B4D401 /* FadeScrollViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0AE2A586A1B00B4D401 /* FadeScrollViewViewController.swift */; };
+		8ABC3CE62A6EECF000B69244 /* DependencyHelperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CE52A6EECF000B69244 /* DependencyHelperMock.swift */; };
+		8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CE72A6EED0900B69244 /* MockThemeManager.swift */; };
+		8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEA2A6EED6900B69244 /* BottomSheetChildViewController.swift */; };
+		8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,10 @@
 		8A6EE0A92A5866C300B4D401 /* ComponentDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDelegate.swift; sourceTree = "<group>"; };
 		8A6EE0AB2A5869BE00B4D401 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		8A6EE0AE2A586A1B00B4D401 /* FadeScrollViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollViewViewController.swift; sourceTree = "<group>"; };
+		8ABC3CE52A6EECF000B69244 /* DependencyHelperMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelperMock.swift; sourceTree = "<group>"; };
+		8ABC3CE72A6EED0900B69244 /* MockThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThemeManager.swift; sourceTree = "<group>"; };
+		8ABC3CEA2A6EED6900B69244 /* BottomSheetChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetChildViewController.swift; sourceTree = "<group>"; };
+		8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetComponentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +83,8 @@
 		8A2FE6502A55EE3D0036B6AF /* SampleComponentLibraryApp */ = {
 			isa = PBXGroup;
 			children = (
+				8ABC3CE92A6EED5C00B69244 /* BottomSheet */,
+				8ABC3CE42A6EECE100B69244 /* Dependency */,
 				8A6EE0AD2A5869C200B4D401 /* Protocol */,
 				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
@@ -130,6 +140,24 @@
 				8A6EE0AB2A5869BE00B4D401 /* Presenter.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		8ABC3CE42A6EECE100B69244 /* Dependency */ = {
+			isa = PBXGroup;
+			children = (
+				8ABC3CE52A6EECF000B69244 /* DependencyHelperMock.swift */,
+				8ABC3CE72A6EED0900B69244 /* MockThemeManager.swift */,
+			);
+			path = Dependency;
+			sourceTree = "<group>";
+		};
+		8ABC3CE92A6EED5C00B69244 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				8ABC3CEA2A6EED6900B69244 /* BottomSheetChildViewController.swift */,
+				8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */,
+			);
+			path = BottomSheet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,9 +264,13 @@
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
+				8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */,
 				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
+				8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */,
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
+				8ABC3CE62A6EECF000B69244 /* DependencyHelperMock.swift in Sources */,
 				8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */,
+				8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

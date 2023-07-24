@@ -47,6 +47,10 @@ public class BottomSheetViewController: UIViewController,
         view.backgroundColor = .clear
     }
 
+    private lazy var dimmedBackgroundView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ToMigrate.bottomSheetClose), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
@@ -134,8 +138,8 @@ public class BottomSheetViewController: UIViewController,
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
-            topTapView.alpha = 0.4
-            topTapView.backgroundColor = .black
+            dimmedBackgroundView.alpha = 0.4
+            dimmedBackgroundView.backgroundColor = .black
         }
     }
 
@@ -159,7 +163,7 @@ public class BottomSheetViewController: UIViewController,
         scrollView.addSubview(scrollContentView)
         sheetView.addSubview(contentView)
         contentView.addSubviews(closeButton, scrollView)
-        view.addSubviews(topTapView, sheetView)
+        view.addSubviews(dimmedBackgroundView, topTapView, sheetView)
 
         contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
@@ -170,6 +174,11 @@ public class BottomSheetViewController: UIViewController,
             topTapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTapView.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: viewModel.cornerRadius),
             topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            dimmedBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmedBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimmedBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dimmedBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
                                            constant: BottomSheetViewController.UX.minVisibleTopSpace),

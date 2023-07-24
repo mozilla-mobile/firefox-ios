@@ -7,10 +7,15 @@ import UIKit
 
 protocol Presenter: AnyObject {
     func present(viewController: UIViewController)
+    func push(viewController: UIViewController)
 }
 
 extension Presenter where Self: UIViewController {
     func present(viewController: UIViewController) {
+        navigationController?.present(viewController, animated: true)
+    }
+
+    func push(viewController: UIViewController) {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

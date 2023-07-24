@@ -8,4 +8,8 @@ import UIKit
 struct FadeScrollViewComponentViewModel: ComponentViewModel {
     var title = "FadeScrollView"
     var viewController: UIViewController = FadeScrollViewViewController()
+
+    func present(with presenter: Presenter?) {
+        presenter?.push(viewController: viewController)
+    }
 }
