@@ -5,9 +5,7 @@
 import Common
 import Redux
 
-protocol ReduxState {}
-
-struct ThemeSettingsState: ReduxState, Equatable {
+struct ThemeSettingsState: ScreenState, Equatable {
     var useSystemAppearance: Bool
     var isAutomaticBrightnessEnable: Bool
     var manualThemeSelected: BuiltinThemeName

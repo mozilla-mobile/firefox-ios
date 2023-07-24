@@ -68,18 +68,18 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func toggleAutomaticBrightness(_ enabled: Bool) {
-        self.legacyThemeManager.automaticBrightnessIsOn = enabled
-        self.themeManager.setAutomaticBrightness(isOn: enabled)
+        legacyThemeManager.automaticBrightnessIsOn = enabled
+        themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
     func updateManualTheme(_ theme: BuiltinThemeName) {
         let isLightTheme = theme == .normal
-        LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
+        legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
         themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
     }
 
     func updateUserBrightness(_ value: Float) {
         themeManager.setAutomaticBrightnessValue(value)
-        LegacyThemeManager.instance.automaticBrightnessValue = value
+        legacyThemeManager.automaticBrightnessValue = value
     }
 }

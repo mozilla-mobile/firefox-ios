@@ -12,7 +12,7 @@ struct AppState: StateType {
         AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
-    func screenState<S: ReduxState>(_ s: S.Type, for screen: AppScreen) -> S? {
+    func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
