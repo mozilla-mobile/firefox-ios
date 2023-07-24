@@ -49,8 +49,7 @@ struct NimbusOnboardingTestingConfigUtility {
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(
                 cards: dictionary,
-                dismissable: true,
-                instructionPopup: buildInfoPopup())
+                dismissable: true)
         })
     }
 
@@ -78,8 +77,7 @@ struct NimbusOnboardingTestingConfigUtility {
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(
                 cards: cards,
-                dismissable: dismissable,
-                instructionPopup: buildInfoPopup())
+                dismissable: dismissable)
         })
     }
 
@@ -104,6 +102,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     andSecondaryButton: withSecondaryButton),
                 disqualifiers: disqualifiers,
                 image: image,
+                instructionsPopup: buildInfoPopup(),
                 link: shouldAddLink ? buildLink() : nil,
                 order: number,
                 prerequisites: prerequisites,
@@ -133,6 +132,7 @@ struct NimbusOnboardingTestingConfigUtility {
             buttons: createButtons(for: id),
             disqualifiers: ["NEVER"],
             image: image,
+            instructionsPopup: buildInfoPopup(),
             link: shouldAddLink.contains(where: { $0 == id }) ? buildLink() : nil,
             order: order,
             prerequisites: ["ALWAYS"],
@@ -197,6 +197,7 @@ struct NimbusOnboardingTestingConfigUtility {
 
     private func buildInfoPopup() -> NimbusInstructionPopup {
         return NimbusInstructionPopup(
+            buttonAction: .dismiss,
             buttonTitle: CardElementNames.popupButtonTitle,
             instructions: [
                 CardElementNames.popupFirstInstruction,

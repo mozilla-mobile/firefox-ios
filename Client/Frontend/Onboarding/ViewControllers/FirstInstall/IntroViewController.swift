@@ -245,7 +245,7 @@ extension IntroViewController: OnboardingCardDelegate {
         case .setDefaultBrowser:
             registerForNotification()
             DefaultApplicationHelper().openSettings()
-        case .openDefaultBrowserPopup:
+        case .openInstructionsPopup:
             presentDefaultBrowserPopup(
                 from: cardName,
                 completionIfLastCard: { self.showNextPageCompletionForLastCard() })
