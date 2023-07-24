@@ -130,7 +130,9 @@ export class FormAutofillHandler {
         }
 
         this.changeFieldState(targetFieldDetail, FIELD_STATES.NORMAL);
-        const section = this.getSectionByElement(targetFieldDetail.element);
+        const section = this.getSectionByElement(
+          targetFieldDetail.elementWeakRef.get()
+        );
         section?.clearFilled(targetFieldDetail);
       }
     }
@@ -291,7 +293,7 @@ export class FormAutofillHandler {
    *        Used to determine the next state
    */
   changeFieldState(fieldDetail, nextState) {
-    const element = fieldDetail.element;
+    const element = fieldDetail.elementWeakRef.get();
     if (!element) {
       this.log.warn(
         fieldDetail.fieldName,
