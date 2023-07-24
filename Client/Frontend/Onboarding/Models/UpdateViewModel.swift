@@ -13,7 +13,6 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     var profile: Profile
     var hasSyncableAccount: Bool?
     var availableCards: [OnboardingCardViewController]
-    var infoPopup: OnboardingDefaultBrowserModelProtocol
     var isDismissable: Bool
     var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
@@ -40,7 +39,6 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         self.profile = profile
         self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
-        self.infoPopup = model.infoPopupModel
         self.isDismissable = model.isDismissable
         self.availableCards = []
     }

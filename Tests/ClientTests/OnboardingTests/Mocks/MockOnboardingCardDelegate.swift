@@ -40,7 +40,7 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
             showNextPage(from: cardName, completionIfLastCard: {})
         case .setDefaultBrowser:
             self.action = .setDefaultBrowser
-        case .openDefaultBrowserPopup:
+        case .openInstructionsPopup:
             presentDefaultBrowserPopup()
         case .readPrivacyPolicy:
             presentPrivacyPolicy(from: cardName,
@@ -61,7 +61,7 @@ class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDeleg
     }
 
     func presentDefaultBrowserPopup() {
-        action = .openDefaultBrowserPopup
+        action = .openInstructionsPopup
     }
 
     func presentSignToSync(
