@@ -14,8 +14,7 @@ final class NimbusFeatureFlagLayer {
         case .autopushFeature:
             return checkAutopushFeature(from: nimbus)
         case .pullToRefresh,
-                .reportSiteIssue,
-                .shakeToRestore:
+                .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
@@ -32,22 +31,17 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .coordinatorsRefactor:
-            return checkCoordinatorRefactorFeature(from: nimbus)
-
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
 
         case .settingsCoordinatorRefactor:
             return checkSettingsCoordinatorRefactorFeature(from: nimbus)
+
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
-
-        case .jumpBackInSyncedTab:
-            return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
@@ -117,7 +111,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
-        case .shakeToRestore: return config.shakeToRestore.status
         default: return false
         }
     }
@@ -159,10 +152,6 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().jumpBackInSyncedTab
-    }
-
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -177,11 +166,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.coordinatorsRefactorFeature.value()
-        return config.enabled
     }
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

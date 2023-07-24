@@ -63,7 +63,7 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomLeftButtonAction))
@@ -148,7 +148,7 @@ class BookmarksPanel: SiteTableViewController,
 
     private func getNewBookmarkAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewBookmark,
-                                     iconString: ImageIdentifiers.Large.bookmark,
+                                     iconString: StandardImageIdentifiers.Large.bookmark,
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
@@ -165,7 +165,7 @@ class BookmarksPanel: SiteTableViewController,
 
     private func getNewFolderAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewFolder,
-                                     iconString: ImageIdentifiers.Large.folder,
+                                     iconString: StandardImageIdentifiers.Large.folder,
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
@@ -179,7 +179,7 @@ class BookmarksPanel: SiteTableViewController,
 
     private func getNewSeparatorAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .BookmarksNewSeparator,
-                                     iconString: ImageIdentifiers.Large.appMenu,
+                                     iconString: StandardImageIdentifiers.Large.appMenu,
                                      tapHandler: { _ in
             let centerVisibleRow = self.centerVisibleRow()
 
@@ -521,7 +521,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         actions.append(pinTopSite)
 
         let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
-                                                 iconString: ImageIdentifiers.Large.bookmarkSlash,
+                                                 iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action,

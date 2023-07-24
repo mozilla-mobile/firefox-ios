@@ -1838,21 +1838,6 @@ extension String {
         tableName: nil,
         value: "Current Homepage",
         comment: "Title of the setting section containing the URL of the current home page.")
-    public static let ReopenLastTabAlertTitle = MZLocalizedString(
-        key: "ReopenAlert.Title",
-        tableName: nil,
-        value: "Reopen Last Closed Tab",
-        comment: "Reopen alert title shown at home page.")
-    public static let ReopenLastTabButtonText = MZLocalizedString(
-        key: "ReopenAlert.Actions.Reopen",
-        tableName: nil,
-        value: "Reopen",
-        comment: "Reopen button text shown in reopen-alert at home page.")
-    public static let ReopenLastTabCancelText = MZLocalizedString(
-        key: "ReopenAlert.Actions.Cancel",
-        tableName: nil,
-        value: "Cancel",
-        comment: "Cancel button text shown in reopen-alert at home page.")
 }
 
 // MARK: - Settings
@@ -4008,7 +3993,6 @@ extension String {
         tableName: nil,
         value: "This action will clear the selected items. It cannot be undone.",
         comment: "Description of the confirmation dialog shown when a user tries to clear some of their private data.")
-    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearWebsiteDataAlertCancel = MZLocalizedString(
         key: "Cancel",
         tableName: "ClearPrivateDataConfirm",
@@ -4028,7 +4012,6 @@ extension String {
         tableName: "ClearHistoryConfirm",
         value: nil,
         comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
-    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearSyncedHistoryAlertCancel = MZLocalizedString(
         key: "Cancel",
         tableName: "ClearHistoryConfirm",

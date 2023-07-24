@@ -17,18 +17,54 @@ protocol StatusBarScrollDelegate: AnyObject {
 class StatusBarOverlay: UIView,
                         ThemeApplicable,
                         StatusBarScrollDelegate,
-                        SearchBarLocationProvider {
+                        SearchBarLocationProvider,
+                        Notifiable {
     private var savedBackgroundColor: UIColor?
+    private var savedIsHomepage: Bool?
+    private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
 
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
     /// 0 = no status bar background shown
     /// 1 = status bar background is opaque
-    private var scrollOffset: CGFloat = 0
+    private var scrollOffset: CGFloat = 1
 
-    func resetState() {
-        scrollOffset = 1
+    // MARK: Initializer
+
+    convenience init(frame: CGRect,
+                     notificationCenter: NotificationProtocol = NotificationCenter.default,
+                     wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+        self.init(frame: frame)
+
+        self.notificationCenter = notificationCenter
+        self.wallpaperManager = wallpaperManager
+        setupNotifications(forObserver: self,
+                           observing: [.WallpaperDidChange,
+                                       .SearchBarPositionDidChange])
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupNotifications(forObserver: self,
+                           observing: [.WallpaperDidChange,
+                                       .SearchBarPositionDidChange])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
+    func resetState(isHomepage: Bool) {
+        savedIsHomepage = isHomepage
+        // We only need no status bar for one edge case
+        let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.type != .defaultWallpaper && isBottomSearchBar
+        scrollOffset = needsNoStatusBar ? 0 : 1
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 
@@ -68,5 +104,17 @@ class StatusBarOverlay: UIView,
             offset = 0
         }
         scrollOffset = offset
+    }
+
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .WallpaperDidChange, .SearchBarPositionDidChange:
+            ensureMainThread {
+                self.resetState(isHomepage: self.savedIsHomepage ?? false)
+            }
+        default: break
+        }
     }
 }

@@ -42,7 +42,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
+        tester().tapView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
 
         // Wait until the dialog shows up
         tester().waitForAnimationsToFinish()
@@ -70,8 +70,8 @@ class HistoryTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         tester().waitForAnimationsToFinish(withTimeout: 10)
-        tester().waitForView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
-        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
+        tester().waitForView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
+        tester().tapView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
         tester().waitForAnimationsToFinish(withTimeout: 10)
         tester().waitForView(withAccessibilityLabel: "Page 102")
 

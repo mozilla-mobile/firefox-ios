@@ -13,7 +13,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case autopushFeature
     case bottomSearchBar
     case contextualHintForToolbar
-    case coordinatorsRefactor
     case creditCardAutofillStatus
     case etpCoordinatorRefactor
     case fakespotFeature
@@ -21,7 +20,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
-    case jumpBackInSyncedTab
     case libraryCoordinatorRefactor
     case notificationSettings
     case onboardingUpgrade
@@ -33,7 +31,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reportSiteIssue
     case searchHighlights
     case settingsCoordinatorRefactor
-    case shakeToRestore
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
@@ -96,11 +93,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
-                .coordinatorsRefactor,
                 .creditCardAutofillStatus,
                 .etpCoordinatorRefactor,
                 .fakespotFeature,
-                .jumpBackInSyncedTab,
                 .libraryCoordinatorRefactor,
                 .notificationSettings,
                 .onboardingUpgrade,
@@ -109,7 +104,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .searchHighlights,
                 .settingsCoordinatorRefactor,
-                .shakeToRestore,
                 .shareExtensionCoordinatorRefactor,
                 .shareSheetChanges,
                 .shareToolbarChanges,

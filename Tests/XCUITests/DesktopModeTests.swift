@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 // swiftlint:disable empty_count
@@ -97,14 +98,14 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.deviceDesktop])
+        waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceDesktop])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.Large.deviceMobile])
+        waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceMobile])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()

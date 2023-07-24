@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Shared
 import WebKit
 import UIKit
@@ -75,7 +76,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().wait(forTimeInterval: 10)
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
+        tester().tapView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
@@ -86,7 +87,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.closeClearPrivateDataDialog(tester())
 
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
+        tester().tapView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
 
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
@@ -114,7 +115,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.Large.history)
+        tester().tapView(withAccessibilityIdentifier: StandardImageIdentifiers.Large.history)
         tester().waitForAnimationsToFinish()
 
         tester().waitForView(withAccessibilityLabel: url1)

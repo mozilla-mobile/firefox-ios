@@ -75,11 +75,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
         // Previously, BVC was assigned it on panel creation via a foregroundBVC call. But it can be done this way, to
         // avoid that call. `sceneForVC` will use the focused, active and foregrounded scene's BVC.
         guard recentlyClosedTabsDelegate != nil else {
-            if CoordinatorFlagManager.isCoordinatorEnabled {
-                recentlyClosedTabsDelegate = sceneForVC?.coordinatorBrowserViewController
-            } else {
-                recentlyClosedTabsDelegate = sceneForVC?.browserViewController
-            }
+            recentlyClosedTabsDelegate = sceneForVC?.coordinatorBrowserViewController
 
             return
         }

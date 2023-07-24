@@ -56,9 +56,7 @@ extension BrowserViewController {
         guard let tab = tabManager.selectedTab,
               let url = tab.canonicalURL?.displayURL else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            addBookmark(url: url.absoluteString, title: tab.title)
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             addBookmark(url: url.absoluteString, title: tab.title)
         }
     }
@@ -72,9 +70,7 @@ extension BrowserViewController {
 
         guard let tab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            tab.reload()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             tab.reload()
         }
     }
@@ -87,9 +83,7 @@ extension BrowserViewController {
                                      extras: ["action": "reload-no-cache"])
         guard let tab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            tab.reload(bypassCache: true)
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             tab.reload(bypassCache: true)
         }
     }
@@ -103,9 +97,7 @@ extension BrowserViewController {
 
         guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            tab.goBack()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             tab.goBack()
         }
     }
@@ -119,9 +111,7 @@ extension BrowserViewController {
 
         guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            tab.goForward()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             tab.goForward()
         }
     }
@@ -143,9 +133,7 @@ extension BrowserViewController {
     private func findInPage(withText text: String) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            self.tab(tab, didSelectFindInPageForSelection: text)
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
@@ -341,9 +329,7 @@ extension BrowserViewController {
     func zoomIn() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            currentTab.zoomIn()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             currentTab.zoomIn()
         }
     }
@@ -352,9 +338,7 @@ extension BrowserViewController {
     func zoomOut() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            currentTab.zoomOut()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             currentTab.zoomOut()
         }
     }
@@ -363,9 +347,7 @@ extension BrowserViewController {
     func resetZoom() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if CoordinatorFlagManager.isCoordinatorEnabled, !contentContainer.hasHomepage {
-            currentTab.resetZoom()
-        } else if homepageViewController?.view.alpha == 0 {
+        if !contentContainer.hasHomepage {
             currentTab.resetZoom()
         }
     }

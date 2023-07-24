@@ -64,14 +64,14 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame)
+        let confirmAlert = ConfirmPanelAlert(message: message,
+                                             frame: frame) { confirm in
+            completionHandler(confirm)
+        }
         if shouldDisplayJSAlertForWebView(webView) {
-            present(confirmAlert.alertController(), animated: true) {
-                completionHandler(true)
-            }
+            present(confirmAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
-            completionHandler(false)
         }
     }
 
@@ -84,14 +84,13 @@ extension BrowserViewController: WKUIDelegate {
     ) {
         let textInputAlert = TextInputAlert(message: prompt,
                                             frame: frame,
-                                            defaultText: defaultText)
+                                            defaultText: defaultText) { confirm in
+            completionHandler(confirm)
+        }
         if shouldDisplayJSAlertForWebView(webView) {
-            present(textInputAlert.alertController(), animated: true) {
-                completionHandler(defaultText)
-            }
+            present(textInputAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
-            completionHandler(nil)
         }
     }
 
@@ -210,7 +209,7 @@ extension BrowserViewController: WKUIDelegate {
                     actions.append(
                         UIAction(
                             title: .ContextMenuOpenInNewTab,
-                            image: UIImage.templateImageNamed(ImageIdentifiers.Large.plus),
+                            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                             identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
                         ) { _ in
                             addTab(url, false)
@@ -220,7 +219,7 @@ extension BrowserViewController: WKUIDelegate {
                 actions.append(
                     UIAction(
                         title: .ContextMenuOpenInNewPrivateTab,
-                        image: UIImage.templateImageNamed(ImageIdentifiers.Large.privateMode),
+                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
                         identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
                     ) { _ in
                         addTab(url, true)
@@ -228,7 +227,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let addBookmarkAction = UIAction(
                     title: .ContextMenuBookmarkLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.bookmark),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                     identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
                 ) { _ in
                     self.addBookmark(url: url.absoluteString, title: elements.title)
@@ -240,7 +239,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 let removeAction = UIAction(
                     title: .RemoveBookmarkContextMenuTitle,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.cross),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                     identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                 ) { _ in
                     self.removeBookmark(url: url.absoluteString)
@@ -253,7 +252,7 @@ extension BrowserViewController: WKUIDelegate {
                 let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
                 actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
+                actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.download), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                     // This checks if download is a blob, if yes, begin blob download process
                     if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                         // if not a blob, set pendingDownloadWebView and load the request in
@@ -267,7 +266,7 @@ extension BrowserViewController: WKUIDelegate {
 
                 actions.append(UIAction(
                     title: .ContextMenuCopyLink,
-                    image: UIImage.templateImageNamed(ImageIdentifiers.Large.link),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                     identifier: UIAction.Identifier("linkContextMenu.copyLink")
                 ) { _ in
                     UIPasteboard.general.url = url
@@ -336,8 +335,7 @@ extension BrowserViewController: WKUIDelegate {
                  type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        let hasNoHomepage = CoordinatorFlagManager.isCoordinatorEnabled ? !contentContainer.hasHomepage: homepageViewController?.view.alpha == 0
-        guard tabManager.selectedTab?.webView == webView, hasNoHomepage else {
+        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasHomepage else {
             decisionHandler(.deny)
             return
         }

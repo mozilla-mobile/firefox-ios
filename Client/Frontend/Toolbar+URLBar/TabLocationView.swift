@@ -50,7 +50,8 @@ class TabLocationView: UIView, FeatureFlaggable {
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
             let product = url.flatMap(ShoppingProduct.init)
-            shoppingCartButton.isHidden = !(product?.isShoppingCartButtonVisible ?? false)
+            let isShoppingCartButtonVisible = product?.isShoppingCartButtonVisible ?? false
+            shoppingCartButton.isHidden = !isShoppingCartButtonVisible
             setNeedsUpdateConstraints()
         }
     }
@@ -287,7 +288,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             let imageID = theme.type.getThemedImageName(name: ImageIdentifiers.lockBlocked)
             lockImage = UIImage(imageLiteralResourceName: imageID)
         } else if let tintColor = trackingProtectionButton.tintColor {
-            lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.Large.lock)
+            lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
                 .withTintColor(tintColor, renderingMode: .alwaysTemplate)
         }
 
@@ -314,7 +315,8 @@ private extension TabLocationView {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
         let product = url.flatMap(ShoppingProduct.init)
-        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable) || (product?.isShoppingCartButtonVisible ?? false)
+        let isShoppingCartButtonVisible = product?.isShoppingCartButtonVisible ?? false
+        readerModeButton.isHidden = (newReaderModeState == .unavailable) || isShoppingCartButtonVisible
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {

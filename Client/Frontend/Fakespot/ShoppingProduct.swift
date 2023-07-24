@@ -24,22 +24,6 @@ struct Product {
  Class for working with the products shopping API,
  with helpers for parsing the product from a URL
  and querying the shopping API for information on it.
-
- - Example:
- ```swift
- let product = ShoppingProduct(url: url)
- if product.isProduct() {
- let analysis = try product.requestAnalysis()
- let recommendations = try product.requestRecommendations()
- }
-
- if !isProductURL(url) {
- return
- }
- let product = ShoppingProduct(url: url)
- let analysis = try product.requestAnalysis()
- let recommendations = try product.requestRecommendations()
- ```
  */
 class ShoppingProduct: FeatureFlaggable {
     private let fakespotFeature = FxNimbus.shared.features.fakespotFeature.value()

@@ -99,7 +99,7 @@ class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
         roundedButton.backgroundColor = theme.colors.layer3
         roundedButton.tintColor = theme.colors.textPrimary
-        let image = UIImage(named: ImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
+        let image = UIImage(named: StandardImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
         roundedButton.setImage(image, for: .normal)
     }
 }
