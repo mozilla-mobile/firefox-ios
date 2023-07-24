@@ -46,7 +46,8 @@ class SaveLoginTest: BaseTestCase {
         passcodeInput.typeText("foo\n")
 
         // This biometric screen only appears the first time.
-        // This if-statement is a temporary workaround for FXIOS-7033
+        // The location of this if-statement is a temporary workaround for FXIOS-7033.
+        // This if-statement is supposed to be located before the passcode is entered.
         // https://github.com/mozilla-mobile/firefox-ios/issues/15642
         sleep(2)
         if app.otherElements.buttons["Continue"].exists {
