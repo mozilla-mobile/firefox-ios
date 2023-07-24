@@ -72,7 +72,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         guard let url else { return false }
         let regexProductIDPatterns = NimbusFakespotFeatureLayer().getRegexProductIDPatterns()
         let hasMatchingPattern = regexProductIDPatterns.contains { regexPattern in
-            !url.absoluteString.match(regexPattern).isEmpty
+            url.absoluteString.match(regexPattern) != nil
         }
         return hasMatchingPattern && isFakespotFeatureEnabled
     }
