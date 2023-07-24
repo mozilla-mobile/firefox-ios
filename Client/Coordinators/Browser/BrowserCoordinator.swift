@@ -138,6 +138,7 @@ class BrowserCoordinator: BaseCoordinator,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
+            homepageViewController.configure(isZeroSearch: inline)
             return homepageViewController
         } else {
             let homepageViewController = HomepageViewController(
@@ -418,7 +419,9 @@ class BrowserCoordinator: BaseCoordinator,
 
         let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
         controller.presentingModalViewControllerDelegate = browserViewController
-        controller.modalPresentationStyle = .formSheet
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        controller.modalPresentationStyle = modalPresentationStyle
         router.present(controller)
 
         legacyGetSettingsViewController(settingsSection: settingsSection) { viewController in

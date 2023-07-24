@@ -138,20 +138,29 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.recordViewAppeared()
+
+        notificationCenter.post(name: .ShowHomepage)
+        notificationCenter.post(name: .HistoryUpdated)
+
         applyTheme()
-        homepageWillAppear(isZeroSearch: viewModel.isZeroSearch)
         reloadView()
-        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        homepageDidAppear()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            self?.displayWallpaperSelector()
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        homepageWillDisappear()
+
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
+        viewModel.recordViewDisappeared()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -264,32 +273,16 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
-    // FXIOS-6203 - Clean up custom homepage view cycles
-    // MARK: - Homepage view cycle
-    /// Normal view controller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
-    /// This is a problem that need to be fixed but until then we have to rely on the methods here.
-
-    func homepageWillAppear(isZeroSearch: Bool) {
-        logger.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)
-
-        viewModel.isZeroSearch = isZeroSearch
-        viewModel.recordViewAppeared()
-        notificationCenter.post(name: .HistoryUpdated)
-    }
-
-    func homepageDidAppear() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-            self?.displayWallpaperSelector()
-        }
-    }
-
-    func homepageWillDisappear() {
-        jumpBackInContextualHintViewController.stopTimer()
-        syncTabContextualHintViewController.stopTimer()
-        viewModel.recordViewDisappeared()
-    }
-
     // MARK: - Helpers
+
+    /// Configure isZeroSearch
+    /// - Parameter isZeroSearch: IsZeroSearch is true when the homepage is created from the tab tray, a long press
+    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
+    /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
+    /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
+    func configure(isZeroSearch: Bool) {
+        viewModel.isZeroSearch = isZeroSearch
+    }
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
