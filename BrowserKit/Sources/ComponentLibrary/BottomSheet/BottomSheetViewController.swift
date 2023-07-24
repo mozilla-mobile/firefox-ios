@@ -11,8 +11,15 @@ public protocol BottomSheetChild: UIViewController {
     func willDismiss()
 }
 
+public protocol BottomSheetDismissProtocol {
+    func dismissSheetViewController(completion: (() -> Void)?)
+}
+
 /// A container that present from the bottom as a sheet
-public class BottomSheetViewController: UIViewController, Themeable, UIGestureRecognizerDelegate {
+public class BottomSheetViewController: UIViewController,
+                                        BottomSheetDismissProtocol,
+                                        Themeable,
+                                        UIGestureRecognizerDelegate {
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
@@ -244,7 +251,7 @@ public class BottomSheetViewController: UIViewController, Themeable, UIGestureRe
                     self.sheetView.transform = .identity
                 })
             } else {
-                dismissViewController()
+                dismissSheetViewController()
             }
         default:
             break
@@ -253,10 +260,12 @@ public class BottomSheetViewController: UIViewController, Themeable, UIGestureRe
 
     @objc
     private func closeTapped() {
-        dismissViewController()
+        dismissSheetViewController()
     }
 
-    private func dismissViewController() {
+    // MARK: - BottomSheetDismissProtocol
+
+    public func dismissSheetViewController(completion: (() -> Void)? = nil) {
         childViewController.willDismiss()
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         UIView.animate(
@@ -265,7 +274,7 @@ public class BottomSheetViewController: UIViewController, Themeable, UIGestureRe
                 self.view.layoutIfNeeded()
                 self.view.backgroundColor = .clear
             }, completion: { _ in
-                self.dismiss(animated: false, completion: nil)
+                self.dismiss(animated: false, completion: completion)
             }
         )
     }

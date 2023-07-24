@@ -7,6 +7,7 @@ import UIKit
 import Storage
 import MozillaAppServices
 import Common
+import ComponentLibrary
 
 class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
                                 SearchBarLocationProvider {
@@ -365,7 +366,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel)
-        var bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import Foundation
 import Shared
 
@@ -83,7 +84,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                     completionIfLastCard: completionIfLastCard)
             }
         )
-        var bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,

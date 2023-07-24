@@ -1249,8 +1249,6 @@
 		E18BAB0128E4AEF300098AE2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
 		E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */; };
-		E195440428A5AFDE00304CF0 /* BottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E195440228A5AFDE00304CF0 /* BottomSheetViewModel.swift */; };
-		E195440528A5AFDE00304CF0 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E195440328A5AFDE00304CF0 /* BottomSheetViewController.swift */; };
 		E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */; };
 		E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */; };
 		E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */; };
@@ -6406,8 +6404,6 @@
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionType.swift; sourceTree = "<group>"; };
-		E195440228A5AFDE00304CF0 /* BottomSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewModel.swift; sourceTree = "<group>"; };
-		E195440328A5AFDE00304CF0 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailabilityTests.swift; sourceTree = "<group>"; };
 		E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionViewCell.swift; sourceTree = "<group>"; };
 		E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCellViewModel.swift; sourceTree = "<group>"; };
@@ -7740,16 +7736,6 @@
 			);
 			path = CreditCard;
 			sourceTree = "<group>";
-		};
-		43C5A0972555DF7300BA37AD /* BottomSheet */ = {
-			isa = PBXGroup;
-			children = (
-				E195440328A5AFDE00304CF0 /* BottomSheetViewController.swift */,
-				E195440228A5AFDE00304CF0 /* BottomSheetViewModel.swift */,
-			);
-			name = BottomSheet;
-			path = Client/BottomSheet;
-			sourceTree = SOURCE_ROOT;
 		};
 		43D00490296FC44B00CB0F31 /* Autofill */ = {
 			isa = PBXGroup;
@@ -10546,7 +10532,6 @@
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
-				43C5A0972555DF7300BA37AD /* BottomSheet */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
@@ -12379,7 +12364,6 @@
 				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				8A93F86229D36F0F004159D9 /* NavigationController.swift in Sources */,
-				E195440528A5AFDE00304CF0 /* BottomSheetViewController.swift in Sources */,
 				E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */,
 				C2D71B9B2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift in Sources */,
 				C869912F28917688007ACC5C /* WallpaperMetadataLoader.swift in Sources */,
@@ -12573,7 +12557,6 @@
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
-				E195440428A5AFDE00304CF0 /* BottomSheetViewModel.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
 				C8699131289176A5007ACC5C /* WallpaperNetworking.swift in Sources */,
 				5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */,
