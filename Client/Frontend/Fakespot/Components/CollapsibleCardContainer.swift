@@ -5,38 +5,48 @@
 import Common
 import UIKit
 
-class CollapsibleCardContainer: UIView, ThemeApplicable {
+class CollapsibleCardContainer: CardContainer {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
         static let titleHorizontalPadding: CGFloat = 16
         static let titleTopPadding: CGFloat = 16
-        static let cornerRadius: CGFloat = 8
-        static let shadowRadius: CGFloat = 14
-        static let shadowOpacity: Float = 1
-        static let shadowOffset = CGSize(width: 0, height: 2)
         static let chevronSize = CGSize(width: 20, height: 20)
     }
 
+    private enum ExpandButtonState {
+        case collapsed
+        case expanded
+
+        var image: UIImage? {
+            switch self {
+            case .expanded:
+                return UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
+            case .collapsed:
+                return UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
+            }
+        }
+    }
+
     // MARK: - Properties
+    private var state: ExpandButtonState = .expanded
 
     // UI
     private lazy var rootView: UIView = .build { _ in }
-    private lazy var headerView: UIView = .build { _ in }
-    lazy var containerView: UIView = .build { _ in }
+    private lazy var headerView: UIView = .build { _ in } // add gesture recognizer
+    private lazy var containerView: UIView = .build { _ in }
+    private var containerHeightConstraint: NSLayoutConstraint?
 
     lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 17.0)
         label.numberOfLines = 0
-        label.text = "I am a header"
     }
 
     private lazy var chevronButton: ResizableButton = .build { view in
-        view.setImage(UIImage(named: ImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
-                      for: .normal)
+        view.setImage(self.state.image, for: .normal)
         view.buttonEdgeSpacing = 0
-        view.accessibilityIdentifier = AccessibilityIdentifiers.Components.collapseButton
+        view.addTarget(self, action: #selector(self.toggleExpand), for: .touchUpInside)
     }
 
     // MARK: - Inits
@@ -50,33 +60,43 @@ class CollapsibleCardContainer: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        rootView.layer.shadowPath = UIBezierPath(roundedRect: rootView.bounds,
-                                                 cornerRadius: UX.cornerRadius).cgPath
+    override func configure(_ view: UIView) {
+        configure(title: "", contentView: view, baseA11yId: "", isCollapsed: false)
     }
 
-    func applyTheme(theme: Theme) {
-        rootView.backgroundColor = theme.colors.layer2
+    func configure(title: String, contentView: UIView, baseA11yId: String, isCollapsed: Bool) {
+        state = isCollapsed ? .collapsed : .expanded
+        containerView.subviews.forEach { $0.removeFromSuperview() }
+        containerView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+
+        updateCardState(isCollapsed: isCollapsed)
+
+        super.configure(rootView)
+    }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+
         titleLabel.textColor = theme.colors.textPrimary
-        chevronButton.tintColor = theme.colors.actionPrimary
-        setupShadow(theme: theme)
+        chevronButton.tintColor = theme.colors.iconPrimary
     }
 
     private func setupLayout() {
+        configure(rootView)
+
         headerView.addSubview(titleLabel)
         headerView.addSubview(chevronButton)
         rootView.addSubview(headerView)
         rootView.addSubview(containerView)
-        addSubview(rootView)
 
         NSLayoutConstraint.activate([
-            rootView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            rootView.topAnchor.constraint(equalTo: topAnchor),
-            rootView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            rootView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             headerView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
                                                 constant: UX.titleHorizontalPadding),
             headerView.topAnchor.constraint(equalTo: rootView.topAnchor,
@@ -91,6 +111,7 @@ class CollapsibleCardContainer: UIView, ThemeApplicable {
             titleLabel.trailingAnchor.constraint(equalTo: chevronButton.leadingAnchor,
                                                  constant: -UX.horizontalPadding),
             titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.chevronSize.height),
 
             chevronButton.topAnchor.constraint(greaterThanOrEqualTo: headerView.topAnchor),
             chevronButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
@@ -108,13 +129,21 @@ class CollapsibleCardContainer: UIView, ThemeApplicable {
         ])
     }
 
-    private func setupShadow(theme: Theme) {
-        rootView.layer.cornerRadius = UX.cornerRadius
-        rootView.layer.shadowPath = UIBezierPath(roundedRect: rootView.bounds,
-                                                 cornerRadius: UX.cornerRadius).cgPath
-        rootView.layer.shadowRadius = UX.shadowRadius
-        rootView.layer.shadowOffset = UX.shadowOffset
-        rootView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        rootView.layer.shadowOpacity = UX.shadowOpacity
+    private func updateCardState(isCollapsed: Bool) {
+        if isCollapsed {
+            state = .collapsed
+            containerHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: 0)
+            containerHeightConstraint?.isActive = true
+        } else {
+            state = .expanded
+            containerHeightConstraint?.isActive = false
+        }
+
+        chevronButton.setImage(state.image, for: .normal)
+    }
+
+    @objc
+    private func toggleExpand(_ sender: UIButton) {
+        updateCardState(isCollapsed: state == .expanded)
     }
 }
