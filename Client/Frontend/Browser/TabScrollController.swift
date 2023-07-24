@@ -28,8 +28,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            let pullToRefreshEnabled = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
-            configureRefreshControl(isEnabled: pullToRefreshEnabled)
+            configureRefreshControl(isEnabled: true)
         }
     }
 
@@ -207,7 +206,11 @@ private extension TabScrollingController {
     }
 
     func configureRefreshControl(isEnabled: Bool) {
-        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
+        let pullToRefreshEnabled = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
+
+        scrollView?.refreshControl = pullToRefreshEnabled ?
+        (isEnabled ? UIRefreshControl() : nil) : nil
+
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
 
