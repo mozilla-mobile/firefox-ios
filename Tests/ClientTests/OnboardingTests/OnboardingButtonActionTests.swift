@@ -73,11 +73,11 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_buttonAction_returnsOpenPopupAction() {
-        let subject = setSubjectUpWith(firstAction: .openDefaultBrowserPopup)
+        let subject = setSubjectUpWith(firstAction: .openInstructionsPopup)
 
         subject.primaryAction()
 
-        XCTAssertEqual(mockDelegate.action, OnboardingActions.openDefaultBrowserPopup)
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.openInstructionsPopup)
     }
 
     // MARK: - Helpers
@@ -112,7 +112,8 @@ class OnboardingButtonActionTests: XCTestCase {
             buttons: buttons,
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
-            imageID: ImageIdentifiers.onboardingSyncv106)
+            imageID: ImageIdentifiers.onboardingSyncv106,
+            instructionsPopup: nil)
 
         mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingCardViewController(

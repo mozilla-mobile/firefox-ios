@@ -59,6 +59,13 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
     }
 
+    func testStart_withLibraryPanelTypeBookmarks_addsChildBookmarksCoordinator() {
+        let subject = createSubject()
+        subject.start(panelType: .bookmarks, navigationController: UINavigationController())
+        XCTAssertTrue(subject.childCoordinators.first is BookmarksCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
     func testParentCoordinatorDelegate_calledDidFinish() {
         let subject = createSubject()
         subject.parentCoordinator = delegate

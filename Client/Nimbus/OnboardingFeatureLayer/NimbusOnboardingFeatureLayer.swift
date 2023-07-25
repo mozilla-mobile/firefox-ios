@@ -31,9 +31,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return OnboardingViewModel(
             cards: cards,
-            infoPopupModel: getPopupInfoModel(
-                from: framework.instructionPopup,
-                withA11yID: cards.first?.a11yIdRoot ?? "noID"),
             isDismissable: framework.dismissable)
     }
 
@@ -62,7 +59,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 buttons: card.buttons,
                 type: card.type,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
-                imageID: card.imageID)
+                imageID: card.imageID,
+                instructionsPopup: card.instructionsPopup)
         }
     }
 
@@ -92,13 +90,22 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 return OnboardingCardInfoModel(
                     name: cardName,
                     order: cardData.order,
-                    title: String(format: cardData.title, AppName.shortName.rawValue),
-                    body: String(format: cardData.body, AppName.shortName.rawValue, AppName.shortName.rawValue),
+                    title: String(
+                        format: cardData.title,
+                        AppName.shortName.rawValue),
+                    body: String(
+                        format: cardData.body,
+                        AppName.shortName.rawValue,
+                        AppName.shortName.rawValue),
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
                     type: cardData.type,
                     a11yIdRoot: cardData.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                    imageID: getOnboardingImageID(from: cardData.image))
+                    imageID: getOnboardingImageID(from: cardData.image),
+                    instructionsPopup: getPopupInfoModel(
+                        from: cardData.instructionsPopup,
+                        withA11yID: "")
+                )
             }
 
             return nil
@@ -188,14 +195,17 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     }
 
     private func getPopupInfoModel(
-        from data: NimbusInstructionPopup,
+        from data: NimbusInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingDefaultBrowserInfoModel {
-        return OnboardingDefaultBrowserInfoModel(
+    ) -> OnboardingInstructionsPopupInfoModel? {
+        guard let data else { return nil }
+
+        return OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
                 .map { String(format: $0, AppName.shortName.rawValue)},
             buttonTitle: data.buttonTitle,
+            buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)
     }
 }

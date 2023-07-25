@@ -24,6 +24,7 @@ class LibraryViewController: UIViewController, Themeable {
     var viewModel: LibraryViewModel
     var notificationCenter: NotificationProtocol
     weak var delegate: LibraryPanelDelegate?
+    weak var navigationHandler: LibraryNavigationHandler?
     var onViewDismissed: (() -> Void)?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -211,6 +212,9 @@ class LibraryViewController: UIViewController, Themeable {
                               accessibilityLabel: accessibilityLabel,
                               accessibilityIdentifier: accessibilityId)
             self.showPanel(navigationController)
+            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                navigationHandler?.start(panelType: viewModel.selectedPanel ?? .bookmarks, navigationController: navigationController)
+            }
         }
 
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0

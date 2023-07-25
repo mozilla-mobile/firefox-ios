@@ -5,6 +5,7 @@
 /* eslint-disable no-undef,mozilla/balanced-listeners */
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormStateManager } from "resource://gre/modules/shared/FormStateManager.sys.mjs";
+import { CreditCardRecord } from "resource://gre/modules/shared/CreditCardRecord.sys.mjs";
 
 export class FormAutofillChild {
   constructor(onSubmitCallback, onAutofillCallback) {
@@ -26,14 +27,17 @@ export class FormAutofillChild {
       this.fieldDetailsManager.identifyAutofillFields(element);
 
     // Only ping swift if current field is a cc field
-    if (validDetails?.find(field => field.element === element)) {
+    if (validDetails?.find(field => field.elementWeakRef.get() === element)) {
       const fieldNamesWithValues = validDetails?.reduce(
         (acc, field) => ({
           ...acc,
-          [field.fieldName]: field.element.value,
+          [field.fieldName]: field.elementWeakRef.get().value,
         }),
         {}
       );
+      // Normalize record format so we always get a consistent
+      // credit card record format: {cc-number, cc-name, cc-exp-month, cc-exp-year}
+      CreditCardRecord.normalizeFields(fieldNamesWithValues);
       this.onAutofillCallback(fieldNamesWithValues);
     }
   }

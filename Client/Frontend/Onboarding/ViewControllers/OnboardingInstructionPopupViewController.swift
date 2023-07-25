@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
+class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private enum UX {
         static let contentStackViewSpacing: CGFloat = 40
         static let textStackViewSpacing: CGFloat = 24
@@ -85,6 +85,7 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     private var contentViewHeightConstraint: NSLayoutConstraint!
     var didTapButton = false
     var buttonTappedFinishFlow: (() -> Void)?
+    var dismissDelegate: BottomSheetDismissProtocol?
 
     // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
@@ -200,12 +201,17 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     // MARK: - Helper methods
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
-        let attributedStrings = viewModel.getAttributedStrings(with: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize))
+        let attributedStrings = viewModel.getAttributedStrings(
+            with: DynamicFontHelper.defaultHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.numeratedTextFontSize))
         attributedStrings.forEach { attributedText in
             let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
                 label.textAlignment = .left
-                label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.numeratedTextFontSize)
+                label.font = DynamicFontHelper.defaultHelper.preferredFont(
+                    withTextStyle: .subheadline,
+                    size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true
                 label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
                 label.attributedText = attributedText
@@ -226,8 +232,15 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     // MARK: - Button actions
     @objc
     func primaryAction() {
-        didTapButton = true
-        DefaultApplicationHelper().openSettings()
+        switch viewModel.buttonAction {
+        case .openIosFxSettings:
+            didTapButton = true
+            DefaultApplicationHelper().openSettings()
+        case .dismissAndNextCard:
+            dismissDelegate?.dismissSheetViewController { self.buttonTappedFinishFlow?() }
+        case .dismiss:
+            dismissDelegate?.dismissSheetViewController(completion: nil)
+        }
     }
 
     // MARK: - Themeable
@@ -243,6 +256,6 @@ class OnboardingDefaultSettingsViewController: UIViewController, Themeable {
     }
 }
 
-extension OnboardingDefaultSettingsViewController: BottomSheetChild {
+extension OnboardingInstructionPopupViewController: BottomSheetChild {
     func willDismiss() { }
 }

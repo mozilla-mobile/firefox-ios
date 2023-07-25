@@ -35,11 +35,6 @@ class SaveLoginTest: BaseTestCase {
         app.cells["SignInToSync"].swipeUp()
         navigator.goto(LoginsSettings)
 
-        // This only appears the first time
-        if app.otherElements.buttons["Continue"].exists {
-            app.otherElements.buttons["Continue"].tap()
-        }
-
         unlockLoginsView()
         waitForExistence(app.tables["Login List"])
     }
@@ -49,6 +44,15 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(passcodeInput, timeout: 20)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
+
+        // This biometric screen only appears the first time.
+        // The location of this if-statement is a temporary workaround for FXIOS-7033.
+        // This if-statement is supposed to be located before the passcode is entered.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/15642
+        sleep(2)
+        if app.otherElements.buttons["Continue"].exists {
+            app.otherElements.buttons["Continue"].tap()
+        }
     }
 
     func testLoginsListFromBrowserTabMenu() {
@@ -214,11 +218,6 @@ class SaveLoginTest: BaseTestCase {
     func testCreateLoginManually() {
         closeURLBar()
         navigator.goto(LoginsSettings)
-        // This only appears the first time
-        sleep(2)
-        if app.otherElements.buttons["Continue"].exists {
-            app.otherElements.buttons["Continue"].tap()
-        }
         unlockLoginsView()
         waitForExistence(app.tables["Login List"], timeout: 15)
         app.buttons["Add"].tap()

@@ -5,10 +5,11 @@
 import Foundation
 import Shared
 
-struct OnboardingDefaultBrowserInfoModel: OnboardingDefaultBrowserModelProtocol {
+struct OnboardingInstructionsPopupInfoModel: OnboardingDefaultBrowserModelProtocol {
     var title: String
     var instructionSteps: [String]
     var buttonTitle: String
+    var buttonAction: OnboardingInstructionsPopupActions
     var a11yIdRoot: String
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
