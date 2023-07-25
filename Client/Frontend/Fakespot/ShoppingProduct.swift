@@ -9,13 +9,13 @@ import Foundation
 /// - Parameters:
 ///   - id: The product id of the product.
 ///   - host: The host of a product URL (without www).
-///   - tld: The top-level domain of a URL.
+///   - topLevelDomain: The top-level domain of a URL.
 ///   - sitename: The name of a website (without TLD or subdomains).
 ///   - valid: If the product is valid or not.
 struct Product {
     let id: String
     let host: String
-    let tld: String
+    let topLevelDomain: String
     let sitename: String
 }
 
@@ -33,7 +33,7 @@ class ShoppingProduct: FeatureFlaggable {
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
     }
 
-    private var isFakespotFeatureEnabled: Bool {
+    var isFakespotFeatureEnabled: Bool {
         guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else { return false }
         return true
     }
@@ -45,18 +45,16 @@ class ShoppingProduct: FeatureFlaggable {
     /// Gets a Product from a URL.
     /// - Returns: Product information parsed from the URL.
     var product: Product? {
-        guard let host = url.host, !host.isEmpty else { return nil }
-        guard let sitename = url.shortDomain, !sitename.isEmpty else { return nil }
-        guard let tld = url.publicSuffix else { return nil }
-         // Check if sitename is one the API has products for
-        guard let siteConfig = nimbusFakespotFeatureLayer.getSiteConfig(siteName: sitename) else { return nil }
-        // Check if API has products for this TLD
-        guard siteConfig.validTlDs.contains(tld) else { return nil }
+        guard let host = url.host,
+              let sitename = url.shortDomain,
+              let tld = url.publicSuffix,
+              let siteConfig = nimbusFakespotFeatureLayer.getSiteConfig(siteName: sitename),
+              siteConfig.validTlDs.contains(tld) else { return nil }
 
         // Try to find a product id from the pathname.
         let matches = url.absoluteString.match(siteConfig.productIdFromUrlRegex)
         guard let id = matches.first else { return nil }
 
-        return Product(id: id, host: host, tld: tld, sitename: sitename)
+        return Product(id: id, host: host, topLevelDomain: tld, sitename: sitename)
     }
 }
