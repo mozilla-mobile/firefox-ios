@@ -7,7 +7,6 @@ import Foundation
 import Shared
 import Kingfisher
 import MozillaAppServices
-import SQLite
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
@@ -41,45 +40,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                     fatalError("Failed to set web server port override.")
                 }
             }
-            
-//            if arg.starts(with: LaunchArguments.PerfHistory) {
-//                // Assuming you want the same logic for copying a DB to the test profile
-//                let filename = arg.replacingOccurrences(of: LaunchArguments.PerfHistory, with: "")
-//                let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filename,
-//                                                                                              ofType: nil,
-//                                                                                              inDirectory: "test-fixtures")!)
-//                try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-//                let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
-//
-//                let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
-//                let filePaths = enumerator?.allObjects as! [String]
-//                filePaths.filter { $0.contains(".db") }.forEach { item in
-//                    try? FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
-//                }
-//
-//                try! FileManager.default.copyItem(at: input, to: output)
-//
-//                // Your Python script seeding logic here
-//
-//                // Given that you're running this in an XCTest environment, it's important to mention again that
-//                // you might not have direct access to run an external script for security reasons.
-//                // However, if you still want to proceed, you'd run the Process class here.
-//                let process = Process()
-//                process.launchPath = "/usr/bin/env"
-//                process.arguments = ["python3", "\(input)/generate-test-db.py"]
-//
-//                let pipe = Pipe()
-//                process.standardOutput = pipe
-//
-//                process.launch()
-//                process.waitUntilExit()
-//
-//                let data = pipe.fileHandleForReading.readDataToEndOfFile()
-//                let output = String(data: data, encoding: .utf8)
-//                print(output ?? "")
-//            }
 
-            
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
                     fatalError("Clearing profile and loading a test database is not a supported combination.")
@@ -90,46 +51,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filename,
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
-                print("your filename is \(filename)")
-                print("your input is \(input)")
-                
-                var db: Connection!
-                let historyVisits = Table("moz_historyvisits")
-                let visitDate = Expression<Int>("visit_date")
-                let rowid = Expression<Int>("rowid")
-                let dbPath = Bundle(for: UITestAppDelegate.self).path(forResource: "testHistoryDatabase500-places", ofType: "db", inDirectory: "test-fixtures")!
-                
-                do {
-                    let path = Bundle(for: type(of: self)).path(forResource: "testHistoryDatabase500-places", ofType: "db", inDirectory: "test-fixtures")!
-                    db = try Connection(path, readonly: false)
-                } catch {
-                    fatalError("Failed to establish SQLite connection: \(error)")
-                    return
-                }
-                // 2. Update the `visit_date`:
-                let times = [
-                    (0, Date().millisecondsSince1970),
-                    (1, Date().addingTimeInterval(-25 * 3600).millisecondsSince1970),
-                    (2, Date().addingTimeInterval(-6 * 24 * 3600).millisecondsSince1970),
-                    (3, Date().addingTimeInterval(-30 * 24 * 3600).millisecondsSince1970),
-                    (4, Date().addingTimeInterval(-31 * 24 * 3600).millisecondsSince1970)
-                ]
-                for (index, timeValue) in times.enumerated() {
-                    let lowerBound = index * 100
-                    let upperBound = lowerBound + 99
-                    print("Type of visitDate: \(type(of: visitDate))")
-                    print("Type of timeValue: \(type(of: timeValue))")
-                    print("timeValue is: \(timeValue) \(timeValue.0) \(timeValue.1)")
-                    do {
-                        try db.run(historyVisits.filter(rowid >= lowerBound && rowid <= upperBound).update(visitDate <- timeValue.1))
-                    } catch {
-                        fatalError("Failed to update visit_date for rowid between \(lowerBound) and \(upperBound): \(error)")
-                    }
-                }
-                
-                // 3. Close the SQLite connection:
-                db = nil
-                
+
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                 let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
 
@@ -300,11 +222,5 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             } catch {
             }
         }
-    }
-}
-
-extension Date {
-    var millisecondsSince1970: Int {
-        return Int(self.timeIntervalSince1970 * 1000.0)
     }
 }
