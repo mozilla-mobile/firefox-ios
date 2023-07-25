@@ -5,7 +5,7 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db", "testPerfHistory400openMenu": "testHistoryDatabase400-places.db"]
+    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db", "testPerfHistory500openMenu": "testHistoryDatabase500-places.db"]
 
     
     override func setUp() {
@@ -204,7 +204,7 @@ class DatabaseFixtureTest: BaseTestCase {
         }
     }
 
-    func testPerfHistory400openMenu() {
+    func testPerfHistory500openMenu() {
         waitForTabsButton()
         measure(metrics: [
             XCTMemoryMetric(),
