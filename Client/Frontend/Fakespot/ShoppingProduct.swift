@@ -4,15 +4,14 @@
 
 import Foundation
 
-/**
- Represents a parsed product for a URL.
-
- - Parameter id: The product id of the product.
- - Parameter host: The host of a product URL (without www).
- - Parameter tld: The top-level domain of a URL.
- - Parameter sitename: The name of a website (without TLD or subdomains).
- - Parameter valid: If the product is valid or not.
- */
+/// Represents a parsed product for a URL.
+///
+/// - Parameters:
+///   - id: The product id of the product.
+///   - host: The host of a product URL (without www).
+///   - tld: The top-level domain of a URL.
+///   - sitename: The name of a website (without TLD or subdomains).
+///   - valid: If the product is valid or not.
 struct Product {
     let id: String
     let host: String
@@ -20,19 +19,16 @@ struct Product {
     let sitename: String
 }
 
-/**
- Class for working with the products shopping API,
- with helpers for parsing the product from a URL
- and querying the shopping API for information on it.
- */
+/// Class for working with the products shopping API,
+/// with helpers for parsing the product from a URL
+/// and querying the shopping API for information on it.
 class ShoppingProduct: FeatureFlaggable {
     private let fakespotFeature = FxNimbus.shared.features.fakespotFeature.value()
     private let url: URL
 
-    /*
-     Creates a product.
-     - Parameter url: URL to get the product info from.
-     */
+
+    /// Creates a product.
+    /// - Parameter url: URL to get the product info from.
     init(url: URL) {
         self.url = url
     }
@@ -46,11 +42,8 @@ class ShoppingProduct: FeatureFlaggable {
         return product != nil && isFakespotFeatureEnabled
     }
 
-    /**
-     Gets a Product from a URL.
-     - Returns: Product information parsed from the URL.
-     */
-
+    /// Gets a Product from a URL.
+    /// - Returns: Product information parsed from the URL.
     var product: Product? {
         guard let host = url.host, !host.isEmpty else { return nil }
         guard let sitename = url.shortDomain, !sitename.isEmpty else { return nil }
