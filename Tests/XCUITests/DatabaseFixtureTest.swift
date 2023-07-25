@@ -7,7 +7,6 @@ import XCTest
 class DatabaseFixtureTest: BaseTestCase {
     let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db", "testPerfHistory500openMenu": "testHistoryDatabase500-places.db"]
 
-    
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -20,17 +19,8 @@ class DatabaseFixtureTest: BaseTestCase {
                            LaunchArguments.LoadDatabasePrefix + fixtures[key]!,
                            LaunchArguments.SkipContextualHints,
                            LaunchArguments.TurnOffTabGroupsInUserPreferences]
-        
         super.setUp()
     }
-
-
-//    override func tearDown() {
-//        // 3. Close the SQLite connection:
-//        sqlite3_close(db)
-//
-//        super.tearDown()
-//    }
 
     /* Disabled due to issue with db: 8281*/
     /*func testOneBookmark() {
@@ -44,179 +34,29 @@ class DatabaseFixtureTest: BaseTestCase {
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }*/
 
-//    func testBookmarksDatabaseFixture() {
-//        waitForTabsButton()
-//        navigator.goto(LibraryPanel_Bookmarks)
-//        waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
-//
-//        let loaded = NSPredicate(format: "count == 1001")
-//        expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-//        waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
-//
-//        let bookmarksList = app.tables["Bookmarks List"].cells.count
-//        XCTAssertEqual(bookmarksList, 1001, "There should be an entry in the bookmarks list")
-//    }
-//
-//    func testHistoryDatabaseFixture() throws {
-//        waitForTabsButton()
-//        navigator.goto(LibraryPanel_History)
-//        waitForExistence(app.tables["History List"], timeout: TIMEOUT_LONG)
-//        // History list has one cell that are for recently closed
-//        // the actual max number is 101
-//        let loaded = NSPredicate(format: "count == 101")
-//        expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-//        waitForExpectations(timeout: TIMEOUT, handler: nil)
-//        let historyList = app.tables["History List"].cells.count
-//        XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
-//    }
+   func testBookmarksDatabaseFixture() {
+       waitForTabsButton()
+       navigator.goto(LibraryPanel_Bookmarks)
+       waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
 
-    func testPerfHistory1startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
+       let loaded = NSPredicate(format: "count == 1001")
+       expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+       waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
 
-    func testPerfHistory1openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 2
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-        }
-    }
+       let bookmarksList = app.tables["Bookmarks List"].cells.count
+       XCTAssertEqual(bookmarksList, 1001, "There should be an entry in the bookmarks list")
+   }
 
-    func testPerfHistory100startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory100openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 101
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-        }
-    }
-
-    func testPerfHistory200startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory200openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 202
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-        }
-    }
-
-    func testPerfHistory300startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory300openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 303
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-        }
-    }
-
-    func testPerfHistory400startUp() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
-        }
-    }
-
-    func testPerfHistory500openMenu() {
-        waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 404
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-        }
-    }
+   func testHistoryDatabaseFixture() throws {
+       waitForTabsButton()
+       navigator.goto(LibraryPanel_History)
+       waitForExistence(app.tables["History List"], timeout: TIMEOUT_LONG)
+       // History list has one cell that are for recently closed
+       // the actual max number is 101
+       let loaded = NSPredicate(format: "count == 101")
+       expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
+       waitForExpectations(timeout: TIMEOUT, handler: nil)
+       let historyList = app.tables["History List"].cells.count
+       XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
+   }
 }
