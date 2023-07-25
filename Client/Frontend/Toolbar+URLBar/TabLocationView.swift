@@ -49,9 +49,10 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
-            let product = url.flatMap(ShoppingProduct.init)
-            let isShoppingCartButtonVisible = product?.isShoppingCartButtonVisible ?? false
-            shoppingCartButton.isHidden = !isShoppingCartButtonVisible
+            if let url {
+                let product = ShoppingProduct(url: url)
+                shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible
+            }
             setNeedsUpdateConstraints()
         }
     }
@@ -314,8 +315,11 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        let product = url.flatMap(ShoppingProduct.init)
-        let isShoppingCartButtonVisible = product?.isShoppingCartButtonVisible ?? false
+        var isShoppingCartButtonVisible = false
+        if let url {
+            let product = ShoppingProduct(url: url)
+            isShoppingCartButtonVisible = product.isShoppingCartButtonVisible
+        }
         readerModeButton.isHidden = (newReaderModeState == .unavailable) || isShoppingCartButtonVisible
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)

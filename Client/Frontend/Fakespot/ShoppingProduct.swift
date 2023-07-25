@@ -23,14 +23,14 @@ struct Product {
 /// with helpers for parsing the product from a URL
 /// and querying the shopping API for information on it.
 class ShoppingProduct: FeatureFlaggable {
-    private let fakespotFeature = FxNimbus.shared.features.fakespotFeature.value()
     private let url: URL
-
+    private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
 
     /// Creates a product.
     /// - Parameter url: URL to get the product info from.
-    init(url: URL) {
+    init(url: URL, nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer()) {
         self.url = url
+        self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
     }
 
     private var isFakespotFeatureEnabled: Bool {
@@ -49,7 +49,7 @@ class ShoppingProduct: FeatureFlaggable {
         guard let sitename = url.shortDomain, !sitename.isEmpty else { return nil }
         guard let tld = url.publicSuffix else { return nil }
          // Check if sitename is one the API has products for
-        guard let siteConfig = fakespotFeature.config[sitename] else { return nil }
+        guard let siteConfig = nimbusFakespotFeatureLayer.getSiteConfig(siteName: sitename) else { return nil }
         // Check if API has products for this TLD
         guard siteConfig.validTlDs.contains(tld) else { return nil }
 
