@@ -5,14 +5,12 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db", "testPerfHistory500openMenu": "testHistoryDatabase500-places.db"]
+    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
-        print("the parts and name is: \(parts) and \(name)")
-        print("the key is: \(key)")
         launchArguments = [LaunchArguments.SkipIntro,
                            LaunchArguments.SkipWhatsNew,
                            LaunchArguments.SkipETPCoverSheet,
