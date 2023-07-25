@@ -38,9 +38,7 @@ class ShoppingProduct: FeatureFlaggable {
     }
 
     private var isFakespotFeatureEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else {
-            return false
-        }
+        guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else { return false }
         return true
     }
 
