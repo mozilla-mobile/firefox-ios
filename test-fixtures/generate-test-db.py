@@ -215,6 +215,9 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
                 url = f"https://{row[1]}"
                 title = row[1]
 
+                if history_count == 0 and bookmark_count == 0:
+                    break
+
                 # a record must first be created in moz_places as a parent key before either history or bookmarks
                 insert_into_moz_places(db_cursor, url, title, current_time_milliseconds, guid)
 
