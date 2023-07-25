@@ -146,6 +146,36 @@ class PerformanceTests: BaseTestCase {
         }
     }*/
 
+    func testPerfHistory1startUp() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
+        }
+    }
+
+    func testPerfHistory1openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                navigator.goto(LibraryPanel_History)
+                let historyList = app.tables["History List"]
+                waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                let expectedCount = 2
+                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+        }
+    }
+
     func testPerfHistory100startUp() {
         waitForTabsButton()
         measure(metrics: [
@@ -169,9 +199,10 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
                 navigator.goto(LibraryPanel_History)
-                let loaded = NSPredicate(format: "count == 101")
-                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-                waitForExpectations(timeout: TIMEOUT, handler: nil)
+                let historyList = app.tables["History List"]
+                waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                let expectedCount = 101
+                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
         }
     }
 
