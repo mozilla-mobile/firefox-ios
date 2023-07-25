@@ -51,7 +51,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filename,
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
-
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
                 let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
 
