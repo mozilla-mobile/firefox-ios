@@ -64,9 +64,6 @@ final class NimbusFeatureFlagLayer {
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
 
-        case .sponsoredTiles:
-            return checkSponsoredTilesFeature(from: nimbus)
-
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
 
@@ -206,11 +203,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().pocketSponsoredStories
-    }
-
-    private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        return config.sponsoredTiles.status
     }
 
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {

@@ -15,16 +15,6 @@ features:
             "recent-explorations": true,
             "pocket": true
           }
-      sponsored-tiles:
-        description: >
-          This property defines the sponsored tile feature on the
-          homepage, which is not a section therein.
-        type: SponsoredTiles
-        default:
-          {
-            "status": true,
-            "max-number-of-tiles": 2
-          }
       pocket-sponsored-stories:
         description: >
           This property defines whether pocket sponsored
@@ -41,10 +31,6 @@ features:
             "recent-explorations": true,
             "pocket": true
           },
-          "sponsored-tiles": {
-            "status": true,
-            "max-number-of-tiles": 2
-          },
           "pocket-sponsored-stories": true
         }
       - channel: beta
@@ -56,25 +42,8 @@ features:
             "recent-explorations": true,
             "pocket": true
           },
-          "sponsored-tiles": {
-            "status": true,
-            "max-number-of-tiles": 1
-          },
           "pocket-sponsored-stories": false
         }
-
-objects:
-  SponsoredTiles:
-    description: "The configuration for the sponsored tile on the homescreen"
-    fields:
-      status:
-        type: Boolean
-        description: Whether or not the feature is enabled
-        default: false
-      max-number-of-tiles:
-        type: Int
-        description: The maximum number of sponsored tiles a user can see
-        default: 2
 
 enums:
   HomeScreenSection:
