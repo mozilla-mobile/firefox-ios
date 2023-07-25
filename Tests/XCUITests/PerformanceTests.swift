@@ -9,10 +9,10 @@ class PerformanceTests: BaseTestCase {
                     "testPerfTabs_3_20tabTray": "tabsState20.archive",
                     "testPerfTabs_2_1280startup": "tabsState1280.archive",
                     "testPerfTabs_4_1280tabTray": "tabsState1280.archive",
+                    "testPerfHistory1startUp": "testHistoryDatabase1-places.db",
+                    "testPerfHistory1openMenu": "testHistoryDatabase1-places.db",
                     "testPerfHistory100startUp": "testHistoryDatabase100-places.db",
                     "testPerfHistory100openMenu": "testHistoryDatabase100-places.db",
-                    "testPerfHistory1000startUp": "testHistoryDatabase1000-places.db",
-                    "testPerfHistory1000openMenu": "testHistoryDatabase1000-places.db",
                     "testPerfBookmarks1startUp": "testBookmarksDatabase1-places.db",
                     "testPerfBookmarks1openMenu": "testBookmarksDatabase1-places.db",
                     "testPerfBookmarks100startUp": "testBookmarksDatabase100-places.db",
@@ -146,8 +146,40 @@ class PerformanceTests: BaseTestCase {
         }
     }*/
 
+    func testPerfHistory1startUp() {
+        waitForTabsButton()
+        app.terminate()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
+                waitForTabsButton()
+        }
+    }
+
+    func testPerfHistory1openMenu() {
+        waitForTabsButton()
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                navigator.goto(LibraryPanel_History)
+                let historyList = app.tables["History List"]
+                waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                let expectedCount = 2
+                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+        }
+    }
+
     func testPerfHistory100startUp() {
         waitForTabsButton()
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -169,9 +201,10 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
                 navigator.goto(LibraryPanel_History)
-                let loaded = NSPredicate(format: "count == 101")
-                expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-                waitForExpectations(timeout: TIMEOUT, handler: nil)
+                let historyList = app.tables["History List"]
+                waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                let expectedCount = 101
+                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
         }
     }
 
