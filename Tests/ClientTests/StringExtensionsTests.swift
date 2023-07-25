@@ -139,16 +139,20 @@ class StringExtensionsTests: XCTestCase {
     }
 
     // MARK: - Tests for match method
-    func testMatchRegex_withValidInput() {
-        let inputString = "https://www.example.com/product/1234567/item"
-        let regexPattern = "\\/product\\/(\\d+)\\/item"
-        let expectedResult = "1234567"
 
-        if let result = inputString.match(regexPattern) {
-            XCTAssertEqual(result, expectedResult)
-        } else {
-            XCTFail("Failed to extract the matching group.")
-        }
+    // Helper method
+    func getResultFrom(inputString: String,
+                       andRegex pattern: String,
+                       file: StaticString = #file,
+                       line: UInt = #line) throws -> String {
+        try XCTUnwrap(inputString.match(pattern), "Failed to extract the matching group.")
+    }
+
+    func testMatchRegex_withValidInput() {
+        let expectedResult = "1234567"
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/1234567/item",
+                                        andRegex: "\\/product\\/(\\d+)\\/item")
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testMatchRegex_withInvalidInput() {
@@ -165,26 +169,16 @@ class StringExtensionsTests: XCTestCase {
     }
 
     func testMatchRegex_withMultipleMatches() {
-        let inputString = "https://www.example.com/product/123/item/product/456/item"
-        let regexPattern = "\\/product\\/(\\d+)\\/item"
         let expectedResult = "123" // Only the first match is returned
-
-        if let result = inputString.match(regexPattern) {
-            XCTAssertEqual(result, expectedResult)
-        } else {
-            XCTFail("Failed to extract the matching group.")
-        }
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item/product/456/item",
+                                        andRegex: "\\/product\\/(\\d+)\\/item")
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testMatchRegex_withCaptureGroupAtDifferentIndex() {
-        let inputString = "https://www.example.com/product/123/item"
-        let regexPattern = "\\/product\\/(\\d+)(\\/item)"
         let expectedResult = "123"
-
-        if let result = inputString.match(regexPattern) {
-            XCTAssertEqual(result, expectedResult)
-        } else {
-            XCTFail("Failed to extract the matching group.")
-        }
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item",
+                                        andRegex: "\\/product\\/(\\d+)(\\/item)")
+        XCTAssertEqual(result, expectedResult)
     }
 }
