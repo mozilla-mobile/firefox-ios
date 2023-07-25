@@ -52,8 +52,7 @@ class ShoppingProduct: FeatureFlaggable {
               siteConfig.validTlDs.contains(tld) else { return nil }
 
         // Try to find a product id from the pathname.
-        let matches = url.absoluteString.match(siteConfig.productIdFromUrlRegex)
-        guard let id = matches.first else { return nil }
+        guard let id = url.absoluteString.match(siteConfig.productIdFromUrlRegex) else { return nil }
 
         return Product(id: id, host: host, topLevelDomain: tld, sitename: sitename)
     }()

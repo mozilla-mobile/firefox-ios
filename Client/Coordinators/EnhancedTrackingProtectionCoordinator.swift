@@ -42,8 +42,17 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
     }
 
-    func start() {
-        router.push(enhancedTrackingProtectionMenuVC)
+    func start(sourceView: UIView) {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+            enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+        } else {
+            enhancedTrackingProtectionMenuVC.asPopover = true
+            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
+            enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
+            enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+        }
+        router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
     }
 
     // MARK: - EnhancedTrackingProtectionMenuDelegate
@@ -54,5 +63,14 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
 
     func didFinish() {
         parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
+    }
+}
+
+extension EnhancedTrackingProtectionCoordinator: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        return SlideOverPresentationController(presentedViewController: presented,
+                                               presenting: presenting,
+                                               withGlobalETPStatus: globalETPStatus)
     }
 }

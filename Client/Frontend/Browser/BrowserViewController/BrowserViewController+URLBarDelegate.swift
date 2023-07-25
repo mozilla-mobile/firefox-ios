@@ -143,7 +143,7 @@ extension BrowserViewController: URLBarDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
         if CoordinatorFlagManager.isEtpCoordinatorEnabled {
             DispatchQueue.main.async {
-                self.navigationHandler?.showEnhancedTrackingProtection()
+                self.navigationHandler?.showEnhancedTrackingProtection(sourceView: urlBar.locationView.trackingProtectionButton)
             }
         } else {
             self.legacyShowEnhancedTrackingProtection(viewModel: etpViewModel)

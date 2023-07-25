@@ -119,14 +119,16 @@ public extension String {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
-    /// Find all matches within the given range of the string.
-    /// The resulting matches are then transformed into an array of substrings and returned
-    func match(_ regex: String) -> [String] {
-        guard let regex = try? NSRegularExpression(pattern: regex) else { return [] }
+    /// Find the first match within the given range of the string.
+    /// If the regex pattern is valid and there is a match found in the input string,
+    /// the method returns the captured substring corresponding to the first capturing group (group index 1) in the regex pattern.
+    /// If no match is found or the regex pattern is invalid, the method returns nil.
+    func match(_ regex: String) -> String? {
+        guard let regex = try? NSRegularExpression(pattern: regex) else { return nil }
         let nsString = self as NSString
         let range = NSRange(location: 0, length: nsString.length)
-        return regex.matches(in: self, range: range)
-            .map { nsString.substring(with: $0.range) }
+        guard let match = regex.firstMatch(in: self, range: range) else { return nil }
+        return nsString.substring(with: match.range(at: 1))
     }
 
     /// Encode HTMLStrings

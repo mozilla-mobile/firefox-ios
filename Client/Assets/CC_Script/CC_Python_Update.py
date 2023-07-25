@@ -12,6 +12,7 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/Constants.ios.mjs",
     "toolkit/modules/CreditCard.sys.mjs",
     "toolkit/components/formautofill/shared/CreditCardRuleset.sys.mjs",
+    "toolkit/components/formautofill/shared/CreditCardRecord.sys.mjs",
     "toolkit/components/formautofill/shared/FieldScanner.sys.mjs",
     "toolkit/components/formautofill/FormAutofill.ios.sys.mjs",
     "toolkit/components/formautofill/FormAutofill.sys.mjs",

@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-open class BaseCoordinator: Coordinator {
+open class BaseCoordinator: NSObject, Coordinator {
     var savedRoute: Route?
     var id = UUID()
     var childCoordinators: [Coordinator] = []

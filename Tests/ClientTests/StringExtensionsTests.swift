@@ -137,4 +137,48 @@ class StringExtensionsTests: XCTestCase {
         let input = ""
         XCTAssertEqual(input.htmlEntityEncodedString, "")
     }
+
+    // MARK: - Tests for match method
+
+    // Helper method
+    func getResultFrom(inputString: String,
+                       andRegex pattern: String,
+                       file: StaticString = #file,
+                       line: UInt = #line) throws -> String {
+        try XCTUnwrap(inputString.match(pattern), "Failed to extract the matching group.")
+    }
+
+    func testMatchRegex_withValidInput() {
+        let expectedResult = "1234567"
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/1234567/item",
+                                        andRegex: "\\/product\\/(\\d+)\\/item")
+        XCTAssertEqual(result, expectedResult)
+    }
+
+    func testMatchRegex_withInvalidInput() {
+        let inputString = "This is not a valid URL string"
+        let regexPattern = "\\d+" // Invalid pattern, should fail
+
+        XCTAssertNil(inputString.match(regexPattern))
+    }
+
+    func testMatchRegex_withNoMatchingGroup() {
+        let inputString = "https://www.example.com"
+        let regexPattern = "\\/product\\/(\\d+)\\/item"
+        XCTAssertNil(inputString.match(regexPattern))
+    }
+
+    func testMatchRegex_withMultipleMatches() {
+        let expectedResult = "123" // Only the first match is returned
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item/product/456/item",
+                                        andRegex: "\\/product\\/(\\d+)\\/item")
+        XCTAssertEqual(result, expectedResult)
+    }
+
+    func testMatchRegex_withCaptureGroupAtDifferentIndex() {
+        let expectedResult = "123"
+        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item",
+                                        andRegex: "\\/product\\/(\\d+)(\\/item)")
+        XCTAssertEqual(result, expectedResult)
+    }
 }

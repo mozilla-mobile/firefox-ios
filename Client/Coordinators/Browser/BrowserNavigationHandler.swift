@@ -10,7 +10,7 @@ protocol BrowserNavigationHandler: AnyObject {
     func show(settings: Route.SettingsSection)
 
     /// Asks to show a enhancedTrackingProtection page, can be a general enhancedTrackingProtection page or a child page
-    func showEnhancedTrackingProtection()
+    func showEnhancedTrackingProtection(sourceView: UIView)
 
     /// Shows the specified section of the home panel.
     ///

@@ -196,13 +196,12 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testShowEnhancedTrackingProtection() throws {
         let subject = createSubject()
-        subject.showEnhancedTrackingProtection()
+        subject.showEnhancedTrackingProtection(sourceView: UIView())
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
-        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(presentedVC.topViewController is EnhancedTrackingProtectionMenuVC)
+        XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
     }
 
     func testShowShareExtension() {
@@ -658,7 +657,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject(isSettingsCoordinatorEnabled: true)
         subject.browserHasLoaded()
 
-        subject.showEnhancedTrackingProtection()
+        subject.showEnhancedTrackingProtection(sourceView: UIView())
         let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
         subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
 
