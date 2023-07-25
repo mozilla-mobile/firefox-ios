@@ -97,10 +97,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let historyVisits = Table("moz_historyvisits")
                 let visitDate = Expression<Int>("visit_date")
                 let rowid = Expression<Int>("rowid")
-                let dbPath = Bundle(for: UITestAppDelegate.self).path(forResource: "testHistoryDatabase400-places", ofType: "db", inDirectory: "test-fixtures")!
+                let dbPath = Bundle(for: UITestAppDelegate.self).path(forResource: "testHistoryDatabase500-places", ofType: "db", inDirectory: "test-fixtures")!
                 
                 do {
-                    let path = Bundle(for: type(of: self)).path(forResource: "testHistoryDatabase400-places", ofType: "db", inDirectory: "test-fixtures")!
+                    let path = Bundle(for: type(of: self)).path(forResource: "testHistoryDatabase500-places", ofType: "db", inDirectory: "test-fixtures")!
                     db = try Connection(path, readonly: false)
                 } catch {
                     fatalError("Failed to establish SQLite connection: \(error)")
