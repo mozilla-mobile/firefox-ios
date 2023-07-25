@@ -1326,6 +1326,7 @@ workflows:
         - test_plan: PerformanceTestPlan   
     
     - script@1.1:
+        is_always_run: true
         title: Create perfherder data object
         inputs:
         - content: |-
