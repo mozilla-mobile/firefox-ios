@@ -12,7 +12,7 @@ import Foundation
 ///   - topLevelDomain: The top-level domain of a URL.
 ///   - sitename: The name of a website (without TLD or subdomains).
 ///   - valid: If the product is valid or not.
-struct Product {
+struct Product: Equatable {
     let id: String
     let host: String
     let topLevelDomain: String
@@ -45,14 +45,13 @@ class ShoppingProduct: FeatureFlaggable {
     /// Gets a Product from a URL.
     /// - Returns: Product information parsed from the URL.
     lazy var product: Product? = {
-        guard let host = url.host,
+        guard let host = url.baseDomain,
               let sitename = url.shortDomain,
               let tld = url.publicSuffix,
               let siteConfig = nimbusFakespotFeatureLayer.getSiteConfig(siteName: sitename),
-              siteConfig.validTlDs.contains(tld) else { return nil }
-
-        // Try to find a product id from the pathname.
-        guard let id = url.absoluteString.match(siteConfig.productIdFromUrlRegex) else { return nil }
+              siteConfig.validTlDs.contains(tld),
+              let id = url.absoluteString.match(siteConfig.productIdFromUrlRegex)
+        else { return nil }
 
         return Product(id: id, host: host, topLevelDomain: tld, sitename: sitename)
     }()

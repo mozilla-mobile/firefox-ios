@@ -7,6 +7,7 @@ import Foundation
 protocol NimbusFakespotFeatureLayerProtocol {
     func getSiteConfig(siteName: String) -> WebsiteConfig?
 }
+
 class NimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol {
     let nimbus: FxNimbus
 
