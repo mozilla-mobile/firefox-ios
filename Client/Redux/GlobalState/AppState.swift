@@ -28,3 +28,7 @@ extension AppState {
         activeScreens = ActiveScreensState()
     }
 }
+
+let store = Store(state: AppState(),
+                  reducer: AppState.reducer,
+                  middlewares: [ThemeManagerMiddleware().themeManagerProvider])

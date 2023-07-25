@@ -6,11 +6,12 @@ import Redux
 
 enum ThemeSettingsAction: Action {
     // UI trigger actions
-    case fetchThemeManagerValues
-    case enableSystemAppearance(Bool)
+    case themeSettingsDidAppear
+    case toggleUseSystemAppearance(Bool)
     case enableAutomaticBrightness(Bool)
     case switchManualTheme(BuiltinThemeName)
     case updateUserBrightness(Float)
+
     // Middleware trigger actions
     case receivedThemeManagerValues(ThemeSettingsState)
     case systemThemeChanged(Bool)

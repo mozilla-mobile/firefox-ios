@@ -6,16 +6,16 @@ import Common
 import Redux
 
 protocol ThemeManagerProvider {
-    var systemThemeIsOn: Bool { get }
+    func getCurrentThemeManagerState() -> ThemeSettingsState
+    func toggleUseSystemAppearance(_ enabled: Bool)
+    func toggleAutomaticBrightness(_ enabled: Bool)
+    func updateManualTheme(_ theme: BuiltinThemeName)
+    func updateUserBrightness(_ value: Float)
 }
 
 class ThemeManagerMiddleware: ThemeManagerProvider {
     var legacyThemeManager: LegacyThemeManager
     var themeManager: ThemeManager
-
-    var systemThemeIsOn: Bool {
-        legacyThemeManager.systemThemeIsOn
-    }
 
     init(legacyThemeManager: LegacyThemeManager = LegacyThemeManager.instance,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
@@ -23,30 +23,30 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         self.themeManager = themeManager
     }
 
-    lazy var setSystemTheme: Middleware<AppState> = { state, action in
+    lazy var themeManagerProvider: Middleware<AppState> = { state, action in
         switch action {
-        case ThemeSettingsAction.fetchThemeManagerValues:
+        case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.async {
                 store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
             }
-        case ThemeSettingsAction.enableSystemAppearance(let enabled):
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
+            DispatchQueue.main.async {
                 self.toggleUseSystemAppearance(enabled)
                 store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
             }
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.async {
                 self.toggleAutomaticBrightness(enabled)
                 store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
             }
         case ThemeSettingsAction.switchManualTheme(let theme):
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.async {
                 self.updateManualTheme(theme)
                 store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
             }
         case ThemeSettingsAction.updateUserBrightness(let value):
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.async {
                 self.updateUserBrightness(value)
                 store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
             }

@@ -27,7 +27,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
         self.useSystemAppearance = false
         self.isAutomaticBrightnessEnable = false
         self.manualThemeSelected = .normal
-        self.userBrightnessThreshold = 0.4
+        self.userBrightnessThreshold = 0
     }
 
     init(useSystemAppearance: Bool,
@@ -42,9 +42,6 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case ThemeSettingsAction.fetchThemeManagerValues:
-            return ThemeSettingsState()
-
         case ThemeSettingsAction.receivedThemeManagerValues(let themeState):
             return themeState
 
@@ -59,11 +56,13 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                       isAutomaticBrightnessEnable: isEnabled,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold)
+
         case ThemeSettingsAction.manualThemeChanged(let theme):
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
                                       manualThemeSelected: theme,
                                       userBrightnessThreshold: state.userBrightnessThreshold)
+            
         case ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,

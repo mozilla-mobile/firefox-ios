@@ -50,7 +50,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     override func viewDidLoad() {
         super.viewDidLoad()
         if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.fetchThemeManagerValues)
+            store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
             store.subscribe(self, transform: {
                 $0.select(ThemeSettingsState.init)
             })
@@ -73,20 +73,15 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         tableView.reloadData()
     }
 
-    override func applyTheme() {
-        super.applyTheme()
-    }
-
     // MARK: - UI actions
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        guard !isReduxIntegrationEnabled else {
-            store.dispatch(ThemeSettingsAction.enableSystemAppearance(control.isOn))
-            return
+        if isReduxIntegrationEnabled {
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(control.isOn))
+        } else {
+            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
+            themeManager.setSystemTheme(isOn: control.isOn)
         }
-
-        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-        themeManager.setSystemTheme(isOn: control.isOn)
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
