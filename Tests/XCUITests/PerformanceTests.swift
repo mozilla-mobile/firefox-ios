@@ -9,10 +9,10 @@ class PerformanceTests: BaseTestCase {
                     "testPerfTabs_3_20tabTray": "tabsState20.archive",
                     "testPerfTabs_2_1280startup": "tabsState1280.archive",
                     "testPerfTabs_4_1280tabTray": "tabsState1280.archive",
+                    "testPerfHistory1startUp": "testHistoryDatabase1-places.db",
+                    "testPerfHistory1openMenu": "testHistoryDatabase1-places.db",
                     "testPerfHistory100startUp": "testHistoryDatabase100-places.db",
                     "testPerfHistory100openMenu": "testHistoryDatabase100-places.db",
-                    "testPerfHistory1000startUp": "testHistoryDatabase1000-places.db",
-                    "testPerfHistory1000openMenu": "testHistoryDatabase1000-places.db",
                     "testPerfBookmarks1startUp": "testBookmarksDatabase1-places.db",
                     "testPerfBookmarks1openMenu": "testBookmarksDatabase1-places.db",
                     "testPerfBookmarks100startUp": "testBookmarksDatabase100-places.db",
@@ -148,6 +148,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfHistory1startUp() {
         waitForTabsButton()
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -178,6 +179,7 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfHistory100startUp() {
         waitForTabsButton()
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
