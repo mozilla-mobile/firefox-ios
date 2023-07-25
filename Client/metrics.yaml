@@ -1631,6 +1631,17 @@ library:
 
 # History Panel
 history:
+  opened:
+    type: event
+    description: |
+      A user opened the history screen.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
   group_list:
     type: counter
     description: |
@@ -1688,6 +1699,51 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10494
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  removed:
+    type: event
+    description: |
+      A user removed a history item.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  removed_today:
+    type: event
+    description: |
+      A user removed history items opened that day.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  removed_today_and_yesterday:
+    type: event
+    description: |
+      A user removed history items opened that
+      day and the day before.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  removed_all:
+    type: event
+    description: |
+      A user removed all history items.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
