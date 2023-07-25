@@ -49,7 +49,10 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
-            shoppingCartButton.isHidden = !isShoppingCartButtonVisible
+            if let url {
+                let product = ShoppingProduct(url: url)
+                shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible
+            }
             setNeedsUpdateConstraints()
         }
     }
@@ -59,22 +62,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             return false
         }
         return true
-    }
-
-    private var isFakespotFeatureEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly) else {
-            return false
-        }
-        return true
-    }
-
-    private var isShoppingCartButtonVisible: Bool {
-        guard let url else { return false }
-        let regexProductIDPatterns = NimbusFakespotFeatureLayer().getRegexProductIDPatterns()
-        let hasMatchingPattern = regexProductIDPatterns.contains { regexPattern in
-            url.absoluteString.match(regexPattern) != nil
-        }
-        return hasMatchingPattern && isFakespotFeatureEnabled
     }
 
     var readerModeState: ReaderModeState {
@@ -328,7 +315,12 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable) || isShoppingCartButtonVisible
+        var isShoppingCartButtonVisible = false
+        if let url {
+            let product = ShoppingProduct(url: url)
+            isShoppingCartButtonVisible = product.isShoppingCartButtonVisible
+        }
+        readerModeButton.isHidden = (newReaderModeState == .unavailable) || isShoppingCartButtonVisible
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
