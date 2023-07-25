@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
 
     /// Gets a Product from a URL.
     /// - Returns: Product information parsed from the URL.
-    var product: Product? {
+    lazy var product: Product? = {
         guard let host = url.host,
               let sitename = url.shortDomain,
               let tld = url.publicSuffix,
@@ -56,5 +56,5 @@ class ShoppingProduct: FeatureFlaggable {
         guard let id = matches.first else { return nil }
 
         return Product(id: id, host: host, topLevelDomain: tld, sitename: sitename)
-    }
+    }()
 }
