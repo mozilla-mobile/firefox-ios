@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Common
+import ComponentLibrary
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -2435,7 +2436,7 @@ extension BrowserViewController {
             }
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(

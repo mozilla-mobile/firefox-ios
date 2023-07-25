@@ -3,58 +3,68 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
+import Foundation
 import UIKit
-import Shared
 
-protocol BottomSheetChild {
+public protocol BottomSheetChild: UIViewController {
     /// Tells the child that the bottom sheet will get dismissed
     func willDismiss()
 }
 
-protocol BottomSheetDismissProtocol {
+public protocol BottomSheetDismissProtocol {
     func dismissSheetViewController(completion: (() -> Void)?)
 }
 
-class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, Themeable {
+/// A container that present from the bottom as a sheet
+public class BottomSheetViewController: UIViewController,
+                                        BottomSheetDismissProtocol,
+                                        Themeable,
+                                        UIGestureRecognizerDelegate {
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
         static let closeButtonTopTrailingSpace: CGFloat = 16
+        static let initialSpringVelocity: CGFloat = 1
+        static let springWithDamping = 0.7
+        static let animationDuration = 0.5
     }
 
-    var notificationCenter: NotificationProtocol
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    public var notificationCenter: NotificationProtocol
+    public var themeManager: ThemeManager
+    public var themeObserver: NSObjectProtocol?
+
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
-
-    typealias BottomSheetChildViewController = UIViewController & BottomSheetChild
-    private let childViewController: BottomSheetChildViewController
+    private let childViewController: BottomSheetChild
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
     }
+
     private lazy var topTapView: UIView = .build { view in
         view.backgroundColor = .clear
     }
+
+    private lazy var dimmedBackgroundView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
+    private lazy var closeButton: UIButton = .build { button in
+        button.setImage(UIImage(named: StandardImageIdentifiers.ToMigrate.bottomSheetClose), for: .normal)
+        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
+    }
+
     private lazy var sheetView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
-    private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
-        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-        button.accessibilityLabel = .CloseButtonTitle
-    }
     private lazy var scrollContentView: UIView = .build { _ in }
     private var contentViewBottomConstraint: NSLayoutConstraint!
-
     private var viewTranslation = CGPoint(x: 0, y: 0)
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
-                childViewController: BottomSheetChildViewController,
+                childViewController: BottomSheetChild,
                 usingDimmedBackground: Bool = false,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 themeManager: ThemeManager = AppContainer.shared.resolve()) {
@@ -79,6 +89,7 @@ class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, T
         super.viewDidLoad()
         sheetView.alpha = 1
         setupChildViewController()
+        closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
 
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
         contentView.addGestureRecognizer(gesture)
@@ -91,7 +102,7 @@ class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, T
         view.layoutIfNeeded()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
     }
@@ -120,39 +131,39 @@ class BottomSheetViewController: UIViewController, BottomSheetDismissProtocol, T
                                                   cornerRadius: viewModel.cornerRadius).cgPath
     }
 
-    public func dismissSheetViewController(completion: (() -> Void)? = nil) {
-        childViewController.willDismiss()
-        contentViewBottomConstraint.constant = childViewController.view.frame.height
-        UIView.animate(
-            withDuration: viewModel.animationTransitionDuration,
-            animations: {
-                self.view.layoutIfNeeded()
-                self.view.backgroundColor = .clear
-            }, completion: { _ in
-                self.dismiss(animated: false, completion: completion)
-            })
-    }
+    // MARK: - Theme
 
-    func applyTheme() {
+    public func applyTheme() {
         contentView.backgroundColor = themeManager.currentTheme.colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
+
         if useDimmedBackground {
-            topTapView.alpha = 0.4
-            topTapView.backgroundColor = .black
+            dimmedBackgroundView.alpha = 0.4
+            dimmedBackgroundView.backgroundColor = .black
         }
     }
-}
 
-private extension BottomSheetViewController {
-    func setupView() {
+    // MARK: - UIGestureRecognizerDelegate
+
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        return false
+    }
+
+    // MARK: - Private
+
+    private func setupView() {
         if viewModel.shouldDismissForTapOutside {
             topTapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                    action: #selector(self.closeTapped)))
         }
+
         scrollView.addSubview(scrollContentView)
         sheetView.addSubview(contentView)
         contentView.addSubviews(closeButton, scrollView)
-        view.addSubviews(topTapView, sheetView)
+        view.addSubviews(dimmedBackgroundView, topTapView, sheetView)
 
         contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
@@ -163,6 +174,11 @@ private extension BottomSheetViewController {
             topTapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTapView.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: viewModel.cornerRadius),
             topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            dimmedBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmedBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimmedBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dimmedBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
                                            constant: BottomSheetViewController.UX.minVisibleTopSpace),
@@ -199,7 +215,7 @@ private extension BottomSheetViewController {
         contentView.bringSubviewToFront(closeButton)
     }
 
-    func setupChildViewController() {
+    private func setupChildViewController() {
         addChild(childViewController)
         scrollContentView.addSubview(childViewController.view)
         childViewController.didMove(toParent: self)
@@ -217,7 +233,7 @@ private extension BottomSheetViewController {
     }
 
     @objc
-    func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
             viewTranslation = recognizer.translation(in: view)
@@ -225,20 +241,20 @@ private extension BottomSheetViewController {
             // do not allow swiping up
             guard viewTranslation.y > 0 else { return }
 
-            UIView.animate(withDuration: 0.5,
+            UIView.animate(withDuration: UX.animationDuration,
                            delay: 0,
-                           usingSpringWithDamping: 0.7,
-                           initialSpringVelocity: 1,
+                           usingSpringWithDamping: UX.springWithDamping,
+                           initialSpringVelocity: UX.initialSpringVelocity,
                            options: .curveEaseOut,
                            animations: {
                 self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
             if viewTranslation.y < 200 {
-                UIView.animate(withDuration: 0.5,
+                UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
-                               usingSpringWithDamping: 0.7,
-                               initialSpringVelocity: 1,
+                               usingSpringWithDamping: UX.springWithDamping,
+                               initialSpringVelocity: UX.initialSpringVelocity,
                                options: .curveEaseOut,
                                animations: {
                     self.sheetView.transform = .identity
@@ -252,16 +268,23 @@ private extension BottomSheetViewController {
     }
 
     @objc
-    func closeTapped() {
+    private func closeTapped() {
         dismissSheetViewController()
     }
-}
 
-extension BottomSheetViewController: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-    ) -> Bool {
-        return false
+    // MARK: - BottomSheetDismissProtocol
+
+    public func dismissSheetViewController(completion: (() -> Void)? = nil) {
+        childViewController.willDismiss()
+        contentViewBottomConstraint.constant = childViewController.view.frame.height
+        UIView.animate(
+            withDuration: viewModel.animationTransitionDuration,
+            animations: {
+                self.view.layoutIfNeeded()
+                self.view.backgroundColor = .clear
+            }, completion: { _ in
+                self.dismiss(animated: false, completion: completion)
+            }
+        )
     }
 }
