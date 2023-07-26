@@ -10,10 +10,14 @@ struct ThemeSettingsState: ScreenState, Equatable {
     var isAutomaticBrightnessEnable: Bool
     var manualThemeSelected: BuiltinThemeName
     var userBrightnessThreshold: Float
+    private var logger: Logger
 
     init(_ appState: AppState) {
         guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
             self.init()
+            logger.log("Error retrieving screen state",
+                       level: .debug,
+                       category: .redux)
             return
         }
 
@@ -24,20 +28,22 @@ struct ThemeSettingsState: ScreenState, Equatable {
     }
 
     init() {
-        self.useSystemAppearance = false
-        self.isAutomaticBrightnessEnable = false
-        self.manualThemeSelected = .normal
-        self.userBrightnessThreshold = 0
+        self.init(useSystemAppearance: false,
+                  isAutomaticBrightnessEnable: false,
+                  manualThemeSelected: .normal,
+                  userBrightnessThreshold: 0)
     }
 
     init(useSystemAppearance: Bool,
          isAutomaticBrightnessEnable: Bool,
          manualThemeSelected: BuiltinThemeName,
-         userBrightnessThreshold: Float) {
+         userBrightnessThreshold: Float,
+         logger: Logger = DefaultLogger.shared) {
         self.useSystemAppearance = useSystemAppearance
         self.isAutomaticBrightnessEnable = isAutomaticBrightnessEnable
         self.manualThemeSelected = manualThemeSelected
         self.userBrightnessThreshold = userBrightnessThreshold
+        self.logger = logger
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -62,7 +68,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
                                       manualThemeSelected: theme,
                                       userBrightnessThreshold: state.userBrightnessThreshold)
-            
+
         case ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
@@ -71,5 +77,12 @@ struct ThemeSettingsState: ScreenState, Equatable {
         default:
             return state
         }
+    }
+
+    static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
+        return lhs.useSystemAppearance == rhs.useSystemAppearance
+        && lhs.isAutomaticBrightnessEnable == rhs.isAutomaticBrightnessEnable
+        && lhs.manualThemeSelected == rhs.manualThemeSelected
+        && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
     }
 }
