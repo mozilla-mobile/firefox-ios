@@ -66,7 +66,7 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
     }
 
     override func configure(_ view: UIView) {
-        configure(title: "", contentView: view, baseA11yId: "", isCollapsed: false)
+        configure(title: "", contentView: view, titleA11yId: "", closeButtonA11yId: "", isCollapsed: false)
     }
 
     func configure(title: String,
