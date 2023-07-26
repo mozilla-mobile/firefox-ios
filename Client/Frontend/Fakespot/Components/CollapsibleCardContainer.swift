@@ -14,7 +14,7 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
         static let chevronSize = CGSize(width: 20, height: 20)
     }
 
-    private enum ExpandButtonState {
+    enum ExpandButtonState {
         case collapsed
         case expanded
 
@@ -24,6 +24,15 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
                 return UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
             case .collapsed:
                 return UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
+            }
+        }
+
+        var toggle: ExpandButtonState {
+            switch self {
+            case .expanded:
+                return .collapsed
+            case .collapsed:
+                return .expanded
             }
         }
     }
@@ -66,15 +75,14 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
     }
 
     override func configure(_ view: UIView) {
-        configure(title: "", contentView: view, titleA11yId: "", closeButtonA11yId: "", isCollapsed: false)
+        configure(title: "", contentView: view, titleA11yId: "", closeButtonA11yId: "", expandState: .collapsed)
     }
 
     func configure(title: String,
                    contentView: UIView,
                    titleA11yId: String? = AccessibilityIdentifiers.Components.collapseButton,
                    closeButtonA11yId: String? = AccessibilityIdentifiers.Components.cardTitleLabel,
-                   isCollapsed: Bool) {
-        state = isCollapsed ? .collapsed : .expanded
+                   expandState: ExpandButtonState) {
         containerView.subviews.forEach { $0.removeFromSuperview() }
         containerView.addSubview(contentView)
 
@@ -89,7 +97,7 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
             contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
-        updateCardState(isCollapsed: isCollapsed)
+        updateCardState(expandState: expandState)
 
         super.configure(rootView)
     }
@@ -144,19 +152,18 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
         ])
     }
 
-    private func updateCardState(isCollapsed: Bool) {
-        state = isCollapsed ? .collapsed : .expanded
+    private func updateCardState(expandState: ExpandButtonState) {
         chevronButton.setImage(state.image, for: .normal)
-        containerHeightConstraint?.isActive = isCollapsed
+        containerHeightConstraint?.isActive = expandState == .collapsed
     }
 
     @objc
     private func toggleExpand(_ sender: UIButton) {
-        updateCardState(isCollapsed: state == .expanded)
+        updateCardState(expandState: state.toggle)
     }
 
     @objc
     func tapHeader(_ recognizer: UITapGestureRecognizer) {
-        updateCardState(isCollapsed: state == .expanded)
+        updateCardState(expandState: state.toggle)
     }
 }
