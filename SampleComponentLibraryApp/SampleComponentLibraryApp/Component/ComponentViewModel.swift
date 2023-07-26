@@ -11,4 +11,7 @@ protocol ComponentViewModel {
 
     // The view controller to present for that component
     var viewController: UIViewController { get }
+
+    // Some view controller needs to be push or present, handle this here case by case
+    func present(with presenter: Presenter?)
 }

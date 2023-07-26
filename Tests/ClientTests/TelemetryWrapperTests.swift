@@ -291,6 +291,48 @@ class TelemetryWrapperTests: XCTestCase {
         testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
     }
 
+    // MARK: - History
+
+    func test_HistoryPanelOpened_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .historyPanelOpened)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.opened)
+    }
+
+    func test_singleHistoryItemRemoved_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .swipe,
+                                     object: .historySingleItemRemoved)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.removed)
+    }
+
+    func test_todaysHistoryRemoved_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .historyRemovedToday)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.removedToday)
+    }
+
+    func test_todayAndYesterdaysHistoryRemoved_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .historyRemovedTodayAndYesterday)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.removedTodayAndYesterday)
+    }
+
+    func test_allHistoryRemoved_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .historyRemovedAll)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.removedAll)
+    }
+
     func test_viewHistoryPanel_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,

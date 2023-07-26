@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Foundation
 import UIKit
 
 public struct BottomSheetViewModel {
@@ -16,24 +17,28 @@ public struct BottomSheetViewModel {
     public var backgroundColor: UIColor
     public var shouldDismissForTapOutside: Bool
     public var shadowOpacity: Float
+    public var closeButtonA11yLabel: String
 
-    public init() {
+    public init(closeButtonA11yLabel: String) {
         cornerRadius = BottomSheetViewModel.UX.cornerRadius
         animationTransitionDuration = BottomSheetViewModel.UX.animationTransitionDuration
         backgroundColor = .clear
         shouldDismissForTapOutside = true
         shadowOpacity = BottomSheetViewModel.UX.shadowOpacity
+        self.closeButtonA11yLabel = closeButtonA11yLabel
     }
 
     public init(cornerRadius: CGFloat,
                 animationTransitionDuration: TimeInterval,
                 backgroundColor: UIColor,
                 shouldDismissForTapOutside: Bool,
-                shadowOpacity: Float) {
+                shadowOpacity: Float,
+                closeButtonA11yLabel: String) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
         self.backgroundColor = backgroundColor
         self.shouldDismissForTapOutside = shouldDismissForTapOutside
         self.shadowOpacity = shadowOpacity
+        self.closeButtonA11yLabel = closeButtonA11yLabel
     }
 }

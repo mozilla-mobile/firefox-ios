@@ -49,7 +49,10 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
             self.clearRecentlyClosedTabs(using: dateOption)
             completion(dateOption)
         }
+
         deleteProfileMetadataSince(dateOption)
+
+        reportDeletionFor(dateOption)
     }
 
     // MARK: URL based deletion functions
@@ -154,6 +157,24 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         case .allTime:
             let pastReferenceDate = Date(timeIntervalSinceReferenceDate: 0)
             return requiringAllTimeAsPresent ? Date() : pastReferenceDate
+        }
+    }
+
+    private func reportDeletionFor(_ dateOption: HistoryDeletionUtilityDateOptions) {
+        switch dateOption {
+        case .today:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .historyRemovedToday)
+        case .yesterday:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .historyRemovedTodayAndYesterday)
+        case .allTime:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .historyRemovedAll)
+        default: break
         }
     }
 }
