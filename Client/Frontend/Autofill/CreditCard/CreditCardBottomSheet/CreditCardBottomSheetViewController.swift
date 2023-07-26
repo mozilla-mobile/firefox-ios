@@ -266,6 +266,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         hostingCell.contentView.backgroundColor = .clear
         hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
+        let accessibilityCCNumberLast4 = creditCard.ccNumberLast4.map { String($0) }.joined(separator: " ")
+        hostingCell.accessibilityLabel = "\(creditCard.ccType), \(creditCard.ccName), \(creditCard.ccType) ••••\(accessibilityCCNumberLast4), Expires \(creditCard.ccExpMonth)/\(creditCard.ccExpYear)"
         return hostingCell
     }
 
