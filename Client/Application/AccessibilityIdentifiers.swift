@@ -364,11 +364,8 @@ public struct AccessibilityIdentifiers {
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
-    struct Shopping {
-        static let collapseButton = "Shopping.collapseButton"
-    }
-
     struct Components {
         static let collapseButton = "collapseButton"
+        static let cardTitleLabel = "cardTitleLabel"
     }
 }

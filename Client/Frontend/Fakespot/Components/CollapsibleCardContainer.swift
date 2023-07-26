@@ -69,12 +69,18 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
         configure(title: "", contentView: view, baseA11yId: "", isCollapsed: false)
     }
 
-    func configure(title: String, contentView: UIView, baseA11yId: String, isCollapsed: Bool) {
+    func configure(title: String,
+                   contentView: UIView,
+                   titleA11yId: String? = AccessibilityIdentifiers.Components.collapseButton,
+                   closeButtonA11yId: String? = AccessibilityIdentifiers.Components.cardTitleLabel,
+                   isCollapsed: Bool) {
         state = isCollapsed ? .collapsed : .expanded
         containerView.subviews.forEach { $0.removeFromSuperview() }
         containerView.addSubview(contentView)
 
         titleLabel.text = title
+        titleLabel.accessibilityIdentifier = titleA11yId
+        chevronButton.accessibilityIdentifier = closeButtonA11yId
 
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
