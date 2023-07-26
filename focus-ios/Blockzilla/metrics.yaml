@@ -728,7 +728,7 @@ search:
     type: string
     lifetime: application
     description: |
-      The default search engine identifier if the search engine is
+      The default search engine name if the search engine is
       pre-loaded with Focus.  If it's a custom search engine,
       then the value will be 'custom'.
     bugs:
