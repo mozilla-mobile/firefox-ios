@@ -88,4 +88,6 @@ class DownloadContentScript: TabContentScript {
         let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
         downloadQueue.enqueue(download)
     }
+
+    func prepareForDeinit() {}
 }

@@ -78,6 +78,8 @@ class FormPostHelper: TabContentScript {
         blankTargetFormPosts.append(formPostData)
     }
 
+    func prepareForDeinit() {}
+
     func urlRequestForNavigationAction(_ navigationAction: WKNavigationAction) -> URLRequest {
         guard let formPostData = blankTargetFormPosts.first(where: { $0.matchesNavigationAction(navigationAction) }) else {
             return navigationAction.request

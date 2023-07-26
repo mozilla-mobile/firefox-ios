@@ -106,6 +106,8 @@ class LoginsHelper: TabContentScript {
         }
     }
 
+    func prepareForDeinit() {}
+
     class func replace(_ base: String, keys: [String], replacements: [String]) -> NSMutableAttributedString {
         var ranges = [NSRange]()
         var string = base

@@ -25,6 +25,8 @@ class FocusHelper: TabContentScript {
         return "focusHelper"
     }
 
+    func prepareForDeinit() {}
+
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: String] else {

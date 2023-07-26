@@ -24,9 +24,7 @@ enum BlockingStrength: String {
     static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
 
-/**
- Firefox-specific implementation of tab content blocking.
- */
+/// Firefox-specific implementation of tab content blocking.
 class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 
@@ -64,6 +62,8 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         super.init(tab: tab)
         setupForTab()
     }
+
+    func prepareForDeinit() {}
 
     func setupForTab() {
         guard let tab = tab else { return }

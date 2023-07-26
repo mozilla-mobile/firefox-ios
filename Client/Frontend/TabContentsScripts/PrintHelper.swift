@@ -28,4 +28,6 @@ class PrintHelper: TabContentScript {
             printController.present(animated: true, completionHandler: nil)
         }
     }
+
+    func prepareForDeinit() {}
 }

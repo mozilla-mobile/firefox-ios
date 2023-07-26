@@ -36,6 +36,8 @@ class LocalRequestHelper: TabContentScript {
         }
     }
 
+    func prepareForDeinit() {}
+
     class func name() -> String {
         return "LocalRequestHelper"
     }
