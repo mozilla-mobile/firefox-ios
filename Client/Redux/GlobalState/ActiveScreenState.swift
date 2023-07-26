@@ -31,12 +31,14 @@ struct ActiveScreensState: Equatable {
 
         if let action = action as? ActiveScreensStateAction {
             switch action {
-            case .showThemeSettings(.themeSettings):
-                screens = [.themeSettings(ThemeSettingsState())]
-            case .closeThemeSettings(.themeSettings):
-                break
+            case .showScreen(.themeSettings):
+                screens += [.themeSettings(ThemeSettingsState())]
+            case .closeScreen(let screen): break
             }
         }
+
+        // Reduce each screen state
+        screens = screens.map { AppScreenState.reducer($0, action) }
 
         return ActiveScreensState(screens: screens)
     }

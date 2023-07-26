@@ -70,6 +70,7 @@
 		2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27D2934F78600FB91BE /* CustomAppActivity.swift */; };
 		2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */; };
+		212985E42A6F078800546684 /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E32A6F078800546684 /* ScreenState.swift */; };
 		21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */; };
 		21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
@@ -91,9 +92,7 @@
 		21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A622A422A3900A5189E /* ThemeMiddleware.swift */; };
 		21618A8A2A4389F700A5189E /* ActiveScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A892A4389F700A5189E /* ActiveScreenState.swift */; };
 		21618A8C2A438A0900A5189E /* ActiveScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */; };
-		21618A902A44976300A5189E /* MainStateAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A8F2A44976300A5189E /* MainStateAction.swift */; };
 		21618A932A4499FC00A5189E /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A912A4499FC00A5189E /* AppState.swift */; };
-		21618A942A4499FC00A5189E /* MainState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A922A4499FC00A5189E /* MainState.swift */; };
 		2165B2C02860BB41004C0786 /* AdjustTelemetryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */; };
 		2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */; };
 		2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */; };
@@ -2074,6 +2073,7 @@
 		2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendToDeviceActivity.swift; sourceTree = "<group>"; };
 		2128E27D2934F78600FB91BE /* CustomAppActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppActivity.swift; sourceTree = "<group>"; };
 		2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkActivity.swift; sourceTree = "<group>"; };
+		212985E32A6F078800546684 /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
 		21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
 		21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsClientAndTabsDataSource.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
@@ -2094,9 +2094,7 @@
 		21618A622A422A3900A5189E /* ThemeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMiddleware.swift; sourceTree = "<group>"; };
 		21618A892A4389F700A5189E /* ActiveScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreenState.swift; sourceTree = "<group>"; };
 		21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreenAction.swift; sourceTree = "<group>"; };
-		21618A8F2A44976300A5189E /* MainStateAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainStateAction.swift; sourceTree = "<group>"; };
 		21618A912A4499FC00A5189E /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		21618A922A4499FC00A5189E /* MainState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainState.swift; sourceTree = "<group>"; };
 		2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustTelemetryHelperTests.swift; sourceTree = "<group>"; };
 		2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustTelemetryHelper.swift; sourceTree = "<group>"; };
 		2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustTelemetryData.swift; sourceTree = "<group>"; };
@@ -7143,11 +7141,10 @@
 		216A0D722A40DD34008077BA /* GlobalState */ = {
 			isa = PBXGroup;
 			children = (
+				212985E32A6F078800546684 /* ScreenState.swift */,
 				21618A912A4499FC00A5189E /* AppState.swift */,
 				21618A892A4389F700A5189E /* ActiveScreenState.swift */,
 				21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */,
-				21618A922A4499FC00A5189E /* MainState.swift */,
-				21618A8F2A44976300A5189E /* MainStateAction.swift */,
 			);
 			path = GlobalState;
 			sourceTree = "<group>";
@@ -12465,7 +12462,6 @@
 				DA27EEDB28BADF4700DD6F5D /* MenuBuilderHelper.swift in Sources */,
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
-				21618A902A44976300A5189E /* MainStateAction.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
@@ -12485,7 +12481,6 @@
 				2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
-				21618A942A4499FC00A5189E /* MainState.swift in Sources */,
 				C8BD87602A0C248000CD803A /* OnboardingButtonsModel.swift in Sources */,
 				8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
@@ -12651,6 +12646,7 @@
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
+				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
