@@ -49,10 +49,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
-            if let url {
-                let product = ShoppingProduct(url: url)
-                shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible
-            }
             setNeedsUpdateConstraints()
         }
     }
@@ -269,6 +265,15 @@ class TabLocationView: UIView, FeatureFlaggable {
     @objc
     func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
+    }
+
+    func updateShoppingCartButtonVisibility(for tab: Tab) {
+        guard let url else {
+            shoppingCartButton.isHidden = true
+            return
+        }
+        let product = ShoppingProduct(url: url)
+        shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible || tab.isPrivate
     }
 
     private func updateTextWithURL() {
