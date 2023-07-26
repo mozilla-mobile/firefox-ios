@@ -24,7 +24,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private(set) var showCreditCard = false
+    private var showCreditCard = false
 
     // stubs - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -36,7 +36,7 @@ class AccessoryViewProvider: UIView, Themeable {
         toolbar.sizeToFit()
     }
 
-    lazy private var previousButton: UIBarButtonItem = {
+    private lazy var previousButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage(systemName: "chevron.up"),
                                      style: .plain,
                                      target: self,
@@ -45,7 +45,7 @@ class AccessoryViewProvider: UIView, Themeable {
         return button
     }()
 
-    lazy private var nextButton: UIBarButtonItem = {
+    private lazy var nextButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
                                      style: .plain,
                                      target: self,
@@ -54,7 +54,7 @@ class AccessoryViewProvider: UIView, Themeable {
         return button
     }()
 
-    lazy private var doneButton: UIBarButtonItem = {
+    private lazy var doneButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
                                      style: .done,
                                      target: self,
@@ -68,7 +68,7 @@ class AccessoryViewProvider: UIView, Themeable {
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
-    lazy private var cardImageView: UIImageView = .build { imageView in
+    private lazy  var cardImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: StandardImageIdentifiers.Large.creditCard)?.withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityElementsHidden = true
@@ -79,7 +79,7 @@ class AccessoryViewProvider: UIView, Themeable {
         ])
     }
 
-    lazy private var useCardTextLabel: UILabel = .build { label in
+    private lazy  var useCardTextLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
         label.text = .CreditCard.Settings.UseSavedCardFromKeyboard
         label.numberOfLines = 0
