@@ -83,6 +83,9 @@ messaging:
     actions:
       type: json
       description: A growable map of action URLs.
+    message-under-experiment:
+      type: string
+      description: "Deprecated. Please use \"experiment\": \"{experiment}\" instead."
     messages:
       type: json
       description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.\n"
