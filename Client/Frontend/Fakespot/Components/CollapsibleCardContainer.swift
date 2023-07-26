@@ -69,6 +69,8 @@ class CollapsibleCardContainer: CardContainer {
         containerView.subviews.forEach { $0.removeFromSuperview() }
         containerView.addSubview(contentView)
 
+        titleLabel.text = title
+
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             contentView.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -95,6 +97,8 @@ class CollapsibleCardContainer: CardContainer {
         headerView.addSubview(chevronButton)
         rootView.addSubview(headerView)
         rootView.addSubview(containerView)
+
+        containerHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: 0)
 
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
@@ -130,16 +134,9 @@ class CollapsibleCardContainer: CardContainer {
     }
 
     private func updateCardState(isCollapsed: Bool) {
-        if isCollapsed {
-            state = .collapsed
-            containerHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: 0)
-            containerHeightConstraint?.isActive = true
-        } else {
-            state = .expanded
-            containerHeightConstraint?.isActive = false
-        }
-
+        state = isCollapsed ? .collapsed : .expanded
         chevronButton.setImage(state.image, for: .normal)
+        containerHeightConstraint?.isActive = isCollapsed
     }
 
     @objc
