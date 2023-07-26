@@ -17,7 +17,7 @@ protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String)
 }
 
-class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplicable {
+class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
     let titleLabel: UILabel
     let textField: UITextField
 
@@ -31,7 +31,6 @@ class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplica
 
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.textField)
-        self.textField.delegate = self
         self.textField.addTarget(self, action: #selector(onTextFieldDidChangeText), for: .editingChanged)
         self.selectionStyle = .none
         self.separatorInset = .zero
