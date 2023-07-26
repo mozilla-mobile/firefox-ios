@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class CollapsibleCardContainer: CardContainer {
+class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -33,9 +33,10 @@ class CollapsibleCardContainer: CardContainer {
 
     // UI
     private lazy var rootView: UIView = .build { _ in }
-    private lazy var headerView: UIView = .build { _ in } // add gesture recognizer
+    private lazy var headerView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
     private var containerHeightConstraint: NSLayoutConstraint?
+    private var tapRecognizer: UITapGestureRecognizer!
 
     lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -54,6 +55,10 @@ class CollapsibleCardContainer: CardContainer {
         super.init(frame: frame)
 
         setupLayout()
+
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHeader))
+        tapRecognizer.delegate = self
+        headerView.addGestureRecognizer(tapRecognizer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -141,6 +146,11 @@ class CollapsibleCardContainer: CardContainer {
 
     @objc
     private func toggleExpand(_ sender: UIButton) {
+        updateCardState(isCollapsed: state == .expanded)
+    }
+
+    @objc
+    func tapHeader(_ recognizer: UITapGestureRecognizer) {
         updateCardState(isCollapsed: state == .expanded)
     }
 }
