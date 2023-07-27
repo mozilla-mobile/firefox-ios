@@ -71,6 +71,7 @@
 		2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27D2934F78600FB91BE /* CustomAppActivity.swift */; };
 		2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */; };
 		212985E42A6F078800546684 /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E32A6F078800546684 /* ScreenState.swift */; };
+		212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */; };
 		21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */; };
 		21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
@@ -2073,6 +2074,7 @@
 		2128E27D2934F78600FB91BE /* CustomAppActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppActivity.swift; sourceTree = "<group>"; };
 		2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkActivity.swift; sourceTree = "<group>"; };
 		212985E32A6F078800546684 /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
+		212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsControllerTests.swift; sourceTree = "<group>"; };
 		21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
 		21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsClientAndTabsDataSource.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
@@ -8195,6 +8197,7 @@
 				8AE1E1DA27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				8ADEC6822A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift */,
+				212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -13062,6 +13065,7 @@
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
+				212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */,
 				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */,
