@@ -6,10 +6,10 @@ import Foundation
 import Redux
 
 enum AppScreen {
-    case themeSettings(themeState: ThemeSettingsState)
+    case themeSettings
 }
 
 enum ActiveScreensStateAction: Action {
-    case showThemeSettings(AppScreen)
-    case closeThemeSettings(AppScreen)
+    case showScreen(AppScreen)
+    case closeScreen(AppScreen)
 }

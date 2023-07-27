@@ -12,11 +12,11 @@ struct AppState: StateType {
         AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
-    func screenState<State>(for screen: AppScreen) -> State? {
+    func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
-                case (.themeSettings(let state), .themeSettings): return state as? State
+                case (.themeSettings(let state), .themeSettings): return state as? S
                 }
             }
             .first
@@ -28,3 +28,7 @@ extension AppState {
         activeScreens = ActiveScreensState()
     }
 }
+
+let store = Store(state: AppState(),
+                  reducer: AppState.reducer,
+                  middlewares: [ThemeManagerMiddleware().themeManagerProvider])

@@ -58,7 +58,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
         let newState = reducer(state, action)
 
         middlewares.forEach { middleware in
-            middleware(state, action)
+            middleware(newState, action)
         }
 
         state = newState
@@ -67,7 +67,8 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
                                                          mainSubscription: Subscription<State>,
                                                          transformedSubscription: Subscription<SubState>?) {
-        let subscriptionWrapper = SubscriptionWrapper(subscription: mainSubscription,
+        let subscriptionWrapper = SubscriptionWrapper(originalSubscription: mainSubscription,
+                                                      transformedSubscription: transformedSubscription,
                                                       subscriber: subscriber)
         subscriptions.update(with: subscriptionWrapper)
         mainSubscription.newValues(oldState: nil, newState: state)

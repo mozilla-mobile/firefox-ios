@@ -31,7 +31,7 @@ protocol TopSitesDataAdaptor {
     func recalculateTopSiteData(for numberOfTilesPerRow: Int)
 }
 
-class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
+class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private let profile: Profile
     private var topSites: [TopSite] = []
     private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
@@ -165,15 +165,15 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
-    func addSponsoredTiles(sites: inout [Site], shouldAddGoogle: Bool, availableSpaceCount: Int) {
+    func addSponsoredTiles(sites: inout [Site],
+                           shouldAddGoogle: Bool,
+                           availableSpaceCount: Int) {
         let sponsoredTileSpaces = getSponsoredNumberTiles(shouldAddGoogle: shouldAddGoogle,
                                                           availableSpaceCount: availableSpaceCount)
 
         if sponsoredTileSpaces > 0 {
-            let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
-                                    maxNumberOfSponsoredTile: maxNumberOfTiles,
                                     defaultSearchEngine: profile.searchEngines.defaultEngine)
         }
     }
@@ -199,7 +199,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     // MARK: - Sponsored tiles (Contiles)
 
     private var shouldLoadSponsoredTiles: Bool {
-        return featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
+        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
     }
 
     private var shouldAddSponsoredTiles: Bool {
@@ -219,12 +219,12 @@ private extension Array where Element == Site {
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
     ///   - contiles: An array of Contiles a type of tiles belonging in the Shortcuts section on the Firefox home page.
-    ///   - maxNumberOfSponsoredTile: maximum number of sponsored tiles
     ///   - defaultSearchEngine: The default engine to filter sponsored tiles against
+    ///   - maxNumberOfSponsoredTile: maximum number of sponsored tiles
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int,
                                     contiles: [Contile],
-                                    maxNumberOfSponsoredTile: Int,
-                                    defaultSearchEngine: OpenSearchEngine?) {
+                                    defaultSearchEngine: OpenSearchEngine?,
+                                    maxNumberOfSponsoredTile: Int = 2) {
         guard maxNumberOfSponsoredTile > 0 else { return }
         var siteAddedCount = 0
 

@@ -236,6 +236,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             return
         case .customizeTopSites:
             viewController = TopSitesSettingsViewController()
+            viewController.profile = profile
         case .fxa:
             let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
             let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(

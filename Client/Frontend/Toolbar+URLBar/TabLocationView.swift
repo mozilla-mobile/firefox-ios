@@ -50,10 +50,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
-            if let url {
-                let product = ShoppingProduct(url: url)
-                shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible
-            }
             setNeedsUpdateConstraints()
         }
     }
@@ -116,6 +112,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         // Temporary icon, will be updated
         // https://mozilla-hub.atlassian.net/browse/FXIOS-7039
         button.addTarget(self, action: #selector(self.didPressShoppingCartButton(_:)), for: .touchUpInside)
+        button.isHidden = true
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
     }
@@ -278,6 +275,15 @@ class TabLocationView: UIView, FeatureFlaggable {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
+    func updateShoppingCartButtonVisibility(for tab: Tab) {
+        guard let url else {
+            shoppingCartButton.isHidden = true
+            return
+        }
+        let product = ShoppingProduct(url: url)
+        shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible || tab.isPrivate
+    }
+
     private func updateTextWithURL() {
         if let host = url?.host, AppConstants.punyCode {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
@@ -322,12 +328,8 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        var isShoppingCartButtonVisible = false
-        if let url {
-            let product = ShoppingProduct(url: url)
-            isShoppingCartButtonVisible = product.isShoppingCartButtonVisible
-        }
-        readerModeButton.isHidden = (newReaderModeState == .unavailable) || isShoppingCartButtonVisible
+
+        readerModeButton.isHidden = (newReaderModeState == .unavailable) || !shoppingCartButton.isHidden
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
