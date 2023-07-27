@@ -123,7 +123,12 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
                                     category: .library)
                     return nil
                 }
-
+                let totalRows = tableView.numberOfRows(inSection: indexPath.section)
+                cell.addCustomSeparator(
+                    atTop: indexPath.row == 0,
+                    atBottom: indexPath.row == totalRows - 1,
+                    separatorColor: self.themeManager.currentTheme.colors.borderPrimary
+                )
                 cell.titleLabel.text = site.title
                 cell.titleLabel.isHidden = site.title.isEmpty
                 cell.descriptionLabel.text = site.url

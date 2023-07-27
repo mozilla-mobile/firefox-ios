@@ -55,6 +55,10 @@ class TwoLineImageOverlayCell: UITableViewCell,
         label.textAlignment = .natural
     }
 
+    lazy var contttainerView: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -120,6 +124,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
         descriptionLabel.textColor = theme.colors.textSecondary
         leftImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
         accessoryView?.tintColor = theme.colors.actionSecondary
+        customTopSeparatorView?.backgroundColor = theme.colors.borderPrimary
+        customBottomSeparatorView?.backgroundColor = theme.colors.borderPrimary
     }
 
     override func prepareForReuse() {
