@@ -397,6 +397,8 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        case shoppingCartButton = "shopping-cart-button"
+        case shoppingBottomSheet = "shopping-bottom-sheet"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -993,6 +995,12 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
+        // MARK: Shopping Experience (Fakespot)
+        case (.action, .tap, .shoppingCartButton, _, _):
+            GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .close, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceClosed.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

@@ -31,6 +31,7 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         setupView()
         listenForThemeChange(view)
         applyTheme()
+        view.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -52,7 +53,14 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         ])
     }
 
+    private func recordTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet)
+    }
+
     // MARK: BottomSheetChild
     func willDismiss() {
+        recordTelemetry()
     }
 }
