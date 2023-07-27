@@ -507,6 +507,11 @@ extension TelemetryWrapper {
         case selectedHistoryItem = "selected-history-item"
         case searchHistory = "search-history"
         case deleteHistory = "delete-history"
+        case historySingleItemRemoved = "history-single-item-removed"
+        case historyPanelOpened = "history-panel-opened"
+        case historyRemovedToday = "history-removed-today"
+        case historyRemovedTodayAndYesterday = "history-removed-today-and-yesterday"
+        case historyRemovedAll = "history-removed-all"
         case shareSheet = "share-sheet"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
@@ -742,6 +747,19 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.delete[from.rawValue].add()
         case (.action, .open, .readingListItem, _, _):
             GleanMetrics.ReadingList.open.add()
+
+        // MARK: History
+        case(.information, .view, .historyPanelOpened, _, _):
+            GleanMetrics.History.opened.record()
+        case(.action, .swipe, .historySingleItemRemoved, _, _):
+            GleanMetrics.History.removed.record()
+        case(.action, .tap, .historyRemovedToday, _, _):
+            GleanMetrics.History.removedToday.record()
+        case(.action, .tap, .historyRemovedTodayAndYesterday, _, _):
+            GleanMetrics.History.removedTodayAndYesterday.record()
+        case(.action, .tap, .historyRemovedAll, _, _):
+            GleanMetrics.History.removedAll.record()
+
         // MARK: Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {

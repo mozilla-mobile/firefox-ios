@@ -41,6 +41,11 @@ features:
         description: What should be displayed when a control message is selected.
         default: show-next-message
 
+      message-under-experiment:
+        type: Option<String>
+        description: 'Deprecated. Please use "experiment": "{experiment}" instead.'
+        default: null
+
     defaults:
       - value:
           # This list of triggers is the same on iOS and Android. Thus,

@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Redux
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
@@ -128,7 +129,9 @@ class SettingsCoordinator: BaseCoordinator,
             return SearchBarSettingsViewController(viewModel: viewModel)
 
         case .topSites:
-            return TopSitesSettingsViewController()
+            let viewController = TopSitesSettingsViewController()
+            viewController.profile = profile
+            return viewController
 
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
@@ -257,6 +260,9 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
+        if ReduxFlagManager.isReduxEnabled {
+            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
+        }
         router.push(ThemeSettingsController())
     }
 

@@ -34,7 +34,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
-    case sponsoredTiles
     case startAtHome
     case tabStorageRefactor
     case tabTrayGroups
@@ -80,8 +79,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
-        case .sponsoredTiles:
-            return FlagKeys.SponsoredShortcuts
         case .startAtHome:
             return FlagKeys.StartAtHome
         case .tabTrayGroups:

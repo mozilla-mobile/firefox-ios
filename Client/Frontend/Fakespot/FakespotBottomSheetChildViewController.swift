@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 
 class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild, Themeable {

@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Common
+import ComponentLibrary
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -1343,6 +1344,7 @@ class BrowserViewController: UIViewController,
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
+        urlBar.locationView.updateShoppingCartButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }
@@ -2435,7 +2437,7 @@ extension BrowserViewController {
             }
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel()
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(

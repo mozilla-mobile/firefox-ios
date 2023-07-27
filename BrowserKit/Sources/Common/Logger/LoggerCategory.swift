@@ -30,6 +30,9 @@ public enum LoggerCategory: String {
     /// Related to the application lifecycle.
     case lifecycle
 
+    /// Related to redux library or integration
+    case redux
+
     /// Related to the setup of services on app launch.
     case setup
 

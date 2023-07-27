@@ -4,12 +4,18 @@
 
 import Foundation
 
-class NimbusFakespotFeatureLayer {
-    private let fakespotFeature = FxNimbus.shared.features.fakespotFeature.value()
+protocol NimbusFakespotFeatureLayerProtocol {
+    func getSiteConfig(siteName: String) -> WebsiteConfig?
+}
 
-    func getRegexProductIDPatterns() -> [String] {
-        fakespotFeature.config.compactMap { item in
-            item.value.productIdFromUrlRegex
-        }
+class NimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol {
+    let nimbus: FxNimbus
+
+    init(nimbus: FxNimbus = .shared) {
+        self.nimbus = nimbus
+    }
+
+    func getSiteConfig(siteName: String) -> WebsiteConfig? {
+        nimbus.features.fakespotFeature.value().config[siteName]
     }
 }

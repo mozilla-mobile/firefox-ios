@@ -3,9 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
 
-enum MainStateAction: Action {
-    case showThemeSettings(ThemeSettingsState)
-    case closeThemeSettings
-}
+/// Defines the state related to a screen used `AppState` reducer to retrieve the state for a specific screen
+protocol ScreenState {}

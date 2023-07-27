@@ -64,9 +64,6 @@ homescreenFeature:
     sections-enabled:
       type: json
       description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default.\n"
-    sponsored-tiles:
-      type: json
-      description: "This property defines the sponsored tile feature on the homepage, which is not a section therein.\n"
 library-coordinator-refactor:
   description: "This feature is for managing the roll out of the library coordinator code as part of the changes on the navigation in the app\n"
   hasExposure: true
@@ -83,6 +80,9 @@ messaging:
     actions:
       type: json
       description: A growable map of action URLs.
+    message-under-experiment:
+      type: string
+      description: "Deprecated. Please use \"experiment\": \"{experiment}\" instead."
     messages:
       type: json
       description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.\n"
