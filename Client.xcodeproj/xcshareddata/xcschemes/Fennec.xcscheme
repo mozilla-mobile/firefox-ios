@@ -241,7 +241,8 @@
       </CodeCoverageTargets>
       <TestPlans>
          <TestPlanReference
-            reference = "container:Tests/UnitTest.xctestplan">
+            reference = "container:Tests/UnitTest.xctestplan"
+            default = "YES">
          </TestPlanReference>
          <TestPlanReference
             reference = "container:Tests/SmokeXCUITests.xctestplan">
@@ -256,8 +257,7 @@
             reference = "container:Tests/Smoketest3.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/Fennec_Enterprise_XCUITests.xctestplan"
-            default = "YES">
+            reference = "container:Tests/Fennec_Enterprise_XCUITests.xctestplan">
          </TestPlanReference>
          <TestPlanReference
             reference = "container:Tests/PerformanceTestPlan.xctestplan">
