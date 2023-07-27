@@ -31,7 +31,6 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         setupView()
         listenForThemeChange(view)
         applyTheme()
-        view.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
