@@ -23,6 +23,7 @@ The script currently doesn't support modifications to:
 though it may in the future.
 """
 
+import argparse
 import csv
 import sqlite3
 import random
@@ -33,10 +34,12 @@ import os
 import re
 import subprocess
 import logging
+import inquirer
 
-BUNDLE_ID = 'org.mozilla.ios.Fennec'
-APP_GROUP_ID = 'group.org.mozilla.ios.Fennec'
+DEFAULT_BUNDLE_ID = 'org.mozilla.ios.FennecEnterprise'
+DEFAULT_APP_GROUP_ID = 'group.org.mozilla.ios.Fennec'
 CSV_FILE = 'websites.csv'
+DEFAULT_DB_NAME = "places.copy"
 
 def _init_logging():
     logging.basicConfig(
@@ -160,16 +163,19 @@ def create_and_clean_database(db_new_name, db_path):
 
     # Create the full path for the new database
     db_new_path = os.path.join(script_dir, db_new_name)
-
+    print("db_new_name: ", db_new_name)
+    print("db_path: ", db_path)
+    print("db_new_path: ", db_new_path)
     try:
         # Copy the database file
         shutil.copyfile(db_path, db_new_path)
+        # Connect to the new database file
+        db_connection = sqlite3.connect(db_new_path)
+
+        db_cursor = db_connection.cursor()
+
     except Exception as e:
         logging.error(f"Error occurred while copying the database: {str(e)}")
-
-    # Connect to the new database file
-    db_connection = sqlite3.connect(db_new_path)
-    db_cursor = db_connection.cursor()
 
     # Make sure tables are empty before inserting new records
     db_cursor.execute("DELETE FROM moz_historyvisits")
@@ -181,7 +187,7 @@ def create_and_clean_database(db_new_name, db_path):
     return db_connection, db_cursor
 
 
-def read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count):
+def read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count, age_option):
     """
     Read URLs from websites.csv and insert records into the database.
 
@@ -205,25 +211,37 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
     # Read in websites.csv
     with open(websites_file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        place_id = 1
         bookmarks_position = 0
+        place_id = 1
 
         while history_count > 0 or bookmark_count > 0:
             for row in reader:
                 current_time_milliseconds = int(time.time() * 1000)
+                one_day_milliseconds = 86400000
+                age = {
+                    'today': current_time_milliseconds,
+                    'yesterday': current_time_milliseconds - (one_day_milliseconds + 10000),
+                    'week': current_time_milliseconds - (one_day_milliseconds * 7),
+                    'month': current_time_milliseconds - (one_day_milliseconds * 30),
+                    'older': current_time_milliseconds - (one_day_milliseconds * 31)
+                }
+
                 guid = generate_guid()
                 url = f"https://{row[1]}"
                 title = row[1]
 
+                if history_count == 0 and bookmark_count == 0:
+                    break
+
                 # a record must first be created in moz_places as a parent key before either history or bookmarks
-                insert_into_moz_places(db_cursor, url, title, current_time_milliseconds, guid)
+                insert_into_moz_places(db_cursor, url, title, age[age_option], guid)
 
                 if history_count > 0:
-                    insert_into_moz_historyvisits(db_cursor, 1, place_id, current_time_milliseconds, 1)
+                    insert_into_moz_historyvisits(db_cursor, 1, place_id, age[age_option], 3)
                     history_count -= 1
 
                 if bookmark_count > 0:
-                    insert_into_moz_bookmarks(db_cursor, place_id, 1, 5, bookmarks_position, title, current_time_milliseconds, current_time_milliseconds, guid)
+                    insert_into_moz_bookmarks(db_cursor, place_id, 1, 5, bookmarks_position, title, age[age_option], age[age_option], guid)
                     bookmark_count -= 1
 
                 place_id += 1
@@ -234,6 +252,49 @@ def read_websites_and_insert_records(db_connection, db_cursor, history_count, bo
         # Commit the changes outside the loop
         db_connection.commit()
 
+def ask_user_for_history_count():
+    return int(input("Enter the number of records to create for history: "))
+
+def ask_user_for_bookmark_count():
+    return int(input("Enter the number of records to create for bookmarks: "))
+
+def ask_user_for_db_name():
+    return input("Enter the name of the new database file (without the .db extension): ").strip()
+
+def get_bundle_id_from_user():
+    bundle_identifiers = {
+        'Fennec': 'org.mozilla.ios.Fennec',
+        'FennecEnterprise': 'org.mozilla.ios.FennecEnterprise',
+        'Firefox': 'org.mozilla.ios.Firefox',
+        'Firefox Beta': 'org.mozilla.ios.FirefoxBeta'
+    }
+
+    bundle_id_menu = [
+        inquirer.Checkbox('bundle_id_options',
+                        message="Select your iOS Simulator bundle identifier (Press Enter when done selecting):",
+                        choices=[(name, bundle_id) for name, bundle_id in bundle_identifiers.items()],
+                        default=['org.mozilla.ios.FennecEnterprise'],
+                        ),
+    ]
+    bundle_id_input = inquirer.prompt(bundle_id_menu)
+    return bundle_id_input['bundle_id_options'][0]
+
+def ask_user_for_age_options():
+    age_options_menu = [
+        inquirer.Checkbox('age_options',
+                        message="Select age options for history entries (Press Enter when done selecting):",
+                        choices=[
+                            ('Today', 'today'),
+                            ('Yesterday', 'yesterday'),
+                            ('This week', 'week'),
+                            ('This month', 'month'),
+                            ('Older', 'older'),
+                        ],
+                        default=['today'],
+                        ),
+    ]
+    age_options_answers = inquirer.prompt(age_options_menu)
+    return age_options_answers['age_options']
 
 def main():
     """
@@ -251,28 +312,74 @@ def main():
 
     _init_logging()
 
+    parser = argparse.ArgumentParser(description='Script to manage the process of creating and modifying a database in the context of a simulated iOS environment.')
+    parser.add_argument('-history', type=int, help='Number of history entries to add to the database')
+    parser.add_argument('-bookmarks', type=int, help='Number of history entries to add to the database')
+    parser.add_argument('-today', action='store_true', help='Include history entries for today')
+    parser.add_argument('-yesterday', action='store_true', help='Include history entries for yesterday')
+    parser.add_argument('-week', action='store_true', help='Include history entries for the past week')
+    parser.add_argument('-month', action='store_true', help='Include history entries for the past month')
+    parser.add_argument('-older', action='store_true', help='Include history entries older than a month')
+    parser.add_argument('-db_name', help='Name of the new database file (without the .db extension)')
+    parser.add_argument('-bundle_identifier', help='Name of the build target bundle identifier. For example, org.mozilla.ios.FennecEnterprise')
+    args = parser.parse_args()
+
+    age_options = {
+        'today': args.today,
+        'yesterday': args.yesterday,
+        'week': args.week,
+        'month': args.month,
+        'older': args.older,
+    }
+
+    age_options_menu = [
+        inquirer.Checkbox('age_options',
+                        message="Select age options for history entries (Press Enter when done selecting):",
+                        choices=[
+                            ('Today', 'today'),
+                            ('Yesterday', 'yesterday'),
+                            ('This week', 'week'),
+                            ('This month', 'month'),
+                            ('Older', 'older'),
+                        ],
+                        default=['today'],
+                        ),
+    ]
+
+    print(args)
+
     db_connection = None  # Initialize db_connection here
     try:
-        # User inputs for number of records to create for history and bookmarks
-        history_count = int(input("Enter the number of records to create for history: "))
-        bookmark_count = int(input("Enter the number of records to create for bookmarks: "))
-        db_new_name = input("Enter the name of the new database file (without the .db extension): ").strip()
+        
+        history_count = args.history if args.history is not None else ask_user_for_history_count()
+        bookmark_count = args.bookmarks if args.bookmarks is not None else ask_user_for_bookmark_count()
 
-        # If the user didn't provide a new name, or if the name has forbidden characters, use a default name
-        if not db_new_name or not all(char.isalnum() or char in '._-' for char in db_new_name):
-            db_new_name = 'places.copy'
+        # Handle user input for age options
+        if not any(age_options.values()):
+            age_options_input = ask_user_for_age_options()
+            for selected_option in age_options_input:
+                if selected_option in age_options:
+                    age_options[selected_option] = True
 
+        # Handle user input for database name
+        db_new_name = args.db_name if args.db_name else ask_user_for_db_name()
+
+        # Handle user input for bundle identifier
+        bundle_id = args.bundle_identifier if args.bundle_identifier else get_bundle_id_from_user()
+        db_path = get_db_path(bundle_id, DEFAULT_APP_GROUP_ID)
         # Append .db to the database name
         db_new_name += '.db'
 
-        # Get the path to the places.db file
-        db_path = get_db_path(BUNDLE_ID, APP_GROUP_ID)
-
+        print("current db_path: ", db_path)
+        print("db_new_name: ", db_new_name)
+        print("age_options: ", age_options) 
         # Create a new database and clean it
         db_connection, db_cursor = create_and_clean_database(db_new_name, db_path)
 
-        # Read websites from CSV and insert records
-        read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count)
+        for age_option, flag in age_options.items():
+            print(age_option, flag)
+            if flag:
+                read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count, age_option)
 
     except sqlite3.Error as e:
         logging.error(f"SQLite error occurred: {str(e)}")
