@@ -129,7 +129,9 @@ class SettingsCoordinator: BaseCoordinator,
             return SearchBarSettingsViewController(viewModel: viewModel)
 
         case .topSites:
-            return TopSitesSettingsViewController()
+            let viewController = TopSitesSettingsViewController()
+            viewController.profile = profile
+            return viewController
 
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC

@@ -31,11 +31,14 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                                           titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsToggle))
         sections.append(topSitesSetting)
 
-        if featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildOnly) {
-            let sponsoredShortcutSetting = BoolSetting(with: .sponsoredTiles,
-                                                       titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle))
-            sections.append(sponsoredShortcutSetting)
-        }
+        let sponsoredShortcutSetting = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
+            defaultValue: true,
+            titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
+        )
+        sections.append(sponsoredShortcutSetting)
 
         let toggleSection = SettingSection(title: nil,
                                            children: sections)
