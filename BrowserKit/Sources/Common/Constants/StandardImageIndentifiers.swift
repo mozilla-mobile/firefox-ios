@@ -53,7 +53,7 @@ public struct StandardImageIdentifiers {
         public static let tabTray = "tabTrayLarge"
     }
 
-    /// Those identifiers currently duplicate `ImageIndentifiers` until they are standardized with task #14633
+    /// Those identifiers currently duplicate `ImageIdentifiers` until they are standardized with task #14633
     public struct ToMigrate {
         public static let bottomSheetClose = "bottomSheet-close"
     }
