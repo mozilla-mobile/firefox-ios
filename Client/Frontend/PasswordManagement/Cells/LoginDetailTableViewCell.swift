@@ -71,7 +71,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
 
     private lazy var highlightedLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
-                                                                   size: UX.highlightedFontSize)
+                                                                         size: UX.highlightedFontSize)
         label.numberOfLines = 0
     }
 
@@ -127,8 +127,8 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
 
         if viewModel.displayDescriptionAsPassword {
             descriptionLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                                  size: 16,
-                                                                                  symbolicTraits: [.traitMonoSpace])
+                                                                                        size: 16,
+                                                                                        symbolicTraits: [.traitMonoSpace])
         }
     }
 

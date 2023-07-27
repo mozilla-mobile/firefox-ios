@@ -63,7 +63,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.lineBreakMode = .byWordWrapping
         label.text = .FxASignin_Subtitle
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                       size: UX.signInLabelFontSize)
+                                                                             size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -77,7 +77,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: UX.signInLabelFontSize)
+                                                                         size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -86,7 +86,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                 guard let url = try? result.get(), let host = url.host else { return }
 
                 let font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                         size: UX.signInLabelFontSize)
+                                                                               size: UX.signInLabelFontSize)
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: font)

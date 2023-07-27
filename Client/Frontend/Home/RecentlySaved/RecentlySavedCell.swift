@@ -27,7 +27,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
 
     let itemTitle: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.bookmarkTitleFontSize)
+                                                                         size: UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
     }
 

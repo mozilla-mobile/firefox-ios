@@ -50,7 +50,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.titleFontSize)
+                                                                             size: UX.titleFontSize)
         label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true

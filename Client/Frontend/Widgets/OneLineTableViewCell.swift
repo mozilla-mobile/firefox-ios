@@ -46,7 +46,7 @@ class OneLineTableViewCell: UITableViewCell,
 
     lazy var titleLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.labelFontSize)
+                                                                         size: UX.labelFontSize)
         label.textAlignment = .natural
     }
 

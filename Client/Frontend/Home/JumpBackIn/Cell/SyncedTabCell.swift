@@ -51,13 +51,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let cardTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: UX.cardTitleFontSize)
+                                                                         size: UX.cardTitleFontSize)
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.cardTitle
     }
 
     private let syncedTabsButton: UIButton = .build { button in
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                                size: UX.deviceSourceFontSize)
+                                                                                      size: UX.deviceSourceFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
@@ -83,27 +83,27 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let tabItemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   size: UX.itemTitleFontSize)
+                                                                         size: UX.itemTitleFontSize)
         label.numberOfLines = 2
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
-
+    
     // Contains the syncedDeviceImage and syncedDeviceLabel
     private var syncedDeviceContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
-
+    
     private let syncedDeviceImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.favIconImage
     }
-
+    
     private let syncedDeviceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                       size: UX.deviceSourceFontSize)
+                                                                             size: UX.deviceSourceFontSize)
         label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
     }

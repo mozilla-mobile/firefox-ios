@@ -63,20 +63,20 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   size: UX.titleFontSize)
+                                                                         size: UX.titleFontSize)
         label.numberOfLines = 2
     }
-
+    
     // Contains the websiteImage and websiteLabel
     private var websiteContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
-
+    
     private var websiteLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                       size: UX.siteFontSize)
+                                                                             size: UX.siteFontSize)
         label.textColor = .label
     }
 

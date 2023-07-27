@@ -44,15 +44,15 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.titleLabelTextSize)
+                                                                             size: UX.titleLabelTextSize)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
-
+    
     private lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                                size: UX.moreButtonTextSize)
+                                                                                      size: UX.moreButtonTextSize)
     }
 
     // MARK: - Variables

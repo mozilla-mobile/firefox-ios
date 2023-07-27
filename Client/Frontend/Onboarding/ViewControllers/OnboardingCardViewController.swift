@@ -96,16 +96,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.textAlignment = .center
         let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                       size: fontSize)
+                                                                             size: fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
-
+    
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionFontSize)
+                                                                         size: UX.descriptionFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }

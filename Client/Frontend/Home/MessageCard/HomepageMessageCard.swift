@@ -47,23 +47,23 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: UX.bannerTitleFontSize)
+                                                                         size: UX.bannerTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
     }
-
+    
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionTextFontSize)
+                                                                         size: UX.descriptionTextFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
     }
-
+    
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
-                                                                                    size: UX.buttonFontSize)
+                                                                                          size: UX.buttonFontSize)
 
         button.layer.cornerRadius = UIFontMetrics.default.scaledValue(for: UX.cornerRadius)
         button.titleLabel?.adjustsFontForContentSizeCategory = true

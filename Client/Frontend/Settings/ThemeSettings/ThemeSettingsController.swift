@@ -169,7 +169,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
             label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
-                                                                       size: UX.footerFontSize)
+                                                                             size: UX.footerFontSize)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         footer.addSubview(label)

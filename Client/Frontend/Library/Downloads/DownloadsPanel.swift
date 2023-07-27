@@ -231,8 +231,8 @@ class DownloadsPanel: UIViewController,
             label.text = .DownloadsPanelEmptyStateTitle
             label.textAlignment = .center
             label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                       size: 17,
-                                                                       weight: .light)
+                                                                             size: 17,
+                                                                             weight: .light)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
             label.numberOfLines = 0
             label.adjustsFontSizeToFitWidth = true

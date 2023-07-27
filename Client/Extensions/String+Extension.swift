@@ -31,7 +31,7 @@ extension String {
         // if we have a text style, we are using dynamic text so the attributed text should do too
         if let textStyle = font.fontDescriptor.fontAttributes[.textStyle] as? UIFont.TextStyle {
             boldFont = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: textStyle,
-                                                                         size: font.pointSize)
+                                                                               size: font.pointSize)
         }
 
         let boldFontAttribute = [NSAttributedString.Key.font: boldFont]

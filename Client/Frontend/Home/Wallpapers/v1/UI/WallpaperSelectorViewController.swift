@@ -26,17 +26,17 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
 
     private lazy var headerLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: 17)
+                                                                         size: 17)
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorTitle
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.title
     }
-
+    
     private lazy var instructionLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 12)
+                                                                         size: 12)
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorDescription
         label.textAlignment = .center

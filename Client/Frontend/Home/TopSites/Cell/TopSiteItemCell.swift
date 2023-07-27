@@ -65,21 +65,21 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         titleLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        size: UX.titleFontSize)
+                                                                              size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
         titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
-
+    
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
         sponsoredLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
-                                                                            size: UX.sponsorFontSize)
+                                                                                  size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
-
+    
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
         selectedOverlay.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius

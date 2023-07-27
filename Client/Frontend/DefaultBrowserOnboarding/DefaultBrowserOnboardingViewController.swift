@@ -71,7 +71,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     private lazy var titleLabel: UILabel = .build { [weak self] label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title1,
-                                                                       size: self?.titleFontSize ?? UX.titleSize)
+                                                                             size: self?.titleFontSize ?? UX.titleSize)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.titleLabel

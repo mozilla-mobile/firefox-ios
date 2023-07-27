@@ -20,13 +20,13 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     let itemTitle: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 15)
+                                                                         size: 15)
         label.adjustsFontForContentSizeCategory = true
     }
-
+    
     let itemDescription: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: 12)
+                                                                         size: 12)
         label.adjustsFontForContentSizeCategory = true
     }
 

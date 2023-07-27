@@ -135,8 +135,8 @@ class HistoryPanel: UIViewController,
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 17,
-                                                                   weight: .light)
+                                                                         size: 17,
+                                                                         weight: .light)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }

@@ -18,7 +18,7 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.discoverMoreFontSize)
+                                                                             size: UX.discoverMoreFontSize)
         label.numberOfLines = 0
         label.textAlignment = .left
     }
