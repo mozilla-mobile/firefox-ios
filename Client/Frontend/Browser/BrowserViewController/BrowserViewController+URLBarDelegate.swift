@@ -112,7 +112,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
-        // TODO: Update closeButtonA11yLabel for the fakespot feature
+
         let viewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         let bottomSheetVC = BottomSheetViewController(viewModel: viewModel,
                                                       childViewController: FakespotBottomSheetChildViewController())
