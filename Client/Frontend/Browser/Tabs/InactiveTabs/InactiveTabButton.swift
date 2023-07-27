@@ -25,7 +25,7 @@ class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .body,
             weight: .semibold,
             maxSize: 16)

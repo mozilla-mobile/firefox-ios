@@ -41,13 +41,13 @@ class ButtonToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                        size: UX.titleFontSize)
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                        size: UX.descriptionFontSize)
         label.numberOfLines = 0
     }
@@ -55,7 +55,7 @@ class ButtonToast: Toast {
     private var roundedButton: UIButton = .build { button in
         button.layer.cornerRadius = UX.buttonBorderRadius
         button.layer.borderWidth = UX.buttonBorderWidth
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                                 size: Toast.UX.fontSize)
         button.titleLabel?.numberOfLines = 1
         button.titleLabel?.lineBreakMode = .byClipping

@@ -25,7 +25,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
 
     private let titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
                                                                    size: 16)
         label.adjustsFontForContentSizeCategory = true
     }

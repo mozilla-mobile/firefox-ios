@@ -168,7 +168,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
+            label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
                                                                        size: UX.footerFontSize)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }

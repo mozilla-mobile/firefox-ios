@@ -8,7 +8,7 @@ import Shared
 
 struct SimpleToast: ThemeApplicable {
     private let toastLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                        size: Toast.UX.fontSize)
         label.numberOfLines = 0
         label.textAlignment = .center

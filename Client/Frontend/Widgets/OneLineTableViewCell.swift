@@ -45,7 +45,7 @@ class OneLineTableViewCell: UITableViewCell,
     lazy var leftImageView: FaviconImageView = .build { _ in }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.labelFontSize)
         label.textAlignment = .natural
     }

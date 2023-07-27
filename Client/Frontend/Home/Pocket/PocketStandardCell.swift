@@ -30,7 +30,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { title in
         title.adjustsFontForContentSizeCategory = true
-        title.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+        title.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    size: UX.titleFontSize)
         title.numberOfLines = 2
     }
@@ -51,7 +51,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                    size: UX.sponsoredFontSize)
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
@@ -62,7 +62,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .caption1,
             size: UX.siteFontSize)
     }
@@ -104,9 +104,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = viewModel.shouldHideSponsor
         descriptionLabel.font = viewModel.shouldHideSponsor
-        ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+        ? LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                         size: UX.siteFontSize)
-        : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+        : LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
                                                             size: UX.siteFontSize)
 
         sponsoredStack.isHidden  = viewModel.shouldHideSponsor

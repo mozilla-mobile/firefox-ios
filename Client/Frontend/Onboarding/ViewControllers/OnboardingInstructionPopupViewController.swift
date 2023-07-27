@@ -49,7 +49,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3, size: UX.titleFontSize)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3, size: UX.titleFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
     }
@@ -65,7 +65,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
@@ -203,14 +203,14 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
         let attributedStrings = viewModel.getAttributedStrings(
-            with: DynamicFontHelper.defaultHelper.preferredFont(
+            with: LegacyDynamicFontHelper.defaultHelper.preferredFont(
                 withTextStyle: .subheadline,
                 size: UX.numeratedTextFontSize))
         attributedStrings.forEach { attributedText in
             let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
                 label.textAlignment = .left
-                label.font = DynamicFontHelper.defaultHelper.preferredFont(
+                label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
                     withTextStyle: .subheadline,
                     size: UX.numeratedTextFontSize)
                 label.adjustsFontForContentSizeCategory = true

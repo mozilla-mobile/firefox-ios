@@ -25,7 +25,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     private var collectionViewHeightConstraint: NSLayoutConstraint!
 
     private lazy var headerLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
                                                                    size: 17)
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorTitle
@@ -35,7 +35,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     }
 
     private lazy var instructionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: 12)
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorDescription

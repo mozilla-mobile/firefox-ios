@@ -27,7 +27,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
                             AppName.shortName.rawValue)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    size: UX.fontSize)
     }
 
@@ -36,7 +36,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    size: UX.fontSize)
     }
 

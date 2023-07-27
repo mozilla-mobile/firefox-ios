@@ -73,7 +73,7 @@ class StringExtensionsTests: XCTestCase {
 
         XCTAssertEqual(
             attributedText.attribute(.font, at: 1, effectiveRange: &effectiveRange) as? UIFont,
-            DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
+            LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
         )
         XCTAssertEqual(effectiveRange, NSRange(location: 1, length: 4))
 
@@ -92,7 +92,7 @@ class StringExtensionsTests: XCTestCase {
 
         XCTAssertEqual(
             attributedText.attribute(.font, at: 6, effectiveRange: &effectiveRange) as? UIFont,
-            DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
+            LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
         )
         XCTAssertEqual(effectiveRange, NSRange(location: 6, length: 4))
     }
