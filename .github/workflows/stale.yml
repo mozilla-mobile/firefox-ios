@@ -50,7 +50,7 @@ jobs:
           ### PULL REQUESTS ###
           # Idle number of days before marking PRs stale
           # We need to review PRs faster than 2 weeks. If there's no action on a PR for this period of time we should close it.
-          days-before-pr-stale: 15
+          days-before-pr-stale: 14
 
           # Idle number of days before closing stale PRs
           days-before-pr-close: 7
@@ -62,4 +62,4 @@ jobs:
           stale-pr-label: "stale"
 
           # Labels on PRs exempted from stale
-          exempt-pr-labels: "do not stale"
+          exempt-pr-labels: "do not stale,weekly-release"
