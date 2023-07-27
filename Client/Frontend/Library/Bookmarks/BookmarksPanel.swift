@@ -533,7 +533,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }
 
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
-                                               iconString: ImageIdentifiers.Large.pin,
+                                               iconString: StandardImageIdentifiers.Large.pin,
                                                tapHandler: { _ in
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {

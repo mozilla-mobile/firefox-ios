@@ -788,7 +788,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AddToShortcutsActionTitle,
-                                     iconString: ImageIdentifiers.Large.pin) { _ in
+                                     iconString: StandardImageIdentifiers.Large.pin) { _ in
             guard let url = self.selectedTab?.url?.displayURL,
                   let title = self.selectedTab?.displayTitle else { return }
             let site = Site(url: url.absoluteString, title: title)
@@ -803,7 +803,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getRemoveShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveFromShortcuts,
-                                     iconString: ImageIdentifiers.Large.pinSlash) { _ in
+                                     iconString: StandardImageIdentifiers.Large.pinSlash) { _ in
             guard let url = self.selectedTab?.url?.displayURL,
                   let title = self.selectedTab?.displayTitle else { return }
             let site = Site(url: url.absoluteString, title: title)

@@ -27,7 +27,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
         })
 
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
-                                               iconString: ImageIdentifiers.Large.pin,
+                                               iconString: StandardImageIdentifiers.Large.pin,
                                                tapHandler: { _ in
             self.pinToTopSites(site)
         })
