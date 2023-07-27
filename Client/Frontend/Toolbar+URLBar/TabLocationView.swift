@@ -110,6 +110,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private lazy var shoppingCartButton: UIButton = .build { button in
         // Temporary icon, will be updated
         // https://mozilla-hub.atlassian.net/browse/FXIOS-7039
+        button.isHidden = true
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
     }
@@ -320,12 +321,8 @@ private extension TabLocationView {
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
-        var isShoppingCartButtonVisible = false
-        if let url {
-            let product = ShoppingProduct(url: url)
-            isShoppingCartButtonVisible = product.isShoppingCartButtonVisible
-        }
-        readerModeButton.isHidden = (newReaderModeState == .unavailable) || isShoppingCartButtonVisible
+
+        readerModeButton.isHidden = (newReaderModeState == .unavailable) || !shoppingCartButton.isHidden
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
