@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
@@ -22,11 +23,11 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.tables.cells.otherElements[ImageIdentifiers.Large.pinSlash].tap()
+        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
 
         // Check that it has been unpinned
         cell.press(forDuration: 2)
-        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.Large.pin])
+        waitForExistence(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }
 
     func testShareOptionIsShown() {
