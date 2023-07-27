@@ -30,7 +30,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                          size: UX.fontSize)
     }
-    
+
     private let learnMoreLabel: UILabel = .build { label in
         label.text = .FirefoxHomepage.Pocket.Footer.LearnMore
         label.isUserInteractionEnabled = true

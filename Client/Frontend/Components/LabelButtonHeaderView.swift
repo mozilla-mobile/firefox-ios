@@ -48,7 +48,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
-    
+
     private lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,

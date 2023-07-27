@@ -42,7 +42,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.numberOfLines = 0
         label.textAlignment = .center
     }
-    
+
     private let instructionsLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
@@ -50,7 +50,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.numberOfLines = 0
         label.textAlignment = .center
     }
-    
+
     private let signInButton: ResizableButton = .build { button in
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                                       size: UX.buttonSizeFont)

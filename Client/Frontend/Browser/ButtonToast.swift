@@ -45,13 +45,13 @@ class ButtonToast: Toast {
                                                                              size: UX.titleFontSize)
         label.numberOfLines = 0
     }
-    
+
     private var descriptionLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                              size: UX.descriptionFontSize)
         label.numberOfLines = 0
     }
-    
+
     private var roundedButton: UIButton = .build { button in
         button.layer.cornerRadius = UX.buttonBorderRadius
         button.layer.borderWidth = UX.buttonBorderWidth

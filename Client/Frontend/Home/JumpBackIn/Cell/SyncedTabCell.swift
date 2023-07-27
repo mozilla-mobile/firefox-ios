@@ -87,18 +87,18 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         label.numberOfLines = 2
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
-    
+
     // Contains the syncedDeviceImage and syncedDeviceLabel
     private var syncedDeviceContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
-    
+
     private let syncedDeviceImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.favIconImage
     }
-    
+
     private let syncedDeviceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2

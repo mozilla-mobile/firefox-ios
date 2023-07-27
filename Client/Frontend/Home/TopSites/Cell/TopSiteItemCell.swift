@@ -71,7 +71,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
-    
+
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
         sponsoredLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
@@ -79,7 +79,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
-    
+
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
         selectedOverlay.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius

@@ -33,7 +33,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.title
     }
-    
+
     private lazy var instructionLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                          size: 12)

@@ -35,7 +35,7 @@ class DownloadToast: Toast {
                                                                              size: ButtonToast.UX.titleFontSize)
         label.numberOfLines = 0
     }
-    
+
     private var descriptionLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                              size: ButtonToast.UX.descriptionFontSize)

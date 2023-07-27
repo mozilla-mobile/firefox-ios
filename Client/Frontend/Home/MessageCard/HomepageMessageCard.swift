@@ -51,7 +51,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
     }
-    
+
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -60,7 +60,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
     }
-    
+
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                                           size: UX.buttonFontSize)

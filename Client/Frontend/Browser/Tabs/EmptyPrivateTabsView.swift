@@ -27,7 +27,7 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private lazy var containerView: UIView = .build { _ in }
-    
+
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title2,
@@ -36,7 +36,7 @@ class EmptyPrivateTabsView: UIView {
         label.text =  .PrivateBrowsingTitle
         label.textAlignment = .center
     }
-    
+
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
@@ -45,7 +45,7 @@ class EmptyPrivateTabsView: UIView {
         label.numberOfLines = 0
         label.text = .TabTrayPrivateBrowsingDescription
     }
-    
+
     let learnMoreButton: UIButton = .build { button in
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
         button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,

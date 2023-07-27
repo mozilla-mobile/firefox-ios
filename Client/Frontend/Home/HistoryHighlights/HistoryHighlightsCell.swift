@@ -23,7 +23,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
                                                                          size: 15)
         label.adjustsFontForContentSizeCategory = true
     }
-    
+
     let itemDescription: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                          size: 12)
