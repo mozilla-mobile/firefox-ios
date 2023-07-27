@@ -163,9 +163,6 @@ def create_and_clean_database(db_new_name, db_path):
 
     # Create the full path for the new database
     db_new_path = os.path.join(script_dir, db_new_name)
-    print("db_new_name: ", db_new_name)
-    print("db_path: ", db_path)
-    print("db_new_path: ", db_new_path)
     try:
         # Copy the database file
         shutil.copyfile(db_path, db_new_path)
@@ -332,22 +329,6 @@ def main():
         'older': args.older,
     }
 
-    age_options_menu = [
-        inquirer.Checkbox('age_options',
-                        message="Select age options for history entries (Press Enter when done selecting):",
-                        choices=[
-                            ('Today', 'today'),
-                            ('Yesterday', 'yesterday'),
-                            ('This week', 'week'),
-                            ('This month', 'month'),
-                            ('Older', 'older'),
-                        ],
-                        default=['today'],
-                        ),
-    ]
-
-    print(args)
-
     db_connection = None  # Initialize db_connection here
     try:
         
@@ -370,14 +351,10 @@ def main():
         # Append .db to the database name
         db_new_name += '.db'
 
-        print("current db_path: ", db_path)
-        print("db_new_name: ", db_new_name)
-        print("age_options: ", age_options) 
         # Create a new database and clean it
         db_connection, db_cursor = create_and_clean_database(db_new_name, db_path)
 
         for age_option, flag in age_options.items():
-            print(age_option, flag)
             if flag:
                 read_websites_and_insert_records(db_connection, db_cursor, history_count, bookmark_count, age_option)
 
