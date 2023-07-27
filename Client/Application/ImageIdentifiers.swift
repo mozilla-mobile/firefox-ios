@@ -24,7 +24,6 @@ public struct ImageIdentifiers {
     public static let homepagePocket = "homepage-pocket"
     public static let libraryPanelSearch = "search"
     public static let libraryReadingList = "library-readinglist"
-    public static let lockBlocked = "lock_blocked"
     public static let logo = "splash"
     public static let logoAmex = "logo_amex"
     public static let logoDiners = "logo_diners"

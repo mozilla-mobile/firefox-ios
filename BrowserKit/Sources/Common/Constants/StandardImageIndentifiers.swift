@@ -46,6 +46,7 @@ public struct StandardImageIdentifiers {
         public static let history = "historyLarge"
         public static let home = "homeLarge"
         public static let lock = "lockLarge"
+        public static let lockSlash = "lockSlashLarge"
         public static let logoFirefox = "logoFirefoxLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
