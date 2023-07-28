@@ -113,6 +113,8 @@ extension UIViewController {
         case editingOverlay = "UIEditingOverlayViewController"
         case inputWindow = "UIInputWindowController"
         case themed = "ThemedNavigationController"
+        case screenTime = "STWebpageController"
+        case remoteScreenTime = "STWebRemoteViewController"
     }
 
     /// Add a swizzle on top of the viewWillAppear function to log whenever a view controller will appear. Needs to be only called once on app launch.
