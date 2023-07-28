@@ -8,15 +8,18 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
+    // Icon size 16x16
     public struct Small {
         public static let pinBadgeFill = "pinBadgeFillSmall"
     }
 
+    // Icon size 20x20
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
     }
 
+    // Icon size 24x24
     public struct Large {
         public static let appendUp = "appendUpLarge"
         public static let appMenu = "appMenuLarge"
@@ -60,6 +63,7 @@ public struct StandardImageIdentifiers {
         public static let tabTray = "tabTrayLarge"
     }
 
+    // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
     }
