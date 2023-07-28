@@ -43,8 +43,8 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                             size: 19)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
+                                                                size: 19)
         label.text = .BreachAlertsTitle
         label.sizeToFit()
         label.isAccessibilityElement = true

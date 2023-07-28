@@ -42,7 +42,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = .CreditCard.RememberCreditCard.MainTitle
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .headline,
             size: UX.titleLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
@@ -56,7 +56,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.text = String(format: String.CreditCard.RememberCreditCard.Header, AppName.shortName.rawValue)
 
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
+        label.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .body,
             size: UX.headerLabelFontSize)
         label.adjustsFontForContentSizeCategory = true

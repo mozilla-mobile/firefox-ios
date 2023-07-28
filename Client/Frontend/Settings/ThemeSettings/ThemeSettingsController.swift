@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Redux
 import Shared
@@ -173,8 +174,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
-                                                                             size: UX.footerFontSize)
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
+                                                                size: UX.footerFontSize)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         footer.addSubview(label)

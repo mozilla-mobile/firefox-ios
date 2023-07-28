@@ -17,7 +17,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     }
 
     public lazy var manageCardsButton: ResizableButton = .build { button in
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .callout,
             size: UX.manageCardsButtonFontSize)
         button.setTitle(.CreditCard.UpdateCreditCard.ManageCardsButtonTitle, for: .normal)

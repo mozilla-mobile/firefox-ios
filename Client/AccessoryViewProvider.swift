@@ -80,7 +80,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     private lazy var useCardTextLabel: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
         label.text = .CreditCard.Settings.UseSavedCardFromKeyboard
         label.numberOfLines = 0
     }

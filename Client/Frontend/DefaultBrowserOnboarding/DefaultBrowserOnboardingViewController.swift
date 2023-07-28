@@ -70,33 +70,33 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private lazy var titleLabel: UILabel = .build { [weak self] label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title1,
-                                                                             size: self?.titleFontSize ?? UX.titleSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title1,
+                                                                size: self?.titleFontSize ?? UX.titleSize)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.titleLabel
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel
     }
 
     private lazy var descriptionLabel1: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel1
     }
 
     private lazy var descriptionLabel2: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel2
     }
 
     private lazy var descriptionLabel3: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }
@@ -104,7 +104,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var goToSettingsButton: ResizableButton = .build { button in
         button.layer.cornerRadius = UX.ctaButtonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.ctaButton
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 20)
         button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         button.titleLabel?.textAlignment = .center
     }
