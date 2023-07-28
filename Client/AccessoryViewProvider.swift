@@ -68,7 +68,7 @@ class AccessoryViewProvider: UIView, Themeable {
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
-    private lazy  var cardImageView: UIImageView = .build { imageView in
+    private lazy var cardImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: StandardImageIdentifiers.Large.creditCard)?.withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityElementsHidden = true
@@ -79,7 +79,7 @@ class AccessoryViewProvider: UIView, Themeable {
         ])
     }
 
-    private lazy  var useCardTextLabel: UILabel = .build { label in
+    private lazy var useCardTextLabel: UILabel = .build { label in
         label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
         label.text = .CreditCard.Settings.UseSavedCardFromKeyboard
         label.numberOfLines = 0
