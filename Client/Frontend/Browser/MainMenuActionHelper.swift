@@ -694,7 +694,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
-                                     alternateTitle: .AppMenu.AddReadingListAlternateTitle,
                                      iconString: ImageIdentifiers.addToReadingList) { _ in
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
@@ -708,7 +707,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getRemoveReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveReadingList,
-                                     alternateTitle: .AppMenu.RemoveReadingListAlternateTitle,
                                      iconString: StandardImageIdentifiers.Large.delete) { _ in
             guard let url = self.tabUrl?.displayURL?.absoluteString,
                   let record = self.profile.readingList.getRecordWithURL(url).value.successValue
@@ -752,7 +750,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddBookmark,
-                                     alternateTitle: .AppMenu.AddBookmarkAlternateTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark) { _ in
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL
@@ -766,7 +763,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getRemoveBookmarkAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveBookmark,
-                                     alternateTitle: .AppMenu.RemoveBookmarkAlternateTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash) { _ in
             guard let url = self.tabUrl?.displayURL else { return }
 

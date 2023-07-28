@@ -589,7 +589,6 @@
 		8A5038142A5DFCE000A1B02A /* MockBrowserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5038132A5DFCE000A1B02A /* MockBrowserProfile.swift */; };
 		8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */; };
 		8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */; };
-		8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56955127C68AE00077A89E /* UILabel+Extension.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
 		8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */; };
 		8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
@@ -4781,7 +4780,6 @@
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
 		8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinatorTests.swift; sourceTree = "<group>"; };
-		8A56955127C68AE00077A89E /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
 		8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPassBookHelper.swift; sourceTree = "<group>"; };
 		8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesHelperTests.swift; sourceTree = "<group>"; };
@@ -7324,7 +7322,6 @@
 				E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */,
 				C80E1A0F2A0943640025B9E1 /* UIFont+Extension.swift */,
 				E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */,
-				8A56955127C68AE00077A89E /* UILabel+Extension.swift */,
 				E1442FC6294782D7003680B0 /* UIModalPresentationStyle+Photon.swift */,
 				E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */,
 				966B0DC72926F60500A85A7E /* UIResponder+Extensions.swift */,
@@ -12566,7 +12563,6 @@
 				8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
-				8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */,
 				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
