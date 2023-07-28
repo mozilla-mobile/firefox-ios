@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 /**
@@ -31,9 +32,9 @@ class SnackButton: UIButton {
         super.init(frame: .zero)
 
         if bold {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.fontSize)
         } else {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)

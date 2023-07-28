@@ -10,7 +10,7 @@ import XCTest
 import Common
 
 class TabDisplayManagerTests: XCTestCase {
-    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
 
     var mockDataStore: WeakListMock<Tab>!
     var dataStore: WeakList<Tab>!
@@ -484,6 +484,11 @@ class TabDisplayManagerTests: XCTestCase {
 
         XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
     }
+
+    func testTabDisplayManager_doesntLeak() {
+        let subject = createTabDisplayManager(useMockDataStore: false)
+        trackForMemoryLeaks(subject)
+    }
 }
 
 // Helper methods
@@ -541,7 +546,7 @@ extension TabDisplayManagerTests {
     }
 }
 
-extension TabDisplayManagerTests: TabDisplayer {
+extension TabDisplayManagerTests: TabDisplayerDelegate {
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {

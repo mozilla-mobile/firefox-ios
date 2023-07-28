@@ -12,7 +12,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .Settings.Passwords.OnboardingMessage
-        label.font = DynamicFontHelper().DeviceFontExtraLarge
+        label.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -23,7 +23,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
+        button.titleLabel?.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
         return button
     }()
 
@@ -32,7 +32,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 8
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
-        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
+        button.titleLabel?.font = LegacyDynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button

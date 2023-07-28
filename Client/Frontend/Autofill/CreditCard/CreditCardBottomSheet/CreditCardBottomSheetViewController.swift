@@ -82,7 +82,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     }
 
     private lazy var yesButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .headline,
             size: UX.yesButtonFontSize)
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)

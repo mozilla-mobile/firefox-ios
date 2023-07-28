@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import XCTest
 @testable import Client
@@ -73,7 +74,7 @@ class StringExtensionsTests: XCTestCase {
 
         XCTAssertEqual(
             attributedText.attribute(.font, at: 1, effectiveRange: &effectiveRange) as? UIFont,
-            DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
+            DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
         )
         XCTAssertEqual(effectiveRange, NSRange(location: 1, length: 4))
 
@@ -92,7 +93,7 @@ class StringExtensionsTests: XCTestCase {
 
         XCTAssertEqual(
             attributedText.attribute(.font, at: 6, effectiveRange: &effectiveRange) as? UIFont,
-            DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
+            DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
         )
         XCTAssertEqual(effectiveRange, NSRange(location: 6, length: 4))
     }

@@ -43,16 +43,16 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.titleLabelTextSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3,
+                                                                size: UX.titleLabelTextSize)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
     private lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                                size: UX.moreButtonTextSize)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                                         size: UX.moreButtonTextSize)
     }
 
     // MARK: - Variables

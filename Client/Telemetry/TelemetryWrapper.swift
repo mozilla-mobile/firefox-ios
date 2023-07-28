@@ -544,6 +544,7 @@ extension TelemetryWrapper {
         case viewDownloadsPanel = "view-downloads-panel"
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
+        case sponsoredShortcuts = "sponsored-shortcuts"
     }
 
     public enum EventValue: String {
@@ -1472,7 +1473,18 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
+        // MARK: - Sponsored Shortcuts
+        case (.information, .view, .sponsoredShortcuts, _, let extras):
+            if let enabled = extras?[EventExtraKey.preference.rawValue] as? Bool {
+                GleanMetrics.TopSites.sponsoredShortcuts.set(enabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: - Awesomebar
         case (.information, .view, .awesomebarLocation, _, let extras):
             if let location = extras?[EventExtraKey.preference.rawValue] as? String {
