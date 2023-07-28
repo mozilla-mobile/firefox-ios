@@ -241,7 +241,7 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-    var webView: WKWebView?
+    var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?
     var bars = [SnackBar]()
