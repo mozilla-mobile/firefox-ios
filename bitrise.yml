@@ -74,6 +74,11 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests"
+
+            echo $BITRISE_SOURCE_DIR
+            ls $BITRISE_SOURCE_DIR
+            echo $BITRISE_XCRESULT_PATH
+            ls $BITRISE_XCRESULT_PATH
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
