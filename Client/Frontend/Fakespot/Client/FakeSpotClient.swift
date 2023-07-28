@@ -6,7 +6,7 @@ import Foundation
 
 protocol FakeSpotClientType {
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData
-    func fetchProductData(productId: String, website: String) async throws -> [ProductAdsData]
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData]
 }
 
 struct MockFakeSpotClient: FakeSpotClientType {
@@ -14,7 +14,7 @@ struct MockFakeSpotClient: FakeSpotClientType {
         try load(ProductAnalysisData.self, filename: "productanalysis-response")
     }
 
-    func fetchProductData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         try load([ProductAdsData].self, filename: "productadsdata-response")
     }
 
@@ -40,7 +40,7 @@ struct StagingFakeSpotClient: FakeSpotClientType {
         return try await fetch(ProductAnalysisData.self, url: endpointURL, requestBody: requestBody)
     }
 
-    func fetchProductData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         // Define the API endpoint URL
         let endpointURL = URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search")!
 

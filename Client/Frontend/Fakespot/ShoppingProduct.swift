@@ -30,7 +30,7 @@ class ShoppingProduct: FeatureFlaggable {
     /// Initializes a new instance of a product with the provided URL and optional parameters.
     ///
     /// - Parameters:
-    ///   - url: The URL to fetch the product information from.
+    ///   - url: The URL to parse the Product instance from.
     ///   - nimbusFakespotFeatureLayer: An optional parameter of type `NimbusFakespotFeatureLayerProtocol`.
     ///                                 It represents the feature layer used for Nimbus Fakespot integration.
     ///   - client: An optional parameter of type `FakeSpotClient`. It represents the client used for communication
@@ -91,8 +91,8 @@ class ShoppingProduct: FeatureFlaggable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductData() async throws -> [ProductAdsData] {
+    func fetchProductAdsData() async throws -> [ProductAdsData] {
         guard let product else { return [] }
-        return try await client.fetchProductData(productId: product.id, website: product.host)
+        return try await client.fetchProductAdData(productId: product.id, website: product.host)
     }
 }
