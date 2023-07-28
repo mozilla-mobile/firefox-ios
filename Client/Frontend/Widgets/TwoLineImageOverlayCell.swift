@@ -55,10 +55,6 @@ class TwoLineImageOverlayCell: UITableViewCell,
         label.textAlignment = .natural
     }
 
-    lazy var contttainerView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
     var topSeparatorView: UIView = .build()
     var bottomSeparatorView: UIView = .build()
 
