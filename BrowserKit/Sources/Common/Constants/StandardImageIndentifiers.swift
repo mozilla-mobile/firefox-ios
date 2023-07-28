@@ -13,6 +13,7 @@ public struct StandardImageIdentifiers {
     }
 
     public struct Medium {
+        public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
     }
 

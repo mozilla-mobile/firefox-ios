@@ -78,7 +78,7 @@ class SearchViewController: SiteTableViewController,
     private let searchEngineScrollViewContent = UIView()
 
     private lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: "bookmark_results")!
+        return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {
