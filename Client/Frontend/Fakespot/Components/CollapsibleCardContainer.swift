@@ -49,7 +49,7 @@ class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
 
     lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 17.0)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 17.0)
         label.numberOfLines = 0
     }
 
