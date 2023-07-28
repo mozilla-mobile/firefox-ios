@@ -46,6 +46,17 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.TopSites.contextualMenu.testGetValue())
     }
 
+    func test_sponsoredShortcuts_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .sponsoredShortcuts,
+                                     value: nil,
+                                     extras: ["pref": true])
+        testBoolMetricSuccess(metric: GleanMetrics.TopSites.sponsoredShortcuts,
+                              expectedValue: true,
+                              failureMessage: "Sponsored shortcut value not tracked")
+    }
+
     // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {
@@ -571,6 +582,15 @@ extension XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+    }
+
+    func testBoolMetricSuccess(metric: BooleanMetricType,
+                               expectedValue: Bool,
+                               failureMessage: String,
+                               file: StaticString = #file,
+                               line: UInt = #line) {
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
     }
 }
