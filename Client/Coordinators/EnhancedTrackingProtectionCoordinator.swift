@@ -42,10 +42,6 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
     }
 
-    deinit {
-        print("ETPCoordinator is deinit")
-    }
-
     func start(sourceView: UIView) {
         if UIDevice.current.userInterfaceIdiom == .phone {
             enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
