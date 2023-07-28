@@ -1810,7 +1810,7 @@ class BrowserViewController: UIViewController,
         setNeedsStatusBarAppearanceUpdate()
 
         // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
+        let webViews = tabManager.tabs.compactMap({ $0.webView })
         webViews.forEach({ $0.applyTheme() })
 
         let tabs = tabManager.tabs
