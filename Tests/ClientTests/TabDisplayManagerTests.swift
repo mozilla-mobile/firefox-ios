@@ -10,7 +10,7 @@ import XCTest
 import Common
 
 class TabDisplayManagerTests: XCTestCase {
-    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
 
     var mockDataStore: WeakListMock<Tab>!
     var dataStore: WeakList<Tab>!
@@ -541,7 +541,7 @@ extension TabDisplayManagerTests {
     }
 }
 
-extension TabDisplayManagerTests: TabDisplayer {
+extension TabDisplayManagerTests: TabDisplayerDelegate {
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
