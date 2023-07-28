@@ -83,11 +83,11 @@
     },
     {
       "identity" : "rust-components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mozilla/rust-components-swift.git",
+      "kind" : "localSourceControl",
+      "location" : "/Users/skhamis/moz/rust-components-swift",
       "state" : {
-        "revision" : "1b3420ffe0e2fee88db4827213b5a9eab2688126",
-        "version" : "117.0.20230722050259"
+        "branch" : "enable-native-m1",
+        "revision" : "b494e977394538b0cf42ad316005b1df6f1e1196"
       }
     },
     {
