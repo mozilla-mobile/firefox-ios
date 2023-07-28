@@ -39,7 +39,7 @@ class AppLaunchUtil {
         setUserAgent()
 
         KeyboardHelper.defaultHelper.startObserving()
-        DynamicFontHelper.defaultHelper.startObserving()
+        LegacyDynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
 
         // Initialize conversion value by specifying fineValue and coarseValue.

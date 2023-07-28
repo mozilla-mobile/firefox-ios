@@ -62,11 +62,11 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.DeviceFont
+        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFont
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -252,13 +252,13 @@ class ReadingListPanel: UITableViewController,
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
             label.adjustsFontSizeToFitWidth = true
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
@@ -269,7 +269,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }

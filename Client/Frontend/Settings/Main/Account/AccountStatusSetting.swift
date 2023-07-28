@@ -45,7 +45,7 @@ class AccountStatusSetting: WithAccountSetting {
             return NSAttributedString(
                 string: displayName,
                 attributes: [
-                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontBold,
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
         }
 
@@ -53,7 +53,7 @@ class AccountStatusSetting: WithAccountSetting {
             return NSAttributedString(
                 string: email,
                 attributes: [
-                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold,
+                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontBold,
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
         }
 

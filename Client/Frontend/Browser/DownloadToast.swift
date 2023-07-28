@@ -31,14 +31,14 @@ class DownloadToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
-                                                                       size: ButtonToast.UX.titleFontSize)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                             size: ButtonToast.UX.titleFontSize)
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
-                                                                       size: ButtonToast.UX.descriptionFontSize)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                             size: ButtonToast.UX.descriptionFontSize)
         label.numberOfLines = 0
     }
 

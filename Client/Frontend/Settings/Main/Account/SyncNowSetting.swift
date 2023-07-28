@@ -46,7 +46,7 @@ class SyncNowSetting: WithAccountSetting {
                 string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
+                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultMediumFont
                 ]
             )
         }
@@ -57,7 +57,7 @@ class SyncNowSetting: WithAccountSetting {
             string: .FxASyncNow,
             attributes: [
                 NSAttributedString.Key.foregroundColor: self.enabled ? syncText : headerLightText,
-                NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
+                NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
     }
@@ -104,19 +104,19 @@ class SyncNowSetting: WithAccountSetting {
                 string: message,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .warning(let message):
             return  NSAttributedString(
                 string: message,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .inProgress:
             return NSAttributedString(
                 string: .SyncingMessageWithEllipsis,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary,
                              NSAttributedString.Key.font: UIFont.systemFont(
-                                ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize,
+                                ofSize: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontSize,
                                 weight: UIFont.Weight.regular)])
         default:
             return syncNowTitle
@@ -154,7 +154,7 @@ class SyncNowSetting: WithAccountSetting {
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.tintColor = theme.colors.actionPrimary
-        troubleshootButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
+        troubleshootButton.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
         troubleshootButton.sizeToFit()
         return troubleshootButton
     }()

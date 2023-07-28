@@ -28,6 +28,6 @@ class ReaderModeFontSizeButton: UIButton {
             accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
         }
 
-        titleLabel?.font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+        titleLabel?.font = UIFont(name: "SF-Pro-Text-Regular", size: LegacyDynamicFontHelper.defaultHelper.ReaderBigFontSize)
     }
 }

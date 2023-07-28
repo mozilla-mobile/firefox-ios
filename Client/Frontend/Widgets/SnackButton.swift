@@ -31,9 +31,9 @@ class SnackButton: UIButton {
         super.init(frame: .zero)
 
         if bold {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: UX.fontSize)
         } else {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)

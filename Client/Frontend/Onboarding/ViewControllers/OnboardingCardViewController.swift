@@ -95,8 +95,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.textAlignment = .center
         let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                       size: fontSize)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
+                                                                             size: fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
@@ -104,8 +104,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionFontSize)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                         size: UX.descriptionFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
@@ -117,7 +117,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
@@ -132,7 +132,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private lazy var secondaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
@@ -147,7 +147,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     private lazy var linkButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.buttonFontSize)
+        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: UX.buttonFontSize)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.linkButtonAction), for: .touchUpInside)
         button.setTitleColor(.systemBlue, for: .normal)

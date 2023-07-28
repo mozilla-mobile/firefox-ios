@@ -68,9 +68,9 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private let zoomLevel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
-                                                                   size: UX.fontSize,
-                                                                   weight: .semibold)
+        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                         size: UX.fontSize,
+                                                                         weight: .semibold)
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true

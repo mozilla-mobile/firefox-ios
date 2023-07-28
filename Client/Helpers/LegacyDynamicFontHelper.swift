@@ -6,13 +6,14 @@ import Foundation
 import UIKit
 import Shared
 
-private let iPadFactor: CGFloat = 1.06
-private let iPhoneFactor: CGFloat = 0.88
+/// This is the Legacy DynamicFontHelper, please use the `DynamicFontHelper` from `BrowserKit.Common` instead.
+class LegacyDynamicFontHelper: NSObject {
+    private let iPadFactor: CGFloat = 1.06
+    private let iPhoneFactor: CGFloat = 0.88
 
-class DynamicFontHelper: NSObject {
-    static var defaultHelper: DynamicFontHelper {
+    static var defaultHelper: LegacyDynamicFontHelper {
         struct Singleton {
-            static let instance = DynamicFontHelper()
+            static let instance = LegacyDynamicFontHelper()
         }
         return Singleton.instance
     }
