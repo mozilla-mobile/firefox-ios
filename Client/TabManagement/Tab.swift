@@ -28,6 +28,11 @@ protocol TabContentScript {
     func prepareForDeinit()
 }
 
+extension TabContentScript {
+    // By default most script don't need a `prepareForDeinit`
+    func prepareForDeinit() {}
+}
+
 protocol LegacyTabDelegate: AnyObject {
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)

@@ -31,8 +31,6 @@ class NightModeHelper: TabContentScript {
         // Do nothing.
     }
 
-    func prepareForDeinit() {}
-
     static func toggle(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
                        tabManager: TabManager) {
         let isActive = userDefaults.bool(forKey: NightModeKeys.Status)

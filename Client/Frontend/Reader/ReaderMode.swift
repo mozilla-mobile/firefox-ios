@@ -289,8 +289,6 @@ class ReaderMode: TabContentScript {
         return "readerModeMessageHandler"
     }
 
-    func prepareForDeinit() {}
-
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
         case .pageShow:

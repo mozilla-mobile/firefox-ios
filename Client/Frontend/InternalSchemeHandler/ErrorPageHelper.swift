@@ -310,8 +310,6 @@ extension ErrorPageHelper: TabContentScript {
             assertionFailure("Unknown error message")
         }
     }
-
-    func prepareForDeinit() {}
 }
 
 private extension URLComponents {

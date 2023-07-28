@@ -67,6 +67,4 @@ extension ContextMenuHelper: TabContentScript {
             elements = nil
         }
     }
-
-    func prepareForDeinit() {}
 }

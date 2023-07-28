@@ -29,8 +29,6 @@ class NoImageModeHelper: TabContentScript {
         // Do nothing.
     }
 
-    func prepareForDeinit() {}
-
     static func isActivated(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }

@@ -33,8 +33,6 @@ class SessionRestoreHelper: TabContentScript {
         }
     }
 
-    func prepareForDeinit() {}
-
     class func name() -> String {
         return "SessionRestoreHelper"
     }

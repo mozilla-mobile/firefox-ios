@@ -63,8 +63,6 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         setupForTab()
     }
 
-    func prepareForDeinit() {}
-
     func setupForTab() {
         guard let tab = tab else { return }
         let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)

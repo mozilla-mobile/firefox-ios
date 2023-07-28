@@ -111,8 +111,6 @@ class AdsTelemetryHelper: TabContentScript {
         return "adsMessageHandler"
     }
 
-    func prepareForDeinit() {}
-
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard
             let provider = getProviderForMessage(message: message),
