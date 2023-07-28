@@ -188,7 +188,29 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: - Webview configuration
+    // A WKWebViewConfiguration used for normal tabs
+    lazy private var configuration: WKWebViewConfiguration = {
+        print("YRD use configuration")
+        return LegacyTabManager.getNewConfiguration()
+    }()
+
+    private class func getNewConfiguration() -> WKWebViewConfiguration {
+        print("YRD getNewConfiguration")
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = false
+
+        return configuration
+    }
+
+    // A WKWebViewConfiguration used for private mode tabs
+    lazy private var privateConfiguration: WKWebViewConfiguration = {
+        print("YRD use privateConfiguration")
+        return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
+    }()
+
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
+        print("YRD makeWebViewConfig")
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
@@ -202,16 +224,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
-
-    // A WKWebViewConfiguration used for normal tabs
-    lazy private var configuration: WKWebViewConfiguration = {
-        return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
-    }()
-
-    // A WKWebViewConfiguration used for private mode tabs
-    lazy private var privateConfiguration: WKWebViewConfiguration = {
-        return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
-    }()
 
     // MARK: Get tabs
     func getTabFor(_ url: URL) -> Tab? {
@@ -816,7 +828,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             }
             // The default tab configurations also need to change.
             self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+//            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
     }
 

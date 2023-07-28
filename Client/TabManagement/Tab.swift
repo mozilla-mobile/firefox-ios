@@ -64,8 +64,8 @@ enum TabUrlType: String {
 
 class Tab: NSObject {
     static let privateModeKey = "PrivateModeKey"
-    fileprivate var _isPrivate = false
-    internal fileprivate(set) var isPrivate: Bool {
+    private var _isPrivate = false
+    private(set) var isPrivate: Bool {
         get {
             return _isPrivate
         }
