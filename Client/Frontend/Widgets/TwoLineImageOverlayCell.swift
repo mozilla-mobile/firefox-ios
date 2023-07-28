@@ -46,12 +46,12 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 16)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16)
         label.textAlignment = .natural
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 14)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 14)
         label.textAlignment = .natural
     }
 

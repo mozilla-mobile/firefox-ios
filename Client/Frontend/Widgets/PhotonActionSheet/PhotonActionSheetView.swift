@@ -200,8 +200,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         titleLabel.text = item.currentTitle
 
         if item.bold {
-            titleLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                                      size: 19)
+            titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
+                                                                         size: 19)
         } else {
             titleLabel.font = LegacyDynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         }

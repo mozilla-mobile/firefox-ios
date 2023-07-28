@@ -62,8 +62,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = .FxASignin_Subtitle
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                             size: UX.signInLabelFontSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
+                                                                size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -76,8 +76,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                         size: UX.signInLabelFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
+                                                            size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -85,8 +85,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
 
-                let font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                               size: UX.signInLabelFontSize)
+                let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
+                                                                  size: UX.signInLabelFontSize)
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
@@ -99,7 +99,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
         button.setTitle(.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
 
@@ -117,7 +117,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
