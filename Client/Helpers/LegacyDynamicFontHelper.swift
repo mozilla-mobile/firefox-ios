@@ -152,7 +152,7 @@ class LegacyDynamicFontHelper: NSObject {
     ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style (optional)
     ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
     /// - Returns: The UIFont with the specified font size, style and weight
-    @available(*, deprecated, message: "Use preferredFont(withTextStyle:size:weight:) instead")
+    @available(*, deprecated, message: "Use DefaultDynamicFontHelper preferredFont(withTextStyle:size:weight:) instead")
     func preferredFont(withTextStyle textStyle: UIFont.TextStyle, weight: UIFont.Weight? = nil, maxSize: CGFloat? = nil) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
@@ -169,40 +169,5 @@ class LegacyDynamicFontHelper: NSObject {
         }
 
         return fontMetrics.scaledFont(for: font, maximumPointSize: min(fontDescriptor.pointSize, maxSize))
-    }
-
-    /// Returns a font that will dynamically scale with dynamic text
-    /// - Parameters:
-    ///   - textStyle: The desired textStyle for the font
-    ///   - size: The size of the font
-    /// - Returns: The UIFont with the specified font size and style
-    func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
-                       size: CGFloat,
-                       weight: UIFont.Weight? = nil,
-                       symbolicTraits: UIFontDescriptor.SymbolicTraits? = nil) -> UIFont {
-        let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
-        var fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
-
-        if let symbolicTraits = symbolicTraits, let descriptor = fontDescriptor.withSymbolicTraits(symbolicTraits) {
-            fontDescriptor = descriptor
-        }
-
-        var font: UIFont
-        if let weight = weight {
-            font = UIFont.systemFont(ofSize: size, weight: weight)
-        } else {
-            font = UIFont(descriptor: fontDescriptor, size: size)
-        }
-
-        return fontMetrics.scaledFont(for: font)
-    }
-
-    /// Return a bold font that will dynamically scale up to a certain size
-    /// - Parameters:
-    ///   - textStyle: The desired textStyle for the font
-    ///   - size: The size of the font
-    /// - Returns: The UIFont with the specified font size, style and bold weight
-    func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {
-        return preferredFont(withTextStyle: textStyle, size: size, weight: .bold)
     }
 }

@@ -19,14 +19,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     let imageView: FaviconImageView = .build { imageView in }
 
     let itemTitle: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                         size: 15)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                            size: 15)
         label.adjustsFontForContentSizeCategory = true
     }
 
     let itemDescription: UILabel = .build { label in
-        label.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                         size: 12)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
+                                                            size: 12)
         label.adjustsFontForContentSizeCategory = true
     }
 

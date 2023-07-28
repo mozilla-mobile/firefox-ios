@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
@@ -270,7 +271,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             // TODO: Get a dedicated string for this.
             let title: String = .TrackerProtectionLearnMore
 
-            let font = LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+            let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
             var attributes = [NSAttributedString.Key: AnyObject]()
             attributes[NSAttributedString.Key.foregroundColor] = themeManager.currentTheme.colors.actionPrimary
             attributes[NSAttributedString.Key.font] = font
