@@ -11,7 +11,6 @@ import Foundation
 public struct ImageIdentifiers {
     public static let addToReadingList = "addToReadingList"
     public static let badgeMask = "badge-mask"
-    public static let bottomSheetClose = "bottomSheet-close"
     public static let circleFill = "circle.fill"
     public static let closeLargeButton = "close-large"
     public static let creditCardPlaceholder = "credit_card_placeholder"
