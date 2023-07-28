@@ -66,7 +66,7 @@ class TabLayoutDelegateTests: XCTestCase {
 }
 
 // MARK: - MockTabDisplayerDelegate
-class MockTabDisplayerDelegate: TabDisplayer {
+class MockTabDisplayerDelegate: TabDisplayerDelegate {
     var tabCellIdentifier: TabCellIdentifier = "identifier"
 
     func focusSelectedTab() {}
