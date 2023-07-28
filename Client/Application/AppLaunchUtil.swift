@@ -183,7 +183,7 @@ class AppLaunchUtil {
     }
 
     private func recordUserPrefsTelemetry() {
-        let isEnabled: Bool = (profile.prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts) ?? true) &&
+        let isEnabled: Bool = (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
                                (profile.prefs.boolForKey(PrefsKeys.FeatureFlags.TopSiteSection) ?? true)
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
