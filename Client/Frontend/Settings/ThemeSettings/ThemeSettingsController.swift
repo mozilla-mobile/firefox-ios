@@ -95,7 +95,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
         // and makes the switch behaviour feel slow and non-standard).
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
             UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
         }
     }
@@ -103,7 +104,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     @objc
     func brightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
-        LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        if isReduxIntegrationEnabled {
+            store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
+        } else {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        }
         applyTheme()
     }
 

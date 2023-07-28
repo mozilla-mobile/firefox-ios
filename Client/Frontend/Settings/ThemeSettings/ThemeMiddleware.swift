@@ -50,6 +50,12 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 self.updateUserBrightness(value)
                 store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
             }
+
+        case ThemeSettingsAction.receivedSystemBrightnessChange:
+            DispatchQueue.main.async {
+                self.updateThemeBasedOnSystemBrightness()
+                store.dispatch(ThemeSettingsAction.systemBrightnessChanged)
+            }
         default:
             break
         }
@@ -81,5 +87,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     func updateUserBrightness(_ value: Float) {
         themeManager.setAutomaticBrightnessValue(value)
         legacyThemeManager.automaticBrightnessValue = value
+    }
+
+    func updateThemeBasedOnSystemBrightness() {
+        legacyThemeManager.updateCurrentThemeBasedOnScreenBrightness()
     }
 }
