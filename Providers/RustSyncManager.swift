@@ -274,9 +274,11 @@ public class RustSyncManager: NSObject, SyncManager {
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
-            syncManagerAPI.rustTogglableEngines
-                .filter({ !self.creditCardAutofillEnabled && $0 != RustSyncManagerAPI.TogglableEngine.creditcards })
-                .forEach { engine in
+            let engines = self.creditCardAutofillEnabled ?
+                syncManagerAPI.rustTogglableEngines :
+                syncManagerAPI.rustTogglableEngines.filter({$0 != RustSyncManagerAPI.TogglableEngine.creditcards })
+
+            engines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
