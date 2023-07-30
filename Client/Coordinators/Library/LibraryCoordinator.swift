@@ -49,8 +49,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         case .history:
             makeHistoryCoordinator(navigationController: navigationController)
         case .downloads:
-            // DownloadsCoordinator will be implemented with FXIOS-6978
-            break
+            makeDownloadsCoordinator(navigationController: navigationController)
         case .readingList:
             // ReadingListCoordinator will be implemented with FXIOS-6978
             break
@@ -79,6 +78,17 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         )
         add(child: historyCoordinator)
         (navigationController.topViewController as? HistoryPanel)?.historyCoordinatorDelegate = historyCoordinator
+    }
+
+    private func makeDownloadsCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is DownloadsCoordinator }) else { return }
+        let router = DefaultRouter(navigationController: navigationController)
+        let downloadsCoordinator = DownloadsCoordinator(
+            router: router,
+            parentCoordinator: parentCoordinator
+        )
+        add(child: downloadsCoordinator)
+        (navigationController.topViewController as? DownloadsPanel)?.navigationHandler = downloadsCoordinator
     }
 
     // MARK: - LibraryPanelDelegate
