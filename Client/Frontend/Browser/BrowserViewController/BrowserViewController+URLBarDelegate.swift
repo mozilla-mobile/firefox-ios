@@ -7,6 +7,7 @@ import Storage
 import Telemetry
 import Glean
 import Common
+import ComponentLibrary
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -107,6 +108,15 @@ extension BrowserViewController: URLBarDelegate {
                                   arrowDirection: isBottomSearchBar ? .down : .up)
             }
         }
+    }
+
+    func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+
+        let viewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        let bottomSheetVC = BottomSheetViewController(viewModel: viewModel,
+                                                      childViewController: FakespotBottomSheetChildViewController())
+        present(bottomSheetVC, animated: false)
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {

@@ -34,6 +34,7 @@ class MockTabLocationViewDelegate: TabLocationViewDelegate {
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {}
+    func tabLocationViewDidTapShoppingCart(_ tabLocationView: TabLocationView, button: UIButton) {}
     func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool {
         return false
     }
