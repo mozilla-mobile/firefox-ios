@@ -36,7 +36,7 @@ import subprocess
 import logging
 import inquirer
 
-DEFAULT_BUNDLE_ID = 'org.mozilla.ios.FennecEnterprise'
+DEFAULT_BUNDLE_ID = 'org.mozilla.ios.Fennec'
 DEFAULT_APP_GROUP_ID = 'group.org.mozilla.ios.Fennec'
 CSV_FILE = 'websites.csv'
 DEFAULT_DB_NAME = "places.copy"
