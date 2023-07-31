@@ -393,6 +393,7 @@ extension TelemetryWrapper {
         case bookmark = "bookmark"
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
+        case mobileBookmarks = "has-mobile-bookmarks"
         case download = "download"
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
@@ -576,6 +577,11 @@ extension TelemetryWrapper {
         case normalTab = "normal-tab"
         case tabView = "tab-view"
         case bookmarksPanel = "bookmarks-panel"
+        case doesHaveMobileBookmarks = "does-have-mobile-bookmarks"
+        case doesNotHaveMobileBookmarks = "does-not-have-mobile-bookmarks"
+        case mobileBookmarksCount = "mobile-bookmarks-count"
+        case bookmarkAddFolder = "bookmark-add-folder"
+        case openBookmarksFromTopSites = "top-sites"
         case historyPanel = "history-panel"
         case historyPanelNonGroupItem = "history-panel-non-grouped-item"
         case historyPanelGroupedItem = "history-panel-grouped-item"
@@ -650,6 +656,9 @@ extension TelemetryWrapper {
         case wallpaperType = "wallpaperType"
 
         case cfrType = "hintType"
+
+        // Bookmarks
+        case mobileBookmarksQuantity = "mobileBookmarksQuantity"
 
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
@@ -736,6 +745,16 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.open[from.rawValue].add()
         case (.action, .change, .bookmark, let from?, _):
             GleanMetrics.Bookmarks.edit[from.rawValue].add()
+        case(.information, .view, .mobileBookmarks, .doesHaveMobileBookmarks, _):
+            GleanMetrics.Bookmarks.hasMobileBookmarks.set(true)
+        case(.information, .view, .mobileBookmarks, .doesNotHaveMobileBookmarks, _):
+            GleanMetrics.Bookmarks.hasMobileBookmarks.set(false)
+        case(.information, .view, .mobileBookmarks, .mobileBookmarksCount, let extras):
+            if let quantity = extras?[EventExtraKey.mobileBookmarksQuantity.rawValue] as? Int64 {
+                GleanMetrics.Bookmarks.mobileBookmarksCount.set(quantity)
+            }
+        case(.action, .tap, .bookmark, .bookmarkAddFolder, _):
+            GleanMetrics.Bookmarks.folderAdd.record()
         // MARK: Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()

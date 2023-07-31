@@ -436,6 +436,7 @@ bookmarks:
       the following:
       * Awesomebar results
       * Bookmarks Panel
+      * Top sites
     labels:
       - awesomebar-results
       - bookmarks-panel
@@ -446,6 +447,43 @@ bookmarks:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  has_mobile_bookmarks:
+    type: boolean
+    description: |
+      A boolean that indicates if the user has bookmarks
+      in the mobile folder.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+  mobile_bookmarks_count:
+    type: quantity
+    description: |
+      A quantity that indicates how many bookmarks a user
+      has in the mobile folder.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-12-01"
+    unit: quantity of mobile bookmarks
+  folder_add:
+    type: event
+    description: |
+      A user added a new bookmark folder.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15620
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"

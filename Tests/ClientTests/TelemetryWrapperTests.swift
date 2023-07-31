@@ -18,6 +18,67 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
     }
 
+    // MARK: - Bookmarks
+
+    func test_userAddedBookmarkFolder_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .bookmark,
+                                     value: .bookmarkAddFolder)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Bookmarks.folderAdd)
+    }
+
+    func test_hasMobileBookmarks_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .doesHaveMobileBookmarks)
+
+        testBoolMetricSuccess(metric: GleanMetrics.Bookmarks.hasMobileBookmarks,
+                              expectedValue: true,
+                              failureMessage: "Should have been set to true.")
+    }
+
+    func test_doesNotHaveMobileBookmarks_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .doesNotHaveMobileBookmarks)
+
+        testBoolMetricSuccess(metric: GleanMetrics.Bookmarks.hasMobileBookmarks,
+                              expectedValue: false,
+                              failureMessage: "Should have been set to false.")
+    }
+
+    func test_mobileBookmarksQuantity_GleanIsCalled() {
+        let quantityKey = TelemetryWrapper.EventExtraKey.mobileBookmarksQuantity.rawValue
+        let expectedQuantity: Int64 = 13
+        let extras = [quantityKey: expectedQuantity]
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .mobileBookmarksCount,
+                                     extras: extras)
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Bookmarks.mobileBookmarksCount,
+                                  expectedValue: 13,
+                                  failureMessage: "Incorrect mobile bookmarks quantity returned.")
+    }
+
+    func test_topSitesTileIsBookmarked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .open,
+                                     object: .bookmark,
+                                     value: .openBookmarksFromTopSites)
+
+        testLabeledMetricSuccess(metric: GleanMetrics.Bookmarks.open)
+
+        let label = TelemetryWrapper.EventValue.openBookmarksFromTopSites.rawValue
+        XCTAssertNotNil(GleanMetrics.Bookmarks.open[label].testGetValue())
+    }
+
     // MARK: - Top Site
 
     func test_topSiteTileWithExtras_GleanIsCalled() {
@@ -222,6 +283,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         let profile = MockProfile()
         TelemetryWrapper.shared.setup(profile: profile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let defaultWallpaper = Wallpaper(id: "fxDefault",
                                          textColor: nil,
@@ -554,6 +616,20 @@ extension XCTestCase {
                                  file: StaticString = #file,
                                  line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on string metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
+    }
+
+    func testBoolMetricSuccess(metric: BooleanMetricType,
+                               expectedValue: Bool,
+                               failureMessage: String,
+                               file: StaticString = #file,
+                               line: UInt = #line) {
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
