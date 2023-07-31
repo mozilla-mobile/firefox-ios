@@ -624,20 +624,6 @@ extension XCTestCase {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
     }
 
-    func testBoolMetricSuccess(metric: BooleanMetricType,
-                               expectedValue: Bool,
-                               failureMessage: String,
-                               file: StaticString = #file,
-                               line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric", file: file, line: line)
-        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
-
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0, file: file, line: line)
-        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0, file: file, line: line)
-    }
-
     func testUrlMetricSuccess(metric: UrlMetricType,
                               expectedValue: String,
                               failureMessage: String,
