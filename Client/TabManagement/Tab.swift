@@ -242,8 +242,8 @@ class Tab: NSObject {
 
     var userActivity: NSUserActivity?
     var webView: TabWebView?
-    var tabDelegate: LegacyTabDelegate?
-    weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
+    weak var tabDelegate: LegacyTabDelegate?
+    weak var urlDidChangeDelegate: URLChangeDelegate?
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
@@ -323,7 +323,7 @@ class Tab: NSObject {
 
             contentBlocker?.noImageMode(enabled: noImageMode)
 
-            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
+            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
         }
     }
 
@@ -337,7 +337,7 @@ class Tab: NSObject {
             // set to black in the WKWebView init.
             webView?.isOpaque = !nightMode
 
-            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
+            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
         }
     }
 
@@ -484,7 +484,7 @@ class Tab: NSObject {
             configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             self.webView?.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
-            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
+            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
 
             tabDelegate?.tab(self, didCreateWebView: webView)
         }
