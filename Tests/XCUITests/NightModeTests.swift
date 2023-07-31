@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-
 class NightModeTests: BaseTestCase {
     private func checkNightModeOn() {
         waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
