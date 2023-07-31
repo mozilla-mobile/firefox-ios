@@ -30,7 +30,7 @@ class RustSyncManagerTests: XCTestCase {
                                           creditCardAutofillEnabled: true,
                                           logger: MockLogger(),
                                           notificationCenter: MockNotificationCenter())
-        rustSyncManager.syncManagerAPI = RustSyncManagerAPI(creditCardAutofillEnabled: true)
+        rustSyncManager.syncManagerAPI = RustSyncManagerAPI()
         profile.syncManager = rustSyncManager
     }
 
