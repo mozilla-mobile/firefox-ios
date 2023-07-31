@@ -5,7 +5,17 @@
 import Common
 import UIKit
 
-class CardContainer: UIView, ThemeApplicable {
+public struct CardContainerModel {
+    public let view: UIView
+    public let a11yId: String
+
+    public init(view: UIView, a11yId: String) {
+        self.view = view
+        self.a11yId = a11yId
+    }
+}
+
+public class CardContainer: UIView, ThemeApplicable {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -31,31 +41,32 @@ class CardContainer: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         rootView.layer.shadowPath = UIBezierPath(roundedRect: rootView.bounds,
                                                  cornerRadius: UX.cornerRadius).cgPath
     }
 
-    func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         rootView.backgroundColor = theme.colors.layer2
         setupShadow(theme: theme)
     }
 
-    func configure(_ view: UIView) {
+    public func configure(_ viewModel: CardContainerModel) {
         rootView.subviews.forEach { $0.removeFromSuperview() }
-        rootView.addSubview(view)
+        rootView.addSubview(viewModel.view)
+        rootView.accessibilityIdentifier = viewModel.a11yId
 
         NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
-                                          constant: UX.horizontalPadding),
-            view.topAnchor.constraint(equalTo: rootView.topAnchor,
-                                      constant: UX.verticalPadding),
-            view.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
-                                           constant: -UX.horizontalPadding),
-            view.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
-                                         constant: -UX.verticalPadding),
+            viewModel.view.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
+                                                    constant: UX.horizontalPadding),
+            viewModel.view.topAnchor.constraint(equalTo: rootView.topAnchor,
+                                                constant: UX.verticalPadding),
+            viewModel.view.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
+                                                     constant: -UX.horizontalPadding),
+            viewModel.view.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
+                                                   constant: -UX.verticalPadding),
         ])
     }
 
