@@ -46,8 +46,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                   size: UX.bannerTitleFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
+                                                            size: UX.bannerTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
     }
@@ -55,15 +55,15 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionTextFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                            size: UX.descriptionTextFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
     }
 
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
-                                                                                    size: UX.buttonFontSize)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
+                                                                             size: UX.buttonFontSize)
 
         button.layer.cornerRadius = UIFontMetrics.default.scaledValue(for: UX.cornerRadius)
         button.titleLabel?.adjustsFontForContentSizeCategory = true

@@ -12,7 +12,7 @@ class DomainAutocompleteTest: BaseTestCase {
     let testWithDB = ["test1Autocomplete", "test3AutocompleteDeletingChars", "test5NoMatches", "testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es
-    let historyDB = "browserAutocomplete.db"
+    let historyDB = "browserAutocomplete-places.db"
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name

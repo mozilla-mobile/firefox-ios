@@ -49,8 +49,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.titleFontSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3,
+                                                                size: UX.titleFontSize)
         label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
@@ -59,7 +59,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var takeSurveyButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
@@ -75,7 +75,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var dismissSurveyButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Redux
 import Shared
@@ -95,7 +96,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
         // and makes the switch behaviour feel slow and non-standard).
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
             UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
         }
     }
@@ -103,7 +105,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     @objc
     func brightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
-        LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        if isReduxIntegrationEnabled {
+            store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
+        } else {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        }
         applyTheme()
     }
 
@@ -168,8 +174,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .footnote,
-                                                                       size: UX.footerFontSize)
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
+                                                                size: UX.footerFontSize)
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         footer.addSubview(label)

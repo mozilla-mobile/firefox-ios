@@ -62,8 +62,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   size: UX.titleFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                            size: UX.titleFontSize)
         label.numberOfLines = 2
     }
 
@@ -75,8 +75,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private var websiteLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                       size: UX.siteFontSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                size: UX.siteFontSize)
         label.textColor = .label
     }
 

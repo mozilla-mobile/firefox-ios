@@ -321,7 +321,7 @@ private extension TabLocationView {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
 
-        readerModeButton.isHidden = (newReaderModeState == .unavailable) || !shoppingCartButton.isHidden
+        readerModeButton.isHidden = !shoppingCartButton.isHidden || (newReaderModeState == .unavailable)
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {

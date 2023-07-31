@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
@@ -67,7 +68,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
-        header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
+        header.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumBoldFont
         header.textColor = themeManager.currentTheme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
@@ -143,7 +144,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         }
         cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
         if indexPath.row == 1 {
-            cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+            cell.textLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumFont
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
@@ -270,7 +271,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             // TODO: Get a dedicated string for this.
             let title: String = .TrackerProtectionLearnMore
 
-            let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+            let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
             var attributes = [NSAttributedString.Key: AnyObject]()
             attributes[NSAttributedString.Key.foregroundColor] = themeManager.currentTheme.colors.actionPrimary
             attributes[NSAttributedString.Key.font] = font
