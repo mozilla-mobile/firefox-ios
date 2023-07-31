@@ -292,8 +292,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
         if hasSecureContent {
-            let imageID = theme.type.getThemedImageName(name: ImageIdentifiers.lockBlocked)
-            lockImage = UIImage(imageLiteralResourceName: imageID)
+            lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         } else if let tintColor = trackingProtectionButton.tintColor {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
                 .withTintColor(tintColor, renderingMode: .alwaysTemplate)
