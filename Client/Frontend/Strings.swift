@@ -405,7 +405,7 @@ extension String {
                 comment: "This value is used as the title for the Not Now button in the update credit card page")
             public static let CreditCardUpdateSuccessToastMessage = MZLocalizedString(
                 key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
-                tableName: "RememberCard",
+                tableName: "UpdateCard",
                 value: "Card Information Updated",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
         }
