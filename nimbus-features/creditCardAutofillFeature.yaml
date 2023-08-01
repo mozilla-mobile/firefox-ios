@@ -9,7 +9,7 @@ features:
     defaults:
       - channel: developer
         value: {
-            "credit-card-autofill-status": true
+            "credit-card-autofill-status": false
         }
       - channel: beta
         value: {
