@@ -45,10 +45,21 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         title = .SettingsHomePageSectionName
         navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: .AppSettingsDone,
+            style: .plain,
+            target: self,
+            action: #selector(done))
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    func done() {
+        settingsDelegate?.didFinish()
     }
 
     // MARK: - View Lifecycle
