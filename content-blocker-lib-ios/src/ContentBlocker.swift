@@ -102,7 +102,7 @@ class ContentBlocker {
         TPStatsBlocklistChecker.shared.startup()
 
         removeOldListsByDateFromStore {
-            self.removeOldListsByNameFromStore {
+            self.removeOldListsByNameFromStore { [weak self]
                 self.compileListsNotInStore {
                     self.setupCompleted = true
                     NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
@@ -212,14 +212,14 @@ extension ContentBlocker {
     }
 
     func removeAllRulesInStore(completion: @escaping () -> Void) {
-        ruleStore?.getAvailableContentRuleListIdentifiers { available in
+        ruleStore?.getAvailableContentRuleListIdentifiers { [weak self] available in
             guard let available = available else {
                 completion()
                 return
             }
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
-                self.ruleStore?.removeContentRuleList(forIdentifier: filename) { _ in
+                self?.ruleStore?.removeContentRuleList(forIdentifier: filename) { _ in
                     result.fill(())
                 }
                 return result
@@ -287,23 +287,23 @@ extension ContentBlocker {
         let blocklists = BlocklistFileName.allCases.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
-            ruleStore?.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
+            ruleStore?.lookUpContentRuleList(forIdentifier: filename) { [weak self] contentRuleList, error in
                 if contentRuleList != nil {
                     result.fill(())
                     return
                 }
-                self.loadJsonFromBundle(forResource: filename) { jsonString in
+                self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
                     guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    self?.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         guard error == nil else {
-                            self.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
+                            self?.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
                             assert(error == nil)
                             return
                         }
                         guard rule != nil else {
-                            self.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
+                            self?.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
                             assert(rule != nil)
                             return
                         }
