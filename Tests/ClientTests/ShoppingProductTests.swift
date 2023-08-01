@@ -9,10 +9,12 @@ final class ShoppingProductTests: XCTestCase {
     var client: TestFakeSpotClient!
 
     override func setUp() {
+        super.setUp()
         client = TestFakeSpotClient()
     }
 
     override func tearDown() {
+        super.tearDown()
         client = nil
     }
 
