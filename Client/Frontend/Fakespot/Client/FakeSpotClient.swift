@@ -26,9 +26,15 @@ struct MockFakeSpotClient: FakeSpotClientType {
 }
 
 struct StagingFakeSpotClient: FakeSpotClientType {
+    enum FakeSpotClientError: Error {
+        case invalidURL
+    }
+
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         // Define the API endpoint URL
-        let endpointURL = URL(string: "https://staging-trustwerty.fakespot.io/api/v1/fx/analysis")!
+        guard let endpointURL = URL(string: "https://staging-trustwerty.fakespot.io/api/v1/fx/analysis") else {
+            throw FakeSpotClientError.invalidURL
+        }
 
         // Prepare the request body
         let requestBody = [
@@ -42,7 +48,9 @@ struct StagingFakeSpotClient: FakeSpotClientType {
 
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         // Define the API endpoint URL
-        let endpointURL = URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search")!
+        guard let endpointURL = URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search") else {
+            throw FakeSpotClientError.invalidURL
+        }
 
         // Prepare the request body
         let requestBody = [
