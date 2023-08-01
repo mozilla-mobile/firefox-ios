@@ -464,6 +464,13 @@ class BrowserViewController: UIViewController,
 
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+        // Feature flag for credit card until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        // We need to update autofill status on sync manager as there could be delay from nimbus
+        // in getting the value. When the delay happens the credit cards might not sync
+        // as the default value is false
+        profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
     }
 
     private func setupAccessibleActions() {
