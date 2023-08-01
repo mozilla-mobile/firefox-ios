@@ -5,7 +5,6 @@
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
-
     // Smoketest
     func testPinToTop() {
         navigator.openURL("http://example.com")
