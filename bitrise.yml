@@ -74,11 +74,6 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests"
-
-            echo $BITRISE_SOURCE_DIR
-            ls $BITRISE_SOURCE_DIR
-            echo $BITRISE_XCRESULT_PATH
-            ls $BITRISE_XCRESULT_PATH
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -534,7 +529,7 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-  4_B_xcode_build_and_test_FullFunctionalTestPlan:
+  4_B_xcode_build_and_test_Fennec:
     steps:
     - xcode-build-for-simulator@0.12:
         inputs:
@@ -765,7 +760,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    - 4_B_xcode_build_and_test_FullFunctionalTestPlan
+    - 4_B_xcode_build_and_test_Fennec
     - 5_deploy_and_slack
     meta:
       bitrise.io:
@@ -1351,13 +1346,13 @@ workflows:
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-FullFunctionalTestPlan.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-FullFunctionalTestPlan-test.xcresult
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
-            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme FullFunctionalTestPlan
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
             cat data.txt
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
