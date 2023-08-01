@@ -51,6 +51,7 @@ public class CardContainer: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         rootView.backgroundColor = theme.colors.layer2
         setupShadow(theme: theme)
+        (rootView.subviews.first as? ThemeApplicable)?.applyTheme(theme: theme)
     }
 
     public func configure(_ viewModel: CardContainerModel) {
