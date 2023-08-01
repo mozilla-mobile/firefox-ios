@@ -5,6 +5,11 @@
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
+    override func setUp() {
+        launchArguments.append(LaunchArguments.DisableAnimations)
+        super.setUp()
+    }
+
     // Smoketest
     func testPinToTop() {
         navigator.openURL("http://example.com")

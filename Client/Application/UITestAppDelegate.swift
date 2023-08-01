@@ -139,6 +139,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyEnableChinaSyncService)
         }
 
+        if launchArguments.contains(LaunchArguments.DisableAnimations) {
+            UIView.setAnimationsEnabled(false)
+        }
+
         self.profile = profile
         return profile
     }

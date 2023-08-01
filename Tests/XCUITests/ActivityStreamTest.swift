@@ -29,6 +29,7 @@ class ActivityStreamTest: BaseTestCase {
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
+        launchArguments.append(LaunchArguments.DisableAnimations)
         super.setUp()
     }
 
