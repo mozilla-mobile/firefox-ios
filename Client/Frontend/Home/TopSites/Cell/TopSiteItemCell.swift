@@ -58,7 +58,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var pinImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Small.pinBadgeFill)
         imageView.isHidden = true
     }
 

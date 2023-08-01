@@ -28,7 +28,7 @@ class IntroViewController: UIViewController,
     var hasRegisteredForDefaultBrowserNotification = false
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: ImageIdentifiers.bottomSheetClose), for: .normal)
+        button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
     }

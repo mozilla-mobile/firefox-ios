@@ -175,6 +175,17 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
     }
 
+    // MARK: - Shopping Experience (Fakespot)
+    func test_shoppingAddressBarIconClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
+    }
+
+    func test_shoppingSurfaceClosed_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .shoppingBottomSheet)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue

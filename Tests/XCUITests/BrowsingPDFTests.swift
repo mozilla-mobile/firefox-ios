@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 let PDF_website = ["url": "www.orimi.com/pdf-test.pdf", "pdfValue": "www.orimi.com/pdf", "urlValue": "yukon.ca/en/educat", "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf", "longUrlValue": "http://www.education.gov.yk.ca/"]
 class BrowsingPDFTests: BaseTestCase {
@@ -81,8 +82,8 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        waitForExistence(app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut])
-        app.tables.cells.otherElements[ImageIdentifiers.removeFromShortcut].tap()
+        waitForExistence(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
+        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }

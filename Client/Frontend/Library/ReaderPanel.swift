@@ -83,18 +83,18 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
         contentView.addSubviews(readStatusImageView, titleLabel, hostnameLabel)
         NSLayoutConstraint.activate([
-            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)),
+            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.ReadIndicatorLeftOffset),
             readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            readStatusImageView.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorWidth)),
-            readStatusImageView.heightAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorHeight)),
+            readStatusImageView.widthAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorWidth),
+            readStatusImageView.heightAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorHeight),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelTopOffset)),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelLeftOffset)),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ReadingListTableViewCellUX.TitleLabelTopOffset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.TitleLabelLeftOffset),
             titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelRightOffset)),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ReadingListTableViewCellUX.TitleLabelRightOffset),
 
             hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
+            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ReadingListTableViewCellUX.HostnameLabelBottomOffset),
             hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
         ])
     }

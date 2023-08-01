@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Theme=Light.pdf",
+      "filename" : "crossCircleFillExtraLargeLight.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Theme=Dark.pdf",
+      "filename" : "crossCircleFillExtraLargeDark.pdf",
       "idiom" : "universal"
     }
   ],
