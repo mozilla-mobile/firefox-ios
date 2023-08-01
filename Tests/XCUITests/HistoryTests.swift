@@ -17,7 +17,7 @@ class HistoryTests: BaseTestCase {
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
 
     // This DDBB contains those 4 websites listed in the name
-    let historyDB = "browserYoutubeTwitterMozillaExample.db"
+    let historyDB = "browserYoutubeTwitterMozillaExample-places.db"
 
     let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
 
