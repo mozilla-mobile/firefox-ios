@@ -46,6 +46,17 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.TopSites.contextualMenu.testGetValue())
     }
 
+    func test_sponsoredShortcuts_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .sponsoredShortcuts,
+                                     value: nil,
+                                     extras: ["pref": true])
+        testBoolMetricSuccess(metric: GleanMetrics.TopSites.sponsoredShortcuts,
+                              expectedValue: true,
+                              failureMessage: "Sponsored shortcut value not tracked")
+    }
+
     // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {
@@ -162,6 +173,17 @@ class TelemetryWrapperTests: XCTestCase {
     func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
         XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
+    }
+
+    // MARK: - Shopping Experience (Fakespot)
+    func test_shoppingAddressBarIconClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
+    }
+
+    func test_shoppingSurfaceClosed_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .shoppingBottomSheet)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
     }
 
     // MARK: - Onboarding
@@ -571,6 +593,15 @@ extension XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric", file: file, line: line)
+        XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
+    }
+
+    func testBoolMetricSuccess(metric: BooleanMetricType,
+                               expectedValue: Bool,
+                               failureMessage: String,
+                               file: StaticString = #file,
+                               line: UInt = #line) {
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
     }
 }

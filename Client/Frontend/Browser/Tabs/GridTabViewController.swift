@@ -62,7 +62,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TabCell.cellIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
@@ -470,7 +470,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 }
 
 // MARK: - TabDisplayer
-extension GridTabViewController: TabDisplayer {
+extension GridTabViewController: TabDisplayerDelegate {
     func focusSelectedTab() {
         self.focusItem()
     }

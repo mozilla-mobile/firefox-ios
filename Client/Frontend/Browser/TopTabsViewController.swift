@@ -33,7 +33,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     private var topTabDisplayManager: TabDisplayManager!
-    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -285,7 +285,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     }
 }
 
-extension TopTabsViewController: TabDisplayer {
+extension TopTabsViewController: TabDisplayerDelegate {
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
         self.handleFadeOutAfterTabSelection()

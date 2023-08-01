@@ -14,6 +14,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
+    func tabLocationViewDidTapShoppingCart(_ tabLocationView: TabLocationView, button: UIButton)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult
@@ -110,6 +111,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private lazy var shoppingCartButton: UIButton = .build { button in
         // Temporary icon, will be updated
         // https://mozilla-hub.atlassian.net/browse/FXIOS-7039
+        button.addTarget(self, action: #selector(self.didPressShoppingCartButton(_:)), for: .touchUpInside)
         button.isHidden = true
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
@@ -264,6 +266,11 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     @objc
+    func didPressShoppingCartButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapShoppingCart(self, button: button)
+    }
+
+    @objc
     func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
@@ -292,8 +299,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
         if hasSecureContent {
-            let imageID = theme.type.getThemedImageName(name: ImageIdentifiers.lockBlocked)
-            lockImage = UIImage(imageLiteralResourceName: imageID)
+            lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         } else if let tintColor = trackingProtectionButton.tintColor {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
                 .withTintColor(tintColor, renderingMode: .alwaysTemplate)
@@ -322,7 +328,7 @@ private extension TabLocationView {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
 
-        readerModeButton.isHidden = (newReaderModeState == .unavailable) || !shoppingCartButton.isHidden
+        readerModeButton.isHidden = !shoppingCartButton.isHidden || (newReaderModeState == .unavailable)
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {

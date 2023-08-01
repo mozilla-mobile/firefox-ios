@@ -20,15 +20,10 @@ open class RustSyncManagerAPI {
         case creditcards
     }
 
-    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history]
-    public init(logger: Logger = DefaultLogger.shared,
-                creditCardAutofillEnabled: Bool = false) {
+    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards]
+    public init(logger: Logger = DefaultLogger.shared) {
         self.api = SyncManagerComponent()
         self.logger = logger
-
-        if creditCardAutofillEnabled {
-            self.rustTogglableEngines.append(.creditcards)
-        }
     }
 
     public func disconnect() {

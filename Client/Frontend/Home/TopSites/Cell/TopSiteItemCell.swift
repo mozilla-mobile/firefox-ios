@@ -58,14 +58,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var pinImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Small.pinBadgeFill)
         imageView.isHidden = true
     }
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        size: UX.titleFontSize)
+        titleLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
+                                                                 size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
         titleLabel.backgroundColor = .clear
@@ -74,8 +74,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
-                                                                            size: UX.sponsorFontSize)
+        sponsoredLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption2,
+                                                                     size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
