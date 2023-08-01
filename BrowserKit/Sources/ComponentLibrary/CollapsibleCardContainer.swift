@@ -118,6 +118,7 @@ public class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegat
     }
 
     public override func configure(_ viewModel: CardContainerModel) {
+        // the overridden method should not be used as it is lacking vital details to configure this card
         fatalError("configure(:) has not been implemented.")
     }
 
