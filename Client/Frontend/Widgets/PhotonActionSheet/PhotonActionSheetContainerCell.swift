@@ -8,7 +8,6 @@ import Shared
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
     func didClick(item: SingleActionViewModel?)
-    func layoutChanged(item: SingleActionViewModel)
 }
 
 // A PhotonActionSheet cell
@@ -44,7 +43,6 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
 
     func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel, theme: Theme) {
         for item in actions.items {
-            item.multipleItemsSetup.isMultiItems = actions.items.count > 1
             configure(with: item, theme: theme)
         }
         applyTheme(theme: theme)
@@ -67,7 +65,6 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
         childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
         childView.delegate = self
         containerStackView.addArrangedSubview(childView)
-        containerStackView.axis = item.multipleItemsSetup.axis
     }
 
     func hideBottomBorder(isHidden: Bool) {
@@ -83,9 +80,5 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
 extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
     func didClick(item: SingleActionViewModel?) {
         delegate?.didClick(item: item)
-    }
-
-    func layoutChanged(item: SingleActionViewModel) {
-        delegate?.layoutChanged(item: item)
     }
 }

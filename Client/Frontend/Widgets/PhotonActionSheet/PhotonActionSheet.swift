@@ -496,8 +496,4 @@ extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
     func didClick(item: SingleActionViewModel?) {
         dismissVC()
     }
-
-    func layoutChanged(item: SingleActionViewModel) {
-        tableView.reloadData()
-    }
 }

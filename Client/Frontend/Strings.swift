@@ -3140,11 +3140,6 @@ extension String {
             tableName: nil,
             value: "Add",
             comment: "Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label.")
-        public static let AddBookmarkAlternateTitle = MZLocalizedString(
-            key: "Menu.AddBookmark.AlternateLabel.v99",
-            tableName: nil,
-            value: "Add Bookmark",
-            comment: "Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page.")
         public static let AddBookmarkConfirmMessage = MZLocalizedString(
             key: "Menu.AddBookmark.Confirm",
             tableName: nil,
@@ -3155,11 +3150,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.")
-        public static let RemoveBookmarkAlternateTitle = MZLocalizedString(
-            key: "Menu.RemoveBookmark.AlternateLabel.v99",
-            tableName: "Menu",
-            value: "Remove Bookmark",
-            comment: "Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks.")
         public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
             key: "Menu.RemoveBookmark.Confirm",
             tableName: nil,
@@ -3177,11 +3167,6 @@ extension String {
             tableName: nil,
             value: "Add",
             comment: "Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label.")
-        public static let AddReadingListAlternateTitle = MZLocalizedString(
-            key: "Menu.AddToReadingList.AlternateLabel.v99",
-            tableName: "Menu",
-            value: "Add to Reading List",
-            comment: "Long label for the button displayed in the menu, used to add a page to the reading list.")
         public static let AddToReadingListConfirmMessage = MZLocalizedString(
             key: "Menu.AddToReadingList.Confirm",
             tableName: nil,
@@ -3192,11 +3177,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label.")
-        public static let RemoveReadingListAlternateTitle = MZLocalizedString(
-            key: "Menu.RemoveReadingList.AlternateLabel.v99",
-            tableName: nil,
-            value: "Remove from Reading List",
-            comment: "Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list.")
         public static let RemoveFromReadingListConfirmMessage = MZLocalizedString(
             key: "Menu.RemoveReadingList.Confirm.v99",
             tableName: nil,
