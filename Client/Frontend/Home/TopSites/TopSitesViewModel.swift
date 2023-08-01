@@ -72,6 +72,15 @@ class TopSitesViewModel {
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
         let extras = originExtra.merge(with: topSiteExtra)
 
+        // Bookmarks from topSites
+        let isBookmarkedSite = profile.places.isBookmarked(url: homeTopSite.site.url).value.successValue ?? false
+        if isBookmarkedSite {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .bookmark,
+                                         value: .openBookmarksFromTopSites)
+        }
+
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .topSiteTile,

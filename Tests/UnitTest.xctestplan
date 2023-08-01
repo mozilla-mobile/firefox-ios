@@ -55,6 +55,31 @@
           "containerPath" : "container:Client.xcodeproj",
           "identifier" : "F8324A042649A188007E4BFA",
           "name" : "CredentialProvider"
+        },
+        {
+          "containerPath" : "container:BrowserKit",
+          "identifier" : "Common",
+          "name" : "Common"
+        },
+        {
+          "containerPath" : "container:BrowserKit",
+          "identifier" : "ComponentLibrary",
+          "name" : "ComponentLibrary"
+        },
+        {
+          "containerPath" : "container:BrowserKit",
+          "identifier" : "Redux",
+          "name" : "Redux"
+        },
+        {
+          "containerPath" : "container:BrowserKit",
+          "identifier" : "SiteImageView",
+          "name" : "SiteImageView"
+        },
+        {
+          "containerPath" : "container:BrowserKit",
+          "identifier" : "TabDataStore",
+          "name" : "TabDataStore"
         }
       ]
     }
