@@ -6,21 +6,6 @@ import XCTest
 @testable import Client
 
 final class ShoppingProductTests: XCTestCase {
-<<<<<<< HEAD
-=======
-    var client: TestFakeSpotClient!
-
-    override func setUp() {
-        super.setUp()
-        client = TestFakeSpotClient()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        client = nil
-    }
-
->>>>>>> ba45c54d3 (Bugfix FXIOS-7066 [v117] customize homepage done button (#15853))
     func testAmazonURL_returnsExpectedProduct() {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
