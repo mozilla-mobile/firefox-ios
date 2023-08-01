@@ -16,8 +16,7 @@ class CardContainerViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
-    private lazy var cardContainer: CardContainer = .build { _ in
-    }
+    private lazy var cardContainer: CardContainer = .build { _ in }
 
     private lazy var contentLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
