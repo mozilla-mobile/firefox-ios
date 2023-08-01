@@ -678,7 +678,11 @@ class ButtonSetting: Setting {
     let destructive: Bool
     let isEnabled: (() -> Bool)?
 
-    init(title: NSAttributedString?, destructive: Bool = false, accessibilityIdentifier: String, isEnabled: (() -> Bool)? = nil, onClick: @escaping (UINavigationController?) -> Void) {
+    init(title: NSAttributedString?,
+         destructive: Bool = false,
+         accessibilityIdentifier: String,
+         isEnabled: (() -> Bool)? = nil,
+         onClick: @escaping (UINavigationController?) -> Void) {
         self.onButtonClick = onClick
         self.destructive = destructive
         self.isEnabled = isEnabled
@@ -802,7 +806,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        [Notification.Name.ProfileDidStartSyncing, Notification.Name.ProfileDidFinishSyncing, Notification.Name.FirefoxAccountChanged].forEach { name in
+        [Notification.Name.ProfileDidStartSyncing,
+         Notification.Name.ProfileDidFinishSyncing,
+         Notification.Name.FirefoxAccountChanged].forEach { name in
             NotificationCenter.default.removeObserver(self, name: name, object: nil)
         }
     }

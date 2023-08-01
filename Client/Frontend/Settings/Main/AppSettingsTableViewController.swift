@@ -192,7 +192,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
-            viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController = HomePageSettingViewController(prefs: profile.prefs, settingsDelegate: settingsDelegate)
 
         case .customizeTabs:
             viewController = TabsSettingsViewController()
