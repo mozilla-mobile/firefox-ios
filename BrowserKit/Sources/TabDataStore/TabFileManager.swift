@@ -96,6 +96,8 @@ public struct DefaultTabFileManager: TabFileManager {
     }
 
     public func copyItem(at sourceURL: URL, to destinationURL: URL) throws {
+        // Ensure there is no file at the destination as copy cannot overwrite
+        try? fileManager.removeItem(at: destinationURL)
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
     }
 
