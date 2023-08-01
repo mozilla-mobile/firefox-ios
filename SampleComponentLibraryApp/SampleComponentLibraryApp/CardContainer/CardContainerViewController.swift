@@ -32,7 +32,7 @@ class CardContainerViewController: UIViewController {
         contentLabel.text = loremIpsum
         let viewModel = CardContainerModel(view: contentLabel, a11yId: "CardContainer")
         cardContainer.configure(viewModel)
-        
+
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         cardContainer.applyTheme(theme: themeManager.currentTheme)
     }

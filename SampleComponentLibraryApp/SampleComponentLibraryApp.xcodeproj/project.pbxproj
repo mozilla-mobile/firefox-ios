@@ -27,6 +27,8 @@
 		8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */; };
 		E17AC7512A77F6EF004671BA /* CardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17AC7502A77F6EF004671BA /* CardContainerViewController.swift */; };
 		E189515A2A77F8760077810A /* CardContainerComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18951592A77F8760077810A /* CardContainerComponentViewModel.swift */; };
+		E19891C82A790AB700CD256D /* CollapsibleCardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */; };
+		E19891C92A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetComponentViewModel.swift; sourceTree = "<group>"; };
 		E17AC7502A77F6EF004671BA /* CardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerViewController.swift; sourceTree = "<group>"; };
 		E18951592A77F8760077810A /* CardContainerComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerComponentViewModel.swift; sourceTree = "<group>"; };
+		E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardContainerViewController.swift; sourceTree = "<group>"; };
+		E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardContainerComponentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +93,7 @@
 			children = (
 				8ABC3CE92A6EED5C00B69244 /* BottomSheet */,
 				E17AC74E2A77F64F004671BA /* CardContainer */,
+				E19891C52A790AB700CD256D /* CollapsibleCardContainer */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
 				8ABC3CE42A6EECE100B69244 /* Dependency */,
 				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
@@ -174,9 +179,11 @@
 			path = CardContainer;
 			sourceTree = "<group>";
 		};
-		E17AC74F2A77F66D004671BA /* CollapsibleCardContainer */ = {
+		E19891C52A790AB700CD256D /* CollapsibleCardContainer */ = {
 			isa = PBXGroup;
 			children = (
+				E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */,
+				E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */,
 			);
 			path = CollapsibleCardContainer;
 			sourceTree = "<group>";
@@ -292,8 +299,10 @@
 				8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */,
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
 				8ABC3CE62A6EECF000B69244 /* DependencyHelperMock.swift in Sources */,
+				E19891C82A790AB700CD256D /* CollapsibleCardContainerViewController.swift in Sources */,
 				8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */,
 				8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */,
+				E19891C92A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
