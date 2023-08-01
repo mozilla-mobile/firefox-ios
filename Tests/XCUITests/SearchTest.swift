@@ -14,11 +14,6 @@ private let SuggestedSite5: String = "foo bar baz qux"
 private let SuggestedSite6: String = "foobar bit perfect"
 
 class SearchTests: BaseTestCase {
-    override func setUp() {
-        launchArguments.append(LaunchArguments.DisableAnimations)
-        super.setUp()
-    }
-
     private func typeOnSearchBar(text: String) {
         waitForExistence(app.textFields.firstMatch, timeout: 10)
         app.textFields.firstMatch.tap()

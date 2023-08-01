@@ -6,10 +6,6 @@ import XCTest
 
 let PDF_website = ["url": "www.orimi.com/pdf-test.pdf", "pdfValue": "www.orimi.com/pdf", "urlValue": "yukon.ca/en/educat", "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf", "longUrlValue": "http://www.education.gov.yk.ca/"]
 class BrowsingPDFTests: BaseTestCase {
-    override func setUp() {
-        launchArguments.append(LaunchArguments.DisableAnimations)
-        super.setUp()
-    }
 
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)

@@ -20,11 +20,6 @@ let defaultNumRowsLoginsList = 2
 let defaultNumRowsEmptyFilterList = 0
 
 class SaveLoginTest: BaseTestCase {
-    override func setUp() {
-        launchArguments.append(LaunchArguments.DisableAnimations)
-        super.setUp()
-    }
-
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()

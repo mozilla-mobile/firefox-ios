@@ -34,7 +34,6 @@ class HomePageSettingsUITests: BaseTestCase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
-        launchArguments.append(LaunchArguments.DisableAnimations)
         super.setUp()
     }
 
