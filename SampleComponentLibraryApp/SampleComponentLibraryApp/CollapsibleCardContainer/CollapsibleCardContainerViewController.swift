@@ -48,11 +48,8 @@ class CollapsibleCardContainerViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
-    private lazy var cardContainer: CollapsibleCardContainer = .build { _ in
-    }
-
-    private lazy var contentView: CardContentView = .build { _ in
-    }
+    private lazy var cardContainer: CollapsibleCardContainer = .build { _ in }
+    private lazy var contentView: CardContentView = .build { _ in }
 
     override func viewDidLoad() {
         super.viewDidLoad()
