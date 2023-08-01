@@ -533,7 +533,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     deinit {
-        print("YRD TabDisplayMgr deinit")
         notificationCenter.removeObserver(self)
     }
 }

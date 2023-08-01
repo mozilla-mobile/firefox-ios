@@ -35,10 +35,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         super.init()
     }
 
-    deinit {
-        print("YRD deinit TabLayoutDelegate")
-    }
-
     private func cellHeightForCurrentDevice() -> CGFloat {
         if traitCollection.verticalSizeClass == .compact ||
             traitCollection.horizontalSizeClass == .compact {

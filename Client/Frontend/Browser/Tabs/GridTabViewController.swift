@@ -195,12 +195,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        print("YRD gridTabVC viewWillDissapear")
-    }
-
     private func setupView() {
         // TODO: Remove SNAPKIT - this will require some work as the layouts
         // are using other snapkit constraints and this will require modification
@@ -243,7 +237,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     deinit {
-        print("YRD GridTabVC deinit")
         tabManagerTeardown()
     }
 
