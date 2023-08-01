@@ -66,6 +66,13 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
     }
 
+    func testStart_withLibraryPanelTypeHistory_addsChildHistoryCoordinator() {
+        let subject = createSubject()
+        subject.start(panelType: .history, navigationController: UINavigationController())
+        XCTAssertTrue(subject.childCoordinators.first is HistoryCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
     func testParentCoordinatorDelegate_calledDidFinish() {
         let subject = createSubject()
         subject.parentCoordinator = delegate
