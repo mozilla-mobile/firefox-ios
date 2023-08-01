@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
-import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { HeuristicsRegExp } from "resource://gre/modules/shared/HeuristicsRegExp.sys.mjs";
 
 const lazy = {};
@@ -15,7 +14,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
 });
 
-XPCOMUtils.defineLazyGetter(lazy, "log", () =>
+ChromeUtils.defineLazyGetter(lazy, "log", () =>
   FormAutofill.defineLogGetter(lazy, "FormAutofillHeuristics")
 );
 
@@ -393,9 +392,6 @@ export const FormAutofillHeuristics = {
     return true;
   },
 
-  // The old heuristics can be removed when we fully adopt fathom, so disable the
-  // esline complexity check for now
-  /* eslint-disable complexity */
   /**
    * Try to look for expiration date fields and revise the field names if needed.
    *
@@ -413,7 +409,7 @@ export const FormAutofillHeuristics = {
     }
 
     const fields = [];
-    for (let idx = scanner.parsingIndex; !scanner.parsingFinished; idx++) {
+    for (let idx = scanner.parsingIndex; ; idx++) {
       const detail = scanner.getFieldDetailByIndex(idx);
       if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
         break;
@@ -433,11 +429,25 @@ export const FormAutofillHeuristics = {
       return true;
     }
 
-    // If the previous element is a cc field, these fields is very likely cc expiry fields
+    const prevCCFields = new Set();
+    for (let idx = scanner.parsingIndex - 1; ; idx--) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (
+        lazy.FormAutofillUtils.getCategoryFromFieldName(detail?.fieldName) !=
+        "creditCard"
+      ) {
+        break;
+      }
+      prevCCFields.add(detail.fieldName);
+    }
+    // We update the "cc-exp-*" fields to correct "cc-ex-*" fields order when
+    // the following conditions are met:
+    // 1. The previous elements are identified as credit card fields and
+    //    cc-number is in it
+    // 2. There is no "cc-exp-*" fields in the previous credit card elements
     if (
-      ["cc-number", "cc-name", "cc-type"].includes(
-        scanner.getFieldDetailByIndex(scanner.parsingIndex - 1)?.fieldName
-      )
+      ["cc-number", "cc-name"].some(f => prevCCFields.has(f)) &&
+      !["cc-exp", "cc-exp-month", "cc-exp-year"].some(f => prevCCFields.has(f))
     ) {
       if (fields.length == 1) {
         scanner.updateFieldName(scanner.parsingIndex, "cc-exp");
@@ -453,6 +463,79 @@ export const FormAutofillHeuristics = {
     for (let idx = 0; idx < fields.length; idx++) {
       scanner.updateFieldName(scanner.parsingIndex + idx, null);
     }
+    return false;
+  },
+
+  /**
+   * Look for cc-*-name fields when *-name field is present
+   *
+   * @param {FieldScanner} scanner
+   *        The current parsing status for all elements
+   * @returns {boolean}
+   *          Return true if there is any field can be recognized in the parser,
+   *          otherwise false.
+   */
+  _parseCreditCardNameFields(scanner, fieldDetail) {
+    const INTERESTED_FIELDS = [
+      "name",
+      "given-name",
+      "additional-name",
+      "family-name",
+    ];
+
+    if (!INTERESTED_FIELDS.includes(fieldDetail.fieldName)) {
+      return false;
+    }
+
+    const fields = [];
+    for (let idx = scanner.parsingIndex; ; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
+        break;
+      }
+      fields.push(detail);
+    }
+
+    const prevCCFields = new Set();
+    for (let idx = scanner.parsingIndex - 1; ; idx--) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (
+        lazy.FormAutofillUtils.getCategoryFromFieldName(detail?.fieldName) !=
+        "creditCard"
+      ) {
+        break;
+      }
+      prevCCFields.add(detail.fieldName);
+    }
+
+    // We update the "name" fields to "cc-name" fields when the following
+    // conditions are met:
+    // 1. The previous elements are identified as credit card fields and
+    //    cc-number is in it
+    // 2. There is no "cc-name-*" fields in the previous credit card elements
+    if (
+      ["cc-number"].some(f => prevCCFields.has(f)) &&
+      !["cc-name", "cc-given-name", "cc-family-name"].some(f =>
+        prevCCFields.has(f)
+      )
+    ) {
+      // If there is only one field, assume the name field a `cc-name` field
+      if (fields.length == 1) {
+        scanner.updateFieldName(scanner.parsingIndex, `cc-name`);
+        scanner.parsingIndex += 1;
+      } else {
+        // update *-name to cc-*-name
+        for (const field of fields) {
+          scanner.updateFieldName(
+            scanner.parsingIndex,
+            `cc-${field.fieldName}`
+          );
+          scanner.parsingIndex += 1;
+        }
+      }
+      return true;
+    }
+
     return false;
   },
 
@@ -501,7 +584,8 @@ export const FormAutofillHeuristics = {
         this._parsePhoneFields(scanner, fieldDetail) ||
         this._parseStreetAddressFields(scanner, fieldDetail) ||
         this._parseAddressFields(scanner, fieldDetail) ||
-        this._parseCreditCardExpiryFields(scanner, fieldDetail)
+        this._parseCreditCardExpiryFields(scanner, fieldDetail) ||
+        this._parseCreditCardNameFields(scanner, fieldDetail)
       ) {
         continue;
       }
@@ -1110,7 +1194,7 @@ export const FormAutofillHeuristics = {
   ],
 };
 
-XPCOMUtils.defineLazyGetter(
+ChromeUtils.defineLazyGetter(
   FormAutofillHeuristics,
   "CREDIT_CARD_FIELDNAMES",
   () =>
@@ -1119,7 +1203,7 @@ XPCOMUtils.defineLazyGetter(
     )
 );
 
-XPCOMUtils.defineLazyGetter(FormAutofillHeuristics, "ADDRESS_FIELDNAMES", () =>
+ChromeUtils.defineLazyGetter(FormAutofillHeuristics, "ADDRESS_FIELDNAMES", () =>
   Object.keys(FormAutofillHeuristics.RULES).filter(name =>
     lazy.FormAutofillUtils.isAddressField(name)
   )
