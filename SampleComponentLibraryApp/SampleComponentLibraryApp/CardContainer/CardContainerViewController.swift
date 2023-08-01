@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import ComponentLibrary
+import Common
 import Foundation
 import UIKit
 
@@ -31,6 +32,9 @@ class CardContainerViewController: UIViewController {
         contentLabel.text = loremIpsum
         let viewModel = CardContainerModel(view: contentLabel, a11yId: "CardContainer")
         cardContainer.configure(viewModel)
+        
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        cardContainer.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
