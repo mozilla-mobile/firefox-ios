@@ -74,7 +74,7 @@ public class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegat
     }
 
     // MARK: - Properties
-    private lazy var viewModel: CollapsibleCardContainerModel = CollapsibleCardContainerModel(
+    private lazy var viewModel = CollapsibleCardContainerModel(
         contentView: rootView,
         cardViewA11yId: "",
         title: "",
