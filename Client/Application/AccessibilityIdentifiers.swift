@@ -367,5 +367,11 @@ public struct AccessibilityIdentifiers {
     struct Components {
         static let collapseButton = "collapseButton"
         static let cardTitleLabel = "cardTitleLabel"
+
+        struct ErrorCard {
+            static let title = "ErrorCard.title"
+            static let description = "ErrorCard.description"
+            static let primaryAction = "ErrorCard.primaryAction"
+        }
     }
 }
