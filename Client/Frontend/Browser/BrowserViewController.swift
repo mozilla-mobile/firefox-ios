@@ -245,6 +245,18 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
+    func didFinishAnnouncement(notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
+            let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
+            let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+            if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage {
+                UIAccessibility.post(notification: .layoutChanged, argument: self.tabManager.selectedTab?.currentWebView())
+            }
+        }
+    }
+
+    @objc
     func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
@@ -536,6 +548,11 @@ class BrowserViewController: UIViewController,
             self,
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFinishAnnouncement),
+            name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
 
         // PresentIntroView notification and code will be removed with FXIOS-6529
