@@ -1244,6 +1244,7 @@
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
+		E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
@@ -6413,6 +6414,7 @@
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
+		E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReliabilityCardView.swift; path = Client/Frontend/Fakespot/Views/ReliabilityCardView.swift; sourceTree = SOURCE_ROOT; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -9816,6 +9818,14 @@
 			path = NotificationSurface;
 			sourceTree = "<group>";
 		};
+		E1516A3C2A7A57BF007819A4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -9929,19 +9939,12 @@
 		E1D3FFAF2A66A9BD002D31EF /* Fakespot */ = {
 			isa = PBXGroup;
 			children = (
-				E1D3FFB02A66A9CC002D31EF /* Components */,
+				E1516A3C2A7A57BF007819A4 /* Views */,
 				E1D3FFB32A66B726002D31EF /* FakespotBottomSheetChildViewController.swift */,
 				8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */,
 				8C92DE942A7128FB0090BD28 /* Client */,
 			);
 			path = Fakespot;
-			sourceTree = "<group>";
-		};
-		E1D3FFB02A66A9CC002D31EF /* Components */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
@@ -12536,6 +12539,7 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
+				E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
 				C889569A27E8D1AC00E3779E /* InactiveTabHeader.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
