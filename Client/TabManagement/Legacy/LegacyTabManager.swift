@@ -110,7 +110,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         if !(0..<count ~= _selectedIndex) {
             return nil
         }
-
         return tabs[_selectedIndex]
     }
 
