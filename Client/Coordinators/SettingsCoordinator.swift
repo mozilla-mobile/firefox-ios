@@ -73,7 +73,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .homePage:
-            let viewController = HomePageSettingViewController(prefs: profile.prefs)
+            let viewController = HomePageSettingViewController(prefs: profile.prefs, settingsDelegate: self)
             viewController.profile = profile
             return viewController
 
@@ -221,7 +221,8 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: GeneralSettingsDelegate
 
     func pressedHome() {
-        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        let viewController = HomePageSettingViewController(prefs: profile.prefs,
+                                                           settingsDelegate: self)
         viewController.profile = profile
         router.push(viewController)
     }
