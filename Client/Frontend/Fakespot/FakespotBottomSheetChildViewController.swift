@@ -34,9 +34,9 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         label.text = .ShoppingExperience.BottomSheetHeaderTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-//        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-//                                                                   size: UX.titleLabelFontSize,
-//                                                                   weight: .semibold)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
+                                                            size: UX.titleLabelFontSize,
+                                                            weight: .semibold)
         label.accessibilityIdentifier = AccessibilityIdentifiers.ShoppingExperience.bottomSheetHeaderTitle
     }
 
