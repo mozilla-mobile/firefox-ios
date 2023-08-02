@@ -93,14 +93,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
+        emptyView.learnMoreButton.addTarget(self,
+                                            action: #selector(didTapLearnMore),
+                                            for: .touchUpInside)
         return emptyView
     }()
 
     private lazy var tabLayoutDelegate: TabLayoutDelegate = {
         let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
-                                         traitCollection: self.traitCollection,
-                                         scrollView: self.collectionView)
+                                         traitCollection: self.traitCollection)
         delegate.tabSelectionDelegate = self
         delegate.tabPeekDelegate = self
         return delegate
@@ -143,8 +144,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
-                                              tabManager: self.tabManager,
+        tabDisplayManager = TabDisplayManager(collectionView: collectionView,
+                                              tabManager: tabManager,
                                               tabDisplayer: self,
                                               reuseID: TabCell.cellIdentifier,
                                               tabDisplayType: .TabGrid,
@@ -224,12 +225,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        flowlayout.invalidateLayout()
+        guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        flowLayout.invalidateLayout()
     }
 
     private func tabManagerTeardown() {
-        tabManager.removeDelegate(self.tabDisplayManager)
+        tabManager.removeDelegate(tabDisplayManager)
         tabDisplayManager = nil
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
@@ -271,8 +272,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
             let offSet = Int(GroupedTabCellProperties.CellUX.defaultCellHeight) * groupIndex
             let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width: self.collectionView.frame.width, height: self.collectionView.frame.height))
-            DispatchQueue.main.async {
-                self.collectionView.scrollRectToVisible(rect, animated: false)
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.scrollRectToVisible(rect, animated: false)
             }
         }
     }
@@ -373,19 +374,20 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     func closeTabsTrayHelper() {
         if tabDisplayManager.isPrivate {
-            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
+            emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
             if !emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
                 emptyPrivateTabsView.alpha = 0
                 UIView.animate(
                     withDuration: 0.5,
-                    animations: {
-                        self.emptyPrivateTabsView.alpha = 1
+                    animations: { [weak self] in
+                        self?.emptyPrivateTabsView.alpha = 1
                     })
             }
-        } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
-            self.tabManager.selectTab(tab)
-            self.dismissTabTray()
+        } else if tabManager.normalTabs.count == 1,
+                  let tab = tabManager.normalTabs.first {
+            tabManager.selectTab(tab)
+            dismissTabTray()
             notificationCenter.post(name: .TabsTrayDidClose)
         }
     }
@@ -414,8 +416,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             return
         }
 
-        presentUndoToast(toastType: .singleTab) { undoButtonPressed in
-            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
+        presentUndoToast(toastType: .singleTab) { [weak self] undoButtonPressed in
+            guard let self,
+                  undoButtonPressed,
+                  let closedTab = self.tabManager.backupCloseTab else { return }
 
             self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
@@ -432,10 +436,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             buttonText: .TabsTray.CloseTabsToast.Action)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
-                                completion: { undoButtonPressed in
-            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
+                                completion: { [weak self]  undoButtonPressed in
+            guard undoButtonPressed, let closedTab = self?.tabManager.backupCloseTab else { return }
 
-            self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
+            self?.tabDisplayManager.undoCloseTab(tab: closedTab.tab,
+                                                 index: closedTab.restorePosition)
         })
         delegate?.tabTrayDidCloseLastTab(toast: toast)
     }
@@ -503,10 +508,11 @@ extension GridTabViewController {
         // as part of a private mode tab
         UIView.animate(
             withDuration: 0.2,
-            animations: {
-                self.collectionView.alpha = 1
-                self.emptyPrivateTabsView.alpha = 1
-            }) { _ in
+            animations: { [weak self] in
+                self?.collectionView.alpha = 1
+                self?.emptyPrivateTabsView.alpha = 1
+            }) { [weak self] _ in
+                guard let self else { return }
                 self.backgroundPrivacyOverlay.alpha = 0
                 self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
             }
@@ -531,7 +537,8 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
         guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
         var bounds = collectionView.bounds
-        bounds = bounds.offsetBy(dx: collectionView.contentInset.left, dy: collectionView.contentInset.top)
+        bounds = bounds.offsetBy(dx: collectionView.contentInset.left,
+                                 dy: collectionView.contentInset.top)
         bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
         bounds.size.height -= collectionView.contentInset.top + collectionView.contentInset.bottom
         // visible cells do sometimes return also not visible cells when attempting to go past the last cell with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)

@@ -27,6 +27,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     var didSelectCardAtIndex: ((_ creditCard: CreditCard) -> Void)?
+    var lastSelectedIndex: IndexPath?
 
     // MARK: View
     var toastView: UIHostingController<ToastView>
@@ -78,6 +79,12 @@ class CreditCardTableViewController: UIViewController, Themeable {
         viewSetup()
         listenForThemeChange(view)
         applyTheme()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFinishAnnouncement),
+            name: UIAccessibility.announcementDidFinishNotification,
+            object: nil)
     }
 
     private func viewSetup() {
@@ -126,8 +133,24 @@ class CreditCardTableViewController: UIViewController, Themeable {
     deinit {
         notificationCenter.removeObserver(self)
     }
+
+    @objc
+    func didFinishAnnouncement(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
+            let saveSuccessMessage: String = .CreditCard.SnackBar.SavedCardLabel
+            let updateSuccessMessage: String = .CreditCard.SnackBar.UpdatedCardLabel
+            let removeCardMessage: String = .CreditCard.SnackBar.RemovedCardLabel
+            if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage  || announcementText == removeCardMessage {
+                if let lastIndex = lastSelectedIndex, let lastSelectedCell = tableView.cellForRow(at: lastIndex) {
+                    UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
+                }
+            }
+        }
+    }
 }
 
+// MARK: UITableViewDelegate
 extension CreditCardTableViewController: UITableViewDelegate,
                                          UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -187,6 +210,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             addPadding: false,
             didSelectAction: { [weak self] in
                 self?.didSelectCardAtIndex?(creditCard)
+                self?.lastSelectedIndex = indexPath
             })
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
