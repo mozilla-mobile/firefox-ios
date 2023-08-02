@@ -74,7 +74,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests"
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.3:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -180,7 +180,7 @@ workflows:
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-x86_64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
+    - deploy-to-bitrise-io@2.3:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_2_XCRESULT_PATH'
@@ -226,7 +226,7 @@ workflows:
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-x86_64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
+    - deploy-to-bitrise-io@2.3:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_XCRESULT_PATH'
@@ -272,7 +272,7 @@ workflows:
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-x86_64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
+    - deploy-to-bitrise-io@2.3:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_3_XCRESULT_PATH'
@@ -318,7 +318,7 @@ workflows:
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-x86_64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
+    - deploy-to-bitrise-io@2.3:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
@@ -434,7 +434,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
-    - deploy-to-bitrise-io@2.2: {}
+    - deploy-to-bitrise-io@2.3: {}
     - script@1:
         inputs:
         - content: |-
@@ -482,7 +482,7 @@ workflows:
         - simulator_device: iPhone 8
   5_deploy_and_slack:
     steps:
-    - deploy-to-bitrise-io@2.2: {}
+    - deploy-to-bitrise-io@2.3: {}
     - cache-push@2.2:
         is_always_run: true
     - slack@3.1:
@@ -740,7 +740,7 @@ workflows:
         inputs:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
-    - deploy-to-bitrise-io@2.2: {}
+    - deploy-to-bitrise-io@2.3: {}
     - cache-push@2.4: {}
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -913,11 +913,11 @@ workflows:
 
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.3:
         inputs:
         - deploy_path: l10n-screenshots-dd/
         - is_compress: 'true'
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.3
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
@@ -981,7 +981,7 @@ workflows:
               mv "$locale.zip" artifacts/
             done
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.3:
         inputs:
         - deploy_path: artifacts/
     envs:
@@ -1066,7 +1066,7 @@ workflows:
         - distribution_method: app-store
         - export_development_team: 43AQ936H96
         - configuration: "$BITRISE_SCHEME"
-    - deploy-to-bitrise-io@2.0: {}
+    - deploy-to-bitrise-io@2.3: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -1291,7 +1291,7 @@ workflows:
         - distribution_method: app-store
         - configuration: FirefoxBeta
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.3: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -1357,7 +1357,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2.3: {}
     meta:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
@@ -1384,7 +1384,7 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
         - project_path: "$BITRISE_PROJECT_PATH"
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.3: {}
     - cache-pull@2.7.2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
