@@ -3601,6 +3601,17 @@ extension String {
         comment: "Share extension label shown after user has performed 'Load in Background' action.")
 }
 
+// MARK: - Shopping Experience
+extension String {
+    public struct ShoppingExperience {
+        public static let BottomSheetHeaderTitle = MZLocalizedString(
+            key: "ShoppingExperience.BottomSheetHeader.Title.v118",
+            tableName: "ShoppingExperience",
+            value: "Review quality check",
+            comment: "Label for the header of the Shopping Experience (Fakespot) bottom sheet")
+    }
+}
+
 // MARK: - Translation bar
 extension String {
     public static let TranslateSnackBarPrompt = MZLocalizedString(

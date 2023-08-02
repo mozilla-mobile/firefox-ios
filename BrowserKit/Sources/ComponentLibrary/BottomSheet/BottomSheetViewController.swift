@@ -27,6 +27,7 @@ public class BottomSheetViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let springWithDamping = 0.7
         static let animationDuration = 0.5
+        static let maximumContentHeight = UIScreen.main.bounds.height - 64
     }
 
     public var notificationCenter: NotificationProtocol
@@ -56,11 +57,20 @@ public class BottomSheetViewController: UIViewController,
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
-    private lazy var sheetView: UIView = .build { _ in }
-    private lazy var contentView: UIView = .build { _ in }
-    private lazy var scrollContentView: UIView = .build { _ in }
+    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    private lazy var sheetView: UIView = .build()
+    private lazy var contentView: UIView = .build()
+    private lazy var scrollContentView: UIView = .build()
+
     private var contentViewBottomConstraint: NSLayoutConstraint!
+    private var contentViewHeightConstraint: NSLayoutConstraint!
+
     private var viewTranslation = CGPoint(x: 0, y: 0)
+    private var currentContentHeight: CGFloat
+    private var defaultHeight: CGFloat
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
@@ -73,7 +83,8 @@ public class BottomSheetViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.useDimmedBackground = usingDimmedBackground
-
+        defaultHeight = viewModel.contentHeight
+        currentContentHeight = viewModel.contentHeight
         super.init(nibName: nil, bundle: nil)
 
         modalPresentationStyle = .overFullScreen
@@ -109,11 +120,7 @@ public class BottomSheetViewController: UIViewController,
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        contentViewBottomConstraint.constant = 0
-        UIView.animate(withDuration: viewModel.animationTransitionDuration) {
-            self.view.backgroundColor = self.viewModel.backgroundColor
-            self.view.layoutIfNeeded()
-        }
+        animateContentView()
     }
 
     override public func viewDidLayoutSubviews() {
@@ -166,6 +173,8 @@ public class BottomSheetViewController: UIViewController,
         view.addSubviews(dimmedBackgroundView, topTapView, sheetView)
 
         contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        contentViewHeightConstraint = sheetView.heightAnchor.constraint(equalToConstant: defaultHeight)
+
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
             greaterThanOrEqualTo: scrollContentView.heightAnchor)
 
@@ -181,22 +190,23 @@ public class BottomSheetViewController: UIViewController,
             dimmedBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
-                                           constant: BottomSheetViewController.UX.minVisibleTopSpace),
+                                           constant: UX.minVisibleTopSpace),
             sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentViewBottomConstraint,
             sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
+            contentViewHeightConstraint,
             contentView.topAnchor.constraint(equalTo: sheetView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
             contentView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor),
             contentView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
 
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                             constant: BottomSheetViewController.UX.closeButtonTopTrailingSpace),
+                                             constant: UX.closeButtonTopTrailingSpace),
             closeButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -BottomSheetViewController.UX.closeButtonTopTrailingSpace),
-            closeButton.widthAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
-            closeButton.heightAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
+                                                  constant: -UX.closeButtonTopTrailingSpace),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
 
             scrollContentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
@@ -234,36 +244,65 @@ public class BottomSheetViewController: UIViewController,
 
     @objc
     private func panGesture(_ recognizer: UIPanGestureRecognizer) {
+        viewTranslation = recognizer.translation(in: view)
+        let isPanningDown = viewTranslation.y > 0
+
+        let newHeight = currentContentHeight - viewTranslation.y
         switch recognizer.state {
         case .changed:
-            viewTranslation = recognizer.translation(in: view)
-
-            // do not allow swiping up
-            guard viewTranslation.y > 0 else { return }
-
-            UIView.animate(withDuration: UX.animationDuration,
-                           delay: 0,
-                           usingSpringWithDamping: UX.springWithDamping,
-                           initialSpringVelocity: UX.initialSpringVelocity,
-                           options: .curveEaseOut,
-                           animations: {
-                self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
-            })
+            guard viewModel.isPanningUpEnabled else {
+                if viewTranslation.y > 0 {
+                    contentViewHeightConstraint?.constant = newHeight
+                }
+                return
+            }
+            contentViewHeightConstraint?.constant = newHeight
+            view.layoutIfNeeded()
         case .ended:
-            if viewTranslation.y < 200 {
-                UIView.animate(withDuration: UX.animationDuration,
-                               delay: 0,
-                               usingSpringWithDamping: UX.springWithDamping,
-                               initialSpringVelocity: UX.initialSpringVelocity,
-                               options: .curveEaseOut,
-                               animations: {
-                    self.sheetView.transform = .identity
-                })
-            } else {
-                dismissSheetViewController()
+            // If the user pans to the bottom and
+            // y goes beyond 200 we dismiss the bottom sheet.
+            if viewTranslation.y > 200 {
+                self.dismissSheetViewController()
+            } else if newHeight < defaultHeight {
+                // Animate to default height if the new height
+                // is below the default threshold.
+                animateContentHeight(defaultHeight)
+            } else if newHeight < UX.maximumContentHeight,
+                                  isPanningDown,
+                                  viewModel.isPanningUpEnabled {
+                // If the new height is below the maximum threshold and
+                // decreasing, reset it to the default height.
+                animateContentHeight(defaultHeight)
+            } else if newHeight > defaultHeight,
+                                  !isPanningDown,
+                                  viewModel.isPanningUpEnabled {
+                // If the new height is below the maximum threshold and
+                // increasing, set it to the maximum height at the top.
+                animateContentHeight(UX.maximumContentHeight)
             }
         default:
             break
+        }
+    }
+
+    private func animateContentHeight(_ height: CGFloat) {
+        UIView.animate(withDuration: UX.animationDuration,
+                       delay: 0,
+                       usingSpringWithDamping: UX.springWithDamping,
+                       initialSpringVelocity: UX.initialSpringVelocity,
+                       options: .curveEaseOut,
+                       animations: {
+            self.contentViewHeightConstraint?.constant = height
+            self.view.layoutIfNeeded()
+        })
+        currentContentHeight = height
+    }
+
+    private func animateContentView() {
+        contentViewBottomConstraint.constant = 0
+        UIView.animate(withDuration: viewModel.animationTransitionDuration) {
+            self.view.backgroundColor = self.viewModel.backgroundColor
+            self.view.layoutIfNeeded()
         }
     }
 
@@ -276,7 +315,7 @@ public class BottomSheetViewController: UIViewController,
 
     public func dismissSheetViewController(completion: (() -> Void)? = nil) {
         childViewController.willDismiss()
-        contentViewBottomConstraint.constant = childViewController.view.frame.height
+        contentViewBottomConstraint.constant = currentContentHeight
         UIView.animate(
             withDuration: viewModel.animationTransitionDuration,
             animations: {

@@ -2452,7 +2452,7 @@ extension BrowserViewController {
             childViewController: viewController
         )
 
-        self.present(bottomSheetVC, animated: true, completion: nil)
+        self.present(bottomSheetVC, animated: false, completion: nil)
     }
 }
 
