@@ -55,9 +55,9 @@ class DownloadsCoordinator: BaseCoordinator, DownloadsNavigationHandler, UIDocum
 
         router.present(controller)
     }
-    
+
     // MARK: - UIDocumentInteractionControllerDelegate
-    
+
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return router.rootViewController ?? UIViewController()
     }
