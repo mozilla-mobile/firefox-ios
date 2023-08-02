@@ -7,7 +7,6 @@ import UIKit
 class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
-    let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager
 
@@ -20,7 +19,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         case down
     }
 
-    fileprivate var scrollDirection: ScrollDirection = .down
     var traitCollection: UITraitCollection
     var numberOfColumns: Int {
         // iPhone 4-6+ portrait
@@ -31,9 +29,8 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         }
     }
 
-    init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection, scrollView: UIScrollView) {
+    init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection) {
         self.tabDisplayManager = tabDisplayManager
-        self.scrollView = scrollView
         self.traitCollection = traitCollection
         super.init()
     }
