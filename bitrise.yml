@@ -917,7 +917,7 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots-dd/
         - is_compress: 'true'
-    - deploy-to-bitrise-io@2.3
+    - deploy-to-bitrise-io@2.3:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
