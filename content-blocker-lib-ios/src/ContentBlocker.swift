@@ -102,9 +102,9 @@ class ContentBlocker {
         TPStatsBlocklistChecker.shared.startup()
 
         removeOldListsByDateFromStore {
-            self.removeOldListsByNameFromStore { [weak self]
-                self.compileListsNotInStore {
-                    self.setupCompleted = true
+            self.removeOldListsByNameFromStore { [weak self] in
+                self?.compileListsNotInStore {
+                    self?.setupCompleted = true
                     NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
                 }
             }
@@ -294,16 +294,17 @@ extension ContentBlocker {
                 }
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
+                    guard let self,
+                          let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self?.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    self.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         guard error == nil else {
-                            self?.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
+                            self.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
                             assert(error == nil)
                             return
                         }
                         guard rule != nil else {
-                            self?.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
+                            self.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
                             assert(rule != nil)
                             return
                         }
