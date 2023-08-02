@@ -7,6 +7,12 @@ import ComponentLibrary
 import UIKit
 
 class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild, Themeable {
+    private struct UX {
+        static let topPadding: CGFloat = 16
+        static let bottomPadding: CGFloat = 40
+        static let horizontalPadding: CGFloat = 16
+    }
+
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -45,10 +51,10 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.topPadding),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.horizontalPadding),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.bottomPadding),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.horizontalPadding),
         ])
     }
 
