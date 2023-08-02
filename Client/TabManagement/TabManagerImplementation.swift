@@ -118,6 +118,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.tabUUID = tabData.id.uuidString
             newTab.screenshotUUID = tabData.id
             newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
+            newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
             newTab.sessionData = LegacySessionData(currentPage: 0,
                                                    urls: [],
                                                    lastUsedTime: tabData.lastUsedTime.toTimestamp())
@@ -205,7 +206,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
-                           lastUsedTime: Date.fromTimestamp(tab.sessionData?.lastUsedTime ?? 0),
+                           lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime ?? 0),
                            createdAtTime: Date.fromTimestamp(tab.firstCreatedTime ?? 0),
                            tabGroupData: groupData)
         }
