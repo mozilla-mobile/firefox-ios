@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ %@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾";
+"A username and password are being requested by %@." = "ᱢᱤᱫᱴᱟᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ %@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱫᱟᱝ ᱥᱟᱵᱟᱫᱽ %1$@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾ ᱥᱟᱭᱤᱴ ᱮ ᱢᱮᱱᱮᱫᱟᱭᱺ%2$@";
+"A username and password are being requested by %@. The site says: %@" = "ᱢᱤᱫᱴᱟᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱫᱟᱝ ᱥᱟᱵᱟᱫᱽ %1$@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾ ᱥᱟᱭᱤᱴ ᱮ ᱢᱮᱱᱮᱫᱟᱭᱺ%2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -188,7 +188,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "ᱞᱤᱝᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "ᱰᱟᱩᱱᱞᱚᱰ ᱞᱤᱝᱠ";
+"ContextMenu.DownloadLinkButtonTitle" = "ᱰᱟᱣᱱᱞᱚᱰ ᱞᱤᱝᱠ";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "ᱱᱟᱶᱟ ᱴᱮᱵᱽ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
@@ -230,7 +230,7 @@
 "CoverSheet.v24.ETP.Title" = "Ad ᱯᱟᱸᱡᱟ ᱵᱤᱨᱩᱫᱷ ᱛᱮ ᱨᱚᱯᱷᱟ";
 
 /* See http://mzl.la/1Qtkf0j */
-"Create an account" = "ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱛᱟ ᱛᱮᱭᱟᱨ ᱢᱮ";
+"Create an account" = "ᱢᱤᱫᱴᱟᱝ ᱠᱷᱟᱛᱟ ᱛᱮᱭᱟᱨ ᱢᱮ";
 
 /* Dark theme setting in Reading View settings */
 "Dark" = "ᱦᱮᱸᱫᱮ";
@@ -254,7 +254,7 @@
 "Done" = "ᱦᱩᱭᱮᱱᱟ";
 
 /* Panel accessibility label */
-"Downloads" = "ᱰᱟᱩᱱᱞᱚᱰ ᱠᱚ";
+"Downloads" = "ᱰᱟᱣᱱᱞᱚᱰ ᱠᱚ";
 
 /* The label of the button the user will press to start downloading a file */
 "Downloads.Alert.DownloadNow" = "ᱱᱤᱛᱚᱜ ᱚᱛᱩᱨ ᱟᱲᱜᱩᱤ ᱢᱮ";
@@ -278,7 +278,7 @@
 "Downloads.Toast.Failed.LabelText" = "ᱟᱹᱛᱩᱨ ᱟᱲᱜᱚ ᱲᱤᱜᱟᱣᱮᱱᱟ";
 
 /* The button to open a new tab with the Downloads home panel */
-"Downloads.Toast.GoToDownloads.Button" = "ᱰᱟᱩᱱᱞᱳᱰ";
+"Downloads.Toast.GoToDownloads.Button" = "ᱰᱟᱣᱱᱞᱳᱰ";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "%d ᱨᱮᱫ ᱠᱷᱚᱱ 1";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "ᱛᱷᱟᱨ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ ᱾";
@@ -557,7 +557,7 @@
 "Keyboard.Shortcuts.Section.Tools" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱠᱚ";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.Window" = "ᱡᱷᱚᱨᱠᱟ";
+"Keyboard.Shortcuts.Section.Window" = "ᱣᱤᱱᱰᱳ";
 
 /* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Settings" = "ᱥᱟᱡᱟᱣ ᱠᱚ";
@@ -566,7 +566,7 @@
 "Keyboard.Shortcuts.ShowBookmarks" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
 /* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowDownloads" = "ᱰᱟᱩᱱᱞᱚᱰ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+"Keyboard.Shortcuts.ShowDownloads" = "ᱰᱟᱣᱱᱞᱚᱰ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
 /* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowFirstTab" = "ᱯᱩᱭᱞᱩ ᱴᱮᱵᱽ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
@@ -647,7 +647,7 @@
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ, ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾";
+"Logins.DevicePasscodeRequired.Message" = "ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ, ᱢᱮᱫᱦᱟᱸ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "ᱞᱟᱦᱟᱜ ᱢᱮ";
@@ -761,7 +761,7 @@
 "Menu.CustomizeHomePage.v99" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱠᱩᱥᱤᱛᱮ ᱫᱚᱦᱚᱭ ᱢᱮ";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "ᱰᱟᱩᱱᱞᱚᱰᱥ";
+"Menu.Downloads.Label" = "ᱰᱟᱣᱱᱞᱚᱰᱥ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ ᱵᱚᱸᱫᱚ ᱢᱮᱱᱟᱜᱼᱟ";
@@ -866,13 +866,13 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "ᱠᱨᱭᱯᱴᱚᱢᱟᱭᱱ ᱠᱚ ᱦᱩᱠᱩ ᱛᱮ ᱟᱢᱟᱜ ᱥᱭᱥᱴᱚᱢ ᱨᱮᱭᱟᱜ ᱯᱟᱣᱟᱨ ᱵᱮᱵᱦᱟᱨ ᱠᱟᱛᱮ ᱰᱤᱴᱟᱞ ᱯᱩᱭᱥᱟᱹ ᱠᱚ ᱦᱟᱛᱟᱣᱮᱫᱟ ᱾ ᱠᱨᱭᱯᱴᱚᱢᱟᱭᱱᱤᱝ ᱥᱠᱨᱤᱯᱴ ᱟᱢᱟᱜ ᱵᱮᱴᱨᱭ ᱞᱚᱜᱚᱱ ᱪᱟᱵᱟᱭᱟ ᱾ ᱠᱚᱢᱯᱩᱴᱚᱨ ᱠᱚ ᱵᱟᱹᱭ ᱵᱟᱹᱭ ᱪᱷᱚᱭ ᱟ, ᱟᱨ ᱟᱢᱟᱜ ᱫᱟᱲᱮ ᱵᱤᱞ ᱠᱚ ᱨᱟᱠᱟᱵ ᱪᱷᱚ ᱫᱟᱲᱮᱜᱼᱟᱭ ᱾";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "ᱱᱚᱶᱟ ᱥᱟᱡᱟᱣ ᱫᱚ ᱵᱨᱚᱣᱡᱚᱨ ᱟᱨ ᱠᱚᱢᱯᱩᱴᱚᱨ ᱨᱮ ᱵᱷᱮᱜᱟᱨ ᱟ ᱾ ᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱚ ᱟᱹᱰᱤᱜᱟᱱ ᱵᱷᱮᱜᱟᱨ ᱥᱟᱡᱟᱣ ᱠᱚ ᱡᱚᱢᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱨᱚᱯᱷᱟᱤᱞ ᱮ ᱛᱮᱭᱟᱨᱟ, ᱚᱠᱟ ᱫᱚ ᱡᱟᱦᱟᱱᱟᱜ ᱧᱮᱞ ᱡᱷᱚᱜ ᱟᱢ ᱯᱟᱧᱡᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨᱚᱜᱼᱟ ᱾";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "ᱱᱚᱶᱟ ᱥᱟᱡᱟᱣ ᱫᱚ ᱵᱨᱚᱣᱡᱚᱨ ᱟᱨ ᱠᱚᱢᱯᱩᱴᱚᱨ ᱨᱮ ᱵᱷᱮᱜᱟᱨ ᱟ ᱾ ᱴᱤᱯᱟᱹᱪᱷᱟᱯᱠᱚ ᱠᱚ ᱟᱹᱰᱤᱜᱟᱱ ᱵᱷᱮᱜᱟᱨ ᱥᱟᱡᱟᱣ ᱠᱚ ᱡᱚᱢᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱢᱤᱫᱴᱟᱝ ᱯᱨᱚᱯᱷᱟᱤᱞ ᱮ ᱛᱮᱭᱟᱨᱟ, ᱚᱠᱟ ᱫᱚ ᱡᱟᱦᱟᱱᱟᱜ ᱧᱮᱞ ᱡᱷᱚᱜ ᱟᱢ ᱯᱟᱧᱡᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨᱚᱜᱼᱟ ᱾";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "ᱥᱚᱥᱤᱭᱟᱞ ᱱᱮᱴᱣᱟᱨᱠ ᱡᱟᱭᱜᱟ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱠᱚᱨᱮ ᱫᱚᱦᱚᱭᱟ ᱠᱚ ᱚᱱᱠᱟ ᱛᱮ ᱩᱱᱠᱩ ᱟᱢ ᱞᱟᱹᱜᱤᱫ ᱴᱟᱨᱜᱮᱴ ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱠᱚ ᱛᱮᱭᱟᱨᱟ ᱾ ᱱᱩᱠᱩ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚ ᱟᱴᱠᱟᱣ ᱞᱮᱠᱷᱟᱱ ᱥᱚᱥᱤᱭᱟᱞ ᱢᱤᱰᱤᱭᱟ ᱠᱚᱢᱯᱟᱱᱤ ᱠᱚᱢ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱟᱼᱟ ᱟᱢ ᱚᱱᱞᱟᱭᱤᱱ ᱪᱮᱫ ᱮᱢ ᱪᱤᱠᱟᱹᱭᱮᱫᱟ ᱾";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱟᱜ";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ᱴᱤᱯᱟᱹᱪᱷᱟᱯᱠᱚ ᱟᱜ";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "ᱪᱦᱤ ᱱᱟᱶᱟ ᱢᱮᱱᱟᱼᱟ";
@@ -1022,7 +1022,7 @@
 "ScanQRCode.InvalidDataError.Message" = "ᱥᱟᱠᱷᱤᱭᱟᱛ ᱫᱚ ᱵᱟᱲ ᱵᱟᱛᱟᱣ ᱢᱮᱱᱟ-ᱟ";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Firefox’ ᱾ Firefox ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱟᱭᱮᱢ ᱾";
+"ScanQRCode.PermissionError.Message.v100" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Firefox’ ᱾ Firefox ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱣᱟᱭᱮᱢ ᱾";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
@@ -1445,7 +1445,7 @@
 "Settings.Passwords.FingerPrintReason.v103" = "ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ‌ ᱾";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
+"Settings.Passwords.OnboardingMessage.v103" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱢᱮᱫᱦᱟᱸ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
@@ -1715,7 +1715,7 @@
 "There was a problem accessing tabs from your other devices. Try again in a few moments." = "ᱚᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱠᱚ ᱟᱹᱛᱩᱨ ᱰᱤᱜᱟᱹᱣ ᱮᱱᱟ ᱾ ᱠᱤᱪᱷᱤ ᱥᱚᱢᱚᱭ ᱯᱚᱨᱮ ᱫᱩᱦᱲᱟᱹ ᱪᱮᱥᱴᱟᱭ ᱢᱮ ᱾";
 
 /* Error displayed when reader mode cannot be enabled */
-"There was an error converting the page" = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱷᱩᱞ ᱦᱳᱭᱮᱱᱟ ᱥᱟᱦᱴᱟ ᱵᱚᱫᱚᱞ ᱜᱷᱚᱰᱤ";
+"There was an error converting the page" = "ᱢᱤᱫᱴᱟᱝ ᱵᱷᱩᱞ ᱦᱳᱭᱮᱱᱟ ᱥᱟᱦᱴᱟ ᱵᱚᱫᱚᱞ ᱜᱷᱚᱰᱤ";
 
 /* Relative date for date in past week. */
 "this week" = "ᱱᱚᱶᱟ ᱦᱟᱴ";
@@ -1781,10 +1781,10 @@
 "Wallpaper.Change.Error.Title.v106" = "ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱵᱟᱭ ᱜᱟᱱ ᱞᱮᱱᱟ";
 
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
-"Wallpaper.Download.Error.Body.v106" = "ᱟᱢᱟᱜ ᱰᱟᱩᱱᱞᱚᱰ ᱥᱟᱞᱟᱜ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ ᱾";
+"Wallpaper.Download.Error.Body.v106" = "ᱟᱢᱟᱜ ᱰᱟᱣᱱᱞᱚᱰ ᱥᱟᱞᱟᱜ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ ᱾";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
-"Wallpaper.Download.Error.Title.v106" = "ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱰᱟᱩᱱᱞᱳᱰ ᱵᱟᱭ ᱜᱟᱱ ᱞᱮᱱᱟ";
+"Wallpaper.Download.Error.Title.v106" = "ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱰᱟᱣᱱᱞᱳᱰ ᱵᱟᱭ ᱜᱟᱱ ᱞᱮᱱᱟ";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "ᱵᱟᱹᱰᱨᱟᱹ";
