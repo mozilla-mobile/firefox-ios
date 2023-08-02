@@ -418,8 +418,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         presentUndoToast(toastType: .singleTab) { [weak self] undoButtonPressed in
             guard let self,
-                    undoButtonPressed,
-                    let closedTab = self.tabManager.backupCloseTab else { return }
+                  undoButtonPressed,
+                  let closedTab = self.tabManager.backupCloseTab else { return }
 
             self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
