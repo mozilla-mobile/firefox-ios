@@ -1,4 +1,4 @@
 # For instructions on managing dependencies, see:
 # https://taskcluster-taskgraph.readthedocs.io/en/latest/howto/bootstrap-taskgraph.html
 
-taskcluster-taskgraph>=3.5.0
+taskcluster-taskgraph>=6.0.0
