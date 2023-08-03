@@ -488,12 +488,11 @@ class Tab: NSObject {
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         // If the interactionState field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
-        if TabStorageFlagManager.isNewTabDataStoreEnabled {
+        if #available(iOS 15, *) {
             if let url = url {
                 webView.load(PrivilegedRequest(url: url) as URLRequest)
             }
-            if #available(iOS 15, *),
-               let interactionState = interactionState {
+            if let interactionState = interactionState {
                 webView.interactionState = interactionState
             }
             return
