@@ -19,6 +19,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
             size: UX.labelSize)
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.accessibilityIdentifier = AccessibilityIdentifiers.ActionFooter.title
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -28,6 +29,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
         button.titleLabel?.numberOfLines = 1
         button.buttonEdgeSpacing = 0
         button.setContentCompressionResistancePriority(.required, for: .vertical)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ActionFooter.primaryAction
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
