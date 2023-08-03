@@ -38,17 +38,30 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
     // MARK: - Initializers
     init(prefs: Prefs,
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+         settingsDelegate: SettingsDelegate? = nil) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
         super.init(style: .grouped)
+        super.settingsDelegate = settingsDelegate
 
         title = .SettingsHomePageSectionName
         navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: .AppSettingsDone,
+            style: .plain,
+            target: self,
+            action: #selector(done))
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    func done() {
+        settingsDelegate?.didFinish()
     }
 
     // MARK: - View Lifecycle

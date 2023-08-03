@@ -14,6 +14,7 @@ class SlideOverPresentationController: UIPresentationController {
     let blurEffectView: UIVisualEffectView!
     var tapGestureRecognizer = UITapGestureRecognizer()
     var globalETPStatus: Bool
+    weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
 
     init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool) {
         globalETPStatus = status
@@ -77,6 +78,10 @@ class SlideOverPresentationController: UIPresentationController {
 
     @objc
     func dismissController() {
-        presentedViewController.dismiss(animated: true, completion: nil)
+        if CoordinatorFlagManager.isEtpCoordinatorEnabled {
+            enhancedTrackingProtectionMenuDelegate?.didFinish()
+        } else {
+            presentedViewController.dismiss(animated: true, completion: nil)
+        }
     }
 }

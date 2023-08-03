@@ -64,6 +64,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
             tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        title = .RecentlyClosedTabsPanelTitle
         listenForThemeChange(view)
         applyTheme()
     }

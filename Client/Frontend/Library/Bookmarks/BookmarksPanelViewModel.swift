@@ -103,6 +103,25 @@ class BookmarksPanelViewModel {
                 self.bookmarkFolder = mobileFolder
                 self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
+                if let mobileBookmarks = mobileFolder.fxChildren, !mobileBookmarks.isEmpty {
+                    TelemetryWrapper.recordEvent(category: .information,
+                                                 method: .view,
+                                                 object: .mobileBookmarks,
+                                                 value: .doesHaveMobileBookmarks)
+
+                    let mobileBookmarksExtra = [TelemetryWrapper.EventExtraKey.mobileBookmarksQuantity.rawValue: Int64(mobileBookmarks.count)]
+                    TelemetryWrapper.recordEvent(category: .information,
+                                                 method: .view,
+                                                 object: .mobileBookmarks,
+                                                 value: .mobileBookmarksCount,
+                                                 extras: mobileBookmarksExtra)
+                } else {
+                    TelemetryWrapper.recordEvent(category: .information,
+                                                 method: .view,
+                                                 object: .mobileBookmarks,
+                                                 value: .doesNotHaveMobileBookmarks)
+                }
+
                 let desktopFolder = LocalDesktopFolder()
                 self.bookmarkNodes.insert(desktopFolder, at: 0)
 

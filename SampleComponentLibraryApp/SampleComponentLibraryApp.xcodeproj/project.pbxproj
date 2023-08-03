@@ -25,6 +25,10 @@
 		8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CE72A6EED0900B69244 /* MockThemeManager.swift */; };
 		8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEA2A6EED6900B69244 /* BottomSheetChildViewController.swift */; };
 		8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */; };
+		E17AC7512A77F6EF004671BA /* CardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17AC7502A77F6EF004671BA /* CardContainerViewController.swift */; };
+		E189515A2A77F8760077810A /* CardContainerComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18951592A77F8760077810A /* CardContainerComponentViewModel.swift */; };
+		E19891C82A790AB700CD256D /* CollapsibleCardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */; };
+		E19891C92A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +52,10 @@
 		8ABC3CE72A6EED0900B69244 /* MockThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThemeManager.swift; sourceTree = "<group>"; };
 		8ABC3CEA2A6EED6900B69244 /* BottomSheetChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetChildViewController.swift; sourceTree = "<group>"; };
 		8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetComponentViewModel.swift; sourceTree = "<group>"; };
+		E17AC7502A77F6EF004671BA /* CardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerViewController.swift; sourceTree = "<group>"; };
+		E18951592A77F8760077810A /* CardContainerComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerComponentViewModel.swift; sourceTree = "<group>"; };
+		E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardContainerViewController.swift; sourceTree = "<group>"; };
+		E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardContainerComponentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,10 +92,12 @@
 			isa = PBXGroup;
 			children = (
 				8ABC3CE92A6EED5C00B69244 /* BottomSheet */,
-				8ABC3CE42A6EECE100B69244 /* Dependency */,
-				8A6EE0AD2A5869C200B4D401 /* Protocol */,
-				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
+				E17AC74E2A77F64F004671BA /* CardContainer */,
+				E19891C52A790AB700CD256D /* CollapsibleCardContainer */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
+				8ABC3CE42A6EECE100B69244 /* Dependency */,
+				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
+				8A6EE0AD2A5869C200B4D401 /* Protocol */,
 				8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */,
 				8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */,
 				8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */,
@@ -160,6 +170,24 @@
 			path = BottomSheet;
 			sourceTree = "<group>";
 		};
+		E17AC74E2A77F64F004671BA /* CardContainer */ = {
+			isa = PBXGroup;
+			children = (
+				E18951592A77F8760077810A /* CardContainerComponentViewModel.swift */,
+				E17AC7502A77F6EF004671BA /* CardContainerViewController.swift */,
+			);
+			path = CardContainer;
+			sourceTree = "<group>";
+		};
+		E19891C52A790AB700CD256D /* CollapsibleCardContainer */ = {
+			isa = PBXGroup;
+			children = (
+				E19891C62A790AB700CD256D /* CollapsibleCardContainerViewController.swift */,
+				E19891C72A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift */,
+			);
+			path = CollapsibleCardContainer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -168,8 +196,8 @@
 			buildConfigurationList = 8A2FE6782A55EE3F0036B6AF /* Build configuration list for PBXNativeTarget "SampleComponentLibraryApp" */;
 			buildPhases = (
 				8A2FE64A2A55EE3D0036B6AF /* Sources */,
-				8A2FE64B2A55EE3D0036B6AF /* Frameworks */,
 				8A2FE64C2A55EE3D0036B6AF /* Resources */,
+				8A2FE64B2A55EE3D0036B6AF /* Frameworks */,
 				8A2FE6922A55F1880036B6AF /* Swiftlint */,
 			);
 			buildRules = (
@@ -256,6 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E189515A2A77F8760077810A /* CardContainerComponentViewModel.swift in Sources */,
 				8A6EE0AF2A586A1B00B4D401 /* FadeScrollViewViewController.swift in Sources */,
 				8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */,
 				8A6EE0A52A58642500B4D401 /* ComponentDataSource.swift in Sources */,
@@ -263,14 +292,17 @@
 				8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */,
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
+				E17AC7512A77F6EF004671BA /* CardContainerViewController.swift in Sources */,
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
 				8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */,
 				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
 				8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */,
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
 				8ABC3CE62A6EECF000B69244 /* DependencyHelperMock.swift in Sources */,
+				E19891C82A790AB700CD256D /* CollapsibleCardContainerViewController.swift in Sources */,
 				8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */,
 				8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */,
+				E19891C92A790AB700CD256D /* CollapsibleCardContainerComponentViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,6 +36,7 @@ public protocol SyncManager {
     func onRemovedAccount() -> Success
     @discardableResult
     func onAddedAccount() -> Success
+    func updateCreditCardAutofillStatus(value: Bool)
 }
 
 /// This exists to pass in external context: e.g., the UIApplication can

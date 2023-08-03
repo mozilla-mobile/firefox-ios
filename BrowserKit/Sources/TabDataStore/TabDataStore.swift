@@ -37,57 +37,11 @@ public actor DefaultTabDataStore: TabDataStore {
         self.throttleTime = throttleTime
     }
 
-    // MARK: - URL Utils
-
-    private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
-        guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
-        let baseFilePath = "window-" + windowID.uuidString
-        return baseURL.appendingPathComponent(baseFilePath)
-    }
-
     // MARK: Fetching Window Data
 
     public func fetchWindowData() async -> WindowData? {
         let allWindows = await fetchAllWindowsData()
         return allWindows.first
-    }
-
-    private func fetchWindowData(withID id: UUID, isBackup: Bool) async -> WindowData? {
-        guard let directoryURL = windowURLPath(for: id, isBackup: isBackup) else {
-            return nil
-        }
-        do {
-            let windowData = try fileManager.getWindowDataFromPath(path: directoryURL)
-            return windowData
-        } catch {
-            return nil
-        }
-    }
-
-    private func fetchWindowData(withID id: UUID) async -> WindowData? {
-        guard let directoryURL = windowURLPath(for: id, isBackup: false) else {
-            return nil
-        }
-        do {
-            let windowData = try fileManager.getWindowDataFromPath(path: directoryURL)
-            return windowData
-        } catch {
-            logger.log("Error fetching window data: \(error)",
-                       level: .debug,
-                       category: .tabs)
-            guard let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
-                return nil
-            }
-            do {
-                let backupWindowData = try fileManager.getWindowDataFromPath(path: backupURL)
-                return backupWindowData
-            } catch {
-                logger.log("Error fetching backup window data: \(error)",
-                           level: .debug,
-                           category: .tabs)
-            }
-            return nil
-        }
     }
 
     private func fetchAllWindowsData() async -> [WindowData] {
@@ -132,16 +86,13 @@ public actor DefaultTabDataStore: TabDataStore {
     public func saveWindowData(window: WindowData, forced: Bool) async {
         guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else { return }
 
-        if fileManager.fileExists(atPath: windowSavingPath) {
-            createWindowDataBackup(window: window, windowSavingPath: windowSavingPath)
-        } else {
-            if let windowDataDirectoryURL = fileManager.windowDataDirectory(isBackup: false) {
-                fileManager.createDirectoryAtPath(path: windowDataDirectoryURL)
-            }
-        }
-
         // Hold onto a copy of the latest window data so whenever the save happens it is using the latest
         windowDataToSave = window
+
+        if let windowDataDirectoryURL = fileManager.windowDataDirectory(isBackup: false),
+           !fileManager.fileExists(atPath: windowDataDirectoryURL) {
+            fileManager.createDirectoryAtPath(path: windowDataDirectoryURL)
+        }
 
         if forced {
             await writeWindowDataToFile(path: windowSavingPath)
@@ -150,16 +101,17 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    private func createWindowDataBackup(window: WindowData, windowSavingPath: URL) {
-        guard let backupWindowSavingPath = windowURLPath(for: window.id, isBackup: true),
-              let backupDirectoryPath = fileManager.windowDataDirectory(isBackup: true) else {
-            return
-        }
+    private func createWindowDataBackup(windowPath: URL) {
+        guard let windowID = windowDataToSave?.id,
+              let backupWindowSavingPath = windowURLPath(for: windowID, isBackup: true),
+              let backupDirectoryPath = fileManager.windowDataDirectory(isBackup: true)
+        else { return }
+
         if !fileManager.fileExists(atPath: backupDirectoryPath) {
             fileManager.createDirectoryAtPath(path: backupDirectoryPath)
         }
         do {
-            try fileManager.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
+            try fileManager.copyItem(at: windowPath, to: backupWindowSavingPath)
         } catch {
             logger.log("Failed to create window data backup: \(error)",
                        level: .debug,
@@ -181,6 +133,9 @@ public actor DefaultTabDataStore: TabDataStore {
             // Once the throttle time has passed initiate the save and reset the bool
             try? await Task.sleep(nanoseconds: throttleTime)
             nextSaveIsScheduled = false
+            if fileManager.fileExists(atPath: path) {
+                createWindowDataBackup(windowPath: path)
+            }
             await writeWindowDataToFile(path: path)
         }
     }
@@ -210,5 +165,13 @@ public actor DefaultTabDataStore: TabDataStore {
         }
         fileManager.removeAllFilesAt(directory: directoryURL)
         fileManager.removeAllFilesAt(directory: backupURL)
+    }
+
+    // MARK: - URL Utils
+
+    private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
+        guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
+        let baseFilePath = "window-" + windowID.uuidString
+        return baseURL.appendingPathComponent(baseFilePath)
     }
 }

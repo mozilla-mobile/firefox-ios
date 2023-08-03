@@ -37,7 +37,9 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
-                           LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                           LaunchArguments.TurnOffTabGroupsInUserPreferences,
+                           LaunchArguments.DisableAnimations
+        ]
 
     func restartInBackground() {
         // Send app to background, and re-enter
