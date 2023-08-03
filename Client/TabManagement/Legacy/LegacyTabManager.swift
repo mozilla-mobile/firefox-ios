@@ -192,18 +192,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
     lazy private var configuration: WKWebViewConfiguration = {
-        print("YRD use configuration")
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
     lazy private var privateConfiguration: WKWebViewConfiguration = {
-        print("YRD use privateConfiguration")
         return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
-        print("YRD makeWebViewConfig")
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
