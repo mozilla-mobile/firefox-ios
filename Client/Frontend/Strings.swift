@@ -486,6 +486,31 @@ extension String {
     }
 }
 
+extension String {
+    public struct Shopping {
+        public static let ReliabilityCardTitle = MZLocalizedString(
+            key: "Shopping.ReviewQuality.ReliabilityCardTitle.v118",
+            tableName: "Shopping",
+            value: "How reliable are these reviews?",
+            comment: "Title of the reliability card displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingAB = MZLocalizedString(
+            key: "Shopping.ReviewQuality.ReliabilityRating.AB.Description.v118",
+            tableName: "Shopping",
+            value: "Reliable reviews",
+            comment: "Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingC = MZLocalizedString(
+            key: "Shopping.ReviewQuality.ReliabilityRating.C.Description.v118",
+            tableName: "Shopping",
+            value: "Only some reliable reviews",
+            comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingDF = MZLocalizedString(
+            key: "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v118",
+            tableName: "Shopping",
+            value: "Unreliable reviews",
+            comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
+    }
+}
+
 // MARK: - Enhanced Tracking Protection screen
 extension String {
     public struct ETPMenu { }
