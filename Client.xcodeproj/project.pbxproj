@@ -621,13 +621,10 @@
 		8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */; };
 		8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */; };
 		8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */; };
-<<<<<<< HEAD
-=======
 		8A6E139E2A71C78A00A88FA8 /* GridTabViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */; };
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
 		8A6E139A2A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */; };
 		8A6E139C2A71BB5700A88FA8 /* TabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */; };
->>>>>>> 38a1896a7 (Bugfix FXIOS-7075 [v116.1] fix leaks with webview (#15776))
 		8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */; };
 		8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */; };
 		8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */; };
@@ -4818,13 +4815,10 @@
 		8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCellTests.swift; sourceTree = "<group>"; };
 		8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContextMenuHelper.swift; sourceTree = "<group>"; };
 		8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-=======
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
 		8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabLayoutDelegateTests.swift; sourceTree = "<group>"; };
 		8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCellTests.swift; sourceTree = "<group>"; };
 		8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTabViewControllerTests.swift; sourceTree = "<group>"; };
->>>>>>> 38a1896a7 (Bugfix FXIOS-7075 [v116.1] fix leaks with webview (#15776))
 		8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -10502,14 +10496,10 @@
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */,
-<<<<<<< HEAD
-=======
-				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
 				8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */,
 				8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */,
 				8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */,
->>>>>>> 38a1896a7 (Bugfix FXIOS-7075 [v116.1] fix leaks with webview (#15776))
 			);
 			path = ClientTests;
 			sourceTree = "<group>";

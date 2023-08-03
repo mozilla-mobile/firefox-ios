@@ -61,13 +61,8 @@ class TabCell: UICollectionViewCell,
     private lazy var smallFaviconView: FaviconImageView = .build { _ in }
     private lazy var favicon: FaviconImageView = .build { _ in }
 
-<<<<<<< HEAD
-    lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
-=======
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
->>>>>>> 38a1896a7 (Bugfix FXIOS-7075 [v116.1] fix leaks with webview (#15776))
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabViewController.UX.closeButtonEdgeInset)
