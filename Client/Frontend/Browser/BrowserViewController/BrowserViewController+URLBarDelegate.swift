@@ -114,7 +114,9 @@ extension BrowserViewController: URLBarDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
 
         let viewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle,
-                                             isPanningUpEnabled: true)
+                                             isPanningUpEnabled: true,
+                                             isFixedHeight: false,
+                                             contentHeight: UIScreen.main.bounds.height * 0.5)
         let bottomSheetVC = BottomSheetViewController(viewModel: viewModel,
                                                       childViewController: FakespotBottomSheetChildViewController())
         present(bottomSheetVC, animated: false)

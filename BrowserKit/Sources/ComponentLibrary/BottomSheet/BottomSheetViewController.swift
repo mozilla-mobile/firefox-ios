@@ -27,7 +27,6 @@ public class BottomSheetViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let springWithDamping = 0.7
         static let animationDuration = 0.5
-        static let maximumContentHeight = UIScreen.main.bounds.height - 64
     }
 
     public var notificationCenter: NotificationProtocol
@@ -57,10 +56,6 @@ public class BottomSheetViewController: UIViewController,
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-
     private lazy var sheetView: UIView = .build()
     private lazy var contentView: UIView = .build()
     private lazy var scrollContentView: UIView = .build()
@@ -71,6 +66,7 @@ public class BottomSheetViewController: UIViewController,
     private var viewTranslation = CGPoint(x: 0, y: 0)
     private var currentContentHeight: CGFloat
     private var defaultHeight: CGFloat
+    private var maximumContentHeight = UIScreen.main.bounds.height * 0.93
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
@@ -136,6 +132,12 @@ public class BottomSheetViewController: UIViewController,
         sheetView.layer.shadowRadius = 20.0
         sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
                                                   cornerRadius: viewModel.cornerRadius).cgPath
+    }
+
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard !viewModel.isFixedHeight else { return }
+        remakeHeights()
     }
 
     // MARK: - Theme
@@ -225,13 +227,24 @@ public class BottomSheetViewController: UIViewController,
         contentView.bringSubviewToFront(closeButton)
     }
 
+    private func remakeHeights() {
+        maximumContentHeight = UIScreen.main.bounds.height * 0.93
+        defaultHeight = UIScreen.main.bounds.height * 0.5
+        currentContentHeight = defaultHeight
+        contentViewHeightConstraint.isActive = false
+        contentViewHeightConstraint = sheetView.heightAnchor.constraint(equalToConstant: defaultHeight)
+        contentViewHeightConstraint.isActive = true
+    }
+
     private func setupChildViewController() {
         addChild(childViewController)
         scrollContentView.addSubview(childViewController.view)
         childViewController.didMove(toParent: self)
 
         guard let childSuperView = childViewController.view.superview else { return }
-
+        if viewModel.isFixedHeight {
+            childViewController.view.heightAnchor.constraint(equalToConstant: defaultHeight).isActive = true
+        }
         NSLayoutConstraint.activate([
             childViewController.view.bottomAnchor.constraint(equalTo: childSuperView.bottomAnchor),
             childViewController.view.topAnchor.constraint(equalTo: childSuperView.topAnchor),
@@ -267,7 +280,7 @@ public class BottomSheetViewController: UIViewController,
                 // Animate to default height if the new height
                 // is below the default threshold.
                 animateContentHeight(defaultHeight)
-            } else if newHeight < UX.maximumContentHeight,
+            } else if newHeight < maximumContentHeight,
                                   isPanningDown,
                                   viewModel.isPanningUpEnabled {
                 // If the new height is below the maximum threshold and
@@ -278,7 +291,7 @@ public class BottomSheetViewController: UIViewController,
                                   viewModel.isPanningUpEnabled {
                 // If the new height is below the maximum threshold and
                 // increasing, set it to the maximum height at the top.
-                animateContentHeight(UX.maximumContentHeight)
+                animateContentHeight(maximumContentHeight)
             }
         default:
             break

@@ -18,12 +18,14 @@ public struct BottomSheetViewModel {
     public var backgroundColor: UIColor
     public var shouldDismissForTapOutside: Bool
     public var isPanningUpEnabled: Bool
+    public var isFixedHeight: Bool
     public var shadowOpacity: Float
     public var closeButtonA11yLabel: String
 
     public init(closeButtonA11yLabel: String,
                 isPanningUpEnabled: Bool = false,
-                contentHeight: CGFloat = UIScreen.main.bounds.height * 0.5) {
+                isFixedHeight: Bool = true,
+                contentHeight: CGFloat = 300) {
         cornerRadius = BottomSheetViewModel.UX.cornerRadius
         animationTransitionDuration = BottomSheetViewModel.UX.animationTransitionDuration
         backgroundColor = .clear
@@ -31,6 +33,7 @@ public struct BottomSheetViewModel {
         shadowOpacity = BottomSheetViewModel.UX.shadowOpacity
         self.closeButtonA11yLabel = closeButtonA11yLabel
         self.isPanningUpEnabled = isPanningUpEnabled
+        self.isFixedHeight = isFixedHeight
         self.contentHeight = contentHeight
     }
 
@@ -40,6 +43,7 @@ public struct BottomSheetViewModel {
                 backgroundColor: UIColor,
                 shouldDismissForTapOutside: Bool,
                 isPanningUpEnabled: Bool,
+                isFixedHeight: Bool,
                 shadowOpacity: Float,
                 closeButtonA11yLabel: String) {
         self.cornerRadius = cornerRadius
@@ -48,6 +52,7 @@ public struct BottomSheetViewModel {
         self.backgroundColor = backgroundColor
         self.shouldDismissForTapOutside = shouldDismissForTapOutside
         self.isPanningUpEnabled = isPanningUpEnabled
+        self.isFixedHeight = isFixedHeight
         self.shadowOpacity = shadowOpacity
         self.closeButtonA11yLabel = closeButtonA11yLabel
     }
