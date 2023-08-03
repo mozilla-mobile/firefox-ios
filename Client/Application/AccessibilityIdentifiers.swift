@@ -269,6 +269,10 @@ public struct AccessibilityIdentifiers {
             static let title = "NoImageMode"
         }
 
+        struct BlockPopUp {
+            static let title = "BlockPopUp"
+        }
+
         struct OpenWithMail {
             static let title = "OpenWith.Setting"
         }
