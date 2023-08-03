@@ -6,6 +6,7 @@
 
 import Common
 import Storage
+import Shared
 import XCTest
 
 class TabLayoutDelegateTests: XCTestCase {
@@ -66,7 +67,7 @@ class TabLayoutDelegateTests: XCTestCase {
 }
 
 // MARK: - MockTabDisplayerDelegate
-class MockTabDisplayerDelegate: TabDisplayerDelegate {
+class MockTabDisplayerDelegate: TabDisplayer {
     var tabCellIdentifier: TabCellIdentifier = "identifier"
 
     func focusSelectedTab() {}
