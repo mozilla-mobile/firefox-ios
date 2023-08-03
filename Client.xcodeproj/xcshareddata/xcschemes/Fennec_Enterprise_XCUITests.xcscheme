@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "sh &quot;${SRCROOT}/test-fixtures/scheme-postbuild.sh&quot; || exit 1">
+               scriptText = "sh &quot;${SRCROOT}/test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
