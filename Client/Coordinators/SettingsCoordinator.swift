@@ -117,6 +117,7 @@ class SettingsCoordinator: BaseCoordinator,
 
         case .contentBlocker:
             let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs)
+            contentBlockerVC.settingsDelegate = self
             contentBlockerVC.profile = profile
             contentBlockerVC.tabManager = tabManager
             return contentBlockerVC
@@ -195,6 +196,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedContentBlocker() {
         let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        viewController.settingsDelegate = self
         viewController.profile = profile
         viewController.tabManager = tabManager
         router.push(viewController)
