@@ -64,6 +64,7 @@
 		210E0EB9298D9D4B00BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
 		210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
 		210E0EBB298D9D6600BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
+		211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */; };
 		21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21112967289480630082C08B /* HomepageMessageCardViewModel.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
 		2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */; };
@@ -434,7 +435,6 @@
 		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */; };
 		5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
-		5AB0973529F7593B00FBDAFB /* TabStorageFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB0973429F7593B00FBDAFB /* TabStorageFlagManager.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
@@ -488,6 +488,7 @@
 		74C027451B2A348C001B1E88 /* LegacySessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* LegacySessionData.swift */; };
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
+		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
 		7B10AA9F1E3A15020002DD08 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AA9E1E3A15020002DD08 /* DataExtensions.swift */; };
 		7B10AABB1E3A1F650002DD08 /* URLRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */; };
@@ -1281,7 +1282,7 @@
 		E1AF3560286DE5F800960045 /* Smoketest3.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */; };
 		E1AF3561286DE5F800960045 /* Smoketest4.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF3559286DE5F600960045 /* Smoketest4.xctestplan */; };
 		E1AF3562286DE5F800960045 /* Smoketest2.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355A286DE5F600960045 /* Smoketest2.xctestplan */; };
-		E1AF3563286DE5F800960045 /* Fennec_Enterprise_XCUITests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355B286DE5F600960045 /* Fennec_Enterprise_XCUITests.xctestplan */; };
+		E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */; };
 		E1AF3564286DE5F800960045 /* SyncIntegrationTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355C286DE5F600960045 /* SyncIntegrationTestPlan.xctestplan */; };
 		E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355D286DE5F700960045 /* UnitTest.xctestplan */; };
 		E1AF3566286DE5F800960045 /* SmokeXCUITests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355E286DE5F700960045 /* SmokeXCUITests.xctestplan */; };
@@ -2081,6 +2082,7 @@
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
 		210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorCell.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
+		211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPopupSetting.swift; sourceTree = "<group>"; };
 		21112967289480630082C08B /* HomepageMessageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModel.swift; sourceTree = "<group>"; };
 		211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+Search.swift"; sourceTree = "<group>"; };
 		2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendToDeviceActivity.swift; sourceTree = "<group>"; };
@@ -2762,6 +2764,9 @@
 		4322E39F28B39DFE00BA0883 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		43233C9E29BF3BBD002E6B6D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Onboarding.strings; sourceTree = "<group>"; };
 		43233C9F29BF3BBD002E6B6D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/ResearchSurface.strings; sourceTree = "<group>"; };
+		432361962A77CE0000027CA4 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/DisplayCard.strings"; sourceTree = "<group>"; };
+		432361972A77CE0000027CA4 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FirefoxSync.strings"; sourceTree = "<group>"; };
+		432361982A77CE0000027CA4 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Footer.strings"; sourceTree = "<group>"; };
 		4324001B2A2DF9E90073E26F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/DisplayCard.strings; sourceTree = "<group>"; };
 		4324001C2A2DF9E90073E26F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
 		4324001D2A2DF9E90073E26F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Upgrade.strings; sourceTree = "<group>"; };
@@ -3214,6 +3219,8 @@
 		436D76622A124BC300E71F8F /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		436D76632A124BC400E71F8F /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/ZoomPageBar.strings; sourceTree = "<group>"; };
 		436DBFB929225A63003F8A35 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
+		436DD5C62A77CF750023C1FF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/CustomizeFirefoxHome.strings; sourceTree = "<group>"; };
+		436DD5C72A77CF760023C1FF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SelectCreditCard.strings; sourceTree = "<group>"; };
 		436DE8522A24C0FD00DE00FC /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/DisplayCard.strings; sourceTree = "<group>"; };
 		436DE8532A24C0FD00DE00FC /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
 		436DE8542A24C0FD00DE00FC /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
@@ -3416,6 +3423,8 @@
 		4388ED8629C879D000E1BA6E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/ErrorState.strings; sourceTree = "<group>"; };
 		4388ED8729C879D000E1BA6E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Settings.strings; sourceTree = "<group>"; };
 		4388ED8829C879D000E1BA6E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/SnackBar.strings; sourceTree = "<group>"; };
+		4389080F2A77D06400AFEAA4 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/CustomizeFirefoxHome.strings; sourceTree = "<group>"; };
+		438908102A77D06400AFEAA4 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/SelectCreditCard.strings; sourceTree = "<group>"; };
 		438992A62A1B884200C4DFC3 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
 		438A8BAB292B951A0070A9C0 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		438B138E28B39FB900E53858 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
@@ -3812,6 +3821,7 @@
 		43D6D6A127E535EE00F47485 /* FxALoginRegistrationTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxALoginRegistrationTelemetryTests.swift; sourceTree = "<group>"; };
 		43D6E61C29225D4100EEFC0F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		43D72DB226FCE3550069BDE9 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = "mr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		43D73B492A77CD3300E8C4EB /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/CustomizeFirefoxHome.strings; sourceTree = "<group>"; };
 		43D79ED529225A170047FF5D /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/SearchHeaderTitle.strings"; sourceTree = "<group>"; };
 		43D7FE852A2DFB3600B35176 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Footer.strings; sourceTree = "<group>"; };
 		43D7FE862A2DFB3600B35176 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/RememberCard.strings; sourceTree = "<group>"; };
@@ -4071,6 +4081,8 @@
 		43F78D602A24BF6600E8A9EC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/DisplayCard.strings; sourceTree = "<group>"; };
 		43F7952425795F69005AEE40 /* SearchTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTelemetry.swift; sourceTree = "<group>"; };
 		43F8734828B39E780047E9CD /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
+		43F8AD442A77CD9F00E5C382 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/CustomizeFirefoxHome.strings; sourceTree = "<group>"; };
+		43F8AD452A77CD9F00E5C382 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/SelectCreditCard.strings; sourceTree = "<group>"; };
 		43F8CEA629F69C9E00ED1918 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Notification.strings; sourceTree = "<group>"; };
 		43F8CEA729F69C9E00ED1918 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/ZoomPageBar.strings; sourceTree = "<group>"; };
 		43F8D46A2A2DF96300B45993 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/DisplayCard.strings; sourceTree = "<group>"; };
@@ -4318,7 +4330,6 @@
 		5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryDeletionProtocol.swift; sourceTree = "<group>"; };
 		5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinator.swift; sourceTree = "<group>"; };
 		5AA75A622A46272000533F8D /* MockThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThemeManager.swift; sourceTree = "<group>"; };
-		5AB0973429F7593B00FBDAFB /* TabStorageFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabStorageFlagManager.swift; sourceTree = "<group>"; };
 		5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNotificationCenter.swift; sourceTree = "<group>"; };
 		5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
 		5ABD40B68B3D03806BC6819C /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/LoginManager.strings"; sourceTree = "<group>"; };
@@ -6452,7 +6463,7 @@
 		E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Smoketest3.xctestplan; sourceTree = "<group>"; };
 		E1AF3559286DE5F600960045 /* Smoketest4.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Smoketest4.xctestplan; sourceTree = "<group>"; };
 		E1AF355A286DE5F600960045 /* Smoketest2.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Smoketest2.xctestplan; sourceTree = "<group>"; };
-		E1AF355B286DE5F600960045 /* Fennec_Enterprise_XCUITests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fennec_Enterprise_XCUITests.xctestplan; sourceTree = "<group>"; };
+		E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FullFunctionalTestPlan.xctestplan; sourceTree = "<group>"; };
 		E1AF355C286DE5F600960045 /* SyncIntegrationTestPlan.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SyncIntegrationTestPlan.xctestplan; sourceTree = "<group>"; };
 		E1AF355D286DE5F700960045 /* UnitTest.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UnitTest.xctestplan; sourceTree = "<group>"; };
 		E1AF355E286DE5F700960045 /* SmokeXCUITests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SmokeXCUITests.xctestplan; sourceTree = "<group>"; };
@@ -7031,6 +7042,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D433852C27ABC8150069DD33 /* MappaMundi in Frameworks */,
+				781C19CF2A780BEC0000DF46 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8210,7 +8222,6 @@
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				6ACB550B28633860007A6ABD /* TabManagerNavDelegate.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
-				5AB0973429F7593B00FBDAFB /* TabStorageFlagManager.swift */,
 				21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */,
 			);
 			path = TabManagement;
@@ -8241,6 +8252,7 @@
 				8A5D1CB12A30D756005AD35C /* SiriPageSetting.swift */,
 				8A5D1CA92A30D6E2005AD35C /* TabsSetting.swift */,
 				8A5D1CAD2A30D71A005AD35C /* ThemeSetting.swift */,
+				211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -9832,7 +9844,7 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E1AF355B286DE5F600960045 /* Fennec_Enterprise_XCUITests.xctestplan */,
+				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
 				E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */,
 				E1AF355A286DE5F600960045 /* Smoketest2.xctestplan */,
 				E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */,
@@ -10993,6 +11005,7 @@
 			name = L10nSnapshotTests;
 			packageProductDependencies = (
 				D433852B27ABC8150069DD33 /* MappaMundi */,
+				781C19CE2A780BEC0000DF46 /* Common */,
 			);
 			productName = L10nSnapshotTests;
 			productReference = 7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */;
@@ -11634,7 +11647,7 @@
 				3BC659591E5BA505006D560F /* bundle_sites.json in Resources */,
 				C8399D9522DE5E6200EFA5CA /* disconnect-block-social.json in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
-				E1AF3563286DE5F800960045 /* Fennec_Enterprise_XCUITests.xctestplan in Resources */,
+				E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */,
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
 				23BEA76A251A99ED00A014BF /* NewYorkMedium-RegularItalic.otf in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
@@ -12407,7 +12420,6 @@
 				DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */,
-				5AB0973529F7593B00FBDAFB /* TabStorageFlagManager.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
@@ -12761,6 +12773,7 @@
 				4347B39A298DA5BB0045F677 /* CreditCardInputViewModel.swift in Sources */,
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
+				211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
 				E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */,
 				C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */,
@@ -13935,6 +13948,9 @@
 				437B0B392A6E941600DD9F66 /* hr */,
 				43DB95962A6E948200B75724 /* kab */,
 				439273362A6E95B50014E253 /* su */,
+				43F8AD452A77CD9F00E5C382 /* co */,
+				436DD5C72A77CF760023C1FF /* ja */,
+				438908102A77D06400AFEAA4 /* pl */,
 			);
 			name = SelectCreditCard.strings;
 			sourceTree = "<group>";
@@ -14800,6 +14816,7 @@
 				4303AEFC2A6557FD0043D90C /* br */,
 				437B0B352A6E941600DD9F66 /* hr */,
 				439273322A6E95B50014E253 /* su */,
+				432361982A77CE0000027CA4 /* en-CA */,
 			);
 			name = Footer.strings;
 			sourceTree = "<group>";
@@ -14993,6 +15010,7 @@
 				4303AEFB2A6557FD0043D90C /* br */,
 				437B0B342A6E941600DD9F66 /* hr */,
 				439273312A6E95B50014E253 /* su */,
+				432361972A77CE0000027CA4 /* en-CA */,
 			);
 			name = FirefoxSync.strings;
 			sourceTree = "<group>";
@@ -15122,6 +15140,7 @@
 				4303AEF62A6557FC0043D90C /* br */,
 				437B0B2F2A6E941500DD9F66 /* hr */,
 				4392732C2A6E95B50014E253 /* su */,
+				432361962A77CE0000027CA4 /* en-CA */,
 			);
 			name = DisplayCard.strings;
 			sourceTree = "<group>";
@@ -15244,6 +15263,10 @@
 				43B5B73E2A6E931200F64C51 /* dsb */,
 				437B0B2E2A6E941500DD9F66 /* hr */,
 				43DB95952A6E948200B75724 /* kab */,
+				43D73B492A77CD3300E8C4EB /* be */,
+				43F8AD442A77CD9F00E5C382 /* co */,
+				436DD5C62A77CF750023C1FF /* ja */,
+				4389080F2A77D06400AFEAA4 /* pl */,
 			);
 			name = CustomizeFirefoxHome.strings;
 			sourceTree = "<group>";
@@ -18033,6 +18056,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18043,6 +18067,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18053,6 +18078,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18335,6 +18361,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -19253,7 +19280,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 117.0.20230729050233;
+				version = 118.0.20230804050245;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -19456,6 +19483,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		781C19CE2A780BEC0000DF46 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
 		};
 		8A05B0042A69A0C40011B622 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;

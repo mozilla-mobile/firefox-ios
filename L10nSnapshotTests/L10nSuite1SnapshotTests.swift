@@ -33,7 +33,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("Onboarding-1")
 
         // Swipe to the second screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
