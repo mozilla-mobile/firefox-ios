@@ -60,7 +60,10 @@ public struct ImageIdentifiers {
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
+<<<<<<< HEAD
     public static let key = "key"
+=======
+>>>>>>> 047a5f8d4 (Revert FXIOS-7151 [v116] Revert private mask icon update (#15901))
     public static let largePrivateTabsMask = "largePrivateMask"
     public static let libraryPanelSearch = "search"
     public static let libraryReadingList = "library-readinglist"

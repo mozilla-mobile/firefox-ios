@@ -77,8 +77,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     // MARK: - Default actions
+<<<<<<< HEAD
 
     func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+=======
+    func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
+>>>>>>> 047a5f8d4 (Revert FXIOS-7151 [v116] Revert private mask icon update (#15901))
         return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items

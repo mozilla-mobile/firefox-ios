@@ -218,7 +218,11 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
+<<<<<<< HEAD
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.Large.plus].exists)
+=======
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.plus].exists)
+>>>>>>> 047a5f8d4 (Revert FXIOS-7151 [v116] Revert private mask icon update (#15901))
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
     }
 
