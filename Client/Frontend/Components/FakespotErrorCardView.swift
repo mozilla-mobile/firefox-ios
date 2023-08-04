@@ -2,11 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import SwiftUI
 import UIKit
 import Common
 
-class FakespotErrorCardView: UIView, ThemeApplicable {
+final class FakespotErrorCardView: UIView, ThemeApplicable {
     private enum UX {
         static let buttonFontSize: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
@@ -20,6 +19,7 @@ class FakespotErrorCardView: UIView, ThemeApplicable {
         static let iconSize: CGFloat = 24
         static let titleFontSize: CGFloat = 13
         static let descriptionFontSize: CGFloat = 13
+        static let cornerRadius: CGFloat = 4
     }
 
     private lazy var containerStackView: UIStackView = .build { stackView in
@@ -55,11 +55,10 @@ class FakespotErrorCardView: UIView, ThemeApplicable {
         stackView.spacing = UX.verticalStackViewSpacing
     }
 
-    // Subviews
     private lazy var iconImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         // Set the icon image here
-        imageView.image = UIImage(systemName: "info.circle.fill")
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.criticalFill)
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -111,11 +110,11 @@ class FakespotErrorCardView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        layer.cornerRadius = 4
+        layer.cornerRadius = UX.cornerRadius
         addSubview(containerStackView)
         NSLayoutConstraint.activate([
-            iconImageView.heightAnchor.constraint(equalToConstant: 24),
-            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize),
+            iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
 
             containerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -136,8 +135,8 @@ class FakespotErrorCardView: UIView, ThemeApplicable {
         iconImageView.tintColor = theme.colors.textInverted
 
         primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = UIColor(rgb: 0x961D1B)
+        primaryButton.backgroundColor = theme.colors.iconAccentYellow
 
-        layer.backgroundColor = UIColor(rgb: 0xC5292D).cgColor
+        layer.backgroundColor = theme.colors.textWarning.cgColor
     }
 }
