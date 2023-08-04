@@ -367,4 +367,13 @@ public struct AccessibilityIdentifiers {
         static let yesButton = "RememberCreditCard.yesButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
+
+    struct Shopping {
+        struct ReliabilityCard {
+            static let card = "Shopping.ReliabilityCard.Card"
+            static let title = "Shopping.ReliabilityCard.Title"
+            static let ratingLetter = "Shopping.ReliabilityCard.RatingLetter"
+            static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
+        }
+    }
 }
