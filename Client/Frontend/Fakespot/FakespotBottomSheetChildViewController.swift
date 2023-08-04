@@ -17,7 +17,8 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
-    private lazy var contentView: UIView = .build { _ in }
+    private lazy var contentView: UIStackView = .build { _ in }
+    private lazy var reliabilityCardView: ReliabilityCardView = .build { _ in }
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -36,6 +37,15 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
         super.viewDidLoad()
         setupView()
         listenForThemeChange(view)
+
+        let reliabilityCardViewModel = ReliabilityCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
+            title: .Shopping.ReliabilityCardTitle,
+            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
+            rating: .gradeA,
+            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
+            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
+        reliabilityCardView.configure(reliabilityCardViewModel)
         applyTheme()
     }
 
@@ -45,9 +55,11 @@ class FakespotBottomSheetChildViewController: UIViewController, BottomSheetChild
     }
 
     func applyTheme() {
+        reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
+        contentView.addArrangedSubview(reliabilityCardView)
         view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
