@@ -130,13 +130,13 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textInverted
-        descriptionLabel.textColor  = theme.colors.textInverted
-        iconImageView.tintColor = theme.colors.textInverted
+        titleLabel.textColor = theme.colors.textOnColor
+        descriptionLabel.textColor  = theme.colors.textOnColor
+        iconImageView.tintColor = theme.colors.textOnColor
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = theme.colors.iconAccentYellow
+        primaryButton.setTitleColor(theme.colors.textOnColor, for: .normal)
+        primaryButton.backgroundColor = theme.colors.iconAccentYellow // Update in FXIOS-7154
 
-        layer.backgroundColor = theme.colors.textWarning.cgColor
+        layer.backgroundColor = theme.colors.textWarning.cgColor // Update in FXIOS-7154
     }
 }
