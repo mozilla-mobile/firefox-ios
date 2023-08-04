@@ -131,6 +131,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
         let passcodeInput = springboard.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 30)
+        snapshot("PasscodeInput")
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
@@ -138,6 +139,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // This snippet is here as a workaround.
         // https://github.com/mozilla-mobile/firefox-ios/issues/15642
         waitForNoExistence(passcodeInput)
+        snapshot("BiometricScreen")
         if app.otherElements.buttons.staticTexts.element(boundBy: 5).exists {
             app.otherElements.buttons.staticTexts.element(boundBy: 5).tap()
         }
