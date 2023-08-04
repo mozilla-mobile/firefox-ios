@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import ComponentLibrary
 
 // A convenience button class to add a closure as an action on a button instead of a selector
 class ActionButton: ResizableButton {

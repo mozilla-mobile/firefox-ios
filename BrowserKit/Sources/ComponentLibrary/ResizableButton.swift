@@ -4,12 +4,15 @@
 
 import UIKit
 
-class ResizableButton: UIButton {
-    struct UX {
-        static let buttonEdgeSpacing: CGFloat = 8
+/// This class is a button that enables resizing with dynamic type
+/// This is a building block component for developement purpose, and isn't the designer component in itself.
+/// See `RoundedButton` for the designer button component (to be done with FXIOS-6948 #15441)
+open class ResizableButton: UIButton {
+    public struct UX {
+        public static let buttonEdgeSpacing: CGFloat = 8
     }
 
-    var buttonEdgeSpacing: CGFloat = UX.buttonEdgeSpacing {
+    public var buttonEdgeSpacing: CGFloat = UX.buttonEdgeSpacing {
         didSet {
             contentEdgeInsets = UIEdgeInsets(top: 0,
                                              left: buttonEdgeSpacing,
@@ -18,12 +21,12 @@ class ResizableButton: UIButton {
         }
     }
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
@@ -39,7 +42,7 @@ class ResizableButton: UIButton {
                                          right: buttonEdgeSpacing)
     }
 
-    override var intrinsicContentSize: CGSize {
+    public override var intrinsicContentSize: CGSize {
         guard let title = titleLabel else {
             return super.intrinsicContentSize
         }
@@ -58,7 +61,7 @@ class ResizableButton: UIButton {
                       height: size.height + contentEdgeInsets.top + contentEdgeInsets.bottom)
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         guard let title = titleLabel else { return }
 
