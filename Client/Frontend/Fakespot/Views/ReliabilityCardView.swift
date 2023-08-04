@@ -20,6 +20,14 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
         static let cornerRadius: CGFloat = 4
+        static let letterVerticalPadding: CGFloat = 4
+        static let letterHorizontalPadding: CGFloat = 4
+        static let descriptionVerticalPadding: CGFloat = 6
+        static let descriptionHorizontalPadding: CGFloat = 8
+        static let titleFontSize: CGFloat = 17
+        static let letterFontSize: CGFloat = 15
+        static let descriptionFontSize: CGFloat = 12
+        static let descriptionBackgroundAlpha: CGFloat = 0.15
     }
 
     private lazy var cardContainer: CardContainer = .build { view in
@@ -30,7 +38,8 @@ class ReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 17)
+        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.titleFontSize)
+        view.numberOfLines = 0
     }
 
     private lazy var reliabilityScoreView: UIView = .build { view in
@@ -44,12 +53,13 @@ class ReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var reliabilityLetterLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 15)
+        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.letterFontSize)
     }
 
     private lazy var reliabilityDescriptionLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1, size: 12)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1, size: UX.descriptionFontSize)
+        view.numberOfLines = 0
     }
 
     private var viewModel: ReliabilityCardViewModel?
@@ -93,7 +103,7 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         if let viewModel {
             reliabilityLetterView.layer.backgroundColor = viewModel.rating.color(theme: theme).cgColor
             reliabilityDescriptionView.layer.backgroundColor = viewModel.rating.color(theme: theme)
-                .withAlphaComponent(0.15).cgColor
+                .withAlphaComponent(UX.descriptionBackgroundAlpha).cgColor
         }
     }
 
@@ -139,15 +149,23 @@ class ReliabilityCardView: UIView, ThemeApplicable {
             reliabilityDescriptionView.trailingAnchor.constraint(equalTo: reliabilityScoreView.trailingAnchor),
             reliabilityDescriptionView.bottomAnchor.constraint(equalTo: reliabilityScoreView.bottomAnchor),
 
-            reliabilityLetterLabel.leadingAnchor.constraint(equalTo: reliabilityLetterView.leadingAnchor, constant: 4),
-            reliabilityLetterLabel.topAnchor.constraint(equalTo: reliabilityLetterView.topAnchor, constant: 1),
-            reliabilityLetterLabel.trailingAnchor.constraint(equalTo: reliabilityLetterView.trailingAnchor, constant: -4),
-            reliabilityLetterLabel.bottomAnchor.constraint(equalTo: reliabilityLetterView.bottomAnchor, constant: -1),
+            reliabilityLetterLabel.leadingAnchor.constraint(equalTo: reliabilityLetterView.leadingAnchor,
+                                                            constant: UX.letterHorizontalPadding),
+            reliabilityLetterLabel.topAnchor.constraint(equalTo: reliabilityLetterView.topAnchor,
+                                                        constant: UX.letterVerticalPadding),
+            reliabilityLetterLabel.trailingAnchor.constraint(equalTo: reliabilityLetterView.trailingAnchor,
+                                                             constant: -UX.letterHorizontalPadding),
+            reliabilityLetterLabel.bottomAnchor.constraint(equalTo: reliabilityLetterView.bottomAnchor,
+                                                           constant: -UX.letterVerticalPadding),
 
-            reliabilityDescriptionLabel.leadingAnchor.constraint(equalTo: reliabilityDescriptionView.leadingAnchor, constant: 8),
-            reliabilityDescriptionLabel.topAnchor.constraint(equalTo: reliabilityDescriptionView.topAnchor, constant: 2),
-            reliabilityDescriptionLabel.trailingAnchor.constraint(equalTo: reliabilityDescriptionView.trailingAnchor, constant: -8),
-            reliabilityDescriptionLabel.bottomAnchor.constraint(equalTo: reliabilityDescriptionView.bottomAnchor, constant: -2),
+            reliabilityDescriptionLabel.leadingAnchor.constraint(equalTo: reliabilityDescriptionView.leadingAnchor,
+                                                                 constant: UX.descriptionHorizontalPadding),
+            reliabilityDescriptionLabel.topAnchor.constraint(equalTo: reliabilityDescriptionView.topAnchor,
+                                                             constant: UX.descriptionVerticalPadding),
+            reliabilityDescriptionLabel.trailingAnchor.constraint(equalTo: reliabilityDescriptionView.trailingAnchor,
+                                                                  constant: -UX.descriptionHorizontalPadding),
+            reliabilityDescriptionLabel.bottomAnchor.constraint(equalTo: reliabilityDescriptionView.bottomAnchor,
+                                                                constant: -UX.descriptionVerticalPadding),
         ])
     }
 }
