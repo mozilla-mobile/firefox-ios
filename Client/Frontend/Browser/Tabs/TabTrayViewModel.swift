@@ -39,7 +39,7 @@ class TabTrayViewModel {
             case .tabs:
                 return UIImage(named: ImageIdentifiers.navTabCounter)
             case .privateTabs:
-                return UIImage(named: StandardImageIdentifiers.Large.privateMode)
+                return UIImage(named: ImageIdentifiers.privateMaskSmall)
             case .syncedTabs:
                 return UIImage(named: ImageIdentifiers.syncedDevicesIcon)
             }
