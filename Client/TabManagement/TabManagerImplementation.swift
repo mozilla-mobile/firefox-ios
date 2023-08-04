@@ -16,7 +16,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
-    lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
@@ -109,6 +108,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func generateTabs(from windowData: WindowData) async {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
+        var tabToSelect: Tab?
 
         for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
@@ -117,6 +117,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.tabUUID = tabData.id.uuidString
             newTab.screenshotUUID = tabData.id
             newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
+            newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
             newTab.sessionData = LegacySessionData(currentPage: 0,
                                                    urls: [],
                                                    lastUsedTime: tabData.lastUsedTime.toTimestamp())
@@ -130,12 +131,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             restoreScreenshot(tab: newTab)
 
             if windowData.activeTabId == tabData.id {
-                selectTab(newTab)
+                tabToSelect = newTab
             }
         }
 
+        selectTab(tabToSelect)
+
         // If tabToSelect is nil after restoration, force selection of first tab normal tab
-        if selectedTab == nil {
+        if tabToSelect == nil {
             guard let tabToSelect = tabs.first(where: { !$0.isPrivate }) else {
                 selectTab(addTab())
                 return
@@ -150,7 +153,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         if clearPrivateTabs {
             savedTabs = windowData.tabData.filter { !$0.isPrivate }
         }
-
         return savedTabs
     }
 
@@ -203,7 +205,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
-                           lastUsedTime: Date.fromTimestamp(tab.sessionData?.lastUsedTime ?? 0),
+                           lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime ?? 0),
                            createdAtTime: Date.fromTimestamp(tab.firstCreatedTime ?? 0),
                            tabGroupData: groupData)
         }
@@ -280,7 +282,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *), isNewTabStoreEnabled {
+        if #available(iOS 15, *) {
             return true
         }
         return false

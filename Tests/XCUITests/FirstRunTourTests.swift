@@ -25,11 +25,12 @@ class FirstRunTourTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
+        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
 
         // Swipe to the second screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)

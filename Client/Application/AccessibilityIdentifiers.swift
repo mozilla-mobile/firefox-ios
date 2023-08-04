@@ -269,6 +269,10 @@ public struct AccessibilityIdentifiers {
             static let title = "NoImageMode"
         }
 
+        struct BlockPopUp {
+            static let title = "BlockPopUp"
+        }
+
         struct OpenWithMail {
             static let title = "OpenWith.Setting"
         }
@@ -364,14 +368,9 @@ public struct AccessibilityIdentifiers {
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
-    struct Components {
-        static let collapseButton = "collapseButton"
-        static let cardTitleLabel = "cardTitleLabel"
-
-        struct ErrorCard {
-            static let title = "ErrorCard.title"
-            static let description = "ErrorCard.description"
-            static let primaryAction = "ErrorCard.primaryAction"
-        }
+    struct ErrorCard {
+        static let title = "ErrorCard.title"
+        static let description = "ErrorCard.description"
+        static let primaryAction = "ErrorCard.primaryAction"
     }
 }

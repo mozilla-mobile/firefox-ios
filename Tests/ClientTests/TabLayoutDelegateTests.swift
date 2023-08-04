@@ -42,8 +42,7 @@ class TabLayoutDelegateTests: XCTestCase {
     func testTabCellDeinit() {
         let manager = createTabDisplayManager()
         let subject = TabLayoutDelegate(tabDisplayManager: manager,
-                                        traitCollection: UITraitCollection(),
-                                        scrollView: UIScrollView())
+                                        traitCollection: UITraitCollection())
         subject.tabSelectionDelegate = tabSelectionDelegate
         subject.tabPeekDelegate = tabPeekDelegate
         trackForMemoryLeaks(subject)

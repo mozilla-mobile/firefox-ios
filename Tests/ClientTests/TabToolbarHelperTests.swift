@@ -54,6 +54,12 @@ class TabToolbarHelperTests: XCTestCase {
         mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
     }
+
+    func test_tabToolBarHelper_basicCreation_doesntLeak() {
+        let tabToolBar = TabToolbar()
+        let subject = TabToolbarHelper(toolbar: tabToolBar)
+        trackForMemoryLeaks(subject)
+    }
 }
 
 class MockTabsButton: TabsButton {

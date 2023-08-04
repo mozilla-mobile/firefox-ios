@@ -31,6 +31,7 @@ class HistoryPanel: UIViewController,
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var state: LibraryPanelMainState
 
@@ -629,7 +630,13 @@ extension HistoryPanel: UITableViewDelegate {
         case .clearHistory:
             showClearRecentHistory()
         case .recentlyClosed:
-            navigateToRecentlyClosed()
+            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                guard viewModel.hasRecentlyClosed else { return }
+                refreshControl?.endRefreshing()
+                historyCoordinatorDelegate?.showRecentlyClosedTab()
+            } else {
+                navigateToRecentlyClosed()
+            }
         default: break
         }
     }

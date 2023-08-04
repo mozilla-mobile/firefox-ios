@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
-
 /**
  * A factory to generate FormLike objects that represent a set of related fields
  * which aren't necessarily marked up with a <form> element. FormLike's emulate
@@ -82,7 +80,7 @@ export let FormLikeFactory = {
     // FormLikes, and computing the elements list becomes more and more
     // expensive. Making the elements list lazy means that it'll only
     // be computed when it's eventually needed (if ever).
-    XPCOMUtils.defineLazyGetter(formLike, "elements", function () {
+    ChromeUtils.defineLazyGetter(formLike, "elements", function () {
       let elements = [];
       for (let el of this.rootElement.querySelectorAll("input, select")) {
         // Exclude elements inside the rootElement that are already in a <form> as

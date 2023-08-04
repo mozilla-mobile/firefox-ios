@@ -67,7 +67,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.accessibilityIdentifier = AccessibilityIdentifiers.Components.ErrorCard.title
+        label.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.title
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -77,7 +77,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             size: UX.buttonFontSize)
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.accessibilityIdentifier = AccessibilityIdentifiers.Components.ErrorCard.description
+        label.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.description
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -92,7 +92,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonHorizontalInset)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Components.ErrorCard.primaryAction
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.primaryAction
     }
 
     /// Custom init method to pass title, description text, action text

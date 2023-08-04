@@ -502,7 +502,9 @@ extension TabDisplayManagerTests {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func createTabDisplayManager(useMockDataStore: Bool = true) -> TabDisplayManager {
+    func createTabDisplayManager(file: StaticString = #file,
+                                 line: UInt = #line,
+                                 useMockDataStore: Bool = true) -> TabDisplayManager {
         let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
                                                   tabManager: manager,
                                                   tabDisplayer: self,
@@ -513,6 +515,7 @@ extension TabDisplayManagerTests {
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
+        trackForMemoryLeaks(tabDisplayManager, file: file, line: line)
         return tabDisplayManager
     }
 
@@ -530,6 +533,7 @@ extension TabDisplayManagerTests {
                                                   cfrDelegate: cfrDelegate,
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
+        trackForMemoryLeaks(tabDisplayManager)
         return tabDisplayManager
     }
 

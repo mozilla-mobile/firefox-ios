@@ -192,7 +192,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
-            viewController = HomePageSettingViewController(prefs: profile.prefs)
+            viewController = HomePageSettingViewController(prefs: profile.prefs, settingsDelegate: settingsDelegate)
 
         case .customizeTabs:
             viewController = TabsSettingsViewController()
@@ -317,14 +317,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getGeneralSettings() -> [SettingSection] {
-        let blockpopUpSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.currentTheme,
-            prefKey: PrefsKeys.KeyBlockPopups,
-            defaultValue: true,
-            titleText: .AppSettingsBlockPopups
-        )
-
         var generalSettings: [Setting] = [
             SearchSetting(settings: self, settingsDelegate: parentCoordinator),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
@@ -332,7 +324,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
-            blockpopUpSetting,
+            BlockPopupSetting(settings: self),
             NoImageModeSetting(settings: self),
         ]
 

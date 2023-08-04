@@ -272,6 +272,11 @@ class BookmarkDetailPanel: SiteTableViewController {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .bookmark,
+                                             value: .bookmarkAddFolder)
+
                 return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid,
                                                    title: bookmarkItemOrFolderTitle,
                                                    position: position).bind({ result in

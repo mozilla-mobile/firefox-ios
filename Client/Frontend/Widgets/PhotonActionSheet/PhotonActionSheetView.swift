@@ -10,7 +10,6 @@ import Shared
 // MARK: - PhotonActionSheetViewDelegate
 protocol PhotonActionSheetViewDelegate: AnyObject {
     func didClick(item: SingleActionViewModel?)
-    func layoutChanged(item: SingleActionViewModel)
 }
 
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
@@ -177,21 +176,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     // MARK: Setup
-
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-
-        // The layout changes when there's multiple items in a row,
-        // and there's not enough space in one row to show the labels without truncating
-        if let item = item,
-           item.multipleItemsSetup.isMultiItems,
-           item.multipleItemsSetup.axis != .vertical,
-           titleLabel.isTruncated {
-            // Disabling this multipleItemsSetup feature for now - will rework to improve
-//            item.multipleItemsSetup.axis = .vertical
-//            delegate?.layoutChanged(item: item)
-        }
-    }
 
     func configure(with item: SingleActionViewModel, theme: Theme) {
         self.item = item
