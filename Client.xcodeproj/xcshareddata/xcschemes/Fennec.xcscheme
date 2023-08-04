@@ -256,6 +256,15 @@
          <TestPlanReference
             reference = "container:Tests/Smoketest3.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/FullFunctionalTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/PerformanceTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/SyncIntegrationTestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
