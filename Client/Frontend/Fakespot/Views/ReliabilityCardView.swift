@@ -78,8 +78,6 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         reliabilityLetterLabel.accessibilityIdentifier = viewModel.ratingLetterA11yId
         reliabilityDescriptionLabel.text = viewModel.rating.description
         reliabilityDescriptionLabel.accessibilityIdentifier = viewModel.ratingDescriptionA11yId
-        reliabilityLetterView.layer.backgroundColor = viewModel.rating.color.cgColor
-        reliabilityDescriptionView.layer.backgroundColor = viewModel.rating.color.withAlphaComponent(0.15).cgColor
 
         let cardModel = CardContainerModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
@@ -90,7 +88,13 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         reliabilityScoreView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         reliabilityScoreView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
         reliabilityLetterLabel.textColor = theme.colors.textOnColor
-        reliabilityDescriptionLabel.textColor = theme.colors.textPrimary // FXColors.DarkGrey90 for light & dark themes
+        reliabilityDescriptionLabel.textColor = theme.colors.textPrimary // Update in FXIOS-7154
+
+        if let viewModel {
+            reliabilityLetterView.layer.backgroundColor = viewModel.rating.color(theme: theme).cgColor
+            reliabilityDescriptionView.layer.backgroundColor = viewModel.rating.color(theme: theme)
+                .withAlphaComponent(0.15).cgColor
+        }
     }
 
     private func setupLayout() {
