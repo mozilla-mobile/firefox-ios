@@ -488,6 +488,7 @@
 		74C027451B2A348C001B1E88 /* LegacySessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* LegacySessionData.swift */; };
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
+		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
 		7B10AA9F1E3A15020002DD08 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AA9E1E3A15020002DD08 /* DataExtensions.swift */; };
 		7B10AABB1E3A1F650002DD08 /* URLRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */; };
@@ -7037,6 +7038,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D433852C27ABC8150069DD33 /* MappaMundi in Frameworks */,
+				781C19CF2A780BEC0000DF46 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10997,6 +10999,7 @@
 			name = L10nSnapshotTests;
 			packageProductDependencies = (
 				D433852B27ABC8150069DD33 /* MappaMundi */,
+				781C19CE2A780BEC0000DF46 /* Common */,
 			);
 			productName = L10nSnapshotTests;
 			productReference = 7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */;
@@ -18045,6 +18048,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18055,6 +18059,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18065,6 +18070,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -18347,6 +18353,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
@@ -19468,6 +19475,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		781C19CE2A780BEC0000DF46 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
 		};
 		8A05B0042A69A0C40011B622 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
