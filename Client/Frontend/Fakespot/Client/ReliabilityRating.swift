@@ -2,14 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 enum ReliabilityRating: String {
-    case a
-    case b
-    case c
-    case d
-    case f
+    case gradeA = "a"
+    case gradeB = "b"
+    case gradeC = "c"
+    case gradeD = "d"
+    case gradeF = "f"
 
     var letter: String {
         return self.rawValue.uppercased()
@@ -17,19 +18,19 @@ enum ReliabilityRating: String {
 
     var description: String {
         switch self {
-        case .a, .b: return .Shopping.ReliabilityRatingAB
-        case .c: return .Shopping.ReliabilityRatingC
-        case .d, .f: return .Shopping.ReliabilityRatingDF
+        case .gradeA, .gradeB: return .Shopping.ReliabilityRatingAB
+        case .gradeC: return .Shopping.ReliabilityRatingC
+        case .gradeD, .gradeF: return .Shopping.ReliabilityRatingDF
         }
     }
 
-    var color: UIColor {
+    func color(theme: Theme) -> UIColor {
         switch self {
-        case .a: return UIColor(rgb: 0x10AD56)
-        case .b: return UIColor(rgb: 0x007DEC)
-        case .c: return UIColor(rgb: 0xF4A902)
-        case .d: return UIColor(rgb: 0xF27313)
-        case .f: return UIColor(rgb: 0xD51235)
+        case .gradeA: return theme.colors.layerAccentPrivate // Update in FXIOS-7154
+        case .gradeB: return theme.colors.layerAccentPrivateNonOpaque // Update in FXIOS-7154
+        case .gradeC: return theme.colors.layerSepia // Update in FXIOS-7154
+        case .gradeD: return theme.colors.layerAccentNonOpaque // Update in FXIOS-7154
+        case .gradeF: return theme.colors.layer1 // Update in FXIOS-7154
         }
     }
 }
