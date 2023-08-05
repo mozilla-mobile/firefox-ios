@@ -10,24 +10,6 @@ import Shared
 import Common
 import Storage
 
-class MockWKScriptMessage: WKScriptMessage {
-    var mockBody: Any
-    var mockName: String
-
-    init(name: String, body: Any) {
-        mockName = name
-        mockBody = body
-    }
-
-    override var body: Any {
-        return mockBody
-    }
-
-    override var name: String {
-        return mockName
-    }
-}
-
 class CreditCardHelperTests: XCTestCase {
     var creditCardHelper: CreditCardHelper!
     var tab: Tab!
@@ -63,8 +45,9 @@ class CreditCardHelperTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        profile = MockProfile(databasePrefix: "CreditCardHelper_tests")
-        profile.reopen()
+        profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
         creditCardHelper = CreditCardHelper(tab: tab)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
@@ -89,8 +72,8 @@ class CreditCardHelperTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        profile.shutdown()
         profile = nil
+        DependencyHelperMock().reset()
         tab = nil
         creditCardHelper = nil
         validMockWKMessage = nil
@@ -198,5 +181,46 @@ class CreditCardHelperTests: XCTestCase {
         XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
         XCTAssertEqual(fieldValues.ccNumberLast4, "6788")
         XCTAssertEqual(fieldValues.ccType, "VISA")
+    }
+
+    // MARK: Leaks
+
+    func test_creditCardHelper_basicCreation_doesntLeak() {
+        let subject = CreditCardHelper(tab: tab)
+        trackForMemoryLeaks(subject)
+    }
+
+    func test_creditCardHelper_foundFieldValuesClosure_doesntLeak() {
+        let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+        let subject = CreditCardHelper(tab: tab)
+        trackForMemoryLeaks(subject)
+        tab.createWebview()
+        tab.addContentScript(subject, name: CreditCardHelper.name())
+
+        subject.foundFieldValues = { fieldValues, type, frame in
+            guard let tabWebView = tab.webView else { return }
+            tabWebView.accessoryView.savedCardsClosure = {}
+        }
+
+        tab.close()
+    }
+}
+
+// MARK: - MockWKScriptMessage
+class MockWKScriptMessage: WKScriptMessage {
+    var mockBody: Any
+    var mockName: String
+
+    init(name: String, body: Any) {
+        mockName = name
+        mockBody = body
+    }
+
+    override var body: Any {
+        return mockBody
+    }
+
+    override var name: String {
+        return mockName
     }
 }

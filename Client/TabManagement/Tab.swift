@@ -25,6 +25,12 @@ protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
+    func prepareForDeinit()
+}
+
+extension TabContentScript {
+    // By default most script don't need a `prepareForDeinit`
+    func prepareForDeinit() {}
 }
 
 protocol LegacyTabDelegate: AnyObject {
@@ -235,7 +241,7 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-    var webView: WKWebView?
+    var webView: TabWebView?
     var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
@@ -442,7 +448,7 @@ class Tab: NSObject {
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration)
-            webView.delegate = self
+            webView.configure(delegate: self, navigationDelegate: navigationDelegate)
 
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
@@ -459,7 +465,6 @@ class Tab: NSObject {
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
             webView.scrollView.layer.masksToBounds = false
-            webView.navigationDelegate = navigationDelegate
 
             restore(webView, interactionState: restoreSessionData)
 
@@ -488,12 +493,11 @@ class Tab: NSObject {
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         // If the interactionState field is populated it means the new session store is in use and the session data
         // now comes from a different source than save tab and parsing is managed by the web view itself
-        if TabStorageFlagManager.isNewTabDataStoreEnabled {
+        if #available(iOS 15, *) {
             if let url = url {
                 webView.load(PrivilegedRequest(url: url) as URLRequest)
             }
-            if #available(iOS 15, *),
-               let interactionState = interactionState {
+            if let interactionState = interactionState {
                 webView.interactionState = interactionState
             }
             return
@@ -567,6 +571,8 @@ class Tab: NSObject {
 
     func close() {
         contentScriptManager.uninstall(tab: self)
+        webView?.configuration.userContentController.removeAllUserScripts()
+        webView?.configuration.userContentController.removeAllScriptMessageHandlers()
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
@@ -868,10 +874,10 @@ extension Tab: UIGestureRecognizerDelegate {
 }
 
 extension Tab: TabWebViewDelegate {
-    fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
+    func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
-    fileprivate func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
+    func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
     }
 }
@@ -898,6 +904,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         helpers.forEach { helper in
             if let name = helper.value.scriptMessageHandlerName() {
                 tab.webView?.configuration.userContentController.removeScriptMessageHandler(forName: name)
+                helper.value.prepareForDeinit()
             }
         }
     }
@@ -943,14 +950,15 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 }
 
-private protocol TabWebViewDelegate: AnyObject {
+protocol TabWebViewDelegate: AnyObject {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }
 
 class TabWebView: WKWebView, MenuHelperInterface {
-    var accessoryView: AccessoryViewProvider
+    var accessoryView = AccessoryViewProvider()
     private var logger: Logger = DefaultLogger.shared
+    private weak var delegate: TabWebViewDelegate?
 
     override var inputAccessoryView: UIView? {
         translatesAutoresizingMaskIntoConstraints = false
@@ -963,31 +971,37 @@ class TabWebView: WKWebView, MenuHelperInterface {
         return accessoryView
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
-        self.accessoryView = AccessoryViewProvider()
+    func configure(delegate: TabWebViewDelegate,
+                   navigationDelegate: WKNavigationDelegate?) {
+        self.delegate = delegate
+        self.navigationDelegate = navigationDelegate
 
-        super.init(frame: frame, configuration: configuration)
-        accessoryView.previousClosure = {
+        accessoryView.previousClosure = { [weak self] in
+            guard let self else { return }
             CreditCardHelper.focusPreviousInputField(tabWebView: self,
                                                      logger: self.logger)
         }
 
-        accessoryView.nextClosure = {
+        accessoryView.nextClosure = { [weak self] in
+            guard let self else { return }
             CreditCardHelper.focusNextInputField(tabWebView: self,
                                                  logger: self.logger)
         }
 
-        accessoryView.doneClosure = {
+        accessoryView.doneClosure = { [weak self] in
+            guard let self else { return }
             CreditCardHelper.blurActiveElement(tabWebView: self, logger: self.logger)
             self.endEditing(true)
         }
     }
 
+    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+        super.init(frame: frame, configuration: configuration)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    fileprivate weak var delegate: TabWebViewDelegate?
 
     // Updates the `background-color` of the webview to match
     // the theme if the webview is showing "about:blank" (nil).

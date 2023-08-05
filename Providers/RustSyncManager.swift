@@ -84,6 +84,10 @@ public class RustSyncManager: NSObject, SyncManager {
                                     repeats: true)
     }
 
+    public func updateCreditCardAutofillStatus(value: Bool) {
+        creditCardAutofillEnabled = value
+    }
+
     func syncEverythingSoon() {
         doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
             self.logger.log("Running delayed startup sync.",

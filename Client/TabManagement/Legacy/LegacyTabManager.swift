@@ -537,7 +537,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             case .blankPage:
                 // If we're showing "about:blank" in a webview, set
                 // the <html> `background-color` to match the theme.
-                if let webView = tab.webView as? TabWebView {
+                if let webView = tab.webView {
                     webView.applyTheme()
                 }
                 break
