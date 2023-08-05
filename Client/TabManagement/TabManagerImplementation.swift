@@ -16,7 +16,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
-    lazy var isNewTabStoreEnabled: Bool = TabStorageFlagManager.isNewTabDataStoreEnabled
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
@@ -280,7 +279,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *), isNewTabStoreEnabled {
+        if #available(iOS 15, *) {
             return true
         }
         return false
