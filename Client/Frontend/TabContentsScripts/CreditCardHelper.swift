@@ -65,6 +65,10 @@ class CreditCardHelper: TabContentScript {
         return "creditCardMessageHandler"
     }
 
+    func prepareForDeinit() {
+        foundFieldValues = nil
+    }
+
     // MARK: Retrieval
 
     func userContentController(_ userContentController: WKUserContentController,
