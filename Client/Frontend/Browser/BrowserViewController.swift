@@ -1895,7 +1895,7 @@ class BrowserViewController: UIViewController,
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
             creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-                guard let tabWebView = tab.webView as? TabWebView,
+                guard let tabWebView = tab.webView,
                       let type = type,
                       userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
                 else { return }
@@ -1992,7 +1992,7 @@ class BrowserViewController: UIViewController,
         (presentedViewController as? LegacyNotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
+        let webViews = tabManager.tabs.compactMap({ $0.webView })
         webViews.forEach({ $0.applyTheme() })
 
         let tabs = tabManager.tabs
