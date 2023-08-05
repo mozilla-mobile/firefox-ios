@@ -484,6 +484,11 @@ class TabDisplayManagerTests: XCTestCase {
 
         XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
     }
+
+    func testTabDisplayManager_doesntLeak() {
+        let subject = createTabDisplayManager(useMockDataStore: false)
+        trackForMemoryLeaks(subject)
+    }
 }
 
 // Helper methods
