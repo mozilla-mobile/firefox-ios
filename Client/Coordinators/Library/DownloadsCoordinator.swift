@@ -8,39 +8,59 @@ protocol DownloadsNavigationHandler: AnyObject {
     /// Handles the possibile navigations for a file.
     /// The source view is the view used to display a popover for the share controller.
     func handleFile(_ file: DownloadedFile, sourceView: UIView)
+
+    /// Shows a UIDocumentInteractionController for the selected file.
+    func showDocument(file: DownloadedFile)
 }
 
-class DownloadsCoordinator: BaseCoordinator, DownloadsNavigationHandler, UIDocumentInteractionControllerDelegate {
+class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, DownloadsNavigationHandler, UIDocumentInteractionControllerDelegate {
     // MARK: - Properties
 
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
+    private let profile: Profile
 
     // MARK: - Initializers
 
     init(
         router: Router,
+        profile: Profile,
         parentCoordinator: LibraryCoordinatorDelegate?
     ) {
         self.parentCoordinator = parentCoordinator
+        self.profile = profile
         super.init(router: router)
     }
 
     // MARK: - DownloadsNavigationHandler
 
     func handleFile(_ file: DownloadedFile, sourceView: UIView) {
-        if file.mimeType == MIMEType.Calendar {
-            let docController = UIDocumentInteractionController(url: file.path)
-            docController.delegate = self
-            docController.presentPreview(animated: true)
-            return
-        }
-
         guard file.canShowInWebView
         else {
-            shareFile(file, sourceView: sourceView)
+            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
+                startShare(file: file, sourceView: sourceView)
+            } else {
+                shareFile(file, sourceView: sourceView)
+            }
             return
         }
         parentCoordinator?.libraryPanel(didSelectURL: file.path, visitType: .typed)
+    }
+
+    private func startShare(file: DownloadedFile, sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
+        let coordinator = makeShareExtensionCoordinator()
+        coordinator.start(url: file.path, sourceView: sourceView)
+    }
+
+    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
+        let coordinator = ShareExtensionCoordinator(
+            alertContainer: UIView(),
+            router: router,
+            profile: profile,
+            parentCoordinator: self
+        )
+        add(child: coordinator)
+        return coordinator
     }
 
     private func shareFile(_ file: DownloadedFile, sourceView: UIView) {
@@ -54,6 +74,18 @@ class DownloadsCoordinator: BaseCoordinator, DownloadsNavigationHandler, UIDocum
         }
 
         router.present(controller)
+    }
+
+    func showDocument(file: DownloadedFile) {
+        let docController = UIDocumentInteractionController(url: file.path)
+        docController.delegate = self
+        docController.presentPreview(animated: true)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
     }
 
     // MARK: - UIDocumentInteractionControllerDelegate

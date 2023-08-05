@@ -8,18 +8,23 @@ import XCTest
 final class DownloadsCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockLibraryCoordinatorDelegate!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         router = MockRouter(navigationController: UINavigationController())
         parentCoordinator = MockLibraryCoordinatorDelegate()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
         router = nil
         parentCoordinator = nil
+        profile = nil
+        DependencyHelperMock().reset()
     }
 
     func testHandleFile_presentsShareController() {
@@ -42,6 +47,7 @@ final class DownloadsCoordinatorTests: XCTestCase {
     private func createSubject() -> DownloadsCoordinator {
         let subject = DownloadsCoordinator(
             router: router,
+            profile: profile,
             parentCoordinator: parentCoordinator
         )
         trackForMemoryLeaks(subject)

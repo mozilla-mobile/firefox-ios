@@ -85,6 +85,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         let router = DefaultRouter(navigationController: navigationController)
         let downloadsCoordinator = DownloadsCoordinator(
             router: router,
+            profile: profile,
             parentCoordinator: parentCoordinator
         )
         add(child: downloadsCoordinator)
