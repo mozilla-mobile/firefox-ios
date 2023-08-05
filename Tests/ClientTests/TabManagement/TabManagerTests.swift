@@ -29,7 +29,6 @@ class TabManagerTests: XCTestCase {
                                            imageStore: mockDiskImageStore,
                                            tabDataStore: mockTabStore,
                                            tabSessionStore: mockSessionStore)
-        subject.isNewTabStoreEnabled = true
     }
 
     override func tearDown() {

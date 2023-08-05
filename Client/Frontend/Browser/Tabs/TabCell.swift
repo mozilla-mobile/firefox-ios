@@ -34,34 +34,34 @@ class TabCell: UICollectionViewCell,
     static let borderWidth: CGFloat = 3
 
     // MARK: - UI Vars
-    lazy var backgroundHolder: UIView = .build { view in
+    private lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
         view.clipsToBounds = true
     }
 
-    lazy private var faviconBG: UIView = .build { view in
+    private lazy var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
         view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 
-    lazy var screenshotView: UIImageView = .build { view in
+    private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
     }
 
-    lazy var titleText: UILabel = .build { label in
+    private lazy var titleText: UILabel = .build { label in
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
     }
 
-    lazy var smallFaviconView: FaviconImageView = .build { _ in }
-    lazy var favicon: FaviconImageView = .build { _ in }
+    private lazy var smallFaviconView: FaviconImageView = .build { _ in }
+    private lazy var favicon: FaviconImageView = .build { _ in }
 
-    lazy var closeButton: UIButton = .build { button in
+    private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
@@ -69,14 +69,14 @@ class TabCell: UICollectionViewCell,
     }
 
     // TODO: Handle visual effects theming FXIOS-5064
-    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+    private var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
     weak var delegate: TabCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
-    var margin = CGFloat(0)
+    private var margin = CGFloat(0)
 
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -102,7 +102,7 @@ class TabCell: UICollectionViewCell,
         setupConstraint()
     }
 
-    func setupConstraint() {
+    private func setupConstraint() {
         NSLayoutConstraint.activate([
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
