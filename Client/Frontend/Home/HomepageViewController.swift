@@ -219,11 +219,14 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
+
         var wallpaperTopConstant: CGFloat = 0
         if CoordinatorFlagManager.isCoordinatorEnabled {
             // Constraint so wallpaper appears under the status bar
-            wallpaperTopConstant = statusBarFrame?.height ?? 0
+            let window = UIApplication.shared.windows.first
+            wallpaperTopConstant = window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
         }
+
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -359,7 +362,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !CoordinatorFlagManager.isCoordinatorEnabled {
             updateStatusBar(theme: themeManager.currentTheme)
-        } else {
+        } else if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
                                                          theme: themeManager.currentTheme)

@@ -1,8 +1,17 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Postavljanje Firefoxa zadanim preglednikom je glas za otvoreni i pristupačni internet.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Bolji internet kao zadana postavka";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Saznaj kako";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Firefoxu.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Firefox kao zadani preglednik za automatsku brzinu, sigurnost i privatnost.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Promijeni standardni preglednik";

@@ -17,11 +17,6 @@ features:
           The list of available cards for onboarding.
         type: Map<String, NimbusOnboardingCardData>
         default: {}
-      instruction-popup:
-        description: >
-          The contents of the instruction popup.
-        type: NimbusInstructionPopup
-        default: {}
       dismissable:
         description: >
           Whether or not the entire onboarding is dismissable
@@ -107,13 +102,6 @@ features:
               type: upgrade
               prerequisites:
                 - ALWAYS
-          instruction-popup:
-            title: Onboarding/DefaultBrowserPopup.Title.v114
-            button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-            instructions:
-              - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-              - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-              - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
           dismissable: true
 
 objects:
@@ -159,6 +147,14 @@ objects:
             title: Onboarding/Onboarding.Sync.Skip.Action.v114
             action: next-card
           secondary: null
+      instructions-popup:
+        type: Option<NimbusInstructionPopup>
+        description: >
+          The object describing the specific instruction popup
+          button for a card.
+          If left empty, the card will have no instruction
+          popup information
+        default: null
       prerequisites:
         type: List<String>
         description: >
@@ -249,6 +245,12 @@ objects:
           The title the button should have.
           This should never be defaulted.
         default: ""
+      button-action:
+        type: OnboardingInstructionsPopupActions
+        description: >
+          The action the button should have.
+          Default is `dismiss-and-next-card`
+        default: dismiss-and-next-card
 
 enums:
   OnboardingActions:
@@ -267,13 +269,27 @@ enums:
       set-default-browser:
         description: >
           Will send the user to settings to set Firefox as their default browser
-      open-default-browser-popup:
+      open-instructions-popup:
         description: >
-          Will open up a popup with instructions for setting
-          Firefox as their default browser.
+          Will open up a popup with instructions for something
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+  OnboardingInstructionsPopupActions:
+    description: >
+      The identifiers for the different actions available for the
+      insturction card in onboarding
+    variants:
+      open-ios-fx-settings:
+        description: >
+          Will take the user to the default browser settings
+          in the iOS system settings
+      dismiss-and-next-card:
+        description: >
+          Will dismiss the popup and move to the next card
+      dismiss:
+        description: >
+          Will dismiss the popup
   NimbusOnboardingImages:
     description: >
       The identifiers for the different images available for cards in onboarding

@@ -475,8 +475,16 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
+        statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
+        // Feature flag for credit card until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        // We need to update autofill status on sync manager as there could be delay from nimbus
+        // in getting the value. When the delay happens the credit cards might not sync
+        // as the default value is false
+        profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
     }
@@ -1019,7 +1027,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1031,7 +1039,7 @@ class BrowserViewController: UIViewController,
         addChild(viewController)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState()
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true

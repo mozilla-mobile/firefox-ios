@@ -41,7 +41,7 @@ export class FormStateManager {
         return null;
       }
       for (let detail of formDetails) {
-        let detailElement = detail.element;
+        let detailElement = detail.elementWeakRef.get();
         if (detailElement && this.activeInput == detailElement) {
           this._activeItems.fieldDetail = detail;
           break;
@@ -66,7 +66,8 @@ export class FormStateManager {
   }
 
   get activeInput() {
-    return this._activeItems.elementWeakRef?.deref();
+    let elementWeakRef = this._activeItems.elementWeakRef;
+    return elementWeakRef ? elementWeakRef.get() : null;
   }
 
   get activeHandler() {
@@ -130,7 +131,7 @@ export class FormStateManager {
       return;
     }
     this._activeItems = {
-      elementWeakRef: new WeakRef(element),
+      elementWeakRef: Cu.getWeakReference(element),
       fieldDetail: null,
     };
   }
@@ -147,10 +148,6 @@ export class FormStateManager {
       return null;
     }
     return records;
-  }
-
-  didDestroy() {
-    this._activeItems = null;
   }
 }
 

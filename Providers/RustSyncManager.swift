@@ -42,8 +42,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger,
-                                                 creditCardAutofillEnabled: creditCardAutofillEnabled)
+    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger)
 
     public var isSyncing: Bool {
         return syncDisplayState != nil && syncDisplayState! == .inProgress
@@ -83,6 +82,10 @@ public class RustSyncManager: NSObject, SyncManager {
                                     selector: selector,
                                     userInfo: nil,
                                     repeats: true)
+    }
+
+    public func updateCreditCardAutofillStatus(value: Bool) {
+        creditCardAutofillEnabled = value
     }
 
     func syncEverythingSoon() {
@@ -276,7 +279,11 @@ public class RustSyncManager: NSObject, SyncManager {
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
-            syncManagerAPI.rustTogglableEngines.forEach { engine in
+            let engines = self.creditCardAutofillEnabled ?
+                syncManagerAPI.rustTogglableEngines :
+                syncManagerAPI.rustTogglableEngines.filter({$0 != RustSyncManagerAPI.TogglableEngine.creditcards })
+
+            engines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
@@ -342,14 +349,16 @@ public class RustSyncManager: NSObject, SyncManager {
                                category: .sync)
                 }
             case .creditcards:
-                profile?.autofill.registerWithSyncManager()
-                if let key = try? profile?.autofill.getStoredKey() {
-                    localEncryptionKeys[engine.rawValue] = key
-                    rustEngines.append(engine.rawValue)
-                } else {
-                    logger.log("Credit card encryption key could not be retrieved for syncing",
-                               level: .warning,
-                               category: .sync)
+                if self.creditCardAutofillEnabled {
+                    profile?.autofill.registerWithSyncManager()
+                    if let key = try? profile?.autofill.getStoredKey() {
+                        localEncryptionKeys[engine.rawValue] = key
+                        rustEngines.append(engine.rawValue)
+                    } else {
+                        logger.log("Credit card encryption key could not be retrieved for syncing",
+                                   level: .warning,
+                                   category: .sync)
+                    }
                 }
             case .bookmarks, .history:
                 if !registeredPlaces {

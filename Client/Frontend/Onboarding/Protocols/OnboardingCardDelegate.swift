@@ -74,8 +74,15 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         from name: String,
         completionIfLastCard: (() -> Void)?
     ) {
-        let viewController = OnboardingDefaultSettingsViewController(
-            viewModel: viewModel.infoPopup,
+        guard let popupViewModel = viewModel
+            .availableCards
+            .first(where: { $0.viewModel.name == name })?
+            .viewModel
+            .instructionsPopup
+        else { return }
+
+        let instructionsVC = OnboardingInstructionPopupViewController(
+            viewModel: popupViewModel,
             buttonTappedFinishFlow: {
                 self.showNextPage(
                     from: name,
@@ -86,8 +93,10 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController,
+            childViewController: instructionsVC,
             usingDimmedBackground: true)
+
+        instructionsVC.dismissDelegate = bottomSheetVC
 
         self.present(bottomSheetVC, animated: false, completion: nil)
     }

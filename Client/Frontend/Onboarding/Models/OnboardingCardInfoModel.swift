@@ -9,6 +9,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var order: Int
     var title: String
     var body: String
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel?
     var link: OnboardingLinkInfoModel?
     var buttons: OnboardingButtons
     var type: OnboardingType
@@ -29,7 +30,8 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         buttons: OnboardingButtons,
         type: OnboardingType,
         a11yIdRoot: String,
-        imageID: String
+        imageID: String,
+        instructionsPopup: OnboardingInstructionsPopupInfoModel?
     ) {
         self.name = name
         self.order = order
@@ -40,5 +42,6 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         self.buttons = buttons
         self.type = type
         self.a11yIdRoot = a11yIdRoot
+        self.instructionsPopup = instructionsPopup
     }
 }
