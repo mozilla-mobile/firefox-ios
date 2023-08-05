@@ -108,6 +108,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func generateTabs(from windowData: WindowData) async {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
+        var tabToSelect: Tab?
 
         for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
@@ -129,12 +130,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             restoreScreenshot(tab: newTab)
 
             if windowData.activeTabId == tabData.id {
-                selectTab(newTab)
+                tabToSelect = newTab
             }
         }
 
+        selectTab(tabToSelect)
+
         // If tabToSelect is nil after restoration, force selection of first tab normal tab
-        if selectedTab == nil {
+        if tabToSelect == nil {
             guard let tabToSelect = tabs.first(where: { !$0.isPrivate }) else {
                 selectTab(addTab())
                 return
@@ -149,7 +152,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         if clearPrivateTabs {
             savedTabs = windowData.tabData.filter { !$0.isPrivate }
         }
-
         return savedTabs
     }
 
