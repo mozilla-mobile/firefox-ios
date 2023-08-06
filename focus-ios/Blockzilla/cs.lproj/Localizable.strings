@@ -481,8 +481,14 @@
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "Podržte prst na domovské obrazovce dokud se ikony nezačnou třást.";
 
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Vyhledejte %@. Poté vyberte widget.";
+
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Klepněte na ikonu plus.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Přidání widgetu %@";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Přidat";
@@ -633,6 +639,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Jak na to";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Necháme vás v anonymním prohlížení, ale příště můžete začít rychleji pomocí widgetu %@ na Domovské obrazovce.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Historie prohlížení vymazána 🎉";
