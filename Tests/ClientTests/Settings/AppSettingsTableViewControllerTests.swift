@@ -72,6 +72,29 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.showCreditCardSettingsCalled, 0)
     }
 
+    func testPassword_whenNeedShowingLoginOnboarding_showOnboarding() {
+        UserDefaults.standard.set(false, forKey: LoginOnboarding.HasSeenLoginOnboardingKey)
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.handle(route: .password)
+
+        XCTAssertEqual(delegate.showPasswordManagerCalled, 1)
+        XCTAssertTrue(delegate.savedShouldShowOnboarding)
+    }
+
+    func testPassword_whenHasAlreadyShownLoginOnboarding_authenticateAndShowPassword() {
+        appAuthenticator.authenticationState = .deviceOwnerAuthenticated
+        UserDefaults.standard.set(true, forKey: LoginOnboarding.HasSeenLoginOnboardingKey)
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.handle(route: .password)
+
+        XCTAssertEqual(delegate.showPasswordManagerCalled, 1)
+        XCTAssertFalse(delegate.savedShouldShowOnboarding)
+    }
+
     func testPressedShowTour_openOnboardingDeeplinkURL() {
         let subject = createSubject()
         subject.parentCoordinator = delegate

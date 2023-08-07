@@ -39,11 +39,16 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }()
 
     weak var coordinator: PasswordManagerFlowDelegate?
+    private var appAuthenticator: AppAuthenticationProtocol
 
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
 
-    init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
+    init(profile: Profile? = nil,
+         tabManager: TabManager? = nil,
+         shownFromAppMenu: Bool = false,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+        self.appAuthenticator = appAuthenticator
         super.init(profile: profile, tabManager: tabManager)
         self.shownFromAppMenu = shownFromAppMenu
     }
@@ -56,7 +61,9 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         super.viewDidLoad()
 
         if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                               target: self,
+                                                               action: #selector(doneButtonTapped))
         }
 
         self.title = .Settings.Passwords.Title
@@ -96,9 +103,22 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled && !shownFromAppMenu {
-            coordinator?.continueFromOnboarding()
+            continueToOnboarding()
         } else {
             proceedHandler()
+        }
+    }
+
+    private func continueToOnboarding() {
+        appAuthenticator.getAuthenticationState { state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.coordinator?.continueFromOnboarding()
+            case .deviceOwnerFailed:
+                break // Keep showing the main settings page
+            case .passCodeRequired:
+                self.coordinator?.showDevicePassCode()
+            }
         }
     }
 

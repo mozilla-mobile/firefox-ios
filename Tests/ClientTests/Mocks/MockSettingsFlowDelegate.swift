@@ -17,6 +17,7 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     var didFinishShowingSettingsCalled = 0
     var showExperimentsCalled = 0
     var showPasswordManagerCalled = 0
+    var savedShouldShowOnboarding: Bool = false
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -35,6 +36,7 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     }
 
     func showPasswordManager(shouldShowOnboarding: Bool) {
+        savedShouldShowOnboarding = shouldShowOnboarding
         showPasswordManagerCalled += 1
     }
 
