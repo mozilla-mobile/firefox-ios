@@ -727,9 +727,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marcio fel Heb ei Darllen";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "Ychwanegu Nod Tudalen";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Nod Tudalen wedi ei Ychwanegu";
 
@@ -813,9 +810,6 @@
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Tynnwyd o’r Llwybrau Byr";
-
-/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
-"Menu.RemoveReadingList.AlternateLabel.v99" = "Tynnu o'r Rhestr Ddarllen";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "Tynnwyd o'r Rhestr Ddarllen";

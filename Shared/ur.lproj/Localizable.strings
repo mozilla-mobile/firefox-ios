@@ -688,9 +688,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "بطور غیر مطالعہ شدہ نشان زد کریں";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "بک مارک شامل کریں";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "نشانی شامل کردی گئی";
 
