@@ -83,9 +83,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     // MARK: - Default actions
-
     func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.privateMode) { _ in
+        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
             sectionType.newPrivateTabActionTelemetry()
         }.items
@@ -272,7 +271,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .PinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.addShortcut,
+                                     iconString: StandardImageIdentifiers.Large.pin,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.pinTopSite(site)
             self.sendTopSiteContextualTelemetry(type: .pin)
@@ -282,7 +281,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     // Unpin removes it from the location it's in. Still can appear in the top sites as unpin
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
-                                     iconString: ImageIdentifiers.removeFromShortcut,
+                                     iconString: StandardImageIdentifiers.Large.pinSlash,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
             self.sendTopSiteContextualTelemetry(type: .unpin)

@@ -393,10 +393,13 @@ extension TelemetryWrapper {
         case bookmark = "bookmark"
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
+        case mobileBookmarks = "has-mobile-bookmarks"
         case download = "download"
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        case shoppingCartButton = "shopping-cart-button"
+        case shoppingBottomSheet = "shopping-bottom-sheet"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -544,6 +547,7 @@ extension TelemetryWrapper {
         case viewDownloadsPanel = "view-downloads-panel"
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
+        case sponsoredShortcuts = "sponsored-shortcuts"
     }
 
     public enum EventValue: String {
@@ -575,6 +579,11 @@ extension TelemetryWrapper {
         case normalTab = "normal-tab"
         case tabView = "tab-view"
         case bookmarksPanel = "bookmarks-panel"
+        case doesHaveMobileBookmarks = "does-have-mobile-bookmarks"
+        case doesNotHaveMobileBookmarks = "does-not-have-mobile-bookmarks"
+        case mobileBookmarksCount = "mobile-bookmarks-count"
+        case bookmarkAddFolder = "bookmark-add-folder"
+        case openBookmarksFromTopSites = "top-sites"
         case historyPanel = "history-panel"
         case historyPanelNonGroupItem = "history-panel-non-grouped-item"
         case historyPanelGroupedItem = "history-panel-grouped-item"
@@ -649,6 +658,9 @@ extension TelemetryWrapper {
         case wallpaperType = "wallpaperType"
 
         case cfrType = "hintType"
+
+        // Bookmarks
+        case mobileBookmarksQuantity = "mobileBookmarksQuantity"
 
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
@@ -735,6 +747,16 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.open[from.rawValue].add()
         case (.action, .change, .bookmark, let from?, _):
             GleanMetrics.Bookmarks.edit[from.rawValue].add()
+        case(.information, .view, .mobileBookmarks, .doesHaveMobileBookmarks, _):
+            GleanMetrics.Bookmarks.hasMobileBookmarks.set(true)
+        case(.information, .view, .mobileBookmarks, .doesNotHaveMobileBookmarks, _):
+            GleanMetrics.Bookmarks.hasMobileBookmarks.set(false)
+        case(.information, .view, .mobileBookmarks, .mobileBookmarksCount, let extras):
+            if let quantity = extras?[EventExtraKey.mobileBookmarksQuantity.rawValue] as? Int64 {
+                GleanMetrics.Bookmarks.mobileBookmarksCount.set(quantity)
+            }
+        case(.action, .tap, .bookmark, .bookmarkAddFolder, _):
+            GleanMetrics.Bookmarks.folderAdd.record()
         // MARK: Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()
@@ -993,6 +1015,12 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
+        // MARK: Shopping Experience (Fakespot)
+        case (.action, .tap, .shoppingCartButton, _, _):
+            GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .close, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceClosed.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
@@ -1472,7 +1500,18 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
+        // MARK: - Sponsored Shortcuts
+        case (.information, .view, .sponsoredShortcuts, _, let extras):
+            if let enabled = extras?[EventExtraKey.preference.rawValue] as? Bool {
+                GleanMetrics.TopSites.sponsoredShortcuts.set(enabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: - Awesomebar
         case (.information, .view, .awesomebarLocation, _, let extras):
             if let location = extras?[EventExtraKey.preference.rawValue] as? String {

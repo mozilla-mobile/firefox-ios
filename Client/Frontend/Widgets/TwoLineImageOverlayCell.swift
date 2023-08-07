@@ -46,13 +46,32 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 16)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16)
         label.textAlignment = .natural
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 14)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 14)
         label.textAlignment = .natural
+    }
+
+    var topSeparatorView: UIView = .build()
+    var bottomSeparatorView: UIView = .build()
+
+    func addCustomSeparator(atTop: Bool, atBottom: Bool) {
+        let height: CGFloat = 0.5  // firefox separator height
+        let leading: CGFloat = atTop || atBottom ? 0 : 50 // 50 is just a placeholder fallback
+        if atTop {
+            topSeparatorView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: height))
+            topSeparatorView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+            contentView.addSubview(topSeparatorView)
+        }
+
+        if atBottom {
+            bottomSeparatorView = UIView(frame: CGRect(x: leading, y: frame.size.height - height, width: frame.size.width, height: height))
+            bottomSeparatorView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+            contentView.addSubview(bottomSeparatorView)
+        }
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -120,6 +139,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
         descriptionLabel.textColor = theme.colors.textSecondary
         leftImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
         accessoryView?.tintColor = theme.colors.actionSecondary
+        topSeparatorView.backgroundColor = theme.colors.borderPrimary
+        bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
     }
 
     override func prepareForReuse() {

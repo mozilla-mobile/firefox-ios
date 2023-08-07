@@ -52,7 +52,7 @@ public class BottomSheetViewController: UIViewController,
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.ToMigrate.bottomSheetClose), for: .normal)
+        button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 

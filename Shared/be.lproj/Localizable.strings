@@ -872,7 +872,7 @@
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Сацыяльныя сеткі размяшчаюць трэкеры на іншых сайтах, каб стварыць ваш больш поўны таргетаваны профіль. Блакіраванне гэтых трэкераў зменшыць колькасць звестак якія збіраюцца пра вашу дзейнасць у Інтэрнэце.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Збіральнікі адбіткаў пальцаў";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Збіральнікі лічбавых адбіткаў";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Што новага";
@@ -1196,13 +1196,13 @@
 "Settings.DataManagement.SearchLabel" = "Фільтр сайтаў";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.DataManagement.SectionName" = "Кіраванне дадзенымі";
+"Settings.DataManagement.SectionName" = "Кіраванне данымі";
 
 /* Title displayed in header of the setting panel. */
-"Settings.DataManagement.Title" = "Кіраванне дадзенымі";
+"Settings.DataManagement.Title" = "Кіраванне данымі";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox спыніць сінхранізацыю з вашым уліковым запісам, але не выдаліць дадзеныя аглядання на гэтай прыладзе.";
+"Settings.Disconnect.Body" = "Firefox спыніць сінхранізацыю з вашым уліковым запісам, але не выдаліць даныя прагляду на гэтай прыладзе.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Адлучыць";
@@ -1502,10 +1502,10 @@
 "Settings.Sync.ButtonDescription.v103" = "Увайсці, каб сінхранізаваць карткі, закладкі, паролі і іншае.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
-"Settings.Sync.ButtonTitle.v103" = "Сінхранізаваць і захаваць дадзеныя";
+"Settings.Sync.ButtonTitle.v103" = "Сінхранізаваць і захаваць даныя";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
-"Settings.Sync.SignInView.Title.v103" = "Сінхранізаваць і захаваць дадзеныя";
+"Settings.Sync.SignInView.Title.v103" = "Сінхранізаваць і захаваць даныя";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактыўныя карткі";

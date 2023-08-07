@@ -37,23 +37,23 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title2,
-                                                                   size: UX.titleSizeFont)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title2,
+                                                            size: UX.titleSizeFont)
         label.numberOfLines = 0
         label.textAlignment = .center
     }
 
     private let instructionsLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionSizeFont)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                            size: UX.descriptionSizeFont)
         label.numberOfLines = 0
         label.textAlignment = .center
     }
 
     private let signInButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
-                                                                                size: UX.buttonSizeFont)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
+                                                                         size: UX.buttonSizeFont)
         button.setTitle(.Settings.Sync.ButtonTitle, for: [])
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,

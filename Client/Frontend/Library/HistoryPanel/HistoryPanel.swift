@@ -31,6 +31,7 @@ class HistoryPanel: UIViewController,
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var state: LibraryPanelMainState
 
@@ -134,9 +135,9 @@ class HistoryPanel: UIViewController,
     lazy var welcomeLabel: UILabel = .build { label in
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: 17,
-                                                                   weight: .light)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                            size: 17,
+                                                            weight: .light)
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
@@ -629,7 +630,13 @@ extension HistoryPanel: UITableViewDelegate {
         case .clearHistory:
             showClearRecentHistory()
         case .recentlyClosed:
-            navigateToRecentlyClosed()
+            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                guard viewModel.hasRecentlyClosed else { return }
+                refreshControl?.endRefreshing()
+                historyCoordinatorDelegate?.showRecentlyClosedTab()
+            } else {
+                navigateToRecentlyClosed()
+            }
         default: break
         }
     }

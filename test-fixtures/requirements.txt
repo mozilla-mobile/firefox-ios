@@ -3,3 +3,4 @@ requests
 ruamel.yaml
 pygithub
 pbxproj
+inquirer

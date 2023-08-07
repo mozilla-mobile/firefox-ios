@@ -20,7 +20,7 @@ class LoginDetailCenteredTableViewCell: UITableViewCell, ThemeApplicable, Reusab
     private var viewModel: LoginDetailCenteredTableViewCellModel?
 
     private lazy var centeredLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
         label.textAlignment = .center
         label.numberOfLines = 0
     }

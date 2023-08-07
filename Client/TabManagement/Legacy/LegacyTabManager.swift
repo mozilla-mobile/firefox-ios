@@ -123,7 +123,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         if !(0..<count ~= _selectedIndex) {
             return nil
         }
-
         return tabs[_selectedIndex]
     }
 
@@ -159,8 +158,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(blockPopUpDidChange),
+                                               name: .BlockPopup,
+                                               object: nil)
     }
 
     // MARK: - Delegates
@@ -189,6 +190,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: - Webview configuration
+    // A WKWebViewConfiguration used for normal tabs
+    lazy private var configuration: WKWebViewConfiguration = {
+        return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
+    }()
+
+    // A WKWebViewConfiguration used for private mode tabs
+    lazy private var privateConfiguration: WKWebViewConfiguration = {
+        return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
+    }()
+
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
@@ -199,20 +210,13 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         configuration.ignoresViewportScaleLimits = true
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        } else {
+            configuration.websiteDataStore = WKWebsiteDataStore.default()
         }
+
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
-
-    // A WKWebViewConfiguration used for normal tabs
-    lazy private var configuration: WKWebViewConfiguration = {
-        return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
-    }()
-
-    // A WKWebViewConfiguration used for private mode tabs
-    lazy private var privateConfiguration: WKWebViewConfiguration = {
-        return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
-    }()
 
     // MARK: Get tabs
     func getTabFor(_ url: URL) -> Tab? {
@@ -550,7 +554,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             case .blankPage:
                 // If we're showing "about:blank" in a webview, set
                 // the <html> `background-color` to match the theme.
-                if let webView = tab.webView as? TabWebView {
+                if let webView = tab.webView {
                     webView.applyTheme()
                 }
                 break
@@ -808,17 +812,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Private
     @objc
-    private func prefsDidChange() {
-        DispatchQueue.main.async {
-            let allowPopups = !(self.profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
-            // Each tab may have its own configuration, so we should tell each of them in turn.
-            for tab in self.tabs {
-                tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            }
-            // The default tab configurations also need to change.
-            self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+    private func blockPopUpDidChange() {
+        let allowPopups = !(profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
+        // Each tab may have its own configuration, so we should tell each of them in turn.
+        for tab in tabs {
+            tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
+        // The default tab configurations also need to change.
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
     }
 
     // returns all activate tabs (private or normal)

@@ -69,8 +69,11 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
 extension EnhancedTrackingProtectionCoordinator: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
-        return SlideOverPresentationController(presentedViewController: presented,
-                                               presenting: presenting,
-                                               withGlobalETPStatus: globalETPStatus)
+        let slideOverPresentationController = SlideOverPresentationController(presentedViewController: presented,
+                                                                              presenting: presenting,
+                                                                              withGlobalETPStatus: globalETPStatus)
+        slideOverPresentationController.enhancedTrackingProtectionMenuDelegate = self
+
+        return slideOverPresentationController
     }
 }

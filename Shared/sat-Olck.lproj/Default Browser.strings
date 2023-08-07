@@ -1,8 +1,8 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox ᱫᱚ ᱟᱢᱟᱜ ᱢᱩᱞ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱞᱮᱠᱷᱟ ᱛᱮ ᱫᱚᱦᱚ ᱫᱚ ᱠᱷᱩᱞᱟᱹ, ᱟᱫᱮᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱞᱮᱠᱷᱟ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫᱴᱟᱹᱝ ᱣᱚᱴ ᱞᱮᱠᱷᱟ ᱠᱟᱱᱟ ᱾";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox ᱫᱚ ᱟᱢᱟᱜ ᱢᱩᱞ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱞᱮᱠᱷᱟ ᱛᱮ ᱫᱚᱦᱚ ᱫᱚ ᱠᱷᱩᱞᱟᱹ, ᱟᱫᱮᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱞᱮᱠᱷᱟ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫᱴᱟᱝ ᱣᱚᱴ ᱞᱮᱠᱷᱟ ᱠᱟᱱᱟ ᱾";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Title.v108" = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱥ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱢᱩᱞ ᱞᱮᱠᱷᱟ ᱫᱚᱦᱚᱭ ᱢᱮ";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "ᱢᱤᱫᱴᱟᱝ ᱵᱮᱥ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱢᱩᱞ ᱞᱮᱠᱷᱟ ᱫᱚᱦᱚᱭ ᱢᱮ";
 
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "ᱪᱮᱫᱢᱮ ᱚᱠᱟᱞᱠᱟ";

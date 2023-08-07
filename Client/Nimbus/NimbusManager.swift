@@ -20,14 +20,6 @@ extension HasNimbusSearchBar {
     }
 }
 
-protocol HasNimbusSponsoredTiles { }
-
-extension HasNimbusSponsoredTiles {
-    var nimbusSponoredTiles: NimbusSponsoredTileLayer {
-        return NimbusManager.shared.sponsoredTileLayer
-    }
-}
-
 class NimbusManager {
     // MARK: - Singleton
 
@@ -37,15 +29,12 @@ class NimbusManager {
 
     // MARK: - Properties
     var featureFlagLayer: NimbusFeatureFlagLayer
-    var sponsoredTileLayer: NimbusSponsoredTileLayer
     var bottomSearchBarLayer: NimbusSearchBarLayer
 
     init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
          bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
     ) {
         self.featureFlagLayer = featureFlagLayer
-        self.sponsoredTileLayer = sponsoredTileLayer
         self.bottomSearchBarLayer = bottomSearchBarLayer
     }
 }

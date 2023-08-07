@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 extension String {
@@ -30,8 +31,8 @@ extension String {
 
         // if we have a text style, we are using dynamic text so the attributed text should do too
         if let textStyle = font.fontDescriptor.fontAttributes[.textStyle] as? UIFont.TextStyle {
-            boldFont = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: textStyle,
-                                                                         size: font.pointSize)
+            boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: textStyle,
+                                                                  size: font.pointSize)
         }
 
         let boldFontAttribute = [NSAttributedString.Key.font: boldFont]

@@ -64,14 +64,8 @@ final class NimbusFeatureFlagLayer {
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
 
-        case .sponsoredTiles:
-            return checkSponsoredTilesFeature(from: nimbus)
-
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
-
-        case .tabStorageRefactor:
-            return checkTabStorageRefactorFeature(from: nimbus)
 
         case .wallpapers,
                 .wallpaperVersion:
@@ -208,18 +202,8 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().pocketSponsoredStories
     }
 
-    private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        return config.sponsoredTiles.status
-    }
-
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxIntegrationFeature.value()
-        return config.enabled
-    }
-
-    private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabStorageRefactorFeature.value()
         return config.enabled
     }
 

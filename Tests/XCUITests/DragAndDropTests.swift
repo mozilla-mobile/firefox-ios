@@ -130,7 +130,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     let testWithDB = ["testTryDragAndDropHistoryToURLBar", "testTryDragAndDropBookmarkToURLBar", "testDragAndDropBookmarkEntry", "test3DragAndDropHistoryEntry"]
 
         // This DDBB contains those 4 websites listed in the name
-    let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
+    let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample-places.db"
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name

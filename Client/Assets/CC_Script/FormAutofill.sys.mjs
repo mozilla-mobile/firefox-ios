@@ -261,7 +261,7 @@ XPCOMUtils.defineLazyPreferenceGetter(
 );
 
 // XXX: This should be invalidated on intl:app-locales-changed.
-XPCOMUtils.defineLazyGetter(FormAutofill, "countries", () => {
+ChromeUtils.defineLazyGetter(FormAutofill, "countries", () => {
   let availableRegionCodes =
     Services.intl.getAvailableLocaleDisplayNames("region");
   let displayNames = Services.intl.getRegionDisplayNames(

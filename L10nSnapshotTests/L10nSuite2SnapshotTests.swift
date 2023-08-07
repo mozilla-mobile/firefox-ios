@@ -123,17 +123,29 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // First time only: The message "Your passwords are now protected
         // by Face ID..." is present when the Firefox app is run after the
         // simulator has been erased.
-        waitForExistence(app.navigationBars.element(boundBy: 0), timeout: 3)
-        waitForExistence(app.otherElements.buttons.element(boundBy: 2))
-        app.otherElements.buttons.element(boundBy: 2).tap()
+        // The biometric screen is supposed to appear here.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/15642
+        // waitForExistence(app.navigationBars.element(boundBy: 0), timeout: 3)
+        // waitForExistence(app.otherElements.buttons.element(boundBy: 2))
+        // app.otherElements.buttons.element(boundBy: 2).tap()
 
         let passcodeInput = springboard.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 30)
+        snapshot("PasscodeInput")
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        // The biometric screen is not supposed to be here during the first run.
+        // This snippet is here as a workaround.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/15642
+        waitForNoExistence(passcodeInput)
+        snapshot("BiometricScreen")
+        if app.otherElements.buttons.staticTexts.element(boundBy: 5).exists {
+            app.otherElements.buttons.staticTexts.element(boundBy: 5).tap()
+        }
+
         waitForExistence(app.tables["Login List"], timeout: 10)
-        app.buttons.element(boundBy: 1).tap()
+        app.buttons.element(boundBy: 2).tap()
         waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()

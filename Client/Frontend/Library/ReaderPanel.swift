@@ -62,11 +62,11 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.DeviceFont
+        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFont
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -83,18 +83,18 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
         contentView.addSubviews(readStatusImageView, titleLabel, hostnameLabel)
         NSLayoutConstraint.activate([
-            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)),
+            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.ReadIndicatorLeftOffset),
             readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            readStatusImageView.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorWidth)),
-            readStatusImageView.heightAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorHeight)),
+            readStatusImageView.widthAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorWidth),
+            readStatusImageView.heightAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorHeight),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelTopOffset)),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelLeftOffset)),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ReadingListTableViewCellUX.TitleLabelTopOffset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.TitleLabelLeftOffset),
             titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelRightOffset)),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ReadingListTableViewCellUX.TitleLabelRightOffset),
 
             hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
+            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ReadingListTableViewCellUX.HostnameLabelBottomOffset),
             hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
         ])
     }
@@ -252,13 +252,13 @@ class ReadingListPanel: UITableViewController,
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
             label.adjustsFontSizeToFitWidth = true
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
@@ -269,7 +269,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }

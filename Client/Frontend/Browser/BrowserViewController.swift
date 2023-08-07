@@ -245,6 +245,18 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
+    func didFinishAnnouncement(notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
+            let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
+            let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
+            if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage {
+                UIAccessibility.post(notification: .layoutChanged, argument: self.tabManager.selectedTab?.currentWebView())
+            }
+        }
+    }
+
+    @objc
     func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
@@ -462,6 +474,13 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
+        // Feature flag for credit card until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        // We need to update autofill status on sync manager as there could be delay from nimbus
+        // in getting the value. When the delay happens the credit cards might not sync
+        // as the default value is false
+        profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
     }
@@ -529,6 +548,11 @@ class BrowserViewController: UIViewController,
             self,
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFinishAnnouncement),
+            name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
 
         // PresentIntroView notification and code will be removed with FXIOS-6529
@@ -1344,6 +1368,7 @@ class BrowserViewController: UIViewController,
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
+        urlBar.locationView.updateShoppingCartButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }
@@ -1715,7 +1740,7 @@ class BrowserViewController: UIViewController,
             let creditCardHelper = CreditCardHelper(tab: tab)
             tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
             creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-                guard let tabWebView = tab.webView as? TabWebView,
+                guard let tabWebView = tab.webView,
                       let type = type,
                       userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
                 else { return }
@@ -1809,7 +1834,7 @@ class BrowserViewController: UIViewController,
         setNeedsStatusBarAppearanceUpdate()
 
         // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
+        let webViews = tabManager.tabs.compactMap({ $0.webView })
         webViews.forEach({ $0.applyTheme() })
 
         let tabs = tabManager.tabs

@@ -17,7 +17,7 @@ protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String)
 }
 
-class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplicable {
+class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
     let titleLabel: UILabel
     let textField: UITextField
 
@@ -31,7 +31,7 @@ class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplica
 
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.textField)
-        self.textField.delegate = self
+        self.textField.addTarget(self, action: #selector(onTextFieldDidChangeText), for: .editingChanged)
         self.selectionStyle = .none
         self.separatorInset = .zero
     }
@@ -71,14 +71,10 @@ class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate, ThemeApplica
         textField.tintColor = theme.colors.actionPrimary
     }
 
-    // MARK: UITextFieldDelegate
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text,
-            let textRange = Range(range, in: text) {
-            let updatedText = text.replacingCharacters(in: textRange, with: string)
-            delegate?.textFieldTableViewCell(self, didChangeText: updatedText)
+    @objc
+    private func onTextFieldDidChangeText() {
+        if let text = textField.text {
+            delegate?.textFieldTableViewCell(self, didChangeText: text)
         }
-        return true
     }
 }

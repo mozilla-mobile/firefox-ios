@@ -243,10 +243,10 @@ extension String {
                 value: "Done",
                 comment: "When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "CreditCard.Settings.ListItemA11y.v112",
+                key: "CreditCard.Settings.ListItemA11y.v118",
                 tableName: "Settings",
-                value: "%1$@ ending in %2$@, issued to %3$@, expires %4$@",
-                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
+                value: "%1$@, issued to %2$@, ending in %3$@, expires %4$@",
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
         }
 
         // Displaying a credit card
@@ -405,7 +405,7 @@ extension String {
                 comment: "This value is used as the title for the Not Now button in the update credit card page")
             public static let CreditCardUpdateSuccessToastMessage = MZLocalizedString(
                 key: "CreditCard.RememberCard.SecondaryButtonTitle.v116",
-                tableName: "RememberCard",
+                tableName: "UpdateCard",
                 value: "Card Information Updated",
                 comment: "This value is used as the toast message for the saving success alert in the remember credit card page")
         }
@@ -3140,11 +3140,6 @@ extension String {
             tableName: nil,
             value: "Add",
             comment: "Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label.")
-        public static let AddBookmarkAlternateTitle = MZLocalizedString(
-            key: "Menu.AddBookmark.AlternateLabel.v99",
-            tableName: nil,
-            value: "Add Bookmark",
-            comment: "Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page.")
         public static let AddBookmarkConfirmMessage = MZLocalizedString(
             key: "Menu.AddBookmark.Confirm",
             tableName: nil,
@@ -3155,11 +3150,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.")
-        public static let RemoveBookmarkAlternateTitle = MZLocalizedString(
-            key: "Menu.RemoveBookmark.AlternateLabel.v99",
-            tableName: "Menu",
-            value: "Remove Bookmark",
-            comment: "Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks.")
         public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
             key: "Menu.RemoveBookmark.Confirm",
             tableName: nil,
@@ -3177,11 +3167,6 @@ extension String {
             tableName: nil,
             value: "Add",
             comment: "Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label.")
-        public static let AddReadingListAlternateTitle = MZLocalizedString(
-            key: "Menu.AddToReadingList.AlternateLabel.v99",
-            tableName: "Menu",
-            value: "Add to Reading List",
-            comment: "Long label for the button displayed in the menu, used to add a page to the reading list.")
         public static let AddToReadingListConfirmMessage = MZLocalizedString(
             key: "Menu.AddToReadingList.Confirm",
             tableName: nil,
@@ -3192,11 +3177,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label.")
-        public static let RemoveReadingListAlternateTitle = MZLocalizedString(
-            key: "Menu.RemoveReadingList.AlternateLabel.v99",
-            tableName: nil,
-            value: "Remove from Reading List",
-            comment: "Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list.")
         public static let RemoveFromReadingListConfirmMessage = MZLocalizedString(
             key: "Menu.RemoveReadingList.Confirm.v99",
             tableName: nil,

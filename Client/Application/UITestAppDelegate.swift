@@ -114,7 +114,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         }
 
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
+            profile.prefs.setBool(false, forKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts)
         }
 
         // Don't show the What's New page.
@@ -137,6 +137,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         if launchArguments.contains(LaunchArguments.FxAChinaServer) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyEnableChinaSyncService)
+        }
+
+        if launchArguments.contains(LaunchArguments.DisableAnimations) {
+            UIView.setAnimationsEnabled(false)
         }
 
         self.profile = profile

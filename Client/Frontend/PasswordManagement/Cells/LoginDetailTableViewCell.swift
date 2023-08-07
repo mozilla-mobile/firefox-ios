@@ -59,7 +59,7 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
 
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.descriptionFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.descriptionFontSize)
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -70,8 +70,8 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
     }
 
     private lazy var highlightedLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
-                                                                   size: UX.highlightedFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
+                                                            size: UX.highlightedFontSize)
         label.numberOfLines = 0
     }
 
@@ -126,9 +126,9 @@ class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, 
         descriptionLabel.isUserInteractionEnabled = viewModel.isEditingFieldData
 
         if viewModel.displayDescriptionAsPassword {
-            descriptionLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                                  size: 16,
-                                                                                  symbolicTraits: [.traitMonoSpace])
+            descriptionLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                                           size: 16,
+                                                                           symbolicTraits: [.traitMonoSpace])
         }
     }
 

@@ -38,7 +38,7 @@ protocol TopTabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
-protocol TabDisplayer: AnyObject {
+protocol TabDisplayerDelegate: AnyObject {
     typealias TabCellIdentifier = String
     var tabCellIdentifier: TabCellIdentifier { get set }
 
@@ -71,18 +71,19 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
-    weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     var tabDisplayType: TabDisplayType = .TabGrid
     private let tabManager: TabManager
     private let collectionView: UICollectionView
-    private var tabDisplayer: TabDisplayer
+
     private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent = false
     var profile: Profile
-    var cfrDelegate: InactiveTabsCFRProtocol?
-    private var nimbus: FxNimbus?
     var notificationCenter: NotificationProtocol
     var theme: Theme
+
+    weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
+    private weak var tabDisplayerDelegate: TabDisplayerDelegate?
+    private weak var cfrDelegate: InactiveTabsCFRProtocol?
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder = TabDisplayOrder()
@@ -170,7 +171,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     @discardableResult
-    fileprivate func cancelDragAndGestures() -> Bool {
+    private func cancelDragAndGestures() -> Bool {
         let isActive = collectionView.hasActiveDrag || isLongPressGestureStarted
         collectionView.cancelInteractiveMovement()
         collectionView.endInteractiveMovement()
@@ -186,23 +187,21 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
     init(collectionView: UICollectionView,
          tabManager: TabManager,
-         tabDisplayer: TabDisplayer,
+         tabDisplayer: TabDisplayerDelegate,
          reuseID: String,
          tabDisplayType: TabDisplayType,
          profile: Profile,
          cfrDelegate: InactiveTabsCFRProtocol? = nil,
-         nimbus: FxNimbus = FxNimbus.shared,
          theme: Theme
     ) {
         self.collectionView = collectionView
-        self.tabDisplayer = tabDisplayer
+        self.tabDisplayerDelegate = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifier = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.cfrDelegate = cfrDelegate
-        self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
         self.theme = theme
 
@@ -212,8 +211,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            guard !tabsToDisplay.isEmpty else { return }
+        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+            guard let self, !tabsToDisplay.isEmpty else { return }
             let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
                 self.saveRegularOrderedTabs(from: tabsToDisplay)
@@ -293,7 +292,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         // Inactive tabs - disabled
         if !shouldEnableInactiveTabs {
             // check if groups are enabled and setup from normal tabs
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs,
+                                                 completion: completion)
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {
@@ -343,10 +343,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         if shouldSelectMostRecentTab {
-            getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
                 let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
                 if let tab = tab {
-                    self.tabManager.selectTab(tab)
+                    self?.tabManager.selectTab(tab)
                 }
             }
         }
@@ -384,9 +384,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState {
-            tabGroup, tabsToDisplay in
-
+        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+            guard let self else { return }
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
@@ -420,7 +419,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 self.collectionView.reloadItems(at: indexPaths)
             }
 
-            self.tabDisplayer.focusSelectedTab()
+            self.tabDisplayerDelegate?.focusSelectedTab()
             completion?()
         }
     }
@@ -466,7 +465,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+            guard let self else { return }
             // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
                tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
@@ -483,8 +483,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         tabManager.undoCloseTab(tab: tab, position: index)
         _ = profile.recentlyClosedTabs.popFirstTab()
 
-        refreshStore {
-            self.updateCellFor(tab: tab, selectedTabChanged: true)
+        refreshStore { [weak self] in
+            self?.updateCellFor(tab: tab, selectedTabChanged: true)
         }
     }
 
@@ -507,7 +507,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
-        let isTabTray = tabDisplayer as? GridTabViewController != nil
+        let isTabTray = tabDisplayerDelegate as? GridTabViewController != nil
         let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
@@ -587,7 +587,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer.cellFactory(for: cell, using: tab)
+            cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
             return cell
         }
 
@@ -620,7 +620,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer.cellFactory(for: cell, using: tab)
+            cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
 
         case .none:
             return cell
@@ -657,7 +657,7 @@ extension TabDisplayManager: GroupedTabDelegate {
     }
 
     func selectGroupTab(tab: Tab) {
-        if let tabTray = tabDisplayer as? GridTabViewController {
+        if let tabTray = tabDisplayerDelegate as? GridTabViewController {
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
         }
@@ -670,8 +670,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
         removeSingleInactiveTab(tab)
 
-        cfrDelegate?.presentUndoSingleToast { undoButtonPressed in
-            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else {
+        cfrDelegate?.presentUndoSingleToast { [weak self] undoButtonPressed in
+            guard undoButtonPressed, let closedTab = self?.tabManager.backupCloseTab else {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
                                              object: .inactiveTabTray,
@@ -679,7 +679,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                              extras: nil)
                 return
             }
-            self.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition ?? 0)
+            self?.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition ?? 0)
         }
     }
 
@@ -693,10 +693,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
-                                      completion: { undoButtonPressed in
-            undoButtonPressed ?
-            self.undoInactiveTabsClose() :
-            self.closeAllInactiveTabs()
+                                      completion: { [weak self] undoButtonPressed in
+            undoButtonPressed ? self?.undoInactiveTabsClose() : self?.closeAllInactiveTabs()
         })
     }
 
@@ -714,7 +712,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) { [weak self] in
+            guard let self else { return }
             self.tabManager.removeTabs(tabs)
             let mostRecentTab = mostRecentTab(inTabs: self.tabManager.normalTabs) ?? self.tabManager.normalTabs.last
             self.tabManager.selectTab(mostRecentTab)
@@ -757,8 +756,12 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
 
     func didSelectInactiveTab(tab: Tab?) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openInactiveTab, extras: nil)
-        if let tabTray = tabDisplayer as? GridTabViewController {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .openInactiveTab,
+                                     extras: nil)
+        if let tabTray = tabDisplayerDelegate as? GridTabViewController {
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
         }
@@ -787,9 +790,9 @@ extension TabDisplayManager: InactiveTabsDelegate {
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
             if tabsToDisplay.contains(tab) {
-                self.tabManager.selectTab(tab)
+                self?.tabManager.selectTab(tab)
             }
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
         }
@@ -978,7 +981,7 @@ extension TabDisplayManager: TabEventHandler {
             var indexPaths = [IndexPath(row: index, section: section)]
 
             if selectedTabChanged {
-                self?.tabDisplayer.focusSelectedTab()
+                self?.tabDisplayerDelegate?.focusSelectedTab()
 
                 // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
                 // This method avoids relying on the state of the "previous" selected tab,
@@ -1134,7 +1137,7 @@ extension TabDisplayManager: TabManagerDelegate {
         refreshStore()
 
         // Need scrollToCurrentTab and not focusTab; these exact params needed to focus (without using async dispatch).
-        (tabDisplayer as? TopTabsViewController)?.scrollToCurrentTab(false, centerCell: true)
+        (tabDisplayerDelegate as? TopTabsViewController)?.scrollToCurrentTab(false, centerCell: true)
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {

@@ -270,7 +270,7 @@ FormAutofillUtils = {
   },
 
   isCCNumber(ccNumber) {
-    return lazy.CreditCard.isValidNumber(ccNumber);
+    return ccNumber && lazy.CreditCard.isValidNumber(ccNumber);
   },
 
   ensureLoggedIn(promptMessage) {
@@ -1166,13 +1166,13 @@ FormAutofillUtils = {
   },
 };
 
-XPCOMUtils.defineLazyGetter(FormAutofillUtils, "stringBundle", function () {
+ChromeUtils.defineLazyGetter(FormAutofillUtils, "stringBundle", function () {
   return Services.strings.createBundle(
     "chrome://formautofill/locale/formautofill.properties"
   );
 });
 
-XPCOMUtils.defineLazyGetter(FormAutofillUtils, "brandBundle", function () {
+ChromeUtils.defineLazyGetter(FormAutofillUtils, "brandBundle", function () {
   return Services.strings.createBundle(
     "chrome://branding/locale/brand.properties"
   );
