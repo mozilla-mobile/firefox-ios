@@ -103,13 +103,13 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled && !shownFromAppMenu {
-            continueToOnboarding()
+            continueFromOnboarding()
         } else {
             proceedHandler()
         }
     }
 
-    private func continueToOnboarding() {
+    private func continueFromOnboarding() {
         appAuthenticator.getAuthenticationState { state in
             switch state {
             case .deviceOwnerAuthenticated:
