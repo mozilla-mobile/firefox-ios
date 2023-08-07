@@ -80,8 +80,32 @@ class ShoppingProduct: FeatureFlaggable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAnalysisData() async throws -> ProductAnalysisData? {
+    func fetchProductAnalysisData(retryCount: Int = 3) async throws -> ProductAnalysisData? {
         guard let product else { return nil }
+
+        // Perform 'retryCount' attempts, and retry on 500 failure:
+        for _ in 0..<retryCount {
+            do {
+                // Attempt to perform the asynchronous 'fetch(_ type:, url:, requestBody:)' operation.
+                // If it succeeds, the 'return' statement will immediately exit the function,
+                // returning the loaded 'ProductAnalysisData'.
+                return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
+            } catch {
+                // If 500 error occurs during the attempt, we use 'continue'
+                // to go back to the beginning of the loop and try again.
+                // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
+                if let error = error as? NSError, error.code == 500 {
+                    continue
+                } else {
+                    throw error
+                }
+            }
+        }
+
+        // If the loop completes three attempts and none of them succeed,
+        // we reach this point. Here, we make a final attempt (fourth attempt),
+        // which throws its error if it fails. If this attempt also fails,
+        // the error will be propagated out of the function to the caller.
         return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
     }
 

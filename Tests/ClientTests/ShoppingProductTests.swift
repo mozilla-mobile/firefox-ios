@@ -93,6 +93,44 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
     }
+
+    func testFetchingProductAnalysisData_WithThrowingServerError_RetriesClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let client = ThrowingFakeSpotClient(error: NSError(domain: "HTTP Error", code: 500, userInfo: nil))
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(retryCount: 3)
+
+        let expected = 4 // 3 + the original API call
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
+
+    func testFetchingProductAnalysisData_WithAnyThrowing_DoesNotRetryClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let client = ThrowingFakeSpotClient(error: NSError(domain: "Any Error", code: 404, userInfo: nil))
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(retryCount: 3)
+
+        let expected = 1
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
+}
+
+final class ThrowingFakeSpotClient: FakeSpotClientType {
+    var fetchProductAnalysisDataCallCount = 0
+    let error: Error
+
+    init(error: Error) {
+        self.error = error
+    }
+
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+        fetchProductAnalysisDataCallCount += 1
+        throw error
+    }
+
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+        return []
+    }
 }
 
 final class TestFakeSpotClient: FakeSpotClientType {
