@@ -114,6 +114,10 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct Shopping {
+        static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
+    }
+
     struct TabTray {
         static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
