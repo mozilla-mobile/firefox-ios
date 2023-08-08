@@ -69,9 +69,6 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         super.init(frame: frame)
 
         setupLayout()
-
-        let cardModel = CardContainerModel(view: contentView, a11yId: "")
-        cardContainer.configure(cardModel)
     }
 
     required init?(coder aDecoder: NSCoder) {
