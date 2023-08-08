@@ -116,7 +116,8 @@ class SettingsCoordinator: BaseCoordinator,
             }
 
         case .contentBlocker:
-            let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs)
+            let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs,
+                                                                       isPresentedFromSettings: false)
             contentBlockerVC.settingsDelegate = self
             contentBlockerVC.profile = profile
             contentBlockerVC.tabManager = tabManager

@@ -100,7 +100,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.profile = profile
         self.tabManager = tabManager
         self.settingsDelegate = delegate
-        navigationItem.title = String.AppSettingsTitle
+        setupNavigationBar()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -111,21 +111,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = String.AppSettingsTitle
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: .AppSettingsDone,
-                style: .done,
-                target: self,
-                action: #selector(done))
-        } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: .AppSettingsDone,
-                style: .done,
-                target: navigationController,
-                action: #selector((navigationController as! ThemedNavigationController).done))
-        }
-
+        setupNavigationBar()
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = AccessibilityIdentifiers.Settings.navigationBarItem
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.tableViewController
 
@@ -152,6 +138,23 @@ class AppSettingsTableViewController: SettingsTableViewController,
             RatingPromptManager.goToAppStoreReview()
         default:
             break
+        }
+    }
+
+    private func setupNavigationBar() {
+        navigationItem.title = String.AppSettingsTitle
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: self,
+                action: #selector(done))
+        } else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: navigationController,
+                action: #selector((navigationController as! ThemedNavigationController).done))
         }
     }
 
@@ -189,7 +192,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         switch deeplink {
         case .contentBlocker:
-            viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController = ContentBlockerSettingViewController(prefs: profile.prefs, isPresentedFromSettings: false)
             viewController.tabManager = tabManager
 
         case .customizeHomepage:

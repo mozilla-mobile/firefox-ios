@@ -11,7 +11,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs,
+         isShownFromSettings: Bool = true) {
         self.prefs = prefs
 
         currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
@@ -20,11 +21,13 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
         self.title = .SettingsTrackingProtectionSectionName
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: .AppSettingsDone,
-            style: .plain,
-            target: self,
-            action: #selector(done))
+        if !isShownFromSettings {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .plain,
+                target: self,
+                action: #selector(done))
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
