@@ -289,7 +289,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.fakespotFeature.value()
+        let config = nimbus.features.shopping2023.value()
 
         return config.status
     }
