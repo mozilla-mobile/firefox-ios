@@ -50,7 +50,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 self.updateUserBrightness(value)
                 store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
             }
-
         case ThemeSettingsAction.receivedSystemBrightnessChange:
             DispatchQueue.main.async {
                 self.updateThemeBasedOnSystemBrightness()

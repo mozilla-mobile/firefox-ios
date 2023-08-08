@@ -64,7 +64,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(brightnessChanged),
+                                               selector: #selector(systemBrightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
     }
@@ -110,11 +110,19 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     @objc
-    func brightnessChanged() {
+    func systemBrightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
-        } else {
+        }
+        brightnessChanged()
+    }
+
+    func brightnessChanged() {
+        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+
+        if !isReduxIntegrationEnabled {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
         applyTheme()
