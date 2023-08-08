@@ -16,7 +16,6 @@ final class ActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
         static let buttonSize: CGFloat = 13
-        static let padding: CGFloat = 8
         static let containerMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
 
@@ -32,25 +31,16 @@ final class ActionFooterView: UIView, ThemeApplicable {
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .footnote,
             size: UX.buttonSize)
-        button.titleLabel?.numberOfLines = 1
         button.buttonEdgeSpacing = 0
         button.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(self.titleLabel)
-        stackView.addArrangedSubview(self.primaryButton)
         stackView.spacing = 0
         stackView.alignment = .leading
         stackView.axis = .vertical
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layoutMargins = UX.containerMargins
-    }
-
-    init(title: String, actionTitle: String) {
-        super.init(frame: .zero)
-        titleLabel.text = title
-        primaryButton.setTitle(actionTitle, for: .normal)
     }
 
     override init(frame: CGRect) {
@@ -73,6 +63,8 @@ final class ActionFooterView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(stackView)
+        stackView.addArrangedSubview(self.titleLabel)
+        stackView.addArrangedSubview(self.primaryButton)
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor),
