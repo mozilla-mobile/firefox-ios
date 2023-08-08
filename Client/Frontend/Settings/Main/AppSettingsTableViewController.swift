@@ -100,6 +100,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.profile = profile
         self.tabManager = tabManager
         self.settingsDelegate = delegate
+        navigationItem.title = String.AppSettingsTitle
     }
 
     required init?(coder aDecoder: NSCoder) {
