@@ -5,6 +5,13 @@
 import Common
 import UIKit
 
+struct ActionFooterViewModel {
+    let title: String
+    let actionTitle: String
+    let a11yTitleIdentifier: String = AccessibilityIdentifiers.ActionFooter.title
+    let a11yActionIdentifier: String = AccessibilityIdentifiers.ActionFooter.primaryAction
+}
+
 final class ActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
@@ -19,7 +26,6 @@ final class ActionFooterView: UIView, ThemeApplicable {
             size: UX.labelSize)
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.accessibilityIdentifier = AccessibilityIdentifiers.ActionFooter.title
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -29,7 +35,6 @@ final class ActionFooterView: UIView, ThemeApplicable {
         button.titleLabel?.numberOfLines = 1
         button.buttonEdgeSpacing = 0
         button.setContentCompressionResistancePriority(.required, for: .vertical)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ActionFooter.primaryAction
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
@@ -44,14 +49,26 @@ final class ActionFooterView: UIView, ThemeApplicable {
 
     init(title: String, actionTitle: String) {
         super.init(frame: .zero)
-        setupLayout()
         titleLabel.text = title
         primaryButton.setTitle(actionTitle, for: .normal)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupLayout()
+    }
+
+    func configure(viewModel: ActionFooterViewModel) {
+        titleLabel.text = viewModel.title
+        primaryButton.setTitle(viewModel.actionTitle, for: .normal)
+
+        titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
+        primaryButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
     }
 
     private func setupLayout() {
