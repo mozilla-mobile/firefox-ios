@@ -55,9 +55,9 @@ extension BlockingStrength {
     static func accessibilityId(for strength: BlockingStrength) -> String {
         switch strength {
         case .basic:
-            return "Settings.TrackingProtectionOption.BlockListBasic"
+            return AccessibilityIdentifiers.Settings.TrackingProtection.basic
         case .strict:
-            return "Settings.TrackingProtectionOption.BlockListStrict"
+            return AccessibilityIdentifiers.Settings.TrackingProtection.strict
         }
     }
 }
