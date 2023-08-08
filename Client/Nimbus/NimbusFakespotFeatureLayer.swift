@@ -16,6 +16,6 @@ class NimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol {
     }
 
     func getSiteConfig(siteName: String) -> WebsiteConfig? {
-        nimbus.features.fakespotFeature.value().config[siteName]
+        nimbus.features.shopping2023.value().config[siteName]
     }
 }

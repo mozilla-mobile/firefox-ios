@@ -1,6 +1,6 @@
 # The configuration for the Fakespot feature
 features:
-  fakespot-feature:
+  shopping2023:
     description: >
       The configuration setting for the status of the Fakespot feature
     variables:
