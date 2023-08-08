@@ -5,6 +5,16 @@
 import UIKit
 import Common
 
+struct FakespotErrorCardViewModel {
+    let title: String
+    let description: String
+    let actionTitle: String
+    let iconImageName: String = StandardImageIdentifiers.Large.criticalFill
+    let a11yTitleIdentifier: String = AccessibilityIdentifiers.ErrorCard.title
+    let a11yDescriptionIdentifier: String = AccessibilityIdentifiers.ErrorCard.description
+    let a11yActionIdentifier: String = AccessibilityIdentifiers.ErrorCard.primaryAction
+}
+
 final class FakespotErrorCardView: UIView, ThemeApplicable {
     private enum UX {
         static let buttonFontSize: CGFloat = 16
@@ -67,7 +77,6 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.title
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -77,7 +86,6 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             size: UX.buttonFontSize)
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.description
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -92,21 +100,27 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonHorizontalInset)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ErrorCard.primaryAction
     }
 
-    /// Custom init method to pass title, description text, action text
-    init(title: String, description: String, actionTitle: String) {
+    override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
-        titleLabel.text = title
-        descriptionLabel.text = description
-        primaryButton.setTitle(actionTitle, for: .normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupLayout()
+    }
+
+    func configure(viewModel: FakespotErrorCardViewModel) {
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
+        primaryButton.setTitle(viewModel.actionTitle, for: .normal)
+        iconImageView.image =  UIImage(named: viewModel.iconImageName)
+
+        titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
+        descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
+        primaryButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
     }
 
     private func setupLayout() {
