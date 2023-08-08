@@ -192,7 +192,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         switch deeplink {
         case .contentBlocker:
-            viewController = ContentBlockerSettingViewController(prefs: profile.prefs, isPresentedFromSettings: false)
+            viewController = ContentBlockerSettingViewController(prefs: profile.prefs, isShownFromSettings: false)
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
