@@ -1756,10 +1756,7 @@ class BrowserViewController: UIViewController,
             switch type {
             case .formInput:
                 self?.profile.autofill.listCreditCards(completion: { cards, error in
-                    guard let cards = cards, !cards.isEmpty, error == nil
-                    else {
-                        return
-                    }
+                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
                     DispatchQueue.main.async {
                         tabWebView.accessoryView.reloadViewFor(.creditCard)
                         tabWebView.reloadInputViews()
