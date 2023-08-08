@@ -266,6 +266,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         hostingCell.contentView.backgroundColor = .clear
         hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
+        hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: creditCard)
+
         return hostingCell
     }
 
