@@ -12,6 +12,10 @@ struct ThemeSettingsState: ScreenState, Equatable {
     var userBrightnessThreshold: Float
     private var logger: Logger
 
+    var systemBrightness: Float {
+        return Float(UIScreen.main.brightness)
+    }
+
     init(_ appState: AppState) {
         guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
             self.init()
