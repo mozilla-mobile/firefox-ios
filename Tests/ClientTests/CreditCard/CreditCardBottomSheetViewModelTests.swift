@@ -173,6 +173,67 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertTrue(value!.ccExpYear > 2000)
     }
 
+    func test_getPlainCreditCardValues_NilDecryptedCard() {
+        viewModel.state = .save
+        viewModel.decryptedCreditCard = nil
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
+        XCTAssertNil(value)
+    }
+
+    func test_getConvertedCreditCardValues_MasterCard() {
+        viewModel.state = .save
+        let masterCard = UnencryptedCreditCardFields(ccName: "John Doe",
+                                                     ccNumber: "5555555555554444",
+                                                     ccNumberLast4: "4444",
+                                                     ccExpMonth: 12,
+                                                     ccExpYear: 2023,
+                                                     ccType: "MasterCard")
+        viewModel.decryptedCreditCard = masterCard
+        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save, ccNumberDecrypted: masterCard.ccNumber)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccType, "MasterCard")
+    }
+
+    func test_getPlainCreditCardValues_InvalidMonth() {
+        viewModel.state = .save
+        let invalidCard = UnencryptedCreditCardFields(ccName: "Jane Smith",
+                                                      ccNumber: "4111111111111111",
+                                                      ccNumberLast4: "1111",
+                                                      ccExpMonth: 13, // Invalid month
+                                                      ccExpYear: 2023,
+                                                      ccType: "VISA")
+        viewModel.decryptedCreditCard = invalidCard
+        let value = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
+        XCTAssertNotNil(value)
+    }
+
+    func test_getConvertedCreditCardValues_UpcomingExpiry() {
+        viewModel.state = .save
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let upcomingMonth = calendar.component(.month, from: currentDate) + 1
+        let upcomingYear = calendar.component(.year, from: currentDate)
+        let upcomingExpiryCard = UnencryptedCreditCardFields(ccName: "Jane Smith",
+                                                             ccNumber: "4111111111111111",
+                                                             ccNumberLast4: "1111",
+                                                             ccExpMonth: Int64(upcomingMonth),
+                                                             ccExpYear: Int64(upcomingYear),
+                                                             ccType: "VISA")
+        viewModel.decryptedCreditCard = upcomingExpiryCard
+        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save, ccNumberDecrypted: upcomingExpiryCard.ccNumber)
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value!.ccExpMonth, Int64(upcomingMonth))
+        XCTAssertEqual(value!.ccExpYear, Int64(upcomingYear))
+    }
+
+    func test_getConvertedCreditCardValues_WhenStateIsSelectAndRowIsOutOfBounds() {
+        viewModel.state = .selectSavedCard
+        let result = viewModel.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
+                                                            ccNumberDecrypted: "1234567890123456",
+                                                            row: 9999)
+        XCTAssertNil(result)
+    }
+
     func test_select_PlainCreditCard_WithNegativeRow() {
         viewModel.state = .selectSavedCard
         viewModel.creditCards = [sampleCreditCard]
