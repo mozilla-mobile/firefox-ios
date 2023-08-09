@@ -320,6 +320,11 @@ public struct AccessibilityIdentifiers {
         struct Version {
             static let title = "FxVersion"
         }
+
+        struct TrackingProtection {
+            static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
+            static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
+        }
     }
 
     struct ShareTo {
