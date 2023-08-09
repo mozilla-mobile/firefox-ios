@@ -31,17 +31,6 @@ etp-coordinator-refactor:
     enabled:
       type: boolean
       description: "Enables the feature\n"
-fakespot-feature:
-  description: "The configuration setting for the status of the Fakespot feature\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    config:
-      type: json
-      description: "A Map of website configurations\n"
-    status:
-      type: boolean
-      description: "Whether the Fakespot feature is enabled or disabled\n"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -182,6 +171,17 @@ share-sheet:
     toolbar-changes:
       type: boolean
       description: If true share option is shown on the toolbar
+shopping2023:
+  description: "The configuration setting for the status of the Fakespot feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    config:
+      type: json
+      description: "A Map of website configurations\n"
+    status:
+      type: boolean
+      description: "Whether the Fakespot feature is enabled or disabled\n"
 spotlight-search:
   description: Add pages as items findable with Spotlight.
   hasExposure: true
@@ -211,14 +211,6 @@ start-at-home-feature:
         - after-four-hours
         - always
         - disabled
-tab-storage-refactor-feature:
-  description: "This feature is for managing the roll out of the new tab storage mechanism as part of the tab refactor project\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    enabled:
-      type: boolean
-      description: "Enables the feature\n"
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

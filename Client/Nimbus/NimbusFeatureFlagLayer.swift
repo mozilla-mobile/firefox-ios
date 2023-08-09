@@ -67,9 +67,6 @@ final class NimbusFeatureFlagLayer {
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
 
-        case .tabStorageRefactor:
-            return checkTabStorageRefactorFeature(from: nimbus)
-
         case .wallpapers,
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
@@ -210,11 +207,6 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkTabStorageRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabStorageRefactorFeature.value()
-        return config.enabled
-    }
-
     public func checkNimbusForCreditCardAutofill(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
@@ -297,7 +289,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.fakespotFeature.value()
+        let config = nimbus.features.shopping2023.value()
 
         return config.status
     }

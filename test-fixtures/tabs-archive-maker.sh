@@ -60,7 +60,7 @@ function boot_sim() {
 
 function build_app() {
     echo "BUILD APP"
-    xcodebuild -scheme Fennec_Enterprise_XCUITests -project ../Client.xcodeproj -sdk iphonesimulator -derivedDataPath ${BUILD_DIR} 
+    xcodebuild -scheme Fennec -project ../Client.xcodeproj -sdk iphonesimulator -derivedDataPath ${BUILD_DIR} 
 }
 
 function install_app() {

@@ -12,7 +12,7 @@ class XCodeBuild(object):
     binary = 'xcodebuild'
     destination = 'platform=iOS Simulator,name=iPhone 14'
     logger = logging.getLogger()
-    scheme = 'Fennec_Enterprise_XCUITests'
+    scheme = 'Fennec'
     testPlan = 'SyncIntegrationTestPlan'
     xcrun = XCRun()
 
