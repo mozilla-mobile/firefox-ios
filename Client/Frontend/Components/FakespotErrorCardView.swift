@@ -33,9 +33,6 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
     }
 
     private lazy var containerStackView: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(self.infoContainerStackView)
-        stackView.addArrangedSubview(UIView())
-        stackView.addArrangedSubview(self.primaryButton)
         stackView.axis = .vertical
         stackView.spacing = UX.containerSpacing
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -43,36 +40,26 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
     }
 
     private lazy var iconStackView: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(UIView())
-        stackView.addArrangedSubview(self.iconImageView)
-        stackView.addArrangedSubview(UIView())
         stackView.axis = .vertical
         stackView.distribution = .equalCentering
         stackView.spacing = UX.iconStackViewSpacing
     }
 
     private lazy var infoContainerStackView: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(self.iconStackView)
-        stackView.addArrangedSubview(self.labelContainerStackView)
         stackView.axis = .horizontal
         stackView.spacing = UX.horizontalStackViewSpacing
     }
 
     private lazy var labelContainerStackView: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(self.titleLabel)
-        stackView.addArrangedSubview(self.descriptionLabel)
         stackView.axis = .vertical
         stackView.spacing = UX.verticalStackViewSpacing
     }
 
     private lazy var iconImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        // Set the icon image here
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.criticalFill)
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.textColor = .white
         label.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
@@ -126,6 +113,21 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
     private func setupLayout() {
         layer.cornerRadius = UX.cornerRadius
         addSubview(containerStackView)
+
+        iconStackView.addArrangedSubview(UIView())
+        iconStackView.addArrangedSubview(iconImageView)
+        iconStackView.addArrangedSubview(UIView())
+
+        infoContainerStackView.addArrangedSubview(iconStackView)
+        infoContainerStackView.addArrangedSubview(labelContainerStackView)
+
+        labelContainerStackView.addArrangedSubview(titleLabel)
+        labelContainerStackView.addArrangedSubview(descriptionLabel)
+
+        containerStackView.addArrangedSubview(infoContainerStackView)
+        containerStackView.addArrangedSubview(UIView())
+        containerStackView.addArrangedSubview(primaryButton)
+
         NSLayoutConstraint.activate([
             iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize),
             iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
