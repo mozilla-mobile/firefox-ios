@@ -1411,6 +1411,7 @@
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
+		EA8AE4462A61A85400C9C165 /* ExperimentIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */; };
 		EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07F85E240D695F00924860 /* PushNotificationSetup.swift */; };
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */; };
@@ -6675,7 +6676,9 @@
 		E9BB4AED8B0289EEF125BBC5 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		E9DF434082AADD254ECE2489 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		E9EF4766A9B41B1946116153 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExperimentIntegrationTests.swift; path = Tests/XCUITests/ExperimentIntegrationTests.swift; sourceTree = "<group>"; };
 		EAAD40AA9E3874E1EA267550 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ExperimentIntegrationTests.xctestplan; sourceTree = "<group>"; };
 		EB07F85E240D695F00924860 /* PushNotificationSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationSetup.swift; sourceTree = "<group>"; };
 		EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseFixtureTest.swift; sourceTree = "<group>"; };
@@ -9853,6 +9856,8 @@
 			isa = PBXGroup;
 			children = (
 				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
+				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
+				E1AF355B286DE5F600960045 /* Fennec_Enterprise_XCUITests.xctestplan */,
 				E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */,
 				E1AF355A286DE5F600960045 /* Smoketest2.xctestplan */,
 				E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */,
@@ -10411,6 +10416,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C3B297054EC00354BE8 /* Sources */,
@@ -12203,6 +12209,7 @@
 			files = (
 				2CA16FDE1E5F089100332277 /* SearchTest.swift in Sources */,
 				0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */,
+				EA8AE4462A61A85400C9C165 /* ExperimentIntegrationTests.swift in Sources */,
 				8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */,
 				3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */,
 				2CCB296720A99C9500121DD8 /* SaveLoginsTests.swift in Sources */,
