@@ -48,6 +48,12 @@ public class Store<State: StateType>: DefaultDispatchStore {
         subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
     }
 
+    public func unsubscribe(_ subscriber: any StoreSubscriber) {
+        if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
+            subscriptions.remove(at: index)
+        }
+    }
+
     public func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
         if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
             subscriptions.remove(at: index)

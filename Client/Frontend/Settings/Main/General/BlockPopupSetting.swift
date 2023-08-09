@@ -9,7 +9,8 @@ class BlockPopupSetting: BoolSetting {
     init(settings: SettingsTableViewController) {
         let currentValue = settings.profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups)
         let didChange = { (isEnabled: Bool) in
-            settings.profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyBlockPopups)
+            NotificationCenter.default.post(name: .BlockPopup,
+                                            object: nil)
         }
 
         super.init(title: .AppSettingsBlockPopups,

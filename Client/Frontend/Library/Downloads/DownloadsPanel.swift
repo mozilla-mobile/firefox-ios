@@ -19,6 +19,7 @@ class DownloadsPanel: UIViewController,
     }
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var navigationHandler: DownloadsNavigationHandler?
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
     var themeManager: ThemeManager
@@ -310,19 +311,27 @@ class DownloadsPanel: UIViewController,
 
         if let downloadedFile = viewModel.downloadedFileForIndexPath(indexPath) {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
-
             if downloadedFile.mimeType == MIMEType.Calendar {
-                let docController = UIDocumentInteractionController(url: downloadedFile.path)
-                docController.delegate = self
-                docController.presentPreview(animated: true)
+                if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                    navigationHandler?.showDocument(file: downloadedFile)
+                } else {
+                    let docController = UIDocumentInteractionController(url: downloadedFile.path)
+                    docController.delegate = self
+                    docController.presentPreview(animated: true)
+                }
                 return
             }
 
-            guard downloadedFile.canShowInWebView else {
-                shareDownloadedFile(downloadedFile, indexPath: indexPath)
-                return
+            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                let cell = tableView.cellForRow(at: indexPath)
+                navigationHandler?.handleFile(downloadedFile, sourceView: cell ?? UIView())
+            } else {
+                guard downloadedFile.canShowInWebView else {
+                    shareDownloadedFile(downloadedFile, indexPath: indexPath)
+                    return
+                }
+                libraryPanelDelegate?.libraryPanel(didSelectURL: downloadedFile.path, visitType: VisitType.typed)
             }
-            libraryPanelDelegate?.libraryPanel(didSelectURL: downloadedFile.path, visitType: VisitType.typed)
         }
     }
 

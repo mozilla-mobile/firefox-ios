@@ -373,4 +373,9 @@ public struct AccessibilityIdentifiers {
         static let description = "ErrorCard.description"
         static let primaryAction = "ErrorCard.primaryAction"
     }
+
+    struct ActionFooter {
+        static let title = "ActionFooter.title"
+        static let primaryAction = "ActionFooter.primaryAction"
+    }
 }

@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import ComponentLibrary
 
 struct FakespotErrorCardViewModel {
     let title: String
