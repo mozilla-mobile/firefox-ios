@@ -69,6 +69,13 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                object: nil)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
     func newState(state: ThemeSettingsState) {
         themeState = state
         tableView.reloadData()
