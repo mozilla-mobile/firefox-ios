@@ -126,6 +126,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
         "NightModeTests",
         "NoImageTests",
+        "OnboardingTests\/testWhatsNewPage()",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
