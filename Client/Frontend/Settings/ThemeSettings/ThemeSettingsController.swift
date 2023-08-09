@@ -119,6 +119,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         brightnessChanged()
     }
 
+    /// Update Theme if user or system brightness change due to user action
     func brightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
 
@@ -339,7 +340,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
             let slider = makeSlider(parent: cell.contentView)
             slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
+            if isReduxIntegrationEnabled {
+                slider.value = themeState.userBrightnessThreshold
+            } else {
+                slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
+            }
             deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
             deviceBrightnessIndicator.isUserInteractionEnabled = false
             deviceBrightnessIndicator.minimumTrackTintColor = .clear
