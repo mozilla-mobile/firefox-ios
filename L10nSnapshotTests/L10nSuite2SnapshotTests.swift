@@ -121,8 +121,10 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Logins"].tap()
 
         waitForExistence(app.navigationBars.element(boundBy: 0), timeout: 3)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue])
-        app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
+        // Press continue button on the password onboarding if it's shown
+        if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
+            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
+        }
 
         let passcodeInput = springboard.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 30)
