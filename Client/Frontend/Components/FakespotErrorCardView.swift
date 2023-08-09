@@ -63,6 +63,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
         label.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
+        label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
