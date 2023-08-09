@@ -34,11 +34,7 @@ open class RustSyncManagerAPI {
 
     public func sync(params: SyncParams,
                      completion: @escaping (SyncResult) -> Void) {
-<<<<<<< HEAD
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
-=======
-        DispatchQueue.global().async { [weak self] in
->>>>>>> e24affb81 (Bugfix FXIOS-7176 [v116] Unowned self reference error in RustSyncManagerAPI.sync function (#15945))
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
                 guard let result = try self?.api.sync(params: params) else { return }
 
