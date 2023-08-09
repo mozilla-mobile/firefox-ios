@@ -130,7 +130,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
-        app.buttons.element(boundBy: 1).tap()
+        app.buttons[AccessibilityIdentifiers.Settings.Passwords.addCredentialButton].tap()
         waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()

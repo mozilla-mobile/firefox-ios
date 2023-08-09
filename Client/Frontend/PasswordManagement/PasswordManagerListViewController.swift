@@ -236,6 +236,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
                                                      action: #selector(cancelSelection))
 
     fileprivate func setupDefaultNavButtons() {
+        addCredentialButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.addCredentialButton
+        editButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.editButton
         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
 
         if shownFromAppMenu {
