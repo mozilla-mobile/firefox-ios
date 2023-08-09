@@ -38,6 +38,24 @@ struct FakeSpotClient: FakeSpotClientType {
     /// Private property to hold the network function for performing API requests.
     private var network: NetworkFunction
 
+    /// Static property representing a staging instance of FakeSpotClient using a custom network function.
+    static let staging: FakeSpotClient = {
+        FakeSpotClient { @Sendable request in
+            // Define the configuration and relay URLs for the staging instance
+            guard
+                let config = URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs"),
+                let relay = URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")
+            else {
+                throw FakeSpotClientError.invalidURL
+            }
+
+            // Create an instance of OhttpManager with the staging configuration
+            let staging = OhttpManager(configUrl: config, relayUrl: relay)
+            // Perform the API request using OhttpManager and get the response data
+            return try await staging.data(for: request)
+        }
+    }()
+
     /// Initialize FakeSpotClient with a custom network function.
     init(network: @escaping NetworkFunction) {
         self.network = network
@@ -104,20 +122,4 @@ struct FakeSpotClient: FakeSpotClientType {
         // Decode the response data and return the result
         return try JSONDecoder().decode(type, from: data)
     }
-}
-
-/// Extension for FakeSpotClient to provide a static staging instance with a custom network function.
-extension FakeSpotClient {
-    /// Static property representing a staging instance of FakeSpotClient using a custom network function.
-    static let staging: FakeSpotClient = {
-        FakeSpotClient { @Sendable request in
-            // Define the configuration and relay URLs for the staging instance
-            let config = URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")!
-            let relay = URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")!
-            // Create an instance of OhttpManager with the staging configuration
-            let staging = OhttpManager(configUrl: config, relayUrl: relay)
-            // Perform the API request using OhttpManager and get the response data
-            return try await staging.data(for: request)
-        }
-    }()
 }
