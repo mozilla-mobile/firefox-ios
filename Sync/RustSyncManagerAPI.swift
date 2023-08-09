@@ -34,19 +34,24 @@ open class RustSyncManagerAPI {
 
     public func sync(params: SyncParams,
                      completion: @escaping (SyncResult) -> Void) {
+<<<<<<< HEAD
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+=======
+        DispatchQueue.global().async { [weak self] in
+>>>>>>> e24affb81 (Bugfix FXIOS-7176 [v116] Unowned self reference error in RustSyncManagerAPI.sync function (#15945))
             do {
-                let result = try self.api.sync(params: params)
+                guard let result = try self?.api.sync(params: params) else { return }
+
                 completion(result)
             } catch let err as NSError {
                 if let syncError = err as? SyncManagerError {
                     let syncErrDescription = syncError.localizedDescription
-                    self.logger.log("Rust SyncManager sync error: \(syncErrDescription)",
-                                    level: .warning,
-                                    category: .sync)
+                    self?.logger.log("Rust SyncManager sync error: \(syncErrDescription)",
+                                     level: .warning,
+                                     category: .sync)
                 } else {
                     let errDescription = err.localizedDescription
-                    self.logger.log("""
+                    self?.logger.log("""
                         Unknown error when attempting a rust SyncManager sync:
                         \(errDescription)
                         """,
