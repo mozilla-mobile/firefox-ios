@@ -63,14 +63,14 @@ final class ActionFooterView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(stackView)
-        stackView.addArrangedSubview(self.titleLabel)
-        stackView.addArrangedSubview(self.primaryButton)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(primaryButton)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: self.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
