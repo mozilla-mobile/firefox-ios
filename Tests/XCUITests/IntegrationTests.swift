@@ -199,13 +199,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
-
+        app.buttons["Continue"].tap()
+        
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
-        app.buttons["Continue"].tap()
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
@@ -251,13 +251,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
-        app.buttons["Continue"].tap()
         waitForExistence(app.tables["Login List"], timeout: 3)
         // Verify the login
         waitForExistence(app.staticTexts["https://accounts.google.com"])
