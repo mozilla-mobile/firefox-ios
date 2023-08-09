@@ -78,7 +78,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         subject.start(panelType: .downloads, navigationController: UINavigationController())
         XCTAssertTrue(subject.childCoordinators.first is DownloadsCoordinator)
     }
-    
+
     func testStart_withLibraryPanelTypeReadingList_addsChildReadingListCoordinator() {
         let subject = createSubject()
         subject.start(panelType: .readingList, navigationController: UINavigationController())
