@@ -32,6 +32,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 8
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
         button.titleLabel?.font = LegacyDynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)

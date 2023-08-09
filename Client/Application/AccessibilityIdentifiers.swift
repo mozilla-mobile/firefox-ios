@@ -319,6 +319,7 @@ public struct AccessibilityIdentifiers {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+            static let onboardingContinue = "onboardingContinue"
         }
 
         struct Version {
