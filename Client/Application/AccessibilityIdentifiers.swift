@@ -376,4 +376,9 @@ public struct AccessibilityIdentifiers {
             static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
         }
     }
+        
+    struct ActionFooter {
+        static let title = "ActionFooter.title"
+        static let primaryAction = "ActionFooter.primaryAction"
+    }
 }
