@@ -79,9 +79,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-
-        case .notificationSettings:
-            return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
         }
     }
 
@@ -214,17 +211,6 @@ final class NimbusFeatureFlagLayer {
 
             switch featureID {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
-            default: return false
-            }
-    }
-
-    public func checkNimbusForNotificationSettings(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.notificationSettingsFeature.value()
-
-            switch featureID {
-            case .notificationSettings: return config.notificationSettingsFeatureStatus
             default: return false
             }
     }

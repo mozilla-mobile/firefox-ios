@@ -87,14 +87,6 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
-notification-settings-feature:
-  description: "The feature that controls the notifications menu in Settings.\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    notification-settings-feature-status:
-      type: boolean
-      description: "If true, we will allow user to use the the notifications menu in Settings"
 onboarding-feature:
   description: The feature that controls whether to show or not Upgrade onboarding
   hasExposure: true
