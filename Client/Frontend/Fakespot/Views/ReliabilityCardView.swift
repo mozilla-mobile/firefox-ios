@@ -30,11 +30,8 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         static let descriptionBackgroundAlpha: CGFloat = 0.15
     }
 
-    private lazy var cardContainer: CardContainer = .build { view in
-    }
-
-    private lazy var contentView: UIView = .build { view in
-    }
+    private lazy var cardContainer: CardContainer = .build()
+    private lazy var contentView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
@@ -48,8 +45,8 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         view.clipsToBounds = true
     }
 
-    private lazy var reliabilityLetterView: UIView = .build { _ in }
-    private lazy var reliabilityDescriptionView: UIView = .build { _ in }
+    private lazy var reliabilityLetterView: UIView = .build()
+    private lazy var reliabilityDescriptionView: UIView = .build()
 
     private lazy var reliabilityLetterLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
