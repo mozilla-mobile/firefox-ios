@@ -69,8 +69,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                                object: nil)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         if isReduxIntegrationEnabled {
             store.unsubscribe(self)
         }
@@ -78,7 +78,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     func newState(state: ThemeSettingsState) {
         themeState = state
-        tableView.reloadData()
+        // Reload of tableView is needed to reflect the new state. Currently applyTheme calls tableview.reload
         applyTheme()
     }
 

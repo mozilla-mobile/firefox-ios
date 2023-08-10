@@ -19,5 +19,5 @@ enum ThemeSettingsAction: Action {
     case automaticBrightnessChanged(Bool)
     case manualThemeChanged(BuiltinThemeName)
     case userBrightnessChanged(Float)
-    case systemBrightnessChanged
+    case systemBrightnessChanged(Float)
 }

@@ -53,7 +53,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         case ThemeSettingsAction.receivedSystemBrightnessChange:
             DispatchQueue.main.async {
                 self.updateThemeBasedOnSystemBrightness()
-                store.dispatch(ThemeSettingsAction.systemBrightnessChanged)
+                let systemBrightness = self.getScreenBrightness()
+                store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
             }
         default:
             break
@@ -64,7 +65,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
                            manualThemeSelected: legacyThemeManager.currentName,
-                           userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue)
+                           userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
+                           systemBrightness: getScreenBrightness())
     }
 
     func toggleUseSystemAppearance(_ enabled: Bool) {
@@ -90,5 +92,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     func updateThemeBasedOnSystemBrightness() {
         legacyThemeManager.updateCurrentThemeBasedOnScreenBrightness()
+    }
+
+    func getScreenBrightness() -> Float {
+        return Float(UIScreen.main.brightness)
     }
 }
