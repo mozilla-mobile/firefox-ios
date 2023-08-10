@@ -7,7 +7,7 @@ import Common
 import Foundation
 import UIKit
 
-class CardContainerViewController: UIViewController {
+class CardViewWithShadowViewController: UIViewController {
     private let loremIpsum =
     """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -16,7 +16,7 @@ class CardContainerViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
-    private lazy var cardContainer: CardContainer = .build { _ in }
+    private lazy var cardView: CardViewWithShadow = .build { _ in }
 
     private lazy var contentLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -29,21 +29,21 @@ class CardContainerViewController: UIViewController {
 
         view.backgroundColor = .white
         contentLabel.text = loremIpsum
-        let viewModel = CardContainerModel(view: contentLabel, a11yId: "CardContainer")
-        cardContainer.configure(viewModel)
+        let viewModel = CardViewWithShadowModel(view: contentLabel, a11yId: "CardViewWithShadow")
+        cardView.configure(viewModel)
 
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        cardContainer.applyTheme(theme: themeManager.currentTheme)
+        cardView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
-        view.addSubview(cardContainer)
+        view.addSubview(cardView)
 
         NSLayoutConstraint.activate([
-            cardContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cardContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            cardContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            cardContainer.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
+            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                   constant: -20)
         ])
     }

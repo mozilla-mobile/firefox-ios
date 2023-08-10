@@ -5,9 +5,9 @@
 import Foundation
 import UIKit
 
-struct CollapsibleCardContainerComponentViewModel: ComponentViewModel {
-    var title = "CollapsibleCardContainer"
-    var viewController: UIViewController = CollapsibleCardContainerViewController()
+struct CollapsibleCardViewComponentViewModel: ComponentViewModel {
+    var title = "CollapsibleCardView"
+    var viewController: UIViewController = CollapsibleCardViewViewController()
 
     func present(with presenter: Presenter?) {
         presenter?.push(viewController: viewController)

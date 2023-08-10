@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public struct CardContainerWithShadowModel {
+public struct CardViewWithShadowModel {
     public let view: UIView
     public let a11yId: String
 
@@ -17,7 +17,7 @@ public struct CardContainerWithShadowModel {
     }
 }
 
-public class CardContainerWithShadow: UIView, ThemeApplicable {
+public class CardViewWithShadow: UIView, ThemeApplicable {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -56,7 +56,7 @@ public class CardContainerWithShadow: UIView, ThemeApplicable {
         (rootView.subviews.first as? ThemeApplicable)?.applyTheme(theme: theme)
     }
 
-    public func configure(_ viewModel: CardContainerWithShadowModel) {
+    public func configure(_ viewModel: CardViewWithShadowModel) {
         rootView.subviews.forEach { $0.removeFromSuperview() }
         rootView.addSubview(viewModel.view)
         rootView.accessibilityIdentifier = viewModel.a11yId

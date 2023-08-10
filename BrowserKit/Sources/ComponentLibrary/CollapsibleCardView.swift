@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public struct CollapsibleCardContainerModel {
+public struct CollapsibleCardViewModel {
     public let contentView: UIView
     public let cardViewA11yId: String
 
@@ -16,7 +16,7 @@ public struct CollapsibleCardContainerModel {
     public let expandButtonA11yLabelExpanded: String
     public let expandButtonA11yLabelCollapsed: String
 
-    public var expandState: CollapsibleCardContainer.ExpandButtonState = .collapsed
+    public var expandState: CollapsibleCardView.ExpandButtonState = .collapsed
 
     public var expandButtonA11yLabel: String {
         return expandState == .expanded ? expandButtonA11yLabelExpanded : expandButtonA11yLabelCollapsed
@@ -31,7 +31,7 @@ public struct CollapsibleCardContainerModel {
                 expandButtonA11yId: String,
                 expandButtonA11yLabelExpanded: String,
                 expandButtonA11yLabelCollapsed: String,
-                expandState: CollapsibleCardContainer.ExpandButtonState = .collapsed) {
+                expandState: CollapsibleCardView.ExpandButtonState = .collapsed) {
         self.contentView = contentView
         self.cardViewA11yId = cardViewA11yId
         self.title = title
@@ -43,7 +43,7 @@ public struct CollapsibleCardContainerModel {
     }
 }
 
-public class CollapsibleCardContainer: CardContainerWithShadow, UIGestureRecognizerDelegate {
+public class CollapsibleCardView: CardViewWithShadow, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -76,7 +76,7 @@ public class CollapsibleCardContainer: CardContainerWithShadow, UIGestureRecogni
     }
 
     // MARK: - Properties
-    private lazy var viewModel = CollapsibleCardContainerModel(
+    private lazy var viewModel = CollapsibleCardViewModel(
         contentView: rootView,
         cardViewA11yId: "",
         title: "",
@@ -119,12 +119,12 @@ public class CollapsibleCardContainer: CardContainerWithShadow, UIGestureRecogni
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func configure(_ viewModel: CardContainerWithShadowModel) {
+    public override func configure(_ viewModel: CardViewWithShadowModel) {
         // the overridden method should not be used as it is lacking vital details to configure this card
         fatalError("configure(:) has not been implemented.")
     }
 
-    public func configure(_ viewModel: CollapsibleCardContainerModel) {
+    public func configure(_ viewModel: CollapsibleCardViewModel) {
         self.viewModel = viewModel
         containerView.subviews.forEach { $0.removeFromSuperview() }
         containerView.addSubview(viewModel.contentView)
@@ -143,7 +143,7 @@ public class CollapsibleCardContainer: CardContainerWithShadow, UIGestureRecogni
 
         updateCardState(expandState: viewModel.expandState)
 
-        let parentViewModel = CardContainerWithShadowModel(view: rootView, a11yId: viewModel.cardViewA11yId)
+        let parentViewModel = CardViewWithShadowModel(view: rootView, a11yId: viewModel.cardViewA11yId)
         super.configure(parentViewModel)
     }
 

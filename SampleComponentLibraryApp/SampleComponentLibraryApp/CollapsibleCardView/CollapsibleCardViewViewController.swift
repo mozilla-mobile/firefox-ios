@@ -7,7 +7,7 @@ import Common
 import Foundation
 import UIKit
 
-class CollapsibleCardContainerViewController: UIViewController {
+class CollapsibleCardViewViewController: UIViewController {
     class CardContentView: UIView, ThemeApplicable {
         lazy var contentLabel: UILabel = .build { label in
             label.adjustsFontForContentSizeCategory = true
@@ -48,7 +48,7 @@ class CollapsibleCardContainerViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
-    private lazy var cardContainer: CollapsibleCardContainer = .build { _ in }
+    private lazy var cardView: CollapsibleCardView = .build { _ in }
     private lazy var contentView: CardContentView = .build { _ in }
 
     override func viewDidLoad() {
@@ -57,28 +57,28 @@ class CollapsibleCardContainerViewController: UIViewController {
 
         view.backgroundColor = .white
         contentView.contentLabel.text = loremIpsum
-        let viewModel = CollapsibleCardContainerModel(
+        let viewModel = CollapsibleCardViewModel(
             contentView: contentView,
-            cardViewA11yId: "CollapsibleCardContainer",
-            title: "Collapsible Card Container Title",
-            titleA11yId: "CollapsibleCardContainerTitle",
-            expandButtonA11yId: "CollapsibleCardContainerExpandButton",
+            cardViewA11yId: "CollapsibleCardView",
+            title: "Collapsible Card View Title",
+            titleA11yId: "CollapsibleCardViewTitle",
+            expandButtonA11yId: "CollapsibleCardViewExpandButton",
             expandButtonA11yLabelExpanded: "Collapse card",
             expandButtonA11yLabelCollapsed: "Expand card")
-        cardContainer.configure(viewModel)
+        cardView.configure(viewModel)
 
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        cardContainer.applyTheme(theme: themeManager.currentTheme)
+        cardView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
-        view.addSubview(cardContainer)
+        view.addSubview(cardView)
 
         NSLayoutConstraint.activate([
-            cardContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cardContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            cardContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            cardContainer.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
+            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                   constant: -20)
         ])
     }
