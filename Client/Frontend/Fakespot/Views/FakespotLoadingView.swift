@@ -7,11 +7,12 @@ import UIKit
 
 class FakespotLoadingView: UIView, ThemeApplicable {
     private enum UX {
-        static let card1And3Height: CGFloat = 192
-        static let card2Height: CGFloat = 40
-        static let card4And5Height: CGFloat = 80
+        static let bigCardHeight: CGFloat = 192
+        static let mediumCardHeight: CGFloat = 80
+        static let smallCardHeight: CGFloat = 40
         static let cardPadding: CGFloat = 16
         static let cornerRadius: CGFloat = 8
+        static let minimumAlpha: CGFloat = 0.25
     }
 
     private lazy var cardView1: UIView = .build()
@@ -48,19 +49,19 @@ class FakespotLoadingView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate([
             cardView1.topAnchor.constraint(equalTo: topAnchor),
             cardView1.bottomAnchor.constraint(equalTo: cardView2.topAnchor, constant: -UX.cardPadding),
-            cardView1.heightAnchor.constraint(equalToConstant: UX.card1And3Height),
+            cardView1.heightAnchor.constraint(equalToConstant: UX.bigCardHeight),
 
             cardView2.bottomAnchor.constraint(equalTo: cardView3.topAnchor, constant: -UX.cardPadding),
-            cardView2.heightAnchor.constraint(equalToConstant: UX.card2Height),
+            cardView2.heightAnchor.constraint(equalToConstant: UX.smallCardHeight),
 
             cardView3.bottomAnchor.constraint(equalTo: cardView4.topAnchor, constant: -UX.cardPadding),
-            cardView3.heightAnchor.constraint(equalToConstant: UX.card1And3Height),
+            cardView3.heightAnchor.constraint(equalToConstant: UX.bigCardHeight),
 
             cardView4.bottomAnchor.constraint(equalTo: cardView5.topAnchor, constant: -UX.cardPadding),
-            cardView4.heightAnchor.constraint(equalToConstant: UX.card4And5Height),
+            cardView4.heightAnchor.constraint(equalToConstant: UX.mediumCardHeight),
 
             cardView5.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.cardPadding),
-            cardView5.heightAnchor.constraint(equalToConstant: UX.card4And5Height),
+            cardView5.heightAnchor.constraint(equalToConstant: UX.mediumCardHeight),
         ])
     }
 
@@ -74,12 +75,12 @@ class FakespotLoadingView: UIView, ThemeApplicable {
 
     private func animateCard(_ card: UIView, delay: TimeInterval) {
         guard !UIAccessibility.isReduceMotionEnabled else {
-            card.alpha = 0.25
+            card.alpha = UX.minimumAlpha
             return
         }
 
         UIView.animate(withDuration: 1.0, delay: delay, options: [.repeat, .autoreverse, .curveEaseInOut]) {
-            card.alpha = 0.25
+            card.alpha = UX.minimumAlpha
         }
     }
 }
