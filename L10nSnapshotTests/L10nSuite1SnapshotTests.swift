@@ -245,4 +245,30 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
+
+    func testTakeMarketingScreenshots() {
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        snapshot("00TopSites")
+
+        // go to synced tabs home screen
+        navigator.goto(TabTray)
+        snapshot("03SyncedTabs")
+
+        // load some web pages in some new tabs
+        navigator.openNewURL(urlString: "https://www.mozilla.org")
+        waitUntilPageLoad()
+        navigator.openNewURL(urlString: "https://mozilla.org/firefox/desktop")
+        waitUntilPageLoad()
+        navigator.openNewURL(urlString: "https://mozilla.org/firefox/new")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        snapshot("02TabTray")
+
+        // perform a search but don't complete (we're testing autocomplete here)
+        navigator.createNewTab()
+        waitForExistence(app.textFields["url"], timeout: 10)
+        app.typeText("firef")
+        sleep(2)
+        snapshot("01SearchResults")
+    }
 }
