@@ -7,7 +7,7 @@ import Common
 import Foundation
 import UIKit
 
-class CardViewWithShadowViewController: UIViewController {
+class ShadowCardViewViewController: UIViewController {
     private let loremIpsum =
     """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -16,7 +16,7 @@ class CardViewWithShadowViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
-    private lazy var cardView: CardViewWithShadow = .build { _ in }
+    private lazy var cardView: ShadowCardView = .build { _ in }
 
     private lazy var contentLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -29,7 +29,7 @@ class CardViewWithShadowViewController: UIViewController {
 
         view.backgroundColor = .white
         contentLabel.text = loremIpsum
-        let viewModel = CardViewWithShadowModel(view: contentLabel, a11yId: "CardViewWithShadow")
+        let viewModel = ShadowCardViewModel(view: contentLabel, a11yId: "ShadowCardView")
         cardView.configure(viewModel)
 
         let themeManager: ThemeManager = AppContainer.shared.resolve()

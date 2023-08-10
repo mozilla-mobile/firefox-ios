@@ -43,7 +43,7 @@ public struct CollapsibleCardViewModel {
     }
 }
 
-public class CollapsibleCardView: CardViewWithShadow, UIGestureRecognizerDelegate {
+public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -119,7 +119,7 @@ public class CollapsibleCardView: CardViewWithShadow, UIGestureRecognizerDelegat
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func configure(_ viewModel: CardViewWithShadowModel) {
+    public override func configure(_ viewModel: ShadowCardViewModel) {
         // the overridden method should not be used as it is lacking vital details to configure this card
         fatalError("configure(:) has not been implemented.")
     }
@@ -143,7 +143,7 @@ public class CollapsibleCardView: CardViewWithShadow, UIGestureRecognizerDelegat
 
         updateCardState(expandState: viewModel.expandState)
 
-        let parentViewModel = CardViewWithShadowModel(view: rootView, a11yId: viewModel.cardViewA11yId)
+        let parentViewModel = ShadowCardViewModel(view: rootView, a11yId: viewModel.cardViewA11yId)
         super.configure(parentViewModel)
     }
 
@@ -152,7 +152,6 @@ public class CollapsibleCardView: CardViewWithShadow, UIGestureRecognizerDelegat
 
         titleLabel.textColor = theme.colors.textPrimary
         expandButton.tintColor = theme.colors.iconPrimary
-        (viewModel.contentView as? ThemeApplicable)?.applyTheme(theme: theme)
     }
 
     private func setupLayout() {

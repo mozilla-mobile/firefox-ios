@@ -27,8 +27,8 @@
 		8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */; };
 		E19891C82A790AB700CD256D /* CollapsibleCardViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C62A790AB700CD256D /* CollapsibleCardViewViewController.swift */; };
 		E19891C92A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C72A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift */; };
-		E1E0E8712A850479003D847E /* CardViewWithShadowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0E86F2A850479003D847E /* CardViewWithShadowViewController.swift */; };
-		E1E0E8722A850479003D847E /* CardViewWithShadowComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0E8702A850479003D847E /* CardViewWithShadowComponentViewModel.swift */; };
+		E1E0E8712A850479003D847E /* ShadowCardViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */; };
+		E1E0E8722A850479003D847E /* ShadowCardViewComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0E8702A850479003D847E /* ShadowCardViewComponentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,8 +54,8 @@
 		8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetComponentViewModel.swift; sourceTree = "<group>"; };
 		E19891C62A790AB700CD256D /* CollapsibleCardViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardViewViewController.swift; sourceTree = "<group>"; };
 		E19891C72A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardViewComponentViewModel.swift; sourceTree = "<group>"; };
-		E1E0E86F2A850479003D847E /* CardViewWithShadowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewWithShadowViewController.swift; sourceTree = "<group>"; };
-		E1E0E8702A850479003D847E /* CardViewWithShadowComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewWithShadowComponentViewModel.swift; sourceTree = "<group>"; };
+		E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardViewViewController.swift; sourceTree = "<group>"; };
+		E1E0E8702A850479003D847E /* ShadowCardViewComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardViewComponentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				8ABC3CE92A6EED5C00B69244 /* BottomSheet */,
-				E1E0E86E2A850479003D847E /* CardViewWithShadow */,
+				E1E0E86E2A850479003D847E /* ShadowCardView */,
 				E19891C52A790AB700CD256D /* CollapsibleCardView */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
 				8ABC3CE42A6EECE100B69244 /* Dependency */,
@@ -179,13 +179,13 @@
 			path = CollapsibleCardView;
 			sourceTree = "<group>";
 		};
-		E1E0E86E2A850479003D847E /* CardViewWithShadow */ = {
+		E1E0E86E2A850479003D847E /* ShadowCardView */ = {
 			isa = PBXGroup;
 			children = (
-				E1E0E86F2A850479003D847E /* CardViewWithShadowViewController.swift */,
-				E1E0E8702A850479003D847E /* CardViewWithShadowComponentViewModel.swift */,
+				E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */,
+				E1E0E8702A850479003D847E /* ShadowCardViewComponentViewModel.swift */,
 			);
-			path = CardViewWithShadow;
+			path = ShadowCardView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1E0E8712A850479003D847E /* CardViewWithShadowViewController.swift in Sources */,
+				E1E0E8712A850479003D847E /* ShadowCardViewViewController.swift in Sources */,
 				8A6EE0AF2A586A1B00B4D401 /* FadeScrollViewViewController.swift in Sources */,
 				8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */,
 				8A6EE0A52A58642500B4D401 /* ComponentDataSource.swift in Sources */,
@@ -295,7 +295,7 @@
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
 				8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */,
 				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
-				E1E0E8722A850479003D847E /* CardViewWithShadowComponentViewModel.swift in Sources */,
+				E1E0E8722A850479003D847E /* ShadowCardViewComponentViewModel.swift in Sources */,
 				8ABC3CEB2A6EED6900B69244 /* BottomSheetChildViewController.swift in Sources */,
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
 				8ABC3CE62A6EECF000B69244 /* DependencyHelperMock.swift in Sources */,
