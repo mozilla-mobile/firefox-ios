@@ -65,6 +65,7 @@
 		210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
 		210E0EBB298D9D6600BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
 		211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */; };
+		211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */; };
 		21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21112967289480630082C08B /* HomepageMessageCardViewModel.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
 		2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */; };
@@ -773,6 +774,7 @@
 		8C92DE8F2A711F970090BD28 /* productanalysis-response.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C92DE8D2A711F970090BD28 /* productanalysis-response.json */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
+		8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
@@ -2085,6 +2087,7 @@
 		210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorCell.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPopupSetting.swift; sourceTree = "<group>"; };
+		211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPAccessoryInfo.swift; sourceTree = "<group>"; };
 		21112967289480630082C08B /* HomepageMessageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModel.swift; sourceTree = "<group>"; };
 		211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+Search.swift"; sourceTree = "<group>"; };
 		2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendToDeviceActivity.swift; sourceTree = "<group>"; };
@@ -5021,6 +5024,7 @@
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisData.swift; sourceTree = "<group>"; };
 		8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsData.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
+		8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotErrorCardView.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -7411,6 +7415,7 @@
 				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
 				8AE1E1CE27B191160024C45E /* SearchBar */,
 				C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */,
+				211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -8582,6 +8587,7 @@
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
 				8C37D7302A7BD04300093621 /* ActionFooterView.swift */,
+				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -12872,6 +12878,7 @@
 				8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */,
 				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
 				8ADAE41E2A33A0E2007BF926 /* ShowIntroductionSetting.swift in Sources */,
+				8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */,
 				8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
@@ -12909,6 +12916,7 @@
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
+				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,
 				E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */,
 				C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */,
@@ -19300,7 +19308,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 118.0.20230806050240;
+				version = 118.0.20230809050307;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

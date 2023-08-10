@@ -319,10 +319,18 @@ public struct AccessibilityIdentifiers {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+            static let onboardingContinue = "onboardingContinue"
+            static let addCredentialButton = "addCredentialButton"
+            static let editButton = "editButton"
         }
 
         struct Version {
             static let title = "FxVersion"
+        }
+
+        struct TrackingProtection {
+            static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
+            static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
         }
     }
 
@@ -370,6 +378,12 @@ public struct AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
+    }
+
+    struct ErrorCard {
+        static let title = "ErrorCard.title"
+        static let description = "ErrorCard.description"
+        static let primaryAction = "ErrorCard.primaryAction"
     }
 
     struct ActionFooter {

@@ -12,6 +12,7 @@ protocol PasswordManagerCoordinatorDelegate: AnyObject {
 
 protocol PasswordManagerFlowDelegate: AnyObject {
     func continueFromOnboarding()
+    func showDevicePassCode()
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel)
     func pressedAddPassword(completion: @escaping (LoginEntry) -> Void)
     func openURL(url: URL)
@@ -47,6 +48,12 @@ class PasswordManagerCoordinator: BaseCoordinator,
         let viewController = PasswordManagerOnboardingViewController()
         viewController.coordinator = self
         router.push(viewController)
+    }
+
+    func showDevicePassCode() {
+        let passcodeViewController = DevicePasscodeRequiredViewController()
+        passcodeViewController.profile = profile
+        router.push(passcodeViewController)
     }
 
     // MARK: - PasswordManagerFlowDelegate

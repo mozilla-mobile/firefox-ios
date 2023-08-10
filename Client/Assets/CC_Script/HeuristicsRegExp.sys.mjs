@@ -56,6 +56,7 @@ export const HeuristicsRegExp = {
       "cc-exp":
         "ważna.*do" +        // pl-PL
         "|data.*ważności" +  // pl-PL
+        "|mm\\s*[\\-\\/]\\s*yy" +  // en-US
         "|mm\\s*[\\-\\/]\\s*aa" +  // es-ES
         "|mm\\s*[\\-\\/]\\s*jj" +  // de-AT
         "|vervaldatum",            // nl-NL
