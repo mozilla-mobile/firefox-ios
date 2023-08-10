@@ -24,24 +24,27 @@ extension ContileProviderInterface {
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
 class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
-    static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
+    private static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
     static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
 
-    lazy var urlSession = makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                         configuration: URLSessionConfiguration.default)
-
-    lazy var urlCache: URLCache = {
-        return URLCache.shared
-    }()
-
+    var urlCache: URLCache
     private var logger: Logger
+    private var networking: ContileNetworking
 
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
+    init(
+        networking: ContileNetworking = DefaultContileNetwork(
+            with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
+                                 configuration: URLSessionConfiguration.default)),
+        urlCache: URLCache = URLCache.shared,
+        logger: Logger = DefaultLogger.shared
+    ) {
+            self.logger = logger
+        self.networking = networking
+        self.urlCache = urlCache
     }
 
     enum Error: Swift.Error {
-        case failure
+        case noDataAvailable
     }
 
     func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
@@ -49,7 +52,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
             logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
                        level: .warning,
                        category: .homepage)
-            completion(.failure(Error.failure))
+            completion(.failure(Error.noDataAvailable))
             return
         }
 
@@ -65,30 +68,16 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     }
 
     private func fetchContiles(request: URLRequest, completion: @escaping (ContileResult) -> Void) {
-        urlSession.dataTask(with: request) { [weak self] data, response, error in
+        networking.data(from: request) { [weak self] result in
             guard let self = self else { return }
-
-            if let error = error {
-                self.logger.log("An error occurred while fetching data: \(error)",
-                                level: .debug,
-                                category: .homepage)
-                completion(.failure(Error.failure))
-                return
+            switch result {
+            case .success(let result):
+                self.cache(response: result.response, for: request, with: result.data)
+                self.decode(data: result.data, completion: completion)
+            case .failure:
+                completion(.failure(Error.noDataAvailable))
             }
-
-            guard let response = validatedHTTPResponse(response, statusCode: 200..<300),
-                  let data = data
-            else {
-                self.logger.log("Response isn't valid, data is nil?: \(data == nil)",
-                                level: .debug,
-                                category: .homepage)
-                completion(.failure(Error.failure))
-                return
-            }
-
-            self.cache(response: response, for: request, with: data)
-            self.decode(data: data, completion: completion)
-        }.resume()
+        }
     }
 
     private func decode(data: Data, completion: @escaping (ContileResult) -> Void) {
@@ -97,13 +86,17 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let rootNote = try decoder.decode(Contiles.self, from: data)
             var contiles = rootNote.tiles
+            guard !contiles.isEmpty else {
+                completion(.failure(Error.noDataAvailable))
+                return
+            }
             contiles.sort { $0.position ?? 0 < $1.position ?? 0 }
             completion(.success(contiles))
         } catch let error {
             self.logger.log("Unable to parse with error: \(error)",
                             level: .warning,
                             category: .homepage)
-            completion(.failure(Error.failure))
+            completion(.failure(Error.noDataAvailable))
         }
     }
 

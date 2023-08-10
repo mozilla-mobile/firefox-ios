@@ -758,6 +758,8 @@
 		8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF10D8E29D774090086351D /* SceneSetupHelper.swift */; };
 		8AF10D9129D7761A0086351D /* MockLaunchScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF10D9029D776190086351D /* MockLaunchScreenManager.swift */; };
 		8AF2D0FC2A5F272A00C7DD69 /* ComponentLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */; };
+		8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */; };
+		8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4E02A856B4500B0474B /* ContileNetworking.swift */; };
 		8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4C29EF076800108DEC /* WebviewViewController.swift */; };
 		8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */; };
 		8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B5329EF2AF100108DEC /* MockLogger.swift */; };
@@ -4994,6 +4996,8 @@
 		8AF10D8929D713F50086351D /* LaunchScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModelTests.swift; sourceTree = "<group>"; };
 		8AF10D8E29D774090086351D /* SceneSetupHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSetupHelper.swift; sourceTree = "<group>"; };
 		8AF10D9029D776190086351D /* MockLaunchScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchScreenManager.swift; sourceTree = "<group>"; };
+		8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockContileNetworking.swift; sourceTree = "<group>"; };
+		8AF6D4E02A856B4500B0474B /* ContileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileNetworking.swift; sourceTree = "<group>"; };
 		8AF99B4C29EF076800108DEC /* WebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewController.swift; sourceTree = "<group>"; };
 		8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserDelegate.swift; sourceTree = "<group>"; };
 		8AF99B5329EF2AF100108DEC /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
@@ -8401,6 +8405,7 @@
 			isa = PBXGroup;
 			children = (
 				96A5629F27D6D0E80045144A /* ContileProvider.swift */,
+				8AF6D4E02A856B4500B0474B /* ContileNetworking.swift */,
 				96A562A227D7B32A0045144A /* Contile.swift */,
 				8AB8572B27D945FA0075C173 /* TopSitesDataAdaptor.swift */,
 				43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */,
@@ -9265,6 +9270,7 @@
 				8A5038132A5DFCE000A1B02A /* MockBrowserProfile.swift */,
 				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
 				21D884402A79628E00AF144C /* MockSettingsDelegate.swift */,
+				8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -12932,6 +12938,7 @@
 				213778632980448C00D01309 /* DownloadFileFetcher.swift in Sources */,
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
 				C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */,
+				8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
@@ -13229,6 +13236,7 @@
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
+				8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
 				8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */,
