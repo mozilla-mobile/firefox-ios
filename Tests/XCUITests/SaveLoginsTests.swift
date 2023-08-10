@@ -44,7 +44,7 @@ class SaveLoginTest: BaseTestCase {
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
             app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
         }
-        
+
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 20)
         passcodeInput.tap()
