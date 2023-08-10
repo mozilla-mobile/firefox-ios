@@ -110,6 +110,15 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController?.viewControllers.first is AddCredentialViewController)
     }
 
+    func testShowDevicePassCode() {
+        let subject = createSubject()
+
+        subject.showDevicePassCode()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is DevicePasscodeRequiredViewController)
+    }
+
     // MARK: - Helper
     func createSubject() -> PasswordManagerCoordinator {
         let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile())
