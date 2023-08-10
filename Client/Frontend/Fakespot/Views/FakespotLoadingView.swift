@@ -35,11 +35,11 @@ class FakespotLoadingView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        cardViews.map { $0.backgroundColor = theme.colors.layer3 }
+        cardViews.forEach { $0.backgroundColor = theme.colors.layer3 }
     }
 
     private func setupLayout() {
-        cardViews.map { cardView in
+        cardViews.forEach { cardView in
             addSubview(cardView)
             cardView.layer.cornerRadius = UX.cornerRadius
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
