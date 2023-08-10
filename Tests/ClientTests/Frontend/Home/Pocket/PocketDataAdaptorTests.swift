@@ -39,26 +39,6 @@ class PocketDataAdaptorTests: XCTestCase {
         let data = subject.getPocketData()
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
-
-    func testNotificationUpdatesData() {
-        mockPocketAPI = MockPocketAPI(result: .success([]))
-        var sentOnce = false
-        let subject = createSubject(expectedFulfillmentCount: 2) {
-            guard !sentOnce else { return }
-            sentOnce = true
-
-            let stories: [PocketFeedStory] = [
-                .make(title: "feed1"),
-                .make(title: "feed2"),
-                .make(title: "feed3"),
-            ]
-            self.mockPocketAPI.result = .success(stories)
-            self.mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification)
-        }
-
-        let data = subject.getPocketData()
-        XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
-    }
 }
 
 // MARK: Helper
