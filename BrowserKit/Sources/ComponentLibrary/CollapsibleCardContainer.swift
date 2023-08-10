@@ -43,7 +43,7 @@ public struct CollapsibleCardContainerModel {
     }
 }
 
-public class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegate {
+public class CollapsibleCardContainer: CardContainerWithShadow, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -119,7 +119,7 @@ public class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegat
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func configure(_ viewModel: CardContainerModel) {
+    public override func configure(_ viewModel: CardContainerWithShadowModel) {
         // the overridden method should not be used as it is lacking vital details to configure this card
         fatalError("configure(:) has not been implemented.")
     }
@@ -143,7 +143,7 @@ public class CollapsibleCardContainer: CardContainer, UIGestureRecognizerDelegat
 
         updateCardState(expandState: viewModel.expandState)
 
-        let parentViewModel = CardContainerModel(view: rootView, a11yId: viewModel.cardViewA11yId)
+        let parentViewModel = CardContainerWithShadowModel(view: rootView, a11yId: viewModel.cardViewA11yId)
         super.configure(parentViewModel)
     }
 
