@@ -73,6 +73,11 @@ class FakespotLoadingView: UIView, ThemeApplicable {
     }
 
     private func animateCard(_ card: UIView, delay: TimeInterval) {
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            card.alpha = 0.25
+            return
+        }
+
         UIView.animate(withDuration: 1.0, delay: delay, options: [.repeat, .autoreverse, .curveEaseInOut]) {
             card.alpha = 0.25
         }
