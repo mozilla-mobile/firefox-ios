@@ -377,6 +377,12 @@ public struct AccessibilityIdentifiers {
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
+    struct ErrorCard {
+        static let title = "ErrorCard.title"
+        static let description = "ErrorCard.description"
+        static let primaryAction = "ErrorCard.primaryAction"
+    }
+
     struct ActionFooter {
         static let title = "ActionFooter.title"
         static let primaryAction = "ActionFooter.primaryAction"
