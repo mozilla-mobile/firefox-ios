@@ -43,18 +43,13 @@ class PocketDataAdaptorTests: XCTestCase {
 
 // MARK: Helper
 private extension PocketDataAdaptorTests {
-    func createSubject(expectedFulfillmentCount: Int = 1,
-                       dataCompletion: (() -> Void)? = nil,
-                       file: StaticString = #file,
+    func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
-        expectation.expectedFulfillmentCount = expectedFulfillmentCount
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
                                                       notificationCenter: mockNotificationCenter) {
             expectation.fulfill()
-            dataCompletion?()
         }
-        mockNotificationCenter.notifiableListener = subject
         trackForMemoryLeaks(subject, file: file, line: line)
         wait(for: [expectation], timeout: 1)
         return subject
