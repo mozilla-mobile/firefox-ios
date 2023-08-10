@@ -11,9 +11,9 @@ struct FakespotErrorCardViewModel {
     let description: String
     let actionTitle: String
     let iconImageName: String = StandardImageIdentifiers.Large.criticalFill
-    let a11yTitleIdentifier: String = AccessibilityIdentifiers.ErrorCard.title
-    let a11yDescriptionIdentifier: String = AccessibilityIdentifiers.ErrorCard.description
-    let a11yActionIdentifier: String = AccessibilityIdentifiers.ErrorCard.primaryAction
+    let a11yTitleIdentifier: String = AccessibilityIdentifiers.Shopping.ErrorCard.title
+    let a11yDescriptionIdentifier: String = AccessibilityIdentifiers.Shopping.ErrorCard.description
+    let a11yActionIdentifier: String = AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
 }
 
 final class FakespotErrorCardView: UIView, ThemeApplicable {
