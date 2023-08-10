@@ -1208,6 +1208,7 @@
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
+		DF5D474E2A84F8BC00D6AE74 /* FakespotSettingsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5D474D2A84F8BC00D6AE74 /* FakespotSettingsCardView.swift */; };
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
 		DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */; };
 		DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA514822761012D00266AA0 /* HistoryHighlightsManagerTests.swift */; };
@@ -6391,6 +6392,7 @@
 		DF46B9A72755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		DF5D474D2A84F8BC00D6AE74 /* FakespotSettingsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotSettingsCardView.swift; sourceTree = "<group>"; };
 		DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSyncManagerTests.swift; sourceTree = "<group>"; };
 		DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsManager.swift; sourceTree = "<group>"; };
 		DFA514822761012D00266AA0 /* HistoryHighlightsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsManagerTests.swift; sourceTree = "<group>"; };
@@ -8586,6 +8588,7 @@
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
 				8C37D7302A7BD04300093621 /* ActionFooterView.swift */,
 				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
+				DF5D474D2A84F8BC00D6AE74 /* FakespotSettingsCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -12491,6 +12494,7 @@
 				E1D3FFB42A66B726002D31EF /* FakespotViewController.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
+				DF5D474E2A84F8BC00D6AE74 /* FakespotSettingsCardView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,

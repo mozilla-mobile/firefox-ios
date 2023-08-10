@@ -35,7 +35,7 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var logoImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        imageView.image = UIImage(named: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 

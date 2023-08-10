@@ -3607,6 +3607,16 @@ public struct Shopping {
         tableName: "Shopping",
         value: "Review quality check",
         comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
+    public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
+            key: "Shopping.Settings.Card.RecommendedProducts.Label.v118",
+            tableName: "Shopping",
+            value: "Show products recommended by Firefox",
+            comment: "Label of the switch from settings card")
+        public static let SettingsCardTurnOffButton = MZLocalizedString(
+            key: "Shopping.Settings.Card.TurnOff.Buttton.v118",
+            tableName: "Shopping",
+            value: "Turn Off Review Quality Check",
+            comment: "Label of the button from settings card")
 }
 
 // MARK: - Translation bar
