@@ -50,7 +50,7 @@ public actor DefaultTabDataStore: TabDataStore {
     private func fetchAllWindowsData() async -> [WindowData] {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
             logger.log("Could not resolve window data directory",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             return [WindowData]()
         }
@@ -70,7 +70,7 @@ public actor DefaultTabDataStore: TabDataStore {
             return windowsData
         } catch {
             logger.log("Error fetching all window data: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             guard let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
                 return [WindowData]()
@@ -129,7 +129,7 @@ public actor DefaultTabDataStore: TabDataStore {
             try fileManager.copyItem(at: windowPath, to: backupWindowSavingPath)
         } catch {
             logger.log("Failed to create window data backup: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
         }
     }
@@ -166,7 +166,7 @@ public actor DefaultTabDataStore: TabDataStore {
             try fileManager.writeWindowData(windowData: windowDataToSave, to: path)
         } catch {
             logger.log("Failed to save window data: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
         }
     }
