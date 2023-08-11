@@ -18,6 +18,7 @@ class FakespotViewController: UIViewController, Themeable {
         static let topPadding: CGFloat = 16
         static let bottomPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 16
+        static let stackSpacing: CGFloat = 16
     }
 
     var notificationCenter: NotificationProtocol
@@ -28,6 +29,7 @@ class FakespotViewController: UIViewController, Themeable {
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
+        stackView.spacing = UX.stackSpacing
     }
 
     private lazy var headerStackView: UIStackView = .build { stackView in
