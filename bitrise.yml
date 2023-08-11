@@ -1491,15 +1491,9 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -configuration Fennec_Enterprise \
                 -sdk iphoneos \
                 -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData" \
-                DEVELOPMENT_TEAM="Mozilla Corporation" \
-                CODE_SIGN_STYLE=Manual \
-                CODE_SIGN_IDENTITY="iPhone Distribution: org.mozilla.ios.Fennec" \
-                PROVISIONING_PROFILE_SPECIFIER="org.mozilla.ios.Fennec_Enterprise"| xcpretty | tee xcodebuild_fennec.log
+                -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Verify App signature, Test, and Runner
@@ -1510,10 +1504,9 @@ workflows:
             codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
             echo "-- test app --"
             xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -configuration Fennec_Enterprise \
                 -sdk iphoneos \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
+    - script@1.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
         - content: |
