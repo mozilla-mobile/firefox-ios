@@ -122,6 +122,13 @@ public struct AccessibilityIdentifiers {
             static let description = "ErrorCard.description"
             static let primaryAction = "ErrorCard.primaryAction"
         }
+
+        struct ReliabilityCard {
+            static let card = "Shopping.ReliabilityCard.Card"
+            static let title = "Shopping.ReliabilityCard.Title"
+            static let ratingLetter = "Shopping.ReliabilityCard.RatingLetter"
+            static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
+        }
     }
 
     struct TabTray {
