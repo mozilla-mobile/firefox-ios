@@ -5,8 +5,17 @@
 import UIKit
 import Common
 import Shared
+import ComponentLibrary
 
-final class FakespotSettingsView: UIView, ThemeApplicable {
+struct FakespotSettingsCardViewModel {
+    let cardA11yId: String
+    let showProductsLabelTitle: String
+    let showProductsLabelTitleA11yId: String
+    let turnOffButtonTitle: String
+    let turnOffButtonTitleA11yId: String
+}
+
+final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLabelFontSize: CGFloat = 17
         static let buttonLabelFontSize: CGFloat = 16
@@ -18,6 +27,8 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
     }
 
     var onSwitchValueVhanged: ((Bool) -> Void)?
+
+    private lazy var cardContainer: CardContainer = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -31,9 +42,8 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
         stackView.spacing = UX.labelSwitchStackViewSpacing
     }
 
-    private lazy var headerLabel: UILabel = .build { label in
+    private lazy var showProductsLabel: UILabel = .build { label in
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.text = Shopping.SettingsCardRecommendedProductsLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
@@ -70,8 +80,8 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(contentStackView)
-        [headerLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview(_:))
-        [labelSwitchStackView, turnOffButton].forEach(contentStackView.addArrangedSubview(_:))
+        [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview(_:))
+        [showProductsLabel, turnOffButton].forEach(contentStackView.addArrangedSubview(_:))
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor),
@@ -79,6 +89,17 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
         ])
+    }
+
+    func configure(_ viewModel: FakespotSettingsCardViewModel) {
+        showProductsLabel.text = viewModel.showProductsLabelTitle
+        showProductsLabel.accessibilityIdentifier = viewModel.showProductsLabelTitleA11yId
+
+        turnOffButton.setTitle(viewModel.turnOffButtonTitle, for: .normal)
+        turnOffButton.accessibilityIdentifier = viewModel.turnOffButtonTitleA11yId
+
+        let cardModel = CardContainerModel(view: contentStackView, a11yId: viewModel.cardA11yId)
+        cardContainer.configure(cardModel)
     }
 
     @objc
@@ -89,7 +110,7 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        headerLabel.textColor = colors.textPrimary
+        showProductsLabel.textColor = colors.textPrimary
 
         recommendedProductsSwitch.onTintColor = colors.actionPrimary
         recommendedProductsSwitch.tintColor = colors.formKnob
