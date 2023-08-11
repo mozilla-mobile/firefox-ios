@@ -8587,7 +8587,6 @@
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
 				8C37D7302A7BD04300093621 /* ActionFooterView.swift */,
-				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -9878,6 +9877,7 @@
 		E16258F02A83D5DE00522742 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 			);
 			path = Views;

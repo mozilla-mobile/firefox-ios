@@ -105,7 +105,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         primaryButton.setTitle(viewModel.actionTitle, for: .normal)
-        iconImageView.image =  UIImage(named: viewModel.iconImageName)
+        iconImageView.image = UIImage(named: viewModel.iconImageName)
 
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
         descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
