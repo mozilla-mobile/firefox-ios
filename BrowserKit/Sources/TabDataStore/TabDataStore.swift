@@ -40,12 +40,18 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: Fetching Window Data
 
     public func fetchWindowData() async -> WindowData? {
+        logger.log("Attempting to fetch window/tab data",
+                   level: .debug,
+                   category: .tabs)
         let allWindows = await fetchAllWindowsData()
         return allWindows.first
     }
 
     private func fetchAllWindowsData() async -> [WindowData] {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
+            logger.log("Could not resolve window data directory",
+                       level: .debug,
+                       category: .tabs)
             return [WindowData]()
         }
 
@@ -53,6 +59,12 @@ public actor DefaultTabDataStore: TabDataStore {
             let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
             let windowsData = parseWindowDataFiles(fromURLs: fileURLs)
             if windowsData.isEmpty {
+                if !fileURLs.isEmpty {
+                    // There was a file present but it failed to restore for some reason
+                    logger.log("Failed to open window/tab data",
+                               level: .fatal,
+                               category: .tabs)
+                }
                 throw TabDataError.failedToFetchData
             }
             return windowsData
@@ -94,6 +106,9 @@ public actor DefaultTabDataStore: TabDataStore {
             fileManager.createDirectoryAtPath(path: windowDataDirectoryURL)
         }
 
+        logger.log("Save window data, is forced: \(forced)",
+                   level: .debug,
+                   category: .tabs)
         if forced {
             await writeWindowDataToFile(path: windowSavingPath)
         } else {
