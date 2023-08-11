@@ -15,6 +15,9 @@ class FakespotViewController: UIViewController, Themeable {
         static let titleLabelFontSize: CGFloat = 17
         static let headerSpacing = 8.0
         static let headerBottomMargin = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        static let topPadding: CGFloat = 16
+        static let bottomPadding: CGFloat = 40
+        static let horizontalPadding: CGFloat = 16
     }
 
     var notificationCenter: NotificationProtocol
@@ -55,6 +58,8 @@ class FakespotViewController: UIViewController, Themeable {
         button.accessibilityLabel = .CloseButtonTitle
     }
 
+    private lazy var loadingView: FakespotLoadingView = .build { _ in }
+
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
@@ -78,6 +83,7 @@ class FakespotViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+        loadingView.animate()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -90,18 +96,26 @@ class FakespotViewController: UIViewController, Themeable {
     func applyTheme() {
         let colors = themeManager.currentTheme.colors
         titleLabel.textColor = colors.textPrimary
+        loadingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
+        contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
+                                                  constant: UX.topPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
+                                                      constant: UX.horizontalPadding),
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
+                                                     constant: -UX.bottomPadding),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
+                                                       constant: -UX.horizontalPadding),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
+                                                    constant: -UX.horizontalPadding * 2),
 
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
