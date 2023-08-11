@@ -30,7 +30,7 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         static let descriptionBackgroundAlpha: CGFloat = 0.15
     }
 
-    private lazy var cardContainer: CardContainer = .build()
+    private lazy var cardContainer: ShadowCardView = .build()
     private lazy var contentView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { view in
@@ -83,7 +83,7 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         reliabilityDescriptionLabel.text = viewModel.rating.description
         reliabilityDescriptionLabel.accessibilityIdentifier = viewModel.ratingDescriptionA11yId
 
-        let cardModel = CardContainerModel(view: contentView, a11yId: viewModel.cardA11yId)
+        let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
     }
 
