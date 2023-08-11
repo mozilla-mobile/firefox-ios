@@ -35,7 +35,9 @@ class ReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.titleFontSize)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                           size: UX.titleFontSize,
+                                                           weight: .medium)
         view.numberOfLines = 0
     }
 
