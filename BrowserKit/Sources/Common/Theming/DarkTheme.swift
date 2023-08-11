@@ -48,6 +48,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var textWarning: UIColor = FXColors.Red20
     var textAccent: UIColor = FXColors.Blue30
     var textOnDark: UIColor = FXColors.LightGrey05
+    var textOnLight: UIColor = FXColors.DarkGrey90
     var textInverted: UIColor = FXColors.DarkGrey90
 
     // MARK: - Icons

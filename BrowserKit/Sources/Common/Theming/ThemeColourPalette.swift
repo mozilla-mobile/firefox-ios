@@ -43,6 +43,7 @@ public protocol ThemeColourPalette {
     var textWarning: UIColor { get }
     var textAccent: UIColor { get }
     var textOnDark: UIColor { get }
+    var textOnLight: UIColor { get }
     var textInverted: UIColor { get }
 
     // MARK: - Icons
