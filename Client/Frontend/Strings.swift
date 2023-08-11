@@ -474,31 +474,6 @@ extension String {
     }
 }
 
-extension String {
-    public struct Shopping {
-        public static let ReliabilityCardTitle = MZLocalizedString(
-            key: "Shopping.ReviewQuality.ReliabilityCardTitle.v118",
-            tableName: "Shopping",
-            value: "How reliable are these reviews?",
-            comment: "Title of the reliability card displayed in the shopping review quality bottom sheet.")
-        public static let ReliabilityRatingAB = MZLocalizedString(
-            key: "Shopping.ReviewQuality.ReliabilityRating.AB.Description.v118",
-            tableName: "Shopping",
-            value: "Reliable reviews",
-            comment: "Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet.")
-        public static let ReliabilityRatingC = MZLocalizedString(
-            key: "Shopping.ReviewQuality.ReliabilityRating.C.Description.v118",
-            tableName: "Shopping",
-            value: "Only some reliable reviews",
-            comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
-        public static let ReliabilityRatingDF = MZLocalizedString(
-            key: "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v118",
-            tableName: "Shopping",
-            value: "Unreliable reviews",
-            comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
-    }
-}
-
 // MARK: - Firefox Homepage
 extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
@@ -3594,12 +3569,34 @@ extension String {
         comment: "Share extension label shown after user has performed 'Load in Background' action.")
 }
 
-public struct Shopping {
-    public static let SheetHeaderTitle = MZLocalizedString(
-        key: "", // Shopping.Sheet.Title.v118
-        tableName: "Shopping",
-        value: "Review quality check",
-        comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
+extension String {
+    public struct Shopping {
+        public static let SheetHeaderTitle = MZLocalizedString(
+            key: "", // Shopping.Sheet.Title.v118
+            tableName: "Shopping",
+            value: "Review quality check",
+            comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
+        public static let ReliabilityCardTitle = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v118
+            tableName: "Shopping",
+            value: "How reliable are these reviews?",
+            comment: "Title of the reliability card displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingAB = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.AB.Description.v118
+            tableName: "Shopping",
+            value: "Reliable reviews",
+            comment: "Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingC = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.C.Description.v118
+            tableName: "Shopping",
+            value: "Only some reliable reviews",
+            comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingDF = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.DF.Description.v118
+            tableName: "Shopping",
+            value: "Unreliable reviews",
+            comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
+    }
 }
 
 // MARK: - Translation bar

@@ -43,7 +43,7 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = Shopping.SheetHeaderTitle
+        label.text = .Shopping.SheetHeaderTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
