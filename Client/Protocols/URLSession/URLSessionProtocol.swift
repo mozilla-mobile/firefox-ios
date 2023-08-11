@@ -10,9 +10,19 @@ protocol URLSessionProtocol {
     func dataTaskWith(_ url: URL,
                       completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol
+
+    func dataTaskWith(
+        request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
+    ) -> URLSessionDataTaskProtocol
 }
 
 extension URLSession: URLSessionProtocol {
+    func dataTaskWith(request: URLRequest,
+                      completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+        return dataTask(with: request, completionHandler: completionHandler)
+    }
+
     func dataTaskWith(_ url: URL,
                       completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol {
