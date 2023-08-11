@@ -128,19 +128,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
         settingsDelegate?.didFinish()
     }
 
-    // MARK: Handle Route decisions
-
-    func handle(route: Route.SettingsSection) {
-        switch route {
-        case .creditCard, .password:
-            authenticateUserFor(route: route)
-        case .rateApp:
-            RatingPromptManager.goToAppStoreReview()
-        default:
-            break
-        }
-    }
-
     private func setupNavigationBar() {
         navigationItem.title = String.AppSettingsTitle
         if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
@@ -155,6 +142,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 style: .done,
                 target: navigationController,
                 action: #selector((navigationController as! ThemedNavigationController).done))
+        }
+    }
+
+    // MARK: Handle Route decisions
+
+    func handle(route: Route.SettingsSection) {
+        switch route {
+        case .password:
+            handlePasswordFlow(route: route)
+        case .creditCard:
+            authenticateUserFor(route: route)
+        case .rateApp:
+            RatingPromptManager.goToAppStoreReview()
+        default:
+            break
+        }
+    }
+
+    private func handlePasswordFlow(route: Route.SettingsSection) {
+        // Show password onboarding before we authenticate
+        if LoginOnboarding.shouldShow() {
+            parentCoordinator?.showPasswordManager(shouldShowOnboarding: true)
+            LoginOnboarding.setShown()
+        } else {
+            authenticateUserFor(route: route)
         }
     }
 
@@ -178,8 +190,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         case .creditCard:
             self.parentCoordinator?.showCreditCardSettings()
         case .password:
-            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: LoginOnboarding.shouldShow())
-            LoginOnboarding.setShown()
+            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: false)
         default:
             break
         }
@@ -391,11 +402,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme,
-                                                        profile: profile,
-                                                        settingsDelegate: parentCoordinator))
-        }
+        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme,
+                                                    profile: profile,
+                                                    settingsDelegate: parentCoordinator))
 
         privacySettings += [
             PrivacyPolicySetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator)

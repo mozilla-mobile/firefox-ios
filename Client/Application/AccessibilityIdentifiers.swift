@@ -116,6 +116,13 @@ public struct AccessibilityIdentifiers {
 
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
+
+        struct ReliabilityCard {
+            static let card = "Shopping.ReliabilityCard.Card"
+            static let title = "Shopping.ReliabilityCard.Title"
+            static let ratingLetter = "Shopping.ReliabilityCard.RatingLetter"
+            static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
+        }
     }
 
     struct TabTray {
@@ -319,6 +326,9 @@ public struct AccessibilityIdentifiers {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+            static let onboardingContinue = "onboardingContinue"
+            static let addCredentialButton = "addCredentialButton"
+            static let editButton = "editButton"
         }
 
         struct Version {
