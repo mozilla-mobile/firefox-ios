@@ -118,9 +118,10 @@ public struct AccessibilityIdentifiers {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
 
         struct ErrorCard {
-            static let title = "ErrorCard.title"
-            static let description = "ErrorCard.description"
-            static let primaryAction = "ErrorCard.primaryAction"
+            static let card = "Shopping.ErrorCard.Card"
+            static let title = "Shopping.ErrorCard.Title"
+            static let description = "Shopping.ErrorCard.Description"
+            static let primaryAction = "Shopping.ErrorCard.PrimaryAction"
         }
 
         struct ReliabilityCard {

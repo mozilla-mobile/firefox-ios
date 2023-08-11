@@ -91,15 +91,15 @@ class FakespotViewController: UIViewController, Themeable {
             ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
+
+        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
+                                                            description: .Shopping.ErrorCardDescription,
+                                                            actionTitle: .Shopping.ErrorCardButtonText)
+        errorCardView.configure(viewModel: errorCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        let errorCardViewModel = FakespotErrorCardViewModel(title: "Something went wrong",
-                                                            description: "Couldn’t load information. Please try again.",
-                                                            actionTitle: "Try again")
-        errorCardView.configure(viewModel: errorCardViewModel)
 
         applyTheme()
         loadingView.animate()

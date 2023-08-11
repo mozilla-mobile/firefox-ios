@@ -3596,6 +3596,21 @@ extension String {
             tableName: "Shopping",
             value: "Unreliable reviews",
             comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardTitle = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Title.v118
+            tableName: "Shopping",
+            value: "Something Went Wrong",
+            comment: "Title of the error displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardDescription = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Description.v118
+            tableName: "Shopping",
+            value: "Couldn’t load information. Please try again.",
+            comment: "Description of the error displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardButtonText = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Button.Text.v118
+            tableName: "Shopping",
+            value: "Try Again",
+            comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
     }
 }
 
