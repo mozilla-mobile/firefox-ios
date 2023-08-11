@@ -180,7 +180,7 @@ class AccessoryViewProvider: UIView, Themeable {
         nextButton.tintColor = theme.colors.iconAccentBlue
         doneButton.tintColor = theme.colors.iconAccentBlue
         cardImageView.tintColor = theme.colors.iconPrimary
-        cardButtonStackView.backgroundColor = .systemBackground
+        cardButtonStackView.backgroundColor = theme.colors.layer5Hover
     }
 
     // MARK: - Actions
