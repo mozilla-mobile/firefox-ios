@@ -123,6 +123,15 @@ public struct AccessibilityIdentifiers {
             static let ratingLetter = "Shopping.ReliabilityCard.RatingLetter"
             static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
         }
+        struct SettingsCard {
+            static let card = "Shopping.SettingsCard.Card"
+            static let title = "Shopping.SettingsCard.Title"
+            static let expandButtonLabelExpanded = "Shopping.SettingsCard.ExpandButtonLabelExpanded"
+            static let expandButtonLabelCollapsed = "Shopping.SettingsCard.ExpandButtonLabelCollapsed"
+            static let expandButton = "Shopping.SettingsCard.ExpandButton"
+            static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
+            static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
+        }
     }
 
     struct TabTray {

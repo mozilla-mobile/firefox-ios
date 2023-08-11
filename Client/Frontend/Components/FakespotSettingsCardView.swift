@@ -18,17 +18,21 @@ struct FakespotSettingsCardViewModel {
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLabelFontSize: CGFloat = 17
-        static let buttonLabelFontSize: CGFloat = 16
+        static let buttonLabelFontSize: CGFloat = 17
         static let buttonCornerRadius: CGFloat = 14
         static let contentStackViewSpacing: CGFloat = 16
-        static let labelSwitchStackViewSpacing: CGFloat = 12
+        static let midSeparatorWidth: CGFloat = 12
+        static let leftRighSeparatorWidth: CGFloat = 8
         static let contentInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
     var onSwitchValueVhanged: ((Bool) -> Void)?
 
-    private lazy var cardContainer: CardContainer = .build()
+    private lazy var leftSeparator: UIView = .build()
+    private lazy var midSeparator: UIView = .build()
+    private lazy var rightSeparator: UIView = .build()
+    private lazy var collapsibleContainer: CollapsibleCardContainer = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -39,7 +43,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     private lazy var labelSwitchStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
-        stackView.spacing = UX.labelSwitchStackViewSpacing
     }
 
     private lazy var showProductsLabel: UILabel = .build { label in
@@ -58,7 +61,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     private lazy var turnOffButton: ActionButton = .build { button in
-        button.setTitle(Shopping.SettingsCardTurnOffButton, for: .normal)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.contentEdgeInsets = UX.buttonInsets
         button.titleLabel?.textAlignment = .center
@@ -72,6 +74,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        setupSeparator(leftSeparator)
+        setupSeparator(midSeparator, width: UX.midSeparatorWidth)
+        setupSeparator(rightSeparator)
     }
 
     required init?(coder: NSCoder) {
@@ -79,16 +84,21 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        addSubview(contentStackView)
-        [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview(_:))
-        [showProductsLabel, turnOffButton].forEach(contentStackView.addArrangedSubview(_:))
+        addSubview(collapsibleContainer)
+
+        [leftSeparator, showProductsLabel, midSeparator, recommendedProductsSwitch, rightSeparator].forEach(labelSwitchStackView.addArrangedSubview)
+        [labelSwitchStackView, turnOffButton].forEach(contentStackView.addArrangedSubview)
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collapsibleContainer.topAnchor.constraint(equalTo: topAnchor),
+            collapsibleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+
+    private func setupSeparator(_ separator: UIView, width: CGFloat = UX.leftRighSeparatorWidth) {
+        separator.widthAnchor.constraint(equalToConstant: width).isActive = true
     }
 
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
@@ -98,8 +108,15 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         turnOffButton.setTitle(viewModel.turnOffButtonTitle, for: .normal)
         turnOffButton.accessibilityIdentifier = viewModel.turnOffButtonTitleA11yId
 
-        let cardModel = CardContainerModel(view: contentStackView, a11yId: viewModel.cardA11yId)
-        cardContainer.configure(cardModel)
+        let viewModel = CollapsibleCardContainerModel(
+            contentView: contentStackView,
+            cardViewA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
+            title: .Shopping.SettingsCardLabelTitle,
+            titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
+            expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
+            expandButtonA11yLabelExpanded: AccessibilityIdentifiers.Shopping.SettingsCard.expandButtonLabelExpanded,
+            expandButtonA11yLabelCollapsed: AccessibilityIdentifiers.Shopping.SettingsCard.expandButtonLabelCollapsed)
+        collapsibleContainer.configure(viewModel)
     }
 
     @objc
@@ -109,6 +126,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
+        collapsibleContainer.applyTheme(theme: theme)
         let colors = theme.colors
         showProductsLabel.textColor = colors.textPrimary
 
