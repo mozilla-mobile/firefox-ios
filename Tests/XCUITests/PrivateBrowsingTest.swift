@@ -228,7 +228,6 @@ class PrivateBrowsingTest: BaseTestCase {
         let numPrivTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numPrivTab)
     }
-
 }
 
 fileprivate extension BaseTestCase {
