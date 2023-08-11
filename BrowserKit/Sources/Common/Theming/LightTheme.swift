@@ -47,7 +47,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var textDisabled: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.4)
     var textWarning: UIColor = FXColors.Red70
     var textAccent: UIColor = FXColors.Blue50
-    var textOnColor: UIColor = FXColors.LightGrey05
+    var textOnDark: UIColor = FXColors.LightGrey05
     var textInverted: UIColor = FXColors.LightGrey05
 
     // MARK: - Icons
