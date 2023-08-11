@@ -1250,6 +1250,8 @@
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
+		E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */; };
+		E1516A3E2A7BC07E007819A4 /* ReliabilityRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
@@ -1309,6 +1311,7 @@
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
 		E1E5BE252A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */; };
 		E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */; };
+		E1FC23F12A8629380089E14D /* ReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC23F02A8629380089E14D /* ReliabilityCardView.swift */; };
 		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */; };
 		E1FE133329C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */; };
@@ -6441,6 +6444,8 @@
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
+		E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReliabilityCardView.swift; path = Client/Frontend/Fakespot/Views/ReliabilityCardView.swift; sourceTree = SOURCE_ROOT; };
+		E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityRating.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -6496,6 +6501,7 @@
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
+		E1FC23F02A8629380089E14D /* ReliabilityCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReliabilityCardView.swift; sourceTree = "<group>"; };
 		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetchAndProcessingUtility.swift; sourceTree = "<group>"; };
 		E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNotificationSurfaceUtility.swift; sourceTree = "<group>"; };
@@ -8671,6 +8677,7 @@
 				8C92DE8A2A711ED60090BD28 /* FakeSpotClient.swift */,
 				8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */,
 				8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */,
+				E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -9879,6 +9886,7 @@
 			isa = PBXGroup;
 			children = (
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
+				E1FC23F02A8629380089E14D /* ReliabilityCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -9978,6 +9986,14 @@
 				8C92DE942A7128FB0090BD28 /* Client */,
 			);
 			path = Fakespot;
+			sourceTree = "<group>";
+		};
+		E1FC23EF2A86290E0089E14D /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
@@ -10426,6 +10442,7 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
+				E1FC23EF2A86290E0089E14D /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -12428,11 +12445,13 @@
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */,
 				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
+				E1FC23F12A8629380089E14D /* ReliabilityCardView.swift in Sources */,
 				C8DC90C92A0675E70008832B /* MarkupParsingUtility.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */,
 				8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */,
 				8A3EF80B2A2FD03C00796E3A /* TogglePullToRefresh.swift in Sources */,
+				E1516A3E2A7BC07E007819A4 /* ReliabilityRating.swift in Sources */,
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
 				DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */,
@@ -12573,6 +12592,7 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
+				E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
 				C889569A27E8D1AC00E3779E /* InactiveTabHeader.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
