@@ -58,7 +58,8 @@ class FakespotViewController: UIViewController, Themeable {
         button.accessibilityLabel = .CloseButtonTitle
     }
 
-    private lazy var loadingView: FakespotLoadingView = .build { _ in }
+    private lazy var errorCardView: FakespotErrorCardView = .build()
+    private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -82,6 +83,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        let errorCardViewModel = FakespotErrorCardViewModel(title: "Something went wrong",
+                                                            description: "Couldn’t load information. Please try again.",
+                                                            actionTitle: "Try again")
+        errorCardView.configure(viewModel: errorCardViewModel)
+
         applyTheme()
         loadingView.animate()
     }
@@ -96,11 +103,13 @@ class FakespotViewController: UIViewController, Themeable {
     func applyTheme() {
         let colors = themeManager.currentTheme.colors
         titleLabel.textColor = colors.textPrimary
+        errorCardView.applyTheme(theme: themeManager.currentTheme)
         loadingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
+        contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
