@@ -41,7 +41,7 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
                                                             size: UX.headerLabelFontSize)
     }
 
-    private lazy var `switch`: UISwitch = .build { uiSwitch in
+    private lazy var recommendedProductsSwitch: UISwitch = .build { uiSwitch in
         uiSwitch.setContentCompressionResistancePriority(.required, for: .horizontal)
         uiSwitch.clipsToBounds = true
         uiSwitch.addTarget(self, action: #selector(self.didToggleSwitch), for: .valueChanged)
@@ -70,7 +70,7 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(contentStackView)
-        [headerLabel, `switch`].forEach(labelSwitchStackView.addArrangedSubview(_:))
+        [headerLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview(_:))
         [labelSwitchStackView, turnOffButton].forEach(contentStackView.addArrangedSubview(_:))
 
         NSLayoutConstraint.activate([
@@ -91,8 +91,8 @@ final class FakespotSettingsView: UIView, ThemeApplicable {
         let colors = theme.colors
         headerLabel.textColor = colors.textPrimary
 
-        `switch`.onTintColor = colors.actionPrimary
-        `switch`.tintColor = colors.formKnob
+        recommendedProductsSwitch.onTintColor = colors.actionPrimary
+        recommendedProductsSwitch.tintColor = colors.formKnob
 
         turnOffButton.backgroundColor = colors.actionSecondary
         turnOffButton.setTitleColor(colors.textPrimary, for: .normal)
