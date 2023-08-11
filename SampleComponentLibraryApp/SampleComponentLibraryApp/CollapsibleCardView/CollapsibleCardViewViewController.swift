@@ -79,7 +79,7 @@ class CollapsibleCardViewViewController: UIViewController {
             cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                  constant: -20)
+                                             constant: -20)
         ])
     }
 }
