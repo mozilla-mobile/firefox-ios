@@ -58,7 +58,8 @@ class FakespotViewController: UIViewController, Themeable {
         button.accessibilityLabel = .CloseButtonTitle
     }
 
-    private lazy var reliabilityCardView: ReliabilityCardView = .build { _ in }
+    private lazy var reliabilityCardView: ReliabilityCardView = .build()
+    private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -92,6 +93,7 @@ class FakespotViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+        loadingView.animate()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -105,11 +107,13 @@ class FakespotViewController: UIViewController, Themeable {
         let colors = themeManager.currentTheme.colors
         titleLabel.textColor = colors.textPrimary
         reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
 
