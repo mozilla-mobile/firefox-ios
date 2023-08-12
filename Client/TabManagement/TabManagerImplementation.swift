@@ -138,7 +138,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.metadataManager?.tabGroupData = groupData
 
             if newTab.url == nil {
-                logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(Date.fromTimestamp(tabData.lastUsedTime))",
+                logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
                            level: .debug,
                            category: .tabs)
             }
