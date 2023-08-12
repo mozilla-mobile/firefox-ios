@@ -48,7 +48,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
               forced || tabs.isEmpty
         else { return }
 
-        logger.log("Tabs restore started with \(forced), \(tabs.isEmpty)", level: .debug, category: .tabs)
+        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty)",
+                   level: .debug,
+                   category: .tabs)
 
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
