@@ -1700,6 +1700,10 @@ class BrowserViewController: UIViewController,
 
         // Credit card sync telemetry
         self.profile.hasSyncAccount { [unowned self] hasSync in
+            logger.log("User has sync account setup \(hasSync)",
+                       level: .debug,
+                       category: .setup)
+
             guard hasSync else { return }
             let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
             TelemetryWrapper.recordEvent(
