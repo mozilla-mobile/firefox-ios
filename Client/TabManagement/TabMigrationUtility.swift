@@ -26,8 +26,16 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
     }
 
     var shouldRunMigration: Bool {
-        guard let shouldRunMigration = prefs.boolForKey(migrationKey) else { return true }
+        guard let shouldRunMigration = prefs.boolForKey(migrationKey) else {
+            logger.log("Should run migration will be TRUE, key didnt exist",
+                       level: .debug,
+                       category: .tabs)
+            return true
+        }
 
+        logger.log("Key exists - running migration? \(shouldRunMigration)",
+                   level: .debug,
+                   category: .tabs)
         return shouldRunMigration
     }
 
