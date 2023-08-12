@@ -10457,11 +10457,7 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
-<<<<<<< HEAD
-				E1FC23EF2A86290E0089E14D /* Recovered References */,
-=======
 				C2446B2E2A856BEA000C527D /* Recovered References */,
->>>>>>> 44f253982 (Add MockLibraryCoordinatorDelegate)
 			);
 			sourceTree = "<group>";
 		};
