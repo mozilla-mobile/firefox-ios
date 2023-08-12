@@ -59,7 +59,7 @@ struct DefaultSwiftyBeaverBuilder: SwiftyBeaverBuilder {
 
         let file = FileDestination(logFileURL: destination)
         file.format = defaultFormat
-        file.minLevel = .info
+        file.minLevel = .debug
         file.levelString.error = "FATAL"
 
         let logger = SwiftyBeaver.self
