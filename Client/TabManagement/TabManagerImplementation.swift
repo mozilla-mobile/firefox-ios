@@ -220,7 +220,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // Also if the a restore is in progress then presevering tabs could cause issues
         if tabs.isEmpty || isRestoringTabs {
             logger.log("Attempted to preserve tabs while tabs were restoring or empty, tab count \(tabs.count), isRestoring \(isRestoringTabs)",
-                       level: .warning,
+                       level: .fatal,
                        category: .tabs)
             return
         }
