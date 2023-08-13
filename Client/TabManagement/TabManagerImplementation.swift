@@ -206,6 +206,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Save tabs
 
     override func preserveTabs() {
+        // If there are no tabs then we do not need to preserve as we are initalizing the app
+        // (there should always be at least a homepage)
+        // Also if the a restore is in progress then presevering tabs could cause issues
+        if tabs.count == 0 || isRestoringTabs {
+            return
+        }
+        
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
         guard shouldUseNewTabStore() else { return }
