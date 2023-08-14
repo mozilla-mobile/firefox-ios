@@ -78,8 +78,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         tabs = [Tab]()
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
-<<<<<<< HEAD
-=======
+
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
 
@@ -91,7 +90,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 isRestoringTabs = true
                 migrateAndRestore()
             }
->>>>>>> 9d5d638f9 (Bugfix FXIOS-7205 [v116.2] stop tab overwrite and ensure migration is run (#16039))
         }
     }
 
