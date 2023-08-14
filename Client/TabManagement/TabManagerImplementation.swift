@@ -46,7 +46,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         guard !isRestoringTabs,
               forced || tabs.isEmpty
-        else { return }
+        else {
+            logger.log("No restore tabs running",
+                       level: .debug,
+                       category: .tabs)
+            return
+        }
 
         logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty)",
                    level: .debug,
@@ -65,10 +70,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         isRestoringTabs = true
 
         guard tabMigration.shouldRunMigration else {
+            logger.log("Not running the migration",
+                       level: .debug,
+                       category: .tabs)
             restoreOnly()
             return
         }
 
+        logger.log("Running the migration",
+                   level: .debug,
+                   category: .tabs)
         migrateAndRestore()
     }
 
