@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "A98C0147-1E50-47C8-8214-6E811BD56870",
+      "id" : "7507FB87-8AE7-4A01-A172-706A9E6B1C1D",
       "name" : "Configuration 1",
       "options" : {
 
@@ -9,23 +9,20 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
       "skippedTests" : [
         "ActivityStreamTest",
         "AuthenticationTest",
+        "BaseTestCase",
         "BookmarkingTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
         "CopiedLinksTests",
         "DataManagementTests",
         "DatabaseFixtureTest",
-        "DatabaseFixtureTest\/testPerfBookmarks1000openMenu()",
-        "DatabaseFixtureTest\/testPerfBookmarks1000startUp()",
-        "DatabaseFixtureTest\/testPerfHistory4000openMenu()",
-        "DatabaseFixtureTest\/testPerfHistory4000startUp()",
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone",
         "DisplaySettingTests",
@@ -34,7 +31,6 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
-        "ExperimentIntegrationTests",
         "FindInPageTests",
         "FirstRunTourTests",
         "FxScreenGraphTests",
@@ -51,7 +47,7 @@
         "NewTabSettingsTest",
         "NightModeTests",
         "NoImageTests",
-        "OnboardingTests",
+        "PerformanceTests",
         "PhotonActionSheetTest",
         "PocketTest",
         "PrivateBrowsingTest",

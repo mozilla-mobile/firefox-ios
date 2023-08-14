@@ -67,6 +67,7 @@
         "DownloadFilesTests\/testShareDownloadedFile()",
         "DragAndDropTestIpad",
         "EngagementNotificationTests",
+        "ExperimentIntegrationTests",
         "FindInPageTests\/testBarDissapearsWhenOpeningTabsTray()",
         "FindInPageTests\/testBarDissapearsWhenReloading()",
         "FindInPageTests\/testFindFromSelection()",

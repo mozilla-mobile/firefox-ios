@@ -57,6 +57,7 @@
         "DownloadFilesTests\/testToastButtonToGoToDownloads()",
         "DragAndDropTestIpad\/testTryDragAndDropBookmarkToURLBar()",
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
+        "ExperimentIntegrationTests",
         "FindInPageTests\/testFindFromMenu()",
         "FirstRunTourTests\/testFirstRunTour()",
         "HistoryTests\/testClearPrivateDataButtonDisabled()",
