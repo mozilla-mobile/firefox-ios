@@ -116,7 +116,7 @@ class FakespotViewController: UIViewController, Themeable {
         [errorCardView, reliabilityCardView, settingsCardView, loadingView].forEach(contentStackView.addArrangedSubview)
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor,
+            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
                                                   constant: UX.topPadding),
             contentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                       constant: UX.horizontalPadding),
@@ -166,14 +166,15 @@ class FakespotViewController: UIViewController, Themeable {
             ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
-        
+
         // SettingsCardView
         let settingsCardViewModel = FakespotSettingsCardViewModel(
             cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
             showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
             showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
             turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton)
+            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
+            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
         settingsCardView.configure(settingsCardViewModel)
     }
 

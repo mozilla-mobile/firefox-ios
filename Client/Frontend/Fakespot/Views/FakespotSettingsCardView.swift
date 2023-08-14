@@ -13,6 +13,7 @@ struct FakespotSettingsCardViewModel {
     let showProductsLabelTitleA11yId: String
     let turnOffButtonTitle: String
     let turnOffButtonTitleA11yId: String
+    let recommendedProductsSwitchA11yId: String
 }
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
@@ -108,14 +109,16 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         turnOffButton.setTitle(viewModel.turnOffButtonTitle, for: .normal)
         turnOffButton.accessibilityIdentifier = viewModel.turnOffButtonTitleA11yId
 
+        recommendedProductsSwitch.accessibilityIdentifier = viewModel.recommendedProductsSwitchA11yId
+
         let viewModel = CollapsibleCardViewModel(
             contentView: contentStackView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
             title: .Shopping.SettingsCardLabelTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
-            expandButtonA11yLabelExpanded: AccessibilityIdentifiers.Shopping.SettingsCard.expandButtonLabelExpanded,
-            expandButtonA11yLabelCollapsed: AccessibilityIdentifiers.Shopping.SettingsCard.expandButtonLabelCollapsed)
+            expandButtonA11yLabelExpanded: .Shopping.SettingsCardExpandedAccessibilityLabel,
+            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel)
         collapsibleContainer.configure(viewModel)
     }
 

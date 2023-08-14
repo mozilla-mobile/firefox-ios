@@ -3615,7 +3615,7 @@ extension String {
             key: "", // Shopping.SettingsCard.Label.Title.v118
             tableName: "Shopping",
             value: "Settings",
-            comment: "Title of the settings card")
+            comment: "Title of the settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v118
             tableName: "Shopping",
@@ -3626,6 +3626,16 @@ extension String {
             tableName: "Shopping",
             value: "Turn Off Review Quality Check",
             comment: "Label of the button from settings card")
+        public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118
+            tableName: "Shopping",
+            value: "Settings Card Expanded",
+            comment: "Accessibility label for the down chevron, from Settings Card View")
+        public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Collapsed.AccessibilityLabel.v118
+            tableName: "Shopping",
+            value: "Settings Card Collapsed",
+            comment: "Accessibility label for the up chevron, from Settings Card View")
     }
 }
 
