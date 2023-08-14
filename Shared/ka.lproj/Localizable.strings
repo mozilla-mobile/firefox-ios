@@ -863,7 +863,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "პარამეტრებით ხდება თქვენი ბრაუზერისა და მოწყობილობის სხვებისგან გამორჩევა. მომხმარებლის ამომცნობები აგროვებს ამ პარამეტრებს თქვენი დახასიათების შესადგენად, რომელსაც იყენებს საიტებზე თვალის სადევნებლად.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე, თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად, ამ ქსელების მფლობელ დაწესებულებებს ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "სოციალური ქსელები ათავსებს მეთვალყურეებს სხვადასხვა საიტებზე თქვენი დახასიათების უკეთ და სრულყოფილად შესადგენად. მათი შეზღუდვის შედეგად ამ ქსელების მფლობელ დაწესებულებებს ნაკლები წვდომა ექნება ინტერნეტში თქვენს მოქმედებებზე.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "მომხმარებლის ამომცნობები";
@@ -908,7 +908,7 @@
 "Oops! Firefox crashed" = "ჰმ! Firefox უეცრად გაითიშა";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "სტატიების, კითხვის რეჟიმში გასახსნელად, შეეხეთ წიგნის ნიშანს, როცა მისამართების ველში გამოჩნდება.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "სტატიების კითხვის რეჟიმში გასახსნელად შეეხეთ წიგნის ნიშანს, როცა მისამართების ველში გამოჩნდება.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "პარამეტრების გახსნა";
@@ -1004,7 +1004,7 @@
 "Sans-serif" = "უნაჭდევო";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "გვერდების შენახვა მომავალში წასაკითხად, შეგიძლიათ კითხვის რეჟიმის სამართავ არეში, წიგნის ნიშანზე შეხებით.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "გვერდების შენახვა მომავალში წასაკითხად შეგიძლიათ კითხვის რეჟიმის სამართავ არეში წიგნის ნიშანზე შეხებით.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "კარგი";

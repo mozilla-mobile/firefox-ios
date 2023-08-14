@@ -1528,6 +1528,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Okéh, Ngarti";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Upama hiji loka henteu jalan sakumaha anu dipiharep, toél konci dina palang alamat sarta pareuman Protéksi Palacakan Tingkat Lanjut pikeun éta kaca.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Awas!";
 
