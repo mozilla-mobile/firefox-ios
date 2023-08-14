@@ -40,7 +40,7 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var logoImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        imageView.image = UIImage(named: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -60,8 +60,10 @@ class FakespotViewController: UIViewController, Themeable {
         button.accessibilityLabel = .CloseButtonTitle
     }
 
+    // MARK: - Child Views
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
+    private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
@@ -81,21 +83,8 @@ class FakespotViewController: UIViewController, Themeable {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupView()
+        configureChildViews()
         listenForThemeChange(view)
-
-        let reliabilityCardViewModel = ReliabilityCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-            title: .Shopping.ReliabilityCardTitle,
-            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-            rating: .gradeA,
-            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
-        reliabilityCardView.configure(reliabilityCardViewModel)
-
-        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
-                                                            description: .Shopping.ErrorCardDescription,
-                                                            actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(viewModel: errorCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -122,23 +111,20 @@ class FakespotViewController: UIViewController, Themeable {
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
-        contentStackView.addArrangedSubview(errorCardView)
-        contentStackView.addArrangedSubview(reliabilityCardView)
-        contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
+        [errorCardView, reliabilityCardView, settingsCardView, loadingView].forEach(contentStackView.addArrangedSubview)
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
+            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor,
                                                   constant: UX.topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
+            contentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                       constant: UX.horizontalPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor,
                                                      constant: -UX.bottomPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
+            contentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                        constant: -UX.horizontalPadding),
-            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-                                                    constant: -UX.horizontalPadding * 2),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -162,6 +148,33 @@ class FakespotViewController: UIViewController, Themeable {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight)
         ])
+    }
+
+    private func configureChildViews() {
+        // ErrorCardView
+        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
+                                                            description: .Shopping.ErrorCardDescription,
+                                                            actionTitle: .Shopping.ErrorCardButtonText)
+        errorCardView.configure(viewModel: errorCardViewModel)
+
+        // ReliabilityCardView
+        let reliabilityCardViewModel = ReliabilityCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
+            title: .Shopping.ReliabilityCardTitle,
+            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
+            rating: .gradeA,
+            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
+            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
+        reliabilityCardView.configure(reliabilityCardViewModel)
+        
+        // SettingsCardView
+        let settingsCardViewModel = FakespotSettingsCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
+            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
+            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
+            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
+            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton)
+        settingsCardView.configure(settingsCardViewModel)
     }
 
     private func recordTelemetry() {

@@ -3611,6 +3611,21 @@ extension String {
             tableName: "Shopping",
             value: "Try Again",
             comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardLabelTitle = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Label.Title.v118
+            tableName: "Shopping",
+            value: "Settings",
+            comment: "Title of the settings card")
+        public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v118
+            tableName: "Shopping",
+            value: "Show products recommended by Firefox",
+            comment: "Label of the switch from settings card")
+        public static let SettingsCardTurnOffButton = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
+            tableName: "Shopping",
+            value: "Turn Off Review Quality Check",
+            comment: "Label of the button from settings card")
     }
 }
 
