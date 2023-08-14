@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 
 class FakespotLoadingView: UIView, ThemeApplicable {
@@ -15,17 +16,22 @@ class FakespotLoadingView: UIView, ThemeApplicable {
         static let minimumAlpha: CGFloat = 0.25
     }
 
-    private lazy var cardView1: UIView = .build()
-    private lazy var cardView2: UIView = .build()
-    private lazy var cardView3: UIView = .build()
-    private lazy var cardView4: UIView = .build()
-    private lazy var cardView5: UIView = .build()
+    private lazy var cardView1: CardView = .build()
+    private lazy var cardView2: CardView = .build()
+    private lazy var cardView3: CardView = .build()
+    private lazy var cardView4: CardView = .build()
+    private lazy var cardView5: CardView = .build()
 
     private lazy var cardViews = [self.cardView1, self.cardView2, self.cardView3, self.cardView4, self.cardView5]
 
     // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        let viewModel = CardViewModel(view: UIView(), a11yId: "CardView", backgroundColor: { theme in
+            return theme.colors.layer3
+        })
+        cardViews.forEach { $0.configure(viewModel) }
 
         setupLayout()
     }
@@ -35,13 +41,12 @@ class FakespotLoadingView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        cardViews.forEach { $0.backgroundColor = theme.colors.layer3 }
+        cardViews.forEach { $0.applyTheme(theme: theme) }
     }
 
     private func setupLayout() {
         cardViews.forEach { cardView in
             addSubview(cardView)
-            cardView.layer.cornerRadius = UX.cornerRadius
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
             cardView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         }

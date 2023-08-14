@@ -5,9 +5,9 @@
 import Foundation
 import UIKit
 
-struct CardContainerComponentViewModel: ComponentViewModel {
-    var title = "CardContainer"
-    var viewController: UIViewController = CardContainerViewController()
+struct CardViewComponentViewModel: ComponentViewModel {
+    var title = "CardView"
+    var viewController: UIViewController = CardViewViewController()
 
     func present(with presenter: Presenter?) {
         presenter?.push(viewController: viewController)

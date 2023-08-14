@@ -1250,7 +1250,6 @@
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
-		E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */; };
 		E1516A3E2A7BC07E007819A4 /* ReliabilityRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
@@ -8584,7 +8583,6 @@
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
 				8C37D7302A7BD04300093621 /* ActionFooterView.swift */,
-				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -9873,6 +9871,7 @@
 		E16258F02A83D5DE00522742 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 				E1FC23F02A8629380089E14D /* ReliabilityCardView.swift */,
 			);
@@ -12577,7 +12576,6 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
-				E1516A3B2A7A5746007819A4 /* ReliabilityCardView.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
 				C889569A27E8D1AC00E3779E /* InactiveTabHeader.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,

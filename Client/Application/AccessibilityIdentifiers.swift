@@ -117,6 +117,13 @@ public struct AccessibilityIdentifiers {
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
 
+        struct ErrorCard {
+            static let card = "Shopping.ErrorCard.Card"
+            static let title = "Shopping.ErrorCard.Title"
+            static let description = "Shopping.ErrorCard.Description"
+            static let primaryAction = "Shopping.ErrorCard.PrimaryAction"
+        }
+
         struct ReliabilityCard {
             static let card = "Shopping.ReliabilityCard.Card"
             static let title = "Shopping.ReliabilityCard.Title"
@@ -385,12 +392,6 @@ public struct AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
-    }
-
-    struct ErrorCard {
-        static let title = "ErrorCard.title"
-        static let description = "ErrorCard.description"
-        static let primaryAction = "ErrorCard.primaryAction"
     }
 
     struct ActionFooter {

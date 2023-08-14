@@ -60,6 +60,7 @@ class FakespotViewController: UIViewController, Themeable {
         button.accessibilityLabel = .CloseButtonTitle
     }
 
+    private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
 
@@ -90,10 +91,16 @@ class FakespotViewController: UIViewController, Themeable {
             ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
+
+        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
+                                                            description: .Shopping.ErrorCardDescription,
+                                                            actionTitle: .Shopping.ErrorCardButtonText)
+        errorCardView.configure(viewModel: errorCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         applyTheme()
         loadingView.animate()
     }
@@ -108,12 +115,14 @@ class FakespotViewController: UIViewController, Themeable {
     func applyTheme() {
         let colors = themeManager.currentTheme.colors
         titleLabel.textColor = colors.textPrimary
+        errorCardView.applyTheme(theme: themeManager.currentTheme)
         reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
         loadingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
+        contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
