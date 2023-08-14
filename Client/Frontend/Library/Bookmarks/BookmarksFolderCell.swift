@@ -27,7 +27,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
 
         return OneLineTableViewCellViewModel(title: title,
                                              leftImageView: leftImageView,
-                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryView: nil,
                                              accessoryType: .disclosureIndicator)
     }
 

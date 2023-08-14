@@ -132,7 +132,7 @@ class OneLineTableViewCell: UITableViewCell,
     func configure(viewModel: OneLineTableViewCellViewModel) {
         titleLabel.text = viewModel.title
         accessoryView = viewModel.accessoryView
-        editingAccessoryType = viewModel.accessoryType
+        accessoryType = viewModel.accessoryType
 
         if let image = viewModel.leftImageView {
             leftImageView.image = image
