@@ -93,8 +93,8 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         cardContainer.applyTheme(theme: theme)
         reliabilityScoreView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         reliabilityScoreView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
-        reliabilityLetterLabel.textColor = theme.colors.textOnColor
-        reliabilityDescriptionLabel.textColor = theme.colors.textPrimary // Update in FXIOS-7154
+        reliabilityLetterLabel.textColor = theme.colors.textOnDark
+        reliabilityDescriptionLabel.textColor = theme.colors.textOnLight
 
         if let viewModel {
             reliabilityLetterView.layer.backgroundColor = viewModel.rating.color(theme: theme).cgColor

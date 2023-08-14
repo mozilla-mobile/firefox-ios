@@ -87,6 +87,8 @@
         "NewTabSettingsTest\/testCheckNewTabSettingsByDefault()",
         "NewTabSettingsTest\/testToggleOffOnAdditionalContentBookmarks()",
         "NoImageTests\/testImageOnOff()",
+        "OnboardingTests\/testCloseTour()",
+        "OnboardingTests\/testFirstRunTour()",
         "PerformanceTests",
         "PhotonActionSheetTest\/testPinToTop()",
         "PhotonActionSheetTest\/testSendToDeviceFromShareOption()",

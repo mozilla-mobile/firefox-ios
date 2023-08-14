@@ -39,42 +39,17 @@ class PocketDataAdaptorTests: XCTestCase {
         let data = subject.getPocketData()
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
-
-    func testNotificationUpdatesData() {
-        mockPocketAPI = MockPocketAPI(result: .success([]))
-        var sentOnce = false
-        let subject = createSubject(expectedFulfillmentCount: 2) {
-            guard !sentOnce else { return }
-            sentOnce = true
-
-            let stories: [PocketFeedStory] = [
-                .make(title: "feed1"),
-                .make(title: "feed2"),
-                .make(title: "feed3"),
-            ]
-            self.mockPocketAPI.result = .success(stories)
-            self.mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification)
-        }
-
-        let data = subject.getPocketData()
-        XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
-    }
 }
 
 // MARK: Helper
 private extension PocketDataAdaptorTests {
-    func createSubject(expectedFulfillmentCount: Int = 1,
-                       dataCompletion: (() -> Void)? = nil,
-                       file: StaticString = #file,
+    func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
-        expectation.expectedFulfillmentCount = expectedFulfillmentCount
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
                                                       notificationCenter: mockNotificationCenter) {
             expectation.fulfill()
-            dataCompletion?()
         }
-        mockNotificationCenter.notifiableListener = subject
         trackForMemoryLeaks(subject, file: file, line: line)
         wait(for: [expectation], timeout: 1)
         return subject

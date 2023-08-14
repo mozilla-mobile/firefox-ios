@@ -46,7 +46,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         guard !isRestoringTabs,
               forced || tabs.isEmpty
-        else { return }
+        else {
+            logger.log("No restore tabs running",
+                       level: .debug,
+                       category: .tabs)
+            return
+        }
+
+        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty)",
+                   level: .debug,
+                   category: .tabs)
 
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
@@ -61,16 +70,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         isRestoringTabs = true
 
         guard tabMigration.shouldRunMigration else {
+            logger.log("Not running the migration",
+                       level: .debug,
+                       category: .tabs)
             restoreOnly()
             return
         }
 
+        logger.log("Running the migration",
+                   level: .debug,
+                   category: .tabs)
         migrateAndRestore()
     }
 
     private func migrateAndRestore() {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
+            logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
         }
     }
 
@@ -78,6 +95,17 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         tabs = [Tab]()
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
+            logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
+
+            // Safety check incase something went wrong during launch where a migration should have occured
+            if tabs.count <= 1 && store.tabs.count > 1 {
+                logger.log("Rerunning migration due to inconsistent tab counts, old tab store count: \(store.tabs.count)",
+                           level: .fatal,
+                           category: .tabs)
+                isRestoringTabs = true
+                migrateAndRestore()
+            }
         }
     }
 
@@ -92,6 +120,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         else {
             // Always make sure there is a single normal tab
             await generateEmptyTab()
+            logger.log("There was no tabs restored, creating a normal tab",
+                       level: .debug,
+                       category: .tabs)
+
             return
         }
         await generateTabs(from: windowData)
@@ -127,6 +159,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
             newTab.metadataManager?.tabGroupData = groupData
 
+            if newTab.url == nil {
+                logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
+                           level: .debug,
+                           category: .tabs)
+            }
+
             // Restore screenshot
             restoreScreenshot(tab: newTab)
 
@@ -134,6 +172,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 tabToSelect = newTab
             }
         }
+
+        logger.log("There was \(filteredTabs.count) tabs restored",
+                   level: .debug,
+                   category: .tabs)
 
         selectTab(tabToSelect)
 
@@ -173,9 +215,21 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Save tabs
 
     override func preserveTabs() {
+        // If there are no tabs then we do not need to preserve as we are initalizing the app
+        // (there should always be at least a homepage)
+        // Also if the a restore is in progress then presevering tabs could cause issues
+        if tabs.isEmpty || isRestoringTabs {
+            logger.log("Attempted to preserve tabs while tabs were restoring or empty, tab count \(tabs.count), isRestoring \(isRestoringTabs)",
+                       level: .fatal,
+                       category: .tabs)
+            return
+        }
+
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
         guard shouldUseNewTabStore() else { return }
+
+        logger.log("Preserve tabs started", level: .debug, category: .tabs)
 
         preserveTabs(forced: false)
     }
@@ -189,6 +243,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
+
+            logger.log("Preserve tabs ended", level: .debug, category: .tabs)
         }
     }
 
@@ -200,7 +256,15 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                          searchUrl: oldTabGroupData?.tabAssociatedSearchUrl,
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
-            return TabData(id: UUID(uuidString: tab.tabUUID) ?? UUID(),
+
+            let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
+            if tab.url?.absoluteString == nil {
+                logger.log("Tab has empty URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))",
+                           level: .debug,
+                           category: .tabs)
+            }
+
+            return TabData(id: tabId,
                            title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
@@ -209,6 +273,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            createdAtTime: Date.fromTimestamp(tab.firstCreatedTime ?? 0),
                            tabGroupData: groupData)
         }
+
+        logger.log("We are preserving \(tabData.count) tabs",
+                   level: .debug,
+                   category: .tabs)
+
         return tabData
     }
 

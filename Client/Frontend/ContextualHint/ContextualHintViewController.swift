@@ -312,14 +312,14 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     func applyTheme() {
         let theme = themeManager.currentTheme
-        closeButton.tintColor = theme.colors.textOnColor
-        descriptionLabel.textColor = theme.colors.textOnColor
+        closeButton.tintColor = theme.colors.textOnDark
+        descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
 
         if viewModel.isActionType() {
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17),
-                .foregroundColor: theme.colors.textOnColor,
+                .foregroundColor: theme.colors.textOnDark,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
 
