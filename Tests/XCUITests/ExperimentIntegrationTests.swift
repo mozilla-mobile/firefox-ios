@@ -14,11 +14,6 @@ final class ExperimentIntegrationTests: BaseTestCase {
         super.setUpScreenGraph()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDownWithError()
-    }
-
     func testVerifyExperimentEnrolled() throws {
         let toolbarClose = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Close'"))
 
