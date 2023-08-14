@@ -504,8 +504,6 @@
 		7BBFEE741BB405D900A305AA /* LegacyTabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBFEE731BB405D900A305AA /* LegacyTabManagerTests.swift */; };
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
-		7BEB64511C7345990092C02E /* MarketingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B95CD191C3AB2EE00638E31 /* MarketingUITests.swift */; };
-		7BEB64521C7345990092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
@@ -1645,13 +1643,6 @@
 			remoteInfo = StorageTests;
 		};
 		7BEB64421C7345600092C02E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
-			remoteInfo = Client;
-		};
-		7BEB645C1C7346100092C02E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
@@ -4614,7 +4605,6 @@
 		7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		7B864D89B9D9C309484081D1 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7B8A47F51D01D3B400C07734 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
-		7B95CD191C3AB2EE00638E31 /* MarketingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketingUITests.swift; sourceTree = "<group>"; };
 		7B9BF91B1E43472E00CB24F4 /* JSONExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONExtensions.swift; sourceTree = "<group>"; };
 		7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPeekViewController.swift; sourceTree = "<group>"; };
 		7BA34E6CB59CF71C21C42BB3 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/FindInPage.strings"; sourceTree = "<group>"; };
@@ -4625,8 +4615,6 @@
 		7BD94478AB4C7DB2706F7AAF /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BEB644E1C7345600092C02E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = L10nSnapshotTests/Info.plist; sourceTree = SOURCE_ROOT; };
-		7BEB645A1C7345990092C02E /* MarketingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarketingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BEB645B1C7345990092C02E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MarketingUITests/Info.plist; sourceTree = SOURCE_ROOT; };
 		7BEFC67F1BFF68C30059C952 /* QuickActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
 		7C0C4902A319FAC7A18682E9 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7C1043E3AE32A70E1EC5383A /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -8013,7 +8001,6 @@
 			isa = PBXGroup;
 			children = (
 				7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */,
-				7B95CD181C3AB2EE00638E31 /* MarketingUITests */,
 				7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */,
 			);
 			name = Snapshot;
@@ -8039,15 +8026,6 @@
 				F8324A062649A188007E4BFA /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		7B95CD181C3AB2EE00638E31 /* MarketingUITests */ = {
-			isa = PBXGroup;
-			children = (
-				7B95CD191C3AB2EE00638E31 /* MarketingUITests.swift */,
-				7BEB645B1C7345990092C02E /* Info.plist */,
-			);
-			path = MarketingUITests;
 			sourceTree = "<group>";
 		};
 		7BC7B4571C903A6A0046E9D2 /* Menu */ = {
@@ -10469,7 +10447,6 @@
 				282731681ABC9BE700AA1954 /* SyncTests.xctest */,
 				E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */,
 				7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */,
-				7BEB645A1C7345990092C02E /* MarketingUITests.xctest */,
 				3BFE4B071D342FB800DDF53F /* XCUITests.xctest */,
 				3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */,
 				E69DB07D1E97DEA9008A67E6 /* SyncTelemetryTests.xctest */,
@@ -11053,22 +11030,6 @@
 			productReference = 7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		7BEB644F1C7345990092C02E /* MarketingUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E60138641C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "MarketingUITests" */;
-			buildPhases = (
-				7BEB64501C7345990092C02E /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7BEB645D1C7346100092C02E /* PBXTargetDependency */,
-			);
-			name = MarketingUITests;
-			productName = MarketingUITests;
-			productReference = 7BEB645A1C7345990092C02E /* MarketingUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		D39FA15E1A83E0EC00EE869C /* UITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */;
@@ -11328,11 +11289,6 @@
 						ProvisioningStyle = Manual;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
-					7BEB644F1C7345990092C02E = {
-						DevelopmentTeam = 43AQ936H96;
-						ProvisioningStyle = Manual;
-						TestTargetID = F84B21BD1A090F8100AAB793;
-					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 43AQ936H96;
@@ -11539,7 +11495,6 @@
 				282731671ABC9BE700AA1954 /* SyncTests */,
 				D39FA15E1A83E0EC00EE869C /* UITests */,
 				7BEB64401C7345600092C02E /* L10nSnapshotTests */,
-				7BEB644F1C7345990092C02E /* MarketingUITests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
@@ -12291,15 +12246,6 @@
 				391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */,
 				8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */,
 				E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BEB64501C7345990092C02E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7BEB64511C7345990092C02E /* MarketingUITests.swift in Sources */,
-				7BEB64521C7345990092C02E /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13473,11 +13419,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB64421C7345600092C02E /* PBXContainerItemProxy */;
-		};
-		7BEB645D1C7346100092C02E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B21BD1A090F8100AAB793 /* Client */;
-			targetProxy = 7BEB645C1C7346100092C02E /* PBXContainerItemProxy */;
 		};
 		C82043712523DBEB00740B71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -18142,31 +18083,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		E60138511C89EAE600DF9756 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				PRODUCT_NAME = MarketingUITests;
-			};
-			name = Fennec;
-		};
-		E60138521C89EAE600DF9756 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
-			};
-			name = Firefox;
-		};
-		E60138531C89EAE600DF9756 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
-			};
-			name = FirefoxBeta;
-		};
 		E69DB0931E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -18422,15 +18338,6 @@
 				PRODUCT_NAME = L10nSnapshotTests;
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
-			};
-			name = Fennec_Enterprise;
-		};
-		E6DCC2191DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -19197,17 +19104,6 @@
 				E6DCC2181DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E601384D1C89EAE600DF9756 /* Firefox */,
 				E601384E1C89EAE600DF9756 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		E60138641C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "MarketingUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E60138511C89EAE600DF9756 /* Fennec */,
-				E6DCC2191DCBB6F100CEC4B7 /* Fennec_Enterprise */,
-				E60138521C89EAE600DF9756 /* Firefox */,
-				E60138531C89EAE600DF9756 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
