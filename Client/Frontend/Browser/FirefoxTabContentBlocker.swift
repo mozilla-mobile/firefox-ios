@@ -24,9 +24,45 @@ enum BlockingStrength: String {
     static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
 
-/**
- Firefox-specific implementation of tab content blocking.
- */
+extension BlockingStrength {
+    var settingStatus: String {
+        switch self {
+        case .basic:
+            return .TrackingProtectionOptionBlockListLevelStandardStatus
+        case .strict:
+            return .TrackingProtectionOptionBlockListLevelStrict
+        }
+    }
+
+    var settingTitle: String {
+        switch self {
+        case .basic:
+            return .TrackingProtectionOptionBlockListLevelStandard
+        case .strict:
+            return .TrackingProtectionOptionBlockListLevelStrict
+        }
+    }
+
+    var settingSubtitle: String {
+        switch self {
+        case .basic:
+            return .TrackingProtectionStandardLevelDescription
+        case .strict:
+            return .TrackingProtectionStrictLevelDescription
+        }
+    }
+
+    static func accessibilityId(for strength: BlockingStrength) -> String {
+        switch strength {
+        case .basic:
+            return AccessibilityIdentifiers.Settings.TrackingProtection.basic
+        case .strict:
+            return AccessibilityIdentifiers.Settings.TrackingProtection.strict
+        }
+    }
+}
+
+/// Firefox-specific implementation of tab content blocking.
 class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 

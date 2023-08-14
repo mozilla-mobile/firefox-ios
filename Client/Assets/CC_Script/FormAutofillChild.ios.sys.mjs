@@ -27,11 +27,11 @@ export class FormAutofillChild {
       this.fieldDetailsManager.identifyAutofillFields(element);
 
     // Only ping swift if current field is a cc field
-    if (validDetails?.find(field => field.elementWeakRef.get() === element)) {
+    if (validDetails?.find(field => field.element === element)) {
       const fieldNamesWithValues = validDetails?.reduce(
         (acc, field) => ({
           ...acc,
-          [field.fieldName]: field.elementWeakRef.get().value,
+          [field.fieldName]: field.element.value,
         }),
         {}
       );
@@ -55,7 +55,13 @@ export class FormAutofillChild {
     this.fieldDetailsManager.activeHandler.onFormSubmitted();
     const records = this.fieldDetailsManager.activeHandler.createRecords();
     if (records.creditCard) {
-      this.onSubmitCallback(records.creditCard.map(entry => entry.record));
+      // Normalize record format so we always get a consistent
+      // credit card record format: {cc-number, cc-name, cc-exp-month, cc-exp-year}
+      const creditCardRecords = records.creditCard.map(entry => {
+        CreditCardRecord.normalizeFields(entry.record);
+        return entry.record;
+      });
+      this.onSubmitCallback(creditCardRecords);
     }
   }
 

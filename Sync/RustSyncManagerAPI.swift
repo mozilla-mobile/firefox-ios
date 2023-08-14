@@ -20,15 +20,10 @@ open class RustSyncManagerAPI {
         case creditcards
     }
 
-    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history]
-    public init(logger: Logger = DefaultLogger.shared,
-                creditCardAutofillEnabled: Bool = false) {
+    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards]
+    public init(logger: Logger = DefaultLogger.shared) {
         self.api = SyncManagerComponent()
         self.logger = logger
-
-        if creditCardAutofillEnabled {
-            self.rustTogglableEngines.append(.creditcards)
-        }
     }
 
     public func disconnect() {
@@ -39,19 +34,20 @@ open class RustSyncManagerAPI {
 
     public func sync(params: SyncParams,
                      completion: @escaping (SyncResult) -> Void) {
-        DispatchQueue.global().async { [unowned self] in
+        DispatchQueue.global().async { [weak self] in
             do {
-                let result = try self.api.sync(params: params)
+                guard let result = try self?.api.sync(params: params) else { return }
+
                 completion(result)
             } catch let err as NSError {
                 if let syncError = err as? SyncManagerError {
                     let syncErrDescription = syncError.localizedDescription
-                    self.logger.log("Rust SyncManager sync error: \(syncErrDescription)",
-                                    level: .warning,
-                                    category: .sync)
+                    self?.logger.log("Rust SyncManager sync error: \(syncErrDescription)",
+                                     level: .warning,
+                                     category: .sync)
                 } else {
                     let errDescription = err.localizedDescription
-                    self.logger.log("""
+                    self?.logger.log("""
                         Unknown error when attempting a rust SyncManager sync:
                         \(errDescription)
                         """,

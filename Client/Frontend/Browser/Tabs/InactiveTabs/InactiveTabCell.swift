@@ -161,9 +161,9 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
                 return UITableViewCell()
             }
 
-            cell.buttonClosure = {
-                let inactiveTabsCount = self.inactiveTabsViewModel?.inactiveTabs.count
-                self.delegate?.didTapCloseInactiveTabs(tabsCount: inactiveTabsCount ?? 0)
+            cell.buttonClosure = { [weak self] in
+                let inactiveTabsCount = self?.inactiveTabsViewModel?.inactiveTabs.count
+                self?.delegate?.didTapCloseInactiveTabs(tabsCount: inactiveTabsCount ?? 0)
             }
             if let theme = inactiveTabsViewModel?.theme {
                 cell.applyTheme(theme: theme)
@@ -258,10 +258,10 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive:
             let closeAction = UIContextualAction(
                 style: .destructive,
-                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
-                    if let tab = self.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
-                        self.removeInactiveTab(at: indexPath)
-                        self.delegate?.closeInactiveTab(tab, index: indexPath.item)
+                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { [weak self] _, _, completion in
+                    if let tab = self?.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
+                        self?.removeInactiveTab(at: indexPath)
+                        self?.delegate?.closeInactiveTab(tab, index: indexPath.item)
                         completion(true)
                     }
                 }

@@ -25,12 +25,30 @@ struct Product: Equatable {
 class ShoppingProduct: FeatureFlaggable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
+    private let client: FakeSpotClientType
 
-    /// Creates a product.
-    /// - Parameter url: URL to get the product info from.
-    init(url: URL, nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer()) {
+    /// Initializes a new instance of a product with the provided URL and optional parameters.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to parse the Product instance from.
+    ///   - nimbusFakespotFeatureLayer: An optional parameter of type `NimbusFakespotFeatureLayerProtocol`.
+    ///                                 It represents the feature layer used for Nimbus Fakespot integration.
+    ///   - client: An optional parameter of type `FakeSpotClient`. It represents the client used for communication
+    ///             with the FakeSpot service.
+    ///
+    /// - Note: The `nimbusFakespotFeatureLayer` and `client` parameters are optional and have default values, which means you can
+    ///         omit them when calling this initializer in most cases.
+    ///
+    /// - Important: Make sure to provide a valid `url`. If the URL is invalid or the server cannot be reached, the product
+    ///              information may not be fetched successfully.
+    init(
+        url: URL,
+        nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
+        client: FakeSpotClientType = MockFakeSpotClient()
+    ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
+        self.client = client
     }
 
     var isFakespotFeatureEnabled: Bool {
@@ -55,4 +73,26 @@ class ShoppingProduct: FeatureFlaggable {
 
         return Product(id: id, host: host, topLevelDomain: tld, sitename: sitename)
     }()
+
+    /// Fetches the analysis data for a specific product.
+    ///
+    /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product, or `nil` if the product is not available.
+    /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
+    ///
+    func fetchProductAnalysisData() async throws -> ProductAnalysisData? {
+        guard let product else { return nil }
+        return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
+    }
+
+    /// Fetches an array of ads data for a specific product.
+    ///
+    /// - Returns: An array of `ProductAdsData` containing the ads data for the product, or an empty array if the product is not available or no ads data is found.
+    /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
+    ///
+    func fetchProductAdsData() async throws -> [ProductAdsData] {
+        guard let product else { return [] }
+        return try await client.fetchProductAdData(productId: product.id, website: product.host)
+    }
 }

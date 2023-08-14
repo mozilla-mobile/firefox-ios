@@ -8,8 +8,8 @@ import Shared
 
 struct SimpleToast: ThemeApplicable {
     private let toastLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
-                                                                       size: Toast.UX.fontSize)
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
+                                                                size: Toast.UX.fontSize)
         label.numberOfLines = 0
         label.textAlignment = .center
     }
@@ -36,6 +36,9 @@ struct SimpleToast: ThemeApplicable {
         ])
         applyTheme(theme: theme)
         animate(toastLabel)
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .announcement, argument: text)
+        }
     }
 
     func applyTheme(theme: Theme) {
@@ -66,7 +69,8 @@ struct SimpleToast: ThemeApplicable {
                 toast.frame = frame
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + Toast.UX.toastDismissAfter
+                let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? DispatchTimeInterval.milliseconds(1000) : DispatchTimeInterval.milliseconds(0)
+                let dispatchTime = DispatchTime.now() + Toast.UX.toastDismissAfter + voiceOverDelay
 
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
                     self.dismiss(toast)

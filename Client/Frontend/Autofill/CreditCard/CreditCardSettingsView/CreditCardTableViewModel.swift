@@ -24,15 +24,12 @@ class CreditCardTableViewModel {
 
         let creditCard = creditCards[indexPath.row]
 
-        let components = DateComponents(year: Int(creditCard.ccExpYear), month: Int(creditCard.ccExpMonth))
-        let formattedExpiryDate = DateComponentsFormatter.localizedString(from: components,
-                                                                          unitsStyle: .spellOut) ?? ""
-
+        let localizedDate = localizedDate(year: Int(creditCard.ccExpYear), month: Int(creditCard.ccExpMonth)) ?? ""
         let string = String(format: .CreditCard.Settings.ListItemA11y,
                             creditCard.ccType,
-                            creditCard.ccNumberLast4,
                             creditCard.ccName,
-                            formattedExpiryDate)
+                            creditCard.ccNumberLast4,
+                            localizedDate)
         let attributedString = NSMutableAttributedString(string: string)
         if let range = attributedString.string.range(of: creditCard.ccNumberLast4) {
             attributedString.addAttributes([.accessibilitySpeechSpellOut: true],
@@ -40,5 +37,23 @@ class CreditCardTableViewModel {
         }
 
         return attributedString
+    }
+
+    func localizedDate(year: Int, month: Int) -> String? {
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = 1
+
+        let calendar = Calendar(identifier: .gregorian)
+        guard let date = calendar.date(from: dateComponents) else {
+            return nil
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale.current
+        return dateFormatter.string(from: date)
     }
 }

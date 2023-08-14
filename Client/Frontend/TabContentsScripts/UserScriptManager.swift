@@ -71,14 +71,10 @@ class UserScriptManager: FeatureFlaggable {
         self.compiledUserScripts = compiledUserScripts
     }
 
-    public func injectUserScriptsIntoTab(_ tab: Tab, nightMode: Bool, noImageMode: Bool) {
+    public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
-        tab.webView?.configuration.userContentController.removeAllUserScripts()
-
-        // Feature flag for CC scripts until we fully enable this feature
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
+        webView?.configuration.userContentController.removeAllUserScripts()
 
         // Inject all pre-compiled user scripts.
         [(WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: false),
@@ -88,30 +84,30 @@ class UserScriptManager: FeatureFlaggable {
             let (injectionTime, mainFrameOnly) = arg
             let name = (mainFrameOnly ? "MainFrame" : "AllFrames") + "AtDocument" + (injectionTime == .atDocumentStart ? "Start" : "End")
             if let userScript = compiledUserScripts[name] {
-                tab.webView?.configuration.userContentController.addUserScript(userScript)
+                webView?.configuration.userContentController.addUserScript(userScript)
             }
 
             let autofillName = "Autofill\(name)"
-            if autofillCreditCardStatus, let autofillScript = compiledUserScripts[autofillName] {
-                tab.webView?.configuration.userContentController.addUserScript(autofillScript)
+            if let autofillScript = compiledUserScripts[autofillName] {
+                webView?.configuration.userContentController.addUserScript(autofillScript)
             }
 
             let webcompatName = "Webcompat\(name)"
             if let webcompatUserScript = compiledUserScripts[webcompatName] {
-                tab.webView?.configuration.userContentController.addUserScript(webcompatUserScript)
+                webView?.configuration.userContentController.addUserScript(webcompatUserScript)
             }
         }
         // Inject the Print Helper. This needs to be in the `page` content world in order to hook `window.print()`.
-        tab.webView?.configuration.userContentController.addUserScript(printHelperUserScript)
+        webView?.configuration.userContentController.addUserScript(printHelperUserScript)
         // If Night Mode is enabled, inject a small user script to ensure
         // that it gets enabled immediately when the DOM loads.
         if nightMode {
-            tab.webView?.configuration.userContentController.addUserScript(nightModeUserScript)
+            webView?.configuration.userContentController.addUserScript(nightModeUserScript)
         }
         // If No Image Mode is enabled, inject a small user script to ensure
         // that it gets enabled immediately when the DOM loads.
         if noImageMode {
-            tab.webView?.configuration.userContentController.addUserScript(noImageModeUserScript)
+            webView?.configuration.userContentController.addUserScript(noImageModeUserScript)
         }
     }
 }

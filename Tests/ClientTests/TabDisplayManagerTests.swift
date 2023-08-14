@@ -10,7 +10,7 @@ import XCTest
 import Common
 
 class TabDisplayManagerTests: XCTestCase {
-    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
 
     var mockDataStore: WeakListMock<Tab>!
     var dataStore: WeakList<Tab>!
@@ -484,6 +484,11 @@ class TabDisplayManagerTests: XCTestCase {
 
         XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
     }
+
+    func testTabDisplayManager_doesntLeak() {
+        let subject = createTabDisplayManager(useMockDataStore: false)
+        trackForMemoryLeaks(subject)
+    }
 }
 
 // Helper methods
@@ -497,7 +502,9 @@ extension TabDisplayManagerTests {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func createTabDisplayManager(useMockDataStore: Bool = true) -> TabDisplayManager {
+    func createTabDisplayManager(file: StaticString = #file,
+                                 line: UInt = #line,
+                                 useMockDataStore: Bool = true) -> TabDisplayManager {
         let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
                                                   tabManager: manager,
                                                   tabDisplayer: self,
@@ -508,6 +515,7 @@ extension TabDisplayManagerTests {
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
+        trackForMemoryLeaks(tabDisplayManager, file: file, line: line)
         return tabDisplayManager
     }
 
@@ -525,6 +533,7 @@ extension TabDisplayManagerTests {
                                                   cfrDelegate: cfrDelegate,
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
+        trackForMemoryLeaks(tabDisplayManager)
         return tabDisplayManager
     }
 
@@ -541,7 +550,7 @@ extension TabDisplayManagerTests {
     }
 }
 
-extension TabDisplayManagerTests: TabDisplayer {
+extension TabDisplayManagerTests: TabDisplayerDelegate {
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {

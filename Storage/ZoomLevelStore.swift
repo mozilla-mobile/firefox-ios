@@ -47,7 +47,7 @@ public class ZoomLevelStore {
             try data.write(to: url, options: .atomic)
         } catch {
             logger.log("Unable to write data to disk: \(error)",
-                       level: .warning,
+                       level: .debug,
                        category: .storage)
         }
     }
@@ -59,8 +59,8 @@ public class ZoomLevelStore {
             let data = try Data(contentsOf: url)
             domainZoomLevels = try decoder.decode([DomainZoomLevel].self, from: data)
         } catch {
-            logger.log("Failed to decode data from \(url.absoluteString): \(error)",
-                       level: .warning,
+            logger.log("Failed to decode data: \(error)",
+                       level: .debug,
                        category: .storage)
         }
         return domainZoomLevels

@@ -17,7 +17,7 @@ class HistoryTests: BaseTestCase {
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
 
     // This DDBB contains those 4 websites listed in the name
-    let historyDB = "browserYoutubeTwitterMozillaExample.db"
+    let historyDB = "browserYoutubeTwitterMozillaExample-places.db"
 
     let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
 
@@ -220,7 +220,7 @@ class HistoryTests: BaseTestCase {
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.plus].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
     }
 
     func testOpenInNewTabRecentlyClosedItem() {
@@ -262,7 +262,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
+        app.tables.otherElements[ImageIdentifiers.newPrivateTab].tap()
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)

@@ -3,91 +3,78 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-
 import XCTest
 
 @testable import Client
 
 class ContileProviderTests: XCTestCase {
+    private var networking: MockContileNetworking!
+
     override func setUp() {
         super.setUp()
-        clearState()
+        networking = MockContileNetworking()
     }
 
     override func tearDown() {
         super.tearDown()
-        clearState()
+        networking = nil
     }
 
     func testErrorResponse_failsWithError() {
-        stubResponse(response: nil, statusCode: 200, error: anError)
-        testProvider { result in
+        networking.error = ContileProvider.Error.noDataAvailable
+        let subject = createSubject()
+
+        subject.fetchContiles { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
-                XCTAssertEqual(error, ContileProvider.Error.failure)
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
             default:
                 XCTFail("Expected failure, got \(result) instead")
             }
         }
     }
 
-    func testNilDataResponse_failsWithError() throws {
-        throw XCTSkip("Skipping since test is flaky on Bitrise, will be improved with FXIOS-6993")
-//        stubResponse(response: nil, statusCode: 200, error: nil)
-//        testProvider { result in
-//            switch result {
-//            case let .failure(error as ContileProvider.Error):
-//                XCTAssertEqual(error, ContileProvider.Error.failure)
-//            default:
-//                XCTFail("Expected failure, got \(result) instead")
-//            }
-//        }
-    }
+    func testEmptyResponseAndData_failsWithError() {
+        networking.data = getData(from: emptyResponse)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
 
-    func testEmptyResponse_failsWithError() {
-        stubResponse(response: emptyResponse, statusCode: 200, error: nil)
-        testProvider { result in
+        subject.fetchContiles { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
-                XCTAssertEqual(error, ContileProvider.Error.failure)
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
             default:
                 XCTFail("Expected failure, got \(result) instead")
             }
         }
     }
 
-    func testAuthStatusCodeResponse_failsWithError() {
-        stubResponse(response: nil, statusCode: 403, error: nil)
-        testProvider { result in
+    func testWrongResponseAndData_failsWithError() {
+        networking.data = getData(from: emptyWrongResponse)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchContiles { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
-                XCTAssertEqual(error, ContileProvider.Error.failure)
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
             default:
                 XCTFail("Expected failure, got \(result) instead")
             }
         }
     }
 
-    func testWrongResponse_failsWithError() {
-        stubResponse(response: emptyWrongResponse, statusCode: 200, error: nil)
-        testProvider { result in
+    func testEmptyArrayResponseAndData_failsWithError() {
+        networking.data = getData(from: emptyArrayResponse)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchContiles { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
-                XCTAssertEqual(error, ContileProvider.Error.failure)
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
             default:
                 XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testEmptyArrayResponse_succeedsWithEmptyArray() {
-        stubResponse(response: emptyArrayResponse, statusCode: 200, error: nil)
-        testProvider { result in
-            switch result {
-            case let .success(contiles):
-                XCTAssertEqual(contiles, [])
-            default:
-                XCTFail("Expected success, got \(result) instead")
             }
         }
     }
@@ -95,8 +82,11 @@ class ContileProviderTests: XCTestCase {
     // MARK: - Tile order
 
     func testOrderingTilePosition_succeedsWithCorrectPosition() {
-        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-        testProvider { result in
+        networking.data = getData(from: twoTilesWithOutOfOrderPositions)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchContiles { result in
             switch result {
             case let .success(contiles):
                 XCTAssertEqual(contiles[0].name, "Tile1")
@@ -108,8 +98,11 @@ class ContileProviderTests: XCTestCase {
     }
 
     func testOrderingTilePositionWithNilPosition_succeedsWithCorrectPosition() {
-        stubResponse(response: twoTilesWithOneNilPosition, statusCode: 200, error: nil)
-        testProvider { result in
+        networking.data = getData(from: twoTilesWithOneNilPosition)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchContiles { result in
             switch result {
             case let .success(contiles):
                 XCTAssertEqual(contiles[0].name, "TileNilPosition")
@@ -123,143 +116,99 @@ class ContileProviderTests: XCTestCase {
     // MARK: - Cache
 
     func testCaching_succeedsFromCache() {
-        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-        let provider = getProvider()
-        let expectation = expectation(description: "Wait for completion")
-        provider.fetchContiles { result in
-            URLProtocolStub.removeStub()
+        let data = getData(from: twoTilesWithOutOfOrderPositions)
+        let response = getResponse(from: 200)
+        let request = getRequest()
+        let subject = createSubject()
+        subject.cache(response: response, for: request, with: data)
 
-            provider.fetchContiles { result in
-                switch result {
-                case let .success(contiles):
-                    XCTAssertEqual(contiles.count, 2)
-                default:
-                    XCTFail("Expected success, got \(result) instead")
-                }
-
-                expectation.fulfill()
+        subject.fetchContiles { result in
+            switch result {
+            case let .success(contiles):
+                XCTAssertEqual(contiles.count, 2)
+            default:
+                XCTFail("Expected success, got \(result) instead")
             }
         }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testCaching_withEmptyResponse_succeedsFromCache() {
-        stubResponse(response: emptyResponse, statusCode: 200, error: nil)
-        let provider = getProvider()
-        let expectation = expectation(description: "Wait for completion")
-        provider.fetchContiles { _ in
-            URLProtocolStub.removeStub()
+        let data = getData(from: emptyResponse)
+        let response = getResponse(from: 200)
+        let request = getRequest()
+        let subject = createSubject()
+        subject.cache(response: response, for: request, with: data)
 
-            provider.fetchContiles { result in
-                switch result {
-                case let .failure(error as ContileProvider.Error):
-                    XCTAssertEqual(error, ContileProvider.Error.failure)
-                default:
-                    XCTFail("Expected failure, got \(result) instead")
-                }
-
-                expectation.fulfill()
+        subject.fetchContiles { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
             }
         }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testCachingExpires_failsIfCacheIsTooOld() {
-        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-        let provider = getProvider()
-        let expectation = expectation(description: "Wait for completion")
-        provider.fetchContiles { result in
-            self.stubResponse(response: nil, statusCode: 403, error: nil)
+        let data = getData(from: twoTilesWithOutOfOrderPositions)
+        let response = getResponse(from: 200)
+        let request = getRequest()
+        let subject = createSubject()
+        subject.cache(response: response, for: request, with: data)
 
-            provider.fetchContiles(timestamp: Date.tomorrow.toTimestamp()) { result in
-                switch result {
-                case let .failure(error as ContileProvider.Error):
-                    XCTAssertEqual(error, ContileProvider.Error.failure)
-                default:
-                    XCTFail("Expected failure, got \(result) instead")
-                }
-                expectation.fulfill()
+        subject.fetchContiles(timestamp: Date.tomorrow.toTimestamp()) { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
             }
         }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testCachingExpires_failsIfCacheIsNewerThanCurrentDate() {
-        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-        let provider = getProvider()
-        let expectation = expectation(description: "Wait for completion")
-        provider.fetchContiles { result in
-            self.stubResponse(response: nil, statusCode: 403, error: nil)
+        let data = getData(from: twoTilesWithOutOfOrderPositions)
+        let response = getResponse(from: 200)
+        let request = getRequest()
+        let subject = createSubject()
+        subject.cache(response: response, for: request, with: data)
 
-            provider.fetchContiles(timestamp: Date.yesterday.toTimestamp()) { result in
-                switch result {
-                case let .failure(error as ContileProvider.Error):
-                    XCTAssertEqual(error, ContileProvider.Error.failure)
-                default:
-                    XCTFail("Expected failure, got \(result) instead")
-                }
-                expectation.fulfill()
+        subject.fetchContiles(timestamp: Date.yesterday.toTimestamp()) { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.noDataAvailable)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
             }
         }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
-    }
-
-    func testNoStubbing_doesntComplete() {
-        let provider = getProvider()
-        let expectation = expectation(description: "Wait for completion")
-        expectation.isInverted = true
-        provider.fetchContiles { result in
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
     }
 }
 
 // MARK: - Helper functions
 
 private extension ContileProviderTests {
-    func getProvider(file: StaticString = #filePath, line: UInt = #line) -> ContileProvider {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
+    func createSubject(file: StaticString = #filePath, line: UInt = #line) -> ContileProvider {
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
-
-        let subject = ContileProvider()
-        subject.urlSession = session
-        subject.urlCache = cache
+        let subject = ContileProvider(networking: networking, urlCache: cache)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
     }
 
-    func testProvider(file: StaticString = #filePath, line: UInt = #line, completion: @escaping (ContileResult) -> Void) {
-        let provider = getProvider(file: file, line: line)
-        let expectation = expectation(description: "Wait for completion")
-        provider.fetchContiles { result in
-            completion(result)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
+    func getData(from string: String) -> Data {
+        return string.data(using: .utf8)!
     }
 
-    func stubResponse(response: String?, statusCode: Int, error: Error?) {
-        let mockJSONData = response?.data(using: .utf8)
-        let response = HTTPURLResponse(url: URL(string: ContileProvider.contileStagingResourceEndpoint)!,
-                                       statusCode: statusCode,
-                                       httpVersion: nil,
-                                       headerFields: nil)!
-        URLProtocolStub.stub(data: mockJSONData, response: response, error: error)
+    func getResponse(from statusCode: Int) -> HTTPURLResponse {
+        return HTTPURLResponse(url: URL(string: ContileProvider.contileStagingResourceEndpoint)!,
+                               statusCode: statusCode,
+                               httpVersion: nil,
+                               headerFields: nil)!
     }
 
-    func clearState() {
-        URLProtocolStub.removeStub()
+    func getRequest() -> URLRequest {
+        return URLRequest(url: URL(string: ContileProvider.contileStagingResourceEndpoint)!)
     }
 
     // MARK: - Mock responses

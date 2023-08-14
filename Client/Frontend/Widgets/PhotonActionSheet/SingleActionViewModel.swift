@@ -60,7 +60,6 @@ class SingleActionViewModel {
 
     // MARK: - Initializers
     init(title: String,
-         alternateTitle: String? = nil,
          text: String? = nil,
          iconString: String? = nil,
          iconURL: URL? = nil,
@@ -73,7 +72,6 @@ class SingleActionViewModel {
          tabCount: String? = nil,
          tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
         self.title = title
-        self.alternateTitle = alternateTitle
         self.iconString = iconString
         self.iconURL = iconURL
         self.iconType = iconType
@@ -92,21 +90,10 @@ class SingleActionViewModel {
     // Title used by default
     private(set) var title: String
 
-    // Alternate title is the title used when the layout changed on multiple items row
-    private(set) var alternateTitle: String?
-
     // Current title looks at the layout direction
     // Horizontal uses the default title, vertical uses the alternate title
     var currentTitle: String {
-        return multipleItemsSetup.axis == .horizontal ? title : alternateTitle ?? title
-    }
-
-    // The layout changes when there's multiple items in a row,
-    // and there's not enough space in one row to show the labels without truncating
-    var multipleItemsSetup = MultipleItemsSetup()
-    struct MultipleItemsSetup {
-        var isMultiItems = false
-        var axis: NSLayoutConstraint.Axis = .horizontal
+        return title
     }
 
     // MARK: Convenience

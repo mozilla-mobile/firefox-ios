@@ -977,7 +977,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // TODO: Add new state
         // screenState.tap(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.lightbulb], to: ReportSiteIssue)
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.otherElements[StandardImageIdentifiers.Large.pin], forAction: Action.PinToTopSitesPAM)
         screenState.tap(app.tables.otherElements[StandardImageIdentifiers.Large.link], forAction: Action.CopyAddressPAM)
 
         screenState.tap(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)

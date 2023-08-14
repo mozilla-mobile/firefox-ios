@@ -15,20 +15,34 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
     private let migrationKey = PrefsKeys.TabMigrationKey
     private var prefs: Prefs
     private var tabDataStore: TabDataStore
+    private var logger: Logger
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         tabDataStore: TabDataStore = DefaultTabDataStore()) {
+         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         logger: Logger = DefaultLogger.shared) {
         self.prefs = profile.prefs
         self.tabDataStore = tabDataStore
+        self.logger = logger
     }
 
     var shouldRunMigration: Bool {
-        guard let shouldRunMigration = prefs.boolForKey(migrationKey) else { return true }
+        guard let shouldRunMigration = prefs.boolForKey(migrationKey) else {
+            logger.log("Should run migration will be TRUE, key didnt exist",
+                       level: .debug,
+                       category: .tabs)
+            return true
+        }
 
+        logger.log("Key exists - running migration? \(shouldRunMigration)",
+                   level: .debug,
+                   category: .tabs)
         return shouldRunMigration
     }
 
     func runMigration(savedTabs: [LegacySavedTab]) async -> WindowData {
+        logger.log("Begin tab migration with legacy tab count \(savedTabs.count)",
+                   level: .debug,
+                   category: .tabs)
         // Create TabData array from savedTabs
         var tabsToMigrate = [TabData]()
 
@@ -61,6 +75,16 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
                                     isPrimary: true,
                                     activeTabId: selectTabUUID ?? UUID(),
                                     tabData: tabsToMigrate)
+
+        logger.log("Tab migration completed with tab count \(windowData.tabData.count)",
+                   level: .debug,
+                   category: .tabs)
+
+        if savedTabs.count != windowData.tabData.count {
+            logger.log("Something went wrong when migrating tab data",
+                       level: .fatal,
+                       category: .tabs)
+        }
 
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData, forced: true)

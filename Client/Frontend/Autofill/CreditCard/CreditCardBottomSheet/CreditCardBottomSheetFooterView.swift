@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 import Shared
 
@@ -17,7 +18,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     }
 
     public lazy var manageCardsButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .callout,
             size: UX.manageCardsButtonFontSize)
         button.setTitle(.CreditCard.UpdateCreditCard.ManageCardsButtonTitle, for: .normal)

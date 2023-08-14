@@ -18,6 +18,8 @@ class HistoryHighlightsTests: XCTestCase {
 
         manager = HistoryHighlightsManager()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies()
         profile.reopen()
         let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
@@ -30,6 +32,7 @@ class HistoryHighlightsTests: XCTestCase {
         profile.shutdown()
         profile = nil
         entryProvider = nil
+        DependencyHelperMock().reset()
     }
 
     func testEmptyRead() {

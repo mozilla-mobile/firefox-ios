@@ -49,7 +49,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.cornerRadius
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: 19)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 19)
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
@@ -495,9 +495,5 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
     func didClick(item: SingleActionViewModel?) {
         dismissVC()
-    }
-
-    func layoutChanged(item: SingleActionViewModel) {
-        tableView.reloadData()
     }
 }

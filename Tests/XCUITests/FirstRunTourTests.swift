@@ -4,7 +4,7 @@
 
 import XCTest
 
-class FirstRunTourTests: BaseTestCase {
+class OnboardingTests: BaseTestCase {
     var currentScreen = 0
     var rootA11yId: String {
         return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
@@ -17,6 +17,7 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/471228
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
@@ -25,11 +26,12 @@ class FirstRunTourTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
+        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
         XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
 
         // Swipe to the second screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
@@ -54,23 +56,37 @@ class FirstRunTourTests: BaseTestCase {
         waitForExistence(topSites)
     }
 
+    // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2250844
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         waitForExistence(topSites)
     }
 
-    // MARK: Private
-    private func goToNextScreen() {
-        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"], timeout: 10)
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        currentScreen += 1
-    }
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/67227
+    func testWhatsNewPage() {
+        app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
+        navigator.goto(BrowserTabMenu)
+        navigator.performAction(Action.OpenWhatsNewPage)
+        waitUntilPageLoad()
 
-    private func tapStartBrowsingButton() {
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
-        // User starts in HomePanelScreen with the default Top Sites
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        waitForExistence(topSites)
+        // Extract version number from url
+        let url = app.textFields["url"].value
+        let textUrl = String(describing: url)
+        let start = textUrl.index(textUrl.startIndex, offsetBy: 43)
+        let end = textUrl.index(textUrl.startIndex, offsetBy: 48)
+        let range = start..<end
+        let mySubstring = textUrl[range]
+        let releaseVersion = String(mySubstring)
+
+        XCTAssertTrue(app.staticTexts[releaseVersion].exists)
+        waitForValueContains(app.textFields["url"], value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/")
+        XCTAssertTrue(app.staticTexts["Release Notes"].exists)
+        if iPad() {
+            XCTAssertTrue(app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"].exists)
+        }
+        XCTAssertTrue(app.staticTexts["Firefox for iOS Release"].exists)
+        XCTAssertTrue(app.staticTexts["Get the most recent version"].exists)
     }
 }

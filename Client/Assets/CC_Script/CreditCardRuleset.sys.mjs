@@ -60,6 +60,7 @@ function queriedOrClickedElements(selector) {
 /**
  * START OF CODE PASTED FROM TRAINING REPOSITORY
  */
+
 var FathomHeuristicsRegExp = {
   RULES: {
     "cc-name": undefined,
@@ -89,6 +90,8 @@ var FathomHeuristicsRegExp = {
         "|posiadacz.*karty" +
         // es-ES
         "|nombre.*(titular|tarjeta)" +
+        // nl-NL
+        "|naam.*op.*kaart" +
         // Rules from Bitwarden
         "|cc-?name" +
         "|card-?name" +
@@ -118,6 +121,8 @@ var FathomHeuristicsRegExp = {
         "|numer.*karty" +
         // es-ES
         "|(número|numero).*tarjeta" +
+        // nl-NL
+        "|kaartnummer" +
         // Rules from Bitwarden
         "|cc-?number" +
         "|cc-?num" +

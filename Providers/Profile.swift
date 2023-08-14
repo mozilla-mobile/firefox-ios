@@ -36,6 +36,7 @@ public protocol SyncManager {
     func onRemovedAccount() -> Success
     @discardableResult
     func onAddedAccount() -> Success
+    func updateCreditCardAutofillStatus(value: Bool)
 }
 
 /// This exists to pass in external context: e.g., the UIApplication can
@@ -641,6 +642,8 @@ open class BrowserProfile: Profile {
     }
 
     func removeAccount() {
+        logger.log("Removing sync account", level: .debug, category: .sync)
+
         let useNewAutopush = prefs.boolForKey(PrefsKeys.FeatureFlags.AutopushFeature) ?? false
 
         RustFirefoxAccounts.shared.disconnect(useNewAutopush: useNewAutopush)

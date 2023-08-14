@@ -7,6 +7,7 @@ import Storage
 import Telemetry
 import Glean
 import Common
+import ComponentLibrary
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -109,6 +110,21 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
+    private func presentFakespotViewController() {
+        let fakespotViewController = FakespotViewController()
+        if #available(iOS 15.0, *) {
+            if let sheet = fakespotViewController.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+            }
+        }
+        present(fakespotViewController, animated: true)
+    }
+
+    func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        presentFakespotViewController()
+    }
+
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
@@ -128,14 +144,14 @@ extension BrowserViewController: URLBarDelegate {
              connectionSecure: webView.hasOnlySecureContent,
              globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
              contentBlockerStatus: contentBlocker.status)
-         etpViewModel.onOpenSettingsTapped = {
+         etpViewModel.onOpenSettingsTapped = { [weak self] in
              if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
                  // Wait to show settings in async dispatch since hamburger menu is still showing at that time
                  DispatchQueue.main.async {
-                     self.navigationHandler?.show(settings: .contentBlocker)
+                     self?.navigationHandler?.show(settings: .contentBlocker)
                  }
              } else {
-                 self.legacyShowSettings(deeplink: .contentBlocker)
+                 self?.legacyShowSettings(deeplink: .contentBlocker)
              }
          }
          etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }

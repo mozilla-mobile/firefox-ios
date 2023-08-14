@@ -33,7 +33,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("Onboarding-1")
 
         // Swipe to the second screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         waitForExistence(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
@@ -60,31 +60,31 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testWebViewContextMenu () throws {
         throw XCTSkip("Failing a lot and now new strings here")
-        // Drag the context menu up to show all the options
-        func drag() {
-            let window = XCUIApplication().windows.element(boundBy: 0)
-            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
-            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            start.press(forDuration: 0.01, thenDragTo: finish)
-        }
-
-        // Link
-        navigator.openURL("http://wikipedia.org")
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.webViews.element(boundBy: 0).links.element(boundBy: 0), timeout: 5)
-        navigator.goto(WebLinkContextMenu)
-        drag()
-        snapshot("WebViewContextMenu-01-link")
-        navigator.back()
-
-        // Image
-        navigator.openURL("http://wikipedia.org")
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.webViews.element(boundBy: 0).images.element(boundBy: 0), timeout: 5)
-        navigator.goto(WebImageContextMenu)
-        drag()
-        snapshot("WebViewContextMenu-02-image")
-        navigator.back()
+//        // Drag the context menu up to show all the options
+//        func drag() {
+//            let window = XCUIApplication().windows.element(boundBy: 0)
+//            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+//            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+//            start.press(forDuration: 0.01, thenDragTo: finish)
+//        }
+//
+//        // Link
+//        navigator.openURL("http://wikipedia.org")
+//        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+//        waitForExistence(app.webViews.element(boundBy: 0).links.element(boundBy: 0), timeout: 5)
+//        navigator.goto(WebLinkContextMenu)
+//        drag()
+//        snapshot("WebViewContextMenu-01-link")
+//        navigator.back()
+//
+//        // Image
+//        navigator.openURL("http://wikipedia.org")
+//        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+//        waitForExistence(app.webViews.element(boundBy: 0).images.element(boundBy: 0), timeout: 5)
+//        navigator.goto(WebImageContextMenu)
+//        drag()
+//        snapshot("WebViewContextMenu-02-image")
+//        navigator.back()
     }
 
     func testWebViewAuthenticationDialog() {

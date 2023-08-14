@@ -8,10 +8,18 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
+    // Icon size 16x16
+    public struct Small {
+        public static let pinBadgeFill = "pinBadgeFillSmall"
+    }
+
+    // Icon size 20x20
     public struct Medium {
+        public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
     }
 
+    // Icon size 24x24
     public struct Large {
         public static let appendUp = "appendUpLarge"
         public static let appMenu = "appMenuLarge"
@@ -42,18 +50,21 @@ public struct StandardImageIdentifiers {
         public static let history = "historyLarge"
         public static let home = "homeLarge"
         public static let lock = "lockLarge"
+        public static let lockSlash = "lockSlashLarge"
         public static let logoFirefox = "logoFirefoxLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
         public static let login = "loginLarge"
+        public static let pin = "pinLarge"
+        public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
-        public static let privateMode = "privateModeLarge"
         public static let qrCode = "qrCodeLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let criticalFill = "criticalFillLarge"
     }
 
-    /// Those identifiers currently duplicate `ImageIndentifiers` until they are standardized with task #14633
-    public struct ToMigrate {
-        public static let bottomSheetClose = "bottomSheet-close"
+    // Icon size 30x30
+    public struct ExtraLarge {
+        public static let crossCircleFill = "crossCircleFillExtraLarge"
     }
 }
