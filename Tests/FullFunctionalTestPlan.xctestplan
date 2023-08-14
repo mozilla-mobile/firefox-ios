@@ -95,6 +95,8 @@
         "PhotonActionSheetTest\/testShareOptionIsShownFromShortCut()",
         "PhotonActionSheetTest\/testSharePageWithShareSheetOptions()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
+        "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode()",
+        "PrivateBrowsingTest\/testSwitchBetweenPrivateTabsToastButton()",
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateMode()",
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateModeBrowserTab()",
         "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateMode()",
