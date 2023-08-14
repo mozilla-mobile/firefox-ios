@@ -17,7 +17,7 @@ class FakespotViewController: UIViewController, Themeable {
         static let headerBottomMargin = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         static let topPadding: CGFloat = 16
         static let bottomPadding: CGFloat = 40
-        static let horizontalPadding: CGFloat = 16
+        static let horizontalPadding: CGFloat = 20
         static let stackSpacing: CGFloat = 16
     }
 

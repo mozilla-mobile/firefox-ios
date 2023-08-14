@@ -21,19 +21,18 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let headerLabelFontSize: CGFloat = 17
         static let buttonLabelFontSize: CGFloat = 17
         static let buttonCornerRadius: CGFloat = 14
+        static let buttonLeadingTrailingPadding: CGFloat = 8
+        static let buttonTopPadding: CGFloat = 16
         static let contentStackViewSpacing: CGFloat = 16
-        static let midSeparatorWidth: CGFloat = 12
-        static let leftRighSeparatorWidth: CGFloat = 8
+        static let labelSwitchStackViewSpacing: CGFloat = 12
         static let contentInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
     var onSwitchValueVhanged: ((Bool) -> Void)?
 
-    private lazy var leftSeparator: UIView = .build()
-    private lazy var midSeparator: UIView = .build()
-    private lazy var rightSeparator: UIView = .build()
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
+    private lazy var contentView: UIView = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -44,6 +43,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     private lazy var labelSwitchStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
+        stackView.spacing = UX.labelSwitchStackViewSpacing
     }
 
     private lazy var showProductsLabel: UILabel = .build { label in
@@ -75,9 +75,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        setupSeparator(leftSeparator)
-        setupSeparator(midSeparator, width: UX.midSeparatorWidth)
-        setupSeparator(rightSeparator)
     }
 
     required init?(coder: NSCoder) {
@@ -86,20 +83,29 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(collapsibleContainer)
+        contentView.addSubviews(contentStackView, turnOffButton)
 
-        [leftSeparator, showProductsLabel, midSeparator, recommendedProductsSwitch, rightSeparator].forEach(labelSwitchStackView.addArrangedSubview)
-        [labelSwitchStackView, turnOffButton].forEach(contentStackView.addArrangedSubview)
+        [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview)
+        contentStackView.addArrangedSubview(labelSwitchStackView)
 
         NSLayoutConstraint.activate([
             collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             collapsibleContainer.topAnchor.constraint(equalTo: topAnchor),
             collapsibleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-    }
+            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-    private func setupSeparator(_ separator: UIView, width: CGFloat = UX.leftRighSeparatorWidth) {
-        separator.widthAnchor.constraint(equalToConstant: width).isActive = true
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            turnOffButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                   constant: -UX.buttonLeadingTrailingPadding),
+            turnOffButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor,
+                                               constant: UX.buttonTopPadding),
+            turnOffButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                    constant: UX.buttonLeadingTrailingPadding),
+            turnOffButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
     }
 
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
@@ -112,7 +118,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         recommendedProductsSwitch.accessibilityIdentifier = viewModel.recommendedProductsSwitchA11yId
 
         let viewModel = CollapsibleCardViewModel(
-            contentView: contentStackView,
+            contentView: contentView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
             title: .Shopping.SettingsCardLabelTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,

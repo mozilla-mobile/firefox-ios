@@ -46,7 +46,7 @@ public struct CollapsibleCardViewModel {
 public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
-        static let horizontalPadding: CGFloat = 8
+        static let horizontalPadding: CGFloat = 16
         static let titleHorizontalPadding: CGFloat = 16
         static let titleTopPadding: CGFloat = 16
         static let expandButtonSize = CGSize(width: 20, height: 20)
