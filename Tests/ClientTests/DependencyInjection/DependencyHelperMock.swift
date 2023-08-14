@@ -37,6 +37,10 @@ class DependencyHelperMock {
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
+        let restoreTabManager: RestoreTabManager = DefaultRestoreTabManager(hasTabsToRestoreAtStartup: false,
+                                                                            delegate: nil)
+        AppContainer.shared.register(service: restoreTabManager)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

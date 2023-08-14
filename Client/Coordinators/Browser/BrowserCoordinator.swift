@@ -15,7 +15,8 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-                          ParentCoordinatorDelegate {
+                          ParentCoordinatorDelegate,
+                          TabManagerDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -29,12 +30,14 @@ class BrowserCoordinator: BaseCoordinator,
     private let wallpaperManager: WallpaperManagerInterface
     private let isSettingsCoordinatorEnabled: Bool
     private var browserIsReady = false
+    private var restoreTabManager: RestoreTabManager
 
     init(router: Router,
          screenshotService: ScreenshotService,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         restoreTabManager: RestoreTabManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
@@ -43,7 +46,9 @@ class BrowserCoordinator: BaseCoordinator,
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
-        self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        self.restoreTabManager = restoreTabManager
+        self.browserViewController = BrowserViewController(profile: profile,
+                                                           tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager
@@ -52,6 +57,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
+        tabManager.addDelegate(self)
     }
 
     func start(with launchType: LaunchType?) {
@@ -160,7 +166,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
-        guard browserIsReady else {
+        guard browserIsReady, !restoreTabManager.alertNeedsToShow else {
             logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
             return false
         }
@@ -518,4 +524,23 @@ class BrowserCoordinator: BaseCoordinator,
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }
+
+    // MARK: - TabManagerDelegate
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // Once tab restore is made, if there's any saved route we make sure to call it
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
+    }
+
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
+
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
+
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+
+    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {}
 }

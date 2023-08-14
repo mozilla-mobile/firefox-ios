@@ -24,12 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         sendTabDelegate: UIApplication.shared.sendTabDelegate,
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
+
     lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,
         imageStore: DefaultDiskImageStore(
             files: profile.files,
             namespace: "TabManagerScreenshots",
             quality: UIConstants.ScreenshotQuality)
+    )
+
+    lazy var restoreTabManager: RestoreTabManager = DefaultRestoreTabManager(
+        hasTabsToRestoreAtStartup: tabManager.hasTabsToRestoreAtStartup(),
+        delegate: tabManager
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager()
@@ -176,7 +182,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
         backgroundWorkUtility?.scheduleOnAppBackground()
-        tabManager.preserveTabs()
+
+        if !restoreTabManager.alertNeedsToShow {
+            tabManager.preserveTabs()
+        }
 
         logger.log("applicationDidEnterBackground end",
                    level: .info,

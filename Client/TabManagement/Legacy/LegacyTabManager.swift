@@ -49,7 +49,7 @@ struct BackupCloseTab {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
+class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler, RestoreTabManagerDelegate {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     let store: LegacyTabManagerStore
@@ -978,6 +978,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         return selectedTab ?? addTab()
+    }
+
+    // MARK: RestoreTabManagerDelegate
+
+    func needsTabRestore() {
+        restoreTabs(true)
+    }
+
+    func needsNewTabOpened() {
+        selectTab(addTab())
     }
 }
 

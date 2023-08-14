@@ -31,6 +31,9 @@ class DependencyHelper {
         let downloadQueue: DownloadQueue = appDelegate.appSessionManager.downloadQueue
         AppContainer.shared.register(service: downloadQueue)
 
+        let restoreTabManager: RestoreTabManager = appDelegate.restoreTabManager
+        AppContainer.shared.register(service: restoreTabManager)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

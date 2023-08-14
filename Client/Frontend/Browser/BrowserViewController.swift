@@ -50,10 +50,7 @@ class BrowserViewController: UIViewController,
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
-    var urlFromAnotherApp: UrlToOpenModel?
-    var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol?
@@ -76,6 +73,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    private let restoreTabManager: RestoreTabManager
     let ratingPromptManager: RatingPromptManager
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -166,6 +164,7 @@ class BrowserViewController: UIViewController,
     init(
         profile: Profile,
         tabManager: TabManager,
+        restoreTabManager: RestoreTabManager = AppContainer.shared.resolve(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
@@ -175,6 +174,7 @@ class BrowserViewController: UIViewController,
     ) {
         self.profile = profile
         self.tabManager = tabManager
+        self.restoreTabManager = restoreTabManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.ratingPromptManager = ratingPromptManager
@@ -422,6 +422,8 @@ class BrowserViewController: UIViewController,
         tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
+        restoreTabs()
+
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
@@ -600,19 +602,19 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if !displayedRestoreTabsAlert && crashedLastLaunch() {
-            logger.log("The application crashed on last session",
-                       level: .info,
-                       category: .lifecycle)
-            displayedRestoreTabsAlert = true
-            showRestoreTabsAlert()
-        } else {
-            tabManager.restoreTabs()
-        }
+        restoreTabs()
 
         updateTabCountUsingTabManager(tabManager, animated: false)
 
         urlBar.searchEnginesDidUpdate()
+    }
+
+    func restoreTabs() {
+        if restoreTabManager.alertNeedsToShow {
+            restoreTabManager.showAlert(on: self)
+        } else {
+            tabManager.restoreTabs()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -920,34 +922,6 @@ class BrowserViewController: UIViewController,
                 }
             }
         }
-    }
-
-    // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
-    // value so that we do not keep asking the user to restore their tabs.
-    var displayedRestoreTabsAlert = false
-
-    fileprivate func crashedLastLaunch() -> Bool {
-        return logger.crashedLastLaunch
-    }
-
-    fileprivate func showRestoreTabsAlert() {
-        guard tabManager.hasTabsToRestoreAtStartup() else {
-            tabManager.selectTab(tabManager.addTab())
-            return
-        }
-        let alert = UIAlertController.restoreTabsAlert(
-            okayCallback: { _ in
-                self.isCrashAlertShowing = false
-                self.tabManager.restoreTabs(true)
-            },
-            noCallback: { _ in
-                self.isCrashAlertShowing = false
-                self.tabManager.selectTab(self.tabManager.addTab())
-                self.openUrlAfterRestore()
-            }
-        )
-        self.present(alert, animated: true, completion: nil)
-        isCrashAlertShowing = true
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
@@ -1444,16 +1418,11 @@ class BrowserViewController: UIViewController,
     }
 
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
-        guard !isCrashAlertShowing else {
-            urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
-            return
-        }
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
@@ -1507,7 +1476,6 @@ class BrowserViewController: UIViewController,
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
         freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
@@ -2292,13 +2260,6 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
-        openUrlAfterRestore()
-    }
-
-    func openUrlAfterRestore() {
-        guard let url = urlFromAnotherApp?.url else { return }
-        openURLInNewTab(url, isPrivate: urlFromAnotherApp?.isPrivate ?? false)
-        urlFromAnotherApp = nil
     }
 
     func show(toast: Toast,
