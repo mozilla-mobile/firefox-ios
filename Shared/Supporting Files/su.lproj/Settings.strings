@@ -22,3 +22,24 @@
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseASavedCard.v112" = "Paké kartu anu diteundeun?";
 
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Singkronkeun";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Anjeun mareuman sakabéh %1$@ iber. Hurungkeun ti Setélan > Iber > %2$@";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Lenyepan ngeunaan pitur-pitur anu mangpaat sarta cara ngoptimalkeun %@.";
+
+/* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Kiat jeung Pitur";
+
+/* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
+"Settings.Notifications.Title.v112" = "Iber";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Buka setélan piranti pikeun ngahurungkeun iber di %@";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Hurungkeun Iber";
+
