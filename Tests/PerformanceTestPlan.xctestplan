@@ -50,6 +50,7 @@
         "NewTabSettingsTest",
         "NightModeTests",
         "NoImageTests",
+        "OnboardingTests",
         "PhotonActionSheetTest",
         "PocketTest",
         "PrivateBrowsingTest",
