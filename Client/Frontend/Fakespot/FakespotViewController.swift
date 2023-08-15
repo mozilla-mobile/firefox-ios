@@ -79,7 +79,6 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         setupView()
         listenForThemeChange(view)
 
@@ -118,6 +117,9 @@ class FakespotViewController: UIViewController, Themeable {
         errorCardView.applyTheme(theme: themeManager.currentTheme)
         reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
         loadingView.applyTheme(theme: themeManager.currentTheme)
+        let theme = themeManager.currentTheme
+
+        view.backgroundColor = theme.colors.layer1
     }
 
     private func setupView() {
