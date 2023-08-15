@@ -20,6 +20,7 @@ protocol TabManager: AnyObject, RestoreTabManagerDelegate {
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
+    var isRestoringTabs: Bool { get }
     var tabDisplayType: TabDisplayType { get set }
     subscript(index: Int) -> Tab? { get }
     subscript(webView: WKWebView) -> Tab? { get }

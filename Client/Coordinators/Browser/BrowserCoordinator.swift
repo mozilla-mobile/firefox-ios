@@ -166,8 +166,15 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
-        guard browserIsReady, !restoreTabManager.alertNeedsToShow else {
-            logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
+        guard browserIsReady, !tabManager.isRestoringTabs, !restoreTabManager.alertNeedsToShow else {
+            let readyMessage = "browser is ready? \(browserIsReady)"
+            let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
+            let alertMessage = "alerts needs to show? \(restoreTabManager.alertNeedsToShow)"
+            logger.log(
+                "Route postponed: \(readyMessage); \(restoringMessage); \(alertMessage)",
+                level: .info,
+                category: .coordinator
+            )
             return false
         }
 
