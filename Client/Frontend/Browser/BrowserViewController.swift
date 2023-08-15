@@ -1891,43 +1891,44 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            let creditCardHelper = CreditCardHelper(tab: tab)
-            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-                guard let tabWebView = tab.webView,
-                      let type = type,
-                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
-                else { return }
+        let creditCardHelper = CreditCardHelper(tab: tab)
+        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+            guard let tabWebView = tab.webView,
+                  let type = type,
+                  userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
+            else { return }
 
-                switch type {
-                case .formInput:
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardFormDetected)
-                    self?.profile.autofill.listCreditCards(completion: { cards, error in
-                        guard let cards = cards, !cards.isEmpty, error == nil
-                        else {
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            tabWebView.accessoryView.reloadViewFor(.creditCard)
-                            tabWebView.reloadInputViews()
-                        }
-                    })
-                case .formSubmit:
-                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
-                    break
-                }
+            // FXIOS-7150: Telemetry for form input regardless of feature flag status
+            if type == .formInput {
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .creditCardFormDetected)
+            }
 
-                tabWebView.accessoryView.savedCardsClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        // Dismiss keyboard
-                        webView.resignFirstResponder()
-                        // Authenticate and show bottom sheet with select a card flow
-                        self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
-                                                                      frame: frame)
+            // Perform autofill operations based on feature flag status
+            guard autofillCreditCardStatus else { return }
+            switch type {
+            case .formInput:
+                self?.profile.autofill.listCreditCards(completion: { cards, error in
+                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
+                    DispatchQueue.main.async {
+                        tabWebView.accessoryView.reloadViewFor(.creditCard)
+                        tabWebView.reloadInputViews()
                     }
+                })
+            case .formSubmit:
+                self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
+                break
+            }
+
+            tabWebView.accessoryView.savedCardsClosure = {
+                DispatchQueue.main.async { [weak self] in
+                    // Dismiss keyboard
+                    webView.resignFirstResponder()
+                    // Authenticate and show bottom sheet with select a card flow
+                    self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
+                                                                  frame: frame)
                 }
             }
         }
