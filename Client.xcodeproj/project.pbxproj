@@ -566,6 +566,9 @@
 		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */; };
 		8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A395551299AF83300B2AFBB /* UIControl+Extension.swift */; };
 		8A3C7BDF2A8BEA1100A14DB7 /* RestoreAlertCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C7BDE2A8BEA1100A14DB7 /* RestoreAlertCreator.swift */; };
+		8A3C7BE22A8BF0DE00A14DB7 /* MockRestoreTabManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C7BE02A8BF0D900A14DB7 /* MockRestoreTabManagerDelegate.swift */; };
+		8A3C7BE52A8BF0FC00A14DB7 /* MockPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C7BE32A8BF0FA00A14DB7 /* MockPresenter.swift */; };
+		8A3C7BE72A8BF11600A14DB7 /* MockRestoreAlertCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C7BE62A8BF11600A14DB7 /* MockRestoreAlertCreator.swift */; };
 		8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */; };
 		8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */; };
 		8A3EF7F42A2FCF5700796E3A /* ExportBrowserDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */; };
@@ -4796,6 +4799,9 @@
 		8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewModelTests.swift; sourceTree = "<group>"; };
 		8A395551299AF83300B2AFBB /* UIControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extension.swift"; sourceTree = "<group>"; };
 		8A3C7BDE2A8BEA1100A14DB7 /* RestoreAlertCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAlertCreator.swift; sourceTree = "<group>"; };
+		8A3C7BE02A8BF0D900A14DB7 /* MockRestoreTabManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRestoreTabManagerDelegate.swift; sourceTree = "<group>"; };
+		8A3C7BE32A8BF0FA00A14DB7 /* MockPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPresenter.swift; sourceTree = "<group>"; };
+		8A3C7BE62A8BF11600A14DB7 /* MockRestoreAlertCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRestoreAlertCreator.swift; sourceTree = "<group>"; };
 		8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenSettings.swift; sourceTree = "<group>"; };
 		8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteExportedDataSetting.swift; sourceTree = "<group>"; };
 		8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportBrowserDataSetting.swift; sourceTree = "<group>"; };
@@ -9288,6 +9294,9 @@
 				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
 				21D884402A79628E00AF144C /* MockSettingsDelegate.swift */,
 				8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */,
+				8A3C7BE02A8BF0D900A14DB7 /* MockRestoreTabManagerDelegate.swift */,
+				8A3C7BE32A8BF0FA00A14DB7 /* MockPresenter.swift */,
+				8A3C7BE62A8BF11600A14DB7 /* MockRestoreAlertCreator.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -13093,6 +13102,7 @@
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				5AF6254528A57B6700A90253 /* MockHistoryHighlightsManager.swift in Sources */,
 				E571EE7E28756A130051D9AA /* PocketStoryProviderTests.swift in Sources */,
+				8A3C7BE72A8BF11600A14DB7 /* MockRestoreAlertCreator.swift in Sources */,
 				8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */,
 				961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */,
 				E1AEC177286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift in Sources */,
@@ -13316,6 +13326,8 @@
 				C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
+				8A3C7BE22A8BF0DE00A14DB7 /* MockRestoreTabManagerDelegate.swift in Sources */,
+				8A3C7BE52A8BF0FC00A14DB7 /* MockPresenter.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
