@@ -651,6 +651,7 @@
 		8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
 		8A9234612A8ADE8200341364 /* RestoreTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9234602A8ADE8200341364 /* RestoreTabManager.swift */; };
+		8A9234642A8AF5C300341364 /* RestoreTabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9234622A8AF56800341364 /* RestoreTabManagerTests.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
 		8A93F85E29D36DA9004159D9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F85D29D36DA9004159D9 /* Coordinator.swift */; };
@@ -4890,6 +4891,7 @@
 		8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayManagerTests.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
 		8A9234602A8ADE8200341364 /* RestoreTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreTabManager.swift; sourceTree = "<group>"; };
+		8A9234622A8AF56800341364 /* RestoreTabManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreTabManagerTests.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
 		8A93F85D29D36DA9004159D9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -10574,6 +10576,7 @@
 				8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */,
 				8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */,
 				8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */,
+				8A9234622A8AF56800341364 /* RestoreTabManagerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -13242,6 +13245,7 @@
 				C869915628917803007ACC5C /* WallpaperJSONTestProvider.swift in Sources */,
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */,
+				8A9234642A8AF5C300341364 /* RestoreTabManagerTests.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
 				CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */,
 				C8610DA82A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift in Sources */,
