@@ -169,5 +169,6 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
 
         primaryButton.setTitleColor(theme.colors.textOnDark, for: .normal)
         primaryButton.backgroundColor = theme.colors.iconAccentYellow // Update in FXIOS-7154
+        cardView.applyTheme(theme: theme)
     }
 }
