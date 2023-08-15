@@ -40,15 +40,10 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     }
 
     func update(webView: WKWebView, isPrivate: Bool = false) {
-        removeWebview()
         self.webView = webView
         setupWebView()
         setupScreenTimeController()
         setScreenTimeUsage(isPrivate: isPrivate)
-    }
-
-    private func removeWebview() {
-        webView.removeFromSuperview()
     }
 
     // MARK: - Rotation
