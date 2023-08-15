@@ -42,6 +42,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let surveyLink = app.buttons.matching(
             NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
         )
+        let surveyURLPredicate = NSPredicate(format: "identifier CONTAINS 'url'")
 
         wait(forElement: surveyLink.element, timeout: 15)
         surveyLink.element.tap()
