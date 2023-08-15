@@ -91,6 +91,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithOneTab() async throws {
+        subject.tabRestoreHasFinished = true
         addTabs(count: 1)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
@@ -99,6 +100,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithManyTabs() async throws {
+        subject.tabRestoreHasFinished = true
         addTabs(count: 5)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)

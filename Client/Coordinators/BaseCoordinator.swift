@@ -36,6 +36,9 @@ open class BaseCoordinator: Coordinator {
 
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator? {
+        // If the app crashed last session then we abandon the deeplink
+        guard !logger.crashedLastLaunch else { return nil }
+
         // Check if the current coordinator can handle the route.
         if handle(route: route) {
             savedRoute = nil
