@@ -36,6 +36,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         subject.start(with: .bookmarks)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
         XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+        XCTAssertEqual((mockRouter.rootViewController as? LibraryViewController)?.childPanelControllers.count, 4)
     }
 
     func testStart_withHistoryHomepanelSection_setsUpLibraryViewControllerWithHistoryPanel() {

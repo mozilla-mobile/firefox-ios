@@ -34,10 +34,24 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
+        libraryViewController.childPanelControllers = makeChildPanels()
         libraryViewController.delegate = self
         libraryViewController.navigationHandler = self
         libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
         libraryViewController.resetHistoryPanelPagination()
+    }
+
+    private func makeChildPanels() -> [UINavigationController] {
+        let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile))
+        let historyPanel = HistoryPanel(profile: profile, tabManager: tabManager)
+        let downloadsPanel = DownloadsPanel()
+        let readingListPanel = ReadingListPanel(profile: profile)
+        return [
+            ThemedNavigationController(rootViewController: bookmarksPanel),
+            ThemedNavigationController(rootViewController: historyPanel),
+            ThemedNavigationController(rootViewController: downloadsPanel),
+            ThemedNavigationController(rootViewController: readingListPanel)
+        ]
     }
 
     // MARK: - LibraryNavigationHandler
