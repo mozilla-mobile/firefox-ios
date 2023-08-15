@@ -34,7 +34,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.labelSize)
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -43,7 +43,6 @@ final class ActionFooterView: UIView, ThemeApplicable {
             size: UX.buttonSize)
         button.buttonEdgeSpacing = 0
         button.contentHorizontalAlignment = .leading
-        button.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     override init(frame: CGRect) {
