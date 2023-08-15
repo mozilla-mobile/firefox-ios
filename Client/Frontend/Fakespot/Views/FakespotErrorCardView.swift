@@ -61,6 +61,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
@@ -70,6 +71,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
