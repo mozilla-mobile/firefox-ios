@@ -422,8 +422,6 @@ class BrowserViewController: UIViewController,
         tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
-        restoreTabs()
-
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
