@@ -7,7 +7,8 @@ import WebKit
 
 @testable import Client
 
-class MockTabManager: TabManager {
+class MockTabManager: TabManager, RestoreTabManagerDelegate {
+    var isRestoringTabs: Bool = false
     var selectedTab: Tab?
     var backupCloseTab: Client.BackupCloseTab?
 
@@ -138,4 +139,10 @@ class MockTabManager: TabManager {
     func testRemoveAll() {}
 
     func testClearArchive() {}
+
+    // MARK: - RestoreTabManagerDelegate
+
+    func needsTabRestore() {}
+
+    func needsNewTabOpened() {}
 }

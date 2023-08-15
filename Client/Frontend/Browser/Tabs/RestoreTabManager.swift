@@ -14,17 +14,23 @@ protocol RestoreTabManagerDelegate: AnyObject {
 }
 
 protocol RestoreTabManager {
-    /// If the restore tabs is showing, we cannot do any deeplink actions since this would trigger a preserve tabs to happen
-    /// which would effectively prevent the tab to be restored
-    var isRestoreTabsAlertShowing: Bool { get }
-
     /// CrashedLastLaunch is sticky and doesn't get reset, so we need to remember its value so that we do not keep asking the user to restore their tabs
     /// But we only set this to true once the user has made his choice whether they want to restore their tabs or not, otherwise we keep showing the alert.
     var alertNeedsToShow: Bool { get }
 
     /// Shows the restore tab alert on the view controller. Make sure to call `alertNeedsToShow` beforehand
-    /// - Parameter viewController: The view controller this alert will be presented on
-    func showAlert(on viewController: UIViewController)
+    /// - Parameters:
+    ///   - viewController: The view controller this alert will be presented on
+    ///   - alertCreator: The restore alert creatr which will build the UI Alert for us
+    func showAlert(on viewController: Presenter,
+                   alertCreator: RestoreAlertCreator)
+}
+
+extension RestoreTabManager {
+    func showAlert(on viewController: Presenter,
+                   alertCreator: RestoreAlertCreator = DefaultRestoreAlertCreator()) {
+        showAlert(on: viewController, alertCreator: alertCreator)
+    }
 }
 
 class DefaultRestoreTabManager: RestoreTabManager {
@@ -32,8 +38,6 @@ class DefaultRestoreTabManager: RestoreTabManager {
     private var userDefaults: UserDefaultsInterface
     private var hasTabsToRestoreAtStartup: Bool
     private var delegate: RestoreTabManagerDelegate?
-
-    private(set) var isRestoreTabsAlertShowing = false
 
     private enum UserDefaultsKey: String {
         case keyRestoreTabsAlertNeedsToBeShown = "restoreTabsAlertNeedsToBeShown"
@@ -55,8 +59,8 @@ class DefaultRestoreTabManager: RestoreTabManager {
         self.hasTabsToRestoreAtStartup = hasTabsToRestoreAtStartup
         self.delegate = delegate
 
-        // TODO: Laurie test + comment this
-        if logger.crashedLastLaunch && !alertNeedsToShow {
+        // We persist the alert to show even if the logger might not see anymore that we crashed in a previous session
+        if logger.crashedLastLaunch || alertNeedsToShow {
             logger.log("The application crashed in a previous session and need to show the restore alert",
                        level: .warning,
                        category: .tabs)
@@ -64,7 +68,8 @@ class DefaultRestoreTabManager: RestoreTabManager {
         }
     }
 
-    func showAlert(on viewController: UIViewController) {
+    func showAlert(on viewController: Presenter,
+                   alertCreator: RestoreAlertCreator = DefaultRestoreAlertCreator()) {
         guard hasTabsToRestoreAtStartup else {
             logger.log("There is no tabs to restore",
                        level: .debug,
@@ -73,19 +78,19 @@ class DefaultRestoreTabManager: RestoreTabManager {
             return
         }
 
-        let alert = UIAlertController.restoreTabsAlert(
-            okayCallback: { _ in
+        let alert = alertCreator.restoreTabsAlert(
+            okayCallback: { [weak self] in
+                guard let self = self else { return }
                 self.alertNeedsToShow = false
-                self.isRestoreTabsAlertShowing = false
                 self.logger.log("The user selected to restore tabs",
                                 level: .debug,
                                 category: .tabs)
 
                 self.delegate?.needsTabRestore()
             },
-            noCallback: { _ in
+            noCallback: { [weak self] in
+                guard let self = self else { return }
                 self.alertNeedsToShow = false
-                self.isRestoreTabsAlertShowing = false
                 self.logger.log("The user selected to not restore any tabs",
                                 level: .debug,
                                 category: .tabs)
@@ -98,6 +103,5 @@ class DefaultRestoreTabManager: RestoreTabManager {
                    level: .debug,
                    category: .tabs)
         viewController.present(alert, animated: true)
-        isRestoreTabsAlertShowing = true
     }
 }

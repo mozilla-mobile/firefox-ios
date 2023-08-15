@@ -607,14 +607,6 @@ class BrowserViewController: UIViewController,
         urlBar.searchEnginesDidUpdate()
     }
 
-    func restoreTabs() {
-        if restoreTabManager.alertNeedsToShow {
-            restoreTabManager.showAlert(on: self)
-        } else {
-            tabManager.restoreTabs()
-        }
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -1662,6 +1654,14 @@ class BrowserViewController: UIViewController,
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)
+    }
+
+    private func restoreTabs() {
+        if restoreTabManager.alertNeedsToShow {
+            restoreTabManager.showAlert(on: self)
+        } else {
+            tabManager.restoreTabs()
+        }
     }
 
     // MARK: Autofill

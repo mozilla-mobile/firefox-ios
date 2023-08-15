@@ -54,40 +54,6 @@ extension UIAlertController {
         return alert
     }
 
-    /**
-    Builds the Alert view that asks the user if they wish to restore their tabs after a crash.
-
-    - parameter okayCallback: Okay option handler
-    - parameter noCallback:   No option handler
-
-    - returns: UIAlertController for asking the user to restore tabs after a crash
-    */
-    class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
-        let titleString = String(format: .Alerts.RestoreTabs.Title, AppName.shortName.rawValue)
-
-        let alert = UIAlertController(
-            title: titleString,
-            message: .Alerts.RestoreTabs.Message,
-            preferredStyle: .alert
-        )
-
-        let noOption = UIAlertAction(
-            title: .Alerts.RestoreTabs.ButtonNo,
-            style: .cancel,
-            handler: noCallback
-        )
-
-        let okayOption = UIAlertAction(
-            title: .Alerts.RestoreTabs.ButtonYes,
-            style: .default,
-            handler: okayCallback
-        )
-
-        alert.addAction(okayOption)
-        alert.addAction(noOption)
-        return alert
-    }
-
     class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
