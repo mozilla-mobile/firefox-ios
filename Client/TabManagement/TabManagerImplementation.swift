@@ -15,6 +15,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
+    var tabRestoreHasFinished = false
     var notificationCenter: NotificationProtocol
 
     init(profile: Profile,
@@ -112,6 +113,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func buildTabRestore(window: WindowData?) async {
         defer {
             isRestoringTabs = false
+            tabRestoreHasFinished = true
         }
 
         guard let windowData = window,
@@ -215,15 +217,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Save tabs
 
     override func preserveTabs() {
-        // If there are no tabs then we do not need to preserve as we are initalizing the app
-        // (there should always be at least a homepage)
-        // Also if the a restore is in progress then presevering tabs could cause issues
-        if tabs.isEmpty || isRestoringTabs {
-            logger.log("Attempted to preserve tabs while tabs were restoring or empty, tab count \(tabs.count), isRestoring \(isRestoringTabs)",
-                       level: .fatal,
-                       category: .tabs)
-            return
-        }
+        // Only preserve tabs after the restore has finished
+        guard tabRestoreHasFinished else { return }
 
         // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
@@ -307,6 +302,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func saveAllTabData() {
+        // Only preserve tabs after the restore has finished
+        guard tabRestoreHasFinished else { return }
+
         saveCurrentTabSessionData()
         preserveTabs(forced: true)
     }
