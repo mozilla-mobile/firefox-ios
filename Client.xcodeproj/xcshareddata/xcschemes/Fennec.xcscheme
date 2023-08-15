@@ -265,6 +265,9 @@
          <TestPlanReference
             reference = "container:Tests/SyncIntegrationTestPlan.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/ExperimentIntegrationTests.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

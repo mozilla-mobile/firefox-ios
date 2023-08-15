@@ -51,8 +51,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         case .downloads:
             makeDownloadsCoordinator(navigationController: navigationController)
         case .readingList:
-            // ReadingListCoordinator will be implemented with FXIOS-6978
-            break
+            makeReadingListCoordinator(navigationController: navigationController)
         }
     }
 
@@ -90,6 +89,17 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         )
         add(child: downloadsCoordinator)
         (navigationController.topViewController as? DownloadsPanel)?.navigationHandler = downloadsCoordinator
+    }
+
+    private func makeReadingListCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is ReadingListCoordinator }) else { return }
+        let router = DefaultRouter(navigationController: navigationController)
+        let readingListCoordinator = ReadingListCoordinator(
+            parentCoordinator: parentCoordinator,
+            router: router
+        )
+        add(child: readingListCoordinator)
+        (navigationController.topViewController as? ReadingListPanel)?.navigationHandler = readingListCoordinator
     }
 
     // MARK: - LibraryPanelDelegate
