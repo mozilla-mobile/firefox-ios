@@ -24,7 +24,14 @@ extension XCTestCase {
         }
     }
 
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+    /// Track down memory leaks on certain objects
+    /// - Parameters:
+    ///   - instance: The instance the memory leaks needs to be
+    ///   - file: file this got called from, so failure is reported in the right file.
+    ///   - line: line this got called from, so failure is reported on the right line.
+    func trackForMemoryLeaks(_ instance: AnyObject,
+                             file: StaticString = #file,
+                             line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
         }

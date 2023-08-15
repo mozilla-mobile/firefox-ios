@@ -68,7 +68,9 @@ class MockTabManager: TabManager, RestoreTabManagerDelegate {
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {}
 
-    func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
+    func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {
+        savedDelegate.removeAll()
+    }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {}
 

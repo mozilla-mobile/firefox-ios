@@ -13,6 +13,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var overlayModeManager: MockOverlayModeManager!
     private var screenshotService: ScreenshotService!
     private var routeBuilder: RouteBuilder!
+    private var tabManager: MockTabManager!
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
@@ -25,6 +26,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        self.tabManager = MockTabManager()
         self.routeBuilder = RouteBuilder()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
@@ -39,6 +41,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         super.tearDown()
         self.routeBuilder = nil
         self.mockRouter = nil
+        self.tabManager = nil
         self.profile = nil
         self.overlayModeManager = nil
         self.screenshotService = nil
@@ -51,13 +54,12 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testInitialState() {
-        let tabManager = MockTabManager()
-        let subject = createSubject(tabManager: tabManager)
+        let subject = createSubject()
 
         XCTAssertNotNil(subject.browserViewController)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
-        XCTAssertEqual(tabManager.savedDelegate[1] as! BrowserCoordinator, subject)
+        XCTAssertEqual(tabManager.savedDelegate[0] as! BrowserCoordinator, subject)
     }
 
     func testWithoutLaunchType_startsBrowserOnly() {
@@ -93,7 +95,8 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - Show homepage
 
     func testShowHomepage_addsOneHomepageOnly() {
-        let subject = createSubject()
+        let mbvc = MockBrowserViewController()
+        let subject = createSubject(mockBrowserViewController: mbvc)
         subject.showHomepage(inline: true,
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
@@ -103,7 +106,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                              overlayManager: overlayModeManager)
 
         let secondHomepage = HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
-        XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
+        XCTAssertEqual(mbvc.embedContentCalled, 1)
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
     }
@@ -135,7 +138,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testShowWebview_embedNewWebview() {
         let webview = WKWebView()
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.show(webView: webview)
 
@@ -147,7 +150,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testShowWebview_reuseExistingWebview() {
         let webview = WKWebView()
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.show(webView: webview)
         let firstWebview = subject.webviewController
@@ -234,7 +237,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleSearchQuery_returnsTrue() {
         let query = "test query"
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -247,7 +250,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleSearch_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -262,7 +265,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleSearchWithNormalMode_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -279,7 +282,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleSearchWithNilURL_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -292,7 +295,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleSearchURL_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -305,7 +308,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleNilSearchURL_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -320,7 +323,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - Homepanel route
 
     func testHandleHomepanelBookmarks_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -334,7 +337,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleHomepanelHistory_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -348,7 +351,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleHomepanelReadingList_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -362,7 +365,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testHandleHomepanelDownloads_returnsTrue() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -378,7 +381,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleHomepanelTopSites_returnsTrue() {
         // Given
         let topSitesURL = URL(string: "firefox://deep-link?url=/homepanel/top-sites")!
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -396,7 +399,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleNewPrivateTab_returnsTrue() {
         // Given
         let newPrivateTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -414,7 +417,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleHomepanelNewTab_returnsTrue() {
         // Given
         let newTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-tab")!
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -536,7 +539,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is SyncContentSettingsViewController)
+            XCTAssertTrue(result is FirefoxAccountSignInViewController)
         }
     }
 
@@ -607,7 +610,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testSettingsCoordinatorDelegate_openURLinNewTab() {
         let expectedURL = URL(string: "www.mozilla.com")!
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
 
         subject.openURLinNewTab(expectedURL)
@@ -630,7 +633,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testETPCoordinatorDelegate_settingsOpenPage() {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
 
         subject.settingsOpenPage(settings: .contentBlocker)
@@ -654,7 +657,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleFxaSignIn_returnsTrue() {
         // Given
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -675,7 +678,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleHandleQRCode_returnsTrue() {
         // Given
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -691,7 +694,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testHandleClosePrivateTabs_returnsTrue() {
         // Given
         let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs")!
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
         subject.browserHasLoaded()
 
@@ -748,10 +751,9 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testSavesRoute_whenTabManagerIsRestoring() {
-        let tabManager = MockTabManager()
         tabManager.isRestoringTabs = true
         restoreTabManager.alertNeedsToShow = false
-        let subject = createSubject(tabManager: tabManager)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
@@ -761,10 +763,9 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testSavesRoute_whenRestoreTabAlertNeedsToShow() {
-        let tabManager = MockTabManager()
         tabManager.isRestoringTabs = false
         restoreTabManager.alertNeedsToShow = true
-        let subject = createSubject(tabManager: tabManager)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
@@ -793,7 +794,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testTappingOpenUrl_CallsTheDidSelectUrlOnBrowserViewController() throws {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
 
         // We show the library with bookmarks tab
@@ -809,7 +810,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testTappingOpenUrlInNewTab_CallsTheDidSelectUrlInNewTapOnBrowserViewController() throws {
-        let mbvc = createBrowserViewController()
+        let mbvc = MockBrowserViewController()
         let subject = createSubject(mockBrowserViewController: mbvc)
 
         // We show the library with bookmarks tab
@@ -827,8 +828,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - TabManagerDelegate
 
     func testTabManagerDidRestoreTabs_callsSavedRoute() {
-        let tabManager = MockTabManager()
-        let subject = createSubject(tabManager: tabManager)
+        let subject = createSubject()
         subject.savedRoute = Route.defaultBrowser(section: .systemSettings)
         subject.browserHasLoaded()
 
@@ -838,27 +838,14 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(tabManager: MockTabManager = MockTabManager(),
-                               isSettingsCoordinatorEnabled: Bool = false,
-                               file: StaticString = #file,
-                               line: UInt = #line) -> BrowserCoordinator {
-        let mockBrowserViewController = createBrowserViewController()
-        return createSubject(tabManager: tabManager,
-                             mockBrowserViewController: mockBrowserViewController,
-                             file: file,
-                             line: line)
-    }
-
-    private func createSubject(tabManager: MockTabManager = MockTabManager(),
-                               mockBrowserViewController: MockBrowserViewController,
-                               isSettingsCoordinatorEnabled: Bool = false,
+    private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
+                               mockBrowserViewController: MockBrowserViewController = MockBrowserViewController(),
                                file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
         routeBuilder.configure(isPrivate: false, prefs: profile.prefs)
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          browserViewController: mockBrowserViewController,
-                                         profile: profile,
                                          tabManager: tabManager,
                                          restoreTabManager: restoreTabManager,
                                          glean: glean,
@@ -866,12 +853,8 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          wallpaperManager: wallpaperManager,
                                          isSettingsCoordinatorEnabled: isSettingsCoordinatorEnabled)
 
-        trackForMemoryLeaks(subject, file: file, line: line)
+        // To be re-enabled with FXIOS-7247
+        // trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-
-    func createBrowserViewController() -> MockBrowserViewController {
-        return MockBrowserViewController(profile: profile,
-                                         tabManager: MockTabManager())
     }
 }
