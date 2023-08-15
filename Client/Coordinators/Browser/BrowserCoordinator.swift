@@ -34,6 +34,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     init(router: Router,
          screenshotService: ScreenshotService,
+         browserViewController: BrowserViewController = BrowserViewController(),
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -47,8 +48,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.restoreTabManager = restoreTabManager
-        self.browserViewController = BrowserViewController(profile: profile,
-                                                           tabManager: tabManager)
+        self.browserViewController = browserViewController
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager

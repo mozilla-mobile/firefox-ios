@@ -162,8 +162,8 @@ class BrowserViewController: UIViewController,
     }
 
     init(
-        profile: Profile,
-        tabManager: TabManager,
+        profile: Profile = AppContainer.shared.resolve(),
+        tabManager: TabManager = AppContainer.shared.resolve(),
         restoreTabManager: RestoreTabManager = AppContainer.shared.resolve(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,

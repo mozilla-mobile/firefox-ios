@@ -8,7 +8,7 @@ import WebKit
 @testable import Client
 
 class MockTabManager: TabManager, RestoreTabManagerDelegate {
-    var isRestoringTabs: Bool = false
+    var isRestoringTabs = false
     var selectedTab: Tab?
     var backupCloseTab: Client.BackupCloseTab?
 
@@ -30,6 +30,7 @@ class MockTabManager: TabManager, RestoreTabManagerDelegate {
     var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
+    var savedDelegate = [TabManagerDelegate]()
 
     subscript(index: Int) -> Tab? {
         return nil
@@ -61,7 +62,9 @@ class MockTabManager: TabManager, RestoreTabManagerDelegate {
         return addTab(nil, afterTab: nil, isPrivate: false)
     }
 
-    func addDelegate(_ delegate: TabManagerDelegate) {}
+    func addDelegate(_ delegate: TabManagerDelegate) {
+        savedDelegate.append(delegate)
+    }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {}
 
