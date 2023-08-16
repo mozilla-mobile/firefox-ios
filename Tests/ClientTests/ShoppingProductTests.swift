@@ -6,11 +6,11 @@ import XCTest
 @testable import Client
 
 final class ShoppingProductTests: XCTestCase {
-    var client: TestFakeSpotClient!
+    var client: TestFakespotClient!
 
     override func setUp() {
         super.setUp()
-        client = TestFakeSpotClient()
+        client = TestFakespotClient()
     }
 
     override func tearDown() {
@@ -95,7 +95,7 @@ final class ShoppingProductTests: XCTestCase {
     }
 }
 
-final class TestFakeSpotClient: FakeSpotClientType {
+final class TestFakespotClient: FakespotClientType {
     var productId: String = ""
     var website: String = ""
     var fetchProductAnalysisDataCalled = false
