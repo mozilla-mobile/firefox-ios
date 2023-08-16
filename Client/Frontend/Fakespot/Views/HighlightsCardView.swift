@@ -31,8 +31,6 @@ class HighlightsCardView: UIView, ThemeApplicable {
     private lazy var contentView: UIView = .build()
     private lazy var footerView: ActionFooterView = .build()
 
-    private var viewModel: HighlightsCardViewModel?
-
     // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,8 +43,6 @@ class HighlightsCardView: UIView, ThemeApplicable {
     }
 
     func configure(_ viewModel: HighlightsCardViewModel) {
-        self.viewModel = viewModel
-
         let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
         footerView.configure(viewModel: viewModel.footerModel)
