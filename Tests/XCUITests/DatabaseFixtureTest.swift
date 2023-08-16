@@ -37,10 +37,6 @@ class DatabaseFixtureTest: BaseTestCase {
        navigator.goto(LibraryPanel_Bookmarks)
        waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
 
-       let loaded = NSPredicate(format: "count == 1001")
-       expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-       waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
-
        let bookmarksList = app.tables["Bookmarks List"].cells.count
        XCTAssertEqual(bookmarksList, 1001, "There should be an entry in the bookmarks list")
    }
@@ -51,10 +47,8 @@ class DatabaseFixtureTest: BaseTestCase {
        waitForExistence(app.tables["History List"], timeout: TIMEOUT_LONG)
        // History list has one cell that are for recently closed
        // the actual max number is 101
-       let loaded = NSPredicate(format: "count == 101")
-       expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
-       waitForExpectations(timeout: TIMEOUT, handler: nil)
-       let historyList = app.tables["History List"].cells.count
+
+       let historyList = app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells.count
        XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
    }
 }
