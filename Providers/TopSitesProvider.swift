@@ -52,12 +52,6 @@ class TopSitesProviderImplementation: TopSitesProvider {
         prefs: Prefs
     ) {
         self.placesFetcher = placesFetcher
-        // It's possible that the top sites fetch is the
-        // very first use of places, lets make sure that
-        // our connection is open
-        if !self.placesFetcher.isOpen {
-            _ = self.placesFetcher.reopenIfClosed()
-        }
         self.pinnedSiteFetcher = pinnedSiteFetcher
         self.prefs = prefs
     }
@@ -85,14 +79,26 @@ class TopSitesProviderImplementation: TopSitesProvider {
 private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
-        placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems, thresholdOption: FrecencyThresholdOption.none)
-            .uponQueue(.global()) { [weak self] result in
-                if let sites = result.successValue {
-                    self?.frecencySites = sites
-                }
-
+        DispatchQueue.global().async { [weak self] in
+            // It's possible that the top sites fetch is the
+            // very first use of places, lets make sure that
+            // our connection is open
+            guard let placesFetcher = self?.placesFetcher else {
                 group.leave()
+                return
             }
+            if !placesFetcher.isOpen {
+                _ = placesFetcher.reopenIfClosed()
+            }
+            placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems, thresholdOption: FrecencyThresholdOption.none)
+                .uponQueue(.global()) { [weak self] result in
+                    if let sites = result.successValue {
+                        self?.frecencySites = sites
+                    }
+
+                    group.leave()
+                }
+        }
     }
 
     func getPinnedSites(group: DispatchGroup) {

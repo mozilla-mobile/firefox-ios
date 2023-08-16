@@ -36,4 +36,13 @@ class WallpaperURLSessionMock: URLSessionProtocol {
         completion(data, response, error)
         return dataTask
     }
+
+    func dataTaskWith(request: URLRequest,
+                      completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+        return MockURLSessionDataTaskProtocol()
+    }
+}
+
+class MockURLSessionDataTaskProtocol: URLSessionDataTaskProtocol {
+    func resume() {}
 }

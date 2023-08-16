@@ -29,7 +29,6 @@ class TabManagerTests: XCTestCase {
                                            imageStore: mockDiskImageStore,
                                            tabDataStore: mockTabStore,
                                            tabSessionStore: mockSessionStore)
-        subject.isNewTabStoreEnabled = true
     }
 
     override func tearDown() {
@@ -87,11 +86,12 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithNoTabs() async throws {
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
     func testPreserveTabsWithOneTab() async throws {
+        subject.tabRestoreHasFinished = true
         addTabs(count: 1)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
@@ -100,6 +100,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithManyTabs() async throws {
+        subject.tabRestoreHasFinished = true
         addTabs(count: 5)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)

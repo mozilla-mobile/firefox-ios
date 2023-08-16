@@ -120,12 +120,10 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.cells["Logins"], timeout: 15)
         app.cells["Logins"].tap()
 
-        // First time only: The message "Your passwords are now protected
-        // by Face ID..." is present when the Firefox app is run after the
-        // simulator has been erased.
-        waitForExistence(app.navigationBars.element(boundBy: 0), timeout: 3)
-        waitForExistence(app.otherElements.buttons.element(boundBy: 2))
-        app.otherElements.buttons.element(boundBy: 2).tap()
+        // Press continue button on the password onboarding if it's shown
+        if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
+            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
+        }
 
         let passcodeInput = springboard.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 30)
@@ -133,7 +131,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
-        app.buttons.element(boundBy: 1).tap()
+        app.buttons[AccessibilityIdentifiers.Settings.Passwords.addCredentialButton].tap()
         waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()

@@ -21,7 +21,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case libraryCoordinatorRefactor
-    case notificationSettings
     case onboardingUpgrade
     case onboardingFreshInstall
     case pocket
@@ -35,7 +34,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareSheetChanges
     case shareToolbarChanges
     case startAtHome
-    case tabStorageRefactor
     case tabTrayGroups
     case topSites
     case wallpapers
@@ -94,7 +92,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .etpCoordinatorRefactor,
                 .fakespotFeature,
                 .libraryCoordinatorRefactor,
-                .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
                 .reduxIntegration,
@@ -104,7 +101,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shareExtensionCoordinatorRefactor,
                 .shareSheetChanges,
                 .shareToolbarChanges,
-                .tabStorageRefactor,
                 .wallpaperOnboardingSheet,
                 .wallpaperVersion,
                 .zoomFeature:

@@ -12,15 +12,37 @@ class XCodeBuild(object):
     binary = 'xcodebuild'
     destination = 'platform=iOS Simulator,name=iPhone 14'
     logger = logging.getLogger()
-    scheme = 'Fennec_Enterprise_XCUITests'
+    scheme = 'Fennec'
     testPlan = 'SyncIntegrationTestPlan'
     xcrun = XCRun()
 
-    def __init__(self, log):
+    def __init__(self, log, **kwargs):
+        self.scheme = kwargs.get("scheme", self.scheme)
+        self.testPlan = kwargs.get("test_plan", self.testPlan)
         self.log = log
 
-    def test(self, identifier):
-        self.xcrun.erase()
+    def install(self):
+        command = "find ~/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Fennec-* -type d -iname 'Client.app'"
+        path = subprocess.check_output(command, shell=True, universal_newlines=True)
+        self.xcrun.boot()
+        try:
+            out = subprocess.check_output(
+                f"xcrun simctl install booted {path}",
+                cwd=os.pardir,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                shell=True
+            )
+        except subprocess.CalledProcessError as e:
+            out = e.output
+            raise
+        finally:
+            with open(self.log, 'w') as f:
+                f.write(out)
+
+    def test(self, identifier, erase=True):
+        if erase:
+            self.xcrun.erase()
         args = [
             self.binary,
             'test',

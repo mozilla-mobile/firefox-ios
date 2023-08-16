@@ -377,8 +377,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         navigator.goto(URLBarOpen)
         navigator.back()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        waitForExistence(app.buttons[StandardImageIdentifiers.Large.privateMode])
-        XCTAssertTrue(app.buttons[StandardImageIdentifiers.Large.privateMode].isEnabled)
+        waitForExistence(app.buttons["smallPrivateMask"])
+        XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
         XCTAssertTrue(userState.isPrivate)
     }
 
@@ -403,26 +403,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitForExistence(app.buttons["Show Tabs"])
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
-
-        // Go to Private mode and do the same
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(urlExample)
-        waitUntilPageLoad()
-        waitForExistence(app.webViews.links.firstMatch)
-        app.webViews.links.firstMatch.press(forDuration: 1)
-        waitForExistence(app.buttons["Open in New Private Tab"])
-        app.buttons["Open in New Private Tab"].press(forDuration: 1)
-        waitForExistence(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
-
-        // Check that the tab has changed
-        waitUntilPageLoad()
-        waitForExistence(app.textFields["url"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: "iana")
-        XCTAssertTrue(app.links["RFC 2606"].exists)
-        waitForExistence(app.buttons["Show Tabs"])
-        let numPrivTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numPrivTab)
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
@@ -444,7 +424,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "iana")
         navigator.goto(TabTray)
-        XCTAssertTrue(app.buttons[StandardImageIdentifiers.Large.privateMode].isEnabled)
+        XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
     }
 }
 

@@ -22,7 +22,6 @@ include:
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/libraryCoordinatorRefactor.yaml
   - nimbus-features/messagingFeature.yaml
-  - nimbus-features/notificationSettingsFeature.yaml
   - nimbus-features/onboardingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/reduxIntegrationFeature.yaml
@@ -33,7 +32,6 @@ include:
   - nimbus-features/shareSheetFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
-  - nimbus-features/tabStorageRefactorFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/wallpaperFeature.yaml
   - nimbus-features/zoomFeature.yaml

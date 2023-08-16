@@ -529,16 +529,16 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-  4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests:
+  4_B_xcode_build_and_test_Fennec:
     steps:
     - xcode-build-for-simulator@0.12:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
     - xcode-test@4.5:
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
+        - scheme: Fennec
+        - xcodebuild_test_options: "-testPlan FullFunctionalTestPlan"
         - simulator_device: "$IOS_DEVICE"
   Detect_warnings:
     steps:
@@ -760,7 +760,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
+    - 4_B_xcode_build_and_test_Fennec
     - 5_deploy_and_slack
     meta:
       bitrise.io:
@@ -771,32 +771,32 @@ workflows:
     - xcode-build-for-simulator@0.12:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
     - xcode-test@4.5:
         is_always_run: true
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - test_plan: "SmokeXCUITests"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
         description: This Workflow is to run SmokeTest on iPad simulator device
     - xcode-test@4.5:
         is_always_run: true
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - test_plan: "Smoketest2"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
     - xcode-test@4.5:
         is_always_run: true
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - test_plan: "Smoketest3"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest3
     - xcode-test@4.5:
         is_always_run: true
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - test_plan: "Smoketest4"
         - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest4
@@ -816,12 +816,12 @@ workflows:
         inputs:
         - configuration: Release
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - xcodebuild_test_options: "-testPlan SmokeXCUITests"
     - xcode-test@4.5:
         inputs:
-        - scheme: Fennec_Enterprise_UITests
-        - simulator_device: iPhone 8
+        - scheme: Fennec
+        - simulator_device: iPhone 14
         is_always_run: true
     meta:
       bitrise.io:
@@ -1321,7 +1321,7 @@ workflows:
         is_always_run: true
     - xcode-test@4.5:
         inputs:
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
         - test_plan: PerformanceTestPlan   
     
@@ -1346,13 +1346,13 @@ workflows:
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests-test.xcresult
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
-            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
             cat data.txt
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
@@ -1463,7 +1463,96 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-
+  Firebase_Performance_Test:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-archive@4.7.2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
+    - script@1.1:
+        title: Firebase Build for Testing Physical Devices
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
+                -sdk iphoneos \
+                -destination "generic/platform=iOS" \
+                -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+    - deploy-to-bitrise-io@2: {}
+    - script@1.1:
+        title: Verify App signature, Test, and Runner
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- verify test and runner signature --"
+            codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
+            echo "-- test app --"
+            xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
+                -sdk iphoneos \
+                -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
+    - script@1.1:
+        title: Create .zip artifact for Firebase Testing
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- create .zip artifact --"
+            cd DerivedData/Build/Products
+            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
+            mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+    - deploy-to-bitrise-io@2: {}
+    - cache-pull@2.7.2:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+    - script@1:
+        title: Install Google Cloud SDK
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+             
+            if [ -e $HOME/google-cloud-sdk ]; then
+              echo "Google Cloud SDK found, skipping installation..."
+            else
+              echo "Google Cloud SDK not found, installing..."
+              curl https://sdk.cloud.google.com > install.sh
+              bash install.sh --disable-prompts
+              source $HOME/google-cloud-sdk/path.bash.inc
+            fi
+    - cache-push@2.7.1:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
+        - compress_archive: "true"
+    - script@1:
+        title: Run Performance Tests in Firebase Test Lab
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e 
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            $HOME/google-cloud-sdk/bin/gcloud version
+            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
+            ls /Users/vagrant/git/Fennec_Enterprise.zip
+            gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
+                --model=iphone14pro,version=16.4 \
+                --xcode-version=14.3.1
 app:
   envs:
   - opts:

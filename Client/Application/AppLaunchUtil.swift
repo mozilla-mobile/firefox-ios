@@ -80,6 +80,14 @@ class AppLaunchUtil {
 
         // Add swizzle on top of UIControl to automatically log when there's an action sent
         UIControl.loggerSwizzle()
+
+        logger.log("App version \(AppInfo.appVersion), Build number \(AppInfo.buildNumber)",
+                   level: .debug,
+                   category: .setup)
+
+        logger.log("Prefs for migration is \(String(describing: profile.prefs.boolForKey(PrefsKeys.TabMigrationKey)))",
+                   level: .debug,
+                   category: .tabs)
     }
 
     func setUpPostLaunchDependencies() {

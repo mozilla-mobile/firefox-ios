@@ -152,19 +152,6 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
-    func testLongPressLinkOptionsPrivateMode() {
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitForExistence(app.webViews.links[website_2["link"]!], timeout: TIMEOUT)
-        app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: TIMEOUT)
-        XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
-    }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")

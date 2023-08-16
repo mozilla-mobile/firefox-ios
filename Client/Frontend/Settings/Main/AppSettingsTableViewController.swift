@@ -100,6 +100,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.profile = profile
         self.tabManager = tabManager
         self.settingsDelegate = delegate
+        setupNavigationBar()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,21 +111,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = String.AppSettingsTitle
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: .AppSettingsDone,
-                style: .done,
-                target: self,
-                action: #selector(done))
-        } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: .AppSettingsDone,
-                style: .done,
-                target: navigationController,
-                action: #selector((navigationController as! ThemedNavigationController).done))
-        }
-
+        setupNavigationBar()
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = AccessibilityIdentifiers.Settings.navigationBarItem
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.tableViewController
 
@@ -141,16 +128,45 @@ class AppSettingsTableViewController: SettingsTableViewController,
         settingsDelegate?.didFinish()
     }
 
+    private func setupNavigationBar() {
+        navigationItem.title = String.AppSettingsTitle
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: self,
+                action: #selector(done))
+        } else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .done,
+                target: navigationController,
+                action: #selector((navigationController as! ThemedNavigationController).done))
+        }
+    }
+
     // MARK: Handle Route decisions
 
     func handle(route: Route.SettingsSection) {
         switch route {
-        case .creditCard, .password:
+        case .password:
+            handlePasswordFlow(route: route)
+        case .creditCard:
             authenticateUserFor(route: route)
         case .rateApp:
             RatingPromptManager.goToAppStoreReview()
         default:
             break
+        }
+    }
+
+    private func handlePasswordFlow(route: Route.SettingsSection) {
+        // Show password onboarding before we authenticate
+        if LoginOnboarding.shouldShow() {
+            parentCoordinator?.showPasswordManager(shouldShowOnboarding: true)
+            LoginOnboarding.setShown()
+        } else {
+            authenticateUserFor(route: route)
         }
     }
 
@@ -174,8 +190,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         case .creditCard:
             self.parentCoordinator?.showCreditCardSettings()
         case .password:
-            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: LoginOnboarding.shouldShow())
-            LoginOnboarding.setShown()
+            self.parentCoordinator?.showPasswordManager(shouldShowOnboarding: false)
         default:
             break
         }
@@ -188,7 +203,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         switch deeplink {
         case .contentBlocker:
-            viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController = ContentBlockerSettingViewController(prefs: profile.prefs, isShownFromSettings: false)
             viewController.tabManager = tabManager
 
         case .customizeHomepage:
@@ -317,14 +332,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getGeneralSettings() -> [SettingSection] {
-        let blockpopUpSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.currentTheme,
-            prefKey: PrefsKeys.KeyBlockPopups,
-            defaultValue: true,
-            titleText: .AppSettingsBlockPopups
-        )
-
         var generalSettings: [Setting] = [
             SearchSetting(settings: self, settingsDelegate: parentCoordinator),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
@@ -332,7 +339,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
-            blockpopUpSetting,
+            BlockPopupSetting(settings: self),
             NoImageModeSetting(settings: self),
         ]
 
@@ -395,11 +402,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme,
-                                                        profile: profile,
-                                                        settingsDelegate: parentCoordinator))
-        }
+        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme,
+                                                    profile: profile,
+                                                    settingsDelegate: parentCoordinator))
 
         privacySettings += [
             PrivacyPolicySetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator)

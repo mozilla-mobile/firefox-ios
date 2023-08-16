@@ -976,6 +976,11 @@ export const FormAutofillHeuristics = {
         for (let label of labels) {
           yield* lazy.LabelUtils.extractLabelStrings(label);
         }
+
+        const ariaLabels = element.getAttribute("aria-label");
+        if (ariaLabels) {
+          yield* [ariaLabels];
+        }
       },
     };
   },

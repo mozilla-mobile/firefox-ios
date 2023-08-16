@@ -137,7 +137,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfError() {
-        let expectedContileResult = ContileResult.failure(ContileProvider.Error.failure)
+        let expectedContileResult = ContileResult.failure(ContileProvider.Error.noDataAvailable)
         let subject = createSubject(expectedContileResult: expectedContileResult)
 
         subject.recalculateTopSiteData(for: 6)

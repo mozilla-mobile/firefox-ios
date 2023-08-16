@@ -13,6 +13,12 @@ class XCRun(object):
         self.logger.info('Running: {}'.format(' '.join(args)))
         subprocess.check_call(args)
 
+    def boot(self, device='iPhone 14'):
+        self._run('boot', device)
+
+    def install(self, device='all'):
+        self._run('install', device)
+
     def shutdown(self, device='all'):
         self._run('shutdown', device)
 
