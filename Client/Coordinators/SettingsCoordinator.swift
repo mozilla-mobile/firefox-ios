@@ -110,6 +110,7 @@ class SettingsCoordinator: BaseCoordinator,
                     theme: themeManager.currentTheme
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                wallpaperVC.settingsDelegate = self
                 return wallpaperVC
             } else {
                 return nil
