@@ -10,7 +10,6 @@ import Shared
 @testable import Client
 
 class TabManagerTests: XCTestCase {
-    var subject: TabManagerImplementation!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
@@ -25,10 +24,6 @@ class TabManagerTests: XCTestCase {
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
-        subject = TabManagerImplementation(profile: mockProfile,
-                                           imageStore: mockDiskImageStore,
-                                           tabDataStore: mockTabStore,
-                                           tabSessionStore: mockSessionStore)
     }
 
     override func tearDown() {
@@ -36,54 +31,58 @@ class TabManagerTests: XCTestCase {
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
-        subject = nil
+        mockSessionStore = nil
     }
 
     // MARK: - Restore tabs
 
     func testRestoreTabs() async throws {
         throw XCTSkip("Needs to fix restore test")
-//        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-//                                                     isPrimary: true,
-//                                                     activeTabId: UUID(),
-//                                                     tabData: getMockTabData(count: 4))
-//
-//        subject.restoreTabs()
-//        try await Task.sleep(nanoseconds: sleepTime * 5)
-//        XCTAssertEqual(subject.tabs.count, 4)
-//        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
+        //        let subject = createSubject()
+        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+        //                                                     isPrimary: true,
+        //                                                     activeTabId: UUID(),
+        //                                                     tabData: getMockTabData(count: 4))
+        //
+        //        subject.restoreTabs()
+        //        try await Task.sleep(nanoseconds: sleepTime * 5)
+        //        XCTAssertEqual(subject.tabs.count, 4)
+        //        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
     }
 
     func testRestoreTabsForced() async throws {
         throw XCTSkip("Needs to fix restore test")
-//        addTabs(count: 5)
-//        XCTAssertEqual(subject.tabs.count, 5)
-//
-//        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-//                                                     isPrimary: true,
-//                                                     activeTabId: UUID(),
-//                                                     tabData: getMockTabData(count: 3))
-//        subject.restoreTabs(true)
-//        try await Task.sleep(nanoseconds: sleepTime * 3)
-//        XCTAssertEqual(subject.tabs.count, 3)
-//        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
+        //        let subject = createSubject()
+        //        addTabs(to: subject, count: 5)
+        //        XCTAssertEqual(subject.tabs.count, 5)
+        //
+        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+        //                                                     isPrimary: true,
+        //                                                     activeTabId: UUID(),
+        //                                                     tabData: getMockTabData(count: 3))
+        //        subject.restoreTabs(true)
+        //        try await Task.sleep(nanoseconds: sleepTime * 3)
+        //        XCTAssertEqual(subject.tabs.count, 3)
+        //        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
     }
 
     func testRestoreScreenshotsForTabs() async throws {
         throw XCTSkip("Needs to fix restore test")
-//        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-//                                                     isPrimary: true,
-//                                                     activeTabId: UUID(),
-//                                                     tabData: getMockTabData(count: 2))
-//
-//        subject.restoreTabs()
-//        try await Task.sleep(nanoseconds: sleepTime * 10)
-//        XCTAssertEqual(mockDiskImageStore.getImageForKeyCallCount, 2)
+        //        let subject = createSubject()
+        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+        //                                                     isPrimary: true,
+        //                                                     activeTabId: UUID(),
+        //                                                     tabData: getMockTabData(count: 2))
+        //
+        //        subject.restoreTabs()
+        //        try await Task.sleep(nanoseconds: sleepTime * 10)
+        //        XCTAssertEqual(mockDiskImageStore.getImageForKeyCallCount, 2)
     }
 
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {
+        let subject = createSubject()
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
@@ -91,8 +90,9 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithOneTab() async throws {
+        let subject = createSubject()
         subject.tabRestoreHasFinished = true
-        addTabs(count: 1)
+        addTabs(to: subject, count: 1)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
@@ -100,8 +100,9 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithManyTabs() async throws {
+        let subject = createSubject()
         subject.tabRestoreHasFinished = true
-        addTabs(count: 5)
+        addTabs(to: subject, count: 5)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
@@ -111,7 +112,8 @@ class TabManagerTests: XCTestCase {
     // MARK: - Save preview screenshot
 
     func testSaveScreenshotWithNoImage() async throws {
-        addTabs(count: 5)
+        let subject = createSubject()
+        addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
             XCTFail("First tab was expected to be found")
             return
@@ -123,7 +125,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testSaveScreenshotWithImage() async throws {
-        addTabs(count: 5)
+        let subject = createSubject()
+        addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
             XCTFail("First tab was expected to be found")
             return
@@ -135,7 +138,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveScreenshotWithImage() async throws {
-        addTabs(count: 5)
+        let subject = createSubject()
+        addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
             XCTFail("First tab was expected to be found")
             return
@@ -149,9 +153,19 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func addTabs(count: Int) {
+    private func createSubject() -> TabManagerImplementation {
+        let subject = TabManagerImplementation(profile: mockProfile,
+                                               imageStore: mockDiskImageStore,
+                                               tabDataStore: mockTabStore,
+                                               tabSessionStore: mockSessionStore)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func addTabs(to subject: TabManagerImplementation, count: Int) {
         for _ in 0..<count {
             let tab = Tab(profile: mockProfile, configuration: webViewConfig)
+            tab.url = URL(string: "https://mozilla.com")!
             subject.tabs.append(tab)
         }
     }

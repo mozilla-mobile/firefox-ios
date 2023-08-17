@@ -16,9 +16,6 @@ public protocol TabSessionStore {
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
     func fetchTabSession(tabID: UUID) async -> Data?
-
-    /// Erases all session data files stored on disk
-    func clearAllData() async
 }
 
 public actor DefaultTabSessionStore: TabSessionStore {
@@ -61,9 +58,5 @@ public actor DefaultTabSessionStore: TabSessionStore {
                        category: .tabs)
             return nil
         }
-    }
-
-    public func clearAllData() async {
-        // TODO: FXIOS-6075
     }
 }

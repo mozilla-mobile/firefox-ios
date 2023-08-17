@@ -118,14 +118,16 @@ class LegacyTabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
         delegate.verify("Not all delegate methods were called")
 
         profile.shutdown()
         manager.removeDelegate(delegate) {
             self.manager.testRemoveAll()
         }
-
-        super.tearDown()
+        profile = nil
+        manager = nil
+        delegate = nil
     }
 
     func testAddTabShouldAddOneNormalTab() {
