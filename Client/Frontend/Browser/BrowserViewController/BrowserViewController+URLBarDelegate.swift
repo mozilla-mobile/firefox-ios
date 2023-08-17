@@ -133,28 +133,28 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
-         guard let tab = self.tabManager.selectedTab,
-               let url = tab.url,
-               let contentBlocker = tab.contentBlocker,
-               let webView = tab.webView else { return }
+        guard let tab = self.tabManager.selectedTab,
+              let url = tab.url,
+              let contentBlocker = tab.contentBlocker,
+              let webView = tab.webView else { return }
 
-         let etpViewModel = EnhancedTrackingProtectionMenuVM(
-             url: url,
-             displayTitle: tab.displayTitle,
-             connectionSecure: webView.hasOnlySecureContent,
-             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-             contentBlockerStatus: contentBlocker.status)
-         etpViewModel.onOpenSettingsTapped = { [weak self] in
-             if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                 // Wait to show settings in async dispatch since hamburger menu is still showing at that time
-                 DispatchQueue.main.async {
-                     self?.navigationHandler?.show(settings: .contentBlocker)
-                 }
-             } else {
-                 self?.legacyShowSettings(deeplink: .contentBlocker)
-             }
-         }
-         etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
+        let etpViewModel = EnhancedTrackingProtectionMenuVM(
+            url: url,
+            displayTitle: tab.displayTitle,
+            connectionSecure: webView.hasOnlySecureContent,
+            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+            contentBlockerStatus: contentBlocker.status)
+        etpViewModel.onOpenSettingsTapped = { [weak self] in
+            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+                DispatchQueue.main.async {
+                    self?.navigationHandler?.show(settings: .contentBlocker)
+                }
+            } else {
+                self?.legacyShowSettings(deeplink: .contentBlocker)
+            }
+        }
+        etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
 
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
         if CoordinatorFlagManager.isEtpCoordinatorEnabled {
