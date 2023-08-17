@@ -151,6 +151,7 @@ class ReadingListPanel: UITableViewController,
                         LibraryPanel,
                         Themeable {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
@@ -164,9 +165,11 @@ class ReadingListPanel: UITableViewController,
 
     private var records: [ReadingListItem]?
 
-    init(profile: Profile,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(
+        profile: Profile,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -383,7 +386,11 @@ class ReadingListPanel: UITableViewController,
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
-            libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
+            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+                navigationHandler?.openUrl(encodedURL, visitType: visitType)
+            } else {
+                libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
+            }
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }

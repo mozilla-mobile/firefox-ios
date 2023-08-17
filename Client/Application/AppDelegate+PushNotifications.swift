@@ -114,8 +114,7 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         var notificationAllowed = true
-        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly),
-           UserDefaults.standard.object(forKey: PrefsKeys.Notifications.SyncNotifications) != nil {
+        if UserDefaults.standard.object(forKey: PrefsKeys.Notifications.SyncNotifications) != nil {
             notificationAllowed = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications)
         }
 

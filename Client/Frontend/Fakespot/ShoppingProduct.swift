@@ -25,7 +25,7 @@ struct Product: Equatable {
 class ShoppingProduct: FeatureFlaggable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
-    private let client: FakeSpotClientType
+    private let client: FakespotClientType
 
     /// Initializes a new instance of a product with the provided URL and optional parameters.
     ///
@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
-        client: FakeSpotClientType = MockFakeSpotClient()
+        client: FakespotClientType = FakespotClient(environment: .staging)
     ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
@@ -94,7 +94,7 @@ class ShoppingProduct: FeatureFlaggable {
                 // If 500 error occurs during the attempt, we use 'continue'
                 // to go back to the beginning of the loop and try again.
                 // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
-                if let error = error as? NSError, error.code == 500 {
+                if (error as NSError).code == 500 {
                     continue
                 } else {
                     throw error

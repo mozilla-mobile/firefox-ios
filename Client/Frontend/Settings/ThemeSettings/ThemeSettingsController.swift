@@ -64,14 +64,22 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(brightnessChanged),
+                                               selector: #selector(systemBrightnessChanged),
                                                name: UIScreen.brightnessDidChangeNotification,
                                                object: nil)
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
     func newState(state: ThemeSettingsState) {
         themeState = state
-        tableView.reloadData()
+        // Reload of tableView is needed to reflect the new state. Currently applyTheme calls tableview.reload
+        applyTheme()
     }
 
     // MARK: - UI actions
@@ -103,11 +111,20 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     @objc
-    func brightnessChanged() {
+    func systemBrightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
-        } else {
+        }
+        brightnessChanged()
+    }
+
+    /// Update Theme if user or system brightness change due to user action
+    func brightnessChanged() {
+        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+
+        if !isReduxIntegrationEnabled {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
         applyTheme()
@@ -122,8 +139,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         } else {
             themeManager.setAutomaticBrightnessValue(control.value)
             LegacyThemeManager.instance.automaticBrightnessValue = control.value
+            brightnessChanged()
         }
-        brightnessChanged()
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
@@ -321,16 +338,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     private func configureLightDarkTheme(indexPath: IndexPath, cell: ThemedTableViewCell) {
         if isAutoBrightnessOn {
-            let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
-            let slider = makeSlider(parent: cell.contentView)
-            slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
-            deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
-            deviceBrightnessIndicator.isUserInteractionEnabled = false
-            deviceBrightnessIndicator.minimumTrackTintColor = .clear
-            deviceBrightnessIndicator.maximumTrackTintColor = .clear
-            deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
-            self.slider = (slider, deviceBrightnessIndicator)
+            configureAutomaticBrightness(cell: cell)
         } else {
             if indexPath.row == 0 {
                 cell.textLabel?.text = .DisplayThemeOptionLight
@@ -347,5 +355,23 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                 cell.accessoryType = .none
             }
         }
+    }
+
+    private func configureAutomaticBrightness(cell: ThemedTableViewCell) {
+        let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
+        let slider = makeSlider(parent: cell.contentView)
+        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        if isReduxIntegrationEnabled {
+            slider.value = themeState.userBrightnessThreshold
+            deviceBrightnessIndicator.value = themeState.systemBrightness
+        } else {
+            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
+            deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
+        }
+        deviceBrightnessIndicator.isUserInteractionEnabled = false
+        deviceBrightnessIndicator.minimumTrackTintColor = .clear
+        deviceBrightnessIndicator.maximumTrackTintColor = .clear
+        deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
+        self.slider = (slider, deviceBrightnessIndicator)
     }
 }

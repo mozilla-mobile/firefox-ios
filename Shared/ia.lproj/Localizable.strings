@@ -727,9 +727,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marcar como non legite";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "Adder marcapaginas";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Marcapaginas addite";
 
@@ -813,9 +810,6 @@
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Removite del accessos directe";
-
-/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
-"Menu.RemoveReadingList.AlternateLabel.v99" = "Remover del lista de lectura";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "Removite del lista de lectura";

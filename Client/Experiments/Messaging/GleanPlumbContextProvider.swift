@@ -50,9 +50,8 @@ class GleanPlumbContextProvider {
     }
 
     private var allowedTipsNotifications: Bool {
-        let featureEnabled = FxNimbus.shared.features.notificationSettingsFeature.value().notificationSettingsFeatureStatus
         let userPreference = userDefaults.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
-        return featureEnabled && userPreference
+        return userPreference
     }
 
     /// JEXLs are more accurately evaluated when given certain details about the app on device.

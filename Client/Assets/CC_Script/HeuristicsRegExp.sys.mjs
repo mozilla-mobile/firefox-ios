@@ -56,18 +56,22 @@ export const HeuristicsRegExp = {
       "cc-exp":
         "ważna.*do" +        // pl-PL
         "|data.*ważności" +  // pl-PL
+        "|mm\\s*[\\-\\/]\\s*yy" +  // en-US
         "|mm\\s*[\\-\\/]\\s*aa" +  // es-ES
-        "|mm\\s*[\\-\\/]\\s*jj",  // de-AT
+        "|mm\\s*[\\-\\/]\\s*jj" +  // de-AT
+        "|vervaldatum",            // nl-NL
       "cc-exp-month":
         "month" +
         "|(cc|kk)month" +    // de-DE
         "|miesiąc" +         // pl-PL
-        "|mes",              // es-ES
+        "|mes" +             // es-ES
+        "|maand",            // nl-NL
       "cc-exp-year":
         "year" +
         "|(cc|kk)year" +     // de-DE
         "|rok" +             // pl-PL
-        "|(anno|año)",       // es-ES
+        "|(anno|año)" +      // es-ES
+        "|jaar",             // nl-NL
       "cc-type":
         "type" +
         "|kartenmarke" +     // de-DE

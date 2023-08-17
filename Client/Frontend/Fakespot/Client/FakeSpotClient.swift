@@ -5,42 +5,64 @@
 import Foundation
 import MozillaAppServices
 
-/// Protocol representing the FakeSpotClientType, which defines two asynchronous methods for fetching product analysis data and product ad data.
-protocol FakeSpotClientType {
+/// Protocol representing the FakespotClientType, which defines two asynchronous methods for fetching product analysis data and product ad data.
+protocol FakespotClientType {
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData]
 }
 
-/// Struct MockFakeSpotClient conforms to the FakeSpotClientType protocol and provides mocked implementations for fetching product analysis data and product ad data.
-struct MockFakeSpotClient: FakeSpotClientType {
-    /// Mock implementation for fetching product analysis data using a JSON file.
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
-        try load(ProductAnalysisData.self, filename: "productanalysis-response")
+/// An enumeration representing different environments for the Fakespot client.
+enum FakespotEnvironment {
+    case staging
+    case prod
+
+    /// Returns the API analysisEndpoint URL based on the selected environment.
+    var analysisEndpoint: URL? {
+        switch self {
+        case .staging:
+            return URL(string: "https://staging.trustwerty.com/api/v1/fx/analysis")
+        case .prod:
+            return nil
+        }
     }
 
-    /// Mock implementation for fetching product ad data using a JSON file.
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
-        try load([ProductAdsData].self, filename: "productadsdata-response")
+    /// Returns the API ad endpoint URL based on the selected environment.
+    var adEndpoint: URL? {
+        switch self {
+        case .staging:
+            return URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search")
+        case .prod:
+            return nil
+        }
     }
 
-    /// Helper function to load JSON data from a file.
-    private func load<T: Decodable>(_ type: T.Type, filename: String) throws -> T {
-        let path = Bundle.main.url(forResource: filename, withExtension: "json")!
-        let data = try Data(contentsOf: path)
-        return try JSONDecoder().decode(type, from: data)
+    /// Returns the configuration URL based on the selected environment.
+    var config: URL? {
+        switch self {
+        case .staging:
+            return URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")
+        case .prod:
+            return nil
+        }
+    }
+
+    /// Returns the relay URL based on the selected environment.
+    var relay: URL? {
+        switch self {
+        case .staging:
+            return URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")
+        case .prod:
+            return nil
+        }
     }
 }
 
-/// Struct FakeSpotClient conforms to the FakeSpotClientType protocol and provides real network implementations for fetching product analysis data and product ad data.
-struct FakeSpotClient: FakeSpotClientType {
-    /// NetworkFunction typealias represents a function that takes a URLRequest and returns Data and URLResponse asynchronously.
-    public typealias NetworkFunction = (_: URLRequest) async throws -> (Data, URLResponse)
-    /// Private property to hold the network function for performing API requests.
-    private var network: NetworkFunction
+/// Struct FakeSpotClient conforms to the FakespotClientType protocol and provides real network implementations for fetching product analysis data and product ad data.
+struct FakespotClient: FakespotClientType {
+    private var environment: FakespotEnvironment
 
-    /// Initialize FakeSpotClient with a custom network function.
-    init(network: @escaping NetworkFunction) {
-        self.network = network
+    init(environment: FakespotEnvironment) {
+        self.environment = environment
     }
 
     /// Error enum for FakeSpotClient errors, including invalid URL.
@@ -51,7 +73,7 @@ struct FakeSpotClient: FakeSpotClientType {
     /// Asynchronous method to fetch product analysis data from a remote server.
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         // Define the API endpoint URL
-        guard let endpointURL = URL(string: "https://staging.trustwerty.com/api/v1/fx/analysis") else {
+        guard let endpointURL = environment.analysisEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
@@ -68,7 +90,7 @@ struct FakeSpotClient: FakeSpotClientType {
     /// Asynchronous method to fetch product ad data from a remote server.
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         // Define the API endpoint URL
-        guard let endpointURL = URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search") else {
+        guard let endpointURL = environment.adEndpoint  else {
             throw FakeSpotClientError.invalidURL
         }
 
@@ -93,8 +115,17 @@ struct FakeSpotClient: FakeSpotClientType {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
 
-        // Perform the API request using the network function and get the response data
-        let (data, response): (Data, URLResponse) = try await network(request)
+        guard
+            let config = environment.config,
+            let relay = environment.relay
+        else {
+            throw FakeSpotClientError.invalidURL
+        }
+
+        // Create an instance of OhttpManager with the staging configuration
+        let manager = OhttpManager(configUrl: config, relayUrl: relay)
+        // Perform the API request using OhttpManager and get the response data
+        let (data, response): (Data, URLResponse) = try await manager.data(for: request)
 
         // Check if the response status code indicates success (200)
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -104,20 +135,4 @@ struct FakeSpotClient: FakeSpotClientType {
         // Decode the response data and return the result
         return try JSONDecoder().decode(type, from: data)
     }
-}
-
-/// Extension for FakeSpotClient to provide a static staging instance with a custom network function.
-extension FakeSpotClient {
-    /// Static property representing a staging instance of FakeSpotClient using a custom network function.
-    static let staging: FakeSpotClient = {
-        FakeSpotClient { @Sendable request in
-            // Define the configuration and relay URLs for the staging instance
-            let config = URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")!
-            let relay = URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")!
-            // Create an instance of OhttpManager with the staging configuration
-            let staging = OhttpManager(configUrl: config, relayUrl: relay)
-            // Perform the API request using OhttpManager and get the response data
-            return try await staging.data(for: request)
-        }
-    }()
 }

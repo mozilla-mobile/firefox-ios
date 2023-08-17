@@ -1,0 +1,80 @@
+{
+  "configurations" : [
+    {
+      "id" : "7507FB87-8AE7-4A01-A172-706A9E6B1C1D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest",
+        "AuthenticationTest",
+        "BaseTestCase",
+        "BookmarkingTests",
+        "BrowsingPDFTests",
+        "ClipBoardTests",
+        "CopiedLinksTests",
+        "DataManagementTests",
+        "DatabaseFixtureTest",
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone",
+        "DisplaySettingTests",
+        "DomainAutocompleteTest",
+        "DownloadFilesTests",
+        "DragAndDropTestIpad",
+        "DragAndDropTests",
+        "EngagementNotificationTests",
+        "FindInPageTests",
+        "FirstRunTourTests",
+        "FxScreenGraphTests",
+        "HistoryTests",
+        "HomeButtonTests",
+        "HomePageSettingsUITests",
+        "IntegrationTests",
+        "IpadOnlyTestCase",
+        "IphoneOnlyTestCase",
+        "JumpBackInTests",
+        "LibraryTestsIpad",
+        "MailAppSettingsTests",
+        "NavigationTest",
+        "NewTabSettingsTest",
+        "NightModeTests",
+        "NoImageTests",
+        "PerformanceTests",
+        "PhotonActionSheetTest",
+        "PocketTest",
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad",
+        "ReaderViewTest",
+        "SaveLoginTest",
+        "ScreenGraphTest",
+        "SearchSettingsUITests",
+        "SearchTests",
+        "SettingsTest",
+        "SiteLoadTest",
+        "SyncUITests",
+        "TabCounterTests",
+        "ThirdPartySearchTest",
+        "ToolbarTests",
+        "TopTabsTest",
+        "TopTabsTestIpad",
+        "TopTabsTestIphone",
+        "TrackingProtectionTests",
+        "WhatsNewTest"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

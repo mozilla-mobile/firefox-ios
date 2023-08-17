@@ -6,169 +6,13 @@ import Common
 import Foundation
 import Shared
 
-extension BlockingStrength {
-    var settingStatus: String {
-        switch self {
-        case .basic:
-            return .TrackingProtectionOptionBlockListLevelStandardStatus
-        case .strict:
-            return .TrackingProtectionOptionBlockListLevelStrict
-        }
-    }
-
-    var settingTitle: String {
-        switch self {
-        case .basic:
-            return .TrackingProtectionOptionBlockListLevelStandard
-        case .strict:
-            return .TrackingProtectionOptionBlockListLevelStrict
-        }
-    }
-
-    var settingSubtitle: String {
-        switch self {
-        case .basic:
-            return .TrackingProtectionStandardLevelDescription
-        case .strict:
-            return .TrackingProtectionStrictLevelDescription
-        }
-    }
-
-    static func accessibilityId(for strength: BlockingStrength) -> String {
-        switch strength {
-        case .basic:
-            return "Settings.TrackingProtectionOption.BlockListBasic"
-        case .strict:
-            return "Settings.TrackingProtectionOption.BlockListStrict"
-        }
-    }
-}
-
-// MARK: Additional information shown when the info accessory button is tapped.
-class TPAccessoryInfo: ThemedTableViewController {
-    var isStrictMode = false
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.register(cellType: ThemedSubtitleTableViewCell.self)
-        tableView.estimatedRowHeight = 130
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
-
-        tableView.sectionHeaderHeight = 0
-        tableView.sectionFooterHeight = 0
-        applyTheme()
-        listenForThemeChange(view)
-    }
-
-    func headerView() -> UIView {
-        let stack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 10))
-        stack.axis = .vertical
-
-        let header = UILabel()
-        header.text = .TPAccessoryInfoBlocksTitle
-        header.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumBoldFont
-        header.textColor = themeManager.currentTheme.colors.textSecondary
-
-        stack.addArrangedSubview(UIView())
-        stack.addArrangedSubview(header)
-
-        stack.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        stack.isLayoutMarginsRelativeArrangement = true
-
-        let topStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 40))
-        topStack.axis = .vertical
-        let sep = UIView()
-        topStack.addArrangedSubview(stack)
-        topStack.addArrangedSubview(sep)
-        topStack.spacing = 10
-
-        topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
-        topStack.isLayoutMarginsRelativeArrangement = true
-
-        sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
-        sep.snp.makeConstraints { make in
-            make.height.equalTo(0.5)
-            make.width.equalToSuperview()
-        }
-        return topStack
-    }
-
-    override func applyTheme() {
-        super.applyTheme()
-        tableView.tableHeaderView = headerView()
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return isStrictMode ? 5 : 4
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme)
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .TPSocialBlocked
-            } else {
-                cell.textLabel?.text = .TPCategoryDescriptionSocial
-            }
-        } else if indexPath.section == 1 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .TPCrossSiteBlocked
-            } else {
-                cell.textLabel?.text = .TPCategoryDescriptionCrossSite
-            }
-        } else if indexPath.section == 2 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .TPCryptominersBlocked
-            } else {
-                cell.textLabel?.text = .TPCategoryDescriptionCryptominers
-            }
-        } else if indexPath.section == 3 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .TPFingerprintersBlocked
-            } else {
-                cell.textLabel?.text = .TPCategoryDescriptionFingerprinters
-            }
-        } else if indexPath.section == 4 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = .TPContentBlocked
-            } else {
-                cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
-            }
-        }
-        cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
-        if indexPath.row == 1 {
-            cell.textLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumFont
-        }
-        cell.textLabel?.numberOfLines = 0
-        cell.detailTextLabel?.numberOfLines = 0
-        cell.backgroundColor = .clear
-        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
-        cell.selectionStyle = .none
-        return cell
-    }
-
-    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell
-        else {
-            return ThemedSubtitleTableViewCell()
-        }
-        return cell
-    }
-}
-
 class ContentBlockerSettingViewController: SettingsTableViewController {
     private let button = UIButton()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs,
+         isShownFromSettings: Bool = true) {
         self.prefs = prefs
 
         currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
@@ -176,6 +20,14 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = .SettingsTrackingProtectionSectionName
+
+        if !isShownFromSettings {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: .AppSettingsDone,
+                style: .plain,
+                target: self,
+                action: #selector(done))
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -305,5 +157,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    @objc
+    func done() {
+        settingsDelegate?.didFinish()
     }
 }

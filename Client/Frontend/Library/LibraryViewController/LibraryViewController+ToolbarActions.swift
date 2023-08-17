@@ -16,7 +16,13 @@ extension LibraryViewController {
 
     @objc
     func topRightButtonAction() {
-        guard let panel = viewModel.currentPanel else { return }
+        var panel: LibraryPanel?
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            panel = getCurrentPanel()
+        } else {
+            panel = viewModel.currentPanel
+        }
+        guard let panel = panel else { return }
 
         if panel.shouldDismissOnDone() {
             dismiss(animated: true, completion: nil)

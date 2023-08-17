@@ -79,9 +79,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-
-        case .notificationSettings:
-            return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
         }
     }
 
@@ -218,17 +215,6 @@ final class NimbusFeatureFlagLayer {
             }
     }
 
-    public func checkNimbusForNotificationSettings(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.notificationSettingsFeature.value()
-
-            switch featureID {
-            case .notificationSettings: return config.notificationSettingsFeatureStatus
-            default: return false
-            }
-    }
-
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -289,7 +275,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.fakespotFeature.value()
+        let config = nimbus.features.shopping2023.value()
 
         return config.status
     }

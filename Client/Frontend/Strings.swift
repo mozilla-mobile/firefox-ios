@@ -14,6 +14,8 @@ public struct Strings {
 
 // MARK: - Localization helper function
 
+/// Full documentation available in
+///
 /// Used to define a new string into the project
 /// - Parameters:
 ///   - key: The key should be unique and composed of a relevant name, ended with the version the string was included in.
@@ -21,15 +23,18 @@ public struct Strings {
 ///   section, added in v103. The name is clear and explicit.
 ///   - tableName: The tablename defines the name of the table containing the localized string.
 ///   This specifically need to be defined for any strings that is part of the messaging framework, but since any string can be part of messaging in the
-///   future all strings should have a tablename. This can be nil for existing strings, new string shouldn't have a nil tableName.
-///   - value: The value is always the text that needs to be localized.  This can be nil for existing strings, new string shouldn't have a nil value.
-///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow
+///   future all strings should have a tablename. This can be nil for existing strings, `new string shouldn't have a nil tableName`.
+///   - value: The value is always the text that needs to be localized.  This can be nil for existing strings, `new string shouldn't have a nil value`.
+///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow the l10n documentation
 ///   https://mozilla-l10n.github.io/documentation/localization/dev_best_practices.html#add-localization-notes
+///   - lastUsedInVersion: Whenever we remove or modify a string, we keep the translated version of that string a bit longer to ensure the last version it was
+///   used in will be release in the App Store before we remove the string from the l10n repository
 private func MZLocalizedString(
     key: String,
     tableName: String?,
     value: String?,
-    comment: String
+    comment: String,
+    lastUsedInVersion: Int? = nil
 ) -> String {
     return NSLocalizedString(key,
                              tableName: tableName,
@@ -40,18 +45,17 @@ private func MZLocalizedString(
 
 // This file contains all strings for Firefox iOS.
 //
-// As we continue to update strings, old strings may be present at the bottom of this
-// file. To preserve a clean implementation of strings, this file should be organized
-// alphabetically, according to specific screens or feature, on that screen. Each
-// string should be under a struct giving a clear indication as to where it is being
-// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
+// To preserve a clean structure of this string file, we should organize them alphabetically,
+// according to specific screens or feature, on that screen. Each string should
+// be under a struct giving a clear indication as to where it is being used.
+// In this case we will prefer verbosity for the sake of accuracy, over brevity.
 // Sub structs may, and should, also be used to separate functionality where it makes
 // sense, but efforts should be made to keep structs two levels deep unless there are
-// good reasons for doing otherwise.
+// good reasons for doing otherwise. As we continue to update strings, old strings may
+// be present at the bottom of this file.
 //
-// Note that some strings belong to one feature that appears across mulitple screens
-// throughout the application. An example is contextual hints. In this case, it makes
-// more sense to organize all those strings under the specific feature.
+// Note that strings shouldn't be reused in multiple places in the application. Depending
+// on the Locale we can't guarantee one string will be translated the same even if its value is the same.
 
 // MARK: - Alerts
 extension String {
@@ -108,22 +112,6 @@ extension String {
                 tableName: nil,
                 value: "Desktop Bookmarks",
                 comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.")
-        }
-    }
-}
-
-// MARK: - Browser View Controller
-extension String {
-    public struct BVC {
-        public struct General {
-        }
-
-        public struct MenuItems {
-            public struct Hamburger {
-            }
-
-            public struct LongPressGesture {
-            }
         }
     }
 }
@@ -246,7 +234,7 @@ extension String {
                 key: "CreditCard.Settings.ListItemA11y.v118",
                 tableName: "Settings",
                 value: "%1$@, issued to %2$@, ending in %3$@, expires %4$@",
-                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date.")
         }
 
         // Displaying a credit card
@@ -484,11 +472,6 @@ extension String {
                 comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and perform the operation of removing the credit card.")
         }
     }
-}
-
-// MARK: - Enhanced Tracking Protection screen
-extension String {
-    public struct ETPMenu { }
 }
 
 // MARK: - Firefox Homepage
@@ -1152,11 +1135,6 @@ extension String {
     }
 }
 
-// MARK: - Passwords and Logins
-extension String {
-    public struct PasswordsAndLogins { }
-}
-
 // MARK: - Research Surface
 extension String {
     public struct ResearchSurface {
@@ -1610,16 +1588,6 @@ extension String {
             value: "Send Link to Device",
             comment: "Button in the share sheet to send the current link to another device.")
     }
-}
-
-// MARK: - Switch Default Browser Screen
-extension String {
-    public struct SwitchDefaultBrowser { }
-}
-
-// MARK: - Sync Screen
-extension String {
-    public struct SyncScreen { }
 }
 
 // MARK: - Tabs Tray
@@ -3599,6 +3567,51 @@ extension String {
         tableName: nil,
         value: "Loading in Firefox",
         comment: "Share extension label shown after user has performed 'Load in Background' action.")
+}
+
+extension String {
+    public struct Shopping {
+        public static let SheetHeaderTitle = MZLocalizedString(
+            key: "", // Shopping.Sheet.Title.v118
+            tableName: "Shopping",
+            value: "Review quality check",
+            comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
+        public static let ReliabilityCardTitle = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v118
+            tableName: "Shopping",
+            value: "How reliable are these reviews?",
+            comment: "Title of the reliability card displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingAB = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.AB.Description.v118
+            tableName: "Shopping",
+            value: "Reliable reviews",
+            comment: "Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingC = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.C.Description.v118
+            tableName: "Shopping",
+            value: "Only some reliable reviews",
+            comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
+        public static let ReliabilityRatingDF = MZLocalizedString(
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.DF.Description.v118
+            tableName: "Shopping",
+            value: "Unreliable reviews",
+            comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardTitle = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Title.v118
+            tableName: "Shopping",
+            value: "Something Went Wrong",
+            comment: "Title of the error displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardDescription = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Description.v118
+            tableName: "Shopping",
+            value: "Couldn’t load information. Please try again.",
+            comment: "Description of the error displayed in the shopping review quality bottom sheet.")
+        public static let ErrorCardButtonText = MZLocalizedString(
+            key: "", // Shopping.ErrorCard.Button.Text.v118
+            tableName: "Shopping",
+            value: "Try Again",
+            comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+    }
 }
 
 // MARK: - Translation bar

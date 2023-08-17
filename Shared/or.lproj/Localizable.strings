@@ -661,9 +661,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "ପଠିତ ହୋଇ ନାହିଁ ବୋଲି ଚିହ୍ନଟ କରନ୍ତୁ";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "ବୁକମାର୍କକୁ ଯୋଗ କରନ୍ତୁ";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ଚିହ୍ନିତ ସ୍ଥାନ ଯୋଡ଼ା ହେଲା";
 
@@ -729,9 +726,6 @@
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "ଶର୍ଟକଟ ତାଲିକାରୁ କଢ଼ାହେଲା";
-
-/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
-"Menu.RemoveReadingList.AlternateLabel.v99" = "ପଠନ ତାଲିକାରୁ କାଢନ୍ତୁ";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "ପଠନ ତାଲିକାରୁ କଢ଼ାହେଲା";
