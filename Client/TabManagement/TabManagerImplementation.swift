@@ -253,8 +253,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                          tabHistoryCurrentState: state)
 
             let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            if tab.url == nil && tab.lastKnownUrl == nil {
-                logger.log("Tab has empty URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))",
+            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))"
+            if tab.url == nil {
+                logger.log("Tab has empty tab.URL \(logMessage)",
+                           level: .debug,
+                           category: .tabs)
+            } else if tab.lastKnownUrl == nil {
+                logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
                            level: .debug,
                            category: .tabs)
             }
