@@ -228,6 +228,7 @@ extension IntroViewController: OnboardingCardDelegate {
         switch action {
         case .requestNotifications:
             askForNotificationPermission(from: cardName)
+            sendOnboardingUserActivationEvent(fineValue: 1)
         case .nextCard:
             showNextPage(from: cardName) {
                 self.showNextPageCompletionForLastCard()
@@ -242,9 +243,11 @@ extension IntroViewController: OnboardingCardDelegate {
                     self.showNextPageCompletionForLastCard()
                 }
             }
+            sendOnboardingUserActivationEvent(fineValue: 3)
         case .setDefaultBrowser:
             registerForNotification()
             DefaultApplicationHelper().openSettings()
+            sendOnboardingUserActivationEvent(fineValue: 2)
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
                 from: cardName,
@@ -258,6 +261,11 @@ extension IntroViewController: OnboardingCardDelegate {
 
     func sendCardViewTelemetry(from cardName: String) {
         viewModel.telemetryUtility.sendCardViewTelemetry(from: cardName)
+    }
+
+    func sendOnboardingUserActivationEvent(fineValue: Int) {
+        let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
+        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
     }
 
     private func showNextPageCompletionForLastCard() {
