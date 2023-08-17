@@ -115,6 +115,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         button.isHidden = true
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shoppingButton
     }
 
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
