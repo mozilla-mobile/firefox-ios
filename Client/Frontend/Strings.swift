@@ -3621,6 +3621,16 @@ extension String {
             tableName: "Shopping",
             value: "Unreliable reviews removed",
             comment: "Description adjusted rating card displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardFooterText = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Footer.Text.v118
+            tableName: "Shopping",
+            value: "Summarized using information provided by Fakespot.com.",
+            comment: "Footer text of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardFooterButtonText = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Footer.Button.Text.v118
+            tableName: "Shopping",
+            value: "View full analysis",
+            comment: "Footer button text of the review highlights displayed in the shopping review quality bottom sheet.")
     }
 }
 

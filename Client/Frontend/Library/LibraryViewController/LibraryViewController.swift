@@ -205,9 +205,10 @@ class LibraryViewController: UIViewController, Themeable {
               index < viewModel.panelDescriptors.count else { return }
 
         if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            let panelDescriptor = viewModel.panelDescriptors[index]
             if let panelVC = childPanelControllers[index].topViewController {
                 let panelNavigationController = childPanelControllers[index]
-                setupLibraryPanel(panelVC, accessibilityLabel: "", accessibilityIdentifier: "")
+                setupLibraryPanel(panelVC, accessibilityLabel: panelDescriptor.accessibilityLabel, accessibilityIdentifier: panelDescriptor.accessibilityIdentifier)
                 showPanel(panelNavigationController)
                 navigationHandler?.start(panelType: viewModel.selectedPanel ?? .bookmarks, navigationController: panelNavigationController)
             }

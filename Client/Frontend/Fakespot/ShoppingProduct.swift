@@ -25,7 +25,7 @@ struct Product: Equatable {
 class ShoppingProduct: FeatureFlaggable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
-    private let client: FakeSpotClientType
+    private let client: FakespotClientType
 
     /// Initializes a new instance of a product with the provided URL and optional parameters.
     ///
@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
-        client: FakeSpotClientType = MockFakeSpotClient()
+        client: FakespotClientType = FakespotClient(environment: .staging)
     ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer

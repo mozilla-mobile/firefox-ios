@@ -62,6 +62,7 @@ class FakespotViewController: UIViewController, Themeable {
 
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
+    private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var adjustRatingView: AdjustRatingView = .build()
 
@@ -80,7 +81,6 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         setupView()
         listenForThemeChange(view)
 
@@ -106,6 +106,11 @@ class FakespotViewController: UIViewController, Themeable {
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
         errorCardView.configure(viewModel: errorCardViewModel)
+
+        let highlightsCardViewModel = HighlightsCardViewModel(
+            footerTitle: .Shopping.HighlightsCardFooterText,
+            footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
+        highlightsCardView.configure(highlightsCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -123,20 +128,25 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let colors = themeManager.currentTheme.colors
-        titleLabel.textColor = colors.textPrimary
-        errorCardView.applyTheme(theme: themeManager.currentTheme)
-        reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
-        loadingView.applyTheme(theme: themeManager.currentTheme)
+        let theme = themeManager.currentTheme
+
+        view.backgroundColor = theme.colors.layer1
+        titleLabel.textColor = theme.colors.textPrimary
+
+        errorCardView.applyTheme(theme: theme)
+        reliabilityCardView.applyTheme(theme: theme)
+        highlightsCardView.applyTheme(theme: theme)
+        loadingView.applyTheme(theme: theme)
         adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
-        contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(reliabilityCardView)
         adjustRatingView.rating = 4.5
         contentStackView.addArrangedSubview(adjustRatingView)
+        contentStackView.addArrangedSubview(highlightsCardView)
+        contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)

@@ -61,6 +61,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
@@ -70,6 +71,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
@@ -169,5 +171,6 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
 
         primaryButton.setTitleColor(theme.colors.textOnDark, for: .normal)
         primaryButton.backgroundColor = theme.colors.iconAccentYellow // Update in FXIOS-7154
+        cardView.applyTheme(theme: theme)
     }
 }
