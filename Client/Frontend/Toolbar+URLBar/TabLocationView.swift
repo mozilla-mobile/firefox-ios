@@ -307,14 +307,12 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
 
         switch blockerStatus {
-        case .blocking, .noBlockedURLs:
+        case .blocking, .noBlockedURLs, .disabled:
             trackingProtectionButton.setImage(lockImage, for: .normal)
         case .safelisted:
             if let smallDotImage = UIImage(systemName: ImageIdentifiers.circleFill)?.withTintColor(theme.colors.iconAccentBlue) {
                 trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
             }
-        case .disabled:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
         }
     }
 }
