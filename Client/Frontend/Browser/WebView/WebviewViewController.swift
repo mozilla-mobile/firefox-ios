@@ -115,13 +115,11 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     // Updates the accessibility so webview and screentime view are accessible
     private func updateScreenTimeA11y(sendNotification: Bool = false) {
         if screenTimeController.urlIsBlocked {
-            screenTimeController.view?.accessibilityElementsHidden = false
             accessibilityElements = [ screenTimeController.view ]
 
             // Remove a11y elements for webview otherwise its content is still getting read with voice over
             webView.accessibilityElements = []
         } else {
-            screenTimeController.view?.accessibilityElementsHidden = true
             accessibilityElements = [ webView ]
             webView.accessibilityElements = nil
         }
