@@ -18,6 +18,9 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
     private enum UX {
         static let titleFontSize: CGFloat = 17
         static let descriptionFontSize: CGFloat = 13
+        static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        static let hStackSpacing: CGFloat = 4
+        static let vStackSpacing: CGFloat = 8
     }
 
     var rating: Double = 0.0 {
@@ -51,15 +54,17 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var hStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.spacing = 4
+        stackView.spacing = UX.hStackSpacing
     }
 
     private lazy var vStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = UX.vStackSpacing
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        stackView.layoutMargins = UX.margins
     }
+
+    private lazy var spacer: UIView = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,7 +101,9 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
                            observing: [.DynamicFontChanged])
 
         hStackView.addArrangedSubview(titleLabel)
-        hStackView.addArrangedSubview(starRatingView)
+        let stackView = UIStackView(arrangedSubviews: [starRatingView, spacer])
+        stackView.axis = .horizontal
+        hStackView.addArrangedSubview(stackView)
 
         vStackView.addArrangedSubview(hStackView)
         vStackView.addArrangedSubview(descriptionLabel)
@@ -109,8 +116,10 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
 
         if contentSizeCategory.isAccessibilityCategory {
             hStackView.axis = .vertical
+            spacer.isHidden = false
         } else {
             hStackView.axis = .horizontal
+            spacer.isHidden = true
         }
 
         setNeedsLayout()

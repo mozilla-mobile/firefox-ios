@@ -7,8 +7,9 @@ import UIKit
 class StarRatingView: UIView {
     enum UX {
         static let starSize: CGFloat = 24
+        static let starCount = 5
     }
-    
+
     var rating: Double = 0.0 {
         didSet {
             updateStarImages()
@@ -45,7 +46,7 @@ class StarRatingView: UIView {
     private func updateStarImages() {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        for index in 1...5 {
+        for index in 1...UX.starCount {
             let starImageView = UIImageView(
                 image: UIImage(systemName: starImageName(for: index))
             )
