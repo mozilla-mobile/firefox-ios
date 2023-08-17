@@ -88,7 +88,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
@@ -97,7 +97,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
 
             // Safety check incase something went wrong during launch where a migration should have occured
             if tabs.count <= 1 && store.tabs.count > 1 {
@@ -253,15 +253,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                          tabHistoryCurrentState: state)
 
             let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            if tab.url?.absoluteString == nil {
+            if tab.url == nil && tab.lastKnownUrl == nil {
                 logger.log("Tab has empty URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))",
                            level: .debug,
                            category: .tabs)
             }
 
+            // laurie
             return TabData(id: tabId,
                            title: tab.lastTitle,
-                           siteUrl: tab.url?.absoluteString ?? "",
+                           siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime ?? 0),
