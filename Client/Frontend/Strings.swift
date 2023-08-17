@@ -3611,6 +3611,16 @@ extension String {
             tableName: "Shopping",
             value: "Try Again",
             comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+        public static let AdjustedRatingTitle = MZLocalizedString(
+            key: "", // Shopping.AdjustedRating.Title.v118
+            tableName: "Shopping",
+            value: "Adjusted rating",
+            comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
+        public static let AdjustedRatingDescription = MZLocalizedString(
+            key: "", // Shopping.AdjustedRating.Description.v118
+            tableName: "Shopping",
+            value: "Unreliable reviews removed",
+            comment: "Description adjusted rating card displayed in the shopping review quality bottom sheet.")
     }
 }
 

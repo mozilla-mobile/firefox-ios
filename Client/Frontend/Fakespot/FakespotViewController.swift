@@ -63,6 +63,7 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -92,6 +93,15 @@ class FakespotViewController: UIViewController, Themeable {
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
 
+        let adjustRatingViewModel = AdjustRatingViewModel(
+            title: .Shopping.AdjustedRatingTitle,
+            description: .Shopping.AdjustedRatingDescription,
+            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
+            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
+            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description
+        )
+        adjustRatingView.configure(adjustRatingViewModel)
+
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
@@ -118,12 +128,15 @@ class FakespotViewController: UIViewController, Themeable {
         errorCardView.applyTheme(theme: themeManager.currentTheme)
         reliabilityCardView.applyTheme(theme: themeManager.currentTheme)
         loadingView.applyTheme(theme: themeManager.currentTheme)
+        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        adjustRatingView.rating = 4.5
+        contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
