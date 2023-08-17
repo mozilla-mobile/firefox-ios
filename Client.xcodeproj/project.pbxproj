@@ -771,9 +771,9 @@
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
+		8CA0634F2A8E665500D7856E /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0634D2A8E665500D7856E /* StarRatingView.swift */; };
+		8CA063502A8E665500D7856E /* AdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0634E2A8E665500D7856E /* AdjustRatingView.swift */; };
 		8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */; };
-		8CB19EBC2A8DF96C0023F88E /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EBB2A8DF96C0023F88E /* StarRatingView.swift */; };
-		8CB19EBE2A8DF99E0023F88E /* AdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EBD2A8DF99E0023F88E /* AdjustRatingView.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
@@ -5017,10 +5017,10 @@
 		8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotClient.swift; sourceTree = "<group>"; };
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisData.swift; sourceTree = "<group>"; };
 		8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsData.swift; sourceTree = "<group>"; };
+		8CA0634D2A8E665500D7856E /* StarRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		8CA0634E2A8E665500D7856E /* AdjustRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustRatingView.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotErrorCardView.swift; sourceTree = "<group>"; };
-		8CB19EBB2A8DF96C0023F88E /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
-		8CB19EBD2A8DF99E0023F88E /* AdjustRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustRatingView.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -9864,9 +9864,9 @@
 		E16258F02A83D5DE00522742 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8CA0634E2A8E665500D7856E /* AdjustRatingView.swift */,
+				8CA0634D2A8E665500D7856E /* StarRatingView.swift */,
 				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
-				8CB19EBB2A8DF96C0023F88E /* StarRatingView.swift */,
-				8CB19EBD2A8DF99E0023F88E /* AdjustRatingView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 				E1FC23F02A8629380089E14D /* ReliabilityCardView.swift */,
 				E16AD22B2A8A7AE800F0AA58 /* HighlightsCardView.swift */,
@@ -12504,6 +12504,7 @@
 				BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */,
+				8CA063502A8E665500D7856E /* AdjustRatingView.swift in Sources */,
 				E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */,
 				74C027451B2A348C001B1E88 /* LegacySessionData.swift in Sources */,
 				C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
@@ -12525,6 +12526,7 @@
 				43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
+				8CA0634F2A8E665500D7856E /* StarRatingView.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
 				2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */,
@@ -12693,7 +12695,6 @@
 				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
 				C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
-				8CB19EBE2A8DF99E0023F88E /* AdjustRatingView.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
@@ -12729,7 +12730,6 @@
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */,
-				8CB19EBC2A8DF96C0023F88E /* StarRatingView.swift in Sources */,
 				215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
