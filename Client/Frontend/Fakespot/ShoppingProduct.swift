@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
-        client: FakespotClientType = FakespotClient(environment: .stanging)
+        client: FakespotClientType = FakespotClient(environment: .staging)
     ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer

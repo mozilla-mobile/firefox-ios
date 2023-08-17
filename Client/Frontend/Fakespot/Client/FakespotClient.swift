@@ -13,14 +13,24 @@ protocol FakespotClientType {
 
 /// An enumeration representing different environments for the Fakespot client.
 enum FakespotEnvironment {
-    case stanging
+    case staging
     case prod
 
-    /// Returns the API endpoint URL based on the selected environment.
-    var endpoint: URL? {
+    /// Returns the API analysisEndpoint URL based on the selected environment.
+    var analysisEndpoint: URL? {
         switch self {
-        case .stanging:
+        case .staging:
             return URL(string: "https://staging.trustwerty.com/api/v1/fx/analysis")
+        case .prod:
+            return nil
+        }
+    }
+
+    /// Returns the API ad endpoint URL based on the selected environment.
+    var adEndpoint: URL? {
+        switch self {
+        case .staging:
+            return URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search")
         case .prod:
             return nil
         }
@@ -29,7 +39,7 @@ enum FakespotEnvironment {
     /// Returns the configuration URL based on the selected environment.
     var config: URL? {
         switch self {
-        case .stanging:
+        case .staging:
             return URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")
         case .prod:
             return nil
@@ -39,7 +49,7 @@ enum FakespotEnvironment {
     /// Returns the relay URL based on the selected environment.
     var relay: URL? {
         switch self {
-        case .stanging:
+        case .staging:
             return URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")
         case .prod:
             return nil
@@ -63,7 +73,7 @@ struct FakespotClient: FakespotClientType {
     /// Asynchronous method to fetch product analysis data from a remote server.
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         // Define the API endpoint URL
-        guard let endpointURL = environment.endpoint else {
+        guard let endpointURL = environment.analysisEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
@@ -80,7 +90,7 @@ struct FakespotClient: FakespotClientType {
     /// Asynchronous method to fetch product ad data from a remote server.
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         // Define the API endpoint URL
-        guard let endpointURL = URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search") else {
+        guard let endpointURL = environment.adEndpoint  else {
             throw FakeSpotClientError.invalidURL
         }
 
