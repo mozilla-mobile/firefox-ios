@@ -30,7 +30,14 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
 
-    private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
+    private static let SupportedLocales = [
+        "fr_FR", "fr",
+        "es_ES", "es",
+        "it_IT", "it",
+        "en_CA", "en_GB", "en_US", "en",
+        "de_DE", "de_AT", "de_CH", "de"
+    ]
+
     private let pocketGlobalFeed: String
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
@@ -64,11 +71,22 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     // Fetch items from the global pocket feed
     func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
+        let isFeatureEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
+
+        // Check if we should use mock data
         if shouldUseMockData {
             return getMockDataFeed(count: items, completion: completion)
-        } else {
-            return getGlobalFeed(items: items, completion: completion)
         }
+
+        // Ensure the feature is enabled and current locale is supported
+        guard isFeatureEnabled, isCurrentLocaleSupported else {
+            completion(.failure(Error.failure))
+            return
+        }
+
+        // Note: Global feed is restricted to specific locale and feature availability
+        getGlobalFeed(items: items, completion: completion)
     }
 
     private func getGlobalFeed(items: Int, completion: @escaping (StoryResult) -> Void) {
