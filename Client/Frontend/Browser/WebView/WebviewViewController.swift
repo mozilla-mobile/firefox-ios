@@ -11,6 +11,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     private var webView: WKWebView
     private let screenTimeController = STWebpageController()
     var contentType: ContentType = .webview
+    var kvoToken: NSKeyValueObservation?
 
     init(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
@@ -22,10 +23,17 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         fatalError("not implemented")
     }
 
+    deinit {
+        kvoToken?.invalidate()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
+
+        // Screentime
         setupScreenTimeController()
+        observeScreenTimeChanges()
     }
 
     private func setupWebView() {
@@ -81,6 +89,8 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         ])
         screenTimeController.didMove(toParent: self)
         screenTimeController.url = webView.url
+
+        updateScreenTimeA11y()
     }
 
     private func removeScreenTimeController() {
@@ -92,6 +102,32 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     private func setScreenTimeUsage(isPrivate: Bool) {
         // Usage recording is suppressed if the navigation is set to incognito mode.
         screenTimeController.suppressUsageRecording = isPrivate
+    }
+
+    // Observing urlIsBlocked change to update a11y correctly for voiceover
+    private func observeScreenTimeChanges() {
+        kvoToken = screenTimeController.observe(\.urlIsBlocked, options: .new) { [weak self] _, change in
+            var urlIsBlocked = change.newValue
+            self?.updateScreenTimeA11y(sendNotification: true)
+        }
+    }
+
+    // Updates the accessibility so webview and screentime view are accessible
+    private func updateScreenTimeA11y(sendNotification: Bool = false) {
+        if screenTimeController.urlIsBlocked {
+            screenTimeController.view?.accessibilityElementsHidden = false
+            accessibilityElements = [ screenTimeController.view ]
+
+            // Remove a11y elements for webview otherwise its content is still getting read with voice over
+            webView.accessibilityElements = []
+        } else {
+            screenTimeController.view?.accessibilityElementsHidden = true
+            accessibilityElements = [ webView ]
+            webView.accessibilityElements = nil
+        }
+
+        guard UIAccessibility.isVoiceOverRunning, sendNotification else { return }
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
     // MARK: - ScreenshotableView
