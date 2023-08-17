@@ -3620,7 +3620,7 @@ extension String {
             key: "", // Shopping.AdjustedRating.Description.v118
             tableName: "Shopping",
             value: "Unreliable reviews removed",
-            comment: "Description adjusted rating card displayed in the shopping review quality bottom sheet.")
+            comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardFooterText = MZLocalizedString(
             key: "", // Shopping.HighlightsCard.Footer.Text.v118
             tableName: "Shopping",
