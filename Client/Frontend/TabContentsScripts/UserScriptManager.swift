@@ -88,13 +88,9 @@ class UserScriptManager: FeatureFlaggable {
             }
 
             let autofillName = "Autofill\(name)"
-<<<<<<< HEAD
-            if autofillCreditCardStatus, let autofillScript = compiledUserScripts[autofillName] {
-                tab.webView?.configuration.userContentController.addUserScript(autofillScript)
-=======
+
             if let autofillScript = compiledUserScripts[autofillName] {
-                webView?.configuration.userContentController.addUserScript(autofillScript)
->>>>>>> 561c5ee00 (Refactor FXIOS-7150 [v116.2] Expose credit_card.form_detected to all users (#15955))
+                tab.webView?.configuration.userContentController.addUserScript(autofillScript)
             }
 
             let webcompatName = "Webcompat\(name)"
