@@ -326,7 +326,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         let currentTheme = themeManager.currentTheme
         view.backgroundColor = currentTheme.colors.layer1
         yesButton.backgroundColor = currentTheme.colors.actionPrimary
-        yesButton.titleLabel?.textColor = currentTheme.colors.textInverted
+        yesButton.setTitleColor(currentTheme.colors.textInverted, for: .normal)
         cardTableView.reloadData()
     }
 }
