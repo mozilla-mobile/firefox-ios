@@ -76,6 +76,10 @@ class UserScriptManager: FeatureFlaggable {
         // removed to prevent the same script from being injected twice.
         tab.webView?.configuration.userContentController.removeAllUserScripts()
 
+        // Feature flag for CC scripts until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+
         // Inject all pre-compiled user scripts.
         [(WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: false),
          (WKUserScriptInjectionTime.atDocumentEnd, mainFrameOnly: false),
@@ -88,8 +92,7 @@ class UserScriptManager: FeatureFlaggable {
             }
 
             let autofillName = "Autofill\(name)"
-
-            if let autofillScript = compiledUserScripts[autofillName] {
+            if autofillCreditCardStatus, let autofillScript = compiledUserScripts[autofillName] {
                 tab.webView?.configuration.userContentController.addUserScript(autofillScript)
             }
 
