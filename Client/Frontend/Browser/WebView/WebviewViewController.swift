@@ -32,8 +32,8 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         setupWebView()
 
         // Screentime
-        setupScreenTimeController()
         observeScreenTimeChanges()
+        setupScreenTimeController()
     }
 
     private func setupWebView() {
@@ -106,8 +106,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
 
     // Observing urlIsBlocked change to update a11y correctly for voiceover
     private func observeScreenTimeChanges() {
-        kvoToken = screenTimeController.observe(\.urlIsBlocked, options: .new) { [weak self] _, change in
-            var urlIsBlocked = change.newValue
+        kvoToken = screenTimeController.observe(\.urlIsBlocked, options: .new) { [weak self] _, _ in
             self?.updateScreenTimeA11y(sendNotification: true)
         }
     }
