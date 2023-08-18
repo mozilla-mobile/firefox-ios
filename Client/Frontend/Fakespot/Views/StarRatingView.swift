@@ -27,8 +27,7 @@ class StarRatingView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupLayout()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func setupLayout() {
@@ -58,6 +57,7 @@ class StarRatingView: UIView {
         }
     }
 
+    // TODO: FXIOS-7265 Update star icons for StarRatingView
     private func starImageName(for index: Int) -> String {
         if Double(index) <= rating {
             return "star.fill"

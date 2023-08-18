@@ -98,7 +98,8 @@ class FakespotViewController: UIViewController, Themeable {
             description: .Shopping.AdjustedRatingDescription,
             titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
             cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
-            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description
+            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
+            rating: 4.5
         )
         adjustRatingView.configure(adjustRatingViewModel)
 
@@ -143,7 +144,6 @@ class FakespotViewController: UIViewController, Themeable {
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
-        adjustRatingView.rating = 4.5
         contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)

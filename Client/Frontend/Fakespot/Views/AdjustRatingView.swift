@@ -12,6 +12,7 @@ struct AdjustRatingViewModel {
     let titleA11yId: String
     let cardA11yId: String
     let descriptionA11yId: String
+    let rating: Double
 }
 
 class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
@@ -21,12 +22,6 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let hStackSpacing: CGFloat = 4
         static let vStackSpacing: CGFloat = 8
-    }
-
-    var rating: Double = 0.0 {
-        didSet {
-            starRatingView.rating = rating
-        }
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
@@ -78,13 +73,14 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         descriptionLabel.text = viewModel.description
         descriptionLabel.accessibilityIdentifier = viewModel.descriptionA11yId
 
+        starRatingView.rating = viewModel.rating
+
         let cardModel = ShadowCardViewModel(view: vStackView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupLayout()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func setupLayout() {
