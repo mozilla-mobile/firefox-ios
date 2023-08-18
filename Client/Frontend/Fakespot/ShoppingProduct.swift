@@ -76,8 +76,9 @@ class ShoppingProduct: FeatureFlaggable {
 
     /// Fetches the analysis data for a specific product.
     ///
+    /// - Parameter retryCount: The number of retry attempts to fetch the data in case of failures. Default is 3.
     /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product, or `nil` if the product is not available.
-    /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
+    /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
     func fetchProductAnalysisData(retryCount: Int = 3) async throws -> ProductAnalysisData? {

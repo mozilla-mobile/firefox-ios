@@ -113,6 +113,15 @@ final class ShoppingProductTests: XCTestCase {
         let expected = 1
         XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
     }
+
+    func testFetchingProductAnalysisData_WithSuccess_DoesNotRetryClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(retryCount: 3)
+
+        let expected = 1
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
 }
 
 final class ThrowingFakeSpotClient: FakespotClientType {
@@ -138,8 +147,10 @@ final class TestFakespotClient: FakespotClientType {
     var website: String = ""
     var fetchProductAnalysisDataCalled = false
     var fetchProductAdsDataCalled = false
+    var fetchProductAnalysisDataCallCount = 0
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+        self.fetchProductAnalysisDataCallCount += 1
         self.productId = productId
         self.website = website
         self.fetchProductAnalysisDataCalled = true
