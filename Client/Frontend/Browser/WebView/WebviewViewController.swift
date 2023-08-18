@@ -5,17 +5,14 @@
 import Foundation
 import Shared
 import WebKit
-import ScreenTime
 
 class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private var webView: WKWebView
-    private let screenTimeController = STWebpageController()
     var contentType: ContentType = .webview
 
     init(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
-        setScreenTimeUsage(isPrivate: isPrivate)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,7 +22,6 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
-        setupScreenTimeController()
     }
 
     private func setupWebView() {
@@ -43,6 +39,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         removeWebview()
         self.webView = webView
         setupWebView()
+<<<<<<< HEAD
         setupScreenTimeController()
         setScreenTimeUsage(isPrivate: isPrivate)
     }
@@ -97,6 +94,8 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     private func setScreenTimeUsage(isPrivate: Bool) {
         // Usage recording is suppressed if the navigation is set to incognito mode.
         screenTimeController.suppressUsageRecording = isPrivate
+=======
+>>>>>>> bb7a84ee7 (Remove FXIOS-7268 [v116] Remove screentime (#16122))
     }
 
     // MARK: - ScreenshotableView
