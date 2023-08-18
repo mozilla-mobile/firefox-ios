@@ -260,7 +260,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            category: .tabs)
             } else if tab.lastKnownUrl == nil {
                 logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
-                           level: .debug,
+                           level: .fatal,
                            category: .tabs)
             }
 
