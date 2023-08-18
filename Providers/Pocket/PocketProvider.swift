@@ -30,13 +30,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
 
-    private static let SupportedLocales = [
-        "fr_FR",
-        "es_ES",
-        "it_IT",
-        "en_CA", "en_GB", "en_US",
-        "de_DE", "de_AT", "de_CH"
-    ]
+    private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 
     private let pocketGlobalFeed: String
 
