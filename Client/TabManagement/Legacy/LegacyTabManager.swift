@@ -58,7 +58,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var tabs = [Tab]()
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
-    private let logger: Logger
+    let logger: Logger
     var backupCloseTab: BackupCloseTab?
 
     var tabDisplayType: TabDisplayType = .TabGrid
@@ -69,6 +69,19 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     var normalTabs: [Tab] {
         return tabs.filter { !$0.isPrivate }
+    }
+
+    var normalActiveTabs: [Tab] {
+        return InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
+                                                              profile: profile)
+    }
+
+    var inactiveTabs: [Tab] {
+        let normalTabs = Set(normalTabs)
+        let normalActiveTabs = Set(normalActiveTabs)
+
+        let inactiveTabs = normalTabs.subtracting(normalActiveTabs)
+        return Array(inactiveTabs)
     }
 
     var privateTabs: [Tab] {
@@ -930,6 +943,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
                                                    inPrivateMode: wasLastSessionPrivate,
                                                    and: profile.prefs)
+
+            logger.log("Start at home triggered with last session private \(wasLastSessionPrivate)",
+                       level: .debug,
+                       category: .tabs)
             selectTab(tabToSelect)
         }
     }

@@ -40,12 +40,18 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: Fetching Window Data
 
     public func fetchWindowData() async -> WindowData? {
+        logger.log("Attempting to fetch window/tab data",
+                   level: .debug,
+                   category: .tabs)
         let allWindows = await fetchAllWindowsData()
         return allWindows.first
     }
 
     private func fetchAllWindowsData() async -> [WindowData] {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
+            logger.log("Could not resolve window data directory",
+                       level: .warning,
+                       category: .tabs)
             return [WindowData]()
         }
 
@@ -53,12 +59,18 @@ public actor DefaultTabDataStore: TabDataStore {
             let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
             let windowsData = parseWindowDataFiles(fromURLs: fileURLs)
             if windowsData.isEmpty {
+                if !fileURLs.isEmpty {
+                    // There was a file present but it failed to restore for some reason
+                    logger.log("Failed to open window/tab data",
+                               level: .fatal,
+                               category: .tabs)
+                }
                 throw TabDataError.failedToFetchData
             }
             return windowsData
         } catch {
             logger.log("Error fetching all window data: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             guard let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
                 return [WindowData]()
@@ -94,6 +106,9 @@ public actor DefaultTabDataStore: TabDataStore {
             fileManager.createDirectoryAtPath(path: windowDataDirectoryURL)
         }
 
+        logger.log("Save window data, is forced: \(forced)",
+                   level: .debug,
+                   category: .tabs)
         if forced {
             await writeWindowDataToFile(path: windowSavingPath)
         } else {
@@ -114,7 +129,7 @@ public actor DefaultTabDataStore: TabDataStore {
             try fileManager.copyItem(at: windowPath, to: backupWindowSavingPath)
         } catch {
             logger.log("Failed to create window data backup: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
         }
     }
@@ -151,7 +166,7 @@ public actor DefaultTabDataStore: TabDataStore {
             try fileManager.writeWindowData(windowData: windowDataToSave, to: path)
         } catch {
             logger.log("Failed to save window data: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
         }
     }
