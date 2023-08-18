@@ -5,17 +5,14 @@
 import Foundation
 import Shared
 import WebKit
-import ScreenTime
 
 class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private var webView: WKWebView
-    private let screenTimeController = STWebpageController()
     var contentType: ContentType = .webview
 
     init(webView: WKWebView, isPrivate: Bool = false) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
-        setScreenTimeUsage(isPrivate: isPrivate)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,7 +22,6 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
-        setupScreenTimeController()
     }
 
     private func setupWebView() {
@@ -43,60 +39,10 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         removeWebview()
         self.webView = webView
         setupWebView()
-        setupScreenTimeController()
-        setScreenTimeUsage(isPrivate: isPrivate)
     }
 
     private func removeWebview() {
         webView.removeFromSuperview()
-    }
-
-    // MARK: - Rotation
-    /// Screentime needs to be added on top of a webview to work, but on rotation it results in a black flash #15432
-    /// We remove it on rotation and then add it back when rotation is done to solve this issue
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        prepareForRotation()
-
-        coordinator.animate(alongsideTransition: nil) { _ in
-            self.rotationEnded()
-        }
-    }
-
-    private func prepareForRotation() {
-        removeScreenTimeController()
-    }
-
-    private func rotationEnded() {
-        setupScreenTimeController()
-    }
-
-    // MARK: - ScreenTime
-
-    private func setupScreenTimeController() {
-        addChild(screenTimeController)
-        view.addSubview(screenTimeController.view)
-        screenTimeController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            screenTimeController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            screenTimeController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            screenTimeController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            screenTimeController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        screenTimeController.didMove(toParent: self)
-        screenTimeController.url = webView.url
-    }
-
-    private func removeScreenTimeController() {
-        screenTimeController.willMove(toParent: nil)
-        screenTimeController.view.removeFromSuperview()
-        screenTimeController.removeFromParent()
-    }
-
-    private func setScreenTimeUsage(isPrivate: Bool) {
-        // Usage recording is suppressed if the navigation is set to incognito mode.
-        screenTimeController.suppressUsageRecording = isPrivate
     }
 
     // MARK: - ScreenshotableView
