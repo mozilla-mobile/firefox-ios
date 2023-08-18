@@ -264,7 +264,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            category: .tabs)
             }
 
-            // laurie
             return TabData(id: tabId,
                            title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
