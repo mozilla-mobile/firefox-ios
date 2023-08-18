@@ -85,9 +85,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-<<<<<<< HEAD
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
-=======
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
 
             // Safety check incase something went wrong during launch where a migration should have occured
@@ -98,7 +95,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 isRestoringTabs = true
                 migrateAndRestore()
             }
->>>>>>> 3afd7becc (Bugfix FXIOS-7145 [v116] Nil URL possibility (#16107))
         }
     }
 
