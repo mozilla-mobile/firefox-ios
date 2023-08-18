@@ -136,7 +136,7 @@ public struct AccessibilityIdentifiers {
             static let title = "Shopping.ReliabilityCard.Title"
             static let description = "Shopping.ReliabilityCard.Description"
         }
-        
+
         struct HighlightsCard {
             static let card = "Shopping.HighlightsCard.Card"
             static let footerTitle = "Shopping.HighlightsCard.FooterTitle"
