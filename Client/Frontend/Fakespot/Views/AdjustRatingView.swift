@@ -63,6 +63,8 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
         setupLayout()
     }
 
@@ -92,9 +94,6 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
             cardContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
             cardContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
 
         hStackView.addArrangedSubview(titleLabel)
         let stackView = UIStackView(arrangedSubviews: [starRatingView, spacer])
