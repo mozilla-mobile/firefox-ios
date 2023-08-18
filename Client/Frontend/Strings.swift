@@ -4213,6 +4213,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Share.A11y.Label.v118",
+        tableName: "TabLocation",
+        value: "Share this page",
+        comment: "Accessibility label for the share button in url bar")
 }
 
 // MARK: - TabPeekViewController

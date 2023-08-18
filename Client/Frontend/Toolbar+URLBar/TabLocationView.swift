@@ -106,6 +106,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.clipsToBounds = false
         shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
+        shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
     }
 
     private lazy var shoppingCartButton: UIButton = .build { button in
