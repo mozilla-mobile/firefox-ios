@@ -227,13 +227,14 @@ extension IntroViewController: OnboardingCardDelegate {
 
         switch action {
         case .requestNotifications:
-            askForNotificationPermission(from: cardName)
             sendOnboardingUserActivationEvent(fineValue: 1)
+            askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
+            sendOnboardingUserActivationEvent(fineValue: 3)
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 with: fxaPrams,
@@ -243,11 +244,10 @@ extension IntroViewController: OnboardingCardDelegate {
                     self.showNextPageCompletionForLastCard()
                 }
             }
-            sendOnboardingUserActivationEvent(fineValue: 3)
         case .setDefaultBrowser:
+            sendOnboardingUserActivationEvent(fineValue: 2)
             registerForNotification()
             DefaultApplicationHelper().openSettings()
-            sendOnboardingUserActivationEvent(fineValue: 2)
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
                 from: cardName,
