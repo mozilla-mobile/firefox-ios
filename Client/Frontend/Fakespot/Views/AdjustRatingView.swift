@@ -22,6 +22,8 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let hStackSpacing: CGFloat = 4
         static let vStackSpacing: CGFloat = 8
+        static let starSize: CGFloat = 24
+        static let starMaxSize: CGFloat = 42
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
@@ -85,8 +87,14 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var starRatingHeightConstraint: NSLayoutConstraint?
+
     private func setupLayout() {
         addSubview(cardContainer)
+
+        let size = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
+        starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: size)
+        starRatingHeightConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -108,6 +116,7 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
 
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
 
         if contentSizeCategory.isAccessibilityCategory {
             hStackView.axis = .vertical

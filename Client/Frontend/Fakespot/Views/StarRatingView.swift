@@ -51,7 +51,7 @@ class StarRatingView: UIView {
             )
             NSLayoutConstraint.activate([
                 starImageView.heightAnchor.constraint(equalToConstant: UX.starSize),
-                starImageView.widthAnchor.constraint(equalToConstant: UX.starSize)
+                starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor)
             ])
             stackView.addArrangedSubview(starImageView)
         }
