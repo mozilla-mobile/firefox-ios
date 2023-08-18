@@ -76,7 +76,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
@@ -85,7 +85,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs).count", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
@@ -228,15 +228,20 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                          tabHistoryCurrentState: state)
 
             let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            if tab.url?.absoluteString == nil {
-                logger.log("Tab has empty URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))",
+            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))"
+            if tab.url == nil {
+                logger.log("Tab has empty tab.URL \(logMessage)",
                            level: .debug,
+                           category: .tabs)
+            } else if tab.lastKnownUrl == nil {
+                logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
+                           level: .fatal,
                            category: .tabs)
             }
 
             return TabData(id: tabId,
                            title: tab.lastTitle,
-                           siteUrl: tab.url?.absoluteString ?? "",
+                           siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime ?? 0),
