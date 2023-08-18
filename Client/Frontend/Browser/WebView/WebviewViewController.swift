@@ -36,13 +36,8 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     }
 
     func update(webView: WKWebView, isPrivate: Bool = false) {
-        removeWebview()
         self.webView = webView
         setupWebView()
-    }
-
-    private func removeWebview() {
-        webView.removeFromSuperview()
     }
 
     // MARK: - ScreenshotableView
