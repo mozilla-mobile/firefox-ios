@@ -17,7 +17,7 @@
 "Intro.Slides.Skip.Button" = "გამოტოვება";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description" = "პირადი მონაცემების უსაფრთხოება ახალ დონეზეა აყვანილი. შეზღუდეთ სარეკლამო და სხვა შიგთავსი, რომლითაც საიტებზე თქვენი დევნაა შესაძლებელი და შეამცირეთ გვერდების ჩატვირთვის დრო.";
+"Intro.Slides.Welcome.Description" = "პირადი მონაცემების უსაფრთხოება ახალ სიმაღლეზეა აყვანილი. შეზღუდეთ სარეკლამო და სხვა შიგთავსი, რომლითაც საიტებზე თქვენი დევნაა შესაძლებელი და შეამცირეთ გვერდების ჩატვირთვის დრო.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "გააძლიერეთ პირადი მონაცემების დაცვა";
