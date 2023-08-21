@@ -47,7 +47,7 @@ class StarRatingView: UIView {
 
         for index in 1...UX.starCount {
             let starImageView = UIImageView(
-                image: UIImage(systemName: starImageName(for: index))
+                image: UIImage(named: starImageName(for: index))
             )
             NSLayoutConstraint.activate([
                 starImageView.heightAnchor.constraint(equalToConstant: UX.starSize),
@@ -60,11 +60,11 @@ class StarRatingView: UIView {
     // TODO: FXIOS-7265 Update star icons for StarRatingView
     private func starImageName(for index: Int) -> String {
         if Double(index) <= rating {
-            return "star.fill"
+            return "bookmarkFillLarge"
         } else if Double(index - 1) < rating {
-            return "star.leadinghalf.fill"
+            return "bookmarkHalfLarge"
         } else {
-            return "star"
+            return "bookmarkLarge"
         }
     }
 }

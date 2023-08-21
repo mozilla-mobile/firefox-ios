@@ -99,7 +99,7 @@ class FakespotViewController: UIViewController, Themeable {
             titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
             cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
             descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
-            rating: 4.5
+            rating: 3.5
         )
         adjustRatingView.configure(adjustRatingViewModel)
 
