@@ -64,8 +64,6 @@
         "HistoryTests\/testDeleteHistoryEntryBySwiping()",
         "HomePageSettingsTest",
         "HomePageSettingsUITests\/testCustomizeHomepage()",
-        "HomePageSettingsUITests\/testJumpBackIn()",
-        "HomePageSettingsUITests\/testRecentlySaved()",
         "HomePageSettingsUITests\/testRecentlyVisited()",
         "HomePageUITest",
         "IntegrationTests",

@@ -56,6 +56,8 @@
         "HomePageSettingsUITests\/testChangeHomeSettingsLabel()",
         "HomePageSettingsUITests\/testCheckHomeSettingsByDefault()",
         "HomePageSettingsUITests\/testClipboard()",
+        "HomePageSettingsUITests\/testJumpBackIn()",
+        "HomePageSettingsUITests\/testRecentlySaved()",
         "HomePageSettingsUITests\/testSetCustomURLAsHome()",
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
