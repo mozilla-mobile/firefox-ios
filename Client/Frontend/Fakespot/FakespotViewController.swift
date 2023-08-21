@@ -17,7 +17,7 @@ class FakespotViewController: UIViewController, Themeable {
         static let headerBottomMargin = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         static let topPadding: CGFloat = 16
         static let bottomPadding: CGFloat = 40
-        static let horizontalPadding: CGFloat = 20
+        static let horizontalPadding: CGFloat = 16
         static let stackSpacing: CGFloat = 16
     }
 
@@ -118,13 +118,14 @@ class FakespotViewController: UIViewController, Themeable {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
                                                   constant: UX.topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
                                                       constant: UX.horizontalPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor,
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
                                                      constant: -UX.bottomPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
                                                        constant: -UX.horizontalPadding),
-            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
+                                                    constant: -UX.horizontalPadding * 2),
 
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

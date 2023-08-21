@@ -3620,22 +3620,22 @@ extension String {
             key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v118
             tableName: "Shopping",
             value: "Show products recommended by Firefox",
-            comment: "Label of the switch from settings card")
+            comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardTurnOffButton = MZLocalizedString(
             key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
             tableName: "Shopping",
             value: "Turn Off Review Quality Check",
-            comment: "Label of the button from settings card")
+            comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118
             tableName: "Shopping",
             value: "Settings Card Expanded",
-            comment: "Accessibility label for the down chevron, from Settings Card View")
+            comment: "Accessibility label for the down chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Collapsed.AccessibilityLabel.v118
             tableName: "Shopping",
             value: "Settings Card Collapsed",
-            comment: "Accessibility label for the up chevron, from Settings Card View")
+            comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
     }
 }
 

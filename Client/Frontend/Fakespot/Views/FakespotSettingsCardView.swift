@@ -29,7 +29,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
-    var onSwitchValueVhanged: ((Bool) -> Void)?
+    var onSwitchValueChanged: ((Bool) -> Void)?
 
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
     private lazy var contentView: UIView = .build()
@@ -42,7 +42,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     private lazy var labelSwitchStackView: UIStackView = .build { stackView in
-        stackView.alignment = .fill
+        stackView.alignment = .center
         stackView.spacing = UX.labelSwitchStackViewSpacing
     }
 
@@ -65,7 +65,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.contentEdgeInsets = UX.buttonInsets
         button.titleLabel?.textAlignment = .center
-        button.backgroundColor = .systemBlue
         button.clipsToBounds = true
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                                          size: UX.buttonLabelFontSize,
@@ -130,7 +129,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     @objc
     func didToggleSwitch(_ sender: UISwitch) {
-        onSwitchValueVhanged?(sender.isOn)
+        onSwitchValueChanged?(sender.isOn)
     }
 
     // MARK: - Theming System
