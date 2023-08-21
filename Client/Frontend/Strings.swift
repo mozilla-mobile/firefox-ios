@@ -4218,6 +4218,11 @@ extension String {
         tableName: "TabLocation",
         value: "Share this page",
         comment: "Accessibility label for the share button in url bar")
+    public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Shopping.A11y.Label.v118",
+        tableName: "TabLocation",
+        value: "Review checker",
+        comment: "Accessibility label for the shopping button in url bar")
 }
 
 // MARK: - TabPeekViewController
