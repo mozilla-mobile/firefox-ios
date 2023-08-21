@@ -76,16 +76,18 @@ class ShoppingProduct: FeatureFlaggable {
 
     /// Fetches the analysis data for a specific product.
     ///
-    /// - Parameter retryCount: The number of retry attempts to fetch the data in case of failures. Default is 3.
+    /// - Parameters:
+    ///   - maxRetries: The number of retry attempts to fetch the data in case of failures. Default is 3.
+    ///   - retryTimeout: The time interval (in milliseconds) to wait between retry attempts. Default is 100 milliseconds.
     /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product, or `nil` if the product is not available.
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAnalysisData(retryCount: Int = 3) async throws -> ProductAnalysisData? {
+    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
         guard let product else { return nil }
 
         // Perform 'retryCount' attempts, and retry on 500 failure:
-        for _ in 0..<retryCount {
+        for failCount in 0..<maxRetries {
             do {
                 // Attempt to perform the asynchronous 'fetch(_ type:, url:, requestBody:)' operation.
                 // If it succeeds, the 'return' statement will immediately exit the function,
@@ -96,6 +98,8 @@ class ShoppingProduct: FeatureFlaggable {
                 // to go back to the beginning of the loop and try again.
                 // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
                 if (error as NSError).code == 500 {
+                    let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
+                    try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
                     continue
                 } else {
                     throw error
