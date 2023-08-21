@@ -6435,7 +6435,6 @@
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
-		E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReliabilityCardView.swift; path = Client/Frontend/Fakespot/Views/ReliabilityCardView.swift; sourceTree = SOURCE_ROOT; };
 		E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityRating.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
@@ -9836,9 +9835,8 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
-				E1AF355B286DE5F600960045 /* Fennec_Enterprise_XCUITests.xctestplan */,
+				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
 				E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */,
 				E1AF355A286DE5F600960045 /* Smoketest2.xctestplan */,
 				E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */,
@@ -9965,14 +9963,6 @@
 				8C92DE942A7128FB0090BD28 /* Client */,
 			);
 			path = Fakespot;
-			sourceTree = "<group>";
-		};
-		E1FC23EF2A86290E0089E14D /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				E1516A3A2A7A5746007819A4 /* ReliabilityCardView.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
