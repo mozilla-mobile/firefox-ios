@@ -40,7 +40,7 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var logoImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        imageView.image = UIImage(named: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -63,6 +63,7 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
     private lazy var highlightsCardView: HighlightsCardView = .build()
+    private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
@@ -101,6 +102,15 @@ class FakespotViewController: UIViewController, Themeable {
             footerTitle: .Shopping.HighlightsCardFooterText,
             footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
         highlightsCardView.configure(highlightsCardViewModel)
+
+        let settingsCardViewModel = FakespotSettingsCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
+            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
+            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
+            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
+            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
+            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
+        settingsCardView.configure(settingsCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -134,6 +144,7 @@ class FakespotViewController: UIViewController, Themeable {
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
+        contentStackView.addArrangedSubview(settingsCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
