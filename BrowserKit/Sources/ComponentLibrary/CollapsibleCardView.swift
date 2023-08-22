@@ -47,8 +47,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
-        static let titleHorizontalPadding: CGFloat = 16
-        static let titleTopPadding: CGFloat = 16
+        static let titleHorizontalPadding: CGFloat = 8
         static let expandButtonSize = CGSize(width: 20, height: 20)
     }
 
@@ -91,6 +90,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     private lazy var headerView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
     private var containerHeightConstraint: NSLayoutConstraint?
+    private var containerBottomConstraint: NSLayoutConstraint?
     private var tapRecognizer: UITapGestureRecognizer!
 
     lazy var titleLabel: UILabel = .build { label in
@@ -163,12 +163,15 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         rootView.addSubview(containerView)
 
         containerHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: 0)
+        containerBottomConstraint = containerView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
+                                                                          constant: -UX.verticalPadding)
+        containerBottomConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
                                                 constant: UX.titleHorizontalPadding),
             headerView.topAnchor.constraint(equalTo: rootView.topAnchor,
-                                            constant: UX.titleTopPadding),
+                                            constant: UX.verticalPadding),
             headerView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
                                                  constant: -UX.titleHorizontalPadding),
             headerView.bottomAnchor.constraint(equalTo: containerView.topAnchor,
@@ -192,16 +195,17 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
                                                    constant: UX.horizontalPadding),
             containerView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
                                                     constant: -UX.horizontalPadding),
-            containerView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
-                                                  constant: -UX.verticalPadding),
         ])
     }
 
     private func updateCardState(expandState: ExpandButtonState) {
+        let isCollapsed = expandState == .collapsed
         viewModel.expandState = expandState
         expandButton.setImage(viewModel.expandState.image, for: .normal)
         expandButton.accessibilityLabel = viewModel.expandButtonA11yLabel
-        containerHeightConstraint?.isActive = expandState == .collapsed
+        containerHeightConstraint?.isActive = isCollapsed
+        containerView.isHidden = isCollapsed
+        containerBottomConstraint?.constant = isCollapsed ? 0 : -UX.verticalPadding
         UIAccessibility.post(notification: .layoutChanged, argument: nil)
     }
 

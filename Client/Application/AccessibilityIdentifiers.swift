@@ -136,6 +136,15 @@ public struct AccessibilityIdentifiers {
             static let footerTitle = "Shopping.HighlightsCard.FooterTitle"
             static let footerAction = "Shopping.HighlightsCard.FooterAction"
         }
+
+        struct SettingsCard {
+            static let card = "Shopping.SettingsCard.Card"
+            static let title = "Shopping.SettingsCard.Title"
+            static let expandButton = "Shopping.SettingsCard.ExpandButton"
+            static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
+            static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
+            static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
+        }
     }
 
     struct TabTray {
