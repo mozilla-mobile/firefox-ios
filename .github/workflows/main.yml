@@ -1,0 +1,20 @@
+name: Build and upload to Data Theorem
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  apk:
+    name: Generate & Upload APK
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload to Data Theorem
+        uses: datatheorem/datatheorem-mobile-secure-action@v2.1.0
+        with:
+          UPLOAD_BINARY_PATH: "./"
+          DT_UPLOAD_API_KEY: ${{ secrets.DT_UPLOAD_API_KEY }}
+          COMMENTS: "This is a pre-production build."
