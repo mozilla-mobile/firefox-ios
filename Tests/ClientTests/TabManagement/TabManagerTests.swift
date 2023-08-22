@@ -86,7 +86,7 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithNoTabs() async throws {
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
