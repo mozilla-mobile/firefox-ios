@@ -152,9 +152,9 @@ class FakespotViewController: UIViewController, Themeable {
 
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             headerStackView.topAnchor.constraint(equalTo: view.topAnchor,
                                                  constant: UX.topLeadingTrailingSpacing),
