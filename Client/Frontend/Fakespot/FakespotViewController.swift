@@ -136,6 +136,7 @@ class FakespotViewController: UIViewController, Themeable {
         errorCardView.applyTheme(theme: theme)
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
+        settingsCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
     }
 
