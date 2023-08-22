@@ -243,10 +243,10 @@ extension String {
                 value: "Done",
                 comment: "When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "CreditCard.Settings.ListItemA11y.v112",
+                key: "CreditCard.Settings.ListItemA11y.v118",
                 tableName: "Settings",
-                value: "%1$@ ending in %2$@, issued to %3$@, expires %4$@",
-                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
+                value: "%1$@, issued to %2$@, ending in %3$@, expires %4$@",
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
         }
 
         // Displaying a credit card
