@@ -191,6 +191,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .welcomeCtd: return ImageIdentifiers.onboardingWelcomeCTD
         case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
         case .setToDock: return ImageIdentifiers.onboardingSetToDock
+        case .searchWidget: return ImageIdentifiers.onboardingSearchWidget
         }
     }
 

@@ -44,6 +44,7 @@ public struct ImageIdentifiers {
     public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
     public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
     public static let onboardingSyncCTD = "onboardingSyncCTD"
+    public static let onboardingSearchWidget = "onboardingSearchWidget"
     public static let onboardingSetToDock = "onboardingDock"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
