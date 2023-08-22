@@ -1,6 +1,3 @@
-/* Long label for the button displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.AlternateLabel.v99" = "Bæta við leslista";
-
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Loka öllum flipum";
 
@@ -33,9 +30,6 @@
 
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Samstilltir flipar";
-
-/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
-"Menu.RemoveBookmark.AlternateLabel.v99" = "Fjarlægja bókamerki";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "Tilkynna vandamál á vefsvæði";
