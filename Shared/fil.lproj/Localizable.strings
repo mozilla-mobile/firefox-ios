@@ -673,9 +673,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Markahan bilang Hindi pa nabasa";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "Magdagdag ng Bookmark";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Idinagdag ang bookmark";
 

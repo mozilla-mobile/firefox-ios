@@ -431,7 +431,7 @@
 "History" = "Historial";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Neteja l'historial recent…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Esborra l'historial recent…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Tot";
@@ -539,7 +539,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "Afegeix a les adreces d'interès";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "Neteja l'historial recent";
+"Keyboard.Shortcuts.ClearRecentHistory" = "Esborra l'historial recent";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Torna a cercar";
@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Voleu suprimir tots els llocs de «%@»?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Suprimeix l'historial (inclou l'historial sincronitzat d'altres dispositius), les galetes i altres dades de navegació.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Elimina l'historial (inclou l'historial sincronitzat d'altres dispositius), les galetes i altres dades de navegació.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Suprimeix";
@@ -727,9 +727,6 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marca com a no llegit";
 
-/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
-"Menu.AddBookmark.AlternateLabel.v99" = "Afegeix a les adreces d'interès";
-
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "S'ha afegit l'adreça d'interès";
 
@@ -813,9 +810,6 @@
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "S'ha eliminat de les dreceres";
-
-/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
-"Menu.RemoveReadingList.AlternateLabel.v99" = "Elimina de la llista de lectura";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "S'ha eliminat de la llista de lectura";
