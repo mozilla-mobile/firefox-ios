@@ -225,16 +225,19 @@ extension IntroViewController: OnboardingCardDelegate {
             with: action,
             and: isPrimaryButton)
 
+        guard let introViewModel = viewModel as? IntroViewModel else { return }
         switch action {
         case .requestNotifications:
-            sendOnboardingUserActivationEvent(fineValue: 1)
+            introViewModel.chosenOptions.insert(.askForNotificationPermission)
+            print("introViewModel.chosenOptions = \(introViewModel.chosenOptions)")
             askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
-            sendOnboardingUserActivationEvent(fineValue: 3)
+            introViewModel.chosenOptions.insert(.syncSignIn)
+            print("introViewModel.chosenOptions = \(introViewModel.chosenOptions)")
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 with: fxaPrams,
@@ -245,7 +248,8 @@ extension IntroViewController: OnboardingCardDelegate {
                 }
             }
         case .setDefaultBrowser:
-            sendOnboardingUserActivationEvent(fineValue: 2)
+            introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
+            print("introViewModel.chosenOptions = \(introViewModel.chosenOptions)")
             registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
@@ -261,11 +265,6 @@ extension IntroViewController: OnboardingCardDelegate {
 
     func sendCardViewTelemetry(from cardName: String) {
         viewModel.telemetryUtility.sendCardViewTelemetry(from: cardName)
-    }
-
-    func sendOnboardingUserActivationEvent(fineValue: Int) {
-        let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
-        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
     }
 
     private func showNextPageCompletionForLastCard() {

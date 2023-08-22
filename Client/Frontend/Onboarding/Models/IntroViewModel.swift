@@ -4,11 +4,25 @@
 
 import Foundation
 import Shared
+import Common
 
 class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+    struct OnboardingOptions: OptionSet, CaseIterable {
+        let rawValue: Int
+
+        static let askForNotificationPermission = OnboardingOptions(rawValue: 1 << 0) // 1
+        static let setAsDefaultBrowser = OnboardingOptions(rawValue: 1 << 1) // 2
+        static let syncSignIn = OnboardingOptions(rawValue: 1 << 2) // 4
+
+        static var allCases: [OnboardingOptions] {
+            return [.askForNotificationPermission, .setAsDefaultBrowser, .syncSignIn]
+        }
+    }
+
     // MARK: - Properties
     // FXIOS-6036 - Make this non optional when coordinators are used
     var introScreenManager: IntroScreenManager?
+    var chosenOptions: OnboardingOptions = []
 
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
@@ -43,5 +57,16 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     func saveHasSeenOnboarding() {
         introScreenManager?.didSeeIntroScreen()
+    }
+
+    // MARK: SkAdNetwork
+    // this event can only be sent once in this time window
+    func sendOnboardingUserActivationEvent() {
+        let fineValue = OnboardingOptions.allCases.map { chosenOptions.contains($0) ? $0.rawValue : 0 }.reduce(0, +)
+        let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
+        // we should send this event only if an action has been selected during the onboarding flow
+        if fineValue > 0 {
+            conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
+        }
     }
 }
