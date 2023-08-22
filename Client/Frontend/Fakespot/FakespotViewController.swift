@@ -61,8 +61,8 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var errorCardView: FakespotErrorCardView = .build()
-    private lazy var reliabilityCardView: ReliabilityCardView = .build()
-    private lazy var highlightsCardView: HighlightsCardView = .build()
+    private lazy var reliabilityCardView: FakespotReliabilityCardView = .build()
+    private lazy var highlightsCardView: FakespotHighlightsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
@@ -83,7 +83,7 @@ class FakespotViewController: UIViewController, Themeable {
         setupView()
         listenForThemeChange(view)
 
-        let reliabilityCardViewModel = ReliabilityCardViewModel(
+        let reliabilityCardViewModel = FakespotReliabilityCardViewModel(
             cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
             title: .Shopping.ReliabilityCardTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
@@ -97,7 +97,7 @@ class FakespotViewController: UIViewController, Themeable {
                                                             actionTitle: .Shopping.ErrorCardButtonText)
         errorCardView.configure(viewModel: errorCardViewModel)
 
-        let highlightsCardViewModel = HighlightsCardViewModel(
+        let highlightsCardViewModel = FakespotHighlightsCardViewModel(
             footerTitle: .Shopping.HighlightsCardFooterText,
             footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
         highlightsCardView.configure(highlightsCardViewModel)

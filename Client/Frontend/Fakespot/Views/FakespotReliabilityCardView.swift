@@ -6,7 +6,7 @@ import ComponentLibrary
 import Common
 import UIKit
 
-struct ReliabilityCardViewModel {
+struct FakespotReliabilityCardViewModel {
     let cardA11yId: String
     let title: String
     let titleA11yId: String
@@ -15,7 +15,7 @@ struct ReliabilityCardViewModel {
     let ratingDescriptionA11yId: String
 }
 
-class ReliabilityCardView: UIView, ThemeApplicable {
+class FakespotReliabilityCardView: UIView, ThemeApplicable {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8
@@ -61,7 +61,7 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         view.numberOfLines = 0
     }
 
-    private var viewModel: ReliabilityCardViewModel?
+    private var viewModel: FakespotReliabilityCardViewModel?
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -74,7 +74,7 @@ class ReliabilityCardView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ viewModel: ReliabilityCardViewModel) {
+    func configure(_ viewModel: FakespotReliabilityCardViewModel) {
         self.viewModel = viewModel
 
         titleLabel.text = viewModel.title

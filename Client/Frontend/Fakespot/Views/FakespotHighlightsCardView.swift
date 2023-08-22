@@ -6,7 +6,7 @@ import ComponentLibrary
 import Common
 import UIKit
 
-struct HighlightsCardViewModel {
+struct FakespotHighlightsCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.card
     let footerTitle: String
     let footerActionTitle: String
@@ -21,7 +21,7 @@ struct HighlightsCardViewModel {
     }
 }
 
-class HighlightsCardView: UIView, ThemeApplicable {
+class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private struct UX {
         static let cardBottomSpace: CGFloat = 16
         static let footerHorizontalSpace: CGFloat = 16
@@ -42,7 +42,7 @@ class HighlightsCardView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ viewModel: HighlightsCardViewModel) {
+    func configure(_ viewModel: FakespotHighlightsCardViewModel) {
         let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
         footerView.configure(viewModel: viewModel.footerModel)
