@@ -36,8 +36,8 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
     }
 
     func testInitialCallbacksAreNil() {
-        XCTAssertTrue(viewModel.onSwitchValueChanged == nil)
-        XCTAssertTrue(viewModel.onTurnOffButtonTapped == nil)
+        XCTAssertNil(viewModel.onSwitchValueChanged)
+        XCTAssertNil(viewModel.onTurnOffButtonTapped)
     }
 
     func testGetUserPrefsAfterSettingCallbacks() {
