@@ -7,13 +7,57 @@ import Common
 import Shared
 import ComponentLibrary
 
-struct FakespotSettingsCardViewModel {
+class FakespotSettingsCardViewModel {
+    let prefs: Prefs
     let cardA11yId: String
     let showProductsLabelTitle: String
     let showProductsLabelTitleA11yId: String
     let turnOffButtonTitle: String
     let turnOffButtonTitleA11yId: String
     let recommendedProductsSwitchA11yId: String
+    var onSwitchValueChanged: ((Bool) -> Void)?
+    var onTurnOffButtonTapped: ((Bool) -> Void)?
+    var isReviewQualityCheckOn = true
+    var areAdsEnabled = true
+
+    init(profile: Profile = AppContainer.shared.resolve(),
+         cardA11yId: String,
+         showProductsLabelTitle: String,
+         showProductsLabelTitleA11yId: String,
+         turnOffButtonTitle: String,
+         turnOffButtonTitleA11yId: String,
+         recommendedProductsSwitchA11yId: String,
+         onSwitchValueChanged: ( (Bool) -> Void)? = nil,
+         onTurnOffButtonTapped: ( (Bool) -> Void)? = nil,
+         isReviewQualityCheckOn: Bool = true,
+         areAdsEnabled: Bool = true) {
+        prefs = profile.prefs
+        self.cardA11yId = cardA11yId
+        self.showProductsLabelTitle = showProductsLabelTitle
+        self.showProductsLabelTitleA11yId = showProductsLabelTitleA11yId
+        self.turnOffButtonTitle = turnOffButtonTitle
+        self.turnOffButtonTitleA11yId = turnOffButtonTitleA11yId
+        self.recommendedProductsSwitchA11yId = recommendedProductsSwitchA11yId
+        self.onSwitchValueChanged = onSwitchValueChanged
+        self.onTurnOffButtonTapped = onTurnOffButtonTapped
+        self.isReviewQualityCheckOn = isReviewQualityCheckOn
+        self.areAdsEnabled = areAdsEnabled
+    }
+
+    func getUserPrefs() {
+        areAdsEnabled = prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+        isReviewQualityCheckOn = prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true
+    }
+
+    func setUserPrefs() {
+        onSwitchValueChanged = { [weak self] areAdsEnabled in
+            self?.prefs.setBool(areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
+        }
+
+        onTurnOffButtonTapped = { [weak self] isReviewCheckOn in
+            self?.prefs.setBool(isReviewCheckOn, forKey: PrefsKeys.Shopping2023OptIn)
+        }
+    }
 }
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
@@ -29,7 +73,13 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
-    var onSwitchValueChanged: ((Bool) -> Void)?
+    private var isReviewQualityCheckOn = true {
+        didSet {
+            #warning("TODO: Update Turn Off button title")
+        }
+    }
+
+    private var viewModel: FakespotSettingsCardViewModel?
 
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
     private lazy var contentView: UIView = .build()
@@ -61,11 +111,12 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         uiSwitch.addTarget(self, action: #selector(self.didToggleSwitch), for: .valueChanged)
     }
 
-    private lazy var turnOffButton: ActionButton = .build { button in
+    private lazy var turnOffButton: ResizableButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.contentEdgeInsets = UX.buttonInsets
         button.titleLabel?.textAlignment = .center
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(self.didTapTurnOffButton), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                                          size: UX.buttonLabelFontSize,
                                                                          weight: .semibold)
@@ -108,6 +159,10 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
+        self.viewModel = viewModel
+        recommendedProductsSwitch.isOn = viewModel.areAdsEnabled
+        isReviewQualityCheckOn = viewModel.isReviewQualityCheckOn
+
         showProductsLabel.text = viewModel.showProductsLabelTitle
         showProductsLabel.accessibilityIdentifier = viewModel.showProductsLabelTitleA11yId
 
@@ -129,7 +184,13 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     @objc
     func didToggleSwitch(_ sender: UISwitch) {
-        onSwitchValueChanged?(sender.isOn)
+        viewModel?.onSwitchValueChanged?(sender.isOn)
+    }
+
+    @objc
+    private func didTapTurnOffButton() {
+        isReviewQualityCheckOn.toggle()
+        viewModel?.onTurnOffButtonTapped?(isReviewQualityCheckOn)
     }
 
     // MARK: - Theming System
