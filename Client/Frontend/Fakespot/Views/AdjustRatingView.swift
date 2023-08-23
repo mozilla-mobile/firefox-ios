@@ -78,6 +78,8 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         descriptionLabel.accessibilityIdentifier = viewModel.descriptionA11yId
 
         starRatingView.rating = viewModel.rating
+        starRatingView.isAccessibilityElement = true
+        starRatingView.accessibilityLabel = String(format: .Shopping.AdjustedRatingStarsAccessibilityLabel, viewModel.rating)
 
         let cardModel = ShadowCardViewModel(view: vStackView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
