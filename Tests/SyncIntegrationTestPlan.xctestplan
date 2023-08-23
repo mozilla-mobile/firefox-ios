@@ -89,6 +89,7 @@
         "TabTraySearchTabsTests",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
+        "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest",
         "TopTabsTestIpad",
