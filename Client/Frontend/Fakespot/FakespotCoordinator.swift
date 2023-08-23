@@ -8,10 +8,6 @@ protocol FakespotCoordinatorDelegate: AnyObject {
     // Define any coordinator delegate methods here
 }
 
-class FakespotViewModel {
-    // Define your properties and methods for the ViewModel here
-}
-
 class FakespotCoordinator: BaseCoordinator {
     weak var parentCoordinator: FakespotCoordinatorDelegate?
     weak var delegate: FakespotCoordinatorDelegate?
