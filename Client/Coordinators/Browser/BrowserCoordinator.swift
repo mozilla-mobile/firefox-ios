@@ -381,6 +381,12 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
+    func showFakespotFlow() {
+        let coordinator = FakespotCoordinator(router: router)
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {

@@ -24,6 +24,7 @@ class FakespotViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let viewModel: FakespotViewModel
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -67,8 +68,12 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var loadingView: FakespotLoadingView = .build()
 
     // MARK: - Initializers
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        viewModel: FakespotViewModel,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
