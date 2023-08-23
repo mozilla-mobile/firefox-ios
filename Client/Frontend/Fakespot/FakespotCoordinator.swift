@@ -13,7 +13,7 @@ class FakespotViewModel {
 }
 
 class FakespotCoordinator: BaseCoordinator {
-    weak var parentCoordinator: BrowserNavigationHandler?
+    weak var parentCoordinator: FakespotCoordinatorDelegate?
     weak var delegate: FakespotCoordinatorDelegate?
 
     let fakespotViewController: FakespotViewController

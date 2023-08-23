@@ -15,6 +15,7 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
+                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
@@ -383,6 +384,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showFakespotFlow() {
         let coordinator = FakespotCoordinator(router: router)
+        coordinator.parentCoordinator = self
         add(child: coordinator)
         coordinator.start()
     }
