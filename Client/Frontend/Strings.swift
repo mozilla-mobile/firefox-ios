@@ -3611,6 +3611,21 @@ extension String {
             tableName: "Shopping",
             value: "Try Again",
             comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Title.v119
+            tableName: "Shopping",
+            value: "Highlights from recent reviews",
+            comment: "Title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardMoreButtonTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.MoreButton.Title.v119
+            tableName: "Shopping",
+            value: "Show More",
+            comment: "Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardLessButtonTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.LessButton.Title.v119
+            tableName: "Shopping",
+            value: "Show Less",
+            comment: "Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardFooterText = MZLocalizedString(
             key: "", // Shopping.HighlightsCard.Footer.Text.v118
             tableName: "Shopping",
