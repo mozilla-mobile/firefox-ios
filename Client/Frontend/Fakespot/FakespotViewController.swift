@@ -24,7 +24,7 @@ class FakespotViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    let viewModel: FakespotViewModel
+    private let viewModel: FakespotViewModel
     weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
