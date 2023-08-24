@@ -263,14 +263,14 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Use email login button tapped
     @objc
     func emailLoginTapped(_ sender: UIButton) {
-        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
-            isOnboarding: telemetryObject == .onboarding)
+        let isOnboarding = telemetryObject == .onboarding
+        let shouldAskForPermission = !OnboardingNotificationCardHelper().notificationCardIsInOnboarding() || !isOnboarding
 
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
                                             profile: profile,
                                             dismissalStyle: fxaDismissStyle,
                                             deepLinkParams: deepLinkParams,
-                                            shouldAskForNotificationPermission: askForPermission)
+                                            shouldAskForNotificationPermission: shouldAskForPermission)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -283,14 +283,14 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
-            isOnboarding: telemetryObject == .onboarding)
+        let isOnboarding = telemetryObject == .onboarding
+        let shouldAskForPermission = !OnboardingNotificationCardHelper().notificationCardIsInOnboarding() || !isOnboarding
 
         let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
                                       profile: profile,
                                       dismissalStyle: fxaDismissStyle,
                                       deepLinkParams: deepLinkParams,
-                                      shouldAskForNotificationPermission: askForPermission)
+                                      shouldAskForNotificationPermission: shouldAskForPermission)
         navigationController?.pushViewController(vc, animated: true)
     }
 

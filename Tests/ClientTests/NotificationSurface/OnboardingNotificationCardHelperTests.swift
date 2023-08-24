@@ -25,12 +25,12 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
         nimbusUtility = nil
     }
 
-    func testHelper_fromOnboarding_noNotificationCard_returnsTrue() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeSync)
+    func testHelper_fromOnboarding_withNotificationCard_returnsTrue() {
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let expectedResult = true
         let subject = createSubject()
 
-        let result = subject.askForPermissionDuringSync(isOnboarding: true)
+        let result = subject.notificationCardIsInOnboarding()
 
         XCTAssertEqual(result, expectedResult)
     }
@@ -40,17 +40,7 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
         let expectedResult = false
         let subject = createSubject()
 
-        let result = subject.askForPermissionDuringSync(isOnboarding: false)
-
-        XCTAssertEqual(result, expectedResult)
-    }
-
-    func testHelper_fromOnboarding_withNotificationCard_returnsFalse() {
-        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
-        let expectedResult = false
-        let subject = createSubject()
-
-        let result = subject.askForPermissionDuringSync(isOnboarding: true)
+        let result = subject.notificationCardIsInOnboarding()
 
         XCTAssertEqual(result, expectedResult)
     }

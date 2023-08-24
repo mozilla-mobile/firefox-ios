@@ -5,7 +5,7 @@
 import Foundation
 
 struct OnboardingNotificationCardHelper {
-    private func notificationCardIsInOnboarding(
+    public func notificationCardIsInOnboarding(
         from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
     ) -> Bool {
         return featureLayer
@@ -15,11 +15,5 @@ struct OnboardingNotificationCardHelper {
                 return $0.buttons.primary.action == .requestNotifications
                 || $0.buttons.secondary?.action == .requestNotifications
             }
-    }
-
-    func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
-        if notificationCardIsInOnboarding() { return false }
-
-        return isOnboarding
     }
 }
