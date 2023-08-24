@@ -114,7 +114,7 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable {
         paragraphStyle.paragraphSpacing = 8
         paragraphStyle.lineHeightMultiple = 1.16
 
-        var attributedString = NSMutableAttributedString(string: highlightText)
+        let attributedString = NSMutableAttributedString(string: highlightText)
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
                                       value: paragraphStyle,
                                       range: NSRange(location: 0, length: attributedString.length))
