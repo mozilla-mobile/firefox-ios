@@ -25,6 +25,7 @@ class FakespotViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     let viewModel: FakespotViewModel
+    weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -198,6 +199,6 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        dismissVC()
+        delegate?.fakespotControllerCancelButtonTapped()
     }
 }

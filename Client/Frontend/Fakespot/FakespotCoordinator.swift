@@ -5,28 +5,30 @@
 import Foundation
 
 protocol FakespotCoordinatorDelegate: AnyObject {
-    // Define any coordinator delegate methods here
+    // Define any coordinator delegate methods
 }
 
-class FakespotCoordinator: BaseCoordinator {
-    weak var parentCoordinator: FakespotCoordinatorDelegate?
-    weak var delegate: FakespotCoordinatorDelegate?
+protocol FakespotViewControllerDelegate: AnyObject {
+    func fakespotControllerCancelButtonTapped()
+}
 
-    let fakespotViewController: FakespotViewController
-    let viewModel: FakespotViewModel
-
-    init(router: Router) {
-        viewModel = FakespotViewModel()
-        fakespotViewController = FakespotViewController(viewModel: viewModel)
-        super.init(router: router)
-    }
+class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate {
+    weak var parentCoordinator: ParentCoordinatorDelegate?
 
     func start() {
+        let viewModel = FakespotViewModel()
+        let fakespotViewController = FakespotViewController(viewModel: viewModel)
+        fakespotViewController.delegate = self
         if #available(iOS 15.0, *) {
             if let sheet = fakespotViewController.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
             }
         }
         router.present(fakespotViewController, animated: true)
+    }
+
+    func fakespotControllerCancelButtonTapped() {
+        router.dismiss(animated: true, completion: nil)
+        parentCoordinator?.didFinish(from: self)
     }
 }
