@@ -3624,8 +3624,8 @@ extension String {
         public static let AdjustedRatingStarsAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.AdjustedRating.StarsAccessibilityLabel.v118
             tableName: "Shopping",
-            value: "%.1f out of 5 stars",
-            comment: "Accessibility label, associated to adjusted rating stars. %.1f is a decimal value from 0 to 5 that will only a tenth (example: 3.5).")
+            value: "%@ out of 5 stars",
+            comment: "Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5).")
         public static let HighlightsCardFooterText = MZLocalizedString(
             key: "", // Shopping.HighlightsCard.Footer.Text.v118
             tableName: "Shopping",
