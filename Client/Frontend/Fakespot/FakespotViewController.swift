@@ -110,8 +110,6 @@ class FakespotViewController: UIViewController, Themeable {
             turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
             turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
             recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
-        settingsCardViewModel.getUserPrefs()
-        settingsCardViewModel.setUserPrefs()
         settingsCardView.configure(settingsCardViewModel)
     }
 

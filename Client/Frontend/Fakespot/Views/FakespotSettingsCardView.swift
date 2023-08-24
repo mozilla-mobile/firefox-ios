@@ -15,10 +15,16 @@ class FakespotSettingsCardViewModel {
     let turnOffButtonTitle: String
     let turnOffButtonTitleA11yId: String
     let recommendedProductsSwitchA11yId: String
-    var onSwitchValueChanged: ((Bool) -> Void)?
-    var onTurnOffButtonTapped: ((Bool) -> Void)?
-    var isReviewQualityCheckOn = true
-    var areAdsEnabled = true
+
+    var isReviewQualityCheckOn: Bool {
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true }
+        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
+    }
+
+    var areAdsEnabled: Bool {
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true }
+        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(),
          cardA11yId: String,
@@ -26,11 +32,7 @@ class FakespotSettingsCardViewModel {
          showProductsLabelTitleA11yId: String,
          turnOffButtonTitle: String,
          turnOffButtonTitleA11yId: String,
-         recommendedProductsSwitchA11yId: String,
-         onSwitchValueChanged: ( (Bool) -> Void)? = nil,
-         onTurnOffButtonTapped: ( (Bool) -> Void)? = nil,
-         isReviewQualityCheckOn: Bool = true,
-         areAdsEnabled: Bool = true) {
+         recommendedProductsSwitchA11yId: String) {
         prefs = profile.prefs
         self.cardA11yId = cardA11yId
         self.showProductsLabelTitle = showProductsLabelTitle
@@ -38,25 +40,6 @@ class FakespotSettingsCardViewModel {
         self.turnOffButtonTitle = turnOffButtonTitle
         self.turnOffButtonTitleA11yId = turnOffButtonTitleA11yId
         self.recommendedProductsSwitchA11yId = recommendedProductsSwitchA11yId
-        self.onSwitchValueChanged = onSwitchValueChanged
-        self.onTurnOffButtonTapped = onTurnOffButtonTapped
-        self.isReviewQualityCheckOn = isReviewQualityCheckOn
-        self.areAdsEnabled = areAdsEnabled
-    }
-
-    func getUserPrefs() {
-        areAdsEnabled = prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
-        isReviewQualityCheckOn = prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true
-    }
-
-    func setUserPrefs() {
-        onSwitchValueChanged = { [weak self] areAdsEnabled in
-            self?.prefs.setBool(areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
-        }
-
-        onTurnOffButtonTapped = { [weak self] isReviewCheckOn in
-            self?.prefs.setBool(isReviewCheckOn, forKey: PrefsKeys.Shopping2023OptIn)
-        }
     }
 }
 
@@ -184,13 +167,12 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     @objc
     func didToggleSwitch(_ sender: UISwitch) {
-        viewModel?.onSwitchValueChanged?(sender.isOn)
+        viewModel?.areAdsEnabled = sender.isOn
     }
 
     @objc
     private func didTapTurnOffButton() {
-        isReviewQualityCheckOn.toggle()
-        viewModel?.onTurnOffButtonTapped?(isReviewQualityCheckOn)
+        viewModel?.isReviewQualityCheckOn = false
     }
 
     // MARK: - Theming System
