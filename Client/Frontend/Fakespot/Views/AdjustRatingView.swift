@@ -89,7 +89,7 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var starRatingHeightConstraint: NSLayoutConstraint?
+    private var starRatingHeightConstraint: NSLayoutConstraint?
 
     private func setupLayout() {
         addSubview(cardContainer)
