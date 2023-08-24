@@ -56,12 +56,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
-    private var isReviewQualityCheckOn = true {
-        didSet {
-            #warning("TODO: Update Turn Off button title")
-        }
-    }
-
     private var viewModel: FakespotSettingsCardViewModel?
 
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
