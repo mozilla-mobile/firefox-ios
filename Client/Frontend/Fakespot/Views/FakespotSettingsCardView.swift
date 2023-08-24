@@ -144,7 +144,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
         self.viewModel = viewModel
         recommendedProductsSwitch.isOn = viewModel.areAdsEnabled
-        isReviewQualityCheckOn = viewModel.isReviewQualityCheckOn
 
         showProductsLabel.text = viewModel.showProductsLabelTitle
         showProductsLabel.accessibilityIdentifier = viewModel.showProductsLabelTitleA11yId
