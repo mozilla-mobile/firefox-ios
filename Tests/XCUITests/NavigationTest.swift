@@ -358,6 +358,7 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1613987
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
@@ -372,9 +373,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.help].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.customizeHomepage].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
-        // TODO: Add new options added [Customize home page, new tab, help]
-        // Customize home page, help and whatsNew are only there when we are on the homepage menu
     }
 
     // Smoketest
