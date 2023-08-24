@@ -3636,6 +3636,31 @@ extension String {
             tableName: "Shopping",
             value: "View full analysis",
             comment: "Footer button text of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardPriceTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Price.Title.v119
+            tableName: "Shopping",
+            value: "Price",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardQualityTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Quality.Title.v119
+            tableName: "Shopping",
+            value: "Quality",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardShippingTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Shipping.Title.v119
+            tableName: "Shopping",
+            value: "Shipping",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardCompetitivenessTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Competitiveness.Title.v119
+            tableName: "Shopping",
+            value: "Competitiveness",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardPackagingTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Packaging.Title.v119
+            tableName: "Shopping",
+            value: "Packaging",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
     }
 }
 
