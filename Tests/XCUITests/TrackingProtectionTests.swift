@@ -128,4 +128,26 @@ class TrackingProtectionTests: BaseTestCase {
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1510468
+    func testLockIconSecureConnection() {
+        navigator.openURL("https://www.Mozilla.org")
+        waitUntilPageLoad()
+        // Tap "Secure connection"
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        // A page displaying the connection is secure
+        XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
+        XCTAssertTrue(app.staticTexts["Connection is secure"].exists, "Missing Connection is secure info")
+        // Dismiss the view and visit "badssl.com". Tap on "expired"
+        app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL("https://www.badssl.com")
+        waitUntilPageLoad()
+        app.links["expired"].tap()
+        waitUntilPageLoad()
+        // The page is correctly displayed with the lock icon disabled
+        XCTAssertTrue(app.staticTexts["This Connection is Untrusted"].exists, "Missing This Connection is Untrusted info")
+        XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "lockSlashLarge")
+    }
 }

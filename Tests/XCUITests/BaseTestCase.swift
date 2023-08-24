@@ -292,6 +292,36 @@ extension XCUIElement {
     func tapOnApp() {
         coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
     }
+
+    /// Check the position of one XCUIElement is on the left side of another XCUIElement
+    func isLeftOf(rightElement: XCUIElement) -> Bool {
+        return self.frame.origin.x < rightElement.frame.origin.x
+    }
+
+    /// Check the position of one XCUIElement is on the right side of another XCUIElement
+    func isRightOf(rightElement: XCUIElement) -> Bool {
+        return self.frame.origin.x > rightElement.frame.origin.x
+    }
+
+    /// Check the position of two XCUIElement objects on vertical line
+    /// - parameter element: XCUIElement
+    /// - distance: the max distance accepted between them
+    /// - return Bool: if the current object is above the given object
+    func isAbove(element: XCUIElement, maxDistanceBetween: CGFloat = 700) -> Bool {
+        let isAbove = self.frame.origin.y < element.frame.origin.y
+        let actualDistance = abs(self.frame.origin.y - element.frame.origin.y)
+        return isAbove && (actualDistance < maxDistanceBetween)
+    }
+
+    /// Check the position of two XCUIElement objects on vertical line
+    /// - parameter element: XCUIElement
+    /// - distance: the max distance accepted between them
+    /// - return Bool: if the current object is below the given object
+    func isBelow(element: XCUIElement, maxDistanceBetween: CGFloat = 700) -> Bool {
+        let isBelow = self.frame.origin.y > element.frame.origin.y
+        let actualDistance = abs(self.frame.origin.y - element.frame.origin.y)
+        return isBelow && (actualDistance < maxDistanceBetween)
+    }
 }
 
 extension XCUIElementQuery {
