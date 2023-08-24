@@ -1293,6 +1293,7 @@
 		E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */; };
 		E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
+		E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */; };
 		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
 		E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
@@ -6482,6 +6483,7 @@
 		E1B04A9C28E20A8300670E54 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotFadeLabel.swift; sourceTree = "<group>"; };
 		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
 		E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewHeaderCell.swift; sourceTree = "<group>"; };
 		E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewCell.swift; sourceTree = "<group>"; };
@@ -9864,6 +9866,7 @@
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
 				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
+				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -13003,6 +13006,7 @@
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
 				8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */,
+				E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */,
 				8A3EF7FB2A2FCF9D00796E3A /* ForceCrashSetting.swift in Sources */,
 				2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */,
 			);
