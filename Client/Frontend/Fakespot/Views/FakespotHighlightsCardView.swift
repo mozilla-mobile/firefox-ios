@@ -8,10 +8,18 @@ import UIKit
 
 struct FakespotHighlightsCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.card
+    let title: String
+    let titleA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.title
+    let moreButtonTitle: String
+    let moreButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.moreButton
+    let lessButtonTitle: String
+    let lessButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.lessButton
     let footerTitle: String
     let footerActionTitle: String
     let footerA11yTitleIdentifier: String = AccessibilityIdentifiers.Shopping.HighlightsCard.footerTitle
     let footerA11yActionIdentifier: String = AccessibilityIdentifiers.Shopping.HighlightsCard.footerAction
+
+    let highlights: Highlights
 
     var footerModel: ActionFooterViewModel {
         return ActionFooterViewModel(title: footerTitle,
@@ -19,17 +27,88 @@ struct FakespotHighlightsCardViewModel {
                                      a11yTitleIdentifier: footerA11yTitleIdentifier,
                                      a11yActionIdentifier: footerA11yActionIdentifier)
     }
+
+    var highlightGroupViewModels: [FakespotHighlightGroupViewModel] {
+        var highlightGroups: [FakespotHighlightGroupViewModel] = []
+
+        if !highlights.price.isEmpty {
+            highlightGroups.append(FakespotHighlightGroupViewModel(
+                highlightGroup: HighlightGroup(type: .price, reviews: highlights.price),
+                titleA11yId: "",
+                imageA11yId: "",
+                highlightsA11yId: ""))
+        }
+
+        if !highlights.quality.isEmpty {
+            highlightGroups.append(FakespotHighlightGroupViewModel(
+                highlightGroup: HighlightGroup(type: .quality, reviews: highlights.quality),
+                titleA11yId: "",
+                imageA11yId: "",
+                highlightsA11yId: ""))
+        }
+
+        if !highlights.competitiveness.isEmpty {
+            highlightGroups.append(FakespotHighlightGroupViewModel(
+                highlightGroup: HighlightGroup(type: .competitiveness, reviews: highlights.competitiveness),
+                titleA11yId: "",
+                imageA11yId: "",
+                highlightsA11yId: ""))
+        }
+        return highlightGroups
+    }
 }
 
 class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private struct UX {
         static let cardBottomSpace: CGFloat = 16
+        static let titleFontSize: CGFloat = 17
         static let footerHorizontalSpace: CGFloat = 16
+        static let buttonFontSize: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 12
+        static let buttonHorizontalInset: CGFloat = 16
+        static let buttonVerticalInset: CGFloat = 12
+        static let contentHorizontalSpace: CGFloat = 8
+        static let contentTopSpace: CGFloat = 8
+        static let highlightSpacing: CGFloat = 16
+        static let highlightStackBottomSpace: CGFloat = 24
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var contentView: UIView = .build()
     private lazy var footerView: ActionFooterView = .build()
+
+    private lazy var titleLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .headline,
+            size: UX.titleFontSize)
+        label.numberOfLines = 0
+    }
+
+    private lazy var highlightStackView: UIStackView = .build { view in
+        view.axis = .vertical
+        view.spacing = UX.highlightSpacing
+    }
+
+    private lazy var moreButton: ActionButton = .build { button in
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: UX.buttonFontSize,
+            weight: .semibold)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(self.showMoreAction), for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: UX.buttonHorizontalInset,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: UX.buttonHorizontalInset)
+    }
+
+    private lazy var dividerView: UIView = .build()
+
+    private var highlightGroups: [FakespotHighlightGroupView] = []
+    private var viewModel: FakespotHighlightsCardViewModel?
+    private var isShowingPreview = true
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -43,17 +122,42 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     }
 
     func configure(_ viewModel: FakespotHighlightsCardViewModel) {
+        self.viewModel = viewModel
         let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
+
+        viewModel.highlightGroupViewModels.forEach { viewModel in
+            let highlightGroup: FakespotHighlightGroupView = .build()
+            highlightGroup.configure(viewModel: viewModel)
+            highlightGroups.append(highlightGroup)
+        }
+        updateHighlights()
         footerView.configure(viewModel: viewModel.footerModel)
+
+        titleLabel.text = viewModel.title
+        titleLabel.accessibilityIdentifier = viewModel.titleA11yId
+
+        moreButton.setTitle(viewModel.moreButtonTitle, for: .normal)
+        moreButton.accessibilityIdentifier = viewModel.moreButtonA11yId
     }
 
     func applyTheme(theme: Theme) {
         cardContainer.applyTheme(theme: theme)
         footerView.applyTheme(theme: theme)
+
+        highlightGroups.forEach { $0.applyTheme(theme: theme) }
+
+        titleLabel.textColor = theme.colors.textPrimary
+        moreButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        moreButton.backgroundColor = theme.colors.actionSecondary
+        dividerView.backgroundColor = theme.colors.borderPrimary
     }
 
     private func setupLayout() {
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(highlightStackView)
+        contentView.addSubview(dividerView)
+        contentView.addSubview(moreButton)
         addSubview(cardContainer)
         addSubview(footerView)
 
@@ -66,6 +170,54 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             footerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.footerHorizontalSpace),
             footerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.footerHorizontalSpace),
             footerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: UX.contentHorizontalSpace),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.contentTopSpace),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -UX.contentHorizontalSpace),
+            titleLabel.bottomAnchor.constraint(equalTo: highlightStackView.topAnchor, constant: -UX.highlightSpacing),
+
+            highlightStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                        constant: UX.contentHorizontalSpace),
+            highlightStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                         constant: -UX.contentHorizontalSpace),
+            highlightStackView.bottomAnchor.constraint(equalTo: dividerView.topAnchor,
+                                                       constant: -UX.highlightStackBottomSpace),
+
+            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            dividerView.bottomAnchor.constraint(equalTo: moreButton.topAnchor, constant: -8),
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+
+            moreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            moreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+
+    @objc
+    private func showMoreAction() {
+        guard let viewModel else { return }
+
+        isShowingPreview = !isShowingPreview
+        updateHighlights()
+
+        moreButton.setTitle(
+            isShowingPreview ? viewModel.moreButtonTitle : viewModel.lessButtonTitle,
+            for: .normal)
+        moreButton.accessibilityIdentifier = isShowingPreview ? viewModel.moreButtonA11yId : viewModel.lessButtonA11yId
+    }
+
+    private func updateHighlights() {
+        highlightStackView.removeAllArrangedViews()
+
+        for i in 0..<highlightGroups.count {
+            guard (isShowingPreview && i == 0) || !isShowingPreview else { return }
+
+            let highlightGroup = highlightGroups[i]
+            highlightStackView.addArrangedSubview(highlightGroup)
+            highlightGroup.showPreview(isShowingPreview)
+        }
     }
 }

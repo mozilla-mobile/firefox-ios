@@ -97,9 +97,18 @@ class FakespotViewController: UIViewController, Themeable {
                                                             actionTitle: .Shopping.ErrorCardButtonText)
         errorCardView.configure(viewModel: errorCardViewModel)
 
+        let highlights = Highlights(price: ["Great quality that one can expect from Apple.",
+                                            "Replacing iPad 5th gen that won't support iOS17, but still wanted to be able to charge all devices with the same lightning cable (especially when traveling).",
+                                            "I am very pleased with my decision to save some money and go with the 9th generation iPad."],
+                                    quality: ["Threw the box away so can't return it, but would not buy this model again, even at the discounted price."],
+                                    competitiveness: ["Please make sure to use some paper like screen protector if you’re using pencil on the screen."])
         let highlightsCardViewModel = FakespotHighlightsCardViewModel(
+            title: .Shopping.HighlightsCardTitle,
+            moreButtonTitle: .Shopping.HighlightsCardMoreButtonTitle,
+            lessButtonTitle: .Shopping.HighlightsCardLessButtonTitle,
             footerTitle: .Shopping.HighlightsCardFooterText,
-            footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
+            footerActionTitle: .Shopping.HighlightsCardFooterButtonText,
+            highlights: highlights)
         highlightsCardView.configure(highlightsCardViewModel)
     }
 
