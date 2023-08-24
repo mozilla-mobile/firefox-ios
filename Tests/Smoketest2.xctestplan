@@ -37,7 +37,6 @@
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
         "FindInPageTests",
-        "FirstRunTourTests",
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",
@@ -95,6 +94,7 @@
         "TabCounterTests",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
+        "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest\/testAddTabFromContext()",
         "TopTabsTest\/testCloseAllTabs()",
@@ -104,6 +104,7 @@
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
+        "TrackingProtectionTests\/testLockIconSecureConnection()",
         "WhatsNewTest"
       ],
       "target" : {
