@@ -17,7 +17,7 @@ class FakespotSettingsCardViewModel {
     let recommendedProductsSwitchA11yId: String
 
     var isReviewQualityCheckOn: Bool {
-        get { return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true }
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
     }
 

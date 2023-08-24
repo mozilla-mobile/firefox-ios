@@ -35,49 +35,31 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.isReviewQualityCheckOn, true)
     }
 
-    func testInitialCallbacksAreNil() {
-        XCTAssertNil(viewModel.onSwitchValueChanged)
-        XCTAssertNil(viewModel.onTurnOffButtonTapped)
-    }
-
-    func testGetUserPrefsAfterSettingCallbacks() {
-        viewModel.setUserPrefs()
-        viewModel.onSwitchValueChanged?(true)
-        viewModel.onTurnOffButtonTapped?(false)
-
-        viewModel.getUserPrefs()
+    func testGetUserPrefsAfterSettingPrefs() {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Shopping2023EnableAds)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
 
         XCTAssertEqual(viewModel.areAdsEnabled, true)
         XCTAssertEqual(viewModel.isReviewQualityCheckOn, false)
     }
 
-    func testSetUserPrefsAndVerifyCallbacks() {
-        viewModel.setUserPrefs()
-        viewModel.onSwitchValueChanged?(false)
-        viewModel.onTurnOffButtonTapped?(true)
+    func testSetUserPrefs() {
+        viewModel.areAdsEnabled = false
+        viewModel.isReviewQualityCheckOn = true
 
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds), false)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn), true)
     }
 
     func testSwitchValueChangedUpdatesPrefs() {
-        viewModel.setUserPrefs()
-        viewModel.onSwitchValueChanged?(false)
+        viewModel.areAdsEnabled = false
 
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds), false)
     }
 
     func testTurnOffButtonTappedUpdatesPrefs() {
-        viewModel.setUserPrefs()
-        viewModel.onTurnOffButtonTapped?(true)
+        viewModel.isReviewQualityCheckOn = false
 
-        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn), true)
-    }
-
-    func testSetUserPrefsWithoutCallbacks() {
-        viewModel.setUserPrefs()
-
-        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds), nil)
-        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn), nil)
+        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn), false)
     }
 }
