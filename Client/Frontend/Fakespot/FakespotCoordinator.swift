@@ -9,7 +9,7 @@ protocol FakespotCoordinatorDelegate: AnyObject {
 }
 
 protocol FakespotViewControllerDelegate: AnyObject {
-    func fakespotControllerCancelButtonTapped()
+    func cancelButtonTapped()
 }
 
 class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate {
@@ -27,7 +27,7 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate {
         router.present(fakespotViewController, animated: true)
     }
 
-    func fakespotControllerCancelButtonTapped() {
+    func cancelButtonTapped() {
         router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }

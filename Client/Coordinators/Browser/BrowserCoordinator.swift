@@ -383,6 +383,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFakespotFlow() {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+            return // flow is already handled
+        }
         let coordinator = FakespotCoordinator(router: router)
         coordinator.parentCoordinator = self
         add(child: coordinator)

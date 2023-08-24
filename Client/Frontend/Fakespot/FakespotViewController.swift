@@ -199,6 +199,6 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        delegate?.fakespotControllerCancelButtonTapped()
+        delegate?.cancelButtonTapped()
     }
 }

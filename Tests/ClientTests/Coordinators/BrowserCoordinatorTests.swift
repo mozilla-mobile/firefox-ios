@@ -825,7 +825,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         subject.showFakespotFlow()
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
-        fakespotCoordinator.fakespotControllerCancelButtonTapped()
+        fakespotCoordinator.cancelButtonTapped()
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
