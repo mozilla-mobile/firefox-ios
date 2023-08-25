@@ -65,6 +65,7 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -111,6 +112,16 @@ class FakespotViewController: UIViewController, Themeable {
             turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
             recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
         settingsCardView.configure(settingsCardViewModel)
+
+        let noAnalysisCardViewModel = NoAnalysisCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.card,
+            headlineLabelText: .Shopping.NoAnalysisCardHeadlineLabelTitle,
+            headlineLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.headlineTitle,
+            bodyLabelText: .Shopping.NoAnalysisCardBodyLabelTitle,
+            bodyLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle,
+            footerLabelText: .Shopping.NoAnalysisCardFooterLabelTitle,
+            footerLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.footerTitle)
+        noAnalysisCardView.configure(noAnalysisCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -137,6 +148,7 @@ class FakespotViewController: UIViewController, Themeable {
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
+        noAnalysisCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
     }
 
@@ -146,6 +158,7 @@ class FakespotViewController: UIViewController, Themeable {
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
+        contentStackView.addArrangedSubview(noAnalysisCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)

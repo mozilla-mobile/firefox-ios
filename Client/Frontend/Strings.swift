@@ -3646,6 +3646,21 @@ extension String {
             tableName: "Shopping",
             value: "Settings Card Collapsed",
             comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
+            tableName: "Shopping",
+            value: "No analysis for these reviews, yet",
+            comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
+            tableName: "Shopping",
+            value: "You’re about 60 seconds away from knowing how trustworthy this product’s reviews are.",
+            comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardFooterLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.FooterLabel.Title.v118
+            tableName: "Shopping",
+            value: "Start analysis on Fakespot.com",
+            comment: "Text for the footer action label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
     }
 }
 

@@ -56,6 +56,7 @@ public struct ImageIdentifiers {
     public static let reportSiteIssue = "menu-reportSiteIssue"
     public static let settings = "menu-Settings"
     public static let share = "action_share"
+    public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let signinSync = "signin-sync"
     public static let signinSyncQRButton = "qr-code-icon-white"
     public static let sponsoredStar = "sponsored-star"
