@@ -16,4 +16,10 @@ struct OnboardingNotificationCardHelper {
                 || $0.buttons.secondary?.action == .requestNotifications
             }
     }
+
+    func shouldAskForNotificationsPermission(telemetryObj: TelemetryWrapper.EventObject) -> Bool {
+        let isOnboarding = telemetryObj == .onboarding
+        let shouldAskForPermission = !OnboardingNotificationCardHelper().notificationCardIsInOnboarding() || !isOnboarding
+        return shouldAskForPermission
+    }
 }

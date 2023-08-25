@@ -45,6 +45,22 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
         XCTAssertEqual(result, expectedResult)
     }
 
+    func testShouldAskForPermission_WhenNotOnboarding() {
+        let telemetryObj = TelemetryWrapper.EventObject.home
+        let subject = createSubject()
+        let result = subject.shouldAskForNotificationsPermission(telemetryObj: telemetryObj)
+
+        XCTAssertTrue(result)
+    }
+
+    func testShouldNotAskForPermission_WhenOnboarding() {
+        let telemetryObj = TelemetryWrapper.EventObject.onboarding
+        let subject = createSubject()
+        let result = subject.shouldAskForNotificationsPermission(telemetryObj: telemetryObj)
+
+        XCTAssertFalse(result)
+    }
+
     // MARK: - Helper
     private func createSubject() -> OnboardingNotificationCardHelper {
         let subject = OnboardingNotificationCardHelper()
