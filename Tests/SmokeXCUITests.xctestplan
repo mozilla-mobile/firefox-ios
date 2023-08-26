@@ -190,6 +190,7 @@
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {
