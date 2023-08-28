@@ -1,3 +1,6 @@
+/* This value is used as the toast message for the saving success alert in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Քարտի տվյալները թարմացվել են";
+
 /* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v115" = "Թարմացնե՞լ այս քարտը:";
 
