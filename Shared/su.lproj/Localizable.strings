@@ -1543,6 +1543,12 @@
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ngurangan iklan ditargét sarta mantuan ngeureunan pangiklan ngalacak pamaluruhan anjeun.";
 
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Upama hiji loka henteu jalan sakumaha anu dipiharep, toél konci dina palang alamat sarta pareuman Kilung Palacakan anu Ditingkatkeun pikeun éta kaca.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Upama hiji loka henteu jalan sakumaha anu dipiharep, toél konci dina palang alamat sarta pareuman Kilung Palacakan anu Dironjatkeun pikeun éta kaca.";
+
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Idinan sababaraha palacak iklan sangkan raramatloka bisa bener midang.";
 
@@ -1565,7 +1571,7 @@
 "Settings.TrackingProtectionOption.BlockListStrict" = "Pereketkeun";
 
 /* Settings option to specify that Tracking Protection is on */
-"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protéksi Palacakan Tingkat Lanjut";
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Kilung Palacakan Tingkat Lanjut";
 
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Bongbolongan";
