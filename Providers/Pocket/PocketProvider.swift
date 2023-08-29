@@ -53,7 +53,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         return URLCache.shared
     }
 
-    lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
+    private lazy var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
         return Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String

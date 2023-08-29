@@ -22,7 +22,7 @@ public class PushRegistrationAPIImplementation: PushRegistrationAPI {
                                                  code: 999,
                                                  userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
-    lazy private var urlSession = makeURLSession(userAgent: UserAgent.fxaUserAgent,
+    private lazy var urlSession = makeURLSession(userAgent: UserAgent.fxaUserAgent,
                                                  configuration: URLSessionConfiguration.ephemeral)
 
     public init() {}
