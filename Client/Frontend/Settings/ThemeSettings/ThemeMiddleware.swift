@@ -61,6 +61,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         }
     }
 
+    // MARK: - Helper func
     func getCurrentThemeManagerState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,

@@ -230,11 +230,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            if isReduxIntegrationEnabled {
-                control.isOn = themeState.useSystemAppearance
-            } else {
-                control.isOn = LegacyThemeManager.instance.systemThemeIsOn
-            }
+            control.isOn = isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
 
             cell.accessoryView = control
         case .automaticBrightness:

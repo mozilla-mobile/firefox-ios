@@ -9,18 +9,33 @@ import XCTest
 @testable import Client
 
 class ThemeSettingsControllerTests: XCTestCase {
+    var mockStore: MockStore<AppState>!
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        mockStore = MockStore(state: AppState(),
+                              reducer: AppState.reducer,
+                              middlewares: [ThemeManagerMiddleware().themeManagerProvider])
     }
 
     override func tearDown() {
         super.tearDown()
         DependencyHelperMock().reset()
+        mockStore = nil
     }
 
     func testThemeSettingsUseSystemAppearance_WithoutRedux() {
         let subject = createSubject(usingRedux: false)
+        let themeSwitch = createUseSystemThemeSwitch(isOn: true)
+        subject.systemThemeSwitchValueChanged(control: themeSwitch)
+
+        XCTAssertTrue(subject.isSystemThemeOn)
+        XCTAssertEqual(subject.tableView.numberOfSections, 1)
+    }
+
+    func testThemeSettingsUseSystemAppearance_WithRedux() {
+        let subject = createSubject(usingRedux: true)
         let themeSwitch = createUseSystemThemeSwitch(isOn: true)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
 
