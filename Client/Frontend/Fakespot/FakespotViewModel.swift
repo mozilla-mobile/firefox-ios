@@ -5,5 +5,54 @@
 import Foundation
 
 class FakespotViewModel {
-    // Define your properties and methods for the ViewModel here
+    enum ViewState<T> {
+        case loading
+        case loaded(T)
+        case error(Error)
+    }
+
+    @Published private(set) var state: ViewState<ProductAnalysisData?> = .loading
+    let shoppingProduct: ShoppingProduct
+
+    let reliabilityCardViewModel = ReliabilityCardViewModel(
+        cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
+        title: .Shopping.ReliabilityCardTitle,
+        titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
+        rating: .gradeA,
+        ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
+        ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
+    )
+
+    let errorCardViewModel = FakespotErrorCardViewModel(
+        title: .Shopping.ErrorCardTitle,
+        description: .Shopping.ErrorCardDescription,
+        actionTitle: .Shopping.ErrorCardButtonText
+    )
+
+    let highlightsCardViewModel = HighlightsCardViewModel(
+        footerTitle: .Shopping.HighlightsCardFooterText,
+        footerActionTitle: .Shopping.HighlightsCardFooterButtonText
+    )
+
+    let settingsCardViewModel = FakespotSettingsCardViewModel(
+        cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
+        showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
+        showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
+        turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
+        turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
+        recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
+    )
+
+    init(shoppingProduct: ShoppingProduct) {
+        self.shoppingProduct = shoppingProduct
+    }
+
+    func fetchData() async {
+        state = .loading
+        do {
+            state = try await .loaded(shoppingProduct.fetchProductAnalysisData())
+        } catch {
+            state = .error(error)
+        }
+    }
 }

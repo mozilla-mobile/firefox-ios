@@ -6,6 +6,7 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
+import Combine
 
 class FakespotViewController: UIViewController, Themeable {
     private struct UX {
@@ -84,39 +85,31 @@ class FakespotViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var cancellable: AnyCancellable?
+
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         listenForThemeChange(view)
 
-        let reliabilityCardViewModel = ReliabilityCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-            title: .Shopping.ReliabilityCardTitle,
-            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-            rating: .gradeA,
-            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
-        reliabilityCardView.configure(reliabilityCardViewModel)
+        cancellable = viewModel
+            .$state
+            .sink { state in
+                switch state {
+                case .loading:
+                    print("Loading")
+                case .loaded(let productData):
+                    print(productData)
+                case .error(let error):
+                    print(error)
+                }
+            }
 
-        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
-                                                            description: .Shopping.ErrorCardDescription,
-                                                            actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(viewModel: errorCardViewModel)
-
-        let highlightsCardViewModel = HighlightsCardViewModel(
-            footerTitle: .Shopping.HighlightsCardFooterText,
-            footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
-        highlightsCardView.configure(highlightsCardViewModel)
-
-        let settingsCardViewModel = FakespotSettingsCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
-            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
-            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
-            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
-            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
-        settingsCardView.configure(settingsCardViewModel)
+        reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
+        errorCardView.configure(viewModel: viewModel.errorCardViewModel)
+        highlightsCardView.configure(viewModel.highlightsCardViewModel)
+        settingsCardView.configure(viewModel.settingsCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +117,9 @@ class FakespotViewController: UIViewController, Themeable {
 
         applyTheme()
         loadingView.animate()
+        Task {
+            await viewModel.fetchData()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {

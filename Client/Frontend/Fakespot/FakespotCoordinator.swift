@@ -15,8 +15,8 @@ protocol FakespotViewControllerDelegate: AnyObject {
 class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate {
     weak var parentCoordinator: ParentCoordinatorDelegate?
 
-    func start() {
-        let viewModel = FakespotViewModel()
+    func start(productURL: URL) {
+        let viewModel = FakespotViewModel(shoppingProduct: ShoppingProduct(url: productURL))
         let fakespotViewController = FakespotViewController(viewModel: viewModel)
         fakespotViewController.delegate = self
         if #available(iOS 15.0, *) {
