@@ -20,8 +20,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
             args = [LaunchArguments.ClearProfile,
                     LaunchArguments.SkipWhatsNew,
                     LaunchArguments.SkipETPCoverSheet,
-                    LaunchArguments.SkipContextualHints,
-                    LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                    LaunchArguments.SkipContextualHints]
         }
         currentScreen = 0
         super.setUp()

@@ -109,10 +109,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             }
         }
 
-        if launchArguments.contains(LaunchArguments.TurnOffTabGroupsInUserPreferences) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.TabTrayGroups)
-        }
-
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
             profile.prefs.setBool(false, forKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts)
         }
