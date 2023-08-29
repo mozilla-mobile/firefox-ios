@@ -537,10 +537,6 @@ private extension HomepageViewController {
         }
 
         // Jumpback in
-        viewModel.jumpBackInViewModel.onTapGroup = { [weak self] tab in
-            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
-        }
-
         viewModel.jumpBackInViewModel.headerButtonAction = { [weak self] button in
             self?.openTabTray(button)
         }
