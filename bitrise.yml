@@ -1423,7 +1423,7 @@ workflows:
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
                 --device=model=iphone13pro,version=15.7 \
-                --device=model=iphone8,version=16.5 \
+                --device=model=iphone8,version=16.6 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
