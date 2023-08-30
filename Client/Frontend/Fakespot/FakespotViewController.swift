@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable {
+class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let closeButtonWidthHeight: CGFloat = 30
         static let topLeadingTrailingSpacing: CGFloat = 18
@@ -87,6 +87,7 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
 
@@ -199,6 +200,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        delegate?.cancelButtonTapped()
+        delegate?.fakespotControllerDidDismiss()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.fakespotControllerDidDismiss()
     }
 }
