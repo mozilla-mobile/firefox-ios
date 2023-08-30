@@ -65,6 +65,7 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -92,6 +93,16 @@ class FakespotViewController: UIViewController, Themeable {
             ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
+
+        let adjustRatingViewModel = AdjustRatingViewModel(
+            title: .Shopping.AdjustedRatingTitle,
+            description: .Shopping.AdjustedRatingDescription,
+            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
+            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
+            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
+            rating: 3.5
+        )
+        adjustRatingView.configure(adjustRatingViewModel)
 
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
@@ -138,11 +149,13 @@ class FakespotViewController: UIViewController, Themeable {
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
+        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
