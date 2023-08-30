@@ -54,6 +54,7 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
     }
 
     func testShouldNotAskForPermission_WhenOnboarding() {
+        nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let telemetryObj = TelemetryWrapper.EventObject.onboarding
         let subject = createSubject()
         let result = subject.shouldAskForNotificationsPermission(telemetryObj: telemetryObj)
