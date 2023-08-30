@@ -283,7 +283,7 @@ class HistoryPanel: UIViewController,
         return siteItem
     }
 
-    private func showClearRecentHistory() {
+    func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
@@ -761,8 +761,7 @@ extension HistoryPanel {
         updatePanelState(newState: .history(state: .mainView))
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .deleteHistory)
-        // TODO: Yoana remove notification and handle directly
-        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
+        showClearRecentHistory()
     }
 
     // MARK: - User Interactions
