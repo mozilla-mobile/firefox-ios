@@ -70,6 +70,7 @@ public class AppConstants {
 
     public static let prefSendUsageData = "settings.sendUsageData"
     public static let prefStudiesToggle = "settings.studiesToggle"
+    public static let prefGleanTempDirtyFlag = "glean.temp.dirtyFlag"
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {
