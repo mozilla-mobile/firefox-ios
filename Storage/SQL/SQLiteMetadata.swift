@@ -9,7 +9,7 @@ import Shared
 open class SQLiteMetadata {
     let db: BrowserDB
 
-    required public init(db: BrowserDB) {
+    public required init(db: BrowserDB) {
         self.db = db
     }
 }

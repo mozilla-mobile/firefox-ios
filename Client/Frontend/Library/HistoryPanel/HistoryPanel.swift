@@ -106,7 +106,7 @@ class HistoryPanel: UIViewController,
         searchbar.delegate = self
     }
 
-    lazy private var tableView: UITableView = .build { [weak self] tableView in
+    private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDataSource
         tableView.addGestureRecognizer(self.longPressRecognizer)

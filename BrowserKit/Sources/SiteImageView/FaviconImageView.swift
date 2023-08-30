@@ -26,7 +26,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     }
     // MARK: - Init
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         self.imageFetcher = DefaultSiteImageHandler()
         super.init(frame: frame)
         setupUI()

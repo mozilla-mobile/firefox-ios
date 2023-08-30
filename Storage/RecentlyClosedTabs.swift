@@ -12,7 +12,7 @@ open class ClosedTabsStore {
         case recentlyClosedTabs
     }
 
-    lazy open var tabs: [ClosedTab] = {
+    open lazy var tabs: [ClosedTab] = {
         guard let tabsArray: Data = self.prefs.objectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue) as Any? as? Data,
               let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: tabsArray),
               let unarchivedArray = unarchiver.decodeObject(of: [NSArray.self, ClosedTab.self], forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue) as? [ClosedTab]
@@ -74,7 +74,7 @@ open class ClosedTab: NSObject, NSCoding {
         super.init()
     }
 
-    required convenience public init?(coder: NSCoder) {
+    public required convenience init?(coder: NSCoder) {
         guard let url = coder.decodeObject(forKey: CodingKeys.url.rawValue) as? URL,
               let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String,
               let date = coder.decodeObject(forKey: CodingKeys.lastExecutedTime.rawValue) as? Timestamp

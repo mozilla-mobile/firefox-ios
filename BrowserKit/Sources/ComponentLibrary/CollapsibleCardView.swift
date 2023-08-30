@@ -119,7 +119,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func configure(_ viewModel: ShadowCardViewModel) {
+    override public func configure(_ viewModel: ShadowCardViewModel) {
         // the overridden method should not be used as it is lacking vital details to configure this card
         fatalError("configure(:) has not been implemented.")
     }
@@ -147,7 +147,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         super.configure(parentViewModel)
     }
 
-    public override func applyTheme(theme: Theme) {
+    override public func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
 
         titleLabel.textColor = theme.colors.textPrimary
