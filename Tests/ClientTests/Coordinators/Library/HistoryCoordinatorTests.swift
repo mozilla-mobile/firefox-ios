@@ -39,7 +39,7 @@ final class HistoryCoordinatorTests: XCTestCase {
     }
 
     func testOpenClearRecentSearch_receiveNotificationCorrectly() {
-        let subject = createSubject()
+        _ = createSubject()
 
         notificationCenter.post(name: .OpenClearRecentHistory)
 
