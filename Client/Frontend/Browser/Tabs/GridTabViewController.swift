@@ -247,7 +247,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     /// The main interface for scrolling to an item, whether that is a group or an individual tab
     ///
     /// This method checks for the existence of a tab to focus on other than the selected tab,
-    /// and then, focuses on that tab.
+    /// and then focuses on that tab.
     func focusItem() {
         guard let selectedTab = tabManager.selectedTab else { return }
         if tabToFocus == nil { tabToFocus = selectedTab }
