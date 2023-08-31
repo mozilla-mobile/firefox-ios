@@ -768,6 +768,7 @@
 		8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3879842A965210003966B0 /* FakespotViewModel.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6DA7D12A6FE78F00DE264F /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
+		8C77B59C2AA063DD00C5924B /* FakespotCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77B59B2AA063DD00C5924B /* FakespotCoordinatorTests.swift */; };
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
@@ -5013,6 +5014,7 @@
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
+		8C77B59B2AA063DD00C5924B /* FakespotCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotCoordinatorTests.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotClient.swift; sourceTree = "<group>"; };
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisData.swift; sourceTree = "<group>"; };
@@ -8329,6 +8331,7 @@
 				C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */,
 				8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */,
 				8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */,
+				8C77B59B2AA063DD00C5924B /* FakespotCoordinatorTests.swift */,
 				C81C66C329F00D1000F6422F /* UserActivityRouteTests.swift */,
 				8A83B7492A265044002FF9AC /* SettingsCoordinatorTests.swift */,
 				F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */,
@@ -13103,6 +13106,7 @@
 				21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */,
 				8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */,
 				8AA7347B28AEDB3100443D24 /* PocketViewModelTests.swift in Sources */,
+				8C77B59C2AA063DD00C5924B /* FakespotCoordinatorTests.swift in Sources */,
 				C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */,
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
