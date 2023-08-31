@@ -98,15 +98,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
-
-            // Safety check incase something went wrong during launch where a migration should have occured
-            if tabs.count <= 1 && store.tabs.count > 1 {
-                logger.log("Rerunning migration due to inconsistent tab counts, old tab store count: \(store.tabs.count)",
-                           level: .fatal,
-                           category: .tabs)
-                isRestoringTabs = true
-                migrateAndRestore()
-            }
         }
     }
 
