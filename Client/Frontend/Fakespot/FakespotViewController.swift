@@ -107,7 +107,7 @@ class FakespotViewController: UIViewController, Themeable {
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(viewModel: errorCardViewModel)
+        errorCardView.configure(errorCardViewModel)
 
         let highlightsCardViewModel = HighlightsCardViewModel(
             footerTitle: .Shopping.HighlightsCardFooterText,

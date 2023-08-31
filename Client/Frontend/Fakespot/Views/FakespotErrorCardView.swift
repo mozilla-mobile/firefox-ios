@@ -17,7 +17,7 @@ struct FakespotErrorCardViewModel {
     let a11yActionIdentifier: String = AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
 }
 
-final class FakespotErrorCardView: UIView, ThemeApplicable {
+final class FakespotErrorCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let buttonFontSize: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
@@ -29,6 +29,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
         static let horizontalStackViewSpacing: CGFloat = 12
         static let verticalStackViewSpacing: CGFloat = 4
         static let iconSize: CGFloat = 24
+        static let iconMaxSize: CGFloat = 58
         static let titleFontSize: CGFloat = 13
         static let descriptionFontSize: CGFloat = 13
     }
@@ -58,7 +59,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .footnote,
+            withTextStyle: .callout,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -68,7 +69,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
     private lazy var descriptionLabel: UILabel = .build { label in
         label.textColor = .white
         label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .footnote,
+            withTextStyle: .subheadline,
             size: UX.buttonFontSize)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -89,17 +90,20 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
                                                 right: UX.buttonHorizontalInset)
     }
 
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
         setupLayout()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupLayout()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(viewModel: FakespotErrorCardViewModel) {
+    func configure(_ viewModel: FakespotErrorCardViewModel) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         primaryButton.setTitle(viewModel.actionTitle, for: .normal)
@@ -117,8 +121,14 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
         cardView.configure(cardModel)
     }
 
+    private var starRatingHeightConstraint: NSLayoutConstraint?
+
     private func setupLayout() {
         addSubview(cardView)
+
+        let size = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        starRatingHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
+        starRatingHeightConstraint?.isActive = true
 
         iconStackView.addArrangedSubview(UIView())
         iconStackView.addArrangedSubview(iconImageView)
@@ -139,8 +149,8 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
             cardView.trailingAnchor.constraint(equalTo: trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize),
-            iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
+            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
 
             infoContainerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                             constant: UX.contentHorizontalSpacing),
@@ -172,5 +182,19 @@ final class FakespotErrorCardView: UIView, ThemeApplicable {
         primaryButton.setTitleColor(theme.colors.textOnDark, for: .normal)
         primaryButton.backgroundColor = theme.colors.iconAccentYellow // Update in FXIOS-7154
         cardView.applyTheme(theme: theme)
+    }
+
+    private func adjustLayout() {
+        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
     }
 }
