@@ -32,7 +32,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testEmptyData_tabTrayGroupsDisabled() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -43,7 +42,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabs() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -58,7 +56,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabsAndSyncedData() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
@@ -77,7 +74,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_whenNoSyncTabsData_notReturned() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -86,11 +82,9 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_whenNoSyncAccount_notReturned() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -99,7 +93,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_noDesktopClients_notReturned() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
         let subject = createSubject()
@@ -110,7 +103,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_oneDesktopClient_returned() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let remoteClient = remoteDesktopClient()
         let remoteTabs = remoteTabs(idRange: 1...3)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
@@ -125,7 +117,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_multipleDesktopClients_returnsLast() async {
-        LegacyFeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let remoteClient = remoteDesktopClient(name: "Fake Client 2")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),

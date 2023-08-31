@@ -4,11 +4,6 @@
 
 import Foundation
 
-/// The filtered jumpBack in list to display to the user.
-/// Only one group is displayed
-struct JumpBackInList {
-    let tabs: [Tab]
-    var itemsToDisplay: Int {
-        return tabs.count
-    }
+class FakespotViewModel {
+    // Define your properties and methods for the ViewModel here
 }
