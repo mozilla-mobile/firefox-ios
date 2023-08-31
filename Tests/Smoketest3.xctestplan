@@ -90,6 +90,7 @@
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
