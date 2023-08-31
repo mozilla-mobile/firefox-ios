@@ -7,31 +7,44 @@ import XCTest
 import Common
 
 final class TabDataStoreTests: XCTestCase {
-    private var tabDataStore: DefaultTabDataStore!
     private var mockFileManager: TabFileManagerMock!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
 
     override func setUp() {
         super.setUp()
         mockFileManager = TabFileManagerMock()
-        tabDataStore = DefaultTabDataStore(fileManager: mockFileManager,
-                                           throttleTime: 100)
     }
 
     override func tearDown() {
         super.tearDown()
+        mockFileManager = nil
     }
 
     // MARK: - Saving Data
 
-    func testSaveWindowData() async throws {
-        let windowData = self.createMockWindow()
+    func testSaveWindowData_noWindowDataDirectory_returns() async throws {
+        let windowData = createMockWindow()
+        let subject = createSubject()
+
+        await subject.saveWindowData(window: windowData, forced: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 1)
+        XCTAssertEqual(mockFileManager.fileExistsCalledCount, 0)
+        XCTAssertEqual(mockFileManager.createDirectoryAtPathCalledCount, 0)
+        XCTAssertEqual(mockFileManager.copyItemCalledCount, 0)
+        XCTAssertEqual(mockFileManager.writeWindowDataCalledCount, 0)
+    }
+
+    func testSaveWindowData_createsDirectory_notForced() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
         mockFileManager.pathContents = []
         mockFileManager.windowData = windowData
         mockFileManager.fileExists = false
 
-        await tabDataStore.saveWindowData(window: windowData, forced: false)
+        await subject.saveWindowData(window: windowData, forced: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 2)
@@ -41,15 +54,16 @@ final class TabDataStoreTests: XCTestCase {
         XCTAssertEqual(mockFileManager.writeWindowDataCalledCount, 1)
     }
 
-    func testSaveWindowDataWithBackup() async throws {
-        let windowData = self.createMockWindow()
+    func testSaveWindowDataWithBackup_doesntCreateDirectory_notForced() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
         mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
         mockFileManager.pathContents = []
         mockFileManager.windowData = windowData
         mockFileManager.fileExists = true
 
-        await tabDataStore.saveWindowData(window: windowData, forced: false)
+        await subject.saveWindowData(window: windowData, forced: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 4)
@@ -59,46 +73,171 @@ final class TabDataStoreTests: XCTestCase {
         XCTAssertEqual(mockFileManager.writeWindowDataCalledCount, 1)
     }
 
+    func testSaveWindowDataForceAndNotForcedMix() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
+        mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
+        mockFileManager.pathContents = []
+        mockFileManager.windowData = windowData
+        mockFileManager.fileExists = true
+
+        await subject.saveWindowData(window: windowData, forced: false)
+        await subject.saveWindowData(window: windowData, forced: false)
+        await subject.saveWindowData(window: windowData, forced: true)
+        try await Task.sleep(nanoseconds: 3 * sleepTime)
+
+        XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 8)
+        XCTAssertEqual(mockFileManager.fileExistsCalledCount, 5)
+        XCTAssertEqual(mockFileManager.createDirectoryAtPathCalledCount, 0)
+        XCTAssertEqual(mockFileManager.copyItemCalledCount, 1)
+        XCTAssertEqual(mockFileManager.writeWindowDataCalledCount, 2)
+    }
+
     // MARK: - Fetching Data
 
-    func testFetchWindowData() async throws {
-        let windowData = self.createMockWindow()
+    func testFetchWindowData_withoutDirectory_returnEmpty() async throws {
+        let subject = createSubject()
+
+        let fetchedWindowData = await subject.fetchWindowData()
+
+        XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 1)
+        XCTAssertEqual(mockFileManager.getWindowDataFromPathCalledCount, 0)
+        XCTAssertNil(fetchedWindowData)
+    }
+
+    func testFetchWindowData_withoutWindowDataAndBackupURL_returnEmpty() async throws {
+        let subject = createSubject()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
+
+        let fetchedWindowData = await subject.fetchWindowData()
+
+        XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 2)
+        XCTAssertEqual(mockFileManager.getWindowDataFromPathCalledCount, 0)
+        XCTAssertNil(fetchedWindowData)
+    }
+
+    func testFetchWindowData_withoutWindowDataEmptyData_useBackupReturnEmpty() async throws {
+        let subject = createSubject()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
+        mockFileManager.backupDirectoryURL = URL(string: "some/directory")
+
+        let fetchedWindowData = await subject.fetchWindowData()
+
+        XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 2)
+        XCTAssertEqual(mockFileManager.getWindowDataFromPathCalledCount, 0)
+        XCTAssertNil(fetchedWindowData)
+    }
+
+    func testFetchWindowData_withWindowData_returnFetchedWindow() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
         mockFileManager.pathContents = [URL(string: "some/directory")!]
         mockFileManager.windowData = windowData
-        let fetchedWindowData = await tabDataStore.fetchWindowData()
+
+        let fetchedWindowData = await subject.fetchWindowData()
+
         XCTAssertEqual(mockFileManager.windowDataDirectoryCalledCount, 1)
         XCTAssertEqual(mockFileManager.contentsOfDirectoryCalledCount, 1)
         XCTAssertEqual(mockFileManager.getWindowDataFromPathCalledCount, 1)
         XCTAssertEqual(fetchedWindowData?.id, windowData.id)
     }
 
+    // MARK: - Fetching and Saving Data
+
+    func testPreserveBeforeRestore() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
+        mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
+        mockFileManager.pathContents = [URL(string: "some/directory")!]
+        mockFileManager.fileExists = true
+
+        await subject.saveWindowData(window: windowData, forced: false) // preserve
+        try await Task.sleep(nanoseconds: sleepTime)
+        let fetchedWindowData = await subject.fetchWindowData() // restore
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+        XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+    }
+
+    func testRestoreBeforePreserve() async throws {
+        let subject = createSubject()
+        let windowData = createMockWindow()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
+        mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
+        mockFileManager.pathContents = [URL(string: "some/directory")!]
+        mockFileManager.fileExists = true
+
+        let fetchedWindowData = await subject.fetchWindowData() // restore
+        await subject.saveWindowData(window: windowData, forced: false) // preserve
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertNil(fetchedWindowData)
+    }
+
+    func testSavingTwiceReturnsMostRecentData() async throws {
+        let subject = createSubject()
+        let windowData1 = createMockWindow()
+        let windowData2 = createMockWindow(uuidString: "ABFF60DA-D1E7-407B-AA3B-130D48B31012")
+        mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
+        mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
+        mockFileManager.pathContents = [URL(string: "some/directory")!]
+        mockFileManager.fileExists = true
+
+        await subject.saveWindowData(window: windowData1, forced: false) // preserve
+        await subject.saveWindowData(window: windowData2, forced: false) // preserve
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        let fetchedWindowData = await subject.fetchWindowData() // restore
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(fetchedWindowData?.id, windowData2.id)
+        XCTAssertEqual(fetchedWindowData?.tabData.count, windowData2.tabData.count)
+    }
+
     // MARK: - Clearing Data
 
     func testClearAllTabData() async throws {
+        let subject = createSubject()
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory1")
         mockFileManager.backupDirectoryURL = URL(string: "some/directory2")
-        await tabDataStore.clearAllWindowsData()
+        await subject.clearAllWindowsData()
         XCTAssertEqual(mockFileManager.removeAllFilesAtCalledCount, 2)
     }
 
     // MARK: - Helpers
 
-    func createMockTab() -> TabData {
-        return TabData(id: UUID(),
-                       title: "Test",
-                       siteUrl: "https://test.com",
-                       faviconURL: "https://test.com/favicon.ico",
-                       isPrivate: false,
-                       lastUsedTime: Date(),
-                       createdAtTime: Date())
+    func createSubject(throttleTime: UInt64 = 100) -> TabDataStore {
+        let subject = DefaultTabDataStore(fileManager: mockFileManager,
+                                          throttleTime: 100)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
-    func createMockWindow() -> WindowData {
-        let tab = self.createMockTab()
-        return WindowData(id: UUID(uuidString: "E3FF60DA-D1E7-407B-AA3B-130D48B3909D")!,
+    func createMockTabs() -> [TabData] {
+        var tabs = [TabData]()
+        for index in 0..<100 {
+            tabs.append(TabData(id: UUID(),
+                                title: "Test \(index)",
+                                siteUrl: "https://test.com",
+                                faviconURL: "https://test.com/favicon.ico",
+                                isPrivate: false,
+                                lastUsedTime: Date(),
+                                createdAtTime: Date()))
+        }
+        return tabs
+    }
+
+    func createMockWindow(
+        uuidString: String = "E3FF60DA-D1E7-407B-AA3B-130D48B3909D"
+    ) -> WindowData {
+        let tabs = createMockTabs()
+        return WindowData(id: UUID(uuidString: uuidString)!,
                           isPrimary: true,
-                          activeTabId: tab.id,
-                          tabData: [tab])
+                          activeTabId: tabs[0].id,
+                          tabData: tabs)
     }
 }
