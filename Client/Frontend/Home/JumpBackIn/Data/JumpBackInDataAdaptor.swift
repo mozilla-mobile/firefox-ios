@@ -132,18 +132,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     private func updateGroupsData() async -> [ASGroup<Tab>]? {
-        guard featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) else {
-            return nil
-        }
-        return await withCheckedContinuation { continuation in
-            SearchTermGroupsUtility.getTabGroups(
-                with: self.profile,
-                from: self.recentTabs,
-                using: .orderedDescending
-            ) { groups, _ in
-                continuation.resume(returning: groups)
-            }
-        }
+        return nil
     }
 
     // MARK: Synced tab data

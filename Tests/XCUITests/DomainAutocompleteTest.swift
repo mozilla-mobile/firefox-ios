@@ -24,8 +24,7 @@ class DomainAutocompleteTest: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.LoadDatabasePrefix + historyDB,
-                               LaunchArguments.SkipContextualHints,
-                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                               LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }

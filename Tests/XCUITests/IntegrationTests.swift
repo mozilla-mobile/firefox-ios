@@ -30,15 +30,13 @@ class IntegrationTests: BaseTestCase {
                         LaunchArguments.SkipWhatsNew,
                         LaunchArguments.SkipETPCoverSheet,
                         LaunchArguments.LoadDatabasePrefix + historyDB,
-                        LaunchArguments.SkipContextualHints,
-                        LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                        LaunchArguments.SkipContextualHints]
      } else if testFxAChinaServer.contains(key) {
         launchArguments = [LaunchArguments.SkipIntro,
                            LaunchArguments.FxAChinaServer,
                            LaunchArguments.SkipWhatsNew,
                            LaunchArguments.SkipETPCoverSheet,
-                           LaunchArguments.SkipContextualHints,
-                           LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                           LaunchArguments.SkipContextualHints]
      }
      super.setUp()
      }

@@ -34,7 +34,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareSheetChanges
     case shareToolbarChanges
     case startAtHome
-    case tabTrayGroups
     case topSites
     case wallpapers
     case wallpaperOnboardingSheet
@@ -79,8 +78,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.RecentlySavedSection
         case .startAtHome:
             return FlagKeys.StartAtHome
-        case .tabTrayGroups:
-            return FlagKeys.TabTrayGroups
         case .topSites:
             return FlagKeys.TopSiteSection
         case .wallpapers:
