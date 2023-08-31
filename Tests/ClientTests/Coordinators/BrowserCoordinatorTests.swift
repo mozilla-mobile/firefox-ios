@@ -818,6 +818,29 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.isPrivate)
     }
 
+    // MARK: - Fakespot
+    func testFakespotCoordinatorDelegate_didDidDismiss_removesChild() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showFakespotFlow()
+        let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
+        fakespotCoordinator.fakespotControllerDidDismiss()
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_startsFakespotCoordinator() {
+        let subject = createSubject()
+        subject.showFakespotFlow()
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? FakespotCoordinator)
+    }
+
     // MARK: - Helpers
     private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
                                file: StaticString = #file,

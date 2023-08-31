@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable {
+class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let closeButtonWidthHeight: CGFloat = 30
         static let topLeadingTrailingSpacing: CGFloat = 18
@@ -24,6 +24,8 @@ class FakespotViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    private let viewModel: FakespotViewModel
+    weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -68,8 +70,12 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        viewModel: FakespotViewModel,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -82,6 +88,7 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
 
@@ -206,6 +213,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        dismissVC()
+        delegate?.fakespotControllerDidDismiss()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.fakespotControllerDidDismiss()
     }
 }
