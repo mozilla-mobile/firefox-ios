@@ -7,13 +7,13 @@ import UIKit
 class NoSearchResultCell: UITableViewCell {
     static let identifier = "noSearchResultCell"
 
-    lazy private var titleLabel: UILabel = .build { label in
+    private lazy var titleLabel: UILabel = .build { label in
         label.textColor = UIColor.CredentialProvider.titleColor
         label.text = .LoginsListNoMatchingResultTitle
         label.font = UIFont.systemFont(ofSize: 15)
     }
 
-    lazy private var descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UILabel = .build { label in
         label.text = .LoginsListNoMatchingResultSubtitle
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13)

@@ -165,38 +165,38 @@ open class MockProfile: Client.Profile {
 
     public var isShutdown = false
 
-    lazy public var queue: TabQueue = {
+    public lazy var queue: TabQueue = {
         return MockTabQueue()
     }()
 
-    lazy public var metadata: Metadata = {
+    public lazy var metadata: Metadata = {
         return SQLiteMetadata(db: self.database)
     }()
 
-    lazy public var isChinaEdition: Bool = {
+    public lazy var isChinaEdition: Bool = {
         return Locale.current.identifier == "zh_CN"
     }()
 
-    lazy public var certStore: CertStore = {
+    public lazy var certStore: CertStore = {
         return CertStore()
     }()
 
-    lazy public var searchEngines: SearchEngines = {
+    public lazy var searchEngines: SearchEngines = {
         return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
-    lazy public var prefs: Prefs = {
+    public lazy var prefs: Prefs = {
         return MockProfilePrefs()
     }()
 
     lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
-    lazy public var autofill = RustAutofill(databasePath: autofillDbPath)
+    public lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
-    lazy public var readingList: ReadingList = {
+    public lazy var readingList: ReadingList = {
         return SQLiteReadingList(db: self.readingListDB)
     }()
 
-    lazy public var recentlyClosedTabs: ClosedTabsStore = {
+    public lazy var recentlyClosedTabs: ClosedTabsStore = {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 

@@ -7,13 +7,13 @@ import UIKit
 class EmptyPlaceholderCell: UITableViewCell {
     static let identifier = "emptyPlaceholderCell"
 
-    lazy private var titleLabel: UILabel = .build { label in
+    private lazy var titleLabel: UILabel = .build { label in
         label.textColor = UIColor.CredentialProvider.titleColor
         label.text = .LoginsListNoLoginsFoundTitle
         label.font = UIFont.systemFont(ofSize: 15)
     }
 
-    lazy private var descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UILabel = .build { label in
         label.text = .LoginsListNoLoginsFoundDescription
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .systemGray
