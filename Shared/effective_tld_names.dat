@@ -6719,7 +6719,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-08-12T15:10:58Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-08-26T15:11:08Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -8997,7 +8997,7 @@ loan
 // https://www.iana.org/domains/root/db/loans.html
 loans
 
-// locker : Dish DBS Corporation
+// locker : Orange Domains LLC
 // https://www.iana.org/domains/root/db/locker.html
 locker
 
@@ -9401,7 +9401,7 @@ nyc
 // https://www.iana.org/domains/root/db/obi.html
 obi
 
-// observer : Dog Beach, LLC
+// observer : Fegistry, LLC
 // https://www.iana.org/domains/root/db/observer.html
 observer
 
