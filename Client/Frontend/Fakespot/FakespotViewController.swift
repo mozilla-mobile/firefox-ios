@@ -95,19 +95,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         setupView()
         listenForThemeChange(view)
 
-        cancellable = viewModel
-            .$state
-            .sink { state in
-                switch state {
-                case .loading:
-                    print("Loading")
-                case .loaded(let productData):
-                    print(productData)
-                case .error(let error):
-                    print(error)
-                }
-            }
-
         reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
         errorCardView.configure(viewModel: viewModel.errorCardViewModel)
         highlightsCardView.configure(viewModel.highlightsCardViewModel)
