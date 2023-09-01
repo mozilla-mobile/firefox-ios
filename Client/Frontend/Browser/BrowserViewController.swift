@@ -71,8 +71,8 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
-    weak var gridTabTrayController: GridTabViewController?
-    var tabTrayViewController: TabTrayViewController?
+    weak var gridTabTrayController: LegacyGridTabViewController?
+    var tabTrayViewController: LegacyTabTrayViewController?
 
     let profile: Profile
     let tabManager: TabManager
@@ -2138,7 +2138,7 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: LegacyTabTrayViewModel.Segment?) {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
@@ -2736,11 +2736,11 @@ extension BrowserViewController: TabTrayDelegate {
 
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
+    func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController) {
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}
+    func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }

@@ -435,7 +435,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
-        let isTabTray = tabDisplayerDelegate as? GridTabViewController != nil
+        let isTabTray = tabDisplayerDelegate as? LegacyGridTabViewController != nil
         let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
@@ -610,7 +610,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
                                      object: .inactiveTabTray,
                                      value: .openInactiveTab,
                                      extras: nil)
-        if let tabTray = tabDisplayerDelegate as? GridTabViewController {
+        if let tabTray = tabDisplayerDelegate as? LegacyGridTabViewController {
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
         }
