@@ -1,0 +1,277 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import UIKit
+import Common
+import ComponentLibrary
+
+struct FakespotCardViewModel {
+    var title: String
+    var description: String
+    var iconImageName: String
+    var linkText: String?
+    var primaryActionText: String?
+
+    let a11yCardIdentifier: String
+    let a11yTitleIdentifier: String
+    let a11yDescriptionIdentifier: String
+    let a11yPrimaryActionIdentifier: String?
+    let a11yLinkActionIdentifier: String?
+}
+
+final class FakespotCardView: UIView, ThemeApplicable, Notifiable {
+    enum CardType: String, CaseIterable, Identifiable {
+        case error
+        case confirmation
+        case warning
+        case info
+
+        var id: String { self.rawValue }
+
+        func primaryButtonText(theme: Theme) -> UIColor {
+            switch self {
+            case .error: return theme.colors.textPrimary
+            case .confirmation: return theme.colors.textPrimary
+            case .warning: return theme.colors.textPrimary
+            case .info: return theme.colors.textOnDark
+            }
+        }
+
+        func primaryButtonBackground(theme: Theme) -> UIColor {
+            switch self {
+            case .error: return theme.colors.actionError
+            case .confirmation: return theme.colors.actionConfirmation
+            case .warning: return theme.colors.actionWarning
+            case .info: return theme.colors.actionPrimary
+            }
+        }
+
+        func cardBackground(theme: Theme) -> UIColor {
+            switch self {
+            case .error: return theme.colors.layerError
+            case .confirmation: return theme.colors.layerConfirmation
+            case .warning: return theme.colors.layerWarning
+            case .info: return theme.colors.layerInfo
+            }
+        }
+    }
+
+    private enum UX {
+        static let linkFontSize: CGFloat = 12
+        static let buttonFontSize: CGFloat = 16
+        static let buttonVerticalInset: CGFloat = 12
+        static let buttonHorizontalInset: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 13
+        static let contentHorizontalSpacing: CGFloat = 4
+        static let contentVerticalSpacing: CGFloat = 8
+        static let iconStackViewSpacing: CGFloat = 4
+        static let horizontalStackViewSpacing: CGFloat = 12
+        static let verticalStackViewSpacing: CGFloat = 4
+        static let iconSize: CGFloat = 24
+        static let iconMaxSize: CGFloat = 58
+        static let titleFontSize: CGFloat = 13
+        static let descriptionFontSize: CGFloat = 13
+    }
+
+    private lazy var cardView: CardView = .build()
+    private lazy var contentView: UIView = .build()
+
+    private lazy var iconStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.distribution = .equalCentering
+        stackView.spacing = UX.iconStackViewSpacing
+    }
+
+    private lazy var containerStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = UX.horizontalStackViewSpacing
+    }
+
+    private lazy var infoContainerStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = UX.horizontalStackViewSpacing
+    }
+
+    private lazy var labelContainerStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = UX.verticalStackViewSpacing
+    }
+
+    private lazy var iconImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+    }
+
+    private lazy var titleLabel: UILabel = .build { label in
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(
+            withTextStyle: .callout,
+            size: UX.buttonFontSize)
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+    }
+
+    private lazy var descriptionLabel: UILabel = .build { label in
+        label.textColor = .white
+        label.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .subheadline,
+            size: UX.buttonFontSize)
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+    }
+
+    private lazy var linkButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .caption1,
+            size: UX.linkFontSize)
+        button.buttonEdgeSpacing = 0
+        button.contentHorizontalAlignment = .leading
+        button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+    }
+
+    private lazy var primaryButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+            withTextStyle: .callout,
+            size: UX.buttonFontSize)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: UX.buttonHorizontalInset,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: UX.buttonHorizontalInset)
+    }
+
+    private var starRatingHeightConstraint: NSLayoutConstraint?
+    private var viewModel: FakespotCardViewModel?
+    private var type: CardType = .error
+
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(_ viewModel: FakespotCardViewModel, type: CardType = .error) {
+        self.viewModel = viewModel
+        self.type = type
+
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
+        iconImageView.image = UIImage(named: viewModel.iconImageName)
+
+        if let title = viewModel.primaryActionText {
+            primaryButton.setTitle(title, for: .normal)
+            primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
+        } else {
+            primaryButton.removeFromSuperview()
+        }
+
+        if let title = viewModel.linkText {
+            linkButton.setTitle(title, for: .normal)
+            primaryButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+        } else {
+            linkButton.removeFromSuperview()
+        }
+
+        titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
+        descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
+
+        let cardModel = CardViewModel(view: contentView,
+                                      a11yId: viewModel.a11yCardIdentifier,
+                                      backgroundColor: { theme in
+            return type.cardBackground(theme: theme)
+        })
+        cardView.configure(cardModel)
+    }
+
+    private func setupLayout() {
+        addSubview(cardView)
+
+        let size = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        starRatingHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
+        starRatingHeightConstraint?.isActive = true
+
+        iconStackView.addArrangedSubview(UIView())
+        iconStackView.addArrangedSubview(iconImageView)
+        iconStackView.addArrangedSubview(UIView())
+
+        infoContainerStackView.addArrangedSubview(iconStackView)
+        infoContainerStackView.addArrangedSubview(labelContainerStackView)
+
+        containerStackView.addArrangedSubview(infoContainerStackView)
+        containerStackView.addArrangedSubview(primaryButton)
+
+        labelContainerStackView.addArrangedSubview(titleLabel)
+        labelContainerStackView.addArrangedSubview(descriptionLabel)
+        labelContainerStackView.addArrangedSubview(linkButton)
+        labelContainerStackView.addArrangedSubview(UIView())
+
+        contentView.addSubview(containerStackView)
+
+        NSLayoutConstraint.activate([
+            cardView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            cardView.topAnchor.constraint(equalTo: topAnchor),
+            cardView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+
+            containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                        constant: UX.contentHorizontalSpacing),
+            containerStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                         constant: -UX.contentHorizontalSpacing),
+            containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                       constant: -UX.contentVerticalSpacing),
+            primaryButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    @objc
+    private func primaryAction() {
+        // Add your button action here
+    }
+
+    @objc
+    private func linkAction() {
+        // Add your button action here
+    }
+
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor  = theme.colors.textPrimary
+        iconImageView.tintColor = theme.colors.textPrimary
+
+        linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        primaryButton.setTitleColor(type.primaryButtonText(theme: theme), for: .normal)
+        primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
+        cardView.applyTheme(theme: theme)
+    }
+
+    private func adjustLayout() {
+        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
+    }
+}
