@@ -772,6 +772,7 @@
 		8C8D8C7A2AA067AD00490D32 /* FakespotCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */; };
 		8C8D8C7C2AA0691A00490D32 /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C7B2AA0691900490D32 /* FakespotCoordinator.swift */; };
 		8C8D8C7E2AA0694D00490D32 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C7D2AA0694D00490D32 /* FakespotViewModel.swift */; };
+		8C8D8C822AA2229300490D32 /* FakespotViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */; };
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
@@ -5025,6 +5026,7 @@
 		8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotCoordinatorTests.swift; sourceTree = "<group>"; };
 		8C8D8C7B2AA0691900490D32 /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotCoordinator.swift; sourceTree = "<group>"; };
 		8C8D8C7D2AA0694D00490D32 /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotViewModel.swift; sourceTree = "<group>"; };
+		8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModelTests.swift; sourceTree = "<group>"; };
 		8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotClient.swift; sourceTree = "<group>"; };
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisData.swift; sourceTree = "<group>"; };
 		8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsData.swift; sourceTree = "<group>"; };
@@ -10576,6 +10578,7 @@
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
+				8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
 				8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */,
 				8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */,
@@ -13090,6 +13093,7 @@
 				5AF6254928A58BB400A90253 /* MockHistoryHighlightsDelegate.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
 				AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */,
+				8C8D8C822AA2229300490D32 /* FakespotViewModelTests.swift in Sources */,
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
