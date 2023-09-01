@@ -118,18 +118,28 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     // MARK: - Test with Redux
-    func testThemeSettingsUseSystemAppearance_WithRedux() {
+    func testUseSystemAppearance_WithRedux() {
         let subject = createSubject(usingRedux: true)
         let themeSwitch = createUseSystemThemeSwitch(isOn: true)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
 
+        // Needed to wait for Redux action handled async in main thread
         let expectation = self.expectation(description: "Redux Middleware")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
             XCTAssertTrue(subject.isSystemThemeOn)
             XCTAssertEqual(subject.tableView.numberOfSections, 1)
         }
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testUseCustomAppearance_WithRedux() {
+        let subject = createSubject(usingRedux: true)
+        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
+        subject.systemThemeSwitchValueChanged(control: themeSwitch)
+
+        XCTAssertFalse(subject.isSystemThemeOn)
+        XCTAssertEqual(subject.tableView.numberOfSections, 3)
     }
 
     func testUseManualTheme_WithRedux() {
@@ -140,12 +150,7 @@ class ThemeSettingsControllerTests: XCTestCase {
         // Select Manual theme row
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
 
-        let expectation = self.expectation(description: "Redux Middleware")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            expectation.fulfill()
-            XCTAssertFalse(subject.isAutoBrightnessOn)
-        }
-        waitForExpectations(timeout: 2)
+        XCTAssertFalse(subject.isAutoBrightnessOn)
     }
 
     func testUpdateToLightManualTheme_WithRedux() {
@@ -157,12 +162,8 @@ class ThemeSettingsControllerTests: XCTestCase {
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
         // Select Light theme
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 2))
-        let expectation = self.expectation(description: "Redux Middleware")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            expectation.fulfill()
-            XCTAssertEqual(subject.manualThemeType, ThemeType.light)
-        }
-        waitForExpectations(timeout: 2)
+
+        XCTAssertEqual(subject.manualThemeType, ThemeType.light)
     }
 
     func testUpdateToDarkManualTheme_WithRedux() {
@@ -175,12 +176,39 @@ class ThemeSettingsControllerTests: XCTestCase {
         // Select Dark theme
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 2))
 
-        let expectation = self.expectation(description: "Redux Middleware")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            expectation.fulfill()
-            XCTAssertEqual(subject.manualThemeType, ThemeType.dark)
-        }
-        waitForExpectations(timeout: 2.5)
+        XCTAssertEqual(subject.manualThemeType, ThemeType.dark)
+    }
+
+    func testSystemBrightness_ForLightTheme_WithRedux() {
+        let subject = createSubject(usingRedux: true)
+        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
+        subject.systemThemeSwitchValueChanged(control: themeSwitch)
+        let tableView = UITableView()
+        // Select to Manual theme row
+        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 1))
+
+        // Set user threshold lower than systemBrightness
+        let userBrightness = Float(UIScreen.main.brightness) - 0.2
+        subject.themeManager.setAutomaticBrightnessValue(userBrightness)
+
+        subject.systemBrightnessChanged()
+        XCTAssertEqual(subject.themeManager.currentTheme.type, .light)
+    }
+
+    func testSystemBrightnessChanged_ForDarkTheme_WithRedux() {
+        let subject = createSubject(usingRedux: true)
+        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
+        subject.systemThemeSwitchValueChanged(control: themeSwitch)
+        let tableView = UITableView()
+        // Select to Manual theme row
+        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 1))
+
+        // Set user threshold higher than systemBrightness
+        let userBrightness = Float(UIScreen.main.brightness) + 0.2
+        subject.themeManager.setAutomaticBrightnessValue(userBrightness)
+
+        subject.systemBrightnessChanged()
+        XCTAssertEqual(subject.themeManager.currentTheme.type, .dark)
     }
 
     // MARK: - Private
