@@ -820,7 +820,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Fakespot
-    func testFakespotCoordinatorDelegate_didTapCancel_removesChild() {
+    func testFakespotCoordinatorDelegate_didDidDismiss_removesChild() {
         let subject = createSubject()
         subject.browserHasLoaded()
 
