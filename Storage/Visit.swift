@@ -96,7 +96,7 @@ open class SiteVisit: Visit {
     var id: Int?
     public let site: Site
 
-    public override func hash(into hasher: inout Hasher) {
+    override public func hash(into hasher: inout Hasher) {
         hasher.combine(date)
         hasher.combine(type)
         hasher.combine(id)

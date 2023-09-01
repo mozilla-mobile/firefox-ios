@@ -107,7 +107,7 @@ open class BrowserDBSQLite {
     let prefs: Prefs
     let notificationCenter: NotificationCenter
 
-    required public init(database: BrowserDB,
+    public required init(database: BrowserDB,
                          prefs: Prefs,
                          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.database = database

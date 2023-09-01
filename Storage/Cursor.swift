@@ -88,7 +88,7 @@ open class Cursor<T>: TypedCursor {
 open class ArrayCursor<T>: Cursor<T> {
     fileprivate var data: [T]
 
-    open override var count: Int {
+    override open var count: Int {
         if status != .success {
             return 0
         }
@@ -104,7 +104,7 @@ open class ArrayCursor<T>: Cursor<T> {
         self.init(data: data, status: CursorStatus.success, statusMessage: "Success")
     }
 
-    open override subscript(index: Int) -> T? {
+    override open subscript(index: Int) -> T? {
         if index >= data.count || index < 0 || status != .success { return nil }
         return data[index]
     }

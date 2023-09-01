@@ -8,7 +8,7 @@ import UIKit
 import Shared
 import Combine
 
-class FakespotViewController: UIViewController, Themeable {
+class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let closeButtonWidthHeight: CGFloat = 30
         static let topLeadingTrailingSpacing: CGFloat = 18
@@ -68,6 +68,7 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
     init(
@@ -90,6 +91,7 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
 
@@ -110,6 +112,7 @@ class FakespotViewController: UIViewController, Themeable {
         errorCardView.configure(viewModel: viewModel.errorCardViewModel)
         highlightsCardView.configure(viewModel.highlightsCardViewModel)
         settingsCardView.configure(viewModel.settingsCardViewModel)
+        adjustRatingView.configure(viewModel.adjustRatingViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -140,11 +143,13 @@ class FakespotViewController: UIViewController, Themeable {
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
+        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
@@ -195,6 +200,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        delegate?.cancelButtonTapped()
+        delegate?.fakespotControllerDidDismiss()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.fakespotControllerDidDismiss()
     }
 }

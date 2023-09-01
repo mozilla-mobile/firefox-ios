@@ -51,7 +51,7 @@ class SiteTableViewController: UIViewController,
         }
     }
 
-    private override init(nibName: String?, bundle: Bundle?) {
+    override private init(nibName: String?, bundle: Bundle?) {
         fatalError("init(coder:) has not been implemented")
     }
 

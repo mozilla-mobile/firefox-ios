@@ -43,6 +43,15 @@ class FakespotViewModel {
         recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
     )
 
+    let adjustRatingViewModel = AdjustRatingViewModel(
+        title: .Shopping.AdjustedRatingTitle,
+        description: .Shopping.AdjustedRatingDescription,
+        titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
+        cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
+        descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
+        rating: 3.5
+    )
+
     init(shoppingProduct: ShoppingProduct) {
         self.shoppingProduct = shoppingProduct
     }

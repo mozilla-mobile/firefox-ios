@@ -29,7 +29,7 @@ struct DownloadedFile: Equatable {
         return MIMEType.mimeTypeFromFileExtension(fileExtension)
     }
 
-    static public func == (lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
+    public static func == (lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
         return lhs.path == rhs.path
     }
 }

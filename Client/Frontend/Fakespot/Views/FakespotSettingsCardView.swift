@@ -7,13 +7,40 @@ import Common
 import Shared
 import ComponentLibrary
 
-struct FakespotSettingsCardViewModel {
+class FakespotSettingsCardViewModel {
+    let prefs: Prefs
     let cardA11yId: String
     let showProductsLabelTitle: String
     let showProductsLabelTitleA11yId: String
     let turnOffButtonTitle: String
     let turnOffButtonTitleA11yId: String
     let recommendedProductsSwitchA11yId: String
+
+    var isReviewQualityCheckOn: Bool {
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
+        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
+    }
+
+    var areAdsEnabled: Bool {
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true }
+        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
+    }
+
+    init(profile: Profile = AppContainer.shared.resolve(),
+         cardA11yId: String,
+         showProductsLabelTitle: String,
+         showProductsLabelTitleA11yId: String,
+         turnOffButtonTitle: String,
+         turnOffButtonTitleA11yId: String,
+         recommendedProductsSwitchA11yId: String) {
+        prefs = profile.prefs
+        self.cardA11yId = cardA11yId
+        self.showProductsLabelTitle = showProductsLabelTitle
+        self.showProductsLabelTitleA11yId = showProductsLabelTitleA11yId
+        self.turnOffButtonTitle = turnOffButtonTitle
+        self.turnOffButtonTitleA11yId = turnOffButtonTitleA11yId
+        self.recommendedProductsSwitchA11yId = recommendedProductsSwitchA11yId
+    }
 }
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
@@ -29,7 +56,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
 
-    var onSwitchValueChanged: ((Bool) -> Void)?
+    private var viewModel: FakespotSettingsCardViewModel?
 
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
     private lazy var contentView: UIView = .build()
@@ -61,11 +88,12 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         uiSwitch.addTarget(self, action: #selector(self.didToggleSwitch), for: .valueChanged)
     }
 
-    private lazy var turnOffButton: ActionButton = .build { button in
+    private lazy var turnOffButton: ResizableButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.contentEdgeInsets = UX.buttonInsets
         button.titleLabel?.textAlignment = .center
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(self.didTapTurnOffButton), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                                          size: UX.buttonLabelFontSize,
                                                                          weight: .semibold)
@@ -108,6 +136,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
+        self.viewModel = viewModel
+        recommendedProductsSwitch.isOn = viewModel.areAdsEnabled
+
         showProductsLabel.text = viewModel.showProductsLabelTitle
         showProductsLabel.accessibilityIdentifier = viewModel.showProductsLabelTitleA11yId
 
@@ -129,7 +160,12 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     @objc
     func didToggleSwitch(_ sender: UISwitch) {
-        onSwitchValueChanged?(sender.isOn)
+        viewModel?.areAdsEnabled = sender.isOn
+    }
+
+    @objc
+    private func didTapTurnOffButton() {
+        viewModel?.isReviewQualityCheckOn = false
     }
 
     // MARK: - Theming System

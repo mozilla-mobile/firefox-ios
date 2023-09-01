@@ -9,7 +9,7 @@ import Dip
 /// This is our concrete dependency container. It holds all dependencies / services the app would need through
 /// a session.
 public class AppContainer: ServiceProvider {
-    static public let shared: ServiceProvider = AppContainer()
+    public static let shared: ServiceProvider = AppContainer()
 
     /// The item holding registered services.
     private var container = DependencyContainer()
