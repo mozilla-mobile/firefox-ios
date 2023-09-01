@@ -49,7 +49,6 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
         let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
-            introViewModel.sendOnboardingUserActivationEvent()
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
 

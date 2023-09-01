@@ -60,7 +60,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     // MARK: SkAdNetwork
-    // this event can only be sent once in this time window
+    // this event should be sent in the first 24h time window, if it's not sent the conversion value is locked by Apple
     func sendOnboardingUserActivationEvent() {
         let fineValue = OnboardingOptions.allCases.map { chosenOptions.contains($0) ? $0.rawValue : 0 }.reduce(0, +)
         let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
