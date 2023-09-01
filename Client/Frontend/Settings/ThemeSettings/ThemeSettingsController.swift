@@ -39,6 +39,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         return isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
     }
 
+    var manualThemeType: ThemeType {
+        return isReduxIntegrationEnabled ? themeState.manualThemeSelected : themeManager.currentTheme.type
+    }
+
     init() {
         self.themeState = ThemeSettingsState()
         super.init(style: .grouped)
@@ -299,7 +303,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     private func changeManualTheme(isLightTheme: Bool) {
         if isReduxIntegrationEnabled {
-            let themeName: BuiltinThemeName = isLightTheme ? .normal : .dark
+            let themeName: ThemeType = isLightTheme ? .light : .dark
             store.dispatch(ThemeSettingsAction.switchManualTheme(themeName))
         } else {
             LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()

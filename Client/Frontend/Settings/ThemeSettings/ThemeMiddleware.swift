@@ -9,7 +9,7 @@ protocol ThemeManagerProvider {
     func getCurrentThemeManagerState() -> ThemeSettingsState
     func toggleUseSystemAppearance(_ enabled: Bool)
     func toggleAutomaticBrightness(_ enabled: Bool)
-    func updateManualTheme(_ theme: BuiltinThemeName)
+    func updateManualTheme(_ theme: ThemeType)
     func updateUserBrightness(_ value: Float)
 }
 
@@ -65,7 +65,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     func getCurrentThemeManagerState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
-                           manualThemeSelected: legacyThemeManager.currentName,
+                           manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
     }
@@ -80,8 +80,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-    func updateManualTheme(_ theme: BuiltinThemeName) {
-        let isLightTheme = theme == .normal
+    func updateManualTheme(_ theme: ThemeType) {
+        let isLightTheme = theme == .light
         legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
         themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
     }
