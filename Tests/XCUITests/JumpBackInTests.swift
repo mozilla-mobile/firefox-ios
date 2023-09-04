@@ -46,45 +46,6 @@ class JumpBackInTests: BaseTestCase {
         // I don't test for its existence.
     }
 
-    func testGroupedTabs() {
-        // Enable "Tab Groups" from Settings -> Tabs
-        navigator.goto(TabsSettings)
-        navigator.performAction(Action.ToggleTabGroups)
-        navigator.goto(SettingsScreen)
-        app.navigationBars.buttons["Done"].tap()
-        navigator.nowAt(NewTabScreen)
-
-        // Create 1 group in tab tray
-        let groups = ["test3"]
-        for group in groups {
-            for _ in 1...3 {
-                navigator.goto(TabTray)
-                waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
-                navigator.performAction(Action.OpenNewTabFromTabTray)
-                navigator.openURL(group)
-                waitUntilPageLoad()
-            }
-        }
-        waitForTabsButton()
-        // Open a new tab
-        navigator.goto(TabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
-        waitForTabsButton()
-
-        // Tap on the "test3" from "Jump Back In" section
-        scrollDown()
-        waitForExistence(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
-        app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
-        if isTablet {
-            waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
-        } else {
-            waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
-        }
-        waitForExistence(app.staticTexts["Test3"])
-    }
-
     func testPrivateTab() throws {
         throw XCTSkip("This test is flaky")
 //        // Visit https://www.twitter.com

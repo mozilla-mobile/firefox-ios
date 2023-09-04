@@ -153,7 +153,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                                                 right: UX.buttonHorizontalInset)
     }
 
-    private var starRatingHeightConstraint: NSLayoutConstraint?
+    private var iconImageHeightConstraint: NSLayoutConstraint?
     private var viewModel: FakespotCardViewModel?
     private var type: CardType = .error
 
@@ -207,8 +207,8 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         addSubview(cardView)
 
         let size = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
-        starRatingHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
-        starRatingHeightConstraint?.isActive = true
+        iconImageHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
+        iconImageHeightConstraint?.isActive = true
 
         iconStackView.addArrangedSubview(UIView())
         iconStackView.addArrangedSubview(iconImageView)
@@ -270,7 +270,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func adjustLayout() {
-        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        iconImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
         setNeedsLayout()
         layoutIfNeeded()
     }
