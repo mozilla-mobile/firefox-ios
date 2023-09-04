@@ -30,7 +30,7 @@ public struct DateGroupedTableData<T: Equatable> {
     public init() {}
 
     @discardableResult
-    mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
+    public mutating func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
         if timestamp > todayTimestamp {
             today.append((item, timestamp))
             return IndexPath(row: today.count - 1, section: 0)
@@ -49,7 +49,7 @@ public struct DateGroupedTableData<T: Equatable> {
         }
     }
 
-    mutating public func remove(_ item: T) {
+    public mutating func remove(_ item: T) {
         if let index = today.firstIndex(where: { item == $0.item }) {
             today.remove(at: index)
         } else if let index = yesterday.firstIndex(where: { item == $0.item }) {

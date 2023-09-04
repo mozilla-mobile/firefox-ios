@@ -1423,7 +1423,7 @@ workflows:
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
                 --device=model=iphone13pro,version=15.7 \
-                --device=model=iphone8,version=16.5 \
+                --device=model=iphone8,version=16.6 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
@@ -1566,10 +1566,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '118.0'
+    BITRISE_RELEASE_VERSION: '119.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '118.0'
+    BITRISE_BETA_VERSION: '119.0'
 
 meta:
   bitrise.io:
@@ -1581,7 +1581,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v118
+- push_branch: release/v119
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards

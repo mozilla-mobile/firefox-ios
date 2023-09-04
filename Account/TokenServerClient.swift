@@ -150,7 +150,7 @@ open class TokenServerClient {
         return nil
     }
 
-    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
+    fileprivate lazy var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     open func token(token: String, kid: String) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()

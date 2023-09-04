@@ -124,7 +124,6 @@ class LegacyTabManagerTests: XCTestCase {
         manager.removeDelegate(delegate) {
             self.manager.testRemoveAll()
         }
-
         super.tearDown()
     }
 

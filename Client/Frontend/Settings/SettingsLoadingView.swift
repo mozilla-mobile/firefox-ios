@@ -35,7 +35,7 @@ class SettingsLoadingView: UIView, ThemeApplicable {
         backgroundColor = theme.colors.layer1
     }
 
-    internal override func updateConstraints() {
+    override internal func updateConstraints() {
         super.updateConstraints()
 
         indicator.snp.remakeConstraints { make in

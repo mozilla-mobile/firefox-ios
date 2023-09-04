@@ -70,8 +70,12 @@ class BookmarksPanelTests: XCTestCase {
         let viewModel = photonSheet.viewModel.actions[0][0].items[0]
         _ = viewModel.tapHandler!(viewModel)
 
-        XCTAssertNotNil(mockNavigationController.pushedViewController)
-        XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
+        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
+        // So the spy navigation controller will not push view controllers but the coordinator will do it.
+        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            XCTAssertNotNil(mockNavigationController.pushedViewController)
+            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
+        }
 
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField))
         let toolbarItems = panel.bottomToolbarItems
@@ -94,8 +98,12 @@ class BookmarksPanelTests: XCTestCase {
         let viewModel = photonSheet.viewModel.actions[0][1].items[0]
         _ = viewModel.tapHandler!(viewModel)
 
-        XCTAssertNotNil(mockNavigationController.pushedViewController)
-        XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
+        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
+        // So the spy navigation controller will not push view controllers but the coordinator will do it.
+        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            XCTAssertNotNil(mockNavigationController.pushedViewController)
+            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
+        }
 
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditMode))
         let toolbarItems = panel.bottomToolbarItems

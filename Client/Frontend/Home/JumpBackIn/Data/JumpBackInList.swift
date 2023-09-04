@@ -7,14 +7,8 @@ import Foundation
 /// The filtered jumpBack in list to display to the user.
 /// Only one group is displayed
 struct JumpBackInList {
-    let group: ASGroup<Tab>?
     let tabs: [Tab]
     var itemsToDisplay: Int {
-        var count = 0
-
-        count += group != nil ? 1 : 0
-        count += tabs.count
-
-        return count
+        return tabs.count
     }
 }

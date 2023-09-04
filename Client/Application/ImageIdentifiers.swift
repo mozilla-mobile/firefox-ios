@@ -45,6 +45,7 @@ public struct ImageIdentifiers {
     public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
     public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
     public static let onboardingSyncCTD = "onboardingSyncCTD"
+    public static let onboardingSearchWidget = "onboardingSearchWidget"
     public static let onboardingSetToDock = "onboardingDock"
     public static let packaging = "packaging"
     public static let price = "price"
@@ -71,4 +72,6 @@ public struct ImageIdentifiers {
     public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
     public static let zoomIn = "menu-ZoomIn"
+    public static let customizeHomepage = "editLarge"
+    public static let help = "helpCircleLarge"
 }

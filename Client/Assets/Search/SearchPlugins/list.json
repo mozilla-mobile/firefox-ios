@@ -253,7 +253,7 @@
       },
       "experimental-hidden": {
         "visibleDefaultEngines": [
-          "amazon-ca", "amazon-au", "google-b-1-m", "duckduckgo"
+          "amazon-ca", "amazon-au", "google-b-1-m"
         ]
       }
     },
@@ -884,11 +884,6 @@
       "default": {
         "visibleDefaultEngines": [
           "google-b-m", "bing", "ddg", "wikipedia-zh-TW"
-        ]
-      },
-      "experimental-hidden": {
-        "visibleDefaultEngines": [
-          "duckduckgo"
         ]
       }
     }
