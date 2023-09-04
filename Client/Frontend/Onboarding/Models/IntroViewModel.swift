@@ -61,12 +61,12 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     // MARK: SkAdNetwork
     // this event should be sent in the first 24h time window, if it's not sent the conversion value is locked by Apple
-    func sendOnboardingUserActivationEvent() {
+    func updateOnboardingUserActivationEvent() {
         let fineValue = OnboardingOptions.allCases.map { chosenOptions.contains($0) ? $0.rawValue : 0 }.reduce(0, +)
         let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
         // we should send this event only if an action has been selected during the onboarding flow
         if fineValue > 0 {
-            conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
+            conversionValue.adNetworkAttributionUpdateConversionEvent()
         }
     }
 }

@@ -229,7 +229,7 @@ extension IntroViewController: OnboardingCardDelegate {
         switch action {
         case .requestNotifications:
             introViewModel.chosenOptions.insert(.askForNotificationPermission)
-            introViewModel.sendOnboardingUserActivationEvent()
+            introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName) {
@@ -237,7 +237,7 @@ extension IntroViewController: OnboardingCardDelegate {
             }
         case .syncSignIn:
             introViewModel.chosenOptions.insert(.syncSignIn)
-            introViewModel.sendOnboardingUserActivationEvent()
+            introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 with: fxaPrams,
@@ -249,7 +249,7 @@ extension IntroViewController: OnboardingCardDelegate {
             }
         case .setDefaultBrowser:
             introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
-            introViewModel.sendOnboardingUserActivationEvent()
+            introViewModel.updateOnboardingUserActivationEvent()
             registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
