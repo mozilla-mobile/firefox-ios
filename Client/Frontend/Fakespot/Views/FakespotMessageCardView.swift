@@ -9,7 +9,6 @@ import ComponentLibrary
 struct FakespotCardViewModel {
     var title: String
     var description: String
-    var iconImageName: String
     var linkText: String?
     var primaryActionText: String?
 
@@ -20,7 +19,7 @@ struct FakespotCardViewModel {
     let a11yLinkActionIdentifier: String?
 }
 
-final class FakespotCardView: UIView, ThemeApplicable, Notifiable {
+final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     enum CardType: String, CaseIterable, Identifiable {
         case error
         case confirmation
@@ -53,6 +52,15 @@ final class FakespotCardView: UIView, ThemeApplicable, Notifiable {
             case .confirmation: return theme.colors.layerConfirmation
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
+            }
+        }
+
+        var iconImageName: String {
+            switch self {
+            case .error: return StandardImageIdentifiers.Large.criticalFill
+            case .confirmation: return StandardImageIdentifiers.Large.criticalFill
+            case .warning: return StandardImageIdentifiers.Large.criticalFill
+            case .info: return StandardImageIdentifiers.Large.criticalFill
             }
         }
     }
@@ -168,7 +176,7 @@ final class FakespotCardView: UIView, ThemeApplicable, Notifiable {
 
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
-        iconImageView.image = UIImage(named: viewModel.iconImageName)
+        iconImageView.image = UIImage(named: type.iconImageName)
 
         if let title = viewModel.primaryActionText {
             primaryButton.setTitle(title, for: .normal)
