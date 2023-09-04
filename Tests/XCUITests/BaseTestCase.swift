@@ -49,6 +49,15 @@ class BaseTestCase: XCTestCase {
         app.activate()
     }
 
+    func closeFromAppSwitcherAndRelaunch() {
+        let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
+        let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
+        swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        app.activate()
+    }
+
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState

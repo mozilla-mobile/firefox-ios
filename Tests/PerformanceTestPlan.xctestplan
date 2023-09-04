@@ -51,6 +51,7 @@
         "NightModeTests",
         "NoImageTests",
         "OnboardingTests",
+        "OpeningScreenTests",
         "PhotonActionSheetTest",
         "PocketTest",
         "PrivateBrowsingTest",

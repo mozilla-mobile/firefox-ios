@@ -127,6 +127,7 @@
         "NightModeTests",
         "NoImageTests",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
