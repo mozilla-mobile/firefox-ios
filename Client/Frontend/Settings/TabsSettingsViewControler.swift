@@ -22,17 +22,10 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
-        let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
-                                           titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
-
         if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
             sectionItems.append(SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
                                                footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
                                                children: [inactiveTabsSetting]))
-        }
-
-        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly) {
-            sectionItems.append(SettingSection(children: [tabGroupsSetting]))
         }
 
         return sectionItems

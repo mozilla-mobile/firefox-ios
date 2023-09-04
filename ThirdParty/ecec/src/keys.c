@@ -248,7 +248,7 @@ ece_webpush_aes128gcm_derive_key_and_nonce(ece_mode_t mode, EC_KEY* localKey,
   uint8_t ikmInfo[ECE_WEBPUSH_AES128GCM_IKM_INFO_LENGTH];
   switch (mode) {
   case ECE_MODE_ENCRYPT:
-    // For encryption, the remote static public key is the receiver key, and the
+    // For encryption, the remote public static key is the receiver key, and the
     // local ephemeral private key is the sender key.
     err = ece_webpush_aes128gcm_generate_info(
       remoteKey, localKey, ECE_WEBPUSH_AES128GCM_IKM_INFO_PREFIX,

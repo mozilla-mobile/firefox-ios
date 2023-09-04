@@ -201,33 +201,6 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
-
-    // This test is disabled for iPad because the toast menu is not shown there
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2254045
-    // Smoketest
-    func testSwitchBetweenPrivateTabsToastButton() {
-        if skipPlatform { return }
-
-        // Go to Private mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(urlExample)
-        waitUntilPageLoad()
-        waitForExistence(app.webViews.links.firstMatch)
-        app.webViews.links.firstMatch.press(forDuration: 1)
-        waitForExistence(app.buttons["Open in New Private Tab"])
-        app.buttons["Open in New Private Tab"].press(forDuration: 1)
-        waitForExistence(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
-
-        // Check that the tab has changed
-        waitUntilPageLoad()
-        waitForExistence(app.textFields["url"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: "iana")
-        XCTAssertTrue(app.links["RFC 2606"].exists)
-        waitForExistence(app.buttons["Show Tabs"])
-        let numPrivTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numPrivTab)
-    }
 }
 
 fileprivate extension BaseTestCase {
@@ -255,6 +228,35 @@ fileprivate extension BaseTestCase {
         }
         let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
         closePrivateTabsSwitch.tap()
+    }
+}
+
+class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2254045
+    // Smoketest
+    func testSwitchBetweenPrivateTabsToastButton() {
+        if skipPlatform { return }
+
+        // Go to Private mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        waitForExistence(app.webViews.links.firstMatch)
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        waitForExistence(app.buttons["Open in New Private Tab"])
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForValueContains(app.textFields["url"], value: "iana")
+        XCTAssertTrue(app.links["RFC 2606"].exists)
+        waitForExistence(app.buttons["Show Tabs"])
+        let numPrivTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numPrivTab)
     }
 }
 

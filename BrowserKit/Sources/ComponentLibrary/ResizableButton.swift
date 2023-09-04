@@ -21,12 +21,12 @@ open class ResizableButton: UIButton {
         }
     }
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
@@ -42,7 +42,7 @@ open class ResizableButton: UIButton {
                                          right: buttonEdgeSpacing)
     }
 
-    public override var intrinsicContentSize: CGSize {
+    override public var intrinsicContentSize: CGSize {
         guard let title = titleLabel else {
             return super.intrinsicContentSize
         }
@@ -61,7 +61,7 @@ open class ResizableButton: UIButton {
                       height: size.height + contentEdgeInsets.top + contentEdgeInsets.bottom)
     }
 
-    public override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         guard let title = titleLabel else { return }
 

@@ -4,18 +4,19 @@
 
 import UIKit
 import Common
-import ComponentLibrary
 
-struct ActionFooterViewModel {
+public struct ActionFooterViewModel {
     let title: String
     let actionTitle: String
     let a11yTitleIdentifier: String
     let a11yActionIdentifier: String
 
-    init(title: String,
-         actionTitle: String,
-         a11yTitleIdentifier: String = AccessibilityIdentifiers.ActionFooter.title,
-         a11yActionIdentifier: String = AccessibilityIdentifiers.ActionFooter.primaryAction) {
+    public init(
+        title: String,
+        actionTitle: String,
+        a11yTitleIdentifier: String,
+        a11yActionIdentifier: String
+    ) {
         self.title = title
         self.actionTitle = actionTitle
         self.a11yTitleIdentifier = a11yTitleIdentifier
@@ -23,7 +24,7 @@ struct ActionFooterViewModel {
     }
 }
 
-final class ActionFooterView: UIView, ThemeApplicable {
+public final class ActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
         static let buttonSize: CGFloat = 13
@@ -55,7 +56,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
         setupLayout()
     }
 
-    func configure(viewModel: ActionFooterViewModel) {
+    public func configure(viewModel: ActionFooterViewModel) {
         titleLabel.text = viewModel.title
         primaryButton.setTitle(viewModel.actionTitle, for: .normal)
 
@@ -80,7 +81,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: Common.Theme) {
+    public func applyTheme(theme: Common.Theme) {
         primaryButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         primaryButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
         titleLabel.textColor = theme.colors.textSecondary

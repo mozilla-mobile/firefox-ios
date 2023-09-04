@@ -76,7 +76,6 @@
         "FindInPageTests\/testFindInPageTwoWordsSearch()",
         "FindInPageTests\/testFindInPageTwoWordsSearchLargeDoc()",
         "FindInPageTests\/testQueryWithNoMatches()",
-        "FirstRunTourTests\/testStartBrowsingFromSecondScreen()",
         "FxScreenGraphTests",
         "HistoryTests",
         "HistoryTests\/testClearHistoryFromSettings()",
@@ -128,6 +127,7 @@
         "NightModeTests",
         "NoImageTests",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
@@ -177,6 +177,7 @@
         "TabCounterTests",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
+        "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest",
         "TopTabsTest\/testAddTabFromContext()",
@@ -190,6 +191,7 @@
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

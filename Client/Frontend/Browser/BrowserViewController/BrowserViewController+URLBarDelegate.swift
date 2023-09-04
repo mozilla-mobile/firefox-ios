@@ -110,19 +110,9 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    private func presentFakespotViewController() {
-        let fakespotViewController = FakespotViewController()
-        if #available(iOS 15.0, *) {
-            if let sheet = fakespotViewController.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-            }
-        }
-        present(fakespotViewController, animated: true)
-    }
-
     func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
-        presentFakespotViewController()
+        navigationHandler?.showFakespotFlow()
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {

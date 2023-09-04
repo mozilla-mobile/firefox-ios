@@ -315,6 +315,9 @@ enums:
       set-to-dock:
         description: >
           Corresponding to the set to dock image
+      search-widget:
+        description: >
+          Corresponding to the fox search widget image
       welcome-globe:
         description: >
           Corresponding to the fox world image

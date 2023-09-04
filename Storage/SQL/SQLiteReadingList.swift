@@ -21,7 +21,7 @@ open class SQLiteReadingList {
     let allColumns = ["client_id", "client_last_modified", "id", "last_modified", "url", "title", "added_by", "archived", "favorite", "unread"].joined(separator: ",")
     let notificationCenter: NotificationCenter
 
-    required public init(db: BrowserDB,
+    public required init(db: BrowserDB,
                          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.db = db
         self.notificationCenter = notificationCenter

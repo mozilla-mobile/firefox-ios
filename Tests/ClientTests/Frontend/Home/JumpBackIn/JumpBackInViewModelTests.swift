@@ -43,48 +43,6 @@ class JumpBackInViewModelTests: XCTestCase {
         mockProfile = nil
     }
 
-    // MARK: - Switch to group
-
-    func test_switchToGroup_noBrowserDelegate_doNothing() {
-        let subject = createSubject()
-        let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        var completionDidRun = false
-        subject.onTapGroup = { tab in
-            completionDidRun = true
-        }
-
-        subject.switchTo(group: group)
-
-        XCTAssertFalse(completionDidRun)
-    }
-
-    func test_switchToGroup_noGroupedItems_doNothing() {
-        let subject = createSubject()
-        let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        var completionDidRun = false
-        subject.onTapGroup = { tab in
-            completionDidRun = true
-        }
-
-        subject.switchTo(group: group)
-
-        XCTAssertFalse(completionDidRun)
-    }
-
-    func test_switchToGroup_callCompletionOnFirstGroupedItem() {
-        let subject = createSubject()
-        let expectedTab = createTab(profile: mockProfile)
-        let group = ASGroup<Tab>(searchTerm: "", groupedItems: [expectedTab], timestamp: 0)
-        var receivedTab: Tab?
-        subject.onTapGroup = { tab in
-            receivedTab = tab
-        }
-
-        subject.switchTo(group: group)
-
-        XCTAssertEqual(expectedTab, receivedTab)
-    }
-
     // MARK: - Switch to tab
 
     func test_switchToTab_notInOverlayMode_switchTabs() {

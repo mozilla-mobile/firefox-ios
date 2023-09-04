@@ -12,7 +12,7 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
         static let horizontalMargin: CGFloat = 8
     }
 
-    lazy private var emptyBG: UIView = .build { view in
+    private lazy var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 

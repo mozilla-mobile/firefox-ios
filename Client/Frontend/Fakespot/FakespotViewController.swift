@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable {
+class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let closeButtonWidthHeight: CGFloat = 30
         static let topLeadingTrailingSpacing: CGFloat = 18
@@ -24,6 +24,8 @@ class FakespotViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    private let viewModel: FakespotViewModel
+    weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -40,7 +42,7 @@ class FakespotViewController: UIViewController, Themeable {
     }
 
     private lazy var logoImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        imageView.image = UIImage(named: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -63,11 +65,17 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
     private lazy var highlightsCardView: HighlightsCardView = .build()
+    private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        viewModel: FakespotViewModel,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -80,6 +88,7 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
 
@@ -92,6 +101,16 @@ class FakespotViewController: UIViewController, Themeable {
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
 
+        let adjustRatingViewModel = AdjustRatingViewModel(
+            title: .Shopping.AdjustedRatingTitle,
+            description: .Shopping.AdjustedRatingDescription,
+            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
+            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
+            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
+            rating: 3.5
+        )
+        adjustRatingView.configure(adjustRatingViewModel)
+
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
@@ -101,6 +120,15 @@ class FakespotViewController: UIViewController, Themeable {
             footerTitle: .Shopping.HighlightsCardFooterText,
             footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
         highlightsCardView.configure(highlightsCardViewModel)
+
+        let settingsCardViewModel = FakespotSettingsCardViewModel(
+            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
+            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
+            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
+            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
+            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
+            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
+        settingsCardView.configure(settingsCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,14 +154,18 @@ class FakespotViewController: UIViewController, Themeable {
         errorCardView.applyTheme(theme: theme)
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
+        settingsCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
+        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
+        contentStackView.addArrangedSubview(settingsCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
@@ -152,9 +184,8 @@ class FakespotViewController: UIViewController, Themeable {
 
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             headerStackView.topAnchor.constraint(equalTo: view.topAnchor,
                                                  constant: UX.topLeadingTrailingSpacing),
@@ -182,6 +213,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        dismissVC()
+        delegate?.fakespotControllerDidDismiss()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.fakespotControllerDidDismiss()
     }
 }

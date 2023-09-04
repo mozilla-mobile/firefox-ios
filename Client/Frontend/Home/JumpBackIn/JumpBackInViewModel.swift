@@ -19,7 +19,6 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     // MARK: - Properties
     var headerButtonAction: ((UIButton) -> Void)?
-    var onTapGroup: ((Tab) -> Void)?
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
@@ -27,12 +26,11 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var delegate: HomepageDataModelDelegate?
 
     // The data that is showed to the user after layout calculation
-    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    var jumpBackInList = JumpBackInList(tabs: [Tab]())
     var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     // Raw data to calculate what we can show to the user
     var recentTabs: [Tab] = [Tab]()
-    var recentGroups: [ASGroup<Tab>]?
     var recentSyncedTab: JumpBackInSyncedTab?
 
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -66,20 +64,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.jumpBackInDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
         self.logger = logger
-    }
-
-    func switchTo(group: ASGroup<Tab>) {
-        guard let firstTab = group.groupedItems.first else { return }
-
-        onTapGroup?(firstTab)
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .firefoxHomepage,
-            value: .jumpBackInSectionGroupOpened,
-            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        )
     }
 
     func switchTo(tab: Tab) {
@@ -143,7 +127,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private var hasJumpBackIn: Bool {
-        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
+        return !recentTabs.isEmpty
     }
 
     private var isMultitasking: Bool {
@@ -171,8 +155,7 @@ private extension JumpBackInViewModel {
     private func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
-            withMaxTabsCount: maxItemsToDisplay.tabsCount,
-            and: recentGroups
+            withMaxTabsCount: maxItemsToDisplay.tabsCount
         )
         let shouldShowSyncTab = maxItemsToDisplay.syncedTabCount >= 1 && hasSyncedTab
         mostRecentSyncedTab = shouldShowSyncTab ? recentSyncedTab : nil
@@ -180,56 +163,28 @@ private extension JumpBackInViewModel {
 
     func createJumpBackInList(
         from tabs: [Tab],
-        withMaxTabsCount maxTabs: Int,
-        and groups: [ASGroup<Tab>]? = nil
+        withMaxTabsCount maxTabs: Int
     ) -> JumpBackInList {
-        let recentGroup = groups?.first
-        let groupCount = recentGroup != nil ? 1 : 0
         let recentTabs = filter(
             tabs: tabs,
-            from: recentGroup,
-            usingGroupCount: groupCount,
             withMaxTabsCount: maxTabs
         )
 
-        return JumpBackInList(group: recentGroup, tabs: recentTabs)
+        return JumpBackInList(tabs: recentTabs)
     }
 
     func filter(
         tabs: [Tab],
-        from recentGroup: ASGroup<Tab>?,
-        usingGroupCount groupCount: Int,
         withMaxTabsCount maxTabs: Int
     ) -> [Tab] {
-        var recentTabs = [Tab]()
-        let maxTabsCount = maxTabs - groupCount
-
-        for tab in tabs {
-            // We must make sure to not include any 'solo' tabs that are also part of a group
-            // because they should not show up in the Jump Back In section.
-            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
-
-            recentTabs.append(tab)
-            // We are only showing one group in Jump Back in, so adjust count accordingly
-            if recentTabs.count == maxTabsCount { break }
-        }
-
-        return recentTabs
+        guard tabs.count > maxTabs else { return tabs }
+        let dropCount = tabs.count - maxTabs
+        return tabs.dropLast(dropCount)
     }
 }
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
-    func configureJumpBackInCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell, indexPath: IndexPath) {
-        let firstGroupItem = group.groupedItems.first
-        let siteURL = firstGroupItem?.lastKnownUrl?.absoluteString ?? ""
-        let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
-        let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
-                                                    descriptionText: descriptionText,
-                                                    siteURL: siteURL)
-        cell.configure(viewModel: cellViewModel, theme: theme)
-    }
-
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
@@ -433,10 +388,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                                                           for: indexPath)
             guard let jumpBackInCell = cell as? JumpBackInCell else { return UICollectionViewCell() }
 
-            if jumpBackInItemRow == (jumpBackInList.itemsToDisplay - 1),
-               let group = jumpBackInList.group {
-                configureJumpBackInCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
-            } else if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
+            if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
             }
             return jumpBackInCell
@@ -468,10 +420,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                        libraryPanelDelegate: LibraryPanelDelegate?) {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
             // JumpBackIn cell
-            if jumpBackInItemRow == jumpBackInList.itemsToDisplay - 1,
-               let group = jumpBackInList.group {
-                switchTo(group: group)
-            } else if let tab = jumpBackInList.tabs[safe: jumpBackInItemRow] {
+            if let tab = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 switchTo(tab: tab)
             }
         } else if hasSyncedTab {
@@ -485,7 +434,6 @@ extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
         Task { @MainActor in
             self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
-            self.recentGroups = await self.jumpBackInDataAdaptor.getGroupsData()
             self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
             self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
             logger.log("JumpBack didLoadNewData and section shouldShow \(self.shouldShow)",

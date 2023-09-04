@@ -32,7 +32,7 @@ public class PushRegistration: NSObject, NSSecureCoding {
     }
 
     @objc
-    public convenience required init?(coder aDecoder: NSCoder) {
+    public required convenience init?(coder aDecoder: NSCoder) {
         guard let uaid = aDecoder.decodeObject(of: NSString.self, forKey: "uaid") as? String,
               let secret = aDecoder.decodeObject(of: NSString.self, forKey: "secret") as? String,
               let subscriptions = aDecoder.decodeObject(
@@ -100,7 +100,7 @@ public class PushSubscription: NSObject, NSSecureCoding {
     }
 
     @objc
-    public convenience required init?(coder aDecoder: NSCoder) {
+    public required convenience init?(coder aDecoder: NSCoder) {
         guard let channelID = aDecoder.decodeObject(of: NSString.self, forKey: "channelID") as? String,
             let urlString = aDecoder.decodeObject(of: NSString.self, forKey: "endpoint") as? String,
             let endpoint = URL(string: urlString),
