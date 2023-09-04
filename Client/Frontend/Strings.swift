@@ -3601,6 +3601,16 @@ extension String {
             tableName: "Shopping",
             value: "Something Went Wrong",
             comment: "Title of the error displayed in the shopping review quality bottom sheet.")
+        public static let ConfirmationCardTitle = MZLocalizedString(
+            key: "", // Shopping.ConfirmationCard.Title.v118
+            tableName: "Shopping",
+            value: "Analysis Is Up To Date",
+            comment: "Title of the confirmation displayed in the shopping review quality bottom sheet.")
+        public static let ConfirmationCardButtonText = MZLocalizedString(
+            key: "", // Shopping.ConfirmationCard.Button.Text.v118
+            tableName: "Shopping",
+            value: "Got It",
+            comment: "Button text of the confirmation displayed in the shopping review quality bottom sheet.")
         public static let ErrorCardDescription = MZLocalizedString(
             key: "", // Shopping.ErrorCard.Description.v118
             tableName: "Shopping",

@@ -63,6 +63,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     }
 
     private lazy var errorCardView: FakespotErrorCardView = .build()
+    private lazy var confirmationCardView: FakespotMessageCardView = .build()
     private lazy var reliabilityCardView: ReliabilityCardView = .build()
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
@@ -111,6 +112,16 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         )
         adjustRatingView.configure(adjustRatingViewModel)
 
+        let confirmationCardViewModel = FakespotMessageCardViewModel(
+            title: .Shopping.ConfirmationCardTitle,
+            primaryActionText: .Shopping.ConfirmationCardButtonText,
+            a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.card,
+            a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.title,
+            a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
+        )
+
+        confirmationCardView.configure(confirmationCardViewModel)
+
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
@@ -152,6 +163,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         titleLabel.textColor = theme.colors.textPrimary
 
         errorCardView.applyTheme(theme: theme)
+        confirmationCardView.applyTheme(theme: theme)
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
@@ -164,6 +176,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
+        contentStackView.addArrangedSubview(confirmationCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
         contentStackView.addArrangedSubview(loadingView)

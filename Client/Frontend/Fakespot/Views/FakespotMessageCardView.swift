@@ -6,61 +6,46 @@ import UIKit
 import Common
 import ComponentLibrary
 
-struct FakespotCardViewModel {
+struct FakespotMessageCardViewModel {
     var title: String
-    var description: String
+    var description: String?
     var linkText: String?
     var primaryActionText: String?
 
-    let a11yCardIdentifier: String
-    let a11yTitleIdentifier: String
-    let a11yDescriptionIdentifier: String
-    let a11yPrimaryActionIdentifier: String?
-    let a11yLinkActionIdentifier: String?
+    var a11yCardIdentifier: String
+    var a11yTitleIdentifier: String
+    var a11yDescriptionIdentifier: String?
+    var a11yPrimaryActionIdentifier: String?
+    var a11yLinkActionIdentifier: String?
 }
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     enum CardType: String, CaseIterable, Identifiable {
-        case error
         case confirmation
-        case warning
-        case info
 
         var id: String { self.rawValue }
 
         func primaryButtonText(theme: Theme) -> UIColor {
             switch self {
-            case .error: return theme.colors.textPrimary
             case .confirmation: return theme.colors.textPrimary
-            case .warning: return theme.colors.textPrimary
-            case .info: return theme.colors.textOnDark
             }
         }
 
         func primaryButtonBackground(theme: Theme) -> UIColor {
             switch self {
-            case .error: return theme.colors.actionError
             case .confirmation: return theme.colors.actionConfirmation
-            case .warning: return theme.colors.actionWarning
-            case .info: return theme.colors.actionPrimary
             }
         }
 
         func cardBackground(theme: Theme) -> UIColor {
             switch self {
-            case .error: return theme.colors.layerError
             case .confirmation: return theme.colors.layerConfirmation
-            case .warning: return theme.colors.layerWarning
-            case .info: return theme.colors.layerInfo
             }
         }
 
         var iconImageName: String {
             switch self {
-            case .error: return StandardImageIdentifiers.Large.criticalFill
-            case .confirmation: return StandardImageIdentifiers.Large.criticalFill
-            case .warning: return StandardImageIdentifiers.Large.criticalFill
-            case .info: return StandardImageIdentifiers.Large.criticalFill
+            case .confirmation: return StandardImageIdentifiers.Large.checkmark
             }
         }
     }
@@ -154,8 +139,8 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private var iconImageHeightConstraint: NSLayoutConstraint?
-    private var viewModel: FakespotCardViewModel?
-    private var type: CardType = .error
+    private var viewModel: FakespotMessageCardViewModel?
+    private var type: CardType = .confirmation
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -170,12 +155,11 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ viewModel: FakespotCardViewModel, type: CardType = .error) {
+    func configure(_ viewModel: FakespotMessageCardViewModel, type: CardType = .confirmation) {
         self.viewModel = viewModel
         self.type = type
 
         titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
         iconImageView.image = UIImage(named: type.iconImageName)
 
         if let title = viewModel.primaryActionText {
@@ -183,6 +167,13 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
         } else {
             primaryButton.removeFromSuperview()
+        }
+
+        if let description = viewModel.description {
+            descriptionLabel.text = description
+            descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
+        } else {
+            descriptionLabel.removeFromSuperview()
         }
 
         if let title = viewModel.linkText {
@@ -193,7 +184,6 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
 
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
-        descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
 
         let cardModel = CardViewModel(view: contentView,
                                       a11yId: viewModel.a11yCardIdentifier,

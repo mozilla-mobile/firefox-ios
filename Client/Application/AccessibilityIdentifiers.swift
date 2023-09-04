@@ -124,6 +124,12 @@ public struct AccessibilityIdentifiers {
             static let primaryAction = "Shopping.ErrorCard.PrimaryAction"
         }
 
+        struct ConfirmationCard {
+            static let card = "Shopping.ConfirmationCard.Card"
+            static let title = "Shopping.ConfirmationCard.Title"
+            static let primaryAction = "Shopping.ConfirmationCard.PrimaryAction"
+        }
+
         struct ReliabilityCard {
             static let card = "Shopping.ReliabilityCard.Card"
             static let title = "Shopping.ReliabilityCard.Title"
