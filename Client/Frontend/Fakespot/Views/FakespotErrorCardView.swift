@@ -90,6 +90,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable, Notifiable {
                                                 right: UX.buttonHorizontalInset)
     }
 
+    private var iconImageHeightConstraint: NSLayoutConstraint?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     override init(frame: CGRect) {
@@ -121,14 +122,12 @@ final class FakespotErrorCardView: UIView, ThemeApplicable, Notifiable {
         cardView.configure(cardModel)
     }
 
-    private var starRatingHeightConstraint: NSLayoutConstraint?
-
     private func setupLayout() {
         addSubview(cardView)
 
         let size = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
-        starRatingHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
-        starRatingHeightConstraint?.isActive = true
+        iconImageHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
+        iconImageHeightConstraint?.isActive = true
 
         iconStackView.addArrangedSubview(UIView())
         iconStackView.addArrangedSubview(iconImageView)
@@ -185,7 +184,7 @@ final class FakespotErrorCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func adjustLayout() {
-        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        iconImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
         setNeedsLayout()
         layoutIfNeeded()
     }
