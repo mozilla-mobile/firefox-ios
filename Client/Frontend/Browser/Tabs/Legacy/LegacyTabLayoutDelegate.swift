@@ -8,7 +8,7 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
     var lastYOffset: CGFloat = 0
-    var tabDisplayManager: TabDisplayManager
+    var tabDisplayManager: LegacyTabDisplayManager
 
     var sectionHeaderSize: CGSize {
         CGSize(width: 50, height: 40)
@@ -29,7 +29,7 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
         }
     }
 
-    init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection) {
+    init(tabDisplayManager: LegacyTabDisplayManager, traitCollection: UITraitCollection) {
         self.tabDisplayManager = tabDisplayManager
         self.traitCollection = traitCollection
         super.init()

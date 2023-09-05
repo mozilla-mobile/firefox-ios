@@ -61,7 +61,7 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    var tabDisplayManager: TabDisplayManager!
+    var tabDisplayManager: LegacyTabDisplayManager!
     var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = LegacyTabCell.cellIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
@@ -143,14 +143,14 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
             LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: LegacyGridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                              tabManager: tabManager,
-                                              tabDisplayer: self,
-                                              reuseID: LegacyTabCell.cellIdentifier,
-                                              tabDisplayType: .TabGrid,
-                                              profile: profile,
-                                              cfrDelegate: self,
-                                              theme: themeManager.currentTheme)
+        tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                    tabManager: tabManager,
+                                                    tabDisplayer: self,
+                                                    reuseID: LegacyTabCell.cellIdentifier,
+                                                    tabDisplayType: .TabGrid,
+                                                    profile: profile,
+                                                    cfrDelegate: self,
+                                                    theme: themeManager.currentTheme)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 

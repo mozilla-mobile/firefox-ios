@@ -50,15 +50,15 @@ class TabLayoutDelegateTests: XCTestCase {
 
     // MARK: - Helper
 
-    func createTabDisplayManager() -> TabDisplayManager {
-        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                                  tabManager: manager,
-                                                  tabDisplayer: delegate,
-                                                  reuseID: TopTabCell.cellIdentifier,
-                                                  tabDisplayType: .TopTabTray,
-                                                  profile: profile,
-                                                  cfrDelegate: cfrDelegate,
-                                                  theme: LightTheme())
+    func createTabDisplayManager() -> LegacyTabDisplayManager {
+        let tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                        tabManager: manager,
+                                                        tabDisplayer: delegate,
+                                                        reuseID: TopTabCell.cellIdentifier,
+                                                        tabDisplayType: .TopTabTray,
+                                                        profile: profile,
+                                                        cfrDelegate: cfrDelegate,
+                                                        theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         return tabDisplayManager
     }

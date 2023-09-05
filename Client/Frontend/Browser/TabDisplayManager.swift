@@ -62,7 +62,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlaggable {
+class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -446,7 +446,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 }
 
 // MARK: - UICollectionViewDataSource
-extension TabDisplayManager: UICollectionViewDataSource {
+extension LegacyTabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard tabDisplayType != .TopTabTray else {
@@ -514,7 +514,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 }
 
 // MARK: - InactiveTabsDelegate
-extension TabDisplayManager: InactiveTabsDelegate {
+extension LegacyTabDisplayManager: InactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
         removeSingleInactiveTab(tab)
@@ -636,7 +636,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
 }
 
 // MARK: - TabSelectionDelegate
-extension TabDisplayManager: TabSelectionDelegate {
+extension LegacyTabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
         getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
@@ -649,7 +649,7 @@ extension TabDisplayManager: TabSelectionDelegate {
 }
 
 // MARK: - UIDropInteractionDelegate
-extension TabDisplayManager: UIDropInteractionDelegate {
+extension LegacyTabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
         if let localDragSession = session.localDragSession,
@@ -677,7 +677,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
 }
 
 // MARK: - UICollectionViewDragDelegate
-extension TabDisplayManager: UICollectionViewDragDelegate {
+extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
     // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
     func collectionView(
@@ -712,7 +712,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 }
 
 // MARK: - UICollectionViewDropDelegate
-extension TabDisplayManager: UICollectionViewDropDelegate {
+extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
     private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
         let previewParams = UIDragPreviewParameters()
@@ -802,7 +802,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 }
 
-extension TabDisplayManager: TabEventHandler {
+extension LegacyTabDisplayManager: TabEventHandler {
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)
@@ -872,7 +872,7 @@ extension TabDisplayManager: TabEventHandler {
 }
 
 // MARK: - TabManagerDelegate
-extension TabDisplayManager: TabManagerDelegate {
+extension LegacyTabDisplayManager: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
         cancelDragAndGestures()
 
@@ -998,7 +998,7 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 }
 
-extension TabDisplayManager: Notifiable {
+extension LegacyTabDisplayManager: Notifiable {
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
