@@ -93,45 +93,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         setupView()
         listenForThemeChange(view)
 
-        let reliabilityCardViewModel = ReliabilityCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-            title: .Shopping.ReliabilityCardTitle,
-            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-            rating: .gradeA,
-            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
-        reliabilityCardView.configure(reliabilityCardViewModel)
-
-        let adjustRatingViewModel = AdjustRatingViewModel(
-            title: .Shopping.AdjustedRatingTitle,
-            description: .Shopping.AdjustedRatingDescription,
-            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
-            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
-            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
-            rating: 3.5
-        )
-        adjustRatingView.configure(adjustRatingViewModel)
-
-        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
-                                                            description: .Shopping.ErrorCardDescription,
-                                                            actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(errorCardViewModel)
-
-        let highlightsCardViewModel = HighlightsCardViewModel(
-            footerTitle: .Shopping.HighlightsCardFooterText,
-            footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
-        highlightsCardView.configure(highlightsCardViewModel)
-
-        let settingsCardViewModel = FakespotSettingsCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
-            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
-            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
-            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
-            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
-        settingsCardView.configure(settingsCardViewModel)
-
-        noAnalysisCardView.configure(NoAnalysisCardViewModel())
+        reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
+        errorCardView.configure(viewModel.errorCardViewModel)
+        highlightsCardView.configure(viewModel.highlightsCardViewModel)
+        settingsCardView.configure(viewModel.settingsCardViewModel)
+        adjustRatingView.configure(viewModel.adjustRatingViewModel)
+        noAnalysisCardView.configure(viewModel.noAnalysisCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -139,6 +106,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
         applyTheme()
         loadingView.animate()
+        Task {
+            await viewModel.fetchData()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
