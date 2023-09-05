@@ -7214,8 +7214,8 @@
 			children = (
 				212985E32A6F078800546684 /* ScreenState.swift */,
 				21618A912A4499FC00A5189E /* AppState.swift */,
-				21618A892A4389F700A5189E /* ActiveScreenState.swift */,
 				21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */,
+				21618A892A4389F700A5189E /* ActiveScreenState.swift */,
 			);
 			path = GlobalState;
 			sourceTree = "<group>";

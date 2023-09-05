@@ -8,7 +8,7 @@ import Redux
 struct ThemeSettingsState: ScreenState, Equatable {
     var useSystemAppearance: Bool
     var isAutomaticBrightnessEnable: Bool
-    var manualThemeSelected: BuiltinThemeName
+    var manualThemeSelected: ThemeType
     var userBrightnessThreshold: Float
     var systemBrightness: Float
     private var logger: Logger
@@ -32,14 +32,14 @@ struct ThemeSettingsState: ScreenState, Equatable {
     init() {
         self.init(useSystemAppearance: false,
                   isAutomaticBrightnessEnable: false,
-                  manualThemeSelected: .normal,
+                  manualThemeSelected: ThemeType.light,
                   userBrightnessThreshold: 0,
                   systemBrightness: 1)
     }
 
     init(useSystemAppearance: Bool,
          isAutomaticBrightnessEnable: Bool,
-         manualThemeSelected: BuiltinThemeName,
+         manualThemeSelected: ThemeType,
          userBrightnessThreshold: Float,
          systemBrightness: Float,
          logger: Logger = DefaultLogger.shared) {
