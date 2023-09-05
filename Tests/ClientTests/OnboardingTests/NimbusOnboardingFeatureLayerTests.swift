@@ -314,6 +314,18 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingSetToDock)
     }
 
+    func testLayer_cardIsReturned_WithSearchWidgetImageIdenfier() {
+        configUtility.setupNimbusWith(image: .searchWidget)
+        let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
+
+        guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
+            XCTFail("Expected a card, and got none.")
+            return
+        }
+
+        XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingSearchWidget)
+    }
+
     // MARK: - Test install types
     func testLayer_cardIsReturned_WithFreshInstallType() {
         configUtility.setupNimbusWith(type: .freshInstall)

@@ -18,6 +18,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
+    let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
@@ -816,6 +817,29 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.didRequestToOpenInNewTabCalled)
         XCTAssertEqual(mbvc.lastOpenedURL, url)
         XCTAssertTrue(mbvc.isPrivate)
+    }
+
+    // MARK: - Fakespot
+    func testFakespotCoordinatorDelegate_didDidDismiss_removesChild() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showFakespotFlow(productURL: exampleProduct)
+        let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
+        fakespotCoordinator.fakespotControllerDidDismiss()
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_startsFakespotCoordinator() {
+        let subject = createSubject()
+        subject.showFakespotFlow(productURL: exampleProduct)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? FakespotCoordinator)
     }
 
     // MARK: - Helpers

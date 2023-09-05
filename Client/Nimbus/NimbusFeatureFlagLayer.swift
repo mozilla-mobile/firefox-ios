@@ -46,8 +46,7 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .historyGroups,
-                .tabTrayGroups:
+        case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
@@ -265,7 +264,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .historyGroups: nimbusID = SearchTermGroups.historyGroups
-        case .tabTrayGroups: nimbusID = SearchTermGroups.tabTrayGroups
         default: return false
         }
 

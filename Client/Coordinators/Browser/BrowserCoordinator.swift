@@ -15,6 +15,7 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
+                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
@@ -379,6 +380,16 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showETPMenu(sourceView: sourceView)
+    }
+
+    func showFakespotFlow(productURL: URL) {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+            return // flow is already handled
+        }
+        let coordinator = FakespotCoordinator(router: router)
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start(productURL: productURL)
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {

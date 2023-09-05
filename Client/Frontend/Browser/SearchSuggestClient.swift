@@ -20,7 +20,7 @@ class SearchSuggestClient {
     fileprivate let userAgent: String
     fileprivate var task: URLSessionTask?
 
-    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: self.userAgent, configuration: URLSessionConfiguration.ephemeral)
+    fileprivate lazy var urlSession: URLSession = makeURLSession(userAgent: self.userAgent, configuration: URLSessionConfiguration.ephemeral)
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {
         self.searchEngine = searchEngine

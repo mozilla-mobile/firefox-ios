@@ -347,9 +347,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.insert(SearchBarSetting(settings: self, settingsDelegate: parentCoordinator), at: 5)
         }
 
-        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
-        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
+        if inactiveTabsAreBuildActive {
             generalSettings.insert(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator), at: 3)
         }
 

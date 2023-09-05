@@ -56,8 +56,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.topSites, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.topSites, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly))

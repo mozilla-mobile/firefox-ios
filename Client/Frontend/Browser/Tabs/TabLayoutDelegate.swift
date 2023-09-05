@@ -45,14 +45,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch TabDisplaySection(rawValue: section) {
-        case .regularTabs:
-            if let groups = tabDisplayManager.tabGroups, !groups.isEmpty {
-                return sectionHeaderSize
-            }
-        default: return .zero
-        }
-
         return .zero
     }
 
@@ -85,15 +77,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             return calculateInactiveTabSizeHelper(collectionView)
-
-        case .groupedTabs:
-            let width = collectionView.frame.size.width
-            if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
-                let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
-                return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-            } else {
-                return CGSize(width: 0, height: 0)
-            }
 
         case .regularTabs, .none:
             guard !tabDisplayManager.filteredTabs.isEmpty else { return CGSize(width: 0, height: 0) }
@@ -143,13 +126,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         case .inactiveTabs:
             guard !tabDisplayManager.isPrivate,
                   tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
-            else { return .zero }
-
-            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
-
-        case .groupedTabs:
-            guard tabDisplayManager.shouldEnableGroupedTabs,
-                  tabDisplayManager.tabGroups?.count ?? 0 > 0
             else { return .zero }
 
             return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)

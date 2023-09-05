@@ -6,11 +6,11 @@ import XCTest
 @testable import Client
 
 final class ShoppingProductTests: XCTestCase {
-    var client: TestFakeSpotClient!
+    var client: TestFakespotClient!
 
     override func setUp() {
         super.setUp()
-        client = TestFakeSpotClient()
+        client = TestFakespotClient()
     }
 
     override func tearDown() {
@@ -93,15 +93,64 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
     }
+
+    func testFetchingProductAnalysisData_WithThrowingServerError_RetriesClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let client = ThrowingFakeSpotClient(error: NSError(domain: "HTTP Error", code: 500, userInfo: nil))
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(maxRetries: 3)
+
+        let expected = 4 // 3 + the original API call
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
+
+    func testFetchingProductAnalysisData_WithAnyThrowing_DoesNotRetryClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let client = ThrowingFakeSpotClient(error: NSError(domain: "Any Error", code: 404, userInfo: nil))
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(maxRetries: 3)
+
+        let expected = 1
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
+
+    func testFetchingProductAnalysisData_WithSuccess_DoesNotRetryClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(maxRetries: 3)
+
+        let expected = 1
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
 }
 
-final class TestFakeSpotClient: FakeSpotClientType {
+final class ThrowingFakeSpotClient: FakespotClientType {
+    var fetchProductAnalysisDataCallCount = 0
+    let error: Error
+
+    init(error: Error) {
+        self.error = error
+    }
+
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+        fetchProductAnalysisDataCallCount += 1
+        throw error
+    }
+
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+        return []
+    }
+}
+
+final class TestFakespotClient: FakespotClientType {
     var productId: String = ""
     var website: String = ""
     var fetchProductAnalysisDataCalled = false
     var fetchProductAdsDataCalled = false
+    var fetchProductAnalysisDataCallCount = 0
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+        self.fetchProductAnalysisDataCallCount += 1
         self.productId = productId
         self.website = website
         self.fetchProductAnalysisDataCalled = true

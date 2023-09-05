@@ -48,7 +48,6 @@ protocol TabDisplayerDelegate: AnyObject {
 
 enum TabDisplaySection: Int, CaseIterable {
     case inactiveTabs
-    case groupedTabs
     case regularTabs
 }
 
@@ -88,21 +87,12 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder = TabDisplayOrder()
 
-    var shouldEnableGroupedTabs: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
-    }
-
     var shouldEnableInactiveTabs: Bool {
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
     var orderedTabs: [Tab] {
         return filteredTabs
-    }
-
-    var tabGroups: [ASGroup<Tab>]?
-    var tabsInAllGroups: [Tab]? {
-        (tabGroups?.map {$0.groupedItems}.flatMap {$0})
     }
 
     private(set) var isPrivate = false
@@ -211,7 +201,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
-        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
             guard let self, !tabsToDisplay.isEmpty else { return }
             let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
@@ -220,42 +210,26 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             orderedRegularTabs.forEach {
                 self.dataStore.insert($0)
             }
-            self.recordGroupedTabTelemetry()
             self.collectionView.reloadData()
         }
     }
 
-    private func tabsSetupHelper(tabGroups: [ASGroup<Tab>]?, filteredTabs: [Tab]) {
-        self.tabGroups = tabGroups
+    private func tabsSetupHelper(filteredTabs: [Tab]) {
         self.filteredTabs = filteredTabs
     }
 
-    private func setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
-        // no groups for when we have less than 2 active tabs
-        guard shouldEnableGroupedTabs, tabsToBuildFrom.count > 1 else {
-            tabsSetupHelper(tabGroups: nil, filteredTabs: tabsToBuildFrom)
-            completion(nil, tabsToBuildFrom)
-            return
-        }
-
-        // build groups
-        SearchTermGroupsUtility.getTabGroups(with: profile,
-                                             from: tabsToBuildFrom,
-                                             using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-            ensureMainThread { [weak self] in
-                self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-                completion(tabGroups, filteredActiveTabs)
-            }
-        }
+    private func setupFilteredTabs(tabsToBuildFrom: [Tab], completion: @escaping ([Tab]) -> Void) {
+        tabsSetupHelper(filteredTabs: tabsToBuildFrom)
+        completion(tabsToBuildFrom)
     }
 
-    private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+    private func getTabsAndUpdateInactiveState(completion: @escaping ([Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
         // We should not make a single tab inactive as that would be the selected tab
         guard !self.isPrivate, allTabs.count > 1 else {
-            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
-            completion(nil, allTabs)
+            tabsSetupHelper(filteredTabs: allTabs)
+            completion(allTabs)
             return
         }
 
@@ -284,39 +258,20 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
                 filteredTabs = inactiveViewModel.activeTabs
             }
-            tabsSetupHelper(tabGroups: nil, filteredTabs: filteredTabs)
-            completion(nil, filteredTabs)
+            tabsSetupHelper(filteredTabs: filteredTabs)
+            completion(filteredTabs)
             return
         }
 
-        // Inactive tabs - disabled
-        if !shouldEnableInactiveTabs {
-            // check if groups are enabled and setup from normal tabs
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs,
-                                                 completion: completion)
-        } else {
-            // Inactive tabs - enabled
-            guard let inactiveViewModel = inactiveViewModel else {
-                // check if groups are enabled and setup from all tabs
-                setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
-                return
-            }
-
-            // check if groups are enabled and setup groups from active tabs only
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: inactiveViewModel.activeTabs, completion: completion)
+        guard let inactiveViewModel = inactiveViewModel,
+              shouldEnableInactiveTabs else {
+            setupFilteredTabs(tabsToBuildFrom: tabManager.normalTabs,
+                              completion: completion)
+            return
         }
-    }
 
-    private func groupNameForTab(tab: Tab) -> String? {
-        guard let groupName = tabGroups?.first(where: { $0.groupedItems.contains(tab) })?.searchTerm else { return nil }
-        return groupName
-    }
-
-    func indexOfGroupTab(tab: Tab) -> (groupName: String, indexOfTabInGroup: Int)? {
-        guard let searchTerm = groupNameForTab(tab: tab),
-              let group = tabGroups?.first(where: { $0.searchTerm == searchTerm }),
-              let indexOfTabInGroup = group.groupedItems.firstIndex(of: tab) else { return nil }
-        return (searchTerm, indexOfTabInGroup)
+        setupFilteredTabs(tabsToBuildFrom: inactiveViewModel.activeTabs,
+                          completion: completion)
     }
 
     func indexOfRegularTab(tab: Tab) -> Int? {
@@ -343,7 +298,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         if shouldSelectMostRecentTab {
-            getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+            getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
                 let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
                 if let tab = tab {
                     self?.tabManager.selectTab(tab)
@@ -384,7 +339,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
             guard let self else { return }
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
@@ -424,33 +379,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    func removeGroupTab(with tab: Tab) {
-        let groupData = indexOfGroupTab(tab: tab)
-        let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
-        guard let groupName = groupData?.groupName,
-              let tabIndexInGroup = groupData?.indexOfTabInGroup,
-              let indexOfGroup = tabGroups?.firstIndex(where: { group in
-                  group.searchTerm == groupName
-              }),
-              let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell else {
-            return
-        }
-
-        // case: Group has less than 3 tabs (refresh all)
-        if let count = tabGroups?[indexOfGroup].groupedItems.count, count < 3 {
-            refreshStore()
-        } else {
-            // case: Group has more than 2 tabs, we are good to remove just one tab from group
-            tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
-            groupedCell.tabDisplayManagerDelegate = self
-            groupedCell.tabGroups = self.tabGroups
-            groupedCell.hasExpanded = true
-            groupedCell.selectedTab = tabManager.selectedTab
-            groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
-            groupedCell.scrollToSelectedGroup()
-        }
-    }
-
     /// Close tab action for Top tabs type
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
         guard !isDragging else { return }
@@ -465,11 +393,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
-        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
             guard let self else { return }
             // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
-               tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
+               tabsToDisplay.count == 1 {
                 self.tabManager.removeTabs([tab])
                 self.tabManager.selectTab(self.tabManager.addTab())
                 return
@@ -512,26 +440,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
 
-    func recordGroupedTabTelemetry() {
-        if shouldEnableGroupedTabs,
-           !isPrivate,
-           let tabGroups = tabGroups,
-           !tabGroups.isEmpty {
-            let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
-            let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
-            let tabsInAllGroup = tabsInAllGroups?.count ?? 0
-            let averageTabsInAllGroups = ceil(Double(tabsInAllGroup / tabGroups.count))
-            let groupTabExtras: [String: Int32] = [
-                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoTabsOnly)": Int32(groupWithTwoTabs),
-                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoMoreTab)": Int32(groupsWithTwoMoreTab),
-                "\(TelemetryWrapper.EventExtraKey.totalNumberOfGroups)": Int32(tabGroups.count),
-                "\(TelemetryWrapper.EventExtraKey.averageTabsInAllGroups)": Int32(averageTabsInAllGroups),
-                "\(TelemetryWrapper.EventExtraKey.totalTabsInAllGroups)": Int32(tabsInAllGroup),
-            ]
-            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .tabTray, value: .tabGroupWithExtras, extras: groupTabExtras)
-        }
-    }
-
     deinit {
         notificationCenter.removeObserver(self)
     }
@@ -542,7 +450,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard tabDisplayType != .TopTabTray else {
-            return dataStore.count + (tabGroups?.count ?? 0)
+            return dataStore.count
         }
 
         switch TabDisplaySection(rawValue: section) {
@@ -550,10 +458,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
             // Hide inactive tray if there are no inactive tabs
             guard let vm = inactiveViewModel, !vm.inactiveTabs.isEmpty else { return 0 }
             return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
-        case .groupedTabs:
-            // Hide grouped tab section if there are no grouped tabs
-            guard let groups = tabGroups, !groups.isEmpty else { return 0 }
-            return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
         case .regularTabs:
             return dataStore.count
         case .none:
@@ -564,21 +468,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        if tabGroups != nil,
-           let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                                      withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
-                                                                      for: indexPath) as? LabelButtonHeaderView {
-            let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
-                                                       title: .TabTrayOtherTabsSectionHeader,
-                                                       titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
-                                                       isButtonHidden: true)
-
-            view.configure(viewModel: viewModel, theme: theme)
-            view.title = .TabTrayOtherTabsSectionHeader
-            view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
-
-            return view
-        }
         return UICollectionReusableView()
     }
 
@@ -606,18 +495,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 }
             }
 
-        case .groupedTabs:
-            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.cellIdentifier, for: indexPath) as? GroupedTabCell {
-                groupedCell.theme = theme
-                groupedCell.tabDisplayManagerDelegate = self
-                groupedCell.tabGroups = self.tabGroups
-                groupedCell.hasExpanded = true
-                groupedCell.selectedTab = tabManager.selectedTab
-                groupedCell.tableView.reloadData()
-                groupedCell.scrollToSelectedGroup()
-                cell = groupedCell
-            }
-
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
@@ -633,34 +510,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if tabDisplayType == .TopTabTray { return 1 }
         return TabDisplaySection.allCases.count
-    }
-}
-
-// MARK: - GroupedTabDelegate
-extension TabDisplayManager: GroupedTabDelegate {
-    func newSearchFromGroup(searchTerm: String) {
-        let object = OpenTabNotificationObject(type: .openSearchNewTab(searchTerm))
-        NotificationCenter.default.post(name: .OpenTabNotification, object: object)
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
-    }
-
-    func closeGroupTab(tab: Tab) {
-        if self.isPrivate == false, filteredTabs.count + (tabsInAllGroups?.count ?? 0) == 1 {
-            self.tabManager.removeTabs([tab])
-            self.tabManager.selectTab(self.tabManager.addTab())
-            return
-        }
-
-        self.tabManager.removeTab(tab)
-        removeGroupTab(with: tab)
-    }
-
-    func selectGroupTab(tab: Tab) {
-        if let tabTray = tabDisplayerDelegate as? GridTabViewController {
-            tabManager.selectTab(tab)
-            tabTray.dismissTabTray()
-        }
     }
 }
 
@@ -790,7 +639,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        getTabsAndUpdateInactiveState { [weak self] tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
             if tabsToDisplay.contains(tab) {
                 self?.tabManager.selectTab(tab)
             }

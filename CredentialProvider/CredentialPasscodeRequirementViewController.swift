@@ -12,13 +12,13 @@ protocol CredentialPasscodeRequirementViewControllerDelegate: AnyObject {
 class CredentialPasscodeRequirementViewController: UIViewController {
     var delegate: CredentialPasscodeRequirementViewControllerDelegate?
 
-    lazy private var logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo-glyph"))
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
 
-    lazy private var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTitle2
@@ -28,7 +28,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         return label
     }()
 
-    lazy private var taglineLabel: UILabel = {
+    private lazy var taglineLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTagline
@@ -38,7 +38,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         return label
     }()
 
-    lazy private var warningLabel: UILabel = {
+    private lazy var warningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 18)
@@ -48,7 +48,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         return label
     }()
 
-    lazy private var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemRed

@@ -44,6 +44,7 @@ public struct ImageIdentifiers {
     public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
     public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
     public static let onboardingSyncCTD = "onboardingSyncCTD"
+    public static let onboardingSearchWidget = "onboardingSearchWidget"
     public static let onboardingSetToDock = "onboardingDock"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
@@ -55,6 +56,7 @@ public struct ImageIdentifiers {
     public static let reportSiteIssue = "menu-reportSiteIssue"
     public static let settings = "menu-Settings"
     public static let share = "action_share"
+    public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let signinSync = "signin-sync"
     public static let signinSyncQRButton = "qr-code-icon-white"
     public static let sponsoredStar = "sponsored-star"
@@ -66,4 +68,6 @@ public struct ImageIdentifiers {
     public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
     public static let zoomIn = "menu-ZoomIn"
+    public static let customizeHomepage = "editLarge"
+    public static let help = "helpCircleLarge"
 }

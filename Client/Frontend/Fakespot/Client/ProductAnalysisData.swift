@@ -5,12 +5,12 @@
 import Foundation
 
 struct ProductAnalysisData: Codable {
-    let productId: String
-    let grade: String
-    let adjustedRating: Double
-    let needsAnalysis: Bool
-    let analysisUrl: URL
-    let highlights: Highlights
+    let productId: String?
+    let grade: String?
+    let adjustedRating: Double?
+    let needsAnalysis: Bool?
+    let analysisUrl: URL?
+    let highlights: Highlights?
 
     private enum CodingKeys: String, CodingKey {
         case productId = "product_id"

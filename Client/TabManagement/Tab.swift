@@ -1029,7 +1029,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
         }
     }
 
-    internal override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override internal func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // The find-in-page selection menu only appears if the webview is the first responder.
         // Do not becomeFirstResponder on a mouse event.
         if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {

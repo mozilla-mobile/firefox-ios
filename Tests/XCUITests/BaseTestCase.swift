@@ -37,7 +37,6 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
-                           LaunchArguments.TurnOffTabGroupsInUserPreferences,
                            LaunchArguments.DisableAnimations
         ]
 
@@ -45,6 +44,15 @@ class BaseTestCase: XCTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        app.activate()
+    }
+
+    func closeFromAppSwitcherAndRelaunch() {
+        let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
+        let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
+        swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
@@ -235,7 +243,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
+        waitForNoExistence(progressIndicator, timeoutValue: 60.0)
     }
 
     func waitForTabsButton() {
@@ -291,6 +299,36 @@ extension XCUIElement {
     /// Tap on app screen at the central of the current element
     func tapOnApp() {
         coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    }
+
+    /// Check the position of one XCUIElement is on the left side of another XCUIElement
+    func isLeftOf(rightElement: XCUIElement) -> Bool {
+        return self.frame.origin.x < rightElement.frame.origin.x
+    }
+
+    /// Check the position of one XCUIElement is on the right side of another XCUIElement
+    func isRightOf(rightElement: XCUIElement) -> Bool {
+        return self.frame.origin.x > rightElement.frame.origin.x
+    }
+
+    /// Check the position of two XCUIElement objects on vertical line
+    /// - parameter element: XCUIElement
+    /// - distance: the max distance accepted between them
+    /// - return Bool: if the current object is above the given object
+    func isAbove(element: XCUIElement, maxDistanceBetween: CGFloat = 700) -> Bool {
+        let isAbove = self.frame.origin.y < element.frame.origin.y
+        let actualDistance = abs(self.frame.origin.y - element.frame.origin.y)
+        return isAbove && (actualDistance < maxDistanceBetween)
+    }
+
+    /// Check the position of two XCUIElement objects on vertical line
+    /// - parameter element: XCUIElement
+    /// - distance: the max distance accepted between them
+    /// - return Bool: if the current object is below the given object
+    func isBelow(element: XCUIElement, maxDistanceBetween: CGFloat = 700) -> Bool {
+        let isBelow = self.frame.origin.y > element.frame.origin.y
+        let actualDistance = abs(self.frame.origin.y - element.frame.origin.y)
+        return isBelow && (actualDistance < maxDistanceBetween)
     }
 }
 

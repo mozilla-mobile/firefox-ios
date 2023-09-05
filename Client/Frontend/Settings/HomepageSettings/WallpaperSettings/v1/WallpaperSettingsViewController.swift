@@ -20,6 +20,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var logger: Logger
+    weak var settingsDelegate: SettingsDelegate?
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -237,10 +238,15 @@ private extension WallpaperSettingsViewController {
     }
 
     func dismissView() {
-        guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
+        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
+            settingsDelegate?.didFinish()
+            viewModel.selectHomepageTab()
+        } else {
+            guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
 
-        viewModel.selectHomepageTab()
-        navigationController.done()
+            viewModel.selectHomepageTab()
+            navigationController.done()
+        }
     }
 
     func preferredContentSizeChanged(_ notification: Notification) {

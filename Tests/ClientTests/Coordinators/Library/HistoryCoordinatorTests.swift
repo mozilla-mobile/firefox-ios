@@ -9,12 +9,14 @@ final class HistoryCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var profile: MockProfile!
     private var parentCoordinator: MockLibraryCoordinatorDelegate!
+    private var notificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         router = MockRouter(navigationController: UINavigationController())
         profile = MockProfile()
+        notificationCenter = MockNotificationCenter()
         parentCoordinator = MockLibraryCoordinatorDelegate()
     }
 
@@ -24,6 +26,7 @@ final class HistoryCoordinatorTests: XCTestCase {
         router = nil
         profile = nil
         parentCoordinator = nil
+        notificationCenter = nil
     }
 
     func testShowRecentlyClosedTabs() {
@@ -35,10 +38,20 @@ final class HistoryCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
+    func testOpenClearRecentSearch_receiveNotificationCorrectly() {
+        _ = createSubject()
+
+        notificationCenter.post(name: .OpenClearRecentHistory)
+
+        XCTAssertEqual(notificationCenter.addObserverCallCount, 1)
+        XCTAssertEqual(notificationCenter.postCallCount, 1)
+    }
+
     private func createSubject() -> HistoryCoordinator {
         let subject = HistoryCoordinator(
             profile: profile,
             router: router,
+            notificationCenter: notificationCenter,
             parentCoordinator: parentCoordinator
         )
         trackForMemoryLeaks(subject)

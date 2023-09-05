@@ -4,20 +4,30 @@
 
 import UIKit
 import Common
-import ComponentLibrary
 
-struct ActionFooterViewModel {
+public struct ActionFooterViewModel {
     let title: String
     let actionTitle: String
-    let a11yTitleIdentifier: String = AccessibilityIdentifiers.ActionFooter.title
-    let a11yActionIdentifier: String = AccessibilityIdentifiers.ActionFooter.primaryAction
+    let a11yTitleIdentifier: String
+    let a11yActionIdentifier: String
+
+    public init(
+        title: String,
+        actionTitle: String,
+        a11yTitleIdentifier: String,
+        a11yActionIdentifier: String
+    ) {
+        self.title = title
+        self.actionTitle = actionTitle
+        self.a11yTitleIdentifier = a11yTitleIdentifier
+        self.a11yActionIdentifier = a11yActionIdentifier
+    }
 }
 
-final class ActionFooterView: UIView, ThemeApplicable {
+public final class ActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
         static let buttonSize: CGFloat = 13
-        static let containerMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -25,7 +35,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.labelSize)
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -33,15 +43,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
             withTextStyle: .footnote,
             size: UX.buttonSize)
         button.buttonEdgeSpacing = 0
-        button.setContentCompressionResistancePriority(.required, for: .vertical)
-    }
-
-    private lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = 0
-        stackView.alignment = .leading
-        stackView.axis = .vertical
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UX.containerMargins
+        button.contentHorizontalAlignment = .leading
     }
 
     override init(frame: CGRect) {
@@ -54,7 +56,7 @@ final class ActionFooterView: UIView, ThemeApplicable {
         setupLayout()
     }
 
-    func configure(viewModel: ActionFooterViewModel) {
+    public func configure(viewModel: ActionFooterViewModel) {
         titleLabel.text = viewModel.title
         primaryButton.setTitle(viewModel.actionTitle, for: .normal)
 
@@ -63,20 +65,23 @@ final class ActionFooterView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        addSubview(stackView)
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(primaryButton)
+        addSubview(titleLabel)
+        addSubview(primaryButton)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: primaryButton.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            primaryButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            primaryButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            primaryButton.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: Common.Theme) {
+    public func applyTheme(theme: Common.Theme) {
         primaryButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         primaryButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
         titleLabel.textColor = theme.colors.textSecondary

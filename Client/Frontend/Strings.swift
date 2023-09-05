@@ -3611,6 +3611,71 @@ extension String {
             tableName: "Shopping",
             value: "Try Again",
             comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+        public static let AdjustedRatingTitle = MZLocalizedString(
+            key: "", // Shopping.AdjustedRating.Title.v118
+            tableName: "Shopping",
+            value: "Adjusted rating",
+            comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
+        public static let AdjustedRatingDescription = MZLocalizedString(
+            key: "", // Shopping.AdjustedRating.Description.v118
+            tableName: "Shopping",
+            value: "Unreliable reviews removed",
+            comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.")
+        public static let AdjustedRatingStarsAccessibilityLabel = MZLocalizedString(
+            key: "", // Shopping.AdjustedRating.StarsAccessibilityLabel.v118
+            tableName: "Shopping",
+            value: "%@ out of 5 stars",
+            comment: "Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5).")
+        public static let HighlightsCardFooterText = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Footer.Text.v118
+            tableName: "Shopping",
+            value: "Summarized using information provided by Fakespot.com.",
+            comment: "Footer text of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardFooterButtonText = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Footer.Button.Text.v118
+            tableName: "Shopping",
+            value: "View full analysis",
+            comment: "Footer button text of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardLabelTitle = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Label.Title.v118
+            tableName: "Shopping",
+            value: "Settings",
+            comment: "Title of the settings card displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v118
+            tableName: "Shopping",
+            value: "Show products recommended by Firefox",
+            comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardTurnOffButton = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
+            tableName: "Shopping",
+            value: "Turn Off Review Quality Check",
+            comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118
+            tableName: "Shopping",
+            value: "Settings Card Expanded",
+            comment: "Accessibility label for the down chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Collapsed.AccessibilityLabel.v118
+            tableName: "Shopping",
+            value: "Settings Card Collapsed",
+            comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
+            tableName: "Shopping",
+            value: "No analysis for these reviews, yet",
+            comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
+            tableName: "Shopping",
+            value: "Launch the Fakespot by Mozilla analyzer and you’ll know in about 60 seconds whether this product’s reviews are reliable.",
+            comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
+            tableName: "Shopping",
+            value: "Launch analyzer on Fakespot.com",
+            comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
     }
 }
 
@@ -4203,6 +4268,36 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Share.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Share this page",
+        comment: "Accessibility label for the share button in url bar")
+    public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Shopping.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Review checker",
+        comment: "Accessibility label for the shopping button in url bar")
+    public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
 }
 
 // MARK: - TabPeekViewController
