@@ -37,7 +37,6 @@ public protocol ThemeColourPalette {
     var indicatorInactive: UIColor { get }
     var actionConfirmation: UIColor { get }
 
-
     // MARK: - Text
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
