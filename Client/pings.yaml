@@ -33,10 +33,7 @@ temp-baseline:
   description: |
     Temporary ping to measure when the app UI is visible to the user.
   include_client_id: true
-  # We set some validation metrics,
-  # when they expire we don't want to send anything anymore.
-  # (That's also when we remove the ping)
-  send_if_empty: false
+  send_if_empty: true
   bugs:
     - https://bugzilla.mozilla.org/show_bug.cgi?id=1850361
   data_reviews:
