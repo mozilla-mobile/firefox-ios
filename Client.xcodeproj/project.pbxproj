@@ -837,6 +837,7 @@
 		ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D82A2F283D003F52C4 /* CreditCardBottomSheetViewModelTests.swift */; };
 		B10997432A97251D00CC8860 /* UrlBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10997422A97251D00CC8860 /* UrlBarTests.swift */; };
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
+		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
@@ -5374,6 +5375,7 @@
 		B0CB471BA31B6922E598AA88 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Today.strings; sourceTree = "<group>"; };
 		B10997422A97251D00CC8860 /* UrlBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlBarTests.swift; sourceTree = "<group>"; };
 		B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMenuTests.swift; sourceTree = "<group>"; };
+		B15058802AA0A878008B7382 /* OpeningScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningScreenTests.swift; sourceTree = "<group>"; };
 		B1864C62B7F68815AA1FE0C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		B18D4F2291BA5459431EDCA9 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Shared.strings"; sourceTree = "<group>"; };
 		B19648D5B3667FE0CB25D069 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -7718,6 +7720,7 @@
 				D4C35390283500A600F7DC7D /* PerformanceTests.swift */,
 				B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */,
 				B10997422A97251D00CC8860 /* UrlBarTests.swift */,
+				B15058802AA0A878008B7382 /* OpeningScreenTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -12232,6 +12235,7 @@
 				2C473BD0209778900008C853 /* DownloadFilesTests.swift in Sources */,
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
 				787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */,
+				B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,
 				3D9CA9A81EF84D04002434DD /* NoImageTests.swift in Sources */,
@@ -19266,7 +19270,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 119.0.20230831050227;
+				version = 119.0.20230903050308;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

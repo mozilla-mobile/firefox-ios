@@ -55,6 +55,7 @@
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
         "PhotonActionSheetTest\/testShareOptionIsShown()",
