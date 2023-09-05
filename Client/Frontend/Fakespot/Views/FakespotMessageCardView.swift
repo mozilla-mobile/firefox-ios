@@ -37,11 +37,13 @@ struct FakespotMessageCardViewModel {
         }
     }
 
+    var type: CardType = .confirmation
     var title: String
     var description: String?
     var linkText: String?
     var primaryActionText: String?
-    var type: CardType = .confirmation
+    var linkAction: (() -> Void)?
+    var primaryAction: (() -> Void)?
 
     var a11yCardIdentifier: String
     var a11yTitleIdentifier: String
@@ -240,12 +242,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     @objc
     private func primaryAction() {
-        // Add your button action here
+        viewModel?.primaryAction?()
     }
 
     @objc
     private func linkAction() {
-        // Add your button action here
+        viewModel?.linkAction?()
     }
 
     // MARK: - ThemeApplicable
