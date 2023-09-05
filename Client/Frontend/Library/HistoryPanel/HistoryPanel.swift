@@ -106,7 +106,7 @@ class HistoryPanel: UIViewController,
         searchbar.delegate = self
     }
 
-    lazy private var tableView: UITableView = .build { [weak self] tableView in
+    private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDataSource
         tableView.addGestureRecognizer(self.longPressRecognizer)
@@ -283,7 +283,7 @@ class HistoryPanel: UIViewController,
         return siteItem
     }
 
-    private func showClearRecentHistory() {
+    func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
@@ -761,8 +761,7 @@ extension HistoryPanel {
         updatePanelState(newState: .history(state: .mainView))
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .deleteHistory)
-        // TODO: Yoana remove notification and handle directly
-        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
+        showClearRecentHistory()
     }
 
     // MARK: - User Interactions

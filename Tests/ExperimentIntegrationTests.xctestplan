@@ -47,6 +47,7 @@
         "NightModeTests",
         "NoImageTests",
         "OnboardingTests",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PocketTest",
@@ -68,6 +69,7 @@
         "TopTabsTestIpad",
         "TopTabsTestIphone",
         "TrackingProtectionTests",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

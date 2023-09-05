@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable {
+class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let closeButtonWidthHeight: CGFloat = 30
         static let topLeadingTrailingSpacing: CGFloat = 18
@@ -24,6 +24,8 @@ class FakespotViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    private let viewModel: FakespotViewModel
+    weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -66,10 +68,15 @@ class FakespotViewController: UIViewController, Themeable {
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
+    private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        viewModel: FakespotViewModel,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -82,6 +89,7 @@ class FakespotViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
 
@@ -94,10 +102,20 @@ class FakespotViewController: UIViewController, Themeable {
             ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
         reliabilityCardView.configure(reliabilityCardViewModel)
 
+        let adjustRatingViewModel = AdjustRatingViewModel(
+            title: .Shopping.AdjustedRatingTitle,
+            description: .Shopping.AdjustedRatingDescription,
+            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
+            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
+            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
+            rating: 3.5
+        )
+        adjustRatingView.configure(adjustRatingViewModel)
+
         let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
                                                             description: .Shopping.ErrorCardDescription,
                                                             actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(viewModel: errorCardViewModel)
+        errorCardView.configure(errorCardViewModel)
 
         let highlightsCardViewModel = HighlightsCardViewModel(
             footerTitle: .Shopping.HighlightsCardFooterText,
@@ -150,11 +168,13 @@ class FakespotViewController: UIViewController, Themeable {
         settingsCardView.applyTheme(theme: theme)
         noAnalysisCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
+        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubviews(headerStackView, scrollView, closeButton)
         contentStackView.addArrangedSubview(reliabilityCardView)
+        contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
@@ -206,6 +226,12 @@ class FakespotViewController: UIViewController, Themeable {
 
     @objc
     private func closeTapped() {
-        dismissVC()
+        delegate?.fakespotControllerDidDismiss()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.fakespotControllerDidDismiss()
     }
 }

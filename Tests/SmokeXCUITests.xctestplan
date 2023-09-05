@@ -127,6 +127,7 @@
         "NightModeTests",
         "NoImageTests",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
@@ -190,6 +191,7 @@
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

@@ -90,6 +90,7 @@
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
@@ -116,6 +117,7 @@
         "TopTabsTestIpad",
         "TopTabsTestIphone",
         "TrackingProtectionTests",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

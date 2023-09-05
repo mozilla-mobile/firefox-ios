@@ -12,7 +12,7 @@ protocol CredentialListViewProtocol: AnyObject {
 
 class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
     fileprivate let cellIdentifier = "cellidentifier"
-    lazy private var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
@@ -24,7 +24,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         return tableView
     }()
 
-    lazy private var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle(.LoginsListSearchCancel, for: .normal)
         button.titleLabel?.font = .navigationButtonFont

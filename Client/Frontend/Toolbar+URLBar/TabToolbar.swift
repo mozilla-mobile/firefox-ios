@@ -30,7 +30,7 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     private let contentView = UIStackView()
 
     // MARK: - Initializers
-    private override init(frame: CGRect) {
+    override private init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()

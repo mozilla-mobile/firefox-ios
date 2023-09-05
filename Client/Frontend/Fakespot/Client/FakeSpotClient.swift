@@ -22,7 +22,7 @@ enum FakespotEnvironment {
         case .staging:
             return URL(string: "https://staging.trustwerty.com/api/v1/fx/analysis")
         case .prod:
-            return nil
+            return URL(string: "https://trustwerty.com/api/v1/fx/analysis")
         }
     }
 
@@ -32,7 +32,7 @@ enum FakespotEnvironment {
         case .staging:
             return URL(string: "https://staging-affiliates.fakespot.io/v1/fx/sp_search")
         case .prod:
-            return nil
+            return URL(string: "https://a.fakespot.com/v1/fx/sp_search")
         }
     }
 
@@ -42,7 +42,7 @@ enum FakespotEnvironment {
         case .staging:
             return URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")
         case .prod:
-            return nil
+            return URL(string: "https://prod.ohttp-gateway.prod.webservices.mozgcp.net/ohttp-configs")
         }
     }
 
@@ -50,9 +50,9 @@ enum FakespotEnvironment {
     var relay: URL? {
         switch self {
         case .staging:
-            return URL(string: "https://mozilla-ohttp-relay-test.edgecompute.app/")
+            return URL(string: "https://mozilla-ohttp-fakespot-dev.fastly-edge.com/")
         case .prod:
-            return nil
+            return URL(string: "https://mozilla-ohttp-fakespot.fastly-edge.com/")
         }
     }
 }

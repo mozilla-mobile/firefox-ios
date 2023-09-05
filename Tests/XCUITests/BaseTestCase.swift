@@ -37,7 +37,6 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
-                           LaunchArguments.TurnOffTabGroupsInUserPreferences,
                            LaunchArguments.DisableAnimations
         ]
 
@@ -45,6 +44,15 @@ class BaseTestCase: XCTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        app.activate()
+    }
+
+    func closeFromAppSwitcherAndRelaunch() {
+        let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
+        let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
+        swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
@@ -235,7 +243,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
+        waitForNoExistence(progressIndicator, timeoutValue: 60.0)
     }
 
     func waitForTabsButton() {

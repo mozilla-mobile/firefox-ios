@@ -124,6 +124,10 @@ public struct PrefsKeys {
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
     public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
 
+    // Shopping Keys
+    public static let Shopping2023EnableAds = "Shopping2023EnableAdsKey"
+    public static let Shopping2023OptIn = "Shopping2023OptInKey"
+
     // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
