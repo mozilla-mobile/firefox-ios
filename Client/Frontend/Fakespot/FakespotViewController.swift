@@ -67,6 +67,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
     private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
@@ -129,6 +130,8 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
             recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
         settingsCardView.configure(settingsCardViewModel)
+
+        noAnalysisCardView.configure(NoAnalysisCardViewModel())
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -155,6 +158,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
+        noAnalysisCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
         adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
@@ -166,6 +170,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
+        contentStackView.addArrangedSubview(noAnalysisCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
         [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)

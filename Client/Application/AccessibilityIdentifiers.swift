@@ -151,6 +151,13 @@ public struct AccessibilityIdentifiers {
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
             static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
         }
+
+        struct NoAnalysisCard {
+            static let card = "Shopping.NoAnalysisCard.Card"
+            static let headlineTitle = "Shopping.NoAnalysisCard.HeadlineTitle"
+            static let bodyTitle = "Shopping.NoAnalysisCard.BodyTitle"
+            static let analyzerButtonTitle = "Shopping.NoAnalysisCard.AnalyzerButtonTitle"
+        }
     }
 
     struct TabTray {

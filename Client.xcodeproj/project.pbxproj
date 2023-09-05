@@ -1212,6 +1212,7 @@
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
+		DF1E6AAB2A976FE7000D4854 /* NoAnalysisCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */; };
 		DF5D47522A9381C700D6AE74 /* FakespotSettingsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */; };
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
 		DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */; };
@@ -6393,6 +6394,7 @@
 		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoAnalysisCardView.swift; sourceTree = "<group>"; };
 		DF46B9A32755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Today.strings"; sourceTree = "<group>"; };
 		DF46B9A42755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
 		DF46B9A52755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
@@ -9893,6 +9895,7 @@
 				E17BE4C52A94D70800C5124E /* ReliabilityCardView.swift */,
 				E16AD22B2A8A7AE800F0AA58 /* HighlightsCardView.swift */,
 				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
+				DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -12981,6 +12984,7 @@
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
+				DF1E6AAB2A976FE7000D4854 /* NoAnalysisCardView.swift in Sources */,
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
