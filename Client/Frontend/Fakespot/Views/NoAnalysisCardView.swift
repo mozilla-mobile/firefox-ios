@@ -8,13 +8,13 @@ import Shared
 import ComponentLibrary
 
 struct NoAnalysisCardViewModel {
-    let cardA11yId: String
-    let headlineLabelText: String
-    let headlineLabelA11yId: String
-    let bodyLabelText: String
-    let bodyLabelA11yId: String
-    let analyzerButtonText: String
-    let analyzerButtonA11yId: String
+    let cardA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.card
+    let headlineLabelText: String = .Shopping.NoAnalysisCardHeadlineLabelTitle
+    let headlineLabelA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.headlineTitle
+    let bodyLabelText: String = .Shopping.NoAnalysisCardBodyLabelTitle
+    let bodyLabelA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle
+    let analyzerButtonText: String = .Shopping.NoAnalysisCardAnalyzerButtonTitle
+    let analyzerButtonA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.analyzerButtonTitle
     var onTapStartAnalysis: (() -> Void)?
 }
 

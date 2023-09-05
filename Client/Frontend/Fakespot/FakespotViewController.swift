@@ -131,16 +131,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
         settingsCardView.configure(settingsCardViewModel)
 
-        let noAnalysisCardViewModel = NoAnalysisCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.card,
-            headlineLabelText: .Shopping.NoAnalysisCardHeadlineLabelTitle,
-            headlineLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.headlineTitle,
-            bodyLabelText: .Shopping.NoAnalysisCardBodyLabelTitle,
-            bodyLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle,
-            analyzerButtonText: .Shopping.NoAnalysisCardAnalyzerButtonTitle,
-            analyzerButtonA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.analyzerButtonTitle)
-
-        noAnalysisCardView.configure(noAnalysisCardViewModel)
+        noAnalysisCardView.configure(NoAnalysisCardViewModel())
     }
 
     override func viewWillAppear(_ animated: Bool) {
