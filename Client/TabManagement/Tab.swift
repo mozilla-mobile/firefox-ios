@@ -660,10 +660,6 @@ class Tab: NSObject {
     @objc
     func reloadPage() {
         reload()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.webView?.scrollView.refreshControl?.endRefreshing()
-        }
     }
 
     @objc
