@@ -6,7 +6,6 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
-import Combine
 
 class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
@@ -86,8 +85,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         fatalError("init(coder:) has not been implemented")
     }
 
-    var cancellable: AnyCancellable?
-
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +93,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         listenForThemeChange(view)
 
         reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
-        errorCardView.configure(viewModel: viewModel.errorCardViewModel)
+        errorCardView.configure(viewModel.errorCardViewModel)
         highlightsCardView.configure(viewModel.highlightsCardViewModel)
         settingsCardView.configure(viewModel.settingsCardViewModel)
         adjustRatingView.configure(viewModel.adjustRatingViewModel)
