@@ -52,6 +52,8 @@ class FakespotViewModel {
         rating: 3.5
     )
 
+    let noAnalysisCardViewModel = NoAnalysisCardViewModel()
+
     init(shoppingProduct: ShoppingProduct) {
         self.shoppingProduct = shoppingProduct
     }
