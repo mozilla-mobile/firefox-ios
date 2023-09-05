@@ -84,6 +84,10 @@ class AppLaunchUtil {
         logger.log("App version \(AppInfo.appVersion), Build number \(AppInfo.buildNumber)",
                    level: .debug,
                    category: .setup)
+
+        logger.log("Prefs for migration is \(String(describing: profile.prefs.boolForKey(PrefsKeys.TabMigrationKey)))",
+                   level: .debug,
+                   category: .tabs)
     }
 
     func setUpPostLaunchDependencies() {
