@@ -7,25 +7,12 @@ import Common
 import ComponentLibrary
 
 struct FakespotMessageCardViewModel {
-    var title: String
-    var description: String?
-    var linkText: String?
-    var primaryActionText: String?
-
-    var a11yCardIdentifier: String
-    var a11yTitleIdentifier: String
-    var a11yDescriptionIdentifier: String?
-    var a11yPrimaryActionIdentifier: String?
-    var a11yLinkActionIdentifier: String?
-}
-
-final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     enum CardType: String, CaseIterable, Identifiable {
         case confirmation
 
         var id: String { self.rawValue }
 
-        func primaryButtonText(theme: Theme) -> UIColor {
+        func primaryButtonTextColor(theme: Theme) -> UIColor {
             switch self {
             case .confirmation: return theme.colors.textPrimary
             }
@@ -50,6 +37,20 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
     }
 
+    var title: String
+    var description: String?
+    var linkText: String?
+    var primaryActionText: String?
+    var type: CardType = .confirmation
+
+    var a11yCardIdentifier: String
+    var a11yTitleIdentifier: String
+    var a11yDescriptionIdentifier: String?
+    var a11yPrimaryActionIdentifier: String?
+    var a11yLinkActionIdentifier: String?
+}
+
+final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
@@ -140,7 +141,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     private var iconImageHeightConstraint: NSLayoutConstraint?
     private var viewModel: FakespotMessageCardViewModel?
-    private var type: CardType = .confirmation
+    private var type: FakespotMessageCardViewModel.CardType = .confirmation
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -155,12 +156,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ viewModel: FakespotMessageCardViewModel, type: CardType = .confirmation) {
+    func configure(_ viewModel: FakespotMessageCardViewModel) {
         self.viewModel = viewModel
-        self.type = type
+        self.type = viewModel.type
 
         titleLabel.text = viewModel.title
-        iconImageView.image = UIImage(named: type.iconImageName)
+        iconImageView.image = UIImage(named: viewModel.type.iconImageName)
 
         if let title = viewModel.primaryActionText {
             primaryButton.setTitle(title, for: .normal)
@@ -188,7 +189,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         let cardModel = CardViewModel(view: contentView,
                                       a11yId: viewModel.a11yCardIdentifier,
                                       backgroundColor: { theme in
-            return type.cardBackground(theme: theme)
+            return viewModel.type.cardBackground(theme: theme)
         })
         cardView.configure(cardModel)
     }
@@ -254,7 +255,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         iconImageView.tintColor = theme.colors.textPrimary
 
         linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        primaryButton.setTitleColor(type.primaryButtonText(theme: theme), for: .normal)
+        primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
         primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
         cardView.applyTheme(theme: theme)
     }
