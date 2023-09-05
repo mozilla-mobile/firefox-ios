@@ -825,11 +825,11 @@ private extension BrowserViewController {
     // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
     // leave a 'Back to Safari' button in the status bar, which we do not want.
     func isStoreURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "itms-apps" {
-            if url.host == "itunes.apple.com" {
-                return true
-            }
+        guard ["http", "http", "itms-apps", "itms-appss"].contains(url.scheme) else { return false }
+        if url.host == "itunes.apple.com" || url.host == "apps.apple.com" {
+            return true
         }
+        
         return false
     }
 
