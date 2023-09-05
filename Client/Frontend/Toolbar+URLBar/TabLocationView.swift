@@ -106,6 +106,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.clipsToBounds = false
         shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
+        shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
     }
 
     private lazy var shoppingCartButton: UIButton = .build { button in
@@ -115,6 +116,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         button.isHidden = true
         button.setImage(UIImage(systemName: "cart.fill"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
+        button.accessibilityLabel = .TabLocationShoppingAccessibilityLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shoppingButton
     }
 
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
@@ -306,14 +309,16 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
 
         switch blockerStatus {
-        case .blocking, .noBlockedURLs:
+        case .blocking, .noBlockedURLs, .disabled:
             trackingProtectionButton.setImage(lockImage, for: .normal)
+            trackingProtectionButton.accessibilityLabel = hasSecureContent ?
+                .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
             if let smallDotImage = UIImage(systemName: ImageIdentifiers.circleFill)?.withTintColor(theme.colors.iconAccentBlue) {
                 trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                trackingProtectionButton.accessibilityLabel = hasSecureContent ?
+                    .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
-        case .disabled:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
         }
     }
 }

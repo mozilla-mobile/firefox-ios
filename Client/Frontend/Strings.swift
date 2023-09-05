@@ -4268,6 +4268,36 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Share.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Share this page",
+        comment: "Accessibility label for the share button in url bar")
+    public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Shopping.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Review checker",
+        comment: "Accessibility label for the shopping button in url bar")
+    public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
 }
 
 // MARK: - TabPeekViewController
