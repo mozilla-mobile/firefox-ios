@@ -24,10 +24,7 @@ public protocol ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerLightGrey30: UIColor { get }
     var layerSepia: UIColor { get }
-    var layerError: UIColor { get }
-    var layerWarning: UIColor { get }
     var layerConfirmation: UIColor { get }
-    var layerInfo: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
@@ -38,9 +35,8 @@ public protocol ThemeColourPalette {
     var formKnob: UIColor { get }
     var indicatorActive: UIColor { get }
     var indicatorInactive: UIColor { get }
-    var actionError: UIColor { get }
-    var actionWarning: UIColor { get }
     var actionConfirmation: UIColor { get }
+
 
     // MARK: - Text
     var textPrimary: UIColor { get }
