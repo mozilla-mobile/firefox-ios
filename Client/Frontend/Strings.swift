@@ -3669,13 +3669,13 @@ extension String {
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
             tableName: "Shopping",
-            value: "You’re about 60 seconds away from knowing how trustworthy this product’s reviews are.",
+            value: "Launch the Fakespot by Mozilla analyzer and you’ll know in about 60 seconds whether this product’s reviews are reliable.",
             comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
-        public static let NoAnalysisCardFooterLabelTitle = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.FooterLabel.Title.v118
+        public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
             tableName: "Shopping",
-            value: "Start analysis on Fakespot.com",
-            comment: "Text for the footer action label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+            value: "Launch analyzer on Fakespot.com",
+            comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
     }
 }
 

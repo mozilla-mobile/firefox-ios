@@ -7,31 +7,15 @@ import Common
 import Shared
 import ComponentLibrary
 
-class NoAnalysisCardViewModel {
+struct NoAnalysisCardViewModel {
     let cardA11yId: String
     let headlineLabelText: String
     let headlineLabelA11yId: String
     let bodyLabelText: String
     let bodyLabelA11yId: String
-    let footerLabelText: String
-    let footerLabelA11yId: String
+    let analyzerButtonText: String
+    let analyzerButtonA11yId: String
     var onTapStartAnalysis: (() -> Void)?
-
-    init(cardA11yId: String,
-         headlineLabelText: String,
-         headlineLabelA11yId: String,
-         bodyLabelText: String,
-         bodyLabelA11yId: String,
-         footerLabelText: String,
-         footerLabelA11yId: String) {
-        self.cardA11yId = cardA11yId
-        self.headlineLabelText = headlineLabelText
-        self.headlineLabelA11yId = headlineLabelA11yId
-        self.bodyLabelText = bodyLabelText
-        self.bodyLabelA11yId = bodyLabelA11yId
-        self.footerLabelText = footerLabelText
-        self.footerLabelA11yId = footerLabelA11yId
-    }
 }
 
 final class NoAnalysisCardView: UIView, ThemeApplicable {
@@ -39,14 +23,15 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
         static let noAnalysisImageViewSize: CGFloat = 104
         static let headlineLabelFontSize: CGFloat = 15
         static let bodyLabelFontSize: CGFloat = 13
-        static let footerLabellFontSize: CGFloat = 13
+        static let analyzerButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 8
-        static let contentStackViewPadding: CGFloat = 16
+        static let contentStackViewPadding: CGFloat = 8
     }
 
     private var viewModel: NoAnalysisCardViewModel?
 
     private lazy var cardContainer: ShadowCardView = .build()
+    private lazy var mainView: UIView = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -73,12 +58,14 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
                                                             size: UX.bodyLabelFontSize)
     }
 
-    private let footerLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.isUserInteractionEnabled = true
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.footerLabellFontSize)
+    private lazy var analyzerButton: ResizableButton = .build { button in
+        button.contentHorizontalAlignment = .leading
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.buttonEdgeSpacing = 0
+        button.titleLabel?.numberOfLines = 0
+        button.addTarget(self, action: #selector(self.didTapStartAnalysis), for: .touchUpInside)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                                         size: UX.analyzerButtonFontSize)
     }
 
     override init(frame: CGRect) {
@@ -91,15 +78,12 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(didTapStartAnalysis))
-        footerLabel.addGestureRecognizer(tapGesture)
-        addSubview(cardContainer)
-        addSubview(contentStackView)
-        [noAnalysisImageView,
-         headlineLabel,
-         bodyLabel,
-         footerLabel].forEach(contentStackView.addArrangedSubview)
+        addSubviews(cardContainer, mainView)
+        mainView.addSubview(contentStackView)
+        contentStackView.addArrangedSubview(noAnalysisImageView)
+        contentStackView.addArrangedSubview(headlineLabel)
+        contentStackView.addArrangedSubview(bodyLabel)
+        contentStackView.addArrangedSubview(analyzerButton)
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -107,13 +91,13 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
             cardContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
             cardContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            contentStackView.topAnchor.constraint(equalTo: topAnchor,
+            contentStackView.topAnchor.constraint(equalTo: mainView.topAnchor,
                                                   constant: UX.contentStackViewPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor,
+            contentStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor,
                                                      constant: -UX.contentStackViewPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor,
+            contentStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor,
                                                       constant: UX.contentStackViewPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor,
+            contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
                                                        constant: -UX.contentStackViewPadding),
 
             noAnalysisImageView.widthAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize),
@@ -135,10 +119,10 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
         bodyLabel.text = viewModel.bodyLabelText
         bodyLabel.accessibilityIdentifier = viewModel.bodyLabelA11yId
 
-        footerLabel.text = viewModel.footerLabelText
-        footerLabel.accessibilityIdentifier = viewModel.footerLabelA11yId
+        analyzerButton.setTitle(viewModel.analyzerButtonText, for: .normal)
+        analyzerButton.accessibilityIdentifier = viewModel.analyzerButtonA11yId
 
-        let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
+        let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
     }
 
@@ -148,6 +132,6 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
         let colors = theme.colors
         headlineLabel.textColor = colors.textPrimary
         bodyLabel.textColor = colors.textPrimary
-        footerLabel.textColor = colors.textAccent
+        analyzerButton.setTitleColor(colors.textAccent, for: .normal)
     }
 }

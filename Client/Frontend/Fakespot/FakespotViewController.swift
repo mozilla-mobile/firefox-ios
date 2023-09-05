@@ -137,8 +137,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             headlineLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.headlineTitle,
             bodyLabelText: .Shopping.NoAnalysisCardBodyLabelTitle,
             bodyLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle,
-            footerLabelText: .Shopping.NoAnalysisCardFooterLabelTitle,
-            footerLabelA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.footerTitle)
+            analyzerButtonText: .Shopping.NoAnalysisCardAnalyzerButtonTitle,
+            analyzerButtonA11yId: AccessibilityIdentifiers.Shopping.NoAnalysisCard.analyzerButtonTitle)
+
         noAnalysisCardView.configure(noAnalysisCardViewModel)
     }
 

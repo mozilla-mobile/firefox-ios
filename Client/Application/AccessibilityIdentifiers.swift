@@ -156,7 +156,7 @@ public struct AccessibilityIdentifiers {
             static let card = "Shopping.NoAnalysisCard.Card"
             static let headlineTitle = "Shopping.NoAnalysisCard.HeadlineTitle"
             static let bodyTitle = "Shopping.NoAnalysisCard.BodyTitle"
-            static let footerTitle = "Shopping.NoAnalysisCard.FooterTitle"
+            static let analyzerButtonTitle = "Shopping.NoAnalysisCard.AnalyzerButtonTitle"
         }
     }
 
