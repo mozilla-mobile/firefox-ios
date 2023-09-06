@@ -63,6 +63,9 @@ final class NimbusFeatureFlagLayer {
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
 
+        case .tabTrayRefactor:
+            return checkTabTrayRefactorFeature(from: nimbus)
+
         case .wallpapers,
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
@@ -192,6 +195,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxIntegrationFeature.value()
+        return config.enabled
+    }
+
+    private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayRefactorFeature.value()
         return config.enabled
     }
 

@@ -125,6 +125,9 @@
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
+		21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */; };
+		21E77E502AA8BAEC00FABA10 /* TabTrayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4F2AA8BAEC00FABA10 /* TabTrayModel.swift */; };
+		21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
 		2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */; };
@@ -2151,6 +2154,9 @@
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
+		21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewController.swift; sourceTree = "<group>"; };
+		21E77E4F2AA8BAEC00FABA10 /* TabTrayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayModel.swift; sourceTree = "<group>"; };
+		21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayFlagManager.swift; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
 		220A4CC8B2685EEA3146A967 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -7301,6 +7307,9 @@
 				212429F22AA27204002D57A8 /* Legacy */,
 				216E9A3829D2119300ABE69B /* InactiveTabs */,
 				21357F2B293FDB07004BF9FD /* RemoteTabs */,
+				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
+				21E77E4F2AA8BAEC00FABA10 /* TabTrayModel.swift */,
+				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -12427,6 +12436,7 @@
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				8AB8573027D94CAD0075C173 /* HomepageViewModelProtocol.swift in Sources */,
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
+				21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
@@ -12576,6 +12586,7 @@
 				21618A8C2A438A0900A5189E /* ActiveScreenAction.swift in Sources */,
 				E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */,
 				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
+				21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* LegacyTabCell.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
@@ -12935,6 +12946,7 @@
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
 				8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
+				21E77E502AA8BAEC00FABA10 /* TabTrayModel.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,
 				E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */,
 				C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */,
