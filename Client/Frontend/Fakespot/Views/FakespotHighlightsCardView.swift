@@ -57,7 +57,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         static let contentHorizontalSpace: CGFloat = 8
         static let contentTopSpace: CGFloat = 8
         static let highlightSpacing: CGFloat = 16
-        static let highlightStackBottomSpace: CGFloat = 24
+        static let highlightStackBottomSpace: CGFloat = 16
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
