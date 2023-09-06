@@ -14,6 +14,14 @@ class FakespotViewModel {
     @Published private(set) var state: ViewState<ProductAnalysisData?> = .loading
     let shoppingProduct: ShoppingProduct
 
+    let confirmationCardViewModel = FakespotMessageCardViewModel(
+        title: .Shopping.ConfirmationCardTitle,
+        primaryActionText: .Shopping.ConfirmationCardButtonText,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.title,
+        a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
+    )
+
     let reliabilityCardViewModel = ReliabilityCardViewModel(
         cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
         title: .Shopping.ReliabilityCardTitle,
