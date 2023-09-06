@@ -16,7 +16,8 @@ class BrowserCoordinator: BaseCoordinator,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
-                          ParentCoordinatorDelegate {
+                          ParentCoordinatorDelegate,
+                          TabManagerDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -53,6 +54,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
+        tabManager.addDelegate(self)
     }
 
     func start(with launchType: LaunchType?) {
@@ -161,8 +163,12 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
-        guard browserIsReady else {
-            logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
+        guard browserIsReady, !tabManager.isRestoringTabs else {
+            let readyMessage = "browser is ready? \(browserIsReady)"
+            let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
+            logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
+                       level: .info,
+                       category: .coordinator)
             return false
         }
 
@@ -528,5 +534,14 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
+    }
+
+    // MARK: - TabManagerDelegate
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // Once tab restore is made, if there's any saved route we make sure to call it
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
     }
 }
