@@ -359,6 +359,7 @@ extension TelemetryWrapper {
         case cancel = "cancel"
         case change = "change"
         case close = "close"
+        case displayed = "displayed"
         case closeAll = "close-all"
         case delete = "delete"
         case deleteAll = "deleteAll"
@@ -1021,6 +1022,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .close, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceClosed.record()
+        case (.action, .displayed, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceDisplayed.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
