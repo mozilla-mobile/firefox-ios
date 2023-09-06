@@ -764,6 +764,7 @@
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
+		8C0B633A2AA8CE7900A3A193 /* SwitchFakespotProduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B63392AA8CE7900A3A193 /* SwitchFakespotProduction.swift */; };
 		8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3879842A965210003966B0 /* FakespotViewModel.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6DA7D12A6FE78F00DE264F /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
@@ -5017,6 +5018,7 @@
 		8BF7415AADE68847B78B376B /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8BFA4413BB71963DB0E69F82 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8BFD47109E07F897D604AEBE /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		8C0B63392AA8CE7900A3A193 /* SwitchFakespotProduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchFakespotProduction.swift; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
 		8C3879842A965210003966B0 /* FakespotViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModel.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
@@ -8222,6 +8224,7 @@
 				8A3EF8102A2FD06B00796E3A /* ToggleHistoryGroups.swift */,
 				8A3EF80E2A2FD05D00796E3A /* ToggleInactiveTabs.swift */,
 				8A3EF80A2A2FD03C00796E3A /* TogglePullToRefresh.swift */,
+				8C0B63392AA8CE7900A3A193 /* SwitchFakespotProduction.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -12750,6 +12753,7 @@
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
+				8C0B633A2AA8CE7900A3A193 /* SwitchFakespotProduction.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,

@@ -15,6 +15,7 @@ enum CoreFeatureFlagID {
     case useMockData
     case useStagingContileAPI
     case useStagingSponsoredPocketStoriesAPI
+    case useStagingFakespotAPI
 }
 
 struct CoreFlaggableFeature {
