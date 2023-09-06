@@ -92,9 +92,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled || CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-            menuHelper.navigationHandler = navigationHandler
-        }
+        menuHelper.navigationHandler = navigationHandler
 
         updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
@@ -242,27 +240,15 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showCustomizeHomePage() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationHandler?.show(settings: .homePage)
-        } else {
-            showSettingsWithDeeplink(to: .customizeHomepage)
-        }
+        navigationHandler?.show(settings: .homePage)
     }
 
     func showWallpaperSettings() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationHandler?.show(settings: .wallpaper)
-        } else {
-            showSettingsWithDeeplink(to: .wallpaper)
-        }
+        navigationHandler?.show(settings: .wallpaper)
     }
 
     func showCreditCardSettings() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationHandler?.show(settings: .creditCard)
-        } else {
-            showSettingsWithDeeplink(to: .creditCard)
-        }
+        navigationHandler?.show(settings: .creditCard)
     }
 
     func showZoomPage(tab: Tab) {

@@ -43,11 +43,6 @@ class OpenWithSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedMailApp()
-        } else {
-            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedMailApp()
     }
 }

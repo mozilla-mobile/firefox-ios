@@ -677,7 +677,7 @@ private extension HomepageViewController {
     }
 
     func openCustomizeHomeSettings() {
-        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .homePage)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .firefoxHomepage,
@@ -685,7 +685,7 @@ private extension HomepageViewController {
     }
 
     func openTabsSettings() {
-        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .tabs)
     }
 
     func getPopoverSourceRect(sourceView: UIView?) -> CGRect {
@@ -704,7 +704,7 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
+    func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 

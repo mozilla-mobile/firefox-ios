@@ -18,10 +18,6 @@ class AppStoreReviewSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedRateApp()
-            return
-        }
-        RatingPromptManager.goToAppStoreReview()
+        settingsDelegate?.pressedRateApp()
     }
 }

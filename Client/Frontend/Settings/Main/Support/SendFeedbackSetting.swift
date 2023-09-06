@@ -23,11 +23,6 @@ class SendFeedbackSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToOpen(url: url, withTitle: title)
-            return
-        }
-
-        setUpAndPushSettingsContentViewController(navigationController, url)
+        settingsDelegate?.askedToOpen(url: url, withTitle: title)
     }
 }

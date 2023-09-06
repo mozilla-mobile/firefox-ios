@@ -10,7 +10,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: LegacyTabTrayViewModel.Segment?)
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
+    func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
 }
 
 extension HomePanelDelegate {
