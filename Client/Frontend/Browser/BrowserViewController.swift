@@ -72,11 +72,12 @@ class BrowserViewController: UIViewController,
     var copyAddressAction: AccessibleAction!
 
     weak var gridTabTrayController: LegacyGridTabViewController?
-    var tabTrayViewController: LegacyTabTrayViewController?
+    var tabTrayViewController: TabTrayController?
 
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
+    lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
