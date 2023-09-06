@@ -50,6 +50,9 @@ class DatabaseFixtureTest: BaseTestCase {
        waitForExistence(app.tables["History List"], timeout: TIMEOUT_LONG)
        // History list has one cell that are for recently closed
        // the actual max number is 101
+       let loaded = NSPredicate(format: "count == 101")
+       expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
+       waitForExpectations(timeout: TIMEOUT, handler: nil)
 
        let historyList = app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells.count
        XCTAssertEqual(historyList, 101, "There should be 101 entries in the history list")
