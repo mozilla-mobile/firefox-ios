@@ -68,6 +68,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         static let iconMaxSize: CGFloat = 58
         static let titleFontSize: CGFloat = 13
         static let descriptionFontSize: CGFloat = 13
+        static let buttonSize: CGFloat = 44
     }
 
     private lazy var cardView: CardView = .build()
@@ -236,7 +237,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                                                          constant: -UX.contentHorizontalSpacing),
             containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                        constant: -UX.contentVerticalSpacing),
-            primaryButton.heightAnchor.constraint(equalToConstant: 44)
+            primaryButton.heightAnchor.constraint(lessThanOrEqualToConstant: UX.buttonSize)
         ])
     }
 
