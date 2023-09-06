@@ -35,6 +35,9 @@ class DatabaseFixtureTest: BaseTestCase {
        waitForTabsButton()
        navigator.goto(LibraryPanel_Bookmarks)
        waitForExistence(app.tables["Bookmarks List"], timeout: TIMEOUT_LONG)
+       let loaded = NSPredicate(format: "count == 1001")
+       expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+       waitForExpectations(timeout: TIMEOUT_LONG, handler: nil)
 
        let bookmarksList = app.tables["Bookmarks List"].cells.count
        XCTAssertEqual(bookmarksList, 1001, "There should be an entry in the bookmarks list")
