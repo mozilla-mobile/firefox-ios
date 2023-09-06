@@ -6,8 +6,6 @@ import UIKit
 import Shared
 
 class DevicePasscodeRequiredViewController: SettingsViewController {
-    private var shownFromAppMenu = false
-
     private var warningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,22 +25,12 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         return button
     }()
 
-    init(shownFromAppMenu: Bool = false) {
-        super.init()
-        self.shownFromAppMenu = shownFromAppMenu
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
-        }
-
         self.title = .Settings.Passwords.Title
 
         self.view.addSubviews(warningLabel, learnMoreButton)
@@ -56,11 +44,6 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
             learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             learnMoreButton.topAnchor.constraint(equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20)
         ])
-    }
-
-    @objc
-    func doneButtonTapped(_ sender: UIButton) {
-        dismiss(animated: true)
     }
 
     @objc
