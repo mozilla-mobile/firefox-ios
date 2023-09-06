@@ -9,16 +9,16 @@ import Shared
 
 class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
-        static let closeButtonWidthHeight: CGFloat = 30
-        static let topLeadingTrailingSpacing: CGFloat = 18
-        static let logoSize: CGFloat = 36
+        static let headerTopSpacing: CGFloat = 22
+        static let headerHorizontalSpacing: CGFloat = 18
+        static let titleCloseSpacing: CGFloat = 16
         static let titleLabelFontSize: CGFloat = 17
-        static let headerSpacing = 8.0
-        static let headerBottomMargin = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-        static let topPadding: CGFloat = 16
-        static let bottomPadding: CGFloat = 40
-        static let horizontalPadding: CGFloat = 16
-        static let stackSpacing: CGFloat = 16
+        static let closeButtonWidthHeight: CGFloat = 30
+        static let scrollViewTopSpacing: CGFloat = 12
+        static let scrollContentTopPadding: CGFloat = 16
+        static let scrollContentBottomPadding: CGFloat = 40
+        static let scrollContentHorizontalPadding: CGFloat = 16
+        static let scrollContentStackSpacing: CGFloat = 16
     }
 
     var notificationCenter: NotificationProtocol
@@ -31,20 +31,10 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.spacing = UX.stackSpacing
+        stackView.spacing = UX.scrollContentStackSpacing
     }
 
-    private lazy var headerStackView: UIStackView = .build { stackView in
-        stackView.alignment = .center
-        stackView.spacing = UX.headerSpacing
-        stackView.layoutMargins = UX.headerBottomMargin
-        stackView.isLayoutMarginsRelativeArrangement = true
-    }
-
-    private lazy var logoImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.homeHeaderLogoBall)
-        imageView.contentMode = .scaleAspectFit
-    }
+    private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
         label.text = .Shopping.SheetHeaderTitle
@@ -68,6 +58,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private lazy var highlightsCardView: HighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
+    private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
     private lazy var adjustRatingView: AdjustRatingView = .build()
 
     // MARK: - Initializers
@@ -93,53 +84,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         setupView()
         listenForThemeChange(view)
 
-        let reliabilityCardViewModel = ReliabilityCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-            title: .Shopping.ReliabilityCardTitle,
-            titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-            rating: .gradeA,
-            ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-            ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription)
-        reliabilityCardView.configure(reliabilityCardViewModel)
-
-        let adjustRatingViewModel = AdjustRatingViewModel(
-            title: .Shopping.AdjustedRatingTitle,
-            description: .Shopping.AdjustedRatingDescription,
-            titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
-            cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
-            descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
-            rating: 3.5
-        )
-        adjustRatingView.configure(adjustRatingViewModel)
-
-        let confirmationCardViewModel = FakespotMessageCardViewModel(
-            title: .Shopping.ConfirmationCardTitle,
-            primaryActionText: .Shopping.ConfirmationCardButtonText,
-            a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.card,
-            a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.title,
-            a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
-        )
-
-        confirmationCardView.configure(confirmationCardViewModel)
-
-        let errorCardViewModel = FakespotErrorCardViewModel(title: .Shopping.ErrorCardTitle,
-                                                            description: .Shopping.ErrorCardDescription,
-                                                            actionTitle: .Shopping.ErrorCardButtonText)
-        errorCardView.configure(errorCardViewModel)
-
-        let highlightsCardViewModel = HighlightsCardViewModel(
-            footerTitle: .Shopping.HighlightsCardFooterText,
-            footerActionTitle: .Shopping.HighlightsCardFooterButtonText)
-        highlightsCardView.configure(highlightsCardViewModel)
-
-        let settingsCardViewModel = FakespotSettingsCardViewModel(
-            cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
-            showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
-            showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
-            turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-            turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
-            recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch)
-        settingsCardView.configure(settingsCardViewModel)
+        confirmationCardView.configure(viewModel.confirmationCardViewModel)
+        reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
+        errorCardView.configure(viewModel.errorCardViewModel)
+        highlightsCardView.configure(viewModel.highlightsCardViewModel)
+        settingsCardView.configure(viewModel.settingsCardViewModel)
+        adjustRatingView.configure(viewModel.adjustRatingViewModel)
+        noAnalysisCardView.configure(viewModel.noAnalysisCardViewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -147,6 +98,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
         applyTheme()
         loadingView.animate()
+        Task {
+            await viewModel.fetchData()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -167,55 +121,63 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
+        noAnalysisCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
         adjustRatingView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
-        view.addSubviews(headerStackView, scrollView, closeButton)
+        headerView.addSubviews(titleLabel, closeButton)
+        view.addSubviews(headerView, scrollView)
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
         contentStackView.addArrangedSubview(confirmationCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
+        contentStackView.addArrangedSubview(noAnalysisCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
-        [logoImageView, titleLabel].forEach(headerStackView.addArrangedSubview)
+
+        let titleCenterYConstraint = titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor)
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
-                                                  constant: UX.topPadding),
+                                                  constant: UX.scrollContentTopPadding),
             contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
-                                                      constant: UX.horizontalPadding),
+                                                      constant: UX.scrollContentHorizontalPadding),
             contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-                                                     constant: -UX.bottomPadding),
+                                                     constant: -UX.scrollContentBottomPadding),
             contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
-                                                       constant: -UX.horizontalPadding),
+                                                       constant: -UX.scrollContentHorizontalPadding),
             contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-                                                    constant: -UX.horizontalPadding * 2),
+                                                    constant: -UX.scrollContentHorizontalPadding * 2),
 
-            scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
+            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.scrollViewTopSpacing),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-            headerStackView.topAnchor.constraint(equalTo: view.topAnchor,
-                                                 constant: UX.topLeadingTrailingSpacing),
-            headerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                                                     constant: UX.topLeadingTrailingSpacing),
-            headerStackView.trailingAnchor.constraint(equalTo: closeButton.safeAreaLayoutGuide.leadingAnchor),
+            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerTopSpacing),
+            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                constant: UX.headerHorizontalSpacing),
+            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                                 constant: -UX.headerHorizontalSpacing),
 
-            logoImageView.widthAnchor.constraint(equalToConstant: UX.logoSize),
-            logoImageView.heightAnchor.constraint(equalToConstant: UX.logoSize),
+            titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.titleCloseSpacing),
+            titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            titleCenterYConstraint,
 
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor,
-                                             constant: UX.topLeadingTrailingSpacing),
-            closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -UX.topLeadingTrailingSpacing),
+            closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
+            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight)
         ])
+
+        titleCenterYConstraint.priority(.defaultLow)
     }
 
     private func recordTelemetry() {

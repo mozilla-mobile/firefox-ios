@@ -18,6 +18,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
+    let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
@@ -823,7 +824,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.browserHasLoaded()
 
-        subject.showFakespotFlow()
+        subject.showFakespotFlow(productURL: exampleProduct)
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
         fakespotCoordinator.fakespotControllerDidDismiss()
 
@@ -833,7 +834,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testTappingShopping_startsFakespotCoordinator() {
         let subject = createSubject()
-        subject.showFakespotFlow()
+        subject.showFakespotFlow(productURL: exampleProduct)
 
         XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)

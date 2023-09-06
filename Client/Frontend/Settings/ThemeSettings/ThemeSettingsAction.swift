@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 
 enum ThemeSettingsAction: Action {
@@ -9,7 +10,7 @@ enum ThemeSettingsAction: Action {
     case themeSettingsDidAppear
     case toggleUseSystemAppearance(Bool)
     case enableAutomaticBrightness(Bool)
-    case switchManualTheme(BuiltinThemeName)
+    case switchManualTheme(ThemeType)
     case updateUserBrightness(Float)
     case receivedSystemBrightnessChange
 
@@ -17,7 +18,7 @@ enum ThemeSettingsAction: Action {
     case receivedThemeManagerValues(ThemeSettingsState)
     case systemThemeChanged(Bool)
     case automaticBrightnessChanged(Bool)
-    case manualThemeChanged(BuiltinThemeName)
+    case manualThemeChanged(ThemeType)
     case userBrightnessChanged(Float)
     case systemBrightnessChanged(Float)
 }

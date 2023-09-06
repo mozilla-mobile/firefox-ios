@@ -9,6 +9,7 @@ import WebKit
 
 final class FakespotCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
@@ -32,7 +33,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     func testFakespotStarts_presentsFakespotController() throws {
         let subject = createSubject()
 
-        subject.start()
+        subject.start(productURL: exampleProduct)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is FakespotViewController)
@@ -41,7 +42,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     func testFakespotCoordinatorDelegate_didDidDismiss_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.start()
+        subject.start(productURL: exampleProduct)
         subject.fakespotControllerDidDismiss()
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
