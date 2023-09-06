@@ -5,7 +5,7 @@
 import Shared
 import UIKit
 
-extension GridTabViewController {
+extension LegacyGridTabViewController {
     override var keyCommands: [UIKeyCommand]? {
         let toggleText: String = tabDisplayManager.isPrivate ? .KeyboardShortcuts.NormalBrowsingMode: .KeyboardShortcuts.PrivateBrowsingMode
         let commands = [

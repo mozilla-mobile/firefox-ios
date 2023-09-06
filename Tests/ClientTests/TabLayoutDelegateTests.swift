@@ -41,8 +41,8 @@ class TabLayoutDelegateTests: XCTestCase {
 
     func testTabCellDeinit() {
         let manager = createTabDisplayManager()
-        let subject = TabLayoutDelegate(tabDisplayManager: manager,
-                                        traitCollection: UITraitCollection())
+        let subject = LegacyTabLayoutDelegate(tabDisplayManager: manager,
+                                              traitCollection: UITraitCollection())
         subject.tabSelectionDelegate = tabSelectionDelegate
         subject.tabPeekDelegate = tabPeekDelegate
         trackForMemoryLeaks(subject)
@@ -50,15 +50,15 @@ class TabLayoutDelegateTests: XCTestCase {
 
     // MARK: - Helper
 
-    func createTabDisplayManager() -> TabDisplayManager {
-        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                                  tabManager: manager,
-                                                  tabDisplayer: delegate,
-                                                  reuseID: TopTabCell.cellIdentifier,
-                                                  tabDisplayType: .TopTabTray,
-                                                  profile: profile,
-                                                  cfrDelegate: cfrDelegate,
-                                                  theme: LightTheme())
+    func createTabDisplayManager() -> LegacyTabDisplayManager {
+        let tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                        tabManager: manager,
+                                                        tabDisplayer: delegate,
+                                                        reuseID: TopTabCell.cellIdentifier,
+                                                        tabDisplayType: .TopTabTray,
+                                                        profile: profile,
+                                                        cfrDelegate: cfrDelegate,
+                                                        theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         return tabDisplayManager
     }
