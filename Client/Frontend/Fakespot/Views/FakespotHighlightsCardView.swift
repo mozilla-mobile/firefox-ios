@@ -186,6 +186,10 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             isShowingPreview ? viewModel.moreButtonTitle : viewModel.lessButtonTitle,
             for: .normal)
         moreButton.accessibilityIdentifier = isShowingPreview ? viewModel.moreButtonA11yId : viewModel.lessButtonA11yId
+
+        if !isShowingPreview {
+            recordTelemetry()
+        }
     }
 
     private func updateHighlights() {
@@ -198,5 +202,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             highlightStackView.addArrangedSubview(highlightGroup)
             highlightGroup.showPreview(isShowingPreview)
         }
+    }
+
+    private func recordTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet)
     }
 }

@@ -247,6 +247,11 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
     }
 
+    func test_shoppingSurfaceShowMoreRecentReviewsClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingRecentReviews)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked)
+    }
+
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
