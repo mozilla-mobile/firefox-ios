@@ -3701,6 +3701,21 @@ extension String {
             tableName: "Shopping",
             value: "Settings Card Collapsed",
             comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
+            tableName: "Shopping",
+            value: "No analysis for these reviews, yet",
+            comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
+            tableName: "Shopping",
+            value: "Launch the Fakespot by Mozilla analyzer and you’ll know in about 60 seconds whether this product’s reviews are reliable.",
+            comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
+            tableName: "Shopping",
+            value: "Launch analyzer on Fakespot.com",
+            comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
     }
 }
 
@@ -4293,6 +4308,36 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Share.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Share this page",
+        comment: "Accessibility label for the share button in url bar")
+    public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.Shopping.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Review checker",
+        comment: "Accessibility label for the shopping button in url bar")
+    public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffNotSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Connection not secure. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationETPOffSecureAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.ETP.Off.Secure.A11y.Label.v119",
+        tableName: "TabLocation",
+        value: "Secure connection. Enhanced Tracking Protection is off.",
+        comment: "Accessibility label for the security icon in url bar")
 }
 
 // MARK: - TabPeekViewController

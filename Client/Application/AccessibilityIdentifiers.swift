@@ -28,6 +28,7 @@ public struct AccessibilityIdentifiers {
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
         static let bookmarksButton = "TabToolbar.libraryButton"
+        static let shoppingButton = "TabLocationView.shoppingButton"
     }
 
     struct Browser {
@@ -153,6 +154,13 @@ public struct AccessibilityIdentifiers {
             static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
             static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
+        }
+
+        struct NoAnalysisCard {
+            static let card = "Shopping.NoAnalysisCard.Card"
+            static let headlineTitle = "Shopping.NoAnalysisCard.HeadlineTitle"
+            static let bodyTitle = "Shopping.NoAnalysisCard.BodyTitle"
+            static let analyzerButtonTitle = "Shopping.NoAnalysisCard.AnalyzerButtonTitle"
         }
     }
 
