@@ -766,6 +766,32 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator)
     }
 
+    func testSavesRoute_whenTabManagerIsRestoring() {
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNotNil(subject.savedRoute)
+        XCTAssertNil(coordinator)
+    }
+
+    func testSavedRouteCalled_whenRestoredTabsIsCalled() {
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+        subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        tabManager.isRestoringTabs = false
+        subject.tabManagerDidRestoreTabs(tabManager)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    // MARK: - Library
+
     func testOneLibraryCoordinatorInstanceExists_whenPresetingMultipleLibraryTabs() {
         let subject = createSubject()
 
@@ -850,6 +876,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
+                                         tabManager: tabManager,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
                                          wallpaperManager: wallpaperManager,

@@ -8,6 +8,7 @@ import WebKit
 @testable import Client
 
 class MockTabManager: TabManager {
+    var isRestoringTabs: Bool = false
     var selectedTab: Tab?
     var backupCloseTab: Client.BackupCloseTab?
 
