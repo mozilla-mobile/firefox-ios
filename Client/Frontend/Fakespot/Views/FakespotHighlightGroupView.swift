@@ -22,11 +22,12 @@ struct FakespotHighlightGroupViewModel {
     }
 }
 
-class FakespotHighlightGroupView: UIView, ThemeApplicable {
+class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     private struct UX {
         static let horizontalSpace: CGFloat = 8
         static let verticalSpace: CGFloat = 8
-        static let imageSize = CGSize(width: 24, height: 24)
+        static let imageSize: CGFloat = 24
+        static let imageMaxSize: CGFloat = 58
         static let titleFontSize: CGFloat = 15
         static let highlightFontSize: CGFloat = 13
     }
@@ -51,10 +52,16 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable {
         label.lineBreakMode = .byClipping
     }
 
+    private var highlightLabelLeadingConstraint: NSLayoutConstraint?
+    private var imageHeightConstraint: NSLayoutConstraint?
+
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
         setupLayout()
     }
 
@@ -88,20 +95,25 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable {
         addSubview(titleLabel)
         addSubview(highlightLabel)
 
+        highlightLabelLeadingConstraint = highlightLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        highlightLabelLeadingConstraint?.isActive = true
+
+        let size = min(UIFontMetrics.default.scaledValue(for: UX.imageSize), UX.imageMaxSize)
+        imageHeightConstraint = itemImageView.heightAnchor.constraint(equalToConstant: size)
+        imageHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             itemImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             itemImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -UX.horizontalSpace),
             itemImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
-            itemImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
-            itemImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
+            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: itemImageView.centerYAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: highlightLabel.topAnchor, constant: -UX.verticalSpace),
 
-            highlightLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             highlightLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             highlightLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
@@ -119,5 +131,21 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable {
                                       value: paragraphStyle,
                                       range: NSRange(location: 0, length: attributedString.length))
         highlightLabel.attributedText = attributedString
+    }
+
+    private func adjustLayout() {
+        let isA11ySize = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        highlightLabelLeadingConstraint?.constant = isA11ySize ? -UX.horizontalSpace : 0
+        imageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.imageSize), UX.imageMaxSize)
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
     }
 }
