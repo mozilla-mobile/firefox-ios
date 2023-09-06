@@ -90,7 +90,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                               buttonView: button,
                                               toastContainer: contentContainer)
         menuHelper.delegate = self
-        menuHelper.menuActionDelegate = self
         menuHelper.sendToDeviceDelegate = self
         menuHelper.navigationHandler = navigationHandler
 
