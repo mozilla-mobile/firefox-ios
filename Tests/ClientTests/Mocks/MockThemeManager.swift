@@ -28,5 +28,13 @@ class MockThemeManager: ThemeManager {
 
     func setAutomaticBrightness(isOn: Bool) {}
 
-    func setAutomaticBrightnessValue(_ value: Float) {}
+    func setAutomaticBrightnessValue(_ value: Float) {
+        let screenLessThanPref = Float(UIScreen.main.brightness) < value
+
+        if screenLessThanPref, currentTheme.type == .light {
+            changeCurrentTheme(.dark)
+        } else if !screenLessThanPref, currentTheme.type == .dark {
+            changeCurrentTheme(.light)
+        }
+    }
 }

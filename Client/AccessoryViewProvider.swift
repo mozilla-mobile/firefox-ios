@@ -83,6 +83,7 @@ class AccessoryViewProvider: UIView, Themeable {
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
         label.text = .CreditCard.Settings.UseSavedCardFromKeyboard
         label.numberOfLines = 0
+        label.accessibilityTraits = .button
     }
 
     private lazy var cardButtonStackView: UIStackView = .build { [weak self] stackView in
@@ -159,7 +160,10 @@ class AccessoryViewProvider: UIView, Themeable {
 
         if showCreditCard {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
+            cardStackViewForBarButton.accessibilityTraits = .button
+            cardStackViewForBarButton.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
             toolbar.items = [previousButton, nextButton, cardStackViewForBarButton, flexibleSpacer, doneButton]
+            toolbar.accessibilityElements = [previousButton, nextButton, cardStackViewForBarButton, doneButton]
         } else {
             toolbar.items = [previousButton, nextButton, flexibleSpacer, doneButton]
         }
@@ -180,7 +184,7 @@ class AccessoryViewProvider: UIView, Themeable {
         nextButton.tintColor = theme.colors.iconAccentBlue
         doneButton.tintColor = theme.colors.iconAccentBlue
         cardImageView.tintColor = theme.colors.iconPrimary
-        cardButtonStackView.backgroundColor = .systemBackground
+        cardButtonStackView.backgroundColor = theme.colors.layer5Hover
     }
 
     // MARK: - Actions

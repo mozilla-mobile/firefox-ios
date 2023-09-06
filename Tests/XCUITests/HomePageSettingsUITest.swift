@@ -31,8 +31,7 @@ class HomePageSettingsUITests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.LoadDatabasePrefix + prefilledTopSites,
-                               LaunchArguments.SkipContextualHints,
-                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                               LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }
@@ -186,6 +185,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1548961
     func testJumpBackIn() {
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
@@ -202,8 +202,17 @@ class HomePageSettingsUITests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
         // Tab tray is open with recently open tab
         waitForExistence(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel], timeout: 3)
+        app.buttons["Done"].tap()
+        // Validation for when Jump In section is not displayed
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        app.tables.cells.switches["Jump Back In"].tap()
+        app.buttons["Done"].tap()
+        navigator.nowAt(NewTabScreen)
+        waitForNoExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1548962
     func testRecentlySaved() {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()

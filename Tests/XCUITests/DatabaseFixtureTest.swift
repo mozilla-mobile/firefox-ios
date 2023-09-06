@@ -15,8 +15,7 @@ class DatabaseFixtureTest: BaseTestCase {
                            LaunchArguments.SkipWhatsNew,
                            LaunchArguments.SkipETPCoverSheet,
                            LaunchArguments.LoadDatabasePrefix + fixtures[key]!,
-                           LaunchArguments.SkipContextualHints,
-                           LaunchArguments.TurnOffTabGroupsInUserPreferences]
+                           LaunchArguments.SkipContextualHints]
         super.setUp()
     }
 

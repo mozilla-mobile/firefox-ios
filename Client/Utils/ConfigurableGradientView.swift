@@ -19,7 +19,7 @@ public class ConfigurableGradientView: UIView {
         return layer as! CAGradientLayer
     }
 
-    public override class var layerClass: AnyClass {
+    override public class var layerClass: AnyClass {
         return CAGradientLayer.self
     }
 

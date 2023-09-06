@@ -37,7 +37,6 @@
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
         "FindInPageTests",
-        "FirstRunTourTests",
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",
@@ -56,6 +55,7 @@
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
         "OnboardingTests\/testWhatsNewPage()",
+        "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
         "PhotonActionSheetTest\/testShareOptionIsShown()",
@@ -95,6 +95,7 @@
         "TabCounterTests",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
+        "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest\/testAddTabFromContext()",
         "TopTabsTest\/testCloseAllTabs()",
@@ -104,6 +105,8 @@
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
+        "TrackingProtectionTests\/testLockIconSecureConnection()",
+        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

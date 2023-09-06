@@ -250,7 +250,7 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
 
-            // only ask for notification permission if it's not onboarding related (e.g. settings)
+            // only ask for notification permission if it's not onboarding related (e.g. settings) or if the onboarding flow is missing the notifications card
             guard self.shouldAskForNotificationPermission else { return }
 
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)

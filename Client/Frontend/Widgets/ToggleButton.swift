@@ -79,19 +79,19 @@ class ToggleButton: UIButton {
         }
     }
 
-    lazy fileprivate var backgroundView: UIView = {
+    fileprivate lazy var backgroundView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         view.layer.addSublayer(self.backgroundLayer)
         return view
     }()
 
-    lazy fileprivate var maskShapeLayer: CAShapeLayer = {
+    fileprivate lazy var maskShapeLayer: CAShapeLayer = {
         let circle = CAShapeLayer()
         return circle
     }()
 
-    lazy fileprivate var backgroundLayer: CALayer = {
+    fileprivate lazy var backgroundLayer: CALayer = {
         let backgroundLayer = CALayer()
         backgroundLayer.backgroundColor = UX.BackgroundColor.cgColor
         backgroundLayer.mask = self.maskShapeLayer
