@@ -1880,9 +1880,10 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
                                              buttonText: .GoButtonTittle)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
+                                completion: { [weak self] buttonPressed in
             if buttonPressed {
-                self.settingsOpenURLInNewTab(url)
+                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+                self?.openURLInNewTab(url, isPrivate: isPrivate)
             }
         })
         clipboardBarDisplayHandler?.clipboardToast = toast
@@ -1916,18 +1917,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         default:
             defaultAction()
         }
-    }
-}
-
-extension BrowserViewController: SettingsDelegate {
-    func settingsOpenURLInNewTab(_ url: URL) {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.openURLInNewTab(url, isPrivate: isPrivate)
-    }
-
-    func didFinish() {
-        // Does nothing since this is used by Coordinators
-        // BVC will stop being a SettingsDelegate after FXIOS-6529
     }
 }
 
