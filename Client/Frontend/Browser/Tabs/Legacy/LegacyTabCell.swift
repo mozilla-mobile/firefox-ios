@@ -18,11 +18,11 @@ protocol TabTrayCell where Self: UICollectionViewCell {
 }
 
 protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(_ cell: TabCell)
+    func tabCellDidClose(_ cell: LegacyTabCell)
 }
 
 // MARK: - Tab Cell
-class TabCell: UICollectionViewCell,
+class LegacyTabCell: UICollectionViewCell,
                TabTrayCell,
                ReusableCell,
                ThemeApplicable {
@@ -36,7 +36,7 @@ class TabCell: UICollectionViewCell,
 
     // MARK: - UI Vars
     private lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
+        view.layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
         view.clipsToBounds = true
     }
 
@@ -66,7 +66,7 @@ class TabCell: UICollectionViewCell,
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabViewController.UX.closeButtonEdgeInset)
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
     }
 
     // TODO: Handle visual effects theming FXIOS-5064
@@ -113,15 +113,15 @@ class TabCell: UICollectionViewCell,
             title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
             title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
             title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-            title.heightAnchor.constraint(equalToConstant: GridTabViewController.UX.textBoxHeight),
+            title.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.textBoxHeight),
 
             favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
-            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (GridTabViewController.UX.textBoxHeight - GridTabViewController.UX.faviconSize) / 2),
-            favicon.heightAnchor.constraint(equalToConstant: GridTabViewController.UX.faviconSize),
-            favicon.widthAnchor.constraint(equalToConstant: GridTabViewController.UX.faviconSize),
+            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (LegacyGridTabViewController.UX.textBoxHeight - LegacyGridTabViewController.UX.faviconSize) / 2),
+            favicon.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
+            favicon.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
 
-            closeButton.heightAnchor.constraint(equalToConstant: GridTabViewController.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalToConstant: GridTabViewController.UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
+            closeButton.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
@@ -176,7 +176,7 @@ class TabCell: UICollectionViewCell,
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
-            layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
+            layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
         }
 
         faviconBG.isHidden = true
@@ -250,10 +250,13 @@ class TabCell: UICollectionViewCell,
     }
 
     private func setTabSelected(_ isPrivate: Bool, theme: Theme) {
-        layoutMargins = UIEdgeInsets(top: TabCell.borderWidth, left: TabCell.borderWidth, bottom: TabCell.borderWidth, right: TabCell.borderWidth)
+        layoutMargins = UIEdgeInsets(top: LegacyTabCell.borderWidth,
+                                     left: LegacyTabCell.borderWidth,
+                                     bottom: LegacyTabCell.borderWidth,
+                                     right: LegacyTabCell.borderWidth)
         layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-        layer.borderWidth = TabCell.borderWidth
-        layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
+        layer.borderWidth = LegacyTabCell.borderWidth
+        layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
     }
 }
 

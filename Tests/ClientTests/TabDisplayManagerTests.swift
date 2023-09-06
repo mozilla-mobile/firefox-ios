@@ -504,40 +504,40 @@ extension TabDisplayManagerTests {
 
     func createTabDisplayManager(file: StaticString = #file,
                                  line: UInt = #line,
-                                 useMockDataStore: Bool = true) -> TabDisplayManager {
-        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                                  tabManager: manager,
-                                                  tabDisplayer: self,
-                                                  reuseID: TopTabCell.cellIdentifier,
-                                                  tabDisplayType: .TopTabTray,
-                                                  profile: profile,
-                                                  cfrDelegate: cfrDelegate,
-                                                  theme: LightTheme())
+                                 useMockDataStore: Bool = true) -> LegacyTabDisplayManager {
+        let tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                        tabManager: manager,
+                                                        tabDisplayer: self,
+                                                        reuseID: TopTabCell.cellIdentifier,
+                                                        tabDisplayType: .TopTabTray,
+                                                        profile: profile,
+                                                        cfrDelegate: cfrDelegate,
+                                                        theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
         trackForMemoryLeaks(tabDisplayManager, file: file, line: line)
         return tabDisplayManager
     }
 
-    func createTabDisplayManagerWithTabs(amountOfTabs: Int, isPrivate: Bool) -> TabDisplayManager {
+    func createTabDisplayManagerWithTabs(amountOfTabs: Int, isPrivate: Bool) -> LegacyTabDisplayManager {
         for _ in 0..<amountOfTabs {
             _ = manager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
         }
 
-        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                                  tabManager: manager,
-                                                  tabDisplayer: self,
-                                                  reuseID: TopTabCell.cellIdentifier,
-                                                  tabDisplayType: .TopTabTray,
-                                                  profile: profile,
-                                                  cfrDelegate: cfrDelegate,
-                                                  theme: LightTheme())
+        let tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                        tabManager: manager,
+                                                        tabDisplayer: self,
+                                                        reuseID: TopTabCell.cellIdentifier,
+                                                        tabDisplayType: .TopTabTray,
+                                                        profile: profile,
+                                                        cfrDelegate: cfrDelegate,
+                                                        theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         trackForMemoryLeaks(tabDisplayManager)
         return tabDisplayManager
     }
 
-    func testSelectedCells(tabDisplayManager: TabDisplayManager, numberOfCells: Int, selectedIndex: Int, file: StaticString = #filePath, line: UInt = #line) {
+    func testSelectedCells(tabDisplayManager: LegacyTabDisplayManager, numberOfCells: Int, selectedIndex: Int, file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertEqual(tabDisplayManager.dataStore.count, numberOfCells, file: file, line: line)
         for index in 0..<numberOfCells {
             let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell

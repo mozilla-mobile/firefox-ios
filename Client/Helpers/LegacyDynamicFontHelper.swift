@@ -117,9 +117,6 @@ class LegacyDynamicFontHelper: NSObject {
     var DefaultStandardFont: UIFont {
         return UIFont.systemFont(ofSize: defaultStandardFontSize, weight: UIFont.Weight.regular)
     }
-    var DefaultStandardFontBold: UIFont {
-        return UIFont.boldSystemFont(ofSize: defaultStandardFontSize)
-    }
 
     /**
      * Reader mode

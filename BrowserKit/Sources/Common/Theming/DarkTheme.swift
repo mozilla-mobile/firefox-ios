@@ -29,6 +29,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
     var layerLightGrey30: UIColor = FXColors.LightGrey30
     var layerSepia: UIColor = FXColors.Orange05
+    var layerConfirmation: UIColor = FXColors.Green80
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue30
@@ -39,6 +40,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var formKnob: UIColor = FXColors.White
     var indicatorActive: UIColor = FXColors.LightGrey90
     var indicatorInactive: UIColor = FXColors.DarkGrey05
+    var actionConfirmation: UIColor = FXColors.Green70
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
