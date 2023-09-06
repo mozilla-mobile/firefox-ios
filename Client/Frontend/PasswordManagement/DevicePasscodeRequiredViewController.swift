@@ -25,10 +25,6 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         return button
     }()
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("not implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = .Settings.Passwords.Title

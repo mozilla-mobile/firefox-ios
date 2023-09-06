@@ -56,7 +56,7 @@ class BrowserViewController: UIViewController,
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
-    var appAuthenticator: AppAuthenticationProtocol?
+    var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -1775,9 +1775,6 @@ class BrowserViewController: UIViewController,
 
     private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
                                                          frame: WKFrameInfo? = nil) {
-        guard let appAuthenticator else {
-            return
-        }
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
