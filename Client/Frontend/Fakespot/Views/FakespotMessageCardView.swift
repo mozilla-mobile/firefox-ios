@@ -237,7 +237,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                                                          constant: -UX.contentHorizontalSpacing),
             containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                        constant: -UX.contentVerticalSpacing),
-            primaryButton.heightAnchor.constraint(lessThanOrEqualToConstant: UX.buttonSize)
+            primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize)
         ])
     }
 
