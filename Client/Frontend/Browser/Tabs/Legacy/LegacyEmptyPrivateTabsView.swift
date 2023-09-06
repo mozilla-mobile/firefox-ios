@@ -8,7 +8,7 @@ import Foundation
 import Shared
 
 // View we display when there are no private tabs created
-class EmptyPrivateTabsView: UIView {
+class LegacyEmptyPrivateTabsView: UIView {
     struct UX {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
