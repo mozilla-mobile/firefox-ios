@@ -14,19 +14,8 @@ struct FakespotHighlightsCardViewModel {
     let moreButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.moreButton
     let lessButtonTitle: String
     let lessButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.lessButton
-    let footerTitle: String
-    let footerActionTitle: String
-    let footerA11yTitleIdentifier: String = AccessibilityIdentifiers.Shopping.HighlightsCard.footerTitle
-    let footerA11yActionIdentifier: String = AccessibilityIdentifiers.Shopping.HighlightsCard.footerAction
 
     let highlights: Highlights
-
-    var footerModel: ActionFooterViewModel {
-        return ActionFooterViewModel(title: footerTitle,
-                                     actionTitle: footerActionTitle,
-                                     a11yTitleIdentifier: footerA11yTitleIdentifier,
-                                     a11yActionIdentifier: footerA11yActionIdentifier)
-    }
 
     var highlightGroupViewModels: [FakespotHighlightGroupViewModel] {
         var highlightGroups: [FakespotHighlightGroupViewModel] = []
@@ -60,9 +49,7 @@ struct FakespotHighlightsCardViewModel {
 
 class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let cardBottomSpace: CGFloat = 16
         static let titleFontSize: CGFloat = 17
-        static let footerHorizontalSpace: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
@@ -75,7 +62,6 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var contentView: UIView = .build()
-    private lazy var footerView: ActionFooterView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -132,7 +118,6 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             highlightGroups.append(highlightGroup)
         }
         updateHighlights()
-        footerView.configure(viewModel: viewModel.footerModel)
 
         titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
@@ -143,7 +128,6 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         cardContainer.applyTheme(theme: theme)
-        footerView.applyTheme(theme: theme)
 
         highlightGroups.forEach { $0.applyTheme(theme: theme) }
 
@@ -159,17 +143,12 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         contentView.addSubview(dividerView)
         contentView.addSubview(moreButton)
         addSubview(cardContainer)
-        addSubview(footerView)
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             cardContainer.topAnchor.constraint(equalTo: topAnchor),
             cardContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            cardContainer.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -UX.cardBottomSpace),
-
-            footerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.footerHorizontalSpace),
-            footerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.footerHorizontalSpace),
-            footerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            cardContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: UX.contentHorizontalSpace),

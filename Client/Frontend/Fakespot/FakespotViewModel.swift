@@ -39,8 +39,6 @@ class FakespotViewModel {
             title: .Shopping.HighlightsCardTitle,
             moreButtonTitle: .Shopping.HighlightsCardMoreButtonTitle,
             lessButtonTitle: .Shopping.HighlightsCardLessButtonTitle,
-            footerTitle: .Shopping.HighlightsCardFooterText,
-            footerActionTitle: .Shopping.HighlightsCardFooterButtonText,
             highlights: highlights)
     }()
 
