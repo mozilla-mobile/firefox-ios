@@ -29,11 +29,6 @@ class SearchSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedSearchEngine()
-        } else {
-            let viewController = SearchSettingsTableViewController(profile: profile)
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedSearchEngine()
     }
 }

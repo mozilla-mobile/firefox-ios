@@ -238,15 +238,8 @@ private extension WallpaperSettingsViewController {
     }
 
     func dismissView() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.didFinish()
-            viewModel.selectHomepageTab()
-        } else {
-            guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
-
-            viewModel.selectHomepageTab()
-            navigationController.done()
-        }
+        settingsDelegate?.didFinish()
+        viewModel.selectHomepageTab()
     }
 
     func preferredContentSizeChanged(_ notification: Notification) {

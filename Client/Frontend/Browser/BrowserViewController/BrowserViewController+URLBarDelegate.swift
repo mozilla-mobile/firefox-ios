@@ -136,13 +136,9 @@ extension BrowserViewController: URLBarDelegate {
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
             contentBlockerStatus: contentBlocker.status)
         etpViewModel.onOpenSettingsTapped = { [weak self] in
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
-                DispatchQueue.main.async {
-                    self?.navigationHandler?.show(settings: .contentBlocker)
-                }
-            } else {
-                self?.legacyShowSettings(deeplink: .contentBlocker)
+            // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+            DispatchQueue.main.async {
+                self?.navigationHandler?.show(settings: .contentBlocker)
             }
         }
         etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
@@ -171,24 +167,6 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         self.present(etpVC, animated: true, completion: nil)
-    }
-
-    // Will be removed with FXIOS-6529
-    func legacyShowSettings(deeplink: AppSettingsDeeplinkOption?) {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: self.profile,
-            and: self.tabManager,
-            delegate: self,
-            deeplinkingTo: deeplink)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-
-        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-        // of this popover on iPad seems to block the presentation of the modal VC.
-        DispatchQueue.main.async {
-            self.present(controller, animated: true, completion: nil)
-        }
     }
 
     func urlBarDidPressStop(_ urlBar: URLBarView) {

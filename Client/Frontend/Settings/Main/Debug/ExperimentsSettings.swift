@@ -16,10 +16,6 @@ class ExperimentsSettings: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedExperiments()
-        } else {
-            navigationController?.pushViewController(ExperimentsViewController(), animated: true)
-        }
+        settingsDelegate?.pressedExperiments()
     }
 }

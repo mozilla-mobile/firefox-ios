@@ -22,13 +22,9 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            guard let url = self.url,
-                  let title = self.title
-            else { return }
-            settingsDelegate?.pressedYourRights(url: url, title: title)
-            return
-        }
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
+        guard let url = self.url,
+              let title = self.title else { return }
+        settingsDelegate?.pressedYourRights(url: url, title: title)
+        return
     }
 }
