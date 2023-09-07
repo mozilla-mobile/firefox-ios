@@ -25,6 +25,7 @@ public protocol ThemeColourPalette {
     var layerLightGrey30: UIColor { get }
     var layerSepia: UIColor { get }
     var layerConfirmation: UIColor { get }
+    var layerWarning: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
@@ -36,6 +37,7 @@ public protocol ThemeColourPalette {
     var indicatorActive: UIColor { get }
     var indicatorInactive: UIColor { get }
     var actionConfirmation: UIColor { get }
+    var actionWarning: UIColor { get }
 
     // MARK: - Text
     var textPrimary: UIColor { get }

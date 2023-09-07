@@ -61,6 +61,7 @@ public struct StandardImageIdentifiers {
         public static let qrCode = "qrCodeLarge"
         public static let tabTray = "tabTrayLarge"
         public static let criticalFill = "criticalFillLarge"
+        public static let warningFill = "warningFillLarge"
     }
 
     // Icon size 30x30
