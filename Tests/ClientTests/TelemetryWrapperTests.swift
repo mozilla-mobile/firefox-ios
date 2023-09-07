@@ -242,6 +242,11 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
     }
 
+    func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingCartButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
+    }
+
     func test_shoppingSurfaceClosed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .shoppingBottomSheet)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)

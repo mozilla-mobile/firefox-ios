@@ -284,7 +284,11 @@ class TabLocationView: UIView, FeatureFlaggable {
             return
         }
         let product = ShoppingProduct(url: url)
-        shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible || tab.isPrivate
+        let shouldHideButton = !product.isShoppingCartButtonVisible || tab.isPrivate
+        shoppingCartButton.isHidden = shouldHideButton
+        if !shouldHideButton {
+            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingCartButton)
+        }
     }
 
     private func updateTextWithURL() {
