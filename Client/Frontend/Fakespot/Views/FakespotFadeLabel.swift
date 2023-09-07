@@ -14,10 +14,10 @@ public class FakespotFadeLabel: UILabel {
 
     private var bottomOpacity: CGColor {
         if isShowingFade {
-            return UIColor(white: 0, alpha: 0).cgColor
-        } else {
-            return opaqueColor
+            return UIColor.clear.cgColor
         }
+        
+        return opaqueColor
     }
 
     var isShowingFade = true
