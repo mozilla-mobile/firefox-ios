@@ -675,7 +675,7 @@ shopping:
     description: |
       Records when the show more button of the recent reviews card is clicked
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16279
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15470
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16279
     notification_emails:
