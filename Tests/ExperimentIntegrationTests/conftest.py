@@ -98,7 +98,6 @@ def fixture_start_app():
 @pytest.fixture(name="experiment_data")
 def fixture_experiment_data(experiment_url):
     data = requests.get(experiment_url).json()
-    del data["branches"][0]["features"][0]["value"]["message-under-experiment"]
     for item in data["branches"][0]["features"][0]["value"]["messages"].values():
         for count, trigger in enumerate(item["trigger"]):
             if "USER_EN_SPEAKER" not in trigger:
