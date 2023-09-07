@@ -186,12 +186,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private func updateHighlights() {
         highlightStackView.removeAllArrangedViews()
 
-        for i in 0..<highlightGroups.count {
-            guard (isShowingPreview && i == 0) || !isShowingPreview else { return }
+        for (index, group) in highlightGroups.enumerated() {
+            guard (isShowingPreview && index == 0) || !isShowingPreview else { return }
 
-            let highlightGroup = highlightGroups[i]
-            highlightStackView.addArrangedSubview(highlightGroup)
-            highlightGroup.showPreview(isShowingPreview)
+            highlightStackView.addArrangedSubview(group)
+            group.showPreview(isShowingPreview)
         }
     }
 
