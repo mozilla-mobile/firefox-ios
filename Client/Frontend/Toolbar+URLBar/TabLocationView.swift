@@ -301,7 +301,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
-        if hasSecureContent {
+        if !hasSecureContent {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         } else if let tintColor = trackingProtectionButton.tintColor {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
@@ -416,7 +416,7 @@ extension TabLocationView: TabEventHandler {
             trackingProtectionButton.alpha = 1.0
             let themeManager: ThemeManager = AppContainer.shared.resolve()
             self.blockerStatus = blocker.status
-            self.hasSecureContent = !(tab.webView?.hasOnlySecureContent ?? false)
+            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
             setTrackingProtection(theme: themeManager.currentTheme)
         }
     }
