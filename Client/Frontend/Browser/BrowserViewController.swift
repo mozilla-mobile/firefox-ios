@@ -1235,6 +1235,14 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    func setupLoadingSpinnerFor(_ webView: WKWebView, isLoading: Bool) {
+        if isLoading {
+            webView.scrollView.refreshControl?.beginRefreshing()
+        } else {
+            webView.scrollView.refreshControl?.endRefreshing()
+        }
+    }
+
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
@@ -1297,6 +1305,8 @@ class BrowserViewController: UIViewController,
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
+            setupLoadingSpinnerFor(webView, isLoading: loading)
+
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
