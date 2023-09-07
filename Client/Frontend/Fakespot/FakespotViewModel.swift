@@ -43,11 +43,7 @@ class FakespotViewModel {
                                             "I am very pleased with my decision to save some money and go with the 9th generation iPad."],
                                     quality: ["Threw the box away so can't return it, but would not buy this model again, even at the discounted price."],
                                     competitiveness: ["Please make sure to use some paper like screen protector if you’re using pencil on the screen."])
-        return FakespotHighlightsCardViewModel(
-            title: .Shopping.HighlightsCardTitle,
-            moreButtonTitle: .Shopping.HighlightsCardMoreButtonTitle,
-            lessButtonTitle: .Shopping.HighlightsCardLessButtonTitle,
-            highlights: highlights)
+        return FakespotHighlightsCardViewModel(highlights: highlights)
     }()
 
     let settingsCardViewModel = FakespotSettingsCardViewModel(

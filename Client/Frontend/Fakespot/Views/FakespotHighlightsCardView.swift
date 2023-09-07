@@ -8,11 +8,11 @@ import UIKit
 
 struct FakespotHighlightsCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.card
-    let title: String
+    let title: String = .Shopping.HighlightsCardTitle
     let titleA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.title
-    let moreButtonTitle: String
+    let moreButtonTitle: String = .Shopping.HighlightsCardMoreButtonTitle
     let moreButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.moreButton
-    let lessButtonTitle: String
+    let lessButtonTitle: String = .Shopping.HighlightsCardLessButtonTitle
     let lessButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.lessButton
 
     let highlights: Highlights
