@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 import Shared
+import Common
 
 class VersionSettingTests: XCTestCase {
     private var delegate: MockDebugSettingsDelegate!
@@ -27,7 +28,7 @@ class VersionSettingTests: XCTestCase {
         let settingsTable = SettingsTableViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settingsDelegate: delegate)
-        versionSetting.theme = DefaultThemeManager().currentTheme
+        versionSetting.theme = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier).currentTheme
 
         // When
         versionSetting.onLongPress(navigationController)
