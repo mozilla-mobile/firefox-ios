@@ -10,5 +10,8 @@ xcrun = "*"
 isim = "*"
 black = "*"
 pytest-html = "*"
+pytest-variables = "*"
+pyyaml = "*"
+
 
 [dev-packages]
