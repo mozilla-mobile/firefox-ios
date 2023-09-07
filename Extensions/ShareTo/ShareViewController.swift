@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Storage
 import Account
+import Common
 
 extension UIStackView {
     func addBackground(color: UIColor) {
@@ -73,7 +74,7 @@ class ShareViewController: UIViewController {
     private var actionRowHeights = [NSLayoutConstraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
-    private let themeManager = DefaultThemeManager()
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     weak var delegate: ShareControllerDelegate?
 
