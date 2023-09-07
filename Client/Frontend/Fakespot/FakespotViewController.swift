@@ -185,7 +185,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     private func sendTelemetryOnAppear() {
         TelemetryWrapper.recordEvent(category: .action,
-                                     method: .displayed,
+                                     method: .view,
                                      object: .shoppingBottomSheet)
     }
 
