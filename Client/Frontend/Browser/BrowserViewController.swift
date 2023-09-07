@@ -554,13 +554,6 @@ class BrowserViewController: UIViewController,
             selector: #selector(didFinishAnnouncement),
             name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
-
-        // PresentIntroView notification and code will be removed with FXIOS-6529
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(presentIntroFrom),
-            name: .PresentIntroView,
-            object: nil)
     }
 
     func addSubviews() {
@@ -641,7 +634,7 @@ class BrowserViewController: UIViewController,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint() },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) },
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .toolbar) },
             overlayState: overlayManager)
     }
 
@@ -1695,19 +1688,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    // Will be clean up with FXIOS-6529
-    func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager,
-            delegate: self,
-            deeplinkingTo: destination)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-        presentWithModalDismissIfNeeded(controller, animated: true)
-    }
-
     // MARK: Autofill
 
     private func creditCardInitialSetupTelemetry() {
@@ -2152,9 +2132,8 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        let route = settingsPage.getSettingsRoute()
-        navigationHandler?.show(settings: route)
+    func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
+        navigationHandler?.show(settings: settingsPage)
     }
 }
 
@@ -2374,55 +2353,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    @objc
-    func presentIntroFrom(notification: Notification) {
-        showProperIntroVC()
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    private func showProperIntroVC() {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
-        let introViewModel = IntroViewModel(introScreenManager: nil,
-                                            profile: profile,
-                                            model: onboardingModel,
-                                            telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel)
-
-        introViewController.didFinishFlow = {
-            IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
-            introViewController.dismiss(animated: true)
-        }
-
-        self.introVCPresentHelper(introViewController: introViewController)
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    private func introVCPresentHelper(introViewController: UIViewController) {
-        // On iPad we present it modally in a controller
-        if topTabsVisible {
-            introViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
-                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            introViewController.modalPresentationStyle = .formSheet
-        } else {
-            introViewController.modalPresentationStyle = .fullScreen
-        }
-        present(introViewController, animated: true) {
-            self.setupHomepageOnBackground()
-        }
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    // On first run (and forced) open up the homepage in the background.
-    private func setupHomepageOnBackground() {
-        if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
-           let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-            tab.loadRequest(URLRequest(url: homePageURL))
-        }
-    }
-
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
                                                   viewType state: CreditCardBottomSheetState,

@@ -22,10 +22,6 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
         featureFlags.set(feature: .pullToRefresh, to: newStatus)
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToReload()
-        } else {
-            updateCell(navigationController)
-        }
+        settingsDelegate?.askedToReload()
     }
 }

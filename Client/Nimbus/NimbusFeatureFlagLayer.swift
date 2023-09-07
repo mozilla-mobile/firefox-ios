@@ -34,9 +34,6 @@ final class NimbusFeatureFlagLayer {
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
 
-        case .settingsCoordinatorRefactor:
-            return checkSettingsCoordinatorRefactorFeature(from: nimbus)
-
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
@@ -160,11 +157,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.libraryCoordinatorRefactor.value()
-        return config.enabled
-    }
-
-    private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.settingsCoordinatorRefactor.value()
         return config.enabled
     }
 

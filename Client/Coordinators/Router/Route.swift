@@ -95,36 +95,6 @@ enum Route: Equatable {
         case topSites
         case wallpaper
         case rateApp
-
-        // Will be clean up with FXIOS-6529
-        func getSettingsRoute() -> AppSettingsDeeplinkOption? {
-            switch self {
-            case .contentBlocker:
-                return .contentBlocker
-            case .homePage:
-                return .customizeHomepage
-            case .tabs:
-                return .customizeTabs
-            case .toolbar:
-                return .customizeToolbar
-            case .topSites:
-                return .customizeTopSites
-            case .wallpaper:
-                return .wallpaper
-            case .creditCard:
-                return .creditCard
-            case .fxa:
-                return .fxa
-            case .mailto:
-                return .mailto
-            case .newTab:
-                return .newTab
-            case .search:
-                return .search
-            case .clearPrivateData, .general, .theme, .password, .rateApp:
-                return nil // not handling those since not needed to temporary fix #14954
-            }
-        }
     }
 
     /// An enumeration representing different actions that can be performed within the application.

@@ -28,13 +28,6 @@ class NotificationsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedNotifications()
-            return
-        }
-
-        let viewController = NotificationsSettingsViewController(prefs: profile.prefs,
-                                                                 hasAccount: profile.hasAccount())
-        navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.pressedNotifications()
     }
 }

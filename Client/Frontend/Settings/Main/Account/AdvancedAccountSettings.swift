@@ -32,14 +32,7 @@ class AdvancedAccountSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedAdvancedAccountSetting()
-            return
-        }
-
-        let viewController = AdvancedAccountSettingViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.pressedAdvancedAccountSetting()
     }
 
     override var hidden: Bool {

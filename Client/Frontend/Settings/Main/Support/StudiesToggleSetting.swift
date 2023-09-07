@@ -45,11 +45,6 @@ class StudiesToggleSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToOpen(url: url, withTitle: title)
-            return
-        }
-
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
+        settingsDelegate?.askedToOpen(url: url, withTitle: title)
     }
 }

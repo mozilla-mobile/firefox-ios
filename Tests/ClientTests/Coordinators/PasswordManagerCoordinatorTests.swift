@@ -79,7 +79,6 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         let mockModel = PasswordDetailViewControllerModel(
             profile: MockProfile(),
             login: mockLoginRecord,
-            webpageNavigationHandler: nil,
             breachRecord: nil
         )
         subject.pressedPasswordDetail(model: mockModel)

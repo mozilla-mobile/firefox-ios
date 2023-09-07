@@ -11,13 +11,7 @@ extension BrowserViewController {
 
     @objc
     func openSettingsKeyCommand() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationHandler?.show(settings: .general)
-        } else {
-            ensureMainThread { [self] in
-                self.legacyShowSettings(deeplink: nil)
-            }
-        }
+        navigationHandler?.show(settings: .general)
     }
 
     @objc
