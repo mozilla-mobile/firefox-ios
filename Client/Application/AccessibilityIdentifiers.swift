@@ -149,8 +149,6 @@ public struct AccessibilityIdentifiers {
             static let title = "Shopping.HighlightsCard.Title"
             static let moreButton = "Shopping.HighlightsCard.MoreButton"
             static let lessButton = "Shopping.HighlightsCard.LessButton"
-            static let footerTitle = "Shopping.HighlightsCard.FooterTitle"
-            static let footerAction = "Shopping.HighlightsCard.FooterAction"
         }
 
         struct SettingsCard {

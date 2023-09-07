@@ -3651,16 +3651,6 @@ extension String {
             tableName: "Shopping",
             value: "%@ out of 5 stars",
             comment: "Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5).")
-        public static let HighlightsCardFooterText = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Footer.Text.v118
-            tableName: "Shopping",
-            value: "Summarized using information provided by Fakespot.com.",
-            comment: "Footer text of the review highlights displayed in the shopping review quality bottom sheet.")
-        public static let HighlightsCardFooterButtonText = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Footer.Button.Text.v118
-            tableName: "Shopping",
-            value: "View full analysis",
-            comment: "Footer button text of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardPriceTitle = MZLocalizedString(
             key: "", // Shopping.HighlightsCard.Price.Title.v119
             tableName: "Shopping",
