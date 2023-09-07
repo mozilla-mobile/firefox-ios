@@ -4,6 +4,8 @@
 
 import Foundation
 
+private typealias A11yId = AccessibilityIdentifiers.Shopping.HighlightsCard
+
 enum HighlightType: String {
     case price
     case quality
@@ -33,31 +35,31 @@ enum HighlightType: String {
 
     var titleA11yId: String {
         switch self {
-        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceTitle
-        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityTitle
-        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessTitle
-        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingTitle
-        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingTitle
+        case .price: return A11yId.groupPriceTitle
+        case .quality: return A11yId.groupQualityTitle
+        case .competitiveness: return A11yId.groupCompetitivenessTitle
+        case .shipping: return A11yId.groupShippingTitle
+        case .packaging: return A11yId.groupPackagingTitle
         }
     }
 
     var iconA11yId: String {
         switch self {
-        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceIcon
-        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityIcon
-        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessIcon
-        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingIcon
-        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingIcon
+        case .price: return A11yId.groupPriceIcon
+        case .quality: return A11yId.groupQualityIcon
+        case .competitiveness: return A11yId.groupCompetitivenessIcon
+        case .shipping: return A11yId.groupShippingIcon
+        case .packaging: return A11yId.groupPackagingIcon
         }
     }
 
     var highlightsA11yId: String {
         switch self {
-        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceHighlightsLabel
-        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityHighlightsLabel
-        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessHighlightsLabel
-        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingHighlightsLabel
-        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingHighlightsLabel
+        case .price: return A11yId.groupPriceHighlightsLabel
+        case .quality: return A11yId.groupQualityHighlightsLabel
+        case .competitiveness: return A11yId.groupCompetitivenessHighlightsLabel
+        case .shipping: return A11yId.groupShippingHighlightsLabel
+        case .packaging: return A11yId.groupPackagingHighlightsLabel
         }
     }
 }
