@@ -8,18 +8,6 @@ import UIKit
 
 struct FakespotHighlightGroupViewModel {
     let highlightGroup: HighlightGroup
-
-    let titleA11yId: String
-    let imageA11yId: String
-    let highlightsA11yId: String
-
-    var title: String {
-        highlightGroup.type.title
-    }
-
-    var image: String {
-        highlightGroup.type.iconName
-    }
 }
 
 class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
@@ -70,13 +58,13 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     }
 
     func configure(viewModel: FakespotHighlightGroupViewModel) {
-        titleLabel.text = viewModel.title
-        titleLabel.accessibilityIdentifier = viewModel.titleA11yId
-        itemImageView.image = UIImage(named: viewModel.image)?.withRenderingMode(.alwaysTemplate)
-        itemImageView.accessibilityIdentifier = viewModel.imageA11yId
+        titleLabel.text = viewModel.highlightGroup.type.title
+        titleLabel.accessibilityIdentifier = viewModel.highlightGroup.type.titleA11yId
+        itemImageView.image = UIImage(named: viewModel.highlightGroup.type.iconName)?.withRenderingMode(.alwaysTemplate)
+        itemImageView.accessibilityIdentifier = viewModel.highlightGroup.type.iconA11yId
 
         updateHighlightLabel(viewModel.highlightGroup.reviews)
-        highlightLabel.accessibilityIdentifier = viewModel.highlightsA11yId
+        highlightLabel.accessibilityIdentifier = viewModel.highlightGroup.type.highlightsA11yId
     }
 
     func applyTheme(theme: Theme) {

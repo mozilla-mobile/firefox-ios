@@ -149,6 +149,26 @@ public struct AccessibilityIdentifiers {
             static let title = "Shopping.HighlightsCard.Title"
             static let moreButton = "Shopping.HighlightsCard.MoreButton"
             static let lessButton = "Shopping.HighlightsCard.LessButton"
+
+            static let groupPriceTitle = "Shopping.HighlightsCard.Group.Price.Title"
+            static let groupPriceIcon = "Shopping.HighlightsCard.Group.Price.Icon"
+            static let groupPriceHighlightsLabel = "Shopping.HighlightsCard.Group.Price.HighlightsLabel"
+
+            static let groupQualityTitle = "Shopping.HighlightsCard.Group.Quality.Title"
+            static let groupQualityIcon = "Shopping.HighlightsCard.Group.Quality.Icon"
+            static let groupQualityHighlightsLabel = "Shopping.HighlightsCard.Group.Quality.HighlightsLabel"
+
+            static let groupCompetitivenessTitle = "Shopping.HighlightsCard.Group.Competitiveness.Title"
+            static let groupCompetitivenessIcon = "Shopping.HighlightsCard.Group.Competitiveness.Icon"
+            static let groupCompetitivenessHighlightsLabel = "Shopping.HighlightsCard.Group.Competitiveness.HighlightsLabel"
+
+            static let groupShippingTitle = "Shopping.HighlightsCard.Group.Shipping.Title"
+            static let groupShippingIcon = "Shopping.HighlightsCard.Group.Shipping.Icon"
+            static let groupShippingHighlightsLabel = "Shopping.HighlightsCard.Group.Shipping.HighlightsLabel"
+
+            static let groupPackagingTitle = "Shopping.HighlightsCard.Group.Packaging.Title"
+            static let groupPackagingIcon = "Shopping.HighlightsCard.Group.Packaging.Icon"
+            static let groupPackagingHighlightsLabel = "Shopping.HighlightsCard.Group.Packaging.HighlightsLabel"
         }
 
         struct SettingsCard {

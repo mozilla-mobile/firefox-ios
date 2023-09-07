@@ -30,6 +30,36 @@ enum HighlightType: String {
         case .packaging: return ImageIdentifiers.packaging
         }
     }
+
+    var titleA11yId: String {
+        switch self {
+        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceTitle
+        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityTitle
+        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessTitle
+        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingTitle
+        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingTitle
+        }
+    }
+
+    var iconA11yId: String {
+        switch self {
+        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceIcon
+        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityIcon
+        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessIcon
+        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingIcon
+        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingIcon
+        }
+    }
+
+    var highlightsA11yId: String {
+        switch self {
+        case .price: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPriceHighlightsLabel
+        case .quality: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupQualityHighlightsLabel
+        case .competitiveness: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupCompetitivenessHighlightsLabel
+        case .shipping: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupShippingHighlightsLabel
+        case .packaging: return AccessibilityIdentifiers.Shopping.HighlightsCard.groupPackagingHighlightsLabel
+        }
+    }
 }
 
 struct HighlightGroup {

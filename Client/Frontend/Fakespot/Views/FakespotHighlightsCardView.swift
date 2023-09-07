@@ -22,26 +22,17 @@ struct FakespotHighlightsCardViewModel {
 
         if !highlights.price.isEmpty {
             highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: HighlightGroup(type: .price, reviews: highlights.price),
-                titleA11yId: "",
-                imageA11yId: "",
-                highlightsA11yId: ""))
+                highlightGroup: HighlightGroup(type: .price, reviews: highlights.price)))
         }
 
         if !highlights.quality.isEmpty {
             highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: HighlightGroup(type: .quality, reviews: highlights.quality),
-                titleA11yId: "",
-                imageA11yId: "",
-                highlightsA11yId: ""))
+                highlightGroup: HighlightGroup(type: .quality, reviews: highlights.quality)))
         }
 
         if !highlights.competitiveness.isEmpty {
             highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: HighlightGroup(type: .competitiveness, reviews: highlights.competitiveness),
-                titleA11yId: "",
-                imageA11yId: "",
-                highlightsA11yId: ""))
+                highlightGroup: HighlightGroup(type: .competitiveness, reviews: highlights.competitiveness)))
         }
         return highlightGroups
     }
