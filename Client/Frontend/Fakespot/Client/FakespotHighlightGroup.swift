@@ -6,7 +6,7 @@ import Foundation
 
 private typealias A11yId = AccessibilityIdentifiers.Shopping.HighlightsCard
 
-enum HighlightType: String {
+enum FakespotHighlightType: String {
     case price
     case quality
     case competitiveness
@@ -64,7 +64,7 @@ enum HighlightType: String {
     }
 }
 
-struct HighlightGroup {
-    let type: HighlightType
+struct FakespotHighlightGroup {
+    let type: FakespotHighlightType
     let reviews: [String]
 }

@@ -10,7 +10,7 @@ struct FakespotReliabilityCardViewModel {
     let cardA11yId: String
     let title: String
     let titleA11yId: String
-    let rating: ReliabilityRating
+    let rating: FakespotReliabilityRating
     let ratingLetterA11yId: String
     let ratingDescriptionA11yId: String
 }

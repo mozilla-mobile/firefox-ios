@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 
 struct FakespotHighlightGroupViewModel {
-    let highlightGroup: HighlightGroup
+    let highlightGroup: FakespotHighlightGroup
 }
 
 class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
