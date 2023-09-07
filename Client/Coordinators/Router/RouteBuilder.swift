@@ -57,7 +57,7 @@ final class RouteBuilder {
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "")
 
             case .glean:
-                    return .glean(url: url)
+                return .glean(url: url)
 
             case .widgetMediumTopSitesOpenUrl:
                 // Widget Top sites - open url
