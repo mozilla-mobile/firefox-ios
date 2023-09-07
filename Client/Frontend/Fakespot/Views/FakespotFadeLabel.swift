@@ -16,7 +16,7 @@ public class FakespotFadeLabel: UILabel {
         if isShowingFade {
             return UIColor.clear.cgColor
         }
-        
+
         return opaqueColor
     }
 
