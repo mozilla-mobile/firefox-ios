@@ -38,6 +38,7 @@ class FakespotViewModel {
     )
 
     let highlightsCardViewModel = {
+        // Dummy data to show content until we integrate with the API
         let highlights = Highlights(price: ["Great quality that one can expect from Apple.",
                                             "Replacing iPad 5th gen that won't support iOS17, but still wanted to be able to charge all devices with the same lightning cable (especially when traveling).",
                                             "I am very pleased with my decision to save some money and go with the 9th generation iPad."],
