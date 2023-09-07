@@ -57,7 +57,7 @@ class SyncNowSetting: WithAccountSetting {
             string: .FxASyncNow,
             attributes: [
                 NSAttributedString.Key.foregroundColor: self.enabled ? syncText : headerLightText,
-                NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont
+                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)
             ]
         )
     }
@@ -98,19 +98,15 @@ class SyncNowSetting: WithAccountSetting {
         }
 
         switch syncStatus {
-        case .bad(let message):
-            guard let message = message else { return syncNowTitle }
+        case .bad(nil):
+            return syncNowTitle
+        case .bad(let message?),
+             .warning(let message):
             return NSAttributedString(
                 string: message,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont])
-        case .warning(let message):
-            return  NSAttributedString(
-                string: message,
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont])
+                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)])
         case .inProgress:
             return NSAttributedString(
                 string: .SyncingMessageWithEllipsis,
