@@ -15,13 +15,8 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-<<<<<<< HEAD
-                          ParentCoordinatorDelegate {
-=======
-                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate {
->>>>>>> 3458b4e10 (Bugfix FXIOS-7251 [v118] Fix deeplinks not working when backgrounding the app for a long time (#16274))
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
