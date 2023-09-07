@@ -32,7 +32,7 @@ struct ConversionValueUtil {
         }
     }
 
-    func adNetworkAttributionUpdateConversionInstallEvent() {
+    func adNetworkAttributionUpdateConversionEvent() {
         if #available(iOS 16.1, *) {
             SKAdNetwork.updatePostbackConversionValue(fineValue, coarseValue: coarseValue.value) { error in
                 handleUpdateConversionInstallEvent(error: error)
