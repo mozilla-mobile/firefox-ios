@@ -35,7 +35,7 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        // TODO: YRD use feature flag here
+        // TODO: FXIOS-7355 Move logic to BrowserCoordinator in
         if isTabTrayRefactorEnabled {
             self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
                                                                profile: profile,
