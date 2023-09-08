@@ -11,6 +11,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1118037
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -68,6 +69,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/52766
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
         waitForExistence(app.navigationBars["Search"].buttons["Settings"], timeout: 3)

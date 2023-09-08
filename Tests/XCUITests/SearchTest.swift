@@ -176,6 +176,7 @@ class SearchTests: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1118037
     func testSearchEngine() {
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it
@@ -226,6 +227,10 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "google")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1614032
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/966835
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/77246
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1613988
     func testSearchIconOnAboutHome() throws {
         if iPad() {
             throw XCTSkip("iPad does not have search icon")
@@ -265,6 +270,7 @@ class SearchTests: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1329027
     func testOpenTabsInSearchSuggestions() {
         // Go to localhost website and check the page displays correctly
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
