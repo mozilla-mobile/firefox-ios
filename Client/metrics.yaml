@@ -699,9 +699,9 @@ shopping:
     description: |
       Records when a product was successfully found
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15681
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15680
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15780
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16311
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-08"
