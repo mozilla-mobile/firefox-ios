@@ -593,7 +593,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
                     if let tempDocURL = tempDocURL,
-                       tempDocURL.isFileURL{
+                       tempDocURL.isFileURL {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView)
                     } else {
                         if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
