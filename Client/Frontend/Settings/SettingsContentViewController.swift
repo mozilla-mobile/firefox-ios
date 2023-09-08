@@ -34,7 +34,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
                     completion: { finished in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                    }
+                )
             }
         }
     }
@@ -51,7 +52,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
                     completion: { finished in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                    }
+                )
             }
         }
     }

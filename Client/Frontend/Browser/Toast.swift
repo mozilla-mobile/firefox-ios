@@ -57,13 +57,14 @@ class Toast: UIView, ThemeApplicable {
                 animations: {
                     self.animationConstraint?.constant = 0
                     self.layoutIfNeeded()
-                }) { finished in
-                    if let duration = duration {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            self.dismiss(false)
-                        }
+                }
+            ) { finished in
+                if let duration = duration {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                        self.dismiss(false)
                     }
                 }
+            }
         }
     }
 
@@ -78,12 +79,13 @@ class Toast: UIView, ThemeApplicable {
             animations: {
                 self.animationConstraint?.constant = UX.toastHeight
                 self.layoutIfNeeded()
-            }) { finished in
-                self.removeFromSuperview()
-                if !buttonPressed {
-                    self.completionHandler?(false)
-                }
             }
+        ) { finished in
+            self.removeFromSuperview()
+            if !buttonPressed {
+                self.completionHandler?(false)
+            }
+        }
     }
 
     @objc
