@@ -18225,7 +18225,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FennecEnterprise;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests.xctrunner;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "";
