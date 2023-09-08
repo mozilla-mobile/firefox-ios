@@ -1491,6 +1491,7 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
+                -scheme Fennec_Enterprise \
                 -sdk iphoneos \
                 -destination "generic/platform=iOS" \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
@@ -1504,6 +1505,7 @@ workflows:
             codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
             echo "-- test app --"
             xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
+                -scheme Fennec_Enterprise \
                 -sdk iphoneos \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
     - script@1.1:
