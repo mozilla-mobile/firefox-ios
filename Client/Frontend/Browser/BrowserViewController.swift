@@ -1918,12 +1918,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
     }
 }
 
-extension BrowserViewController: PresentingModalViewControllerDelegate {
-    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
-        self.dismiss(animated: animated, completion: nil)
-    }
-}
-
 /**
  * History visit management.
  * TODO: this should be expanded to track various visit types; see Bug 1166084.
