@@ -9,30 +9,35 @@ import ComponentLibrary
 struct FakespotMessageCardViewModel {
     enum CardType: String, CaseIterable, Identifiable {
         case confirmation
+        case info
 
         var id: String { self.rawValue }
 
         func primaryButtonTextColor(theme: Theme) -> UIColor {
             switch self {
             case .confirmation: return theme.colors.textPrimary
+            case .info: return theme.colors.textOnDark
             }
         }
 
         func primaryButtonBackground(theme: Theme) -> UIColor {
             switch self {
             case .confirmation: return theme.colors.actionConfirmation
+            case .info: return theme.colors.actionPrimary
             }
         }
 
         func cardBackground(theme: Theme) -> UIColor {
             switch self {
             case .confirmation: return theme.colors.layerConfirmation
+            case .info: return theme.colors.layerInfo
             }
         }
 
         var iconImageName: String {
             switch self {
             case .confirmation: return StandardImageIdentifiers.Large.checkmark
+            case .info: return StandardImageIdentifiers.Large.criticalFill
             }
         }
     }

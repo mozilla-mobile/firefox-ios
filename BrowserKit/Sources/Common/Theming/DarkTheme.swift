@@ -29,6 +29,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
     var layerLightGrey30: UIColor = FXColors.LightGrey30
     var layerSepia: UIColor = FXColors.Orange05
+    var layerInfo: UIColor = FXColors.Blue60.withAlphaComponent(0.8)
     var layerConfirmation: UIColor = FXColors.Green80
 
     // MARK: - Actions

@@ -24,6 +24,7 @@ public protocol ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerLightGrey30: UIColor { get }
     var layerSepia: UIColor { get }
+    var layerInfo: UIColor { get }
     var layerConfirmation: UIColor { get }
 
     // MARK: - Actions
