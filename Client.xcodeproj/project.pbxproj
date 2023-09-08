@@ -763,7 +763,6 @@
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
-		8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3879842A965210003966B0 /* FakespotViewModel.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6DA7D12A6FE78F00DE264F /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
 		8C6F94652A972EB300415FF6 /* AdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */; };
@@ -775,7 +774,6 @@
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */; };
-		8CD02BD02A9631330029106A /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
@@ -1238,6 +1236,9 @@
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
 		E13A72D9291154E600E9A99D /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
+		E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */; };
+		E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */; };
+		E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */; };
 		E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */; };
 		E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
 		E1442FC0294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
@@ -1316,7 +1317,6 @@
 		E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */; };
-		E1D3FFB42A66B726002D31EF /* FakespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */; };
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
@@ -5019,7 +5019,6 @@
 		8BFA4413BB71963DB0E69F82 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8BFD47109E07F897D604AEBE /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
-		8C3879842A965210003966B0 /* FakespotViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModel.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
@@ -5035,7 +5034,6 @@
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
 		8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotErrorCardView.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
-		8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotCoordinator.swift; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
 		8D1340A4B7E4ACBF43347178 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -6441,6 +6439,9 @@
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
 		E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModelTests.swift; sourceTree = "<group>"; };
 		E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerMock.swift; sourceTree = "<group>"; };
+		E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewController.swift; path = Client/Frontend/Fakespot/FakespotViewController.swift; sourceTree = SOURCE_ROOT; };
+		E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotCoordinator.swift; path = Client/Frontend/Fakespot/FakespotCoordinator.swift; sourceTree = SOURCE_ROOT; };
+		E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewModel.swift; path = Client/Frontend/Fakespot/FakespotViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSiteHeaderView.swift; sourceTree = "<group>"; };
 		E1442FBE294782B6003680B0 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		E1442FC1294782C2003680B0 /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -6514,7 +6515,6 @@
 		E1CD81C4290C6D5800124B27 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
-		E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewController.swift; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
@@ -10009,9 +10009,9 @@
 			isa = PBXGroup;
 			children = (
 				E16258F02A83D5DE00522742 /* Views */,
-				E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */,
-				8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */,
-				8C3879842A965210003966B0 /* FakespotViewModel.swift */,
+				E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */,
+				E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */,
+				E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */,
 				8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */,
 				8C92DE942A7128FB0090BD28 /* Client */,
 			);
@@ -12415,6 +12415,7 @@
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
+				E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */,
 				8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */,
 				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
@@ -12505,7 +12506,6 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
-				E1D3FFB42A66B726002D31EF /* FakespotViewController.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
@@ -12550,7 +12550,6 @@
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
-				8CD02BD02A9631330029106A /* FakespotCoordinator.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
@@ -12617,6 +12616,7 @@
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift in Sources */,
 				74B420C92A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift in Sources */,
+				E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */,
 				E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
@@ -12863,6 +12863,7 @@
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
 				437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */,
+				E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */,
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				5A8E7B6F29B8E5E500BF060F /* UIButton+Extensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
@@ -12934,7 +12935,6 @@
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
-				8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,
 				E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */,
