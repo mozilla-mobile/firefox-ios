@@ -4,5 +4,4 @@
 
 import Foundation
 
-/// Defines the state related to a screen used `AppState` reducer to retrieve the state for a specific screen
-public protocol ScreenState {}
+class FakeReduxMiddleware {}

@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 
-/// Defines the state related to a screen used `AppState` reducer to retrieve the state for a specific screen
-public protocol ScreenState {}
+@testable import Client
+struct FakeReduxState: ScreenState, Equatable {
+}
