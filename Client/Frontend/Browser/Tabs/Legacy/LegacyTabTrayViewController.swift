@@ -20,7 +20,7 @@ protocol TabTrayViewDelegate: UIViewController {
 }
 // swiftlint:enable class_delegate_protocol
 
-class LegacyTabTrayViewController: UIViewController, Themeable {
+class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayController {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
