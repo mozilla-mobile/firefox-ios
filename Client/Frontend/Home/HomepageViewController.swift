@@ -78,12 +78,12 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
                                            tabManager: tabManager,
                                            theme: themeManager.currentTheme)
 
-        let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
-                                                                    with: viewModel.profile)
-        self.jumpBackInContextualHintViewController = ContextualHintViewController(with: jumpBackInContextualViewModel)
-        let syncTabContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackInSyncedTab,
-                                                                 with: viewModel.profile)
-        self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewModel)
+        let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
+                                                                          with: viewModel.profile)
+        self.jumpBackInContextualHintViewController = ContextualHintViewController(with: jumpBackInContextualViewProvider)
+        let syncTabContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackInSyncedTab,
+                                                                       with: viewModel.profile)
+        self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewProvider)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
 
         self.themeManager = themeManager

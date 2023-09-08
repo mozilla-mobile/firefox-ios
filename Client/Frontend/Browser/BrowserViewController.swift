@@ -184,9 +184,9 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
-        let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
-                                                       with: profile)
-        self.contextHintVC = ContextualHintViewController(with: contextViewModel)
+        let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
+                                                                with: profile)
+        self.contextHintVC = ContextualHintViewController(with: contextualViewProvider)
         super.init(nibName: nil, bundle: nil)
         didInit()
     }

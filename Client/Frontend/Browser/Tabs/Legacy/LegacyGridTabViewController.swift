@@ -125,9 +125,9 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
         self.tabToFocus = tabToFocus
         self.notificationCenter = notificationCenter
 
-        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
-                                                          with: profile)
-        self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        let contextualViewProvider = ContextualHintViewProvider(forHintType: .inactiveTabs,
+                                                                with: profile)
+        self.contextualHintViewController = ContextualHintViewController(with: contextualViewProvider)
         self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
