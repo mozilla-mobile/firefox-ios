@@ -195,6 +195,14 @@ start-at-home-feature:
         - after-four-hours
         - always
         - disabled
+tab-tray-refactor-feature:
+  description: "This feature is for managing the roll out of the Tab Tray refactor feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true
