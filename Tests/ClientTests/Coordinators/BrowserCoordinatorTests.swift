@@ -12,13 +12,11 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
     private var screenshotService: ScreenshotService!
-    private var routeBuilder: RouteBuilder!
     private var tabManager: MockTabManager!
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
-    let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
@@ -26,7 +24,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
-        self.routeBuilder = RouteBuilder()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
         self.tabManager = MockTabManager()
@@ -38,7 +35,6 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -332,8 +328,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/bookmarks")!)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .homepanel(section: .bookmarks))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
@@ -347,8 +342,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/history")!)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .homepanel(section: .history))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
@@ -362,8 +356,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/reading-list")!)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .homepanel(section: .readingList))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
@@ -377,8 +370,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://deep-link?url=/homepanel/downloads")!)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .homepanel(section: .downloads))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.showLibraryCalled)
@@ -388,15 +380,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleHomepanelTopSites_returnsTrue() {
         // Given
-        let topSitesURL = URL(string: "firefox://deep-link?url=/homepanel/top-sites")!
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(url: topSitesURL)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .homepanel(section: .topSites))
 
         // Then
         XCTAssertTrue(result)
@@ -407,15 +397,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleNewPrivateTab_returnsTrue() {
         // Given
-        let newPrivateTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-private-tab")!
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(url: newPrivateTabURL)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .search(url: nil, isPrivate: true))
 
         // Then
         XCTAssertTrue(result)
@@ -426,15 +414,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleHomepanelNewTab_returnsTrue() {
         // Given
-        let newTabURL = URL(string: "firefox://deep-link?url=/homepanel/new-tab")!
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(url: newTabURL)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .search(url: nil, isPrivate: false))
 
         // Then
         XCTAssertTrue(result)
@@ -593,14 +579,15 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(url: URL(string: "firefox://fxa-signin?signin=coolcodes&user=foo&email=bar")!)
-        let result = subject.handle(route: route!)
+        let params = FxALaunchParams(entrypoint: .fxaDeepLinkNavigation,
+                                     query: ["signin": "coolcodes", "user": "foo", "email": "bar"])
+        let result = subject.handle(route: .fxaSignIn(params: params))
 
         // Then
         XCTAssertTrue(result)
         XCTAssertEqual(mbvc.presentSignInCount, 1)
         XCTAssertEqual(mbvc.presentSignInFlowType, .emailLoginFlow)
-        XCTAssertEqual(mbvc.presentSignInFxaOptions, FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["signin": "coolcodes", "user": "foo", "email": "bar"]))
+        XCTAssertEqual(mbvc.presentSignInFxaOptions, params)
         XCTAssertEqual(mbvc.presentSignInReferringPage, ReferringPage.none)
     }
 
@@ -608,15 +595,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleHandleQRCode_returnsTrue() {
         // Given
-        let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode", localizedTitle: "QR Code")
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .action(action: .showQRCode))
 
         // Then
         XCTAssertTrue(result)
@@ -625,15 +610,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testHandleClosePrivateTabs_returnsTrue() {
         // Given
-        let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs")!
         let subject = createSubject()
         let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
         // When
-        let route = routeBuilder.makeRoute(url: url)
-        let result = subject.handle(route: route!)
+        let result = subject.handle(route: .action(action: .closePrivateTabs))
 
         // Then
         XCTAssertTrue(result)
@@ -767,7 +750,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.browserHasLoaded()
 
-        subject.showFakespotFlow(productURL: exampleProduct)
+        subject.showFakespotFlow(productURL: URL(string: "www.example.com")!)
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
         fakespotCoordinator.fakespotControllerDidDismiss()
 
@@ -777,7 +760,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     func testTappingShopping_startsFakespotCoordinator() {
         let subject = createSubject()
-        subject.showFakespotFlow(productURL: exampleProduct)
+        subject.showFakespotFlow(productURL: URL(string: "www.example.com")!)
 
         XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
@@ -788,7 +771,6 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
-        routeBuilder.configure(isPrivate: false, prefs: profile.prefs)
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
