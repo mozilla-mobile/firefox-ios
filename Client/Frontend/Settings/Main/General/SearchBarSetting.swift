@@ -31,11 +31,6 @@ class SearchBarSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedToolbar()
-        } else {
-            let viewController = SearchBarSettingsViewController(viewModel: viewModel)
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedToolbar()
     }
 }

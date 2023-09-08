@@ -175,14 +175,7 @@ class SyncNowSetting: WithAccountSetting {
 
     @objc
     private func troubleshoot() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToOpen(url: syncSUMOURL, withTitle: title)
-            return
-        }
-
-        let viewController = SettingsContentViewController()
-        viewController.url = syncSUMOURL
-        settings.navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.askedToOpen(url: syncSUMOURL, withTitle: title)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {

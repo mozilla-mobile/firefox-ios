@@ -26,12 +26,6 @@ class SiriPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedSiri()
-        } else {
-            let viewController = SiriSettingsViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedSiri()
     }
 }

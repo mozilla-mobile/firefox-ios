@@ -136,14 +136,6 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
-settings-coordinator-refactor:
-  description: "This feature is for managing the roll out of the settings coordinator code as part of the changes on the navigation in the app\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    enabled:
-      type: boolean
-      description: "Enables the feature\n"
 share-extension-coordinator-refactor:
   description: "This feature is for managing the roll out of the share extension coordinator as part of the changes to the navigation in the app\n"
   hasExposure: true

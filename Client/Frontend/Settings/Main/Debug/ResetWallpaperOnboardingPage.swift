@@ -22,10 +22,6 @@ class ResetWallpaperOnboardingPage: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         UserDefaults.standard.set(false, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToReload()
-        } else {
-            updateCell(navigationController)
-        }
+        settingsDelegate?.askedToReload()
     }
 }

@@ -62,7 +62,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
-    let appAuthenticator: AppAuthenticationProtocol
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
@@ -80,15 +79,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
          tabManager: TabManager,
          buttonView: UIButton,
          toastContainer: UIView,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
+         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
         self.toastContainer = toastContainer
-        self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
@@ -444,40 +441,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getSettingsAction() -> PhotonRowActions {
         let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
                                                  iconString: ImageIdentifiers.settings) { _ in
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
-                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
-                DispatchQueue.main.async {
-                    self.navigationHandler?.show(settings: .general)
-                }
-            } else {
-                self.legacyShowSettings()
+            // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+            DispatchQueue.main.async {
+                self.navigationHandler?.show(settings: .general)
             }
         }.items
         return openSettings
-    }
-
-    // Will be removed with FXIOS-6529
-    private func legacyShowSettings() {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: self.profile,
-            and: self.tabManager,
-            delegate: self.menuActionDelegate)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            controller.modalPresentationStyle = .fullScreen
-        }
-        controller.presentingModalViewControllerDelegate = self.menuActionDelegate
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
-
-        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-        // of this popover on iPad seems to block the presentation of the modal VC.
-        DispatchQueue.main.async {
-            self.delegate?.showViewController(viewController: controller)
-        }
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {
@@ -814,77 +785,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: Password
 
-    typealias NavigationHandlerType = (_ url: URL?) -> Void
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
-        guard PasswordManagerListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs),
-              let navigationController = navigationController
-        else { return nil }
+        guard PasswordManagerListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs) else { return nil }
 
         return SingleActionViewModel(title: .AppMenu.AppMenuPasswords,
                                      iconString: StandardImageIdentifiers.Large.login,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                self.navigationHandler?.show(settings: .password)
-                return
-            }
-
-            let navigationHandler: NavigationHandlerType = { url in
-                UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-                self.delegate?.openURLInNewTab(url, isPrivate: false)
-            }
-
-            if self.appAuthenticator.canAuthenticateDeviceOwner {
-                if LoginOnboarding.shouldShow() {
-                    self.showLoginOnboarding(navigationHandler: navigationHandler, navigationController: navigationController)
-                } else {
-                    self.showLoginListVC(navigationHandler: navigationHandler, navigationController: navigationController)
-                }
-            } else {
-                let rootViewController = DevicePasscodeRequiredViewController(shownFromAppMenu: true)
-                let navController = ThemedNavigationController(rootViewController: rootViewController)
-                self.delegate?.showViewController(viewController: navController)
-            }
+            self.navigationHandler?.show(settings: .password)
         }.items
-    }
-
-    private func showLoginOnboarding(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
-        let loginOnboardingViewController = PasswordManagerOnboardingViewController(shownFromAppMenu: true)
-        loginOnboardingViewController.doneHandler = {
-            loginOnboardingViewController.dismiss(animated: true)
-        }
-
-        loginOnboardingViewController.proceedHandler = {
-            loginOnboardingViewController.dismiss(animated: true) {
-                self.showLoginListVC(navigationHandler: navigationHandler, navigationController: navigationController)
-            }
-        }
-
-        let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
-        delegate?.showViewController(viewController: navController)
-
-        LoginOnboarding.setShown()
-    }
-
-    private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
-        guard let menuActionDelegate = menuActionDelegate else { return }
-        PasswordManagerListViewController.create(
-            didShowFromAppMenu: true,
-            authenticateInNavigationController: navigationController,
-            profile: self.profile,
-            settingsDelegate: menuActionDelegate,
-            webpageNavigationHandler: navigationHandler
-        ) { [weak self] loginsVC in
-            self?.presentLoginList(loginsVC)
-        }
-    }
-
-    private func presentLoginList(_ loginsVC: PasswordManagerListViewController?) {
-        guard let loginsVC = loginsVC else { return }
-        let navController = ThemedNavigationController(rootViewController: loginsVC)
-        delegate?.showViewController(viewController: navController)
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
     }
 
     // MARK: - Conveniance

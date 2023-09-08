@@ -43,14 +43,6 @@ class ContentBlockerSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedContentBlocker()
-            return
-        }
-
-        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
-        viewController.profile = profile
-        viewController.tabManager = tabManager
-        navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.pressedContentBlocker()
     }
 }

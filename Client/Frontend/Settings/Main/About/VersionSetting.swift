@@ -33,31 +33,8 @@ class VersionSetting: Setting {
     }
 
     override func onLongPress(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            let alertTitle: String = .SettingsCopyAppVersionAlertTitle
-            let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
-            settingsDelegate?.askedToShow(alert: alert)
-        } else {
-            copyAppVersionAndPresentAlert(by: navigationController)
-        }
-    }
-
-    private func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle: String = .SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
-        getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
-        UIPasteboard.general.string = self.title?.string
-        navigationController?.topViewController?.present(alert, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                alert.dismiss(animated: true)
-            }
-        }
-    }
-
-    private func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
-        return tableView?.cellForRow(at: indexPath)
+        settingsDelegate?.askedToShow(alert: alert)
     }
 }

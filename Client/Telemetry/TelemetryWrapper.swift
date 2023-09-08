@@ -1024,6 +1024,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceClosed.record()
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
+        case (.action, .view, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceDisplayed.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

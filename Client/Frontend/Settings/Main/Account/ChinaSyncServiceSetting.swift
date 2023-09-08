@@ -69,10 +69,6 @@ class ChinaSyncServiceSetting: Setting {
         alert.addAction(okString)
         alert.addAction(cancel)
 
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToShow(alert: alert)
-        } else {
-            settings.present(alert, animated: true)
-        }
+        settingsDelegate?.askedToShow(alert: alert)
     }
 }
