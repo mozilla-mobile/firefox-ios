@@ -6,8 +6,6 @@ import UIKit
 import Shared
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
-    private var shownFromAppMenu = false
-
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
