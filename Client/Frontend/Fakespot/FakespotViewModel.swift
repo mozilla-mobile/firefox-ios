@@ -75,6 +75,7 @@ class FakespotViewModel {
         state = .loading
         do {
             state = try await .loaded(shoppingProduct.fetchProductAnalysisData())
+            TelemetryWrapper.recordEvent(category: .information, method: .view, object: .productPageDetected)
         } catch {
             state = .error(error)
         }
