@@ -1020,6 +1020,8 @@ extension TelemetryWrapper {
         // MARK: Shopping Experience (Fakespot)
         case (.action, .tap, .shoppingCartButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .view, .shoppingCartButton, _, _):
+            GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceClosed.record()
         case (.action, .tap, .shoppingRecentReviews, _, _):
