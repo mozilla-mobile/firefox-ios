@@ -579,14 +579,15 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         // When
-        let params = FxALaunchParams(entrypoint: .homepanel, query: ["signin": "cool", "user": "foo", "email": "bar"])
+        let params = FxALaunchParams(entrypoint: .fxaDeepLinkNavigation,
+                                     query: ["signin": "coolcodes", "user": "foo", "email": "bar"])
         let result = subject.handle(route: .fxaSignIn(params: params))
 
         // Then
         XCTAssertTrue(result)
         XCTAssertEqual(mbvc.presentSignInCount, 1)
         XCTAssertEqual(mbvc.presentSignInFlowType, .emailLoginFlow)
-        XCTAssertEqual(mbvc.presentSignInFxaOptions, FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["signin": "coolcodes", "user": "foo", "email": "bar"]))
+        XCTAssertEqual(mbvc.presentSignInFxaOptions, params)
         XCTAssertEqual(mbvc.presentSignInReferringPage, ReferringPage.none)
     }
 
