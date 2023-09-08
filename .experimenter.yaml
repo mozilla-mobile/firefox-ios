@@ -95,9 +95,6 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
-    upgrade-flow:
-      type: boolean
-      description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
 onboarding-framework-feature:
   description: "The new onboarding framework feature that will allow onboarding to be experimentable through initial experiments.\n"
   hasExposure: true

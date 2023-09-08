@@ -46,8 +46,7 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .onboardingUpgrade,
-                .onboardingFreshInstall:
+        case .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .reduxIntegration:
@@ -221,7 +220,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.onboardingFeature.value()
 
         switch featureID {
-        case .onboardingUpgrade: return config.upgradeFlow
         case .onboardingFreshInstall: return config.firstRunFlow
         default: return false
         }

@@ -23,7 +23,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
 
     // If the feature is enabled and is not clean install
     var shouldShowFeature: Bool {
-        return featureFlags.isFeatureEnabled(.onboardingUpgrade, checking: .buildOnly) && !isFreshInstall
+        return !isFreshInstall
     }
 
     var isFreshInstall: Bool {
