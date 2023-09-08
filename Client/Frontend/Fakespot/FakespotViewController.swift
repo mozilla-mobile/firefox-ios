@@ -83,6 +83,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
+        sendTelemetryOnAppear()
 
         confirmationCardView.configure(viewModel.confirmationCardViewModel)
         reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
@@ -183,6 +184,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private func recordTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
+                                     object: .shoppingBottomSheet)
+    }
+
+    private func sendTelemetryOnAppear() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
                                      object: .shoppingBottomSheet)
     }
 
