@@ -763,21 +763,17 @@
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
-		8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3879842A965210003966B0 /* FakespotViewModel.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6DA7D12A6FE78F00DE264F /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
 		8C6F94652A972EB300415FF6 /* AdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */; };
 		8C6F94662A972EB300415FF6 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* StarRatingView.swift */; };
 		8C8D8C7A2AA067AD00490D32 /* FakespotCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */; };
-		8C8D8C7C2AA0691A00490D32 /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C7B2AA0691900490D32 /* FakespotCoordinator.swift */; };
-		8C8D8C7E2AA0694D00490D32 /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C7D2AA0694D00490D32 /* FakespotViewModel.swift */; };
 		8C8D8C822AA2229300490D32 /* FakespotViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */; };
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */; };
-		8CD02BD02A9631330029106A /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
@@ -1240,6 +1236,9 @@
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
 		E13A72D9291154E600E9A99D /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
+		E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */; };
+		E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */; };
+		E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */; };
 		E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */; };
 		E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
 		E1442FC0294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
@@ -1260,20 +1259,20 @@
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
-		E1516A3E2A7BC07E007819A4 /* ReliabilityRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */; };
+		E1516A3E2A7BC07E007819A4 /* FakespotReliabilityRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* FakespotReliabilityRating.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
 		E16258EF2A83BE0800522742 /* FakespotLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */; };
 		E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */; };
-		E16AD22C2A8A7AE800F0AA58 /* HighlightsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AD22B2A8A7AE800F0AA58 /* HighlightsCardView.swift */; };
+		E16AD22C2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
 		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
 		E17496382991A2720096900A /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496372991A2720096900A /* AdaptiveStack.swift */; };
 		E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496392992B42C0096900A /* CreditCardSectionHeader.swift */; };
 		E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */; };
 		E17496402994302D0096900A /* PreferredFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963F2994302D0096900A /* PreferredFont.swift */; };
-		E17BE4C62A94D70800C5124E /* ReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17BE4C52A94D70800C5124E /* ReliabilityCardView.swift */; };
+		E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */; };
 		E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */; };
 		E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */; };
 		E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */; };
@@ -1284,6 +1283,7 @@
 		E18BAB0128E4AEF300098AE2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
 		E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */; };
+		E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F44062A951C330056160F /* FakespotHighlightGroup.swift */; };
 		E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */; };
 		E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */; };
 		E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */; };
@@ -1306,6 +1306,7 @@
 		E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */; };
 		E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
+		E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */; };
 		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
 		E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
@@ -1316,12 +1317,12 @@
 		E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
 		E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */; };
-		E1D3FFB42A66B726002D31EF /* FakespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */; };
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
 		E1E5BE252A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */; };
 		E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */; };
+		E1FC23F12A8629380089E14D /* FakespotReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */; };
 		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */; };
 		E1FE133329C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */; };
@@ -5018,7 +5019,6 @@
 		8BFA4413BB71963DB0E69F82 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8BFD47109E07F897D604AEBE /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
-		8C3879842A965210003966B0 /* FakespotViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModel.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
@@ -5026,8 +5026,6 @@
 		8C6F94642A972EB300415FF6 /* StarRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotCoordinatorTests.swift; sourceTree = "<group>"; };
-		8C8D8C7B2AA0691900490D32 /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotCoordinator.swift; sourceTree = "<group>"; };
-		8C8D8C7D2AA0694D00490D32 /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotViewModel.swift; sourceTree = "<group>"; };
 		8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModelTests.swift; sourceTree = "<group>"; };
 		8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotClient.swift; sourceTree = "<group>"; };
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisData.swift; sourceTree = "<group>"; };
@@ -5036,7 +5034,6 @@
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
 		8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotErrorCardView.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
-		8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotCoordinator.swift; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
 		8D1340A4B7E4ACBF43347178 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -6442,6 +6439,9 @@
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
 		E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModelTests.swift; sourceTree = "<group>"; };
 		E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerMock.swift; sourceTree = "<group>"; };
+		E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewController.swift; path = Client/Frontend/Fakespot/FakespotViewController.swift; sourceTree = SOURCE_ROOT; };
+		E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotCoordinator.swift; path = Client/Frontend/Fakespot/FakespotCoordinator.swift; sourceTree = SOURCE_ROOT; };
+		E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewModel.swift; path = Client/Frontend/Fakespot/FakespotViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSiteHeaderView.swift; sourceTree = "<group>"; };
 		E1442FBE294782B6003680B0 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		E1442FC1294782C2003680B0 /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -6459,7 +6459,7 @@
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
-		E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityRating.swift; sourceTree = "<group>"; };
+		E1516A3D2A7BC07E007819A4 /* FakespotReliabilityRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotReliabilityRating.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -6467,14 +6467,14 @@
 		E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotLoadingView.swift; sourceTree = "<group>"; };
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLMailTests.swift; sourceTree = "<group>"; };
-		E16AD22B2A8A7AE800F0AA58 /* HighlightsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsCardView.swift; sourceTree = "<group>"; };
+		E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightsCardView.swift; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
 		E17496372991A2720096900A /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		E17496392992B42C0096900A /* CreditCardSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSectionHeader.swift; sourceTree = "<group>"; };
 		E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewSectionHeader.swift; sourceTree = "<group>"; };
 		E174963F2994302D0096900A /* PreferredFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredFont.swift; sourceTree = "<group>"; };
-		E17BE4C52A94D70800C5124E /* ReliabilityCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReliabilityCardView.swift; sourceTree = "<group>"; };
+		E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightGroupView.swift; sourceTree = "<group>"; };
 		E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationCardHelper.swift; sourceTree = "<group>"; };
 		E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterProtocol.swift; sourceTree = "<group>"; };
 		E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationManager.swift; sourceTree = "<group>"; };
@@ -6483,6 +6483,7 @@
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionType.swift; sourceTree = "<group>"; };
+		E18F44062A951C330056160F /* FakespotHighlightGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightGroup.swift; sourceTree = "<group>"; };
 		E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailabilityTests.swift; sourceTree = "<group>"; };
 		E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionViewCell.swift; sourceTree = "<group>"; };
 		E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCellViewModel.swift; sourceTree = "<group>"; };
@@ -6507,16 +6508,17 @@
 		E1B04A9C28E20A8300670E54 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotFadeLabel.swift; sourceTree = "<group>"; };
 		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
 		E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewHeaderCell.swift; sourceTree = "<group>"; };
 		E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewCell.swift; sourceTree = "<group>"; };
 		E1CD81C4290C6D5800124B27 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		E1CEC2012A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
-		E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewController.swift; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
+		E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotReliabilityCardView.swift; sourceTree = "<group>"; };
 		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetchAndProcessingUtility.swift; sourceTree = "<group>"; };
 		E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNotificationSurfaceUtility.swift; sourceTree = "<group>"; };
@@ -8686,7 +8688,8 @@
 				8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */,
 				8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */,
 				8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */,
-				E1516A3D2A7BC07E007819A4 /* ReliabilityRating.swift */,
+				E1516A3D2A7BC07E007819A4 /* FakespotReliabilityRating.swift */,
+				E18F44062A951C330056160F /* FakespotHighlightGroup.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -9906,8 +9909,10 @@
 				8C6F94642A972EB300415FF6 /* StarRatingView.swift */,
 				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
-				E17BE4C52A94D70800C5124E /* ReliabilityCardView.swift */,
-				E16AD22B2A8A7AE800F0AA58 /* HighlightsCardView.swift */,
+				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
+				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
+				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
+				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
 				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
 				DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */,
 			);
@@ -10003,12 +10008,10 @@
 		E1D3FFAF2A66A9BD002D31EF /* Fakespot */ = {
 			isa = PBXGroup;
 			children = (
-				8C8D8C7D2AA0694D00490D32 /* FakespotViewModel.swift */,
-				8C8D8C7B2AA0691900490D32 /* FakespotCoordinator.swift */,
 				E16258F02A83D5DE00522742 /* Views */,
-				E1D3FFB32A66B726002D31EF /* FakespotViewController.swift */,
-				8CD02BCF2A9631330029106A /* FakespotCoordinator.swift */,
-				8C3879842A965210003966B0 /* FakespotViewModel.swift */,
+				E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */,
+				E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */,
+				E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */,
 				8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */,
 				8C92DE942A7128FB0090BD28 /* Client */,
 			);
@@ -12412,6 +12415,7 @@
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
+				E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */,
 				8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */,
 				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
@@ -12433,14 +12437,15 @@
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */,
+				E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */,
 				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
+				E1FC23F12A8629380089E14D /* FakespotReliabilityCardView.swift in Sources */,
 				C8DC90C92A0675E70008832B /* MarkupParsingUtility.swift in Sources */,
-				E17BE4C62A94D70800C5124E /* ReliabilityCardView.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */,
 				8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */,
 				8A3EF80B2A2FD03C00796E3A /* TogglePullToRefresh.swift in Sources */,
-				E1516A3E2A7BC07E007819A4 /* ReliabilityRating.swift in Sources */,
+				E1516A3E2A7BC07E007819A4 /* FakespotReliabilityRating.swift in Sources */,
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
 				DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */,
@@ -12501,7 +12506,6 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
-				E1D3FFB42A66B726002D31EF /* FakespotViewController.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
@@ -12546,7 +12550,6 @@
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
-				8CD02BD02A9631330029106A /* FakespotCoordinator.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
@@ -12559,7 +12562,7 @@
 				C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
 				C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */,
 				DA27EEDB28BADF4700DD6F5D /* MenuBuilderHelper.swift in Sources */,
-				E16AD22C2A8A7AE800F0AA58 /* HighlightsCardView.swift in Sources */,
+				E16AD22C2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift in Sources */,
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
@@ -12613,6 +12616,7 @@
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift in Sources */,
 				74B420C92A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift in Sources */,
+				E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */,
 				E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
@@ -12859,6 +12863,7 @@
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
 				437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */,
+				E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */,
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				5A8E7B6F29B8E5E500BF060F /* UIButton+Extensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
@@ -12866,6 +12871,7 @@
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
 				216A0D712A40D0FB008077BA /* ReduxFlagManager.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
+				E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */,
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
 				8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */,
 				2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */,
@@ -12929,7 +12935,6 @@
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
-				8C3879852A965210003966B0 /* FakespotViewModel.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,
 				E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */,
@@ -12952,7 +12957,6 @@
 				C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */,
 				8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
-				8C8D8C7C2AA0691A00490D32 /* FakespotCoordinator.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
@@ -13014,7 +13018,6 @@
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
 				C8656D77270F858900E199EA /* TabsSettingsViewControler.swift in Sources */,
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
-				8C8D8C7E2AA0694D00490D32 /* FakespotViewModel.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
 				437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */,
@@ -13064,6 +13067,7 @@
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
 				8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */,
+				E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */,
 				8A3EF7FB2A2FCF9D00796E3A /* ForceCrashSetting.swift in Sources */,
 				2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */,
 			);

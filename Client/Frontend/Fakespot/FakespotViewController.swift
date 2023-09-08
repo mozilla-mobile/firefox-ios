@@ -54,8 +54,8 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     private lazy var errorCardView: FakespotErrorCardView = .build()
     private lazy var confirmationCardView: FakespotMessageCardView = .build()
-    private lazy var reliabilityCardView: ReliabilityCardView = .build()
-    private lazy var highlightsCardView: HighlightsCardView = .build()
+    private lazy var reliabilityCardView: FakespotReliabilityCardView = .build()
+    private lazy var highlightsCardView: FakespotHighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
@@ -178,7 +178,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight)
         ])
 
-        titleCenterYConstraint.priority(.defaultLow)
+        _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
     private func recordTelemetry() {

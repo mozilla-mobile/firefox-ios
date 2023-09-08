@@ -3621,6 +3621,21 @@ extension String {
             tableName: "Shopping",
             value: "Try Again",
             comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Title.v119
+            tableName: "Shopping",
+            value: "Highlights from recent reviews",
+            comment: "Title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardMoreButtonTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.MoreButton.Title.v119
+            tableName: "Shopping",
+            value: "Show More",
+            comment: "Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardLessButtonTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.LessButton.Title.v119
+            tableName: "Shopping",
+            value: "Show Less",
+            comment: "Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingTitle = MZLocalizedString(
             key: "", // Shopping.AdjustedRating.Title.v118
             tableName: "Shopping",
@@ -3636,16 +3651,31 @@ extension String {
             tableName: "Shopping",
             value: "%@ out of 5 stars",
             comment: "Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5).")
-        public static let HighlightsCardFooterText = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Footer.Text.v118
+        public static let HighlightsCardPriceTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Price.Title.v119
             tableName: "Shopping",
-            value: "Summarized using information provided by Fakespot.com.",
-            comment: "Footer text of the review highlights displayed in the shopping review quality bottom sheet.")
-        public static let HighlightsCardFooterButtonText = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Footer.Button.Text.v118
+            value: "Price",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardQualityTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Quality.Title.v119
             tableName: "Shopping",
-            value: "View full analysis",
-            comment: "Footer button text of the review highlights displayed in the shopping review quality bottom sheet.")
+            value: "Quality",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardShippingTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Shipping.Title.v119
+            tableName: "Shopping",
+            value: "Shipping",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardCompetitivenessTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Competitiveness.Title.v119
+            tableName: "Shopping",
+            value: "Competitiveness",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+        public static let HighlightsCardPackagingTitle = MZLocalizedString(
+            key: "", // Shopping.HighlightsCard.Packaging.Title.v119
+            tableName: "Shopping",
+            value: "Packaging",
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardLabelTitle = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Label.Title.v118
             tableName: "Shopping",

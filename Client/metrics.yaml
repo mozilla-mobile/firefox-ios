@@ -670,6 +670,18 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-07-27"
 
+  surface_show_more_recent_reviews_clicked:
+    type: event
+    description: |
+      Records when the show more button of the recent reviews card is clicked
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15470
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16279
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-07-27"
+    
   surface_displayed:
     type: event
     description: |
