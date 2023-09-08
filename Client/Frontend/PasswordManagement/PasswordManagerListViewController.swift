@@ -23,11 +23,9 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     private var selectedIndexPaths = [IndexPath]()
     private let tableView: UITableView = .build()
 
-    weak var settingsDelegate: SettingsDelegate?
     weak var coordinator: PasswordManagerFlowDelegate?
 
     var shownFromAppMenu = false
-    var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     fileprivate lazy var selectionButton: UIButton = .build { button in
         button.titleLabel?.font = PasswordManagerViewModel.UX.selectionButtonFont
@@ -39,36 +37,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    static func create(
-        didShowFromAppMenu: Bool,
-        authenticateInNavigationController navigationController: UINavigationController,
-        profile: Profile,
-        settingsDelegate: SettingsDelegate? = nil,
-        webpageNavigationHandler: ((_ url: URL?) -> Void)?,
-        completion: @escaping ((PasswordManagerListViewController?) -> Void)
-    ) {
-        AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
-            let viewController: PasswordManagerListViewController?
-            switch result {
-            case .success:
-                viewController = PasswordManagerListViewController(
-                    shownFromAppMenu: didShowFromAppMenu,
-                    profile: profile,
-                    webpageNavigationHandler: webpageNavigationHandler
-                )
-                viewController?.settingsDelegate = settingsDelegate
-            case .failure:
-                viewController = nil
-            }
-            DispatchQueue.main.async {
-                completion(viewController)
-            }
-        }
-    }
-
     init(shownFromAppMenu: Bool = false,
          profile: Profile,
-         webpageNavigationHandler: ((_ url: URL?) -> Void)? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = PasswordManagerViewModel(
@@ -77,7 +47,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
             theme: themeManager.currentTheme
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
-        self.webpageNavigationHandler = webpageNavigationHandler
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.shownFromAppMenu = shownFromAppMenu
@@ -166,20 +135,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         loadLogins()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        guard settingsDelegate != nil else {
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                return
-            } else {
-                settingsDelegate = sceneForVC?.coordinatorBrowserViewController
-            }
-
-            return
-        }
-    }
-
     func applyTheme() {
         let theme = themeManager.currentTheme
         viewModel.theme = theme
@@ -236,6 +191,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
                                                      action: #selector(cancelSelection))
 
     fileprivate func setupDefaultNavButtons() {
+        addCredentialButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.addCredentialButton
+        editButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.editButton
         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
 
         if shownFromAppMenu {
@@ -327,19 +284,7 @@ private extension PasswordManagerListViewController {
             }
         }
 
-        // The assumption is that if webpageNavigationHandler is not nil, we came from the photon menu
-        // where coordinators are not yet implemented
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && webpageNavigationHandler == nil {
-            coordinator?.pressedAddPassword(completion: completion)
-            return
-        }
-        let addController = AddCredentialViewController(didSaveAction: completion)
-
-        let controller = UINavigationController(
-            rootViewController: addController
-        )
-        controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true)
+        coordinator?.pressedAddPassword(completion: completion)
     }
 
     @objc
@@ -453,20 +398,10 @@ extension PasswordManagerListViewController: UITableViewDelegate {
             let detailViewModel = PasswordDetailViewControllerModel(
                 profile: viewModel.profile,
                 login: login,
-                webpageNavigationHandler: webpageNavigationHandler,
                 breachRecord: breachRecord
             )
 
-            // The assumption is that if webpageNavigationHandler is not nil, we came from the photon menu
-            // where coordinators are not yet implemented
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled && webpageNavigationHandler == nil {
-                coordinator?.pressedPasswordDetail(model: detailViewModel)
-                return
-            }
-
-            let detailViewController = PasswordDetailViewController(viewModel: detailViewModel)
-            detailViewController.settingsDelegate = settingsDelegate
-            navigationController?.pushViewController(detailViewController, animated: true)
+            coordinator?.pressedPasswordDetail(model: detailViewModel)
         }
     }
 

@@ -383,13 +383,6 @@
     "domain": "eventbrite.com"
   },
   {
-    "title": "expedia",
-    "url": "https://www.expedia.com/",
-    "image_url": "expedia-com.png",
-    "background_color": "#003460",
-    "domain": "expedia.com"
-  },
-  {
     "title": "facebook",
     "url": "https://www.facebook.com/",
     "image_url": "facebook-com.png",

@@ -71,8 +71,8 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
-    weak var gridTabTrayController: GridTabViewController?
-    var tabTrayViewController: TabTrayViewController?
+    weak var gridTabTrayController: LegacyGridTabViewController?
+    var tabTrayViewController: LegacyTabTrayViewController?
 
     let profile: Profile
     let tabManager: TabManager
@@ -554,13 +554,6 @@ class BrowserViewController: UIViewController,
             selector: #selector(didFinishAnnouncement),
             name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
-
-        // PresentIntroView notification and code will be removed with FXIOS-6529
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(presentIntroFrom),
-            name: .PresentIntroView,
-            object: nil)
     }
 
     func addSubviews() {
@@ -641,7 +634,7 @@ class BrowserViewController: UIViewController,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint() },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) },
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .toolbar) },
             overlayState: overlayManager)
     }
 
@@ -1235,6 +1228,14 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    func setupLoadingSpinnerFor(_ webView: WKWebView, isLoading: Bool) {
+        if isLoading {
+            webView.scrollView.refreshControl?.beginRefreshing()
+        } else {
+            webView.scrollView.refreshControl?.endRefreshing()
+        }
+    }
+
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
@@ -1297,6 +1298,8 @@ class BrowserViewController: UIViewController,
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
+            setupLoadingSpinnerFor(webView, isLoading: loading)
+
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
@@ -1685,19 +1688,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    // Will be clean up with FXIOS-6529
-    func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager,
-            delegate: self,
-            deeplinkingTo: destination)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-        presentWithModalDismissIfNeeded(controller, animated: true)
-    }
-
     // MARK: Autofill
 
     private func creditCardInitialSetupTelemetry() {
@@ -1717,6 +1707,10 @@ class BrowserViewController: UIViewController,
 
         // Credit card sync telemetry
         self.profile.hasSyncAccount { [unowned self] hasSync in
+            logger.log("User has sync account setup \(hasSync)",
+                       level: .debug,
+                       category: .setup)
+
             guard hasSync else { return }
             let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
             TelemetryWrapper.recordEvent(
@@ -1736,43 +1730,44 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            let creditCardHelper = CreditCardHelper(tab: tab)
-            tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-            creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-                guard let tabWebView = tab.webView,
-                      let type = type,
-                      userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
-                else { return }
+        let creditCardHelper = CreditCardHelper(tab: tab)
+        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+            guard let tabWebView = tab.webView,
+                  let type = type,
+                  userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
+            else { return }
 
-                switch type {
-                case .formInput:
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardFormDetected)
-                    self?.profile.autofill.listCreditCards(completion: { cards, error in
-                        guard let cards = cards, !cards.isEmpty, error == nil
-                        else {
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            tabWebView.accessoryView.reloadViewFor(.creditCard)
-                            tabWebView.reloadInputViews()
-                        }
-                    })
-                case .formSubmit:
-                    self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
-                    break
-                }
+            // FXIOS-7150: Telemetry for form input regardless of feature flag status
+            if type == .formInput {
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .creditCardFormDetected)
+            }
 
-                tabWebView.accessoryView.savedCardsClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        // Dismiss keyboard
-                        webView.resignFirstResponder()
-                        // Authenticate and show bottom sheet with select a card flow
-                        self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
-                                                                      frame: frame)
+            // Perform autofill operations based on feature flag status
+            guard autofillCreditCardStatus else { return }
+            switch type {
+            case .formInput:
+                self?.profile.autofill.listCreditCards(completion: { cards, error in
+                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
+                    DispatchQueue.main.async {
+                        tabWebView.accessoryView.reloadViewFor(.creditCard)
+                        tabWebView.reloadInputViews()
                     }
+                })
+            case .formSubmit:
+                self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
+                break
+            }
+
+            tabWebView.accessoryView.savedCardsClosure = {
+                DispatchQueue.main.async { [weak self] in
+                    // Dismiss keyboard
+                    webView.resignFirstResponder()
+                    // Authenticate and show bottom sheet with select a card flow
+                    self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
+                                                                  frame: frame)
                 }
             }
         }
@@ -2133,13 +2128,12 @@ extension BrowserViewController: HomePanelDelegate {
         show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: LegacyTabTrayViewModel.Segment?) {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
-        let route = settingsPage.getSettingsRoute()
-        navigationHandler?.show(settings: route)
+    func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
+        navigationHandler?.show(settings: settingsPage)
     }
 }
 
@@ -2359,55 +2353,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    @objc
-    func presentIntroFrom(notification: Notification) {
-        showProperIntroVC()
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    private func showProperIntroVC() {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
-        let introViewModel = IntroViewModel(introScreenManager: nil,
-                                            profile: profile,
-                                            model: onboardingModel,
-                                            telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel)
-
-        introViewController.didFinishFlow = {
-            IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
-            introViewController.dismiss(animated: true)
-        }
-
-        self.introVCPresentHelper(introViewController: introViewController)
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    private func introVCPresentHelper(introViewController: UIViewController) {
-        // On iPad we present it modally in a controller
-        if topTabsVisible {
-            introViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
-                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            introViewController.modalPresentationStyle = .formSheet
-        } else {
-            introViewController.modalPresentationStyle = .fullScreen
-        }
-        present(introViewController, animated: true) {
-            self.setupHomepageOnBackground()
-        }
-    }
-
-    // FXIOS-6529 - will be cleaned up after settings coordinator is released
-    // On first run (and forced) open up the homepage in the background.
-    private func setupHomepageOnBackground() {
-        if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs),
-           let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-            tab.loadRequest(URLRequest(url: homePageURL))
-        }
-    }
-
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
                                                   viewType state: CreditCardBottomSheetState,
@@ -2731,11 +2676,11 @@ extension BrowserViewController: TabTrayDelegate {
 
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
+    func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController) {
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}
+    func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }

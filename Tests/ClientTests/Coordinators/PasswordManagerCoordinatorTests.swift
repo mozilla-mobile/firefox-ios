@@ -79,7 +79,6 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         let mockModel = PasswordDetailViewControllerModel(
             profile: MockProfile(),
             login: mockLoginRecord,
-            webpageNavigationHandler: nil,
             breachRecord: nil
         )
         subject.pressedPasswordDetail(model: mockModel)
@@ -108,6 +107,15 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         let navigationController = passwordManagerSpy.viewControllerToPresent as? UINavigationController
         XCTAssertEqual(passwordManagerSpy.presentCalled, 1)
         XCTAssertTrue(navigationController?.viewControllers.first is AddCredentialViewController)
+    }
+
+    func testShowDevicePassCode() {
+        let subject = createSubject()
+
+        subject.showDevicePassCode()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is DevicePasscodeRequiredViewController)
     }
 
     // MARK: - Helper

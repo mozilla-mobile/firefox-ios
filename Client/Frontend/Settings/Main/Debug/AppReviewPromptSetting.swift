@@ -20,10 +20,6 @@ class AppReviewPromptSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         UserDefaults.standard.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToReload()
-        } else {
-            updateCell(navigationController)
-        }
+        settingsDelegate?.askedToReload()
     }
 }

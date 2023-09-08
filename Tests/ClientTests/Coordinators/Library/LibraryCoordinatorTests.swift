@@ -36,6 +36,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         subject.start(with: .bookmarks)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
         XCTAssertTrue(mockRouter.rootViewController is LibraryViewController)
+        XCTAssertEqual((mockRouter.rootViewController as? LibraryViewController)?.childPanelControllers.count, 4)
     }
 
     func testStart_withHistoryHomepanelSection_setsUpLibraryViewControllerWithHistoryPanel() {
@@ -70,6 +71,19 @@ final class LibraryCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.start(panelType: .history, navigationController: UINavigationController())
         XCTAssertTrue(subject.childCoordinators.first is HistoryCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
+    func testStart_withLibraryPanelTypeDownloads_addsChildDownloadsCoordinator() {
+        let subject = createSubject()
+        subject.start(panelType: .downloads, navigationController: UINavigationController())
+        XCTAssertTrue(subject.childCoordinators.first is DownloadsCoordinator)
+    }
+
+    func testStart_withLibraryPanelTypeReadingList_addsChildReadingListCoordinator() {
+        let subject = createSubject()
+        subject.start(panelType: .readingList, navigationController: UINavigationController())
+        XCTAssertTrue(subject.childCoordinators.first is ReadingListCoordinator)
         XCTAssertEqual(subject.childCoordinators.count, 1)
     }
 
@@ -115,30 +129,5 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertTrue(delegate.didRequestToOpenInNewTabCalled)
         XCTAssertEqual(delegate.lastOpenedURL, url)
         XCTAssertTrue(delegate.isPrivate)
-    }
-}
-
-class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDelegate {
-    var didFinishSettingsCalled = 0
-    var didRequestToOpenInNewTabCalled = false
-    var didSelectURLCalled = false
-    var lastOpenedURL: URL?
-    var lastVisitType: VisitType?
-    var isPrivate = false
-
-    func didFinishLibrary(from coordinator: LibraryCoordinator) {
-        didFinishSettingsCalled += 1
-    }
-
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        didRequestToOpenInNewTabCalled = true
-        lastOpenedURL = url
-        self.isPrivate = isPrivate
-    }
-
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        didSelectURLCalled = true
-        lastOpenedURL = url
-        lastVisitType = visitType
     }
 }

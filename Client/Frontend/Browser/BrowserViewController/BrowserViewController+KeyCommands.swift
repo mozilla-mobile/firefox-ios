@@ -11,13 +11,7 @@ extension BrowserViewController {
 
     @objc
     func openSettingsKeyCommand() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            navigationHandler?.show(settings: .general)
-        } else {
-            ensureMainThread { [self] in
-                self.legacyShowSettings(deeplink: nil)
-            }
-        }
+        navigationHandler?.show(settings: .general)
     }
 
     @objc
@@ -41,13 +35,17 @@ extension BrowserViewController {
 
     @objc
     func openClearHistoryPanelKeyCommand() {
-        guard let libraryViewController = self.libraryViewController else {
-            let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
-            clearHistoryHelper.showClearRecentHistory(onViewController: self)
-            return
-        }
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            navigationHandler?.show(homepanelSection: .history)
+        } else {
+            guard let libraryViewController = self.libraryViewController else {
+                let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
+                clearHistoryHelper.showClearRecentHistory(onViewController: self)
+                return
+            }
 
-        libraryViewController.viewModel.selectedPanel = .history
+            libraryViewController.viewModel.selectedPanel = .history
+        }
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 

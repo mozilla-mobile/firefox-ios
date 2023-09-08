@@ -140,8 +140,8 @@
    </BuildAction>
    <TestAction
       buildConfiguration = "Fennec"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       shouldUseLaunchSchemeArgsEnv = "NO"
       language = "en"
       region = "US"
@@ -264,6 +264,9 @@
          </TestPlanReference>
          <TestPlanReference
             reference = "container:Tests/SyncIntegrationTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/ExperimentIntegrationTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

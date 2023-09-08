@@ -16,6 +16,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
@@ -69,6 +70,29 @@ class AppSettingsTableViewControllerTests: XCTestCase {
 
         XCTAssertEqual(delegate.showDevicePassCodeCalled, 0)
         XCTAssertEqual(delegate.showCreditCardSettingsCalled, 0)
+    }
+
+    func testPassword_whenNeedShowingLoginOnboarding_showOnboarding() {
+        UserDefaults.standard.set(false, forKey: LoginOnboarding.HasSeenLoginOnboardingKey)
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.handle(route: .password)
+
+        XCTAssertEqual(delegate.showPasswordManagerCalled, 1)
+        XCTAssertTrue(delegate.savedShouldShowOnboarding)
+    }
+
+    func testPassword_whenHasAlreadyShownLoginOnboarding_authenticateAndShowPassword() {
+        appAuthenticator.authenticationState = .deviceOwnerAuthenticated
+        UserDefaults.standard.set(true, forKey: LoginOnboarding.HasSeenLoginOnboardingKey)
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.handle(route: .password)
+
+        XCTAssertEqual(delegate.showPasswordManagerCalled, 1)
+        XCTAssertFalse(delegate.savedShouldShowOnboarding)
     }
 
     func testPressedShowTour_openOnboardingDeeplinkURL() {

@@ -8,7 +8,9 @@ struct ComponentData {
     var data: [ComponentViewModel] {
         return [FadeScrollViewComponentViewModel(),
                 BottomSheetComponentViewModel(),
-                CardContainerComponentViewModel(),
-                CollapsibleCardContainerComponentViewModel()]
+                CardViewComponentViewModel(),
+                ShadowCardViewComponentViewModel(),
+                CollapsibleCardViewComponentViewModel(),
+                ActionFooterComponentViewModel()]
     }
 }

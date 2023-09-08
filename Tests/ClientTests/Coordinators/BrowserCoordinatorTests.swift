@@ -18,6 +18,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var glean: MockGleanWrapper!
     private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
+    let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
@@ -173,7 +174,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.show(settings: .general)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -499,91 +500,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedVC.topViewController is AppSettingsTableViewController)
     }
 
-    func testNewTabSettingsRoute_returnsNewTabSettingsPage() throws {
-        let route = Route.SettingsSection.newTab
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is NewTabContentSettingsViewController)
-        }
-    }
-
-    func testHomepageSettingsRoute_returnsHomepageSettingsPage() throws {
-        let route = Route.SettingsSection.homePage
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is HomePageSettingViewController)
-        }
-    }
-
-    func testMailtoSettingsRoute_returnsMailtoSettingsPage() throws {
-        let route = Route.SettingsSection.mailto
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is OpenWithSettingsViewController)
-        }
-    }
-
-    func testSearchSettingsRoute_returnsSearchSettingsPage() throws {
-        let route = Route.SettingsSection.search
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is SearchSettingsTableViewController)
-        }
-    }
-
-    func testClearPrivateDataSettingsRoute_returnsClearPrivateDataSettingsPage() throws {
-        let route = Route.SettingsSection.clearPrivateData
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is ClearPrivateDataTableViewController)
-        }
-    }
-
-    func testFxaSettingsRoute_returnsFxaSettingsPage() throws {
-        let route = Route.SettingsSection.fxa
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is SyncContentSettingsViewController)
-        }
-    }
-
-    func testThemeSettingsRoute_returnsThemeSettingsPage() throws {
-        let route = Route.SettingsSection.theme
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is ThemeSettingsController)
-        }
-    }
-
-    func testWallpaperSettingsRoute_canShow_returnsWallpaperSettingsPage() throws {
-        wallpaperManager.canSettingsBeShown = true
-        let route = Route.SettingsSection.wallpaper
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertTrue(result is WallpaperSettingsViewController)
-        }
-    }
-
-    func testWallpaperSettingsRoute_cannotShow_returnsWallpaperSettingsPage() throws {
-        wallpaperManager.canSettingsBeShown = false
-        let route = Route.SettingsSection.wallpaper
-        let subject = createSubject()
-
-        subject.legacyGetSettingsViewController(settingsSection: route) { result in
-            XCTAssertNil(result)
-        }
-    }
-
     func testSettingsRoute_addSettingsCoordinator() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
@@ -594,7 +512,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testSettingsRoute_addSettingsCoordinatorOnlyOnce() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let result1 = subject.handle(route: .settings(section: .general))
@@ -607,7 +525,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testPresentedCompletion_callsDidFinishSettings_removesChild() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
@@ -631,7 +549,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testSettingsCoordinatorDelegate_didFinishSettings_removesChild() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         let result = subject.handle(route: .settings(section: .general))
@@ -654,7 +572,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testEnhancedTrackingProtectionCoordinatorDelegate_didFinishETP_removesChild() {
-        let subject = createSubject(isSettingsCoordinatorEnabled: true)
+        let subject = createSubject()
         subject.browserHasLoaded()
 
         subject.showEnhancedTrackingProtection(sourceView: UIView())
@@ -765,6 +683,32 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertNil(coordinator)
     }
 
+    func testSavesRoute_whenTabManagerIsRestoring() {
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        XCTAssertNotNil(subject.savedRoute)
+        XCTAssertNil(coordinator)
+    }
+
+    func testSavedRouteCalled_whenRestoredTabsIsCalled() {
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+        subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+
+        tabManager.isRestoringTabs = false
+        subject.tabManagerDidRestoreTabs(tabManager)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    // MARK: - Library
+
     func testOneLibraryCoordinatorInstanceExists_whenPresetingMultipleLibraryTabs() {
         let subject = createSubject()
 
@@ -818,18 +762,40 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.isPrivate)
     }
 
+    // MARK: - Fakespot
+    func testFakespotCoordinatorDelegate_didDidDismiss_removesChild() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showFakespotFlow(productURL: exampleProduct)
+        let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
+        fakespotCoordinator.fakespotControllerDidDismiss()
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_startsFakespotCoordinator() {
+        let subject = createSubject()
+        subject.showFakespotFlow(productURL: exampleProduct)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? FakespotCoordinator)
+    }
+
     // MARK: - Helpers
-    private func createSubject(isSettingsCoordinatorEnabled: Bool = false,
-                               file: StaticString = #file,
+    private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
         routeBuilder.configure(isPrivate: false, prefs: profile.prefs)
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          profile: profile,
+                                         tabManager: tabManager,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         wallpaperManager: wallpaperManager,
-                                         isSettingsCoordinatorEnabled: isSettingsCoordinatorEnabled)
+                                         wallpaperManager: wallpaperManager)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

@@ -20,16 +20,7 @@ class OpenSupportPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled,
-           let url = URL(string: "https://support.mozilla.org/products/ios") {
-            settingsDelegate?.pressedOpenSupportPage(url: url)
-            return
-        }
-
-        navigationController?.dismiss(animated: true) {
-            if let url = URL(string: "https://support.mozilla.org/products/ios") {
-                self.delegate?.settingsOpenURLInNewTab(url)
-            }
-        }
+        guard let url = URL(string: "https://support.mozilla.org/products/ios") else { return }
+        settingsDelegate?.pressedOpenSupportPage(url: url)
     }
 }

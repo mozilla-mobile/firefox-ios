@@ -120,7 +120,7 @@ class SearchTests: XCTestCase {
         XCTAssertNil(googleEngine.queryForSearchURL(invalidSearchURL))
 
         // check that it matches given a different configuration
-        file = Bundle.main.path(forResource: "duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/")!
+        file = Bundle.main.path(forResource: "ddg", ofType: "xml", inDirectory: "SearchPlugins/")!
         let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file, engineID: "duckduckgo")
         XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
 

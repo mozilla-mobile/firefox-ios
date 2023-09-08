@@ -46,7 +46,7 @@ class AppLaunchUtil {
         // Initialize conversion value by specifying fineValue and coarseValue.
         // Call update postback conversion value for install event.
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
-        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
+        conversionValue.adNetworkAttributionUpdateConversionEvent()
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
@@ -80,6 +80,14 @@ class AppLaunchUtil {
 
         // Add swizzle on top of UIControl to automatically log when there's an action sent
         UIControl.loggerSwizzle()
+
+        logger.log("App version \(AppInfo.appVersion), Build number \(AppInfo.buildNumber)",
+                   level: .debug,
+                   category: .setup)
+
+        logger.log("Prefs for migration is \(String(describing: profile.prefs.boolForKey(PrefsKeys.TabMigrationKey)))",
+                   level: .debug,
+                   category: .tabs)
     }
 
     func setUpPostLaunchDependencies() {

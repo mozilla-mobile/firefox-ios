@@ -32,10 +32,10 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                     focusedSegment: TabTrayViewModel.Segment? = nil) {
+                     focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        self.tabTrayViewController = TabTrayViewController(
+        self.tabTrayViewController = LegacyTabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
             tabToFocus: tabToFocus,
@@ -111,12 +111,9 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
+        guard let productURL = urlBar.currentURL else { return }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
-
-        let viewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
-        let bottomSheetVC = BottomSheetViewController(viewModel: viewModel,
-                                                      childViewController: FakespotBottomSheetChildViewController())
-        present(bottomSheetVC, animated: false)
+        navigationHandler?.showFakespotFlow(productURL: productURL)
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
@@ -127,28 +124,24 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
-         guard let tab = self.tabManager.selectedTab,
-               let url = tab.url,
-               let contentBlocker = tab.contentBlocker,
-               let webView = tab.webView else { return }
+        guard let tab = self.tabManager.selectedTab,
+              let url = tab.url,
+              let contentBlocker = tab.contentBlocker,
+              let webView = tab.webView else { return }
 
-         let etpViewModel = EnhancedTrackingProtectionMenuVM(
-             url: url,
-             displayTitle: tab.displayTitle,
-             connectionSecure: webView.hasOnlySecureContent,
-             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-             contentBlockerStatus: contentBlocker.status)
-         etpViewModel.onOpenSettingsTapped = { [weak self] in
-             if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                 // Wait to show settings in async dispatch since hamburger menu is still showing at that time
-                 DispatchQueue.main.async {
-                     self?.navigationHandler?.show(settings: .contentBlocker)
-                 }
-             } else {
-                 self?.legacyShowSettings(deeplink: .contentBlocker)
-             }
-         }
-         etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
+        let etpViewModel = EnhancedTrackingProtectionMenuVM(
+            url: url,
+            displayTitle: tab.displayTitle,
+            connectionSecure: webView.hasOnlySecureContent,
+            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+            contentBlockerStatus: contentBlocker.status)
+        etpViewModel.onOpenSettingsTapped = { [weak self] in
+            // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+            DispatchQueue.main.async {
+                self?.navigationHandler?.show(settings: .contentBlocker)
+            }
+        }
+        etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
 
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
         if CoordinatorFlagManager.isEtpCoordinatorEnabled {
@@ -174,24 +167,6 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         self.present(etpVC, animated: true, completion: nil)
-    }
-
-    // Will be removed with FXIOS-6529
-    func legacyShowSettings(deeplink: AppSettingsDeeplinkOption?) {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: self.profile,
-            and: self.tabManager,
-            delegate: self,
-            deeplinkingTo: deeplink)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-
-        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-        // of this popover on iPad seems to block the presentation of the modal VC.
-        DispatchQueue.main.async {
-            self.present(controller, animated: true, completion: nil)
-        }
     }
 
     func urlBarDidPressStop(_ urlBar: URLBarView) {

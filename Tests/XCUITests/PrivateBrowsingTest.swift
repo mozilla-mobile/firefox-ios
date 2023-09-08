@@ -15,6 +15,7 @@ let url2Label = "Internet for people, not profit — Mozilla"
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253494
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(url1)
         waitForTabsButton()
@@ -44,6 +45,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253508
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.nowAt(NewTabScreen)
@@ -79,6 +81,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253513
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.nowAt(NewTabScreen)
@@ -137,6 +140,7 @@ class PrivateBrowsingTest: BaseTestCase {
      The loaded page has two staticTexts that get set when the db is correctly created (because the db didn't exist in the cache)
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253753
     func testClearIndexedDB() {
         navigator.nowAt(NewTabScreen)
         enableClosePrivateBrowsingOptionWhenLeaving()
@@ -158,6 +162,7 @@ class PrivateBrowsingTest: BaseTestCase {
         checkIndexedDBIsCreated()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253515
     func testPrivateBrowserPanelView() {
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
@@ -180,6 +185,21 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253754
+    func testLongPressLinkOptionsPrivateMode() {
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: TIMEOUT)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: TIMEOUT)
+        XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
 }
 
@@ -211,10 +231,40 @@ fileprivate extension BaseTestCase {
     }
 }
 
+class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2254045
+    // Smoketest
+    func testSwitchBetweenPrivateTabsToastButton() {
+        if skipPlatform { return }
+
+        // Go to Private mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        waitForExistence(app.webViews.links.firstMatch)
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        waitForExistence(app.buttons["Open in New Private Tab"])
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForValueContains(app.textFields["url"], value: "iana")
+        XCTAssertTrue(app.links["RFC 2606"].exists)
+        waitForExistence(app.buttons["Show Tabs"])
+        let numPrivTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numPrivTab)
+    }
+}
+
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253518
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()
@@ -229,6 +279,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         checkOpenTabsAfterClosingPrivateMode()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253519
     func testiPadDirectAccessPrivateMode() {
         if skipPlatform { return }
         waitForTabsButton()
@@ -252,6 +303,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(history, 0, "History list should be empty")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2253520
     func testiPadDirectAccessPrivateModeBrowserTab() {
         if skipPlatform { return }
         navigator.openURL("www.mozilla.org")

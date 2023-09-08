@@ -32,6 +32,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 8
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
         button.titleLabel?.font = LegacyDynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
@@ -39,13 +40,13 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }()
 
     weak var coordinator: PasswordManagerFlowDelegate?
+    private var appAuthenticator: AppAuthenticationProtocol
 
-    var doneHandler: () -> Void = {}
-    var proceedHandler: () -> Void = {}
-
-    init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
+    init(profile: Profile? = nil,
+         tabManager: TabManager? = nil,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+        self.appAuthenticator = appAuthenticator
         super.init(profile: profile, tabManager: tabManager)
-        self.shownFromAppMenu = shownFromAppMenu
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,10 +55,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
-        }
 
         self.title = .Settings.Passwords.Title
 
@@ -82,11 +79,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }
 
     @objc
-    func doneButtonTapped(_ sender: UIButton) {
-        self.doneHandler()
-    }
-
-    @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
@@ -95,10 +87,19 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && !shownFromAppMenu {
-            coordinator?.continueFromOnboarding()
-        } else {
-            proceedHandler()
+        continueFromOnboarding()
+    }
+
+    private func continueFromOnboarding() {
+        appAuthenticator.getAuthenticationState { state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.coordinator?.continueFromOnboarding()
+            case .deviceOwnerFailed:
+                break // Keep showing the main settings page
+            case .passCodeRequired:
+                self.coordinator?.showDevicePassCode()
+            }
         }
     }
 

@@ -52,7 +52,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
         return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
-                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryView: nil,
                                              accessoryType: .disclosureIndicator)
     }
 

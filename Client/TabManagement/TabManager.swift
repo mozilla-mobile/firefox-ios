@@ -10,6 +10,7 @@ import Shared
 
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
+    var isRestoringTabs: Bool { get }
     var delaySelectingNewPopupTab: TimeInterval { get }
     var recentlyAccessedNormalTabs: [Tab] { get }
     var tabs: [Tab] { get }

@@ -431,7 +431,7 @@
 "History" = "Historial";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Neteja l'historial recent…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Esborra l'historial recent…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Tot";
@@ -539,7 +539,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "Afegeix a les adreces d'interès";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "Neteja l'historial recent";
+"Keyboard.Shortcuts.ClearRecentHistory" = "Esborra l'historial recent";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Torna a cercar";
@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Voleu suprimir tots els llocs de «%@»?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Suprimeix l'historial (inclou l'historial sincronitzat d'altres dispositius), les galetes i altres dades de navegació.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Elimina l'historial (inclou l'historial sincronitzat d'altres dispositius), les galetes i altres dades de navegació.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Suprimeix";

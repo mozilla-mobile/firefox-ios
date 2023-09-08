@@ -25,7 +25,7 @@ struct Product: Equatable {
 class ShoppingProduct: FeatureFlaggable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
-    private let client: FakeSpotClientType
+    private let client: FakespotClientType
 
     /// Initializes a new instance of a product with the provided URL and optional parameters.
     ///
@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
-        client: FakeSpotClientType = MockFakeSpotClient()
+        client: FakespotClientType = FakespotClient(environment: .staging)
     ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
@@ -76,12 +76,41 @@ class ShoppingProduct: FeatureFlaggable {
 
     /// Fetches the analysis data for a specific product.
     ///
+    /// - Parameters:
+    ///   - maxRetries: The number of retry attempts to fetch the data in case of failures. Default is 3.
+    ///   - retryTimeout: The time interval (in milliseconds) to wait between retry attempts. Default is 100 milliseconds.
     /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product, or `nil` if the product is not available.
-    /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
+    /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAnalysisData() async throws -> ProductAnalysisData? {
+    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
         guard let product else { return nil }
+
+        // Perform 'retryCount' attempts, and retry on 500 failure:
+        for failCount in 0..<maxRetries {
+            do {
+                // Attempt to perform the asynchronous 'fetch(_ type:, url:, requestBody:)' operation.
+                // If it succeeds, the 'return' statement will immediately exit the function,
+                // returning the loaded 'ProductAnalysisData'.
+                return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
+            } catch {
+                // If 500 error occurs during the attempt, we use 'continue'
+                // to go back to the beginning of the loop and try again.
+                // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
+                if (error as NSError).code == 500 {
+                    let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
+                    try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
+                    continue
+                } else {
+                    throw error
+                }
+            }
+        }
+
+        // If the loop completes three attempts and none of them succeed,
+        // we reach this point. Here, we make a final attempt (fourth attempt),
+        // which throws its error if it fails. If this attempt also fails,
+        // the error will be propagated out of the function to the caller.
         return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
     }
 

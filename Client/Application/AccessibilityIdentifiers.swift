@@ -28,6 +28,7 @@ public struct AccessibilityIdentifiers {
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
         static let bookmarksButton = "TabToolbar.libraryButton"
+        static let shoppingButton = "TabLocationView.shoppingButton"
     }
 
     struct Browser {
@@ -112,6 +113,79 @@ public struct AccessibilityIdentifiers {
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
+    }
+
+    struct Shopping {
+        static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
+
+        struct ErrorCard {
+            static let card = "Shopping.ErrorCard.Card"
+            static let title = "Shopping.ErrorCard.Title"
+            static let description = "Shopping.ErrorCard.Description"
+            static let primaryAction = "Shopping.ErrorCard.PrimaryAction"
+        }
+
+        struct ConfirmationCard {
+            static let card = "Shopping.ConfirmationCard.Card"
+            static let title = "Shopping.ConfirmationCard.Title"
+            static let primaryAction = "Shopping.ConfirmationCard.PrimaryAction"
+        }
+
+        struct ReliabilityCard {
+            static let card = "Shopping.ReliabilityCard.Card"
+            static let title = "Shopping.ReliabilityCard.Title"
+            static let ratingLetter = "Shopping.ReliabilityCard.RatingLetter"
+            static let ratingDescription = "Shopping.ReliabilityCard.RatingDescription"
+        }
+
+        struct AdjustRating {
+            static let card = "Shopping.AdjustRating.Card"
+            static let title = "Shopping.ReliabilityCard.Title"
+            static let description = "Shopping.ReliabilityCard.Description"
+        }
+
+        struct HighlightsCard {
+            static let card = "Shopping.HighlightsCard.Card"
+            static let title = "Shopping.HighlightsCard.Title"
+            static let moreButton = "Shopping.HighlightsCard.MoreButton"
+            static let lessButton = "Shopping.HighlightsCard.LessButton"
+
+            static let groupPriceTitle = "Shopping.HighlightsCard.Group.Price.Title"
+            static let groupPriceIcon = "Shopping.HighlightsCard.Group.Price.Icon"
+            static let groupPriceHighlightsLabel = "Shopping.HighlightsCard.Group.Price.HighlightsLabel"
+
+            static let groupQualityTitle = "Shopping.HighlightsCard.Group.Quality.Title"
+            static let groupQualityIcon = "Shopping.HighlightsCard.Group.Quality.Icon"
+            static let groupQualityHighlightsLabel = "Shopping.HighlightsCard.Group.Quality.HighlightsLabel"
+
+            static let groupCompetitivenessTitle = "Shopping.HighlightsCard.Group.Competitiveness.Title"
+            static let groupCompetitivenessIcon = "Shopping.HighlightsCard.Group.Competitiveness.Icon"
+            static let groupCompetitivenessHighlightsLabel = "Shopping.HighlightsCard.Group.Competitiveness.HighlightsLabel"
+
+            static let groupShippingTitle = "Shopping.HighlightsCard.Group.Shipping.Title"
+            static let groupShippingIcon = "Shopping.HighlightsCard.Group.Shipping.Icon"
+            static let groupShippingHighlightsLabel = "Shopping.HighlightsCard.Group.Shipping.HighlightsLabel"
+
+            static let groupPackagingTitle = "Shopping.HighlightsCard.Group.Packaging.Title"
+            static let groupPackagingIcon = "Shopping.HighlightsCard.Group.Packaging.Icon"
+            static let groupPackagingHighlightsLabel = "Shopping.HighlightsCard.Group.Packaging.HighlightsLabel"
+        }
+
+        struct SettingsCard {
+            static let card = "Shopping.SettingsCard.Card"
+            static let title = "Shopping.SettingsCard.Title"
+            static let expandButton = "Shopping.SettingsCard.ExpandButton"
+            static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
+            static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
+            static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
+        }
+
+        struct NoAnalysisCard {
+            static let card = "Shopping.NoAnalysisCard.Card"
+            static let headlineTitle = "Shopping.NoAnalysisCard.HeadlineTitle"
+            static let bodyTitle = "Shopping.NoAnalysisCard.BodyTitle"
+            static let analyzerButtonTitle = "Shopping.NoAnalysisCard.AnalyzerButtonTitle"
+        }
     }
 
     struct TabTray {
@@ -315,10 +389,18 @@ public struct AccessibilityIdentifiers {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
+            static let onboardingContinue = "onboardingContinue"
+            static let addCredentialButton = "addCredentialButton"
+            static let editButton = "editButton"
         }
 
         struct Version {
             static let title = "FxVersion"
+        }
+
+        struct TrackingProtection {
+            static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
+            static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
         }
     }
 

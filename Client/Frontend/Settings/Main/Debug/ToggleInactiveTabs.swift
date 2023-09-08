@@ -23,10 +23,6 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
         let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToReload()
-        } else {
-            updateCell(navigationController)
-        }
+        settingsDelegate?.askedToReload()
     }
 }

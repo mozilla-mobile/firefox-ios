@@ -21,6 +21,13 @@ protocol TabManagerDelegate: AnyObject {
 }
 
 extension TabManagerDelegate {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {}
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {}
     func tabManagerUpdateCount() {}
 }
 
@@ -58,7 +65,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var tabs = [Tab]()
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
-    private let logger: Logger
+    let logger: Logger
     var backupCloseTab: BackupCloseTab?
 
     var tabDisplayType: TabDisplayType = .TabGrid
@@ -191,12 +198,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
-    lazy private var configuration: WKWebViewConfiguration = {
+    private lazy var configuration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
-    lazy private var privateConfiguration: WKWebViewConfiguration = {
+    private lazy var privateConfiguration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
@@ -943,6 +950,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
                                                    inPrivateMode: wasLastSessionPrivate,
                                                    and: profile.prefs)
+
+            logger.log("Start at home triggered with last session private \(wasLastSessionPrivate)",
+                       level: .debug,
+                       category: .tabs)
             selectTab(tabToSelect)
         }
     }

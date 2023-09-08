@@ -64,14 +64,14 @@ extension URLBarViewProtocol {
 class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
                     SearchEngineDelegate, SearchBarLocationProvider {
     // Additional UIAppearance-configurable properties
-    @objc lazy dynamic var locationBorderColor: UIColor = .clear {
+    @objc dynamic lazy var locationBorderColor: UIColor = .clear {
         didSet {
             if !inOverlayMode {
                 locationContainer.layer.borderColor = locationBorderColor.cgColor
             }
         }
     }
-    @objc lazy dynamic var locationActiveBorderColor: UIColor = .clear {
+    @objc dynamic lazy var locationActiveBorderColor: UIColor = .clear {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor

@@ -31,17 +31,6 @@ etp-coordinator-refactor:
     enabled:
       type: boolean
       description: "Enables the feature\n"
-fakespot-feature:
-  description: "The configuration setting for the status of the Fakespot feature\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    config:
-      type: json
-      description: "A Map of website configurations\n"
-    status:
-      type: boolean
-      description: "Whether the Fakespot feature is enabled or disabled\n"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -98,14 +87,6 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
-notification-settings-feature:
-  description: "The feature that controls the notifications menu in Settings.\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    notification-settings-feature-status:
-      type: boolean
-      description: "If true, we will allow user to use the the notifications menu in Settings"
 onboarding-feature:
   description: The feature that controls whether to show or not Upgrade onboarding
   hasExposure: true
@@ -155,14 +136,6 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
-settings-coordinator-refactor:
-  description: "This feature is for managing the roll out of the settings coordinator code as part of the changes on the navigation in the app\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    enabled:
-      type: boolean
-      description: "Enables the feature\n"
 share-extension-coordinator-refactor:
   description: "This feature is for managing the roll out of the share extension coordinator as part of the changes to the navigation in the app\n"
   hasExposure: true
@@ -182,6 +155,17 @@ share-sheet:
     toolbar-changes:
       type: boolean
       description: If true share option is shown on the toolbar
+shopping2023:
+  description: "The configuration setting for the status of the Fakespot feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    config:
+      type: json
+      description: "A Map of website configurations\n"
+    status:
+      type: boolean
+      description: "Whether the Fakespot feature is enabled or disabled\n"
 spotlight-search:
   description: Add pages as items findable with Spotlight.
   hasExposure: true

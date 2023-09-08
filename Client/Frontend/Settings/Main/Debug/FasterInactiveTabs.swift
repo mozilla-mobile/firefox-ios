@@ -23,10 +23,6 @@ class FasterInactiveTabs: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
         UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.askedToReload()
-        } else {
-            updateCell(navigationController)
-        }
+        settingsDelegate?.askedToReload()
     }
 }

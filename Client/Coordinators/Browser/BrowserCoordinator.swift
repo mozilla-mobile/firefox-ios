@@ -15,7 +15,9 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-                          ParentCoordinatorDelegate {
+                          FakespotCoordinatorDelegate,
+                          ParentCoordinatorDelegate,
+                          TabManagerDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -27,7 +29,6 @@ class BrowserCoordinator: BaseCoordinator,
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let wallpaperManager: WallpaperManagerInterface
-    private let isSettingsCoordinatorEnabled: Bool
     private var browserIsReady = false
 
     init(router: Router,
@@ -37,8 +38,7 @@ class BrowserCoordinator: BaseCoordinator,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         isSettingsCoordinatorEnabled: Bool = CoordinatorFlagManager.isSettingsCoordinatorEnabled) {
+         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -47,11 +47,11 @@ class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.wallpaperManager = wallpaperManager
-        self.isSettingsCoordinatorEnabled = isSettingsCoordinatorEnabled
         super.init(router: router)
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
+        tabManager.addDelegate(self)
     }
 
     func start(with launchType: LaunchType?) {
@@ -160,8 +160,12 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func handle(route: Route) -> Bool {
-        guard browserIsReady else {
-            logger.log("Could not handle route, wasn't ready", level: .info, category: .coordinator)
+        guard browserIsReady, !tabManager.isRestoringTabs else {
+            let readyMessage = "browser is ready? \(browserIsReady)"
+            let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
+            logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
+                       level: .info,
+                       category: .coordinator)
             return false
         }
 
@@ -188,13 +192,7 @@ class BrowserCoordinator: BaseCoordinator,
             return true
 
         case let .settings(section):
-            // 'Else' case will be removed with FXIOS-6529
-            if isSettingsCoordinatorEnabled {
-                return handleSettings(with: section)
-            } else {
-                legacyHandle(settingsSection: section)
-                return true
-            }
+            return handleSettings(with: section)
 
         case let .action(routeAction):
             switch routeAction {
@@ -353,11 +351,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func show(settings: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
-            if self.isSettingsCoordinatorEnabled {
-                _ = self.handleSettings(with: settings)
-            } else {
-                self.legacyHandle(settingsSection: settings)
-            }
+            _ = self.handleSettings(with: settings)
         }
     }
 
@@ -381,6 +375,16 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
+    func showFakespotFlow(productURL: URL) {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+            return // flow is already handled
+        }
+        let coordinator = FakespotCoordinator(router: router)
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start(productURL: productURL)
+    }
+
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
@@ -390,115 +394,6 @@ class BrowserCoordinator: BaseCoordinator,
         let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
-    }
-
-    // MARK: - To be removed with FXIOS-6529
-    private func legacyHandle(settingsSection: Route.SettingsSection) {
-        // Temporary bugfix for #14954, real fix is with settings coordinator
-        if let subNavigationController = router.navigationController.presentedViewController as? ThemedNavigationController,
-           let settings = subNavigationController.viewControllers.first as? AppSettingsTableViewController {
-            // Showing settings already, pass the deeplink down
-            if let deeplinkTo = settingsSection.getSettingsRoute() {
-                settings.deeplinkTo = deeplinkTo
-                settings.checkForDeeplinkSetting()
-            }
-            return
-        }
-
-        let baseSettingsVC = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager,
-            delegate: browserViewController
-        )
-
-        let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
-        controller.presentingModalViewControllerDelegate = browserViewController
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
-        controller.modalPresentationStyle = modalPresentationStyle
-        router.present(controller)
-
-        legacyGetSettingsViewController(settingsSection: settingsSection) { viewController in
-            guard let viewController else { return }
-            controller.pushViewController(viewController, animated: true)
-        }
-    }
-
-    // Will be removed with FXIOS-6529
-    func legacyGetSettingsViewController(settingsSection section: Route.SettingsSection,
-                                         completion: @escaping (UIViewController?) -> Void) {
-        switch section {
-        case .newTab:
-            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            completion(viewController)
-
-        case .homePage:
-            let viewController = HomePageSettingViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            completion(viewController)
-
-        case .mailto:
-            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
-            completion(viewController)
-
-        case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile)
-            completion(viewController)
-
-        case .clearPrivateData:
-            let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
-            completion(viewController)
-
-        case .fxa:
-            let fxaParams = FxALaunchParams(entrypoint: .fxaDeepLinkSetting, query: [:])
-            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
-                fxaParams,
-                flowType: .emailLoginFlow,
-                referringPage: .settings,
-                profile: browserViewController.profile
-            )
-            completion(viewController)
-
-        case .theme:
-            completion(ThemeSettingsController())
-
-        case .wallpaper:
-            if wallpaperManager.canSettingsBeShown {
-                let viewModel = WallpaperSettingsViewModel(
-                    wallpaperManager: wallpaperManager,
-                    tabManager: tabManager,
-                    theme: themeManager.currentTheme
-                )
-                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
-                completion(wallpaperVC)
-            } else {
-                completion(nil)
-            }
-
-        case .creditCard:
-            let viewModel = CreditCardSettingsViewModel(profile: profile)
-            let viewController = CreditCardSettingsViewController(
-                creditCardViewModel: viewModel)
-            let appAuthenticator = AppAuthenticator()
-            if appAuthenticator.canAuthenticateDeviceOwner {
-                appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-                    switch result {
-                    case .success:
-                        completion(viewController)
-                    case .failure:
-                        break
-                    }
-                }
-            } else {
-                let passcodeViewController = DevicePasscodeRequiredViewController()
-                passcodeViewController.profile = profile
-                completion(passcodeViewController)
-            }
-
-        default:
-            completion(nil)
-        }
     }
 
     // MARK: - LibraryPanelDelegate
@@ -517,5 +412,14 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
+    }
+
+    // MARK: - TabManagerDelegate
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // Once tab restore is made, if there's any saved route we make sure to call it
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
     }
 }

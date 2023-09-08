@@ -34,9 +34,6 @@ final class NimbusFeatureFlagLayer {
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
 
-        case .settingsCoordinatorRefactor:
-            return checkSettingsCoordinatorRefactorFeature(from: nimbus)
-
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
@@ -46,8 +43,7 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .historyGroups,
-                .tabTrayGroups:
+        case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
@@ -79,9 +75,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-
-        case .notificationSettings:
-            return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
         }
     }
 
@@ -167,11 +160,6 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.settingsCoordinatorRefactor.value()
-        return config.enabled
-    }
-
     private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
         return config.enabled
@@ -214,17 +202,6 @@ final class NimbusFeatureFlagLayer {
 
             switch featureID {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
-            default: return false
-            }
-    }
-
-    public func checkNimbusForNotificationSettings(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.notificationSettingsFeature.value()
-
-            switch featureID {
-            case .notificationSettings: return config.notificationSettingsFeatureStatus
             default: return false
             }
     }
@@ -279,7 +256,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .historyGroups: nimbusID = SearchTermGroups.historyGroups
-        case .tabTrayGroups: nimbusID = SearchTermGroups.tabTrayGroups
         default: return false
         }
 
@@ -289,7 +265,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.fakespotFeature.value()
+        let config = nimbus.features.shopping2023.value()
 
         return config.status
     }

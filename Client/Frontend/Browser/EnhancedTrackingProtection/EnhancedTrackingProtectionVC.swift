@@ -380,10 +380,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     func trackingProtectionToggleTapped() {
         // site is safelisted if site ETP is disabled
         viewModel.toggleSiteSafelistStatus()
-        switch viewModel.isSiteETPEnabled {
-        case true: toggleStatusLabel.text = .ETPOn
-        case false: toggleStatusLabel.text = .ETPOff
-        }
+        toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
     }
 
     @objc

@@ -152,19 +152,6 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
-    func testLongPressLinkOptionsPrivateMode() {
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitForExistence(app.webViews.links[website_2["link"]!], timeout: TIMEOUT)
-        app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: TIMEOUT)
-        XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
-    }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
@@ -371,6 +358,7 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1613987
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
@@ -385,9 +373,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.help].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.customizeHomepage].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
-        // TODO: Add new options added [Customize home page, new tab, help]
-        // Customize home page, help and whatsNew are only there when we are on the homepage menu
     }
 
     // Smoketest

@@ -11,9 +11,6 @@ public protocol DispatchStore {
 
 public protocol DefaultDispatchStore: DispatchStore {
     associatedtype State: StateType
-    /// `ActionCreators` allows  to perform a conditional dispatch to the store.
-    /// An `ActionCreator` takes the current application state and a reference to a store then may return an optional `Action`
-    associatedtype ActionCreator = (_ state: State, _ store: DefaultDispatchStore) -> Action?
 
     var state: State { get }
 
@@ -21,6 +18,5 @@ public protocol DefaultDispatchStore: DispatchStore {
     func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
                                                  transform: ((Subscription<State>) -> Subscription<SubState>)?) where S.SubscriberStateType == SubState
     func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
-
-    func dispatch(_ actionCreator: ActionCreator)
+    func unsubscribe(_ subscriber: any StoreSubscriber)
 }
