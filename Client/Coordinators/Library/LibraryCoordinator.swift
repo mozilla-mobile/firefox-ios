@@ -18,7 +18,7 @@ protocol LibraryNavigationHandler: AnyObject {
 class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigationHandler {
     private let profile: Profile
     private let tabManager: TabManager
-    private let libraryViewController: LibraryViewController
+    private var libraryViewController: LibraryViewController!
     weak var parentCoordinator: LibraryCoordinatorDelegate?
 
     init(
@@ -26,14 +26,14 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager = AppContainer.shared.resolve()
     ) {
-        self.libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
-        self.router.setRootViewController(libraryViewController)
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
+        libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
+        router.setRootViewController(libraryViewController)
         libraryViewController.childPanelControllers = makeChildPanels()
         libraryViewController.delegate = self
         libraryViewController.navigationHandler = self
@@ -70,7 +70,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
+        if let bookmarkCoordinator = childCoordinators.first(where: { $0 is BookmarksCoordinator }) {
+            remove(child: bookmarkCoordinator)
+        }
         let router = DefaultRouter(navigationController: navigationController)
         let bookmarksCoordinator = BookmarksCoordinator(
             router: router,
@@ -82,7 +84,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is HistoryCoordinator }) else { return }
+        if let historyCoordinator = childCoordinators.first(where: { $0 is HistoryCoordinator }) {
+            remove(child: historyCoordinator)
+        }
         let router = DefaultRouter(navigationController: navigationController)
         let historyCoordinator = HistoryCoordinator(
             profile: profile,
@@ -94,7 +98,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeDownloadsCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is DownloadsCoordinator }) else { return }
+        if let downloadsCoordinator = childCoordinators.first(where: { $0 is DownloadsCoordinator }) {
+            remove(child: downloadsCoordinator)
+        }
         let router = DefaultRouter(navigationController: navigationController)
         let downloadsCoordinator = DownloadsCoordinator(
             router: router,
@@ -106,7 +112,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeReadingListCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is ReadingListCoordinator }) else { return }
+        if let readingListCoordinator = childCoordinators.first(where: { $0 is ReadingListCoordinator }) {
+            remove(child: readingListCoordinator)
+        }
         let router = DefaultRouter(navigationController: navigationController)
         let readingListCoordinator = ReadingListCoordinator(
             parentCoordinator: parentCoordinator,

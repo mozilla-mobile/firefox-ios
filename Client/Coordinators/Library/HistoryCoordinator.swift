@@ -42,6 +42,7 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
 
     func showRecentlyClosedTab() {
         let controller = RecentlyClosedTabsPanel(profile: profile)
+        controller.title = .RecentlyClosedTabsPanelTitle
         controller.libraryPanelDelegate = parentCoordinator
         router.push(controller)
     }

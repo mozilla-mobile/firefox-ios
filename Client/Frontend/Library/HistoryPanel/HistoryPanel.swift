@@ -183,6 +183,7 @@ class HistoryPanel: UIViewController,
 
         // Update theme of already existing view
         bottomStackView.applyTheme(theme: themeManager.currentTheme)
+        viewModel.shouldResetHistory = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
