@@ -163,17 +163,22 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfHistory1openMenu() {
         waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 2
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+        do {
+            let snapshot = app.tables["History List"].snapshot()
+            measure(metrics: [
+                XCTMemoryMetric(),
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure cpu cycles
+                XCTStorageMetric(), // to measure storage consuming
+                XCTMemoryMetric()]) {
+                    navigator.goto(LibraryPanel_History)
+                    let historyList = app.tables["History List"]
+                    waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                    let expectedCount = 2
+                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+            }
+        } catch {
+            XCTFail("Failed to take snapshot: \(error)")
         }
     }
 
@@ -194,17 +199,22 @@ class PerformanceTests: BaseTestCase {
 
     func testPerfHistory100openMenu() {
         waitForTabsButton()
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                navigator.goto(LibraryPanel_History)
-                let historyList = app.tables["History List"]
-                waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                let expectedCount = 101
-                XCTAssertEqual(historyList.cells.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+        do {
+            let snapshot = try app.tables["History List"].snapshot()
+            measure(metrics: [
+                XCTMemoryMetric(),
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure cpu cycles
+                XCTStorageMetric(), // to measure storage consuming
+                XCTMemoryMetric()]) {
+                    navigator.goto(LibraryPanel_History)
+                    let historyList = app.tables["History List"]
+                    waitForExistence(historyList, timeout: TIMEOUT_LONG)
+                    let expectedCount = 101
+                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
+            }
+        } catch {
+            XCTFail("Failed to take snapshot: \(error)")
         }
     }
 
@@ -226,17 +236,22 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1openMenu() {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                let bookmarkTable = app.tables["Bookmarks List"]
-                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                let expectedCount = 2
-                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+        do {
+            let snapshot = app.tables["Bookmarks List"].snapshot()
+            measure(metrics: [
+                XCTMemoryMetric(),
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure cpu cycles
+                XCTStorageMetric(), // to measure storage consuming
+                XCTMemoryMetric()]) {
+                    // activity measurement here
+                    let bookmarkTable = app.tables["Bookmarks List"]
+                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                    let expectedCount = 2
+                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+                }
+        } catch {
+            XCTFail("Failed to take snapshot: \(error)")
         }
     }
 
@@ -258,17 +273,22 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks100openMenu() {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                let bookmarkTable = app.tables["Bookmarks List"]
-                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                let expectedCount = 101
-                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+        do {
+            let snapshot = try app.tables["Bookmarks List"].snapshot()
+            measure(metrics: [
+                XCTMemoryMetric(),
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure cpu cycles
+                XCTStorageMetric(), // to measure storage consuming
+                XCTMemoryMetric()]) {
+                    // activity measurement here
+                    let bookmarkTable = app.tables["Bookmarks List"]
+                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                    let expectedCount = 101
+                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+            }
+        } catch {
+            XCTFail("Failed to take a snapshot: \(error)")
         }
     }
 
@@ -290,17 +310,23 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1000openMenu() {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            XCTMemoryMetric()]) {
-                // activity measurement here
-                let bookmarkTable = app.tables["Bookmarks List"]
-                waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                let expectedCount = 1001
-                XCTAssertEqual(bookmarkTable.cells.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+
+        do {
+            let snapshot = try app.tables["Bookmarks List"].snapshot()
+            measure(metrics: [
+                XCTMemoryMetric(),
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure CPU cycles
+                XCTStorageMetric(), // to measure storage consumption
+                XCTMemoryMetric()]) {
+                    // Activity measurement here
+                    let bookmarkTable = app.tables["Bookmarks List"]
+                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
+                    let expectedCount = 1001
+                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+            }
+        } catch {
+            XCTFail("Failed to take a snapshot: \(error)")
         }
     }
 }
