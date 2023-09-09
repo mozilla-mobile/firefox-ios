@@ -164,7 +164,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfHistory1openMenu() {
         waitForTabsButton()
         do {
-            let snapshot = app.tables["History List"].snapshot()
+            let snapshot = try app.tables["History List"].snapshot()
             measure(metrics: [
                 XCTMemoryMetric(),
                 XCTClockMetric(), // to measure timeClock Mon
@@ -237,7 +237,7 @@ class PerformanceTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
         do {
-            let snapshot = app.tables["Bookmarks List"].snapshot()
+            let snapshot = try app.tables["Bookmarks List"].snapshot()
             measure(metrics: [
                 XCTMemoryMetric(),
                 XCTClockMetric(), // to measure timeClock Mon
