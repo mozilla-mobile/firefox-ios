@@ -646,14 +646,16 @@ extension HistoryPanel: UITableViewDelegate {
         exitSearchState()
         updatePanelState(newState: .history(state: .inFolder))
 
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-        asGroupListVC.title = asGroupItem.displayTitle
-
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            historyCoordinatorDelegate?.showSearchGroupedItems(asGroupItem)
+        } else {
+            let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
+            let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
+            asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
+            asGroupListVC.title = asGroupItem.displayTitle
+            navigationController?.pushViewController(asGroupListVC, animated: true)
+        }
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
-
-        navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 
     @objc
