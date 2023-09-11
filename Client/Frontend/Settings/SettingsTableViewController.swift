@@ -523,7 +523,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
 
-        textField.font = LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont
+        textField.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)
 
         textField.snp.makeConstraints { make in
             make.height.equalTo(44)

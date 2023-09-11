@@ -400,6 +400,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case shoppingCartButton = "shopping-cart-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
+        case shoppingRecentReviews = "shopping-recent-reviews"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1019,8 +1020,12 @@ extension TelemetryWrapper {
         // MARK: Shopping Experience (Fakespot)
         case (.action, .tap, .shoppingCartButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .view, .shoppingCartButton, _, _):
+            GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceClosed.record()
+        case (.action, .tap, .shoppingRecentReviews, _, _):
+            GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceDisplayed.record()
 

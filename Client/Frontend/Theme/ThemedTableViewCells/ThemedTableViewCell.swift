@@ -52,7 +52,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         super.prepareForReuse()
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
-        textLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultStandardFont
+        textLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)
         detailTextLabel?.text = nil
         accessoryView = nil
         accessoryType = .none

@@ -2,11 +2,6 @@ features:
   onboarding-feature:
     description: The feature that controls whether to show or not Upgrade onboarding
     variables:
-      upgrade-flow:
-        description: >
-          If true, we show the Upgrade onboarding screen when the user upgrades the version.
-        type: Boolean
-        default: false
       first-run-flow:
         description: >
           If true, we show the new Onboarding screen when the user for v106 version.
@@ -15,11 +10,9 @@ features:
     defaults:
       - channel: beta
         value: {
-          "upgrade-flow": false,
           "first-run-flow": true,
         }
       - channel: developer
         value: {
-          "upgrade-flow": false,
           "first-run-flow": true,
         }

@@ -25,8 +25,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
     weak var coordinator: PasswordManagerFlowDelegate?
 
-    var shownFromAppMenu = false
-
     fileprivate lazy var selectionButton: UIButton = .build { button in
         button.titleLabel?.font = PasswordManagerViewModel.UX.selectionButtonFont
         button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
@@ -37,8 +35,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    init(shownFromAppMenu: Bool = false,
-         profile: Profile,
+    init(profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = PasswordManagerViewModel(
@@ -49,7 +46,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.shownFromAppMenu = shownFromAppMenu
         super.init(nibName: nil, bundle: nil)
         listenForThemeChange(view)
     }
@@ -194,14 +190,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         addCredentialButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.addCredentialButton
         editButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.editButton
         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
-
-        if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                               target: self,
-                                                               action: #selector(dismissLogins))
-        } else {
-            navigationItem.leftBarButtonItem = nil
-        }
+        navigationItem.leftBarButtonItem = nil
     }
 
     fileprivate func toggleDeleteBarButton() {

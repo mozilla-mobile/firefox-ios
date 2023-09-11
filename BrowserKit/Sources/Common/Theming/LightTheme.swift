@@ -31,6 +31,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerSepia: UIColor = FXColors.Orange05
     var layerInfo: UIColor = FXColors.Blue50.withAlphaComponent(0.44)
     var layerConfirmation: UIColor = FXColors.Green20
+    var layerWarning: UIColor = FXColors.Yellow20
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue50
@@ -42,6 +43,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var indicatorActive: UIColor = FXColors.LightGrey50
     var indicatorInactive: UIColor = FXColors.LightGrey30
     var actionConfirmation: UIColor = FXColors.Green60
+    var actionWarning: UIColor = FXColors.Yellow60.withAlphaComponent(0.4)
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.DarkGrey90

@@ -78,6 +78,7 @@
         "PocketTest",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
+        "PrivateBrowsingTestIphone",
         "ReaderViewTest",
         "SaveLoginTest",
         "ScreenGraphTest",

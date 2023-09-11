@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-enum ReliabilityRating: String {
+enum FakespotReliabilityRating: String {
     case gradeA = "a"
     case gradeB = "b"
     case gradeC = "c"

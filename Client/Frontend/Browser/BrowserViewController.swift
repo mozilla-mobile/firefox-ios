@@ -56,7 +56,7 @@ class BrowserViewController: UIViewController,
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
-    var appAuthenticator: AppAuthenticationProtocol?
+    var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -72,11 +72,12 @@ class BrowserViewController: UIViewController,
     var copyAddressAction: AccessibleAction!
 
     weak var gridTabTrayController: LegacyGridTabViewController?
-    var tabTrayViewController: LegacyTabTrayViewController?
+    var tabTrayViewController: TabTrayController?
 
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
+    lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -1775,9 +1776,6 @@ class BrowserViewController: UIViewController,
 
     private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
                                                          frame: WKFrameInfo? = nil) {
-        guard let appAuthenticator else {
-            return
-        }
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
@@ -1880,9 +1878,10 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
                                              buttonText: .GoButtonTittle)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
+                                completion: { [weak self] buttonPressed in
             if buttonPressed {
-                self.settingsOpenURLInNewTab(url)
+                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+                self?.openURLInNewTab(url, isPrivate: isPrivate)
             }
         })
         clipboardBarDisplayHandler?.clipboardToast = toast
@@ -1916,24 +1915,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         default:
             defaultAction()
         }
-    }
-}
-
-extension BrowserViewController: SettingsDelegate {
-    func settingsOpenURLInNewTab(_ url: URL) {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.openURLInNewTab(url, isPrivate: isPrivate)
-    }
-
-    func didFinish() {
-        // Does nothing since this is used by Coordinators
-        // BVC will stop being a SettingsDelegate after FXIOS-6529
-    }
-}
-
-extension BrowserViewController: PresentingModalViewControllerDelegate {
-    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
-        self.dismiss(animated: animated, completion: nil)
     }
 }
 

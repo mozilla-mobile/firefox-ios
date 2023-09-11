@@ -64,7 +64,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     let tabManager: TabManager
 
     weak var delegate: ToolBarActionMenuDelegate?
-    weak var menuActionDelegate: MenuActionsDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
@@ -562,11 +561,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .AppMenu.AppMenuSharePageTitleString,
                                      iconString: ImageIdentifiers.share) { _ in
             guard let tab = self.selectedTab,
-                  let url = tab.url,
-                  let presentableVC = self.menuActionDelegate as? PresentableVC
+                  let url = tab.url
             else { return }
 
-            self.share(fileURL: url, buttonView: self.buttonView, presentableVC: presentableVC)
+            self.share(fileURL: url, buttonView: self.buttonView)
         }.items
     }
 
@@ -595,9 +593,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
                     if let tempDocURL = tempDocURL,
-                       tempDocURL.isFileURL,
-                       let presentableVC = self.menuActionDelegate as? PresentableVC {
-                        self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
+                       tempDocURL.isFileURL {
+                        self.share(fileURL: tempDocURL, buttonView: self.buttonView)
                     } else {
                         if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
                             self.navigationHandler?.showShareExtension(
@@ -615,7 +612,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     // Main menu option Share page with when opening a file
-    private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
+    private func share(fileURL: URL, buttonView: UIView) {
         if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
             navigationHandler?.showShareExtension(
                 url: fileURL,
