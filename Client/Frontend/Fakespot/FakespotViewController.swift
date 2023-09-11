@@ -59,6 +59,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
     private lazy var adjustRatingView: AdjustRatingView = .build()
+    private lazy var reviewQualityCardView: ReviewQualityCardView = .build()
 
     // MARK: - Initializers
     init(
@@ -89,6 +90,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         settingsCardView.configure(viewModel.settingsCardViewModel)
         adjustRatingView.configure(viewModel.adjustRatingViewModel)
         noAnalysisCardView.configure(viewModel.noAnalysisCardViewModel)
+        reviewQualityCardView.configure()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -120,7 +122,8 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         settingsCardView.applyTheme(theme: theme)
         noAnalysisCardView.applyTheme(theme: theme)
         loadingView.applyTheme(theme: theme)
-        adjustRatingView.applyTheme(theme: themeManager.currentTheme)
+        adjustRatingView.applyTheme(theme: theme)
+        reviewQualityCardView.applyTheme(theme: theme)
     }
 
     private func setupView() {
@@ -132,6 +135,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
         contentStackView.addArrangedSubview(noAnalysisCardView)
+        contentStackView.addArrangedSubview(reviewQualityCardView)
         contentStackView.addArrangedSubview(loadingView)
         scrollView.addSubview(contentStackView)
 
