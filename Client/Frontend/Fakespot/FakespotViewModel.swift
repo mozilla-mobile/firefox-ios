@@ -111,7 +111,7 @@ class FakespotViewModel: ObservableObject {
         recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
     )
 
-    let adjustRatingViewModel = AdjustRatingViewModel(
+    let adjustRatingViewModel = FakespotAdjustRatingViewModel(
         title: .Shopping.AdjustedRatingTitle,
         description: .Shopping.AdjustedRatingDescription,
         titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
@@ -120,7 +120,7 @@ class FakespotViewModel: ObservableObject {
         rating: 3.5
     )
 
-    let noAnalysisCardViewModel = NoAnalysisCardViewModel()
+    let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {

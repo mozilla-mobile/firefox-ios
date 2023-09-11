@@ -185,7 +185,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             return view
 
         case .adjustRatingCard:
-            let view: AdjustRatingView = .build()
+            let view: FakespotAdjustRatingView = .build()
             view.configure(viewModel.adjustRatingViewModel)
             return view
 
@@ -200,7 +200,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             return view
 
         case .noAnalysisCard:
-            let view: NoAnalysisCardView = .build()
+            let view: FakespotNoAnalysisCardView = .build()
             view.configure(viewModel.noAnalysisCardViewModel)
             return view
 

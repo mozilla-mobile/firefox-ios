@@ -6,7 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 
-struct AdjustRatingViewModel {
+struct FakespotAdjustRatingViewModel {
     let title: String
     let description: String
     let titleA11yId: String
@@ -15,7 +15,7 @@ struct AdjustRatingViewModel {
     let rating: Double
 }
 
-class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
+class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
     private enum UX {
         static let titleFontSize: CGFloat = 17
         static let descriptionFontSize: CGFloat = 13
@@ -47,7 +47,7 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
     }
 
-    private lazy var starRatingView: StarRatingView = .build()
+    private lazy var starRatingView: FakespotStarRatingView = .build()
 
     private lazy var hStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -70,7 +70,7 @@ class AdjustRatingView: UIView, Notifiable, ThemeApplicable {
         setupLayout()
     }
 
-    func configure(_ viewModel: AdjustRatingViewModel) {
+    func configure(_ viewModel: FakespotAdjustRatingViewModel) {
         titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
 
