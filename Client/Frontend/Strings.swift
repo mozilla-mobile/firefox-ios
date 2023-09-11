@@ -1187,6 +1187,11 @@ extension String {
             tableName: nil,
             value: "Firefox Suggest",
             comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions.")
+        public static let SponsoredSuggestionDescription = MZLocalizedString(
+            key: "Search.SponsoredSuggestionDescription.v119",
+            tableName: "Search",
+            value: "Sponsored",
+            comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a label for sponsored Firefox suggestions.")
         public static let EngineSectionTitle = MZLocalizedString(
             key: "Search.EngineSection.Title.v108",
             tableName: "SearchHeaderTitle",
