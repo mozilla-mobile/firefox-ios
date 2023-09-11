@@ -427,7 +427,7 @@ class HistoryPanel: UIViewController,
         cell.titleLabel.text = asGroup.displayTitle
         let imageView = UIImageView(image: chevronImage)
         cell.accessoryView = imageView
-        let tabTrayImage: UIImage = UIImage(named: StandardImageIdentifiers.Large.tabTray) ?? UIImage()
+        let tabTrayImage = UIImage(named: StandardImageIdentifiers.Large.tabTray) ?? UIImage()
         let tintedTabTrayImage = tabTrayImage.withTintColor(themeManager.currentTheme.colors.iconSecondary)
         cell.leftImageView.manuallySetImage(tintedTabTrayImage)
         cell.leftImageView.backgroundColor = themeManager.currentTheme.colors.layer5
