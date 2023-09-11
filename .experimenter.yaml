@@ -95,9 +95,6 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
-    upgrade-flow:
-      type: boolean
-      description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
 onboarding-framework-feature:
   description: "The new onboarding framework feature that will allow onboarding to be experimentable through initial experiments.\n"
   hasExposure: true
@@ -136,14 +133,6 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
-settings-coordinator-refactor:
-  description: "This feature is for managing the roll out of the settings coordinator code as part of the changes on the navigation in the app\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    enabled:
-      type: boolean
-      description: "Enables the feature\n"
 share-extension-coordinator-refactor:
   description: "This feature is for managing the roll out of the share extension coordinator as part of the changes to the navigation in the app\n"
   hasExposure: true
@@ -203,6 +192,14 @@ start-at-home-feature:
         - after-four-hours
         - always
         - disabled
+tab-tray-refactor-feature:
+  description: "This feature is for managing the roll out of the Tab Tray refactor feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

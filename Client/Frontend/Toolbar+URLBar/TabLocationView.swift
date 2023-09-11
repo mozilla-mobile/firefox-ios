@@ -285,7 +285,11 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        shoppingCartButton.isHidden = !product.isShoppingCartButtonVisible || tab.isPrivate
+        let shouldHideButton = !product.isShoppingCartButtonVisible || tab.isPrivate
+        shoppingCartButton.isHidden = shouldHideButton
+        if !shouldHideButton {
+            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingCartButton)
+        }
     }
 
     private func updateTextWithURL() {

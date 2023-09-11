@@ -84,7 +84,7 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - TestsThemeable
 class TestsThemeable: UIViewController, Themeable {
-    var themeManager: ThemeManager = DefaultThemeManager()
+    var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 

@@ -26,7 +26,6 @@ enum LoginDetailCellType: Int {
 struct PasswordDetailViewControllerModel {
     let profile: Profile
     var login: LoginRecord
-    let webpageNavigationHandler: ((_ url: URL?) -> Void)?
     let breachRecord: BreachRecord?
 
     private var cellTypes: [LoginDetailCellType] {

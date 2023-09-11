@@ -660,7 +660,6 @@ class Tab: NSObject {
     @objc
     func reloadPage() {
         reload()
-        self.webView?.scrollView.refreshControl?.endRefreshing()
     }
 
     @objc

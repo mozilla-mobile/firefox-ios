@@ -6,8 +6,6 @@ import UIKit
 import Shared
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
-    private var shownFromAppMenu = false
-
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,16 +40,11 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     weak var coordinator: PasswordManagerFlowDelegate?
     private var appAuthenticator: AppAuthenticationProtocol
 
-    var doneHandler: () -> Void = {}
-    var proceedHandler: () -> Void = {}
-
     init(profile: Profile? = nil,
          tabManager: TabManager? = nil,
-         shownFromAppMenu: Bool = false,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.appAuthenticator = appAuthenticator
         super.init(profile: profile, tabManager: tabManager)
-        self.shownFromAppMenu = shownFromAppMenu
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -60,12 +53,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                               target: self,
-                                                               action: #selector(doneButtonTapped))
-        }
 
         self.title = .Settings.Passwords.Title
 
@@ -90,11 +77,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }
 
     @objc
-    func doneButtonTapped(_ sender: UIButton) {
-        self.doneHandler()
-    }
-
-    @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
@@ -103,11 +85,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && !shownFromAppMenu {
-            continueFromOnboarding()
-        } else {
-            proceedHandler()
-        }
+        continueFromOnboarding()
     }
 
     private func continueFromOnboarding() {
