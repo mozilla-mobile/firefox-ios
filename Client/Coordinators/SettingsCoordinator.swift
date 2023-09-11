@@ -171,6 +171,11 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(experimentsViewController)
     }
 
+    func showFirefoxSuggest() {
+        let firefoxSuggestViewController = FirefoxSuggestSettingsViewController(profile: profile)
+        router.push(firefoxSuggestViewController)
+    }
+
     func showPasswordManager(shouldShowOnboarding: Bool) {
         let passwordCoordinator = PasswordManagerCoordinator(
             router: router,
