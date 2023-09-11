@@ -12,7 +12,8 @@ class EngagementNotificationTests: BaseTestCase {
 
     override func setUp() {
         launchArguments = [LaunchArguments.ClearProfile,
-                           "\(LaunchArguments.LoadExperiment)engagementNotificationWithoutConditions"]
+                           "\(LaunchArguments.LoadExperiment)engagementNotificationWithoutConditions",
+                           LaunchArguments.DisableAnimations]
         super.setUp()
     }
 
