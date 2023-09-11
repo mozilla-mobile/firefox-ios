@@ -6,11 +6,12 @@ import Shared
 import Storage
 import SwiftUI
 import UIKit
+import Common
 
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
-    private let themeManager = DefaultThemeManager()
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     private var profile: Profile {
         let profile = BrowserProfile(localName: "profile")
 
