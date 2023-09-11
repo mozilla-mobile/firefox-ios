@@ -17,6 +17,8 @@ struct AppState: StateType {
             .compactMap {
                 switch ($0, screen) {
                 case (.themeSettings(let state), .themeSettings): return state as? S
+                case (.integrationTest(let state), .integrationTest): return state as? S
+                default: return nil
                 }
             }
             .first

@@ -7,4 +7,12 @@ import Redux
 
 @testable import Client
 struct FakeReduxState: ScreenState, Equatable {
+    init(appState: AppState) {}
+
+    static let reducer: Reducer<Self> = { state, action in
+        switch action {
+        default:
+            return state
+        }
+    }
 }

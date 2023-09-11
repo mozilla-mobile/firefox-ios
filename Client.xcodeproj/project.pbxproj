@@ -95,6 +95,7 @@
 		215B5B1F2AABA3DD006C165D /* FakeReduxAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B1E2AABA3DD006C165D /* FakeReduxAction.swift */; };
 		215B5B212AABA3EC006C165D /* FakeReduxState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B202AABA3EC006C165D /* FakeReduxState.swift */; };
 		215B5B232AABA3FA006C165D /* FakeReduxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B222AABA3FA006C165D /* FakeReduxViewController.swift */; };
+		215B5B272AAFABBB006C165D /* FakeReduxState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B202AABA3EC006C165D /* FakeReduxState.swift */; };
 		21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A602A4201E500A5189E /* ThemeSettingsController.swift */; };
 		21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A622A422A3900A5189E /* ThemeMiddleware.swift */; };
 		21618A8A2A4389F700A5189E /* ActiveScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A892A4389F700A5189E /* ActiveScreenState.swift */; };
@@ -12465,6 +12466,7 @@
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
+				215B5B272AAFABBB006C165D /* FakeReduxState.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,

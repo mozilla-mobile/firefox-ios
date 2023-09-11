@@ -5,8 +5,19 @@
 import Redux
 import UIKit
 
+@testable import Client
+
 class FakeReduxViewController: UIViewController, StoreSubscriber {
+    typealias SubscriberStateType = FakeReduxState
     override func viewDidLoad() {
         super.viewDidLoad()
+        store.dispatch(ActiveScreensStateAction.showScreen(.integrationTest))
+        store.subscribe(self, transform: {
+            $0.select(FakeReduxState.init)
+        })
+    }
+
+    func newState(state: FakeReduxState) {
+        print("YRD newState \(state)")
     }
 }

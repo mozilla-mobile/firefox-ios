@@ -6,11 +6,13 @@ import Foundation
 import Redux
 
 enum AppScreenState: Equatable {
-   case themeSettings(ThemeSettingsState)
+    case themeSettings(ThemeSettingsState)
+    case integrationTest(FakeReduxState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
+        case .integrationTest(let state): return .integrationTest(FakeReduxState.reducer(state, action))
         }
     }
 }
@@ -33,7 +35,9 @@ struct ActiveScreensState: Equatable {
             switch action {
             case .showScreen(.themeSettings):
                 screens += [.themeSettings(ThemeSettingsState())]
-            case .closeScreen(.themeSettings):
+            case .showScreen(.integrationTest):
+                screens += [.themeSettings(ThemeSettingsState())]
+            case .closeScreen:
                 screens = []
             }
         }
