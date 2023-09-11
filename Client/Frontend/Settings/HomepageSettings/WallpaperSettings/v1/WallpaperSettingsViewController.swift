@@ -223,8 +223,8 @@ private extension WallpaperSettingsViewController {
             viewModel: viewModel,
             theme: themeManager.currentTheme,
             completion: { buttonPressed in
-            if buttonPressed { self.dismissView() }
-        })
+                if buttonPressed { self.dismissView() }
+            })
 
         toast.showToast(viewController: self,
                         delay: Toast.UX.toastDelayBefore,
@@ -238,15 +238,8 @@ private extension WallpaperSettingsViewController {
     }
 
     func dismissView() {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.didFinish()
-            viewModel.selectHomepageTab()
-        } else {
-            guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
-
-            viewModel.selectHomepageTab()
-            navigationController.done()
-        }
+        settingsDelegate?.didFinish()
+        viewModel.selectHomepageTab()
     }
 
     func preferredContentSizeChanged(_ notification: Notification) {

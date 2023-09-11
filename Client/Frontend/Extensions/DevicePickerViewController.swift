@@ -8,6 +8,7 @@ import Storage
 import SnapKit
 import Account
 import SwiftUI
+import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
@@ -56,7 +57,7 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
-    private let themeManager = DefaultThemeManager()
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
     // provide Share To functionality

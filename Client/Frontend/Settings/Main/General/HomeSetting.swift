@@ -31,12 +31,6 @@ class HomeSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedHome()
-        } else {
-            let viewController = HomePageSettingViewController(prefs: profile.prefs)
-            viewController.profile = profile
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedHome()
     }
 }

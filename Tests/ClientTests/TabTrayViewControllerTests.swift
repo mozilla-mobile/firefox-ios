@@ -13,8 +13,8 @@ import Shared
 class TabTrayViewControllerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: TabManager!
-    var tabTray: TabTrayViewController!
-    var gridTab: GridTabViewController!
+    var tabTray: LegacyTabTrayViewController!
+    var gridTab: LegacyGridTabViewController!
     var overlayManager: MockOverlayModeManager!
     var urlBar: MockURLBarView!
 
@@ -27,12 +27,12 @@ class TabTrayViewControllerTests: XCTestCase {
         urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
-        tabTray = TabTrayViewController(tabTrayDelegate: nil,
-                                        profile: profile,
-                                        tabToFocus: nil,
-                                        tabManager: manager,
-                                        overlayManager: overlayManager)
-        gridTab = GridTabViewController(tabManager: manager, profile: profile)
+        tabTray = LegacyTabTrayViewController(tabTrayDelegate: nil,
+                                              profile: profile,
+                                              tabToFocus: nil,
+                                              tabManager: manager,
+                                              overlayManager: overlayManager)
+        gridTab = LegacyGridTabViewController(tabManager: manager, profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -69,7 +69,7 @@ class TabTrayViewControllerTests: XCTestCase {
     }
 
     func testTabTrayInPrivateMode_WhenTabIsCreated() {
-        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
         tabTray.viewDidLoad()
         tabTray.didTapAddTab(UIBarButtonItem())
         tabTray.didTapDone()
@@ -81,7 +81,7 @@ class TabTrayViewControllerTests: XCTestCase {
     func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {
         // If the user selects Private mode but doesn't focus or creates a new tab
         // we considered that regular is actually active
-        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
         tabTray.viewDidLoad()
         tabTray.didTapDone()
 
@@ -90,7 +90,7 @@ class TabTrayViewControllerTests: XCTestCase {
     }
 
     func testInOverlayMode_ForHomepageNewTabSettings() {
-        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
         tabTray.viewDidLoad()
         profile.prefs.setString(NewTabPage.topSites.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
         tabTray.viewModel.didTapAddTab(UIBarButtonItem())

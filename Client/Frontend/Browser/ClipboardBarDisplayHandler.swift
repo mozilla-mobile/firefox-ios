@@ -14,7 +14,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
 
-    weak var delegate: (ClipboardBarDisplayHandlerDelegate & SettingsDelegate)?
+    weak var delegate: ClipboardBarDisplayHandlerDelegate?
     weak var settingsDelegate: SettingsDelegate?
     weak var tabManager: TabManager?
     private var sessionStarted = true

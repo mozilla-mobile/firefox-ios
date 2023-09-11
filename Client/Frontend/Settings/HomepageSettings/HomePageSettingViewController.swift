@@ -105,7 +105,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             onChecked: {
                 self.currentNewTabChoice = NewTabPage.topSites
                 onFinished()
-        })
+            })
+
         let showWebPage = WebPageSetting(
             prefs: prefs,
             prefKey: PrefsKeys.HomeButtonHomePageURL,
@@ -117,7 +118,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 self.currentNewTabChoice = NewTabPage.homePage
                 self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
                 self.tableView.reloadData()
-        })
+            })
+
         showWebPage.textField.textAlignment = .natural
 
         return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
@@ -132,12 +134,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let pocketStatusText = String(
             format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
             PocketAppName.shortName.rawValue)
+
         let pocketSetting = BoolSetting(
             with: .pocket,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories),
             statusText: NSAttributedString(string: pocketStatusText)) { [weak self] _ in
                 self?.tableView.reloadData()
-            }
+        }
 
         let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
                                             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn))
@@ -203,7 +206,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             onChecked: {
                 self.currentStartAtHomeSetting = .afterFourHours
                 onOptionSelected(true, .afterFourHours)
-        })
+            })
 
         let alwaysOption = CheckmarkSetting(
             title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Always),
@@ -213,7 +216,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             onChecked: {
                 self.currentStartAtHomeSetting = .always
                 onOptionSelected(true, .always)
-        })
+            })
 
         let neverOption = CheckmarkSetting(
             title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Never),
@@ -223,7 +226,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             onChecked: {
                 self.currentStartAtHomeSetting = .disabled
                 onOptionSelected(false, .disabled)
-        })
+            })
 
         let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionTitle),
                                      footerTitle: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionDescription),

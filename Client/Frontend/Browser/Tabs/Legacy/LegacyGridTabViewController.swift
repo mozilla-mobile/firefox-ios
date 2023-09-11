@@ -8,8 +8,8 @@ import Shared
 import Common
 
 protocol TabTrayDelegate: AnyObject {
-    func tabTrayDidDismiss(_ tabTray: GridTabViewController)
-    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab)
+    func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController)
+    func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayOpenRecentlyClosedTab(_ url: URL)
@@ -17,7 +17,7 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidCloseLastTab(toast: ButtonToast)
 }
 
-class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
+class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     struct UX {
         static let cornerRadius: CGFloat = 6
         static let textBoxHeight: CGFloat = 32
@@ -61,8 +61,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TabCell.cellIdentifier
+    var tabDisplayManager: LegacyTabDisplayManager!
+    var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = LegacyTabCell.cellIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
@@ -91,17 +91,17 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         return true
     }
 
-    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
-        let emptyView = EmptyPrivateTabsView()
+    private lazy var emptyPrivateTabsView: LegacyEmptyPrivateTabsView = {
+        let emptyView = LegacyEmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self,
                                             action: #selector(didTapLearnMore),
                                             for: .touchUpInside)
         return emptyView
     }()
 
-    private lazy var tabLayoutDelegate: TabLayoutDelegate = {
-        let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
-                                         traitCollection: self.traitCollection)
+    private lazy var tabLayoutDelegate: LegacyTabLayoutDelegate = {
+        let delegate = LegacyTabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
+                                               traitCollection: self.traitCollection)
         delegate.tabSelectionDelegate = self
         delegate.tabPeekDelegate = self
         return delegate
@@ -137,20 +137,20 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     private func collectionViewSetup() {
         collectionView = UICollectionView(frame: .zero,
                                           collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(cellType: TabCell.self)
+        collectionView.register(cellType: LegacyTabCell.self)
         collectionView.register(cellType: InactiveTabCell.self)
         collectionView.register(
             LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: collectionView,
-                                              tabManager: tabManager,
-                                              tabDisplayer: self,
-                                              reuseID: TabCell.cellIdentifier,
-                                              tabDisplayType: .TabGrid,
-                                              profile: profile,
-                                              cfrDelegate: self,
-                                              theme: themeManager.currentTheme)
+            withReuseIdentifier: LegacyGridTabViewController.independentTabsHeaderIdentifier)
+        tabDisplayManager = LegacyTabDisplayManager(collectionView: collectionView,
+                                                    tabManager: tabManager,
+                                                    tabDisplayer: self,
+                                                    reuseID: LegacyTabCell.cellIdentifier,
+                                                    tabDisplayType: .TabGrid,
+                                                    profile: profile,
+                                                    cfrDelegate: self,
+                                                    theme: themeManager.currentTheme)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -382,7 +382,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     /// Handles close tab by clicking on close button or swipe gesture
-    func closeTabAction(tab: Tab, cell: TabCell) {
+    func closeTabAction(tab: Tab, cell: LegacyTabCell) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab,
                                                    restorePosition: tabManager.tabs.firstIndex(of: tab))
         tabDisplayManager.tabDisplayCompletionDelegate = self
@@ -453,13 +453,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 }
 
 // MARK: - TabDisplayer
-extension GridTabViewController: TabDisplayerDelegate {
+extension LegacyGridTabViewController: TabDisplayerDelegate {
     func focusSelectedTab() {
         self.focusItem()
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TabCell else { return cell }
+        guard let tabCell = cell as? LegacyTabCell else { return cell }
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
@@ -469,7 +469,7 @@ extension GridTabViewController: TabDisplayerDelegate {
 }
 
 // MARK: - App Notifications
-extension GridTabViewController {
+extension LegacyGridTabViewController {
     @objc
     func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate && !tabManager.privateTabs.isEmpty {
@@ -489,16 +489,17 @@ extension GridTabViewController {
             animations: { [weak self] in
                 self?.collectionView.alpha = 1
                 self?.emptyPrivateTabsView.alpha = 1
-            }) { [weak self] _ in
-                guard let self else { return }
-                self.backgroundPrivacyOverlay.alpha = 0
-                self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
             }
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.backgroundPrivacyOverlay.alpha = 0
+            self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
+        }
     }
 }
 
 // MARK: - TabSelectionDelegate
-extension GridTabViewController: TabSelectionDelegate {
+extension LegacyGridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
@@ -511,9 +512,9 @@ extension GridTabViewController: TabSelectionDelegate {
 }
 
 // MARK: UIScrollViewAccessibilityDelegate
-extension GridTabViewController: UIScrollViewAccessibilityDelegate {
+extension LegacyGridTabViewController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
-        guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
+        guard var visibleCells = collectionView.visibleCells as? [LegacyTabCell] else { return nil }
         var bounds = collectionView.bounds
         bounds = bounds.offsetBy(dx: collectionView.contentInset.left,
                                  dy: collectionView.contentInset.top)
@@ -546,9 +547,9 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 }
 
 // MARK: - SwipeAnimatorDelegate
-extension GridTabViewController: SwipeAnimatorDelegate {
+extension LegacyGridTabViewController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        guard let tabCell = animator.animatingView as? TabCell,
+        guard let tabCell = animator.animatingView as? LegacyTabCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.closeTabAction(tab: tab, cell: tabCell)
@@ -564,8 +565,8 @@ extension GridTabViewController: SwipeAnimatorDelegate {
 }
 
 // MARK: - TabCellDelegate
-extension GridTabViewController: TabCellDelegate {
-    func tabCellDidClose(_ cell: TabCell) {
+extension LegacyGridTabViewController: TabCellDelegate {
+    func tabCellDidClose(_ cell: LegacyTabCell) {
         if let indexPath = collectionView.indexPath(for: cell),
            let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             closeTabAction(tab: tab, cell: cell)
@@ -574,7 +575,7 @@ extension GridTabViewController: TabCellDelegate {
 }
 
 // MARK: - TabPeekDelegate
-extension GridTabViewController: TabPeekDelegate {
+extension LegacyGridTabViewController: TabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
@@ -586,7 +587,7 @@ extension GridTabViewController: TabPeekDelegate {
     func tabPeekDidCloseTab(_ tab: Tab) {
         // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-           let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
+           let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? LegacyTabCell {
             cell.close()
         }
     }
@@ -604,7 +605,7 @@ extension GridTabViewController: TabPeekDelegate {
 }
 
 // MARK: - TabDisplayCompletionDelegate & RecentlyClosedPanelDelegate
-extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
+extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
         TelemetryWrapper.recordEvent(category: .action,
@@ -647,7 +648,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
 }
 
 // MARK: - Toolbar Actions
-extension GridTabViewController {
+extension LegacyGridTabViewController {
     func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem) {
         switch action {
         case .addTab:
@@ -683,7 +684,7 @@ extension GridTabViewController {
 }
 
 // MARK: - DevicePickerViewControllerDelegate
-extension GridTabViewController: DevicePickerViewControllerDelegate {
+extension LegacyGridTabViewController: DevicePickerViewControllerDelegate {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         if let item = devicePickerViewController.shareItem {
             _ = self.profile.sendItem(item, toDevices: devices)
@@ -697,7 +698,7 @@ extension GridTabViewController: DevicePickerViewControllerDelegate {
 }
 
 // MARK: - Presentation Delegates
-extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+extension LegacyGridTabViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -706,7 +707,7 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
 }
 
 // MARK: - Notifiable
-extension GridTabViewController: Notifiable {
+extension LegacyGridTabViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willResignActiveNotification:
@@ -719,7 +720,7 @@ extension GridTabViewController: Notifiable {
 }
 
 // MARK: - Contextual Hint and Toast
-extension GridTabViewController: InactiveTabsCFRProtocol {
+extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel) {
         prepareJumpBackInContextualHint(on: view)
     }

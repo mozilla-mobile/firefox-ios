@@ -53,10 +53,13 @@ class DisconnectSetting: Setting {
             title: .SettingsDisconnectSyncAlertTitle,
             message: .SettingsDisconnectSyncAlertBody,
             preferredStyle: UIAlertController.Style.alert)
+
         alertController.addAction(
             UIAlertAction(title: .SettingsDisconnectCancelAction, style: .cancel) { (action) in
                 // Do nothing.
-        })
+            }
+        )
+
         alertController.addAction(
             UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile.removeAccount()
@@ -69,7 +72,9 @@ class DisconnectSetting: Setting {
                 } else {
                     self.settingsVC.dismiss(animated: true, completion: nil)
                 }
-        })
+            }
+        )
+
         navigationController?.present(alertController, animated: true, completion: nil)
     }
 }

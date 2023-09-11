@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Common
 
 // MARK: - Protocol
 protocol FeatureFlaggable { }
@@ -88,6 +89,12 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         }
     }
 
+    /// Set different app build channels to a core feature
+    public func set(feature featureID: CoreFeatureFlagID, toChannels desiredChannels: [AppBuildChannel]) {
+        let desiredFeature = CoreFlaggableFeature(withID: featureID, enabledFor: desiredChannels)
+        coreFeatures[featureID] = desiredFeature
+    }
+
     /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
         // Do nothing if this is a non-binary feature
@@ -146,7 +153,11 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         let useStagingSponsoredPocketStoriesAPI = CoreFlaggableFeature(withID: .useStagingSponsoredPocketStoriesAPI,
                                                                        enabledFor: [.beta, .developer])
 
+        let useStagingFakespotAPI = CoreFlaggableFeature(withID: .useStagingFakespotAPI,
+                                                         enabledFor: [.beta, .developer])
+
         coreFeatures[.useStagingContileAPI] = useStagingContileAPI
         coreFeatures[.useStagingSponsoredPocketStoriesAPI] = useStagingSponsoredPocketStoriesAPI
+        coreFeatures[.useStagingFakespotAPI] = useStagingFakespotAPI
     }
 }

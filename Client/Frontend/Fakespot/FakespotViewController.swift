@@ -53,8 +53,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     }
 
     private lazy var errorCardView: FakespotErrorCardView = .build()
-    private lazy var reliabilityCardView: ReliabilityCardView = .build()
-    private lazy var highlightsCardView: HighlightsCardView = .build()
+    private lazy var confirmationCardView: FakespotMessageCardView = .build()
+    private lazy var reliabilityCardView: FakespotReliabilityCardView = .build()
+    private lazy var highlightsCardView: FakespotHighlightsCardView = .build()
     private lazy var settingsCardView: FakespotSettingsCardView = .build()
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
@@ -82,7 +83,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         presentationController?.delegate = self
         setupView()
         listenForThemeChange(view)
+        sendTelemetryOnAppear()
 
+        confirmationCardView.configure(viewModel.confirmationCardViewModel)
         reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
         errorCardView.configure(viewModel.errorCardViewModel)
         highlightsCardView.configure(viewModel.highlightsCardViewModel)
@@ -115,6 +118,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         titleLabel.textColor = theme.colors.textPrimary
 
         errorCardView.applyTheme(theme: theme)
+        confirmationCardView.applyTheme(theme: theme)
         reliabilityCardView.applyTheme(theme: theme)
         highlightsCardView.applyTheme(theme: theme)
         settingsCardView.applyTheme(theme: theme)
@@ -129,6 +133,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)
+        contentStackView.addArrangedSubview(confirmationCardView)
         contentStackView.addArrangedSubview(errorCardView)
         contentStackView.addArrangedSubview(settingsCardView)
         contentStackView.addArrangedSubview(noAnalysisCardView)
@@ -173,12 +178,18 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight)
         ])
 
-        titleCenterYConstraint.priority(.defaultLow)
+        _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
     private func recordTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
+                                     object: .shoppingBottomSheet)
+    }
+
+    private func sendTelemetryOnAppear() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
                                      object: .shoppingBottomSheet)
     }
 

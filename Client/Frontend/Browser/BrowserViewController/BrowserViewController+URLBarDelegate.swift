@@ -32,16 +32,26 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                     focusedSegment: TabTrayViewModel.Segment? = nil) {
+                     focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        self.tabTrayViewController = TabTrayViewController(
-            tabTrayDelegate: self,
-            profile: profile,
-            tabToFocus: tabToFocus,
-            tabManager: tabManager,
-            overlayManager: overlayManager,
-            focusedSegment: focusedSegment)
+        // TODO: FXIOS-7355 Move logic to BrowserCoordinator in
+        if isTabTrayRefactorEnabled {
+            self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
+                                                               profile: profile,
+                                                               tabToFocus: tabToFocus,
+                                                               tabManager: tabManager,
+                                                               overlayManager: overlayManager,
+                                                               focusedSegment: focusedSegment)
+        } else {
+            self.tabTrayViewController = LegacyTabTrayViewController(
+                tabTrayDelegate: self,
+                profile: profile,
+                tabToFocus: tabToFocus,
+                tabManager: tabManager,
+                overlayManager: overlayManager,
+                focusedSegment: focusedSegment)
+        }
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
@@ -136,13 +146,9 @@ extension BrowserViewController: URLBarDelegate {
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
             contentBlockerStatus: contentBlocker.status)
         etpViewModel.onOpenSettingsTapped = { [weak self] in
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                // Wait to show settings in async dispatch since hamburger menu is still showing at that time
-                DispatchQueue.main.async {
-                    self?.navigationHandler?.show(settings: .contentBlocker)
-                }
-            } else {
-                self?.legacyShowSettings(deeplink: .contentBlocker)
+            // Wait to show settings in async dispatch since hamburger menu is still showing at that time
+            DispatchQueue.main.async {
+                self?.navigationHandler?.show(settings: .contentBlocker)
             }
         }
         etpViewModel.onToggleSiteSafelistStatus = { tab.reload() }
@@ -171,24 +177,6 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         self.present(etpVC, animated: true, completion: nil)
-    }
-
-    // Will be removed with FXIOS-6529
-    func legacyShowSettings(deeplink: AppSettingsDeeplinkOption?) {
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: self.profile,
-            and: self.tabManager,
-            delegate: self,
-            deeplinkingTo: deeplink)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-
-        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-        // of this popover on iPad seems to block the presentation of the modal VC.
-        DispatchQueue.main.async {
-            self.present(controller, animated: true, completion: nil)
-        }
     }
 
     func urlBarDidPressStop(_ urlBar: URLBarView) {

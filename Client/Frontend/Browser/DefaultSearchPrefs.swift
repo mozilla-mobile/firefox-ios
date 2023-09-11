@@ -86,6 +86,6 @@ final class DefaultSearchPrefs {
                 (defaultEngine, localeJSON) -> String in
                 let inner = localeJSON[region] as? [String: Any]
                 return inner?["searchDefault"] as? String ?? defaultEngine
-        }
+            }
     }
 }

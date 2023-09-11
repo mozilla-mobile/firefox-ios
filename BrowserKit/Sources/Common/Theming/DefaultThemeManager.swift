@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
 
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 public final class DefaultThemeManager: ThemeManager, Notifiable {
@@ -28,6 +27,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public var notificationCenter: NotificationProtocol
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
+    private var sharedContainerIdentifier: String
 
     public var window: UIWindow?
 
@@ -35,10 +35,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
-                mainQueue: DispatchQueueInterface = DispatchQueue.main) {
+                mainQueue: DispatchQueueInterface = DispatchQueue.main,
+                sharedContainerIdentifier: String) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
+        self.sharedContainerIdentifier = sharedContainerIdentifier
 
         migrateDefaultsToUseStandard()
 
@@ -153,7 +155,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func migrateDefaultsToUseStandard() {
-        guard let oldDefaultsStore = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) else { return }
+        guard let oldDefaultsStore = UserDefaults(suiteName: sharedContainerIdentifier) else { return }
 
         if let systemThemeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.systemThemeIsOn) {
             userDefaults.set(systemThemeIsOn, forKey: ThemeKeys.systemThemeIsOn)

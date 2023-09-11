@@ -34,9 +34,6 @@ final class NimbusFeatureFlagLayer {
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
 
-        case .settingsCoordinatorRefactor:
-            return checkSettingsCoordinatorRefactorFeature(from: nimbus)
-
         case .etpCoordinatorRefactor:
             return checkEtpCoordinatorRefactorFeature(from: nimbus)
 
@@ -49,8 +46,7 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .onboardingUpgrade,
-                .onboardingFreshInstall:
+        case .onboardingFreshInstall:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .reduxIntegration:
@@ -65,6 +61,9 @@ final class NimbusFeatureFlagLayer {
 
         case .startAtHome:
             return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
+
+        case .tabTrayRefactor:
+            return checkTabTrayRefactorFeature(from: nimbus)
 
         case .wallpapers,
                 .wallpaperVersion:
@@ -163,11 +162,6 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkSettingsCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.settingsCoordinatorRefactor.value()
-        return config.enabled
-    }
-
     private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
         return config.enabled
@@ -203,6 +197,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayRefactorFeature.value()
+        return config.enabled
+    }
+
     public func checkNimbusForCreditCardAutofill(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
@@ -221,7 +220,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.onboardingFeature.value()
 
         switch featureID {
-        case .onboardingUpgrade: return config.upgradeFlow
         case .onboardingFreshInstall: return config.firstRunFlow
         default: return false
         }
