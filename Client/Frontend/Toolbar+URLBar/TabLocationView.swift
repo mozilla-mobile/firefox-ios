@@ -283,7 +283,8 @@ class TabLocationView: UIView, FeatureFlaggable {
             shoppingCartButton.isHidden = true
             return
         }
-        let product = ShoppingProduct(url: url)
+        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
         let shouldHideButton = !product.isShoppingCartButtonVisible || tab.isPrivate
         shoppingCartButton.isHidden = shouldHideButton
         if !shouldHideButton {

@@ -21,7 +21,7 @@ final class ShoppingProductTests: XCTestCase {
     func testAmazonURL_returnsExpectedProduct() {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
         let expected = Product(id: "B087T8Q2C4", host: "amazon.com", topLevelDomain: "com", sitename: "amazon")
 
         XCTAssertEqual(sut.product, expected)
@@ -30,7 +30,7 @@ final class ShoppingProductTests: XCTestCase {
     func testBestBuyURL_returnsExpectedProduct() {
         let url = URL(string: "https://www.bestbuy.com/site/macbook-air-13-3-laptop-apple-m1-chip-8gb-memory-256gb-ssd-space-gray/5721600.p?skuId=5721600")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
         let expected = Product(id: "5721600.p", host: "bestbuy.com", topLevelDomain: "com", sitename: "bestbuy")
 
         XCTAssertEqual(sut.product, expected)
@@ -39,7 +39,7 @@ final class ShoppingProductTests: XCTestCase {
     func testBasicURL_returnsNilProduct() {
         let url = URL(string: "https://www.example.com")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
 
         XCTAssertNil(sut.product)
     }
@@ -47,7 +47,7 @@ final class ShoppingProductTests: XCTestCase {
     func testBasicURL_hidesShoppingIcon() {
         let url = URL(string: "https://www.example.com")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
 
         XCTAssertFalse(sut.isShoppingCartButtonVisible)
     }
@@ -55,7 +55,7 @@ final class ShoppingProductTests: XCTestCase {
     func testFetchingProductAnalysisData_WithInvalidURL_ReturnsNil() async throws {
         let url = URL(string: "https://www.example.com")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
         let productData = try await sut.fetchProductAnalysisData()
 
         XCTAssertNil(productData)
@@ -76,7 +76,7 @@ final class ShoppingProductTests: XCTestCase {
     func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async throws {
         let url = URL(string: "https://www.example.com")!
 
-        let sut = ShoppingProduct(url: url)
+        let sut = ShoppingProduct(url: url, client: client)
         let productAdData = try await sut.fetchProductAdsData()
 
         XCTAssertTrue(productAdData.isEmpty)
