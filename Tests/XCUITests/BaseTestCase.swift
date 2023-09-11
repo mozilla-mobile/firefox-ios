@@ -69,6 +69,7 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
+        app.launchArguments.append("-disableAnimations")
         app.launch()
     }
 
