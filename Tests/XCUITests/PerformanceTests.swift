@@ -48,6 +48,7 @@ class PerformanceTests: BaseTestCase {
     // Taking the edges, low and high load. For more values in the middle
     // check the available archives
     func testPerfTabs_1_20startup() {
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -56,10 +57,14 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
+            app.terminate()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfTabs_2_1280startup() {
+        app.terminate()
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -68,13 +73,20 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
+            app.terminate()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfTabs_3_20tabTray() {
-        app.launch()
-        waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"], timeout: TIMEOUT_LONG)
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
+        let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
+
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+        mozWaitForElementToExist(element: tabsButtonNumber, timeoutInSeconds: TIMEOUT)
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -82,28 +94,37 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT_LONG)
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
-            app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
+            mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+            tabsButton.tap()
+            mozWaitForElementToExist(element: doneButton, timeoutInSeconds: TIMEOUT)
+            doneButton.tap()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfTabs_4_1280tabTray() {
-        app.launch()
-        waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"], timeout: TIMEOUT_LONG)
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
+        let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
+
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+        mozWaitForElementToExist(element: tabsButtonNumber, timeoutInSeconds: TIMEOUT)
+
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
-            app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
+            mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+            tabsButton.tap()
+            mozWaitForElementToExist(element: doneButton, timeoutInSeconds: TIMEOUT)
+            doneButton.tap()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfHistory1startUp() {
