@@ -148,6 +148,6 @@ class TrackingProtectionTests: BaseTestCase {
         // The page is correctly displayed with the lock icon disabled
         XCTAssertTrue(app.staticTexts["This Connection is Untrusted"].exists, "Missing This Connection is Untrusted info")
         XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "lockSlashLarge")
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Secure connection")
     }
 }
