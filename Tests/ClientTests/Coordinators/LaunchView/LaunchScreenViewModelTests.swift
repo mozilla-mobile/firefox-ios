@@ -106,8 +106,11 @@ final class LaunchScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> LaunchScreenViewModel {
+        let onboardingModel = createOnboardingViewModel()
+
         let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
+                                            messageManager: messageManager,
+                                            onboardingModel: onboardingModel)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -128,5 +131,30 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                  triggers: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
+    }
+
+    func createOnboardingViewModel() -> OnboardingViewModel {
+        let cards: [OnboardingCardInfoModel] = [
+            createCard(index: 1),
+            createCard(index: 2)
+        ]
+
+        return OnboardingViewModel(cards: cards,
+                                   isDismissable: true)
+    }
+
+    func createCard(index: Int) -> OnboardingCardInfoModel {
+        let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
+                                                                           action: .nextCard))
+        return OnboardingCardInfoModel(name: "Name \(index)",
+                                       order: index,
+                                       title: "Title \(index)",
+                                       body: "Body \(index)",
+                                       link: nil,
+                                       buttons: buttons,
+                                       type: .upgrade,
+                                       a11yIdRoot: "A11y id \(index)",
+                                       imageID: "Image id \(index)",
+                                       instructionsPopup: nil)
     }
 }
