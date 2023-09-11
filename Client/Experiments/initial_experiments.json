@@ -11,7 +11,7 @@
       "channel": "release",
       "userFacingName": "[release] iOS Onboarding - Pin to Dock",
       "userFacingDescription": "Onboarding experiment",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -178,7 +178,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('116.!') >= 0) && (language in ['en'])))",
       "startDate": "2023-08-08",
-      "enrollmentEndDate": "2023-08-29",
+      "enrollmentEndDate": "2023-09-07",
       "endDate": null,
       "proposedDuration": 25,
       "proposedEnrollment": 14,
@@ -189,20 +189,20 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-felt-privacy",
-      "id": "ios-felt-privacy",
+      "slug": "ios-onboarding-search-widget",
+      "id": "ios-onboarding-search-widget",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "iOS Felt Privacy",
-      "userFacingDescription": "Copy focused on privacy",
-      "isEnrollmentPaused": true,
+      "userFacingName": "iOS Onboarding - Search Widget",
+      "userFacingDescription": "Onboarding experiment",
+      "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-release-6",
+        "namespace": "ios-onboarding-framework-feature-release-8",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -234,34 +234,7 @@
             {
               "featureId": "onboarding-framework-feature",
               "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "title": "Onboarding/Onboarding.Welcome.Title.TreatementA.v114",
-                    "body": "Onboarding/Onboarding.Welcome.Description.TreatementA.v114",
-                    "buttons": {
-                      "primary": {
-                        "title": "Onboarding/Onboarding.Welcome.ActionTreatementA.v114",
-                        "action": "open-instructions-popup"
-                      },
-                      "secondary": {
-                        "title": "Onboarding/Onboarding.Welcome.Skip.v114",
-                        "action": "next-card"
-                      }
-                    },
-                    "instructions-popup": {
-                      "title": "Switch Your Default Browser",
-                      "button-title": "Go To Settings",
-                      "button-action": "open-ios-fx-settings",
-                      "instructions": [
-                        "1. Go to *Settings*",
-                        "2. Tap *Default Browser App*",
-                        "3. Select *Firefox*"
-                      ]
-                    }
-                  }
-                }
-              }
+              "value": {}
             }
           ]
         },
@@ -280,11 +253,15 @@
               "value": {
                 "cards": {
                   "welcome": {
-                    "title": "We love keeping you safe",
-                    "body": "Our non-profit backed browser helps stop companies from secretly following you around the web.",
+                    "image": "search-widget",
+                    "title": "Try the Firefox search widget",
+                    "body": "Quick searches are just a tap away with Firefox on your Home Screen.",
+                    "link": {
+                      "title": "Firefox privacy notice"
+                    },
                     "buttons": {
                       "primary": {
-                        "title": "Onboarding/Onboarding.Welcome.ActionTreatementA.v114",
+                        "title": "Show Me How",
                         "action": "open-instructions-popup"
                       },
                       "secondary": {
@@ -293,23 +270,64 @@
                       }
                     },
                     "instructions-popup": {
-                      "title": "Switch Your Default Browser",
-                      "button-title": "Go To Settings",
-                      "button-action": "open-ios-fx-settings",
+                      "title": "Add Firefox Search Widget to Home Screen",
+                      "button-title": "Got It",
                       "instructions": [
-                        "1. Go to *Settings*",
-                        "2. Tap *Default Browser App*",
-                        "3. Select *Firefox*"
+                        "1. Long press on the *Home Screen* until the icons start to jiggle.",
+                        "2. Tap on the *plus icon*.",
+                        "3. *Search for Firefox*, then choose a widget."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "search-widget": {
+                    "order": 20,
+                    "image": "search-widget",
+                    "title": "Try the Firefox search widget",
+                    "body": "Quick searches are just a tap away with Firefox on your Home Screen.",
+                    "buttons": {
+                      "primary": {
+                        "title": "Show Me How",
+                        "action": "open-instructions-popup"
+                      },
+                      "secondary": {
+                        "title": "Onboarding/Onboarding.Welcome.Skip.v114",
+                        "action": "next-card"
+                      }
+                    },
+                    "instructions-popup": {
+                      "title": "Add Firefox Search Widget to Home Screen",
+                      "button-title": "Got It",
+                      "instructions": [
+                        "1. Long press on the *Home Screen* until the icons start to jiggle.",
+                        "2. Tap on the *plus icon*.",
+                        "3. *Search for Firefox*, then choose a widget."
                       ]
                     }
                   },
                   "sign-to-sync": {
-                    "title": "Stay encrypted when you hop between devices",
-                    "body": "When you’re signed in and synced, you’re safer. Firefox encrypts your passwords, bookmarks, and more."
+                    "order": 30
                   },
                   "notification-permissions": {
-                    "title": "Notifications help you stay safer with Firefox",
-                    "body": "Securely send tabs between your devices and discover other privacy features in Firefox."
+                    "order": 40
                   }
                 }
               }
@@ -317,11 +335,11 @@
           ]
         }
       ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('116.!') >= 0) && (language in ['en'])))",
-      "startDate": "2023-07-27",
-      "enrollmentEndDate": "2023-08-09",
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('117.!') >= 0) && (language in ['en'])))",
+      "startDate": "2023-09-08",
+      "enrollmentEndDate": "2023-09-22",
       "endDate": null,
-      "proposedDuration": 28,
+      "proposedDuration": 25,
       "proposedEnrollment": 14,
       "referenceBranch": "control",
       "featureValidationOptOut": false,

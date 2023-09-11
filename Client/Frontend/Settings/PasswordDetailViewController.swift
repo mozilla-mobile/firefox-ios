@@ -304,11 +304,7 @@ extension PasswordDetailViewController {
     @objc
     func didTapBreachLearnMore() {
         guard let url = BreachAlertsManager.monitorAboutUrl else { return }
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
-            coordinator?.openURL(url: url)
-            return
-        }
-        viewModel.webpageNavigationHandler?(url)
+        coordinator?.openURL(url: url)
     }
 
     @objc
@@ -318,11 +314,7 @@ extension PasswordDetailViewController {
         urlComponents.host = domain
         urlComponents.scheme = "https"
         guard let url = urlComponents.url else { return }
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
-            coordinator?.openURL(url: url)
-            return
-        }
-        viewModel.webpageNavigationHandler?(url)
+        coordinator?.openURL(url: url)
     }
 
     func deleteLogin() {
@@ -426,14 +418,7 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
         guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
 
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled && settingsDelegate == nil {
-            coordinator?.openURL(url: url)
-            return
-        }
-
-        navigationController?.dismiss(animated: true, completion: {
-            self.settingsDelegate?.settingsOpenURLInNewTab(url)
-        })
+        coordinator?.openURL(url: url)
     }
 
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {

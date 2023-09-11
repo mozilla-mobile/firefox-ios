@@ -23,13 +23,8 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            guard let url = self.url,
-                  let title = self.title
-            else { return }
-            settingsDelegate?.pressedLicense(url: url, title: title)
-            return
-        }
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
+        guard let url = self.url,
+              let title = self.title else { return }
+        settingsDelegate?.pressedLicense(url: url, title: title)
     }
 }

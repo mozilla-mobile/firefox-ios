@@ -24,7 +24,7 @@ final class GridTabViewControllerTests: XCTestCase {
     }
 
     func testGridTabViewControllerDeinit() {
-        let subject = GridTabViewController(tabManager: manager, profile: profile)
+        let subject = LegacyGridTabViewController(tabManager: manager, profile: profile)
         trackForMemoryLeaks(subject)
     }
 }

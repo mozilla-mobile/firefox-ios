@@ -37,10 +37,6 @@ class ThemeSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedTheme()
-        } else {
-            navigationController?.pushViewController(ThemeSettingsController(), animated: true)
-        }
+        settingsDelegate?.pressedTheme()
     }
 }

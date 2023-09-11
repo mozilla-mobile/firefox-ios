@@ -13,10 +13,4 @@ class HiddenSetting: Setting {
         self.settings = settings
         super.init(title: nil)
     }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
 }

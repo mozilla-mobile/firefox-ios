@@ -225,14 +225,19 @@ extension IntroViewController: OnboardingCardDelegate {
             with: action,
             and: isPrimaryButton)
 
+        guard let introViewModel = viewModel as? IntroViewModel else { return }
         switch action {
         case .requestNotifications:
+            introViewModel.chosenOptions.insert(.askForNotificationPermission)
+            introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
         case .nextCard:
             showNextPage(from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
+            introViewModel.chosenOptions.insert(.syncSignIn)
+            introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 with: fxaPrams,
@@ -243,6 +248,8 @@ extension IntroViewController: OnboardingCardDelegate {
                 }
             }
         case .setDefaultBrowser:
+            introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
+            introViewModel.updateOnboardingUserActivationEvent()
             registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:

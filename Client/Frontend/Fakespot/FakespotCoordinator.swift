@@ -12,11 +12,12 @@ protocol FakespotViewControllerDelegate: AnyObject {
     func fakespotControllerDidDismiss()
 }
 
-class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate {
+class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
 
     func start(productURL: URL) {
-        let viewModel = FakespotViewModel(shoppingProduct: ShoppingProduct(url: productURL))
+        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let viewModel = FakespotViewModel(shoppingProduct: ShoppingProduct(url: productURL, client: FakespotClient(environment: environment)))
         let fakespotViewController = FakespotViewController(viewModel: viewModel)
         fakespotViewController.delegate = self
         if #available(iOS 15.0, *) {

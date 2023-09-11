@@ -4,11 +4,11 @@
 
 import UIKit
 
-class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
     var lastYOffset: CGFloat = 0
-    var tabDisplayManager: TabDisplayManager
+    var tabDisplayManager: LegacyTabDisplayManager
 
     var sectionHeaderSize: CGSize {
         CGSize(width: 50, height: 40)
@@ -23,13 +23,13 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
     var numberOfColumns: Int {
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return GridTabViewController.UX.compactNumberOfColumnsThin
+            return LegacyGridTabViewController.UX.compactNumberOfColumnsThin
         } else {
-            return GridTabViewController.UX.numberOfColumnsWide
+            return LegacyGridTabViewController.UX.numberOfColumnsWide
         }
     }
 
-    init(tabDisplayManager: TabDisplayManager, traitCollection: UITraitCollection) {
+    init(tabDisplayManager: LegacyTabDisplayManager, traitCollection: UITraitCollection) {
         self.tabDisplayManager = tabDisplayManager
         self.traitCollection = traitCollection
         super.init()
@@ -38,9 +38,9 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
     private func cellHeightForCurrentDevice() -> CGFloat {
         if traitCollection.verticalSizeClass == .compact ||
             traitCollection.horizontalSizeClass == .compact {
-            return GridTabViewController.UX.textBoxHeight * 6
+            return LegacyGridTabViewController.UX.textBoxHeight * 6
         } else {
-            return GridTabViewController.UX.textBoxHeight * 8
+            return LegacyGridTabViewController.UX.textBoxHeight * 8
         }
     }
 
@@ -61,7 +61,7 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return GridTabViewController.UX.margin
+        return LegacyGridTabViewController.UX.margin
     }
 
     @objc
@@ -70,7 +70,7 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let margin = GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)
+        let margin = LegacyGridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)
         let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
         let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
 
@@ -118,23 +118,23 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs, .none:
             return UIEdgeInsets(
-                top: GridTabViewController.UX.margin,
-                left: GridTabViewController.UX.margin + collectionView.safeAreaInsets.left,
-                bottom: GridTabViewController.UX.margin,
-                right: GridTabViewController.UX.margin + collectionView.safeAreaInsets.right)
+                top: LegacyGridTabViewController.UX.margin,
+                left: LegacyGridTabViewController.UX.margin + collectionView.safeAreaInsets.left,
+                bottom: LegacyGridTabViewController.UX.margin,
+                right: LegacyGridTabViewController.UX.margin + collectionView.safeAreaInsets.right)
 
         case .inactiveTabs:
             guard !tabDisplayManager.isPrivate,
                   tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
             else { return .zero }
 
-            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
+            return UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.margin)
         }
     }
 
     @objc
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabViewController.UX.margin
+        return LegacyGridTabViewController.UX.margin
     }
 
     @objc

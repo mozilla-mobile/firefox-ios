@@ -41,23 +41,15 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
-            return NSAttributedString(
-                string: displayName,
-                attributes: [
-                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontBold,
-                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        }
+        guard let profile = RustFirefoxAccounts.shared.userProfile else { return nil }
 
-        if let email = RustFirefoxAccounts.shared.userProfile?.email {
-            return NSAttributedString(
-                string: email,
-                attributes: [
-                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontBold,
-                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        }
+        let string = profile.displayName ?? profile.email
 
-        return nil
+        return NSAttributedString(
+            string: string,
+            attributes: [
+                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .semibold),
+                NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override var status: NSAttributedString? {
@@ -76,26 +68,11 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
-
-            if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-                settingsDelegate?.pressedToShowFirefoxAccount()
-                return
-            }
-
-            let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
-            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-            navigationController?.pushViewController(controller, animated: true)
+            settingsDelegate?.pressedToShowFirefoxAccount()
             return
         }
 
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedToShowSyncContent()
-            return
-        }
-
-        let viewController = SyncContentSettingsViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.pressedToShowSyncContent()
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {

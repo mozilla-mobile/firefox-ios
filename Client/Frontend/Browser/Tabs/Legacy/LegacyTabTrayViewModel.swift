@@ -6,7 +6,7 @@ import Common
 import Shared
 import Storage
 
-class TabTrayViewModel {
+class LegacyTabTrayViewModel {
     enum Segment: Int, CaseIterable {
         case tabs
         case privateTabs
@@ -59,7 +59,7 @@ class TabTrayViewModel {
     let tabTrayView: TabTrayViewDelegate
     let syncedTabsController: RemoteTabsPanel
 
-    var segmentToFocus: TabTrayViewModel.Segment?
+    var segmentToFocus: LegacyTabTrayViewModel.Segment?
     var layout: Layout = .compact
 
     var normalTabsCount: String {
@@ -71,22 +71,22 @@ class TabTrayViewModel {
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
          overlayManager: OverlayModeManager,
-         segmentToFocus: TabTrayViewModel.Segment? = nil) {
+         segmentToFocus: LegacyTabTrayViewModel.Segment? = nil) {
         self.profile = profile
         self.tabManager = tabManager
         self.overlayManager = overlayManager
 
-        self.tabTrayView = GridTabViewController(tabManager: self.tabManager,
-                                                 profile: profile,
-                                                 tabTrayDelegate: tabTrayDelegate,
-                                                 tabToFocus: tabToFocus)
+        self.tabTrayView = LegacyGridTabViewController(tabManager: self.tabManager,
+                                                       profile: profile,
+                                                       tabTrayDelegate: tabTrayDelegate,
+                                                       tabToFocus: tabToFocus)
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
         self.segmentToFocus = segmentToFocus
     }
 
     func navTitle(for segmentIndex: Int) -> String? {
         if layout == .compact {
-            let segment = TabTrayViewModel.Segment(rawValue: segmentIndex)
+            let segment = LegacyTabTrayViewModel.Segment(rawValue: segmentIndex)
             return segment?.navTitle
         }
         return nil
@@ -98,7 +98,7 @@ class TabTrayViewModel {
 }
 
 // MARK: - Actions
-extension TabTrayViewModel {
+extension LegacyTabTrayViewModel {
     @objc
     func didTapDeleteTab(_ sender: UIBarButtonItem) {
         tabTrayView.performToolbarAction(.deleteTab, sender: sender)

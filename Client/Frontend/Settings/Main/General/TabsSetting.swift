@@ -23,11 +23,6 @@ class TabsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedTabs()
-        } else {
-            let viewController = TabsSettingsViewController()
-            navigationController?.pushViewController(viewController, animated: true)
-        }
+        settingsDelegate?.pressedTabs()
     }
 }

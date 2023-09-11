@@ -11,8 +11,6 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
-    var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
-
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
@@ -32,15 +30,6 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         super.init(rootViewController: rootViewController)
     }
 
-    @objc
-    func done() {
-        if let delegate = presentingModalViewControllerDelegate {
-            delegate.dismissPresentedModalViewController(self, animated: true)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
     }
@@ -52,9 +41,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         applyTheme()
         listenForThemeChange(view)
     }
-}
 
-extension ThemedNavigationController {
     private func setupNavigationBarAppearance(theme: Theme) {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
@@ -74,10 +61,6 @@ extension ThemedNavigationController {
         setupNavigationBarAppearance(theme: themeManager.currentTheme)
         setNeedsStatusBarAppearanceUpdate()
     }
-}
-
-protocol PresentingModalViewControllerDelegate: AnyObject {
-    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool)
 }
 
 class ModalSettingsNavigationController: UINavigationController {

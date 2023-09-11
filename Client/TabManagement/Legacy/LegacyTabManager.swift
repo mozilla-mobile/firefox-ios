@@ -21,6 +21,13 @@ protocol TabManagerDelegate: AnyObject {
 }
 
 extension TabManagerDelegate {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {}
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {}
     func tabManagerUpdateCount() {}
 }
 

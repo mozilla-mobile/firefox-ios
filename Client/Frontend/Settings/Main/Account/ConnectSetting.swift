@@ -31,14 +31,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
-        if CoordinatorFlagManager.isSettingsCoordinatorEnabled {
-            settingsDelegate?.pressedConnectSetting()
-            return
-        }
-
-        let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
-        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-        navigationController?.pushViewController(viewController, animated: true)
+        settingsDelegate?.pressedConnectSetting()
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
