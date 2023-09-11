@@ -107,8 +107,11 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory1startUp() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -117,38 +120,58 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                waitForTabsButton()
+                mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+                app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
     }
 
     func testPerfHistory1openMenu() {
-        waitForTabsButton()
-        do {
-            let snapshot = try app.tables["History List"].snapshot()
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                    navigator.goto(LibraryPanel_History)
-                    let historyList = app.tables["History List"]
-                    waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                    let expectedCount = 2
-                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-            }
-        } catch {
-            XCTFail("Failed to take snapshot: \(error)")
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+
+        navigator.goto(LibraryPanel_History)
+
+        // Ensure 'History List' exists before taking a snapshot to avoid expensive retries.
+        // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
+        let historyList = app.tables["History List"].firstMatch
+        mozWaitForElementToExist(element: historyList, timeoutInSeconds: TIMEOUT)
+
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // Include snapshot here as it is the closest aproximation to an element load measurement
+                do {
+                    let historyListSnapshot = try historyList.snapshot()
+                    let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
+                    let historyItems = historyListCells.dropFirst()
+
+                    // Warning: If the history database used for this test is updated, so will the date of those history items
+                    // This means as those history items age, they will fall into older buckets, causing new cells to be created
+                    // representing this new age bucket (i.e. 'yesterday', 'a week', etc) where the 100 entries will be split across
+                    // multiple age buckets.
+                    // This will cause this test to fail as we are expecting exactly one age bucket for these to fail into.
+                    // If this test fails because the actual count is 1 greater than expected, that is why.
+                    XCTAssertEqual(historyItems.count, 1, "Number of cells in 'History List' is not equal to 1")
+                } catch {
+                    XCTFail("Failed to take snapshot: \(error)")
+                }
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
     }
 
     func testPerfHistory100startUp() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -157,30 +180,47 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                waitForTabsButton()
+                mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+                app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
     }
 
     func testPerfHistory100openMenu() {
-        waitForTabsButton()
-        do {
-            let snapshot = try app.tables["History List"].snapshot()
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                    navigator.goto(LibraryPanel_History)
-                    let historyList = app.tables["History List"]
-                    waitForExistence(historyList, timeout: TIMEOUT_LONG)
-                    let expectedCount = 101
-                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'History List' is not equal to \(expectedCount)")
-            }
-        } catch {
-            XCTFail("Failed to take snapshot: \(error)")
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+
+        navigator.goto(LibraryPanel_History)
+
+        // Ensure 'History List' exists before taking a snapshot to avoid expensive retries.
+        // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
+        let historyList = app.tables["History List"].firstMatch
+        mozWaitForElementToExist(element: historyList, timeoutInSeconds: TIMEOUT)
+
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // Include snapshot here as it is the closest aproximation to an element load measurement
+                do {
+                    let historyListSnapshot = try historyList.snapshot()
+                    let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
+                    let historyItems = historyListCells.dropFirst()
+
+                    // Warning: If the history database used for this test is updated, so will the date of those history items
+                    // This means as those history items age, they will fall into older buckets, causing new cells to be created
+                    // representing this new age bucket (i.e. 'yesterday', 'a week', etc) where the 100 entries will be split across
+                    // multiple age buckets.
+                    // This will cause this test to fail as we are expecting exactly one age bucket for these to fail into.
+                    // If this test fails because the actual count is 1 greater than expected, that is why.
+                    XCTAssertEqual(historyItems.count, 100, "Number of cells in 'History List' is not equal to 101")
+                } catch {
+                    XCTFail("Failed to take snapshot: \(error)")
+                }
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
@@ -191,7 +231,7 @@ class PerformanceTests: BaseTestCase {
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
-        
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -232,9 +272,9 @@ class PerformanceTests: BaseTestCase {
                     // Activity measurement here
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
                     let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListCells.dropFirst()
 
-                    XCTAssertEqual(filteredBookmarksList.count, 1, "Number of cells in 'Bookmarks List' is not equal to 1")
+                    XCTAssertEqual(bookmarks.count, 1, "Number of cells in 'Bookmarks List' is not equal to 1")
                 } catch {
                     XCTFail("Failed to take snapshot: \(error)")
                 }
@@ -288,10 +328,10 @@ class PerformanceTests: BaseTestCase {
                 do {
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
                     let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListCells.dropFirst()
 
                     // Activity measurement here
-                    XCTAssertEqual(filteredBookmarksList.count, 100, "Number of cells in 'Bookmarks List' is not equal to 100")
+                    XCTAssertEqual(bookmarks.count, 100, "Number of cells in 'Bookmarks List' is not equal to 100")
                 } catch {
                     XCTFail("Failed to take a snapshot: \(error)")
                 }
@@ -332,7 +372,7 @@ class PerformanceTests: BaseTestCase {
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
         mozWaitForElementToExist(element: bookmarksList, timeoutInSeconds: TIMEOUT)
-        
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -346,9 +386,9 @@ class PerformanceTests: BaseTestCase {
                     // Activity measurement here
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
                     let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListCells.dropFirst()
 
-                    XCTAssertEqual(filteredBookmarksList.count, 1000, "Number of cells in 'Bookmarks List' is not equal to 1000")
+                    XCTAssertEqual(bookmarks.count, 1000, "Number of cells in 'Bookmarks List' is not equal to 1000")
                 } catch {
                     XCTFail("Failed to take a snapshot: \(error)")
                 }
