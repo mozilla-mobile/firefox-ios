@@ -10,12 +10,13 @@ class ContextualHintView: UIView, ThemeApplicable {
     private var viewModel: ContextualHintViewModel!
 
     struct UX {
+        static let actionButtonTextSize: CGFloat = 17
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
         static let closeButtonInset = UIEdgeInsets(top: 0, left: 7.5, bottom: 15, right: 7.5)
-
+        static let descriptionTextSize: CGFloat = 17
         static let stackViewLeading: CGFloat = 16
         static let stackViewTopArrowTopConstraint: CGFloat = 16
         static let stackViewTopArrowBottomConstraint: CGFloat = 10
@@ -35,7 +36,7 @@ class ContextualHintView: UIView, ThemeApplicable {
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.descriptionTextSize)
         label.textAlignment = .left
         label.numberOfLines = 0
     }
@@ -141,7 +142,7 @@ class ContextualHintView: UIView, ThemeApplicable {
 
         if viewModel.isActionType {
             let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17),
+                .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.actionButtonTextSize),
                 .foregroundColor: theme.colors.textOnDark,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]

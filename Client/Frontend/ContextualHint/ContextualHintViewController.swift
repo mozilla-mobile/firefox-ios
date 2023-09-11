@@ -9,6 +9,10 @@ import UIKit
 import Shared
 
 class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable {
+    private struct UX {
+        static let contextualHintWidth: CGFloat = 350
+    }
+
     // MARK: - UI Elements
     private lazy var hintView: ContextualHintView = .build { _ in }
 
@@ -72,7 +76,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let targetSize = CGSize(width: 350, height: UIView.layoutFittingCompressedSize.height)
+        let targetSize = CGSize(width: UX.contextualHintWidth, height: UIView.layoutFittingCompressedSize.height)
         preferredContentSize = hintView.systemLayoutSizeFitting(targetSize)
     }
 
