@@ -26,7 +26,6 @@ class PerformanceTests: BaseTestCase {
         let functionName = String(parts[1])
         // defaults
         launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHints]
-
         // append specific load profiles to LaunchArguments
         if fixtures.keys.contains(functionName) {
             launchArguments.append(LaunchArguments.LoadTabsStateArchive + fixtures[functionName]!)
@@ -82,7 +81,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         // Warning: Avoid using waitForExistence as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
+        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
@@ -238,7 +237,7 @@ class PerformanceTests: BaseTestCase {
                     // multiple age buckets.
                     // This will cause this test to fail as we are expecting exactly one age bucket for these to fail into.
                     // If this test fails because the actual count is 1 greater than expected, that is why.
-                    XCTAssertEqual(historyItems.count, 100, "Number of cells in 'History List' is not equal to 101")
+                    XCTAssertEqual(historyItems.count, 100, "Number of cells in 'History List' is not equal to 100")
                 } catch {
                     XCTFail("Failed to take snapshot: \(error)")
                 }
