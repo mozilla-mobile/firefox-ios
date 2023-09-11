@@ -9,7 +9,7 @@ requests = "*"
 xcrun = "*"
 isim = "*"
 black = "*"
-pytest-html = "*"
+pytest-html = "==3.2.0"
 pytest-variables = "*"
 pyyaml = "*"
 
