@@ -16,7 +16,7 @@ public class HeroImageView: UIView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler
-    var requestStartedWith: String?
+    var currentURLString: String?
     private var completionHandler: (() -> Void)?
 
     private lazy var heroImageView: UIImageView = .build { imageView in

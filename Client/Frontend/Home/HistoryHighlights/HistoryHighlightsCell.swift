@@ -97,7 +97,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        imageView.image = nil
         itemDescription.isHidden = true
 
         contentView.layer.shadowRadius = 0.0
