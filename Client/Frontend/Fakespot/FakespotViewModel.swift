@@ -2,17 +2,72 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
+import Common
+import Shared
 
-class FakespotViewModel {
-    enum ViewState<T> {
+class FakespotViewModel: ObservableObject {
+    enum ViewState {
         case loading
-        case loaded(T)
+        case loaded(ProductAnalysisData?)
         case error(Error)
+
+        var viewElements: [ViewElement] {
+            var elements: [ViewElement] = []
+
+            switch self {
+            case .loading:
+                elements = [.loadingView]
+
+            case .loaded(let data):
+                elements = [.reliabilityCard, .adjustRatingCard]
+
+                if data?.highlights != nil {
+                    elements.append(.highlightsCard)
+                }
+
+//                elements.append(.qualityDeterminationCard)
+                elements.append(.settingsCard)
+
+            case .error(let error):
+                // add error card
+                elements = [.settingsCard] // [.qualityDeterminationCard, .settingsCard]
+            }
+
+            return elements
+        }
     }
 
-    @Published private(set) var state: ViewState<ProductAnalysisData?> = .loading
+    enum ViewElement {
+        case loadingView
+//        case onboarding
+        case reliabilityCard
+        case adjustRatingCard
+        case highlightsCard
+//        case qualityDeterminationCard
+        case settingsCard
+        case noAnalysisCard
+        case messageCard
+    }
+
+    private(set) var state: ViewState = .loading {
+        didSet {
+            stateChangeClosure?()
+        }
+    }
     let shoppingProduct: ShoppingProduct
+    var stateChangeClosure: (() -> Void)?
+
+    var viewElements: [ViewElement] {
+//        guard isOptedIn else { return [.onboarding] }
+
+        return state.viewElements
+    }
+
+    private let prefs: Prefs
+    private var isOptedIn: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+    }
 
     let confirmationCardViewModel = FakespotMessageCardViewModel(
         title: .Shopping.ConfirmationCardTitle,
@@ -67,8 +122,10 @@ class FakespotViewModel {
 
     let noAnalysisCardViewModel = NoAnalysisCardViewModel()
 
-    init(shoppingProduct: ShoppingProduct) {
+    init(shoppingProduct: ShoppingProduct,
+         profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
+        self.prefs = profile.prefs
     }
 
     func fetchData() async {
