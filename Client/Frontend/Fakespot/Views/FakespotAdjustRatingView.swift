@@ -7,11 +7,11 @@ import Common
 import ComponentLibrary
 
 struct FakespotAdjustRatingViewModel {
-    let title: String
-    let description: String
-    let titleA11yId: String
-    let cardA11yId: String
-    let descriptionA11yId: String
+    let title: String = .Shopping.AdjustedRatingTitle
+    let description: String = .Shopping.AdjustedRatingDescription
+    let titleA11yId: String = AccessibilityIdentifiers.Shopping.AdjustRating.title
+    let cardA11yId: String = AccessibilityIdentifiers.Shopping.AdjustRating.card
+    let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdjustRating.description
     let rating: Double
 }
 

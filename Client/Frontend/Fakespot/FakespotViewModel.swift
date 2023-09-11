@@ -77,14 +77,7 @@ class FakespotViewModel: ObservableObject {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
     )
 
-    let reliabilityCardViewModel = FakespotReliabilityCardViewModel(
-        cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-        title: .Shopping.ReliabilityCardTitle,
-        titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-        rating: .gradeA,
-        ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-        ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
-    )
+    let reliabilityCardViewModel = FakespotReliabilityCardViewModel(rating: .gradeA)
 
     let errorCardViewModel = FakespotErrorCardViewModel(
         title: .Shopping.ErrorCardTitle,
@@ -102,23 +95,9 @@ class FakespotViewModel: ObservableObject {
         return FakespotHighlightsCardViewModel(highlights: highlights)
     }()
 
-    let settingsCardViewModel = FakespotSettingsCardViewModel(
-        cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
-        showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
-        showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
-        turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-        turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
-        recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
-    )
+    let settingsCardViewModel = FakespotSettingsCardViewModel()
 
-    let adjustRatingViewModel = FakespotAdjustRatingViewModel(
-        title: .Shopping.AdjustedRatingTitle,
-        description: .Shopping.AdjustedRatingDescription,
-        titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
-        cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
-        descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
-        rating: 3.5
-    )
+    let adjustRatingViewModel = FakespotAdjustRatingViewModel(rating: 3.5)
 
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
 
