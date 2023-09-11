@@ -106,46 +106,6 @@ class PerformanceTests: BaseTestCase {
         }
     }
 
-    // Additional Scenarios
-    // 1. Start app
-    // 2. Open tabs Tray
-    // 3. Open 1 new tab
-    // 4. Close 1 tab
-    // 5. Close all tabs
-    // 6. Switch to private browsing
-    // 7. Switch back from private browsing
-    // 8. Create new tab in private browsing
-
-    // This can be used for generating new tabs
-    /*
-    func testTabs5Setup() {
-        let archiveSize = 1080
-        let fileName = "/Users/rpappalax/git/firefox-ios-TABS-PERF-WIP/Client/Assets/topdomains.txt"
-        var contents = ""
-        var urls = [String]()
-        do {
-            contents = try String(contentsOfFile: fileName)
-            urls = contents.components(separatedBy: "\n")
-        } catch {
-            print("COULDNT LOAD")
-        }
-        navigator.goto(NewTabScreen)
-        var counter = 0
-        let topDomainsCount = urls.count
-        //for url in urls {
-        for n in 0...archiveSize {
-            print(urls[counter])
-            if (counter >= archiveSize) {
-                break
-            }
-            // if we don't have enough urls, start from the beginning of list
-            if (counter >= (topDomainsCount - 1)) {
-                counter = 0
-            }
-            counter += 1
-        }
-    }*/
-
     func testPerfHistory1startUp() {
         waitForTabsButton()
         app.terminate()
@@ -159,6 +119,8 @@ class PerformanceTests: BaseTestCase {
                 app.launch()
                 waitForTabsButton()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfHistory1openMenu() {
@@ -180,6 +142,8 @@ class PerformanceTests: BaseTestCase {
         } catch {
             XCTFail("Failed to take snapshot: \(error)")
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfHistory100startUp() {
@@ -195,6 +159,8 @@ class PerformanceTests: BaseTestCase {
                 app.launch()
                 waitForTabsButton()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfHistory100openMenu() {
@@ -216,11 +182,16 @@ class PerformanceTests: BaseTestCase {
         } catch {
             XCTFail("Failed to take snapshot: \(error)")
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfBookmarks1startUp() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
+        
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
@@ -229,104 +200,160 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                waitForTabsButton()
+                mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+                app.terminate()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfBookmarks1openMenu() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+
         navigator.goto(LibraryPanel_Bookmarks)
-        do {
-            let snapshot = try app.tables["Bookmarks List"].snapshot()
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                    // activity measurement here
-                    let bookmarkTable = app.tables["Bookmarks List"]
-                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                    let expectedCount = 2
-                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
+
+        // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
+        // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
+        let bookmarksList = app.tables["Bookmarks List"].firstMatch
+        mozWaitForElementToExist(element: bookmarksList, timeoutInSeconds: TIMEOUT)
+
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
+                // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
+                do {
+                    // Activity measurement here
+                    let bookmarksListSnapshot = try bookmarksList.snapshot()
+                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
+                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+
+                    XCTAssertEqual(filteredBookmarksList.count, 1, "Number of cells in 'Bookmarks List' is not equal to 1")
+                } catch {
+                    XCTFail("Failed to take snapshot: \(error)")
                 }
-        } catch {
-            XCTFail("Failed to take snapshot: \(error)")
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfBookmarks100startUp() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // activity measurement here
+                // Activity measurement here
                 app.launch()
-                waitForTabsButton()
+                mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+                app.terminate()
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfBookmarks100openMenu() {
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_Bookmarks)
-        do {
-            let snapshot = try app.tables["Bookmarks List"].snapshot()
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                    // activity measurement here
-                    let bookmarkTable = app.tables["Bookmarks List"]
-                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                    let expectedCount = 101
-                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
-            }
-        } catch {
-            XCTFail("Failed to take a snapshot: \(error)")
-        }
-    }
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
-    func testPerfBookmarks1000startUp() {
-        waitForTabsButton()
-        app.terminate()
+        navigator.goto(LibraryPanel_Bookmarks)
+
+        // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
+        // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
+        let bookmarksList = app.tables["Bookmarks List"].firstMatch
+        mozWaitForElementToExist(element: bookmarksList, timeoutInSeconds: TIMEOUT)
+
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-                waitForTabsButton()
+                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
+                // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
+                do {
+                    let bookmarksListSnapshot = try bookmarksList.snapshot()
+                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
+                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+
+                    // Activity measurement here
+                    XCTAssertEqual(filteredBookmarksList.count, 100, "Number of cells in 'Bookmarks List' is not equal to 100")
+                } catch {
+                    XCTFail("Failed to take a snapshot: \(error)")
+                }
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
+    }
+
+    func testPerfBookmarks1000startUp() {
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+        app.terminate()
+
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+                // Activity measurement here
+                app.launch()
+                mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+                app.terminate()
+        }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 
     func testPerfBookmarks1000openMenu() {
-        waitForTabsButton()
+        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+
         navigator.goto(LibraryPanel_Bookmarks)
 
-        do {
-            let snapshot = try app.tables["Bookmarks List"].snapshot()
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure CPU cycles
-                XCTStorageMetric(), // to measure storage consumption
-                XCTMemoryMetric()]) {
+        // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
+        // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
+        let bookmarksList = app.tables["Bookmarks List"].firstMatch
+        mozWaitForElementToExist(element: bookmarksList, timeoutInSeconds: TIMEOUT)
+        
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
+            XCTMemoryMetric()]) {
+                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
+                // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
+                do {
                     // Activity measurement here
-                    let bookmarkTable = app.tables["Bookmarks List"]
-                    waitForExistence(bookmarkTable, timeout: TIMEOUT_LONG)
-                    let expectedCount = 1001
-                    XCTAssertEqual(snapshot.children.count, expectedCount, "Number of cells in 'Bookmarks List' is not equal to \(expectedCount)")
-            }
-        } catch {
-            XCTFail("Failed to take a snapshot: \(error)")
+                    let bookmarksListSnapshot = try bookmarksList.snapshot()
+                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
+                    let filteredBookmarksList = bookmarksListCells.dropFirst()
+
+                    XCTAssertEqual(filteredBookmarksList.count, 1000, "Number of cells in 'Bookmarks List' is not equal to 1000")
+                } catch {
+                    XCTFail("Failed to take a snapshot: \(error)")
+                }
         }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
     }
 }
