@@ -148,11 +148,11 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()
         }
-        
+
         if CommandLine.arguments.contains("-disableAnimations") {
                     UIView.setAnimationsEnabled(false)
                 }
-        
+
         Tab.ChangeUserAgent.clear()
 
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
