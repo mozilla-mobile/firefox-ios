@@ -18,13 +18,6 @@ public class FaviconImageView: UIImageView, SiteImageView {
     var currentURLString: String?
     private var completionHandler: (() -> Void)?
 
-//    override public var image: UIImage? {
-//        didSet {
-//            uniqueID = UUID()
-//            currentURLString = nil
-//        }
-//    }
-
     // MARK: - Init
 
     override public init(frame: CGRect) {
