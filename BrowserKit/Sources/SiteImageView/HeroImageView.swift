@@ -69,11 +69,6 @@ public class HeroImageView: UIView, SiteImageView {
         fallbackFaviconBackground.layer.borderColor = colors.faviconBorderColor.cgColor
     }
 
-    public func prepareForReuse() {
-        heroImageView.image = nil
-        setFallBackFaviconVisibility(isHidden: false)
-    }
-
     // MARK: - SiteImageView
 
     func setURL(_ siteURLString: String, type: SiteImageType) {
@@ -82,6 +77,7 @@ public class HeroImageView: UIView, SiteImageView {
         heroImageView.image = nil
         let id = UUID()
         uniqueID = id
+        currentURLString = siteURLString
 
         let model = SiteImageModel(id: id,
                                    expectedImageType: .heroImage,
