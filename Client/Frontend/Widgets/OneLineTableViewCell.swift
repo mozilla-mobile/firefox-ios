@@ -134,7 +134,7 @@ class OneLineTableViewCell: UITableViewCell,
         accessoryType = viewModel.accessoryType
 
         if let image = viewModel.leftImageView {
-            leftImageView.image = image
+            leftImageView.manuallySetImage(image)
         }
     }
 

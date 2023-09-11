@@ -73,7 +73,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+        favicon.manuallySetImage(
+            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {

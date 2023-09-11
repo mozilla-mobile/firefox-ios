@@ -65,7 +65,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private var favicon: FaviconImageView = .build { favicon in
-        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+        favicon.manuallySetImage(
+            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
     }
 
     private let siteDomainLabel: UILabel = .build { label in

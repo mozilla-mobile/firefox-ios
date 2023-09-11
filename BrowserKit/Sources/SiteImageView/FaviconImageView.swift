@@ -54,6 +54,12 @@ public class FaviconImageView: UIImageView, SiteImageView {
         setURL(viewModel)
     }
 
+    public func manuallySetImage(_ image: UIImage) {
+        uniqueID = UUID()
+        currentURLString = nil
+        self.image = image
+    }
+
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
