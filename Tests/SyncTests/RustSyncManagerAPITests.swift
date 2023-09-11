@@ -27,9 +27,10 @@ class RustSyncManagerAPITests: XCTestCase {
                                            telemetryJson: "{\"version\": \"invalidVersion\"}")
         self.rustSyncManagerApi
             .reportSyncTelemetry(syncResult: invalidSyncResult) { description in
-            actual = description
-            expectation.fulfill()
-        }
+                actual = description
+                expectation.fulfill()
+            }
+
         waitForExpectations(timeout: 5)
         XCTAssertEqual(actual, expected)
     }

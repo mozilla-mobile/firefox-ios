@@ -195,12 +195,13 @@ extension BrowserViewController: WKUIDelegate {
                 let getImageData = { (_ url: URL, success: @escaping (Data) -> Void) in
                     makeURLSession(
                         userAgent: UserAgent.fxaUserAgent,
-                        configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+                        configuration: URLSessionConfiguration.default)
+                    .dataTask(with: url) { (data, response, error) in
                             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                                let data = data {
                                 success(data)
                             }
-                        }.resume()
+                    }.resume()
                 }
 
                 var actions = [UIAction]()

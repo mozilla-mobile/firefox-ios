@@ -352,11 +352,12 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
                     options: .transitionCrossDissolve,
                     animations: {
                         self.collectionView.reloadData()
-                    }) { finished in
-                        if finished {
-                            self.collectionView.reloadData()
-                        }
                     }
+                ) { finished in
+                    if finished {
+                        self.collectionView.reloadData()
+                    }
+                }
             } else {
                 self.collectionView.reloadData()
             }
