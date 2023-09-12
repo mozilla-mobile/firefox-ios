@@ -775,8 +775,7 @@
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */; };
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
-		8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */; };
-		8CBDE8E12AB076BE001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E02AB076BE001985BF /* ProductAnalyzeResponse.swift */; };
+		8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */; };
 		8CFD56882AAF057D003157A6 /* SwitchFakespotProduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD56872AAF057D003157A6 /* SwitchFakespotProduction.swift */; };
 		8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
@@ -5040,8 +5039,7 @@
 		8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsData.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
-		8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotErrorCardView.swift; sourceTree = "<group>"; };
-		8CBDE8E02AB076BE001985BF /* ProductAnalyzeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalyzeResponse.swift; sourceTree = "<group>"; };
+		8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAnalyzeResponse.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -8699,8 +8697,8 @@
 		8C92DE942A7128FB0090BD28 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */,
 				8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */,
-				8CBDE8E02AB076BE001985BF /* ProductAnalyzeResponse.swift */,
 				8C92DE922A7128DE0090BD28 /* ProductAdsData.swift */,
 				8C92DE902A7128CB0090BD28 /* ProductAnalysisData.swift */,
 				E1516A3D2A7BC07E007819A4 /* FakespotReliabilityRating.swift */,
@@ -9922,7 +9920,6 @@
 				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
 				8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */,
 				8C6F94642A972EB300415FF6 /* StarRatingView.swift */,
-				8CB19EB12A83C5280023F88E /* FakespotErrorCardView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
 				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
@@ -12724,12 +12721,12 @@
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
 				8AE80BB82891BE0700BC12EA /* JumpBackInDataAdaptor.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */,
-				8CBDE8E12AB076BE001985BF /* ProductAnalyzeResponse.swift in Sources */,
 				8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */,
 				C88E7A572A0553360072E638 /* OnboardingButtonInfoModel.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
+				8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */,
 				96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */,
 				8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
@@ -12915,7 +12912,6 @@
 				8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */,
 				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
 				8ADAE41E2A33A0E2007BF926 /* ShowIntroductionSetting.swift in Sources */,
-				8CB19EB22A83C5280023F88E /* FakespotErrorCardView.swift in Sources */,
 				8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
