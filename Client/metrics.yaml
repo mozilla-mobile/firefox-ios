@@ -706,7 +706,7 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-06"
 
-  shopping_settings_component_opted_out:
+  settings_component_opted_out:
     type: event
     description: |
       Records when the 'Turn Off Review Quality Check' button was tapped

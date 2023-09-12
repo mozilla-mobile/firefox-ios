@@ -110,8 +110,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if presentingViewController == nil {
-            recordDismissVCTelemetry()
+        if presentingViewController == nil,
+            viewModel.settingsCardViewModel.isReviewQualityCheckOn {
+            recordDismissTelemetry()
         }
     }
 
@@ -185,7 +186,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
-    private func recordDismissVCTelemetry() {
+    private func recordDismissTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
                                      object: .shoppingBottomSheet)

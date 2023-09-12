@@ -1030,7 +1030,7 @@ extension TelemetryWrapper {
         case (.action, .view, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceDisplayed.record()
         case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
-            GleanMetrics.Shopping.shoppingSettingsComponentOptedOut.record()
+            GleanMetrics.Shopping.settingsComponentOptedOut.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
