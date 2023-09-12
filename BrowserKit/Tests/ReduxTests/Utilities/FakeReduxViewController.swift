@@ -2,22 +2,29 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Redux
 import UIKit
 
-@testable import Client
-
+@testable import Redux
 class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
+
+    var counter: Int = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        store.dispatch(ActiveScreensStateAction.showScreen(.integrationTest))
-        store.subscribe(self, transform: {
-            $0.select(FakeReduxState.init)
-        })
+        store.subscribe(self)
     }
 
     func newState(state: FakeReduxState) {
         print("YRD newState \(state)")
+        counter = state.counter
+    }
+
+    func increaseCounter() {
+        store.dispatch(FakeReduxAction.increaseCounter(1))
+    }
+
+    func decreaseCounter() {
+        store.dispatch(FakeReduxAction.increaseCounter(0))
     }
 }

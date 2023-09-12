@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
 
-class FakeReduxAction: Action {
-    
+@testable import Redux
+enum FakeReduxAction: Action {
+    case increaseCounter(Int)
+    case decreaseCounter(Int)
 }

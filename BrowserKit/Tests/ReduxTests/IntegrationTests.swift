@@ -5,13 +5,26 @@
 import XCTest
 
 @testable import Redux
-
 let store = Store(state: FakeReduxState(),
                   reducer: FakeReduxState.reducer,
-                  middlewares: [FakeReduxMiddleware().themeManagerProvider])
+                  middlewares: [FakeReduxMiddleware().fakeProvider])
 
 final class IntegrationTests: XCTestCase {
-    func testTemp() {
-        XCTAssertTrue(true)
+    var fakeViewController: FakeReduxViewController!
+
+    override func setUp() {
+        super.setUp()
+        fakeViewController = FakeReduxViewController()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        fakeViewController = nil
+    }
+
+    func testDispatchStore() {
+        fakeViewController.increaseCounter()
+
+        XCTAssertEqual(fakeViewController.counter, 1)
     }
 }
