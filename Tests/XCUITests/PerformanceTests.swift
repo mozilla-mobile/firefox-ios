@@ -231,11 +231,11 @@ class PerformanceTests: BaseTestCase {
                     let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
                     let historyItems = historyListCells.dropFirst()
 
-                    // Warning: If the history database used for this test is updated, so will the date of those history items
+                    // Warning: If the history database used for this test is updated, so will the date of those history items.
                     // This means as those history items age, they will fall into older buckets, causing new cells to be created
                     // representing this new age bucket (i.e. 'yesterday', 'a week', etc) where the 100 entries will be split across
                     // multiple age buckets.
-                    // This will cause this test to fail as we are expecting exactly one age bucket for these to fail into.
+                    // This will cause this test to fail as we are expecting exactly one age bucket for these to fall into.
                     // If this test fails because the actual count is 1 greater than expected, that is why.
                     XCTAssertEqual(historyItems.count, 100, "Number of cells in 'History List' is not equal to 100")
                 } catch {
