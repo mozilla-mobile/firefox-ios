@@ -401,6 +401,7 @@ extension TelemetryWrapper {
         case shoppingCartButton = "shopping-cart-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
         case shoppingRecentReviews = "shopping-recent-reviews"
+        case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1028,6 +1029,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceDisplayed.record()
+        case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
+            GleanMetrics.Shopping.shoppingSettingsComponentOptedOut.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

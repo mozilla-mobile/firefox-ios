@@ -90,6 +90,10 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         errorCardView.configure(viewModel.errorCardViewModel)
         highlightsCardView.configure(viewModel.highlightsCardViewModel)
         settingsCardView.configure(viewModel.settingsCardViewModel)
+        viewModel.settingsCardViewModel.onTapTurnOffButton = { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.fakespotControllerDidDismiss()
+        }
         adjustRatingView.configure(viewModel.adjustRatingViewModel)
         noAnalysisCardView.configure(viewModel.noAnalysisCardViewModel)
     }
@@ -107,7 +111,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if presentingViewController == nil {
-            recordTelemetry()
+            recordDismissVCTelemetry()
         }
     }
 
@@ -181,7 +185,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
-    private func recordTelemetry() {
+    private func recordDismissVCTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
                                      object: .shoppingBottomSheet)
