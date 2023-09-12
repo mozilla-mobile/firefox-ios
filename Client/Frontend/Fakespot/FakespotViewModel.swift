@@ -20,31 +20,35 @@ class FakespotViewModel: ObservableObject {
                 elements = [.loadingView]
 
             case .loaded(let data):
-                elements = [.reliabilityCard, .adjustRatingCard]
-
-                if data?.highlights != nil {
-                    elements.append(.highlightsCard)
-                }
-
-//                elements.append(.qualityDeterminationCard)
-                elements.append(.settingsCard)
+                elements = [.reliabilityCard,
+                    .adjustRatingCard,
+                    .highlightsCard,
+//                    .qualityDeterminationCard, // card not created yet (FXIOS-6963)
+                    .settingsCard]
 
             case .error(let error):
                 // add error card
-                elements = [.settingsCard] // [.qualityDeterminationCard, .settingsCard]
+                elements = [.settingsCard] // [.qualityDeterminationCard, .settingsCard]  // card not created yet (FXIOS-6963)
             }
 
             return elements
+        }
+
+        var productData: ProductAnalysisData? {
+            switch self {
+            case .loading, .error: return nil
+            case .loaded(let data): return data
+            }
         }
     }
 
     enum ViewElement {
         case loadingView
-//        case onboarding
+//        case onboarding // card not created yet (FXIOS-7270)
         case reliabilityCard
         case adjustRatingCard
         case highlightsCard
-//        case qualityDeterminationCard
+//        case qualityDeterminationCard // card not created yet (FXIOS-6963)
         case settingsCard
         case noAnalysisCard
         case messageCard
@@ -59,7 +63,7 @@ class FakespotViewModel: ObservableObject {
     var stateChangeClosure: (() -> Void)?
 
     var viewElements: [ViewElement] {
-//        guard isOptedIn else { return [.onboarding] }
+//        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
 
         return state.viewElements
     }
@@ -67,6 +71,24 @@ class FakespotViewModel: ObservableObject {
     private let prefs: Prefs
     private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+    }
+
+    var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
+        guard let grade = state.productData?.grade,
+                let rating = FakespotReliabilityRating(rawValue: grade)
+        else { return nil }
+
+        return FakespotReliabilityCardViewModel(rating: rating)
+    }
+
+    var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
+        guard let highlights = state.productData?.highlights else { return nil }
+        return FakespotHighlightsCardViewModel(highlights: highlights)
+    }
+
+    var adjustRatingViewModel: FakespotAdjustRatingViewModel? {
+        guard let adjustedRating = state.productData?.adjustedRating else { return nil }
+        return FakespotAdjustRatingViewModel(rating: adjustedRating)
     }
 
     let confirmationCardViewModel = FakespotMessageCardViewModel(
@@ -78,8 +100,6 @@ class FakespotViewModel: ObservableObject {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
     )
 
-    let reliabilityCardViewModel = FakespotReliabilityCardViewModel(rating: .gradeA)
-
     let errorCardViewModel = FakespotMessageCardViewModel(
         type: .error,
         title: .Shopping.ErrorCardTitle,
@@ -90,21 +110,7 @@ class FakespotViewModel: ObservableObject {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.description,
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
     )
-
-    let highlightsCardViewModel = {
-        // Dummy data to show content until we integrate with the API
-        let highlights = Highlights(price: ["Great quality that one can expect from Apple.",
-                                            "Replacing iPad 5th gen that won't support iOS17, but still wanted to be able to charge all devices with the same lightning cable (especially when traveling).",
-                                            "I am very pleased with my decision to save some money and go with the 9th generation iPad."],
-                                    quality: ["Threw the box away so can't return it, but would not buy this model again, even at the discounted price."],
-                                    competitiveness: ["Please make sure to use some paper like screen protector if you’re using pencil on the screen."])
-        return FakespotHighlightsCardViewModel(highlights: highlights)
-    }()
-
     let settingsCardViewModel = FakespotSettingsCardViewModel()
-
-    let adjustRatingViewModel = FakespotAdjustRatingViewModel(rating: 3.5)
-
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,

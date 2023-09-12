@@ -163,7 +163,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.removeAllArrangedViews()
 
         viewModel.state.viewElements.forEach { element in
-            let view = createContentView(viewElement: element)
+            guard let view = createContentView(viewElement: element) else { return }
             contentStackView.addArrangedSubview(view)
 
             if let loadingView = view as? FakespotLoadingView {
@@ -173,25 +173,28 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         applyTheme()
     }
 
-    private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView {
+    private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
         switch viewElement {
         case .loadingView:
             let view: FakespotLoadingView = .build()
             return view
 
         case .reliabilityCard:
+            guard let cardViewModel = viewModel.reliabilityCardViewModel else { return nil }
             let view: FakespotReliabilityCardView = .build()
-            view.configure(viewModel.reliabilityCardViewModel)
+            view.configure(cardViewModel)
             return view
 
         case .adjustRatingCard:
+            guard let cardViewModel = viewModel.adjustRatingViewModel else { return nil }
             let view: FakespotAdjustRatingView = .build()
-            view.configure(viewModel.adjustRatingViewModel)
+            view.configure(cardViewModel)
             return view
 
         case .highlightsCard:
+            guard let cardViewModel = viewModel.highlightsCardViewModel else { return nil }
             let view: FakespotHighlightsCardView = .build()
-            view.configure(viewModel.highlightsCardViewModel)
+            view.configure(cardViewModel)
             return view
 
         case .settingsCard:
@@ -205,7 +208,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             return view
 
         case .messageCard:
-            let view: FakespotErrorCardView = .build()
+            let view: FakespotMessageCardView = .build()
             view.configure(viewModel.errorCardViewModel)
             return view
         }
