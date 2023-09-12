@@ -42,12 +42,12 @@ struct FakespotMessageCardViewModel {
             }
         }
 
-        enum AccesoryType {
+        enum AccessoryType {
             case image(name: String)
             case progress
         }
 
-        var accesoryType: AccesoryType {
+        var accessoryType: AccessoryType {
             switch self {
             case .confirmation:
                 return .image(name: StandardImageIdentifiers.Large.checkmark)
@@ -188,7 +188,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         titleLabel.text = viewModel.title
 
         let accesoryView: UIView
-        switch viewModel.type.accesoryType {
+        switch viewModel.type.accessoryType {
         case .image(name: let name):
             let imageView: UIImageView = .build { imageView in
                 imageView.contentMode = .scaleAspectFit
