@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-class ContextualHintViewModelTests: XCTestCase {
+class ContextualHintViewProviderTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     private var profile: MockProfile!
@@ -25,25 +25,25 @@ class ContextualHintViewModelTests: XCTestCase {
     // MARK: Mark Contextual Hint Configuration
 
     func testJumpBackInSyncTabConfiguredTrue() {
-        let subject = ContextualHintViewModel(forHintType: .jumpBackInSyncedTab, with: profile)
+        let subject = ContextualHintViewProvider(forHintType: .jumpBackInSyncedTab, with: profile)
         subject.markContextualHintConfiguration(configured: true)
         XCTAssertTrue(profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)!)
     }
 
     func testJumpBackInSyncTabConfiguredFalse() {
-        let subject = ContextualHintViewModel(forHintType: .jumpBackInSyncedTab, with: profile)
+        let subject = ContextualHintViewProvider(forHintType: .jumpBackInSyncedTab, with: profile)
         subject.markContextualHintConfiguration(configured: false)
         XCTAssertFalse(profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)!)
     }
 
     func testJumpBackInConfiguredTrue() {
-        let subject = ContextualHintViewModel(forHintType: .jumpBackIn, with: profile)
+        let subject = ContextualHintViewProvider(forHintType: .jumpBackIn, with: profile)
         subject.markContextualHintConfiguration(configured: true)
         XCTAssertTrue(profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInConfiguredKey.rawValue)!)
     }
 
     func testJumpBackInConfiguredFalse() {
-        let subject = ContextualHintViewModel(forHintType: .jumpBackIn, with: profile)
+        let subject = ContextualHintViewProvider(forHintType: .jumpBackIn, with: profile)
         subject.markContextualHintConfiguration(configured: false)
         XCTAssertFalse(profile.prefs.boolForKey(CFRPrefsKeys.jumpBackInConfiguredKey.rawValue)!)
     }
