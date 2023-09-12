@@ -58,7 +58,6 @@ enum FakespotEnvironment {
         return URL(string: urlString)
     }
 
-
     /// Returns the API analyze endpoint URL based on the selected environment.
     var analyzeEndpoint: URL? {
         buildURL(path: .analyze)
