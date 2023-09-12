@@ -124,7 +124,6 @@ class OneLineTableViewCell: UITableViewCell,
         selectionStyle = .default
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
-        leftImageView.image = nil
     }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
@@ -135,7 +134,7 @@ class OneLineTableViewCell: UITableViewCell,
         accessoryType = viewModel.accessoryType
 
         if let image = viewModel.leftImageView {
-            leftImageView.image = image
+            leftImageView.manuallySetImage(image)
         }
     }
 
