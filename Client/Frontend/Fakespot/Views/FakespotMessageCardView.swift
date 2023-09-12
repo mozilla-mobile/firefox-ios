@@ -187,26 +187,26 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
         titleLabel.text = viewModel.title
 
-        let accesoryView: UIView
+        let accessoryView: UIView
         switch viewModel.type.accessoryType {
         case .image(name: let name):
             let imageView: UIImageView = .build { imageView in
                 imageView.contentMode = .scaleAspectFit
                 imageView.image = UIImage(named: name)
             }
-            accesoryView = imageView
+            accessoryView = imageView
         case .progress:
             let spinner = UIActivityIndicatorView(style: .medium)
             spinner.startAnimating()
-            accesoryView = spinner
+            accessoryView = spinner
         }
 
-        iconContainerView.addSubview(accesoryView)
+        iconContainerView.addSubview(accessoryView)
         NSLayoutConstraint.activate([
-            accesoryView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
-            accesoryView.topAnchor.constraint(equalTo: iconContainerView.topAnchor),
-            accesoryView.trailingAnchor.constraint(equalTo: iconContainerView.trailingAnchor),
-            accesoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor),
+            accessoryView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
+            accessoryView.topAnchor.constraint(equalTo: iconContainerView.topAnchor),
+            accessoryView.trailingAnchor.constraint(equalTo: iconContainerView.trailingAnchor),
+            accessoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor),
         ])
 
         if let title = viewModel.primaryActionText {
