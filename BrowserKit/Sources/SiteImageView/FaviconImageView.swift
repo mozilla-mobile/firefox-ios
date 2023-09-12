@@ -42,11 +42,15 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     // MARK: - Public
 
+    /// Initiates the retrival of the favion image and sets it to the view
+    /// - Parameter viewModel: the configuration of the favicon
     public func setFavicon(_ viewModel: FaviconImageViewModel) {
         setupFaviconLayout(viewModel: viewModel)
         setURL(viewModel)
     }
 
+    /// Manually set the image for the favicon view
+    /// - Parameter image: the image to be set on the view
     public func manuallySetImage(_ image: UIImage) {
         uniqueID = UUID()
         currentURLString = nil
