@@ -12,6 +12,7 @@ struct FakespotMessageCardViewModel {
         case warning
         case info
         case infoLoading
+        case error
 
         var id: String { self.rawValue }
 
@@ -21,6 +22,7 @@ struct FakespotMessageCardViewModel {
             case .warning: return theme.colors.textPrimary
             case .info: return theme.colors.textOnDark
             case .infoLoading: return theme.colors.textOnDark
+            case .error: return theme.colors.textPrimary
             }
         }
 
@@ -30,6 +32,7 @@ struct FakespotMessageCardViewModel {
             case .warning: return theme.colors.actionWarning
             case .info: return theme.colors.actionPrimary
             case .infoLoading: return theme.colors.actionPrimary
+            case .error: return theme.colors.actionError
             }
         }
 
@@ -39,6 +42,7 @@ struct FakespotMessageCardViewModel {
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
             case .infoLoading: return theme.colors.layerInfo
+            case .error: return theme.colors.layerError
             }
         }
 
@@ -57,6 +61,8 @@ struct FakespotMessageCardViewModel {
                 return .image(name: StandardImageIdentifiers.Large.criticalFill)
             case .infoLoading:
                 return .progress
+            case .error:
+                return .image(name: StandardImageIdentifiers.Large.criticalFill)
             }
         }
     }
