@@ -38,6 +38,7 @@ class IntegrationTests: BaseTestCase {
                            LaunchArguments.SkipETPCoverSheet,
                            LaunchArguments.SkipContextualHints]
      }
+    launchArguments.append(LaunchArguments.DisableAnimations)
      super.setUp()
      }
 

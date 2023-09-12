@@ -142,7 +142,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
                                    LaunchArguments.SkipWhatsNew,
                                    LaunchArguments.SkipETPCoverSheet,
                                    LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB,
-                                   LaunchArguments.SkipContextualHints]
+                                   LaunchArguments.SkipContextualHints,
+                                   LaunchArguments.DisableAnimations]
         }
         super.setUp()
     }
