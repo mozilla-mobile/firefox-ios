@@ -162,7 +162,8 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs]) {
         // filter clients for non empty desktop clients
         let desktopClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty &&
-            ClientType.fromFxAType($0.client.type) == .Desktop }
+            ClientType.fromFxAType($0.client.type) == .Desktop
+        }
 
         guard !desktopClientAndTabs.isEmpty, !clientAndTabs.isEmpty else {
             mostRecentSyncedTab = nil
