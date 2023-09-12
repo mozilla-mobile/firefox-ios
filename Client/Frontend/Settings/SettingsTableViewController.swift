@@ -24,19 +24,6 @@ extension UILabel {
         }
         attributedText = attributed
     }
-
-    func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
-        guard let text = text else { return 0 }
-
-        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSAttributedString.Key.font: label.font as Any]
-        let boundingRect = NSString(string: text).boundingRect(
-            with: size,
-            options: .usesLineFragmentOrigin,
-            attributes: attrs,
-            context: nil)
-        return boundingRect.height
-    }
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
