@@ -6,15 +6,20 @@ import Foundation
 
 @testable import Redux
 struct FakeReduxState: StateType, Equatable {
-    var counter = 0
+    var counter: Int
+
+    init () {
+        self.init(counter: 0)
+    }
+
+    init(counter: Int) {
+        self.counter = counter
+    }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakeReduxAction.increaseCounter(let value):
-//            counter = value
-            return FakeReduxState(counter: value)
-        case FakeReduxAction.decreaseCounter(let value):
-//            var tempCounter = counter - 1
+        case FakeReduxAction.counterIncreased(let value),
+            FakeReduxAction.counterIncreased(let value):
             return FakeReduxState(counter: value)
         default:
             return state

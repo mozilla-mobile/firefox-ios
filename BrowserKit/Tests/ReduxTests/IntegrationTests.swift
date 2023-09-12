@@ -22,9 +22,29 @@ final class IntegrationTests: XCTestCase {
         fakeViewController = nil
     }
 
-    func testDispatchStore() {
+    func testDispatchStore_IncreaseCounter() {
+        fakeViewController.viewDidLoad()
         fakeViewController.increaseCounter()
 
-        XCTAssertEqual(fakeViewController.counter, 1)
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            XCTAssertEqual(self.fakeViewController.label.text, "1")
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testDispatchStore_DecreaseCounter() {
+        fakeViewController.viewDidLoad()
+        fakeViewController.decreaseCounter()
+
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            XCTAssertEqual(self.fakeViewController.label.text, "-1")
+        }
+        waitForExpectations(timeout: 1)
     }
 }

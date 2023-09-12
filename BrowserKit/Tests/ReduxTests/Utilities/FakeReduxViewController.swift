@@ -8,23 +8,25 @@ import UIKit
 class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 
-    var counter: Int = 0
+    var label = UILabel(frame: .zero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         store.subscribe(self)
+
+        view.addSubview(label)
     }
 
     func newState(state: FakeReduxState) {
         print("YRD newState \(state)")
-        counter = state.counter
+        label.text = "\(state.counter)"
     }
 
     func increaseCounter() {
-        store.dispatch(FakeReduxAction.increaseCounter(1))
+        store.dispatch(FakeReduxAction.increaseCounter)
     }
 
     func decreaseCounter() {
-        store.dispatch(FakeReduxAction.increaseCounter(0))
+        store.dispatch(FakeReduxAction.decreaseCounter)
     }
 }

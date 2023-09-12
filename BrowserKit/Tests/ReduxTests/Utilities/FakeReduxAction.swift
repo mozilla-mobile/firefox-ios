@@ -6,6 +6,11 @@ import Foundation
 
 @testable import Redux
 enum FakeReduxAction: Action {
-    case increaseCounter(Int)
-    case decreaseCounter(Int)
+    // User action
+    case increaseCounter
+    case decreaseCounter
+
+    // Middleware actions
+    case counterIncreased(Int)
+    case counterDecreased(Int)
 }

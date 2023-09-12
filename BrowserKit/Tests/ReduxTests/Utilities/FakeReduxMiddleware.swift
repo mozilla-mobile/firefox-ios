@@ -6,6 +6,30 @@ import Foundation
 
 @testable import Redux
 class FakeReduxMiddleware {
+    var counter: Int = 0
+
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
+        switch action {
+        case FakeReduxAction.increaseCounter:
+            self.increaseCounter()
+            DispatchQueue.main.async {
+                store.dispatch(FakeReduxAction.counterIncreased(self.counter))
+            }
+        case FakeReduxAction.decreaseCounter:
+            self.decreaseCounter()
+            DispatchQueue.main.async {
+                store.dispatch(FakeReduxAction.counterDecreased(self.counter))
+            }
+        default:
+           break
+        }
+    }
+
+    private func increaseCounter() {
+        counter += 1
+    }
+
+    private func decreaseCounter() {
+        counter -= 1
     }
 }
