@@ -17,7 +17,17 @@ protocol FakespotClientType {
     /// - Parameters:
     ///   - productId: The ID of the product to fetch ad data for.
     ///   - website: The website associated with the product.
+    /// - Throws: An error if the operation fails.
+    /// - Returns: An array of `ProductAdsData` objects containing ad data.
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData]
+
+    /// Triggers the analysis of a product for a given product ID and website.
+    /// - Parameters:
+    ///   - productId: The ID of the product to analyze.
+    ///   - website: The website associated with the product.
+    /// - Throws: An error if the analysis cannot be triggered.
+    /// - Returns: A `ProductAnalyzeResponse` indicating the status of the analysis.
+    func triggerProductAnalyze(productId: String, website: String) async throws -> ProductAnalyzeResponse
 }
 
 /// An enumeration representing different environments for the Fakespot client.
@@ -90,20 +100,6 @@ enum FakespotEnvironment {
     }
 }
 
-struct ProductAnalyzeResponse: Decodable {
-    /// Enumeration representing different analysis statuses.
-    enum AnalysisStatus: String, Decodable {
-        case pending = "pending"
-        case inProgress = "in_progress"
-        case completed = "completed"
-        case notAnalyzable = "not_analyzable"
-        case notFound = "not_found"
-        case unprocessable = "unprocessable"
-    }
-
-    let status: AnalysisStatus
-}
-
 /// Struct FakeSpotClient conforms to the FakespotClientType protocol and provides real network implementations for fetching product analysis data and product ad data.
 struct FakespotClient: FakespotClientType {
     private var environment: FakespotEnvironment
@@ -117,6 +113,23 @@ struct FakespotClient: FakespotClientType {
     /// Error enum for FakeSpotClient errors, including invalid URL.
     enum FakeSpotClientError: Error {
         case invalidURL
+    }
+
+    /// Trigger product analyze for a given product ID and website.
+    func triggerProductAnalyze(productId: String, website: String) async throws -> ProductAnalyzeResponse {
+        // Define the API endpoint URL
+        guard let endpointURL = environment.analyzeEndpoint else {
+            throw FakeSpotClientError.invalidURL
+        }
+
+        // Prepare the request body
+        let requestBody = [
+            "product_id": productId,
+            "website": website
+        ]
+
+        // Perform the async API request and get the data
+        return try await fetch(ProductAnalyzeResponse.self, url: endpointURL, requestBody: requestBody)
     }
 
     /// Fetches product analysis data for a given product ID and website.
