@@ -27,6 +27,12 @@ class FakespotSettingsCardViewModel {
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
     }
 
+    func recordTelemetryForShoppingOptedOut() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingSettingsCardTurnOffButton)
+    }
+
     init(profile: Profile = AppContainer.shared.resolve(),
          cardA11yId: String,
          showProductsLabelTitle: String,
@@ -136,12 +142,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         ])
     }
 
-    private func recordTelemetryForShoppingOptedOut() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingSettingsCardTurnOffButton)
-    }
-
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
         self.viewModel = viewModel
         recommendedProductsSwitch.isOn = viewModel.areAdsEnabled
@@ -174,7 +174,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
         viewModel?.onTapTurnOffButton?()
-        recordTelemetryForShoppingOptedOut()
+        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System
