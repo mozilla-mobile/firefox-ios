@@ -1781,17 +1781,19 @@ class BrowserViewController: UIViewController,
             case .deviceOwnerAuthenticated:
                 // Note: Since we are injecting card info, we pass on the frame
                 // for special iframe cases
-                self.showBottomSheetCardViewController(creditCard: nil,
-                                                       decryptedCard: nil,
-                                                       viewType: .selectSavedCard,
-                                                       frame: frame)
+                // self.showBottomSheetCardViewController(creditCard: nil,
+                  //                                     decryptedCard: nil,
+                   //                                    viewType: .selectSavedCard,
+                    //                                   frame: frame)
+                self.navigationHandler?.showBottomSheetCard(creditCard: nil, decryptedCard: nil, viewType: .selectSavedCard, frame: frame, alertContainer: self.contentContainer)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
-                let passcodeViewController = DevicePasscodeRequiredViewController()
-                passcodeViewController.profile = self.profile
-                self.navigationController?.pushViewController(passcodeViewController,
-                                                              animated: true)
+                self.navigationHandler?.showRequiredPassCode()
+                // let passcodeViewController = DevicePasscodeRequiredViewController()
+                // passcodeViewController.profile = self.profile
+                // self.navigationController?.pushViewController(passcodeViewController,
+                //                                              animated: true)
             }
         }
     }
@@ -1801,9 +1803,10 @@ class BrowserViewController: UIViewController,
             existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
-                    self.showBottomSheetCardViewController(creditCard: nil,
-                                                           decryptedCard: fieldValues,
-                                                           viewType: .save)
+                    self.navigationHandler?.showBottomSheetCard(creditCard: nil, decryptedCard: fieldValues, viewType: .update, frame: nil, alertContainer: self.contentContainer)
+                    // self.showBottomSheetCardViewController(creditCard: nil,
+                       //                                    decryptedCard: fieldValues,
+                         //                                  viewType: .save)
                 }
                 return
             }
@@ -1811,9 +1814,10 @@ class BrowserViewController: UIViewController,
             // card already saved should update if any of its other values are different
             if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
-                    self.showBottomSheetCardViewController(creditCard: existingCard,
-                                                           decryptedCard: fieldValues,
-                                                           viewType: .update)
+                    self.navigationHandler?.showBottomSheetCard(creditCard: existingCard, decryptedCard: fieldValues, viewType: .update, frame: nil, alertContainer: self.contentContainer)
+                    // self.showBottomSheetCardViewController(creditCard: existingCard,
+                       //                                    decryptedCard: fieldValues,
+                       //                                    viewType: .update)
                 }
             }
         }
