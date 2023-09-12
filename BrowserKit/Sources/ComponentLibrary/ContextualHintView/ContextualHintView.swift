@@ -2,11 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import ComponentLibrary
+import Foundation
 import Common
 import UIKit
 
-class ContextualHintView: UIView, ThemeApplicable {
+public class ContextualHintView: UIView, ThemeApplicable {
     private var viewModel: ContextualHintViewModel!
 
     struct UX {
@@ -69,12 +69,12 @@ class ContextualHintView: UIView, ThemeApplicable {
         return gradient
     }()
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         gradient.frame = bounds
     }
 
-    func configure(viewModel: ContextualHintViewModel) {
+    public func configure(viewModel: ContextualHintViewModel) {
         self.viewModel = viewModel
 
         closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
@@ -135,7 +135,7 @@ class ContextualHintView: UIView, ThemeApplicable {
         layoutIfNeeded()
     }
 
-    func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         closeButton.tintColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
