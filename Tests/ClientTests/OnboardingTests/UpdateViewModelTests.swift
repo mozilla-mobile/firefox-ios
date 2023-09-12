@@ -8,27 +8,17 @@ import XCTest
 import Shared
 
 class UpdateViewModelTests: XCTestCase {
-    var profile: MockProfile!
-    var nimbusUtility: NimbusOnboardingTestingConfigUtility!
-    typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        nimbusUtility = NimbusOnboardingTestingConfigUtility()
-        nimbusUtility.setupNimbus(withOrder: cards.allCards)
-        profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
-        profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
-        profile.shutdown()
         profile = nil
-        nimbusUtility = nil
-
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
     // MARK: Enable cards
@@ -40,8 +30,9 @@ class UpdateViewModelTests: XCTestCase {
         subject.hasSyncableAccount {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-            XCTAssertEqual(subject.availableCards.count, 1)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
+            XCTAssertEqual(subject.availableCards.count, 2)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
+            XCTAssertEqual(subject.availableCards[1].viewModel.name, "Name 2")
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -56,8 +47,8 @@ class UpdateViewModelTests: XCTestCase {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
             XCTAssertEqual(subject.availableCards.count, 2)
-            XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.updateWelcome.rawValue)
-            XCTAssertEqual(subject.availableCards[1].viewModel.name, cards.updateSync.rawValue)
+            XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
+            XCTAssertEqual(subject.availableCards[1].viewModel.name, "Name 2")
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -72,7 +63,7 @@ class UpdateViewModelTests: XCTestCase {
         subject.hasSyncableAccount {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-            XCTAssertEqual(subject.shouldShowSingleCard, true)
+            XCTAssertEqual(subject.shouldShowSingleCard, false)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 2.0)
@@ -98,7 +89,6 @@ class UpdateViewModelTests: XCTestCase {
     func testShouldNotShowCoverSheet_featureFlagOff_appVersionKeyNil() {
         let subject = createSubject()
         let currentTestAppVersion = "22.0"
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let shouldShow = subject.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
@@ -119,7 +109,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testShouldNotShowCoverSheet_ForMinorVersionUpgrade() {
         let subject = createSubject()
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "21.1"
@@ -134,7 +123,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testShouldShowCoverSheetFromUpdateVersion() {
         let subject = createSubject()
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "22.0"
@@ -149,7 +137,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testShouldShowCoverSheetForVersionNil() {
         let subject = createSubject()
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
@@ -159,7 +146,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testShouldSaveVersion_CleanInstall() {
         let subject = createSubject()
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
@@ -170,7 +156,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testShouldSaveVersion_UnsavedVersion() {
         let subject = createSubject()
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         let currentTestAppVersion = "22.0"
 
@@ -180,10 +165,11 @@ class UpdateViewModelTests: XCTestCase {
 
     // MARK: - Private Helpers
     func createSubject(
+        hasOnboardingCards: Bool = true,
         file: StaticString = #file,
         line: UInt = #line
     ) -> UpdateViewModel {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        let onboardingModel = createOnboardingViewModel(withCards: hasOnboardingCards)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let subject = UpdateViewModel(profile: profile,
                                       model: onboardingModel,
@@ -192,5 +178,30 @@ class UpdateViewModelTests: XCTestCase {
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
+    }
+
+    func createOnboardingViewModel(withCards: Bool) -> OnboardingViewModel {
+        let cards: [OnboardingCardInfoModel] = [
+            createCard(index: 1),
+            createCard(index: 2)
+        ]
+
+        return OnboardingViewModel(cards: withCards ? cards : [],
+                                   isDismissable: true)
+    }
+
+    func createCard(index: Int) -> OnboardingCardInfoModel {
+        let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
+                                                                           action: .nextCard))
+        return OnboardingCardInfoModel(name: "Name \(index)",
+                                       order: index,
+                                       title: "Title \(index)",
+                                       body: "Body \(index)",
+                                       link: nil,
+                                       buttons: buttons,
+                                       type: .upgrade,
+                                       a11yIdRoot: "A11y id \(index)",
+                                       imageID: "Image id \(index)",
+                                       instructionsPopup: nil)
     }
 }
