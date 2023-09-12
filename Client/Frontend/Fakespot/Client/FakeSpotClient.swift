@@ -7,7 +7,16 @@ import MozillaAppServices
 
 /// Protocol representing the FakespotClientType, which defines two asynchronous methods for fetching product analysis data and product ad data.
 protocol FakespotClientType {
+    /// Fetches product analysis data for a given product ID and website.
+    /// - Parameters:
+    ///   - productId: The ID of the product to analyze.
+    ///   - website: The website associated with the product.
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData
+
+    /// Fetches product ad data for a given product ID and website.
+    /// - Parameters:
+    ///   - productId: The ID of the product to fetch ad data for.
+    ///   - website: The website associated with the product.
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData]
 }
 
@@ -16,14 +25,38 @@ enum FakespotEnvironment {
     case staging
     case prod
 
-    /// Returns the API analysisEndpoint URL based on the selected environment.
-    var analysisEndpoint: URL? {
+    enum FakespotPath: String {
+        case analyze = "/analyze"
+        case analysis = "/analysis"
+    }
+
+    private var baseURL: String {
         switch self {
         case .staging:
-            return URL(string: "https://staging.trustwerty.com/api/v1/fx/analysis")
+            return "https://staging.trustwerty.com"
         case .prod:
-            return URL(string: "https://trustwerty.com/api/v1/fx/analysis")
+            return "https://trustwerty.com"
         }
+    }
+
+    private var apiVersion: String {
+        return "/api/v1/fx"
+    }
+
+    private func buildURL(path: FakespotPath) -> URL? {
+        let urlString = baseURL + apiVersion + path.rawValue
+        return URL(string: urlString)
+    }
+
+
+    /// Returns the API analyze endpoint URL based on the selected environment.
+    var analyzeEndpoint: URL? {
+        buildURL(path: .analyze)
+    }
+
+    /// Returns the API analysis endpoint URL based on the selected environment.
+    var analysisEndpoint: URL? {
+        buildURL(path: .analysis)
     }
 
     /// Returns the API ad endpoint URL based on the selected environment.
@@ -57,10 +90,26 @@ enum FakespotEnvironment {
     }
 }
 
+struct ProductAnalyzeResponse: Decodable {
+    /// Enumeration representing different analysis statuses.
+    enum AnalysisStatus: String, Decodable {
+        case pending = "pending"
+        case inProgress = "in_progress"
+        case completed = "completed"
+        case notAnalyzable = "not_analyzable"
+        case notFound = "not_found"
+        case unprocessable = "unprocessable"
+    }
+
+    let status: AnalysisStatus
+}
+
 /// Struct FakeSpotClient conforms to the FakespotClientType protocol and provides real network implementations for fetching product analysis data and product ad data.
 struct FakespotClient: FakespotClientType {
     private var environment: FakespotEnvironment
 
+    /// Initializes a FakeSpotClient with the specified environment.
+    /// - Parameter environment: The environment to use (staging or production).
     init(environment: FakespotEnvironment) {
         self.environment = environment
     }
@@ -70,7 +119,7 @@ struct FakespotClient: FakespotClientType {
         case invalidURL
     }
 
-    /// Asynchronous method to fetch product analysis data from a remote server.
+    /// Fetches product analysis data for a given product ID and website.
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         // Define the API endpoint URL
         guard let endpointURL = environment.analysisEndpoint else {
@@ -87,10 +136,10 @@ struct FakespotClient: FakespotClientType {
         return try await fetch(ProductAnalysisData.self, url: endpointURL, requestBody: requestBody)
     }
 
-    /// Asynchronous method to fetch product ad data from a remote server.
+    /// Fetches product ad data for a given product ID and website.
     func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
         // Define the API endpoint URL
-        guard let endpointURL = environment.adEndpoint  else {
+        guard let endpointURL = environment.adEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
