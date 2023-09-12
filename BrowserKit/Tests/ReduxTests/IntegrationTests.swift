@@ -6,7 +6,11 @@ import XCTest
 
 @testable import Redux
 
-final class SampleEmptyTests: XCTestCase {
+let store = Store(state: FakeReduxState(),
+                  reducer: FakeReduxState.reducer,
+                  middlewares: [FakeReduxMiddleware().themeManagerProvider])
+
+final class IntegrationTests: XCTestCase {
     func testTemp() {
         XCTAssertTrue(true)
     }

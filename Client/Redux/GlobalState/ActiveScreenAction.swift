@@ -7,7 +7,6 @@ import Redux
 
 public enum AppScreen {
     case themeSettings
-    case integrationTest
 }
 
 public enum ActiveScreensStateAction: Action {

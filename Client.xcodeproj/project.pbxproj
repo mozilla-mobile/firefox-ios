@@ -91,11 +91,6 @@
 		215B458027D7FD7D00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */; };
 		215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */; };
-		215B5B1D2AABA3C5006C165D /* FakeReduxMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B1B2AABA3B4006C165D /* FakeReduxMiddleware.swift */; };
-		215B5B1F2AABA3DD006C165D /* FakeReduxAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B1E2AABA3DD006C165D /* FakeReduxAction.swift */; };
-		215B5B212AABA3EC006C165D /* FakeReduxState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B202AABA3EC006C165D /* FakeReduxState.swift */; };
-		215B5B232AABA3FA006C165D /* FakeReduxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B222AABA3FA006C165D /* FakeReduxViewController.swift */; };
-		215B5B272AAFABBB006C165D /* FakeReduxState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B5B202AABA3EC006C165D /* FakeReduxState.swift */; };
 		21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A602A4201E500A5189E /* ThemeSettingsController.swift */; };
 		21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A622A422A3900A5189E /* ThemeMiddleware.swift */; };
 		21618A8A2A4389F700A5189E /* ActiveScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A892A4389F700A5189E /* ActiveScreenState.swift */; };
@@ -2124,10 +2119,6 @@
 		215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabMetadataManager.swift; sourceTree = "<group>"; };
 		215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManagerTests.swift; sourceTree = "<group>"; };
-		215B5B1B2AABA3B4006C165D /* FakeReduxMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReduxMiddleware.swift; sourceTree = "<group>"; };
-		215B5B1E2AABA3DD006C165D /* FakeReduxAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReduxAction.swift; sourceTree = "<group>"; };
-		215B5B202AABA3EC006C165D /* FakeReduxState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReduxState.swift; sourceTree = "<group>"; };
-		215B5B222AABA3FA006C165D /* FakeReduxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReduxViewController.swift; sourceTree = "<group>"; };
 		21618A602A4201E500A5189E /* ThemeSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeSettingsController.swift; sourceTree = "<group>"; };
 		21618A622A422A3900A5189E /* ThemeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMiddleware.swift; sourceTree = "<group>"; };
 		21618A892A4389F700A5189E /* ActiveScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreenState.swift; sourceTree = "<group>"; };
@@ -7233,17 +7224,6 @@
 			path = Downloads;
 			sourceTree = "<group>";
 		};
-		215B5B1A2AABA397006C165D /* Redux */ = {
-			isa = PBXGroup;
-			children = (
-				215B5B1E2AABA3DD006C165D /* FakeReduxAction.swift */,
-				215B5B1B2AABA3B4006C165D /* FakeReduxMiddleware.swift */,
-				215B5B202AABA3EC006C165D /* FakeReduxState.swift */,
-				215B5B222AABA3FA006C165D /* FakeReduxViewController.swift */,
-			);
-			path = Redux;
-			sourceTree = "<group>";
-		};
 		216A0D6F2A40D0E4008077BA /* Redux */ = {
 			isa = PBXGroup;
 			children = (
@@ -10559,7 +10539,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				215B5B1A2AABA397006C165D /* Redux */,
 				DF1E6AA92A964358000D4854 /* Shopping */,
 				8A171A6029F82AD90085770E /* Application */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
@@ -12466,7 +12445,6 @@
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
-				215B5B272AAFABBB006C165D /* FakeReduxState.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
@@ -13163,7 +13141,6 @@
 				8AF10D9129D7761A0086351D /* MockLaunchScreenManager.swift in Sources */,
 				5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */,
 				E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */,
-				215B5B1D2AABA3C5006C165D /* FakeReduxMiddleware.swift in Sources */,
 				96A5F736298D8EDF00234E5F /* MockSearchEngineProvider.swift in Sources */,
 				8A5D1CA02A30C9D7005AD35C /* MockAppSettingsDelegate.swift in Sources */,
 				21A1C3C72996AFF800181B7C /* OverlayModeManagerTests.swift in Sources */,
@@ -13174,7 +13151,6 @@
 				21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */,
 				21BFEEF82A05A0370033048D /* TabMigrationUtilityTests.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
-				215B5B232AABA3FA006C165D /* FakeReduxViewController.swift in Sources */,
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
 				C889D7D52858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift in Sources */,
 				8A171A6329F82B0E0085770E /* SceneDelegateTests.swift in Sources */,
@@ -13196,7 +13172,6 @@
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,
 				C81C66C429F00D1000F6422F /* UserActivityRouteTests.swift in Sources */,
 				8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */,
-				215B5B212AABA3EC006C165D /* FakeReduxState.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
 				8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */,
@@ -13341,7 +13316,6 @@
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				6A5F591D28627C0100FABA92 /* TabManagerNavDelegateTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
-				215B5B1F2AABA3DD006C165D /* FakeReduxAction.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,

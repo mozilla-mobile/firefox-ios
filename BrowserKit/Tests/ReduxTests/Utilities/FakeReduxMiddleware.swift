@@ -4,4 +4,7 @@
 
 import Foundation
 
-class FakeReduxMiddleware {}
+class FakeReduxMiddleware {
+    lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
+    }
+}
