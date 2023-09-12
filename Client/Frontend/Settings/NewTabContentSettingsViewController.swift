@@ -38,7 +38,9 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             onChecked: {
                 self.currentChoice = NewTabPage.topSites
                 onFinished()
-        })
+            }
+        )
+
         let showBlankPage = CheckmarkSetting(
             title: NSAttributedString(string: .SettingsNewTabBlankPage),
             subtitle: nil,
@@ -47,7 +49,9 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             onChecked: {
                 self.currentChoice = NewTabPage.blankPage
                 onFinished()
-        })
+            }
+        )
+
         let showWebPage = WebPageSetting(
             prefs: prefs,
             prefKey: PrefsKeys.NewTabCustomUrlPrefKey,
@@ -59,7 +63,9 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
                 self.currentChoice = NewTabPage.homePage
                 self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
                 self.tableView.reloadData()
-        })
+            }
+        )
+
         showWebPage.textField.textAlignment = .natural
 
         let section = SettingSection(

@@ -70,6 +70,7 @@ class FakespotViewModel: ObservableObject {
     }
 
     let confirmationCardViewModel = FakespotMessageCardViewModel(
+        type: .info,
         title: .Shopping.ConfirmationCardTitle,
         primaryActionText: .Shopping.ConfirmationCardButtonText,
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.card,
@@ -79,10 +80,15 @@ class FakespotViewModel: ObservableObject {
 
     let reliabilityCardViewModel = FakespotReliabilityCardViewModel(rating: .gradeA)
 
-    let errorCardViewModel = FakespotErrorCardViewModel(
+    let errorCardViewModel = FakespotMessageCardViewModel(
+        type: .error,
         title: .Shopping.ErrorCardTitle,
         description: .Shopping.ErrorCardDescription,
-        actionTitle: .Shopping.ErrorCardButtonText
+        primaryActionText: .Shopping.ErrorCardButtonText,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.description,
+        a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
     )
 
     let highlightsCardViewModel = {

@@ -489,11 +489,12 @@ extension LegacyGridTabViewController {
             animations: { [weak self] in
                 self?.collectionView.alpha = 1
                 self?.emptyPrivateTabsView.alpha = 1
-            }) { [weak self] _ in
-                guard let self else { return }
-                self.backgroundPrivacyOverlay.alpha = 0
-                self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
             }
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.backgroundPrivacyOverlay.alpha = 0
+            self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
+        }
     }
 }
 

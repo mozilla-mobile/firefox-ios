@@ -90,10 +90,10 @@ struct TextInputAlert: JSAlertInfo {
         })
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             self.completionHandler(input.text)
-         })
+        })
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             self.completionHandler(nil)
-         })
+        })
         alertController.alertInfo = self
         return alertController
     }
