@@ -11,6 +11,7 @@ struct FakespotMessageCardViewModel {
         case confirmation
         case warning
         case info
+        case infoLoading
 
         var id: String { self.rawValue }
 
@@ -19,6 +20,7 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.textPrimary
             case .warning: return theme.colors.textPrimary
             case .info: return theme.colors.textOnDark
+            case .infoLoading: return theme.colors.textOnDark
             }
         }
 
@@ -27,6 +29,7 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.actionConfirmation
             case .warning: return theme.colors.actionWarning
             case .info: return theme.colors.actionPrimary
+            case .infoLoading: return theme.colors.actionPrimary
             }
         }
 
@@ -35,14 +38,25 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.layerConfirmation
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
+            case .infoLoading: return theme.colors.layerInfo
             }
         }
 
-        var iconImageName: String {
+        enum AccessoryType {
+            case image(name: String)
+            case progress
+        }
+
+        var accessoryType: AccessoryType {
             switch self {
-            case .confirmation: return StandardImageIdentifiers.Large.checkmark
-            case .warning: return StandardImageIdentifiers.Large.warningFill
-            case .info: return StandardImageIdentifiers.Large.criticalFill
+            case .confirmation:
+                return .image(name: StandardImageIdentifiers.Large.checkmark)
+            case .warning:
+                return .image(name: StandardImageIdentifiers.Large.warningFill)
+            case .info:
+                return .image(name: StandardImageIdentifiers.Large.criticalFill)
+            case .infoLoading:
+                return .progress
             }
         }
     }
@@ -105,9 +119,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         stackView.spacing = UX.verticalStackViewSpacing
     }
 
-    private lazy var iconImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-    }
+    private lazy var iconContainerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredBoldFont(
@@ -152,7 +164,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                                                 right: UX.buttonHorizontalInset)
     }
 
-    private var iconImageHeightConstraint: NSLayoutConstraint?
+    private var iconContainerHeightConstraint: NSLayoutConstraint?
     private var viewModel: FakespotMessageCardViewModel?
     private var type: FakespotMessageCardViewModel.CardType = .confirmation
 
@@ -174,7 +186,28 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         self.type = viewModel.type
 
         titleLabel.text = viewModel.title
-        iconImageView.image = UIImage(named: viewModel.type.iconImageName)
+
+        let accessoryView: UIView
+        switch viewModel.type.accessoryType {
+        case .image(name: let name):
+            let imageView: UIImageView = .build { imageView in
+                imageView.contentMode = .scaleAspectFit
+                imageView.image = UIImage(named: name)
+            }
+            accessoryView = imageView
+        case .progress:
+            let spinner = UIActivityIndicatorView(style: .medium)
+            spinner.startAnimating()
+            accessoryView = spinner
+        }
+
+        iconContainerView.addSubview(accessoryView)
+        NSLayoutConstraint.activate([
+            accessoryView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
+            accessoryView.topAnchor.constraint(equalTo: iconContainerView.topAnchor),
+            accessoryView.trailingAnchor.constraint(equalTo: iconContainerView.trailingAnchor),
+            accessoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor),
+        ])
 
         if let title = viewModel.primaryActionText {
             primaryButton.setTitle(title, for: .normal)
@@ -211,11 +244,11 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         addSubview(cardView)
 
         let size = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
-        iconImageHeightConstraint = iconImageView.heightAnchor.constraint(equalToConstant: size)
-        iconImageHeightConstraint?.isActive = true
+        iconContainerHeightConstraint = iconContainerView.heightAnchor.constraint(equalToConstant: size)
+        iconContainerHeightConstraint?.isActive = true
 
         iconStackView.addArrangedSubview(UIView())
-        iconStackView.addArrangedSubview(iconImageView)
+        iconStackView.addArrangedSubview(iconContainerView)
         iconStackView.addArrangedSubview(UIView())
 
         infoContainerStackView.addArrangedSubview(iconStackView)
@@ -237,8 +270,8 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             cardView.trailingAnchor.constraint(equalTo: trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
-            iconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            iconContainerView.widthAnchor.constraint(equalTo: iconContainerView.heightAnchor),
+            iconContainerView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
 
             containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                         constant: UX.contentHorizontalSpacing),
@@ -265,7 +298,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
-        iconImageView.tintColor = theme.colors.textPrimary
+        iconContainerView.tintColor = theme.colors.textPrimary
 
         linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
         primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
@@ -274,7 +307,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func adjustLayout() {
-        iconImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        iconContainerHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
         setNeedsLayout()
         layoutIfNeeded()
     }
