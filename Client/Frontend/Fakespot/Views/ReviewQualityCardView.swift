@@ -17,7 +17,7 @@ final class ReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private let rating: ReliabilityRating
+    private let rating: FakespotReliabilityRating
 
     private lazy var reliabilityLetterView: UIView = .build()
 
@@ -31,7 +31,7 @@ final class ReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     private var ratingHeightConstraint: NSLayoutConstraint?
     private var ratingWidthConstraint: NSLayoutConstraint?
 
-    init(rating: ReliabilityRating) {
+    init(rating: FakespotReliabilityRating) {
         self.rating = rating
         super.init(frame: .zero)
         setupNotifications(forObserver: self,
