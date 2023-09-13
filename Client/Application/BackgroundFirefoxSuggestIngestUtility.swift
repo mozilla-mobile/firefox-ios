@@ -10,7 +10,7 @@ import Storage
 
 /// A background utility that downloads and stores new Firefox Suggest
 /// suggestions when the device is online and connected to power.
-class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol {
+class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureFlaggable {
     static let taskIdentifier = "org.mozilla.ios.firefox.suggest.ingest"
 
     let firefoxSuggest: RustFirefoxSuggest
@@ -25,6 +25,7 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol {
 
     /// Schedules the ingestion task to run when the app is backgrounded.
     func scheduleTaskOnAppBackground() {
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
         logger.log("Scheduling background ingestion",
                    level: .debug,
                    category: .storage)
@@ -67,6 +68,7 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol {
 
     /// Registers a launch handler for the background ingestion task.
     private func setUp() {
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.taskIdentifier, using: nil) { task in
             Task {
                 let success = await self.ingest()

@@ -167,6 +167,8 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func loadFirefoxSuggestions() {
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
+
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
