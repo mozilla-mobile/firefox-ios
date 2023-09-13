@@ -16,7 +16,8 @@ class DatabaseFixtureTest: BaseTestCase {
                            LaunchArguments.SkipWhatsNew,
                            LaunchArguments.SkipETPCoverSheet,
                            LaunchArguments.LoadDatabasePrefix + fixtures[key]!,
-                           LaunchArguments.SkipContextualHints]
+                           LaunchArguments.SkipContextualHints,
+                           LaunchArguments.DisableAnimations]
         super.setUp()
     }
 

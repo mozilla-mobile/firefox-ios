@@ -368,7 +368,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 cell.isUserInteractionEnabled = true
             }
 
-            cell.leftImageView.image = UIImage(named: StandardImageIdentifiers.Large.folder)
+            cell.leftImageView.manuallySetImage(UIImage(named: StandardImageIdentifiers.Large.folder) ?? UIImage())
             cell.leftImageView.contentMode = .center
             cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
 

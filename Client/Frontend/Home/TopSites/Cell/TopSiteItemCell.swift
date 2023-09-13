@@ -116,7 +116,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        imageView.image = nil
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinViewHolder.isHidden = true

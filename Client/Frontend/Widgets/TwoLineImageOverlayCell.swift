@@ -151,6 +151,5 @@ class TwoLineImageOverlayCell: UITableViewCell,
                                       left: UX.imageSize + 2 * UX.borderViewMargin,
                                       bottom: 0,
                                       right: 0)
-        leftImageView.image = nil
     }
 }

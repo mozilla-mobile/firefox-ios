@@ -617,8 +617,11 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
+        // TODO: #16076 - We should avoid force unwraps
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("loginsPerField.db").path
+        // Though we don't migrate SQLCipher DBs anymore, we keep this call to
+        // delete any existing DBs if they still exist
+        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
 
         return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
     }()
