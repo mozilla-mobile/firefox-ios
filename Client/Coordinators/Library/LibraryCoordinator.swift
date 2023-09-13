@@ -74,7 +74,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let bookmarksCoordinator = BookmarksCoordinator(
             router: router,
@@ -86,7 +86,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is HistoryCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is HistoryCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let historyCoordinator = HistoryCoordinator(
             profile: profile,
@@ -98,7 +98,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeDownloadsCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is DownloadsCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is DownloadsCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let downloadsCoordinator = DownloadsCoordinator(
             router: router,
@@ -110,7 +110,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeReadingListCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is ReadingListCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is ReadingListCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let readingListCoordinator = ReadingListCoordinator(
             parentCoordinator: parentCoordinator,
