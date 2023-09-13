@@ -1583,7 +1583,7 @@ meta:
 
 trigger_map:
 - push_branch: main
-  worfklwo: Firebase_Performance_Test
+  workflow: Firebase_Performance_Test
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v119
