@@ -1469,19 +1469,19 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-archive@4.7.2:
-        inputs:
-        - compile_bitcode: 'no'
-        - upload_bitcode: 'no'
-        - team_id: 9G8J6YA743
-        - export_method: development
-        - distribution_method: development
-        - export_development_team: 9G8J6YA743
-        - output_tool: xcodebuild
-        - scheme: Fennec_Enterprise
-        - configuration: Fennec_Enterprise
-        - project_path: "$BITRISE_PROJECT_PATH"
-    - deploy-to-bitrise-io@2: {}
+    #- xcode-archive@4.7.2:
+    #    inputs:
+    #    - compile_bitcode: 'no'
+    #    - upload_bitcode: 'no'
+    #    - team_id: 9G8J6YA743
+    #    - export_method: development
+    #    - distribution_method: development
+    #    - export_development_team: 9G8J6YA743
+    #    - output_tool: xcodebuild
+    #    - scheme: Fennec_Enterprise
+    #    - configuration: Fennec_Enterprise
+    #    - project_path: "$BITRISE_PROJECT_PATH"
+    #- deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
@@ -1491,70 +1491,73 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -destination "generic/platform=iOS" \
+                -scheme Fennec \
+                -sdk iphonesimulator \
+                -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-    - deploy-to-bitrise-io@2: {}
-    - script@1.1:
-        title: Verify App signature, Test, and Runner
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- verify test and runner signature --"
-            codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
-            echo "-- test app --"
-            xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
-    - script@1.1:
-        title: Create .zip artifact for Firebase Testing
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- create .zip artifact --"
-            cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-x86_64.xctestrun
-            mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
-    - deploy-to-bitrise-io@2: {}
-    - cache-pull@2.7.2:
-        inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
-    - script@1:
-        title: Install Google Cloud SDK
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-             
-            if [ -e $HOME/google-cloud-sdk ]; then
-              echo "Google Cloud SDK found, skipping installation..."
-            else
-              echo "Google Cloud SDK not found, installing..."
-              curl https://sdk.cloud.google.com > install.sh
-              bash install.sh --disable-prompts
-              source $HOME/google-cloud-sdk/path.bash.inc
-            fi
-    - cache-push@2.7.1:
-        inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
-        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
-        - compress_archive: "true"
-    - script@1:
-        title: Run Performance Tests in Firebase Test Lab
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e 
-            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
-            $HOME/google-cloud-sdk/bin/gcloud version
-            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
-            $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            ls /Users/vagrant/git/Fennec_Enterprise.zip
-            gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
-                --model=iphone14pro,version=16.4 \
-                --xcode-version=14.3.1
+
+            echo "see derived data"
+            ls DerivedData
+    #- deploy-to-bitrise-io@2: {}
+    #- script@1.1:
+    #    title: Verify App signature, Test, and Runner
+    #    inputs:
+    #    - content: |
+    #        set -euxo pipefail
+    #        echo "-- verify test and runner signature --"
+    #        codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
+    #        echo "-- test app --"
+    #        xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
+    #            -scheme Fennec_Enterprise \
+    #            -sdk iphoneos \
+    #            -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
+    #- script@1.1:
+    #    title: Create .zip artifact for Firebase Testing
+    #    inputs:
+    #    - content: |
+    #        set -euxo pipefail
+    #        echo "-- create .zip artifact --"
+    #        cd DerivedData/Build/Products
+    #        zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-x86_64.xctestrun
+    #        mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+    #- deploy-to-bitrise-io@2: {}
+    #- cache-pull@2.7.2:
+    #    inputs:
+    #    - cache_paths: "$HOME/google-cloud-sdk"
+    #- script@1:
+    #    title: Install Google Cloud SDK
+    #    inputs:
+    #    - content: |-
+    #        #!/usr/bin/env bash
+    #        set -e
+    #         
+    #        if [ -e $HOME/google-cloud-sdk ]; then
+    #          echo "Google Cloud SDK found, skipping installation..."
+    #        else
+    #          echo "Google Cloud SDK not found, installing..."
+    #          curl https://sdk.cloud.google.com > install.sh
+    #          bash install.sh --disable-prompts
+    #          source $HOME/google-cloud-sdk/path.bash.inc
+    #        fi
+    #- cache-push@2.7.1:
+    #    inputs:
+    #    - cache_paths: "$HOME/google-cloud-sdk"
+    #    - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
+    #    - compress_archive: "true"
+    #- script@1:
+    #    title: Run Performance Tests in Firebase Test Lab
+    #    inputs:
+    #    - content: |-
+    #        #!/usr/bin/env bash
+    #        set -e 
+    #        curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+    #        $HOME/google-cloud-sdk/bin/gcloud version
+    #        $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+    #        $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
+    #        ls /Users/vagrant/git/Fennec_Enterprise.zip
+    #        gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
+    #            --model=iphone14pro,version=16.4 \
+    #            --xcode-version=14.3.1
 app:
   envs:
   - opts:
@@ -1580,13 +1583,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_multiple_shards
+  worfklwo: Firebase_Performance_Test
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v119
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: Firebase_Performance_Test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
