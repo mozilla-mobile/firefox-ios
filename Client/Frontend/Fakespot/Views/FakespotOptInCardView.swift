@@ -22,6 +22,7 @@ final class OptInCardView: UIView, ThemeApplicable {
         static let mainButtonFontSize: CGFloat = 16
         static let mainButtonCornerRadius: CGFloat = 14
         static let mainButtonInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        static let mainButtonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         static let secondaryButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16

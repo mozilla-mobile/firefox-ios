@@ -120,6 +120,7 @@ class FakespotViewModel {
         self.shoppingProduct = shoppingProduct
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
+        optInCardViewModel.productSitename = shoppingProduct.product?.sitename
     }
 
     func fetchData() async {

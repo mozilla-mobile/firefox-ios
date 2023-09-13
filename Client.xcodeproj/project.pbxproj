@@ -9945,6 +9945,7 @@
 				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
 				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
 				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
+				AB132B8C2AAFB27600973880 /* FakespotOptInCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

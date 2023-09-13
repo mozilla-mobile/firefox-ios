@@ -1046,6 +1046,16 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
         case (.action, .view, .shoppingSettingsChevronButton, _, _):
             GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
+        case (.action, .tap, .shoppingOptIn, _, _):
+            GleanMetrics.Shopping.surfaceOptInAccepted.record()
+        case (.action, .tap, .shoppingNotNowButton, _, _):
+            GleanMetrics.Shopping.surfaceNotNowClicked.record()
+        case (.action, .tap, .shoppingTermsOfUseButton, _, _):
+            GleanMetrics.Shopping.surfaceShowTermsClicked.record()
+        case (.action, .tap, .shoppingPrivacyPolicyButton, _, _):
+            GleanMetrics.Shopping.surfaceShowPrivacyPolicyClicked.record()
+        case (.action, .tap, .shoppingLearnMoreButton, _, _):
+            GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
