@@ -10,6 +10,11 @@ class FakeReduxMiddleware {
 
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
         switch action {
+        case FakeReduxAction.requestInitialValue:
+            self.getInitialValue()
+            DispatchQueue.main.async {
+                store.dispatch(FakeReduxAction.initialValueLoaded(self.counter))
+            }
         case FakeReduxAction.increaseCounter:
             self.increaseCounter()
             DispatchQueue.main.async {
@@ -31,5 +36,9 @@ class FakeReduxMiddleware {
 
     private func decreaseCounter() {
         counter -= 1
+    }
+
+    private func getInitialValue() {
+        counter = Int.random(in: Range(1...9))
     }
 }

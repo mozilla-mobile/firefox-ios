@@ -13,12 +13,11 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
     override func viewDidLoad() {
         super.viewDidLoad()
         store.subscribe(self)
-
+        store.dispatch(FakeReduxAction.requestInitialValue)
         view.addSubview(label)
     }
 
     func newState(state: FakeReduxState) {
-        print("YRD newState \(state)")
         label.text = "\(state.counter)"
     }
 

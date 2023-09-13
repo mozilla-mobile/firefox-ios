@@ -11,10 +11,12 @@ let store = Store(state: FakeReduxState(),
 
 final class IntegrationTests: XCTestCase {
     var fakeViewController: FakeReduxViewController!
+    var initialValue: Int!
 
     override func setUp() {
         super.setUp()
         fakeViewController = FakeReduxViewController()
+        fakeViewController.view.setNeedsLayout()
     }
 
     override func tearDown() {
@@ -23,27 +25,44 @@ final class IntegrationTests: XCTestCase {
     }
 
     func testDispatchStore_IncreaseCounter() {
-        fakeViewController.viewDidLoad()
+        getInitialValue(shouldIncrease: true)
         fakeViewController.increaseCounter()
 
         // Needed to wait for Redux action handled async in main thread
         let expectation = self.expectation(description: "Redux integration test")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
-            XCTAssertEqual(self.fakeViewController.label.text, "1")
+            let intValue = Int(self.fakeViewController.label.text ?? "0")
+            XCTAssertEqual(intValue, self.initialValue)
         }
         waitForExpectations(timeout: 1)
     }
 
     func testDispatchStore_DecreaseCounter() {
-        fakeViewController.viewDidLoad()
+        getInitialValue(shouldIncrease: false)
         fakeViewController.decreaseCounter()
 
         // Needed to wait for Redux action handled async in main thread
         let expectation = self.expectation(description: "Redux integration test")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
-            XCTAssertEqual(self.fakeViewController.label.text, "-1")
+            let intValue = Int(self.fakeViewController.label.text ?? "0")
+            XCTAssertEqual(intValue, self.initialValue)
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    private func getInitialValue(shouldIncrease: Bool) {
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            self.initialValue = store.state.counter
+            if shouldIncrease {
+                self.initialValue += 1
+            } else {
+                self.initialValue -= 1
+            }
         }
         waitForExpectations(timeout: 1)
     }
