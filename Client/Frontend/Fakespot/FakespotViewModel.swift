@@ -72,9 +72,11 @@ class FakespotViewModel {
     )
 
     let noAnalysisCardViewModel = NoAnalysisCardViewModel()
+    var optInCardViewModel = FakespotOptInCardViewModel()
 
     init(shoppingProduct: ShoppingProduct) {
         self.shoppingProduct = shoppingProduct
+        optInCardViewModel.productSitename = shoppingProduct.product?.sitename
     }
 
     func fetchData() async {
