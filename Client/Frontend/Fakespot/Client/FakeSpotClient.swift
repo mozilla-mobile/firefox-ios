@@ -92,7 +92,7 @@ enum FakespotEnvironment {
     var relay: URL? {
         switch self {
         case .staging:
-            return URL(string: "https://mozilla-ohttp-fakespot-dev.fastly-edge.com/")
+            return URL(string: "https://mozilla-ohttp-dev.fastly-edge.com/")
         case .prod:
             return URL(string: "https://mozilla-ohttp-fakespot.fastly-edge.com/")
         }
