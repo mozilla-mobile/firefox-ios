@@ -1495,14 +1495,14 @@ workflows:
                 -sdk iphonesimulator \
                 -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-
-            echo "see derived data"
-            ls DerivedData
     #- deploy-to-bitrise-io@2: {}
-    #- script@1.1:
-    #    title: Verify App signature, Test, and Runner
-    #    inputs:
-    #    - content: |
+    - script@1.1:
+        title: Verify App signature, Test, and Runner
+        inputs:
+        - content: |
+            echo "see files created"
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
     #        set -euxo pipefail
     #        echo "-- verify test and runner signature --"
     #        codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
