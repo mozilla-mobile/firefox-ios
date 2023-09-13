@@ -19,14 +19,14 @@ class FakespotViewModel: ObservableObject {
             case .loading:
                 elements = [.loadingView]
 
-            case .loaded(let data):
+            case .loaded:
                 elements = [.reliabilityCard,
                     .adjustRatingCard,
                     .highlightsCard,
 //                    .qualityDeterminationCard, // card not created yet (FXIOS-6963)
                     .settingsCard]
 
-            case .error(let error):
+            case .error:
                 // add error card
                 elements = [.settingsCard] // [.qualityDeterminationCard, .settingsCard]  // card not created yet (FXIOS-6963)
             }
