@@ -89,7 +89,7 @@ features:
                   action: next-card
               type: upgrade
               prerequisites:
-                - ALWAYS
+                - NEVER
             update-sign-to-sync:
               order: 20
               title: Upgrade/Upgrade.SyncSign.Title.v114
@@ -104,7 +104,7 @@ features:
                   action: next-card
               type: upgrade
               prerequisites:
-                - ALWAYS
+                - NEVER
           dismissable: true
 
 objects:

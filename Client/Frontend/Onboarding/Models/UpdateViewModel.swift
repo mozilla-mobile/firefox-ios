@@ -21,9 +21,9 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return availableCards.count == 1
     }
 
-    // If the feature is enabled and is not clean install
+    // If the feature has cards available and is not clean install
     var shouldShowFeature: Bool {
-        return !isFreshInstall
+        return !cardModels.isEmpty && !isFreshInstall
     }
 
     var isFreshInstall: Bool {

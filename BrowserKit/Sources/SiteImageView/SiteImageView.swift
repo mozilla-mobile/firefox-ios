@@ -12,20 +12,19 @@ protocol SiteImageView: UIView {
 
     func updateImage(site: SiteImageModel)
     func setImage(imageModel: SiteImageModel)
-
     // Avoid multiple image loading in parallel. Only start a new request if the URL string has changed
-    var requestStartedWith: String? { get set }
+    var currentURLString: String? { get set }
     func canMakeRequest(with siteURLString: String?) -> Bool
 }
 
 extension SiteImageView {
     func canMakeRequest(with siteURLString: String?) -> Bool {
-        guard requestStartedWith != nil else {
-            requestStartedWith = siteURLString
+        guard currentURLString != nil else {
+            currentURLString = siteURLString
             return true
         }
 
-        return requestStartedWith != siteURLString
+        return currentURLString != siteURLString
     }
 
     func updateImage(site: SiteImageModel) {
@@ -35,7 +34,6 @@ extension SiteImageView {
 
             DispatchQueue.main.async { [weak self] in
                 self?.setImage(imageModel: imageModel)
-                self?.requestStartedWith = nil
             }
         }
     }
