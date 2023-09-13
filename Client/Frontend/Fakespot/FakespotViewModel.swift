@@ -6,7 +6,7 @@ import UIKit
 import Common
 import Shared
 
-class FakespotViewModel: ObservableObject {
+class FakespotViewModel {
     enum ViewState {
         case loading
         case loaded(ProductAnalysisData?)
