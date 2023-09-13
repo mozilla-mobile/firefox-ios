@@ -1491,7 +1491,7 @@ workflows:
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec \
+                -scheme Fennec_Enterprise \
                 -sdk iphonesimulator \
                 -destination "platform=iOS Simulator,name=iPhone 14,OS=16.4" \
                 -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
