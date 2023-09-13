@@ -60,7 +60,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private lazy var loadingView: FakespotLoadingView = .build()
     private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
     private lazy var adjustRatingView: AdjustRatingView = .build()
-    private lazy var reviewQualityCardView: ReviewQualityCardView = .build()
+    private lazy var reviewQualityCardView: FaekspotReviewQualityCardView = .build()
 
     // MARK: - Initializers
     init(

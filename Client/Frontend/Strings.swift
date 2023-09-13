@@ -3725,12 +3725,12 @@ extension String {
             key: "", // / Shopping.ReviewQualityCard.Label.Title.v119
             tableName: "Shopping",
             value: "How we determine review quality Card Expanded",
-            comment: "Accessibility label for the down chevron, from How we determine review quality Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardCollapsedAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v119
             tableName: "Shopping",
             value: "How we determine review quality Card Collapsed",
-            comment: "Accessibility label for the up chevron, from How we determine review quality Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Headline.Label.v119
             tableName: "Shopping",
