@@ -73,7 +73,7 @@ class DatabaseFixtureTest: BaseTestCase {
            let snapshot = try app.tables["History List"].snapshot()
            let historyList = snapshot.children.count
 
-           XCTAssertEqual(historyList, 102, "There should be 102 entries in the history list")
+           XCTAssertEqual(historyList, 103, "There should be 103 entries in the history list")
        } catch {
            XCTFail("Failed to take snapshot: \(error)")
        }
