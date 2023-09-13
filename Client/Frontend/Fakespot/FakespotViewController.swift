@@ -63,7 +63,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
 
-        viewModel.stateChangeClosure = { [weak self] in
+        viewModel.onStateChange = { [weak self] in
             ensureMainThread {
                 self?.updateContent()
             }

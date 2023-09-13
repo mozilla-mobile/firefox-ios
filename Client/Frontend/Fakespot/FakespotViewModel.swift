@@ -56,11 +56,11 @@ class FakespotViewModel {
 
     private(set) var state: ViewState = .loading {
         didSet {
-            stateChangeClosure?()
+            onStateChange?()
         }
     }
     let shoppingProduct: ShoppingProduct
-    var stateChangeClosure: (() -> Void)?
+    var onStateChange: (() -> Void)?
 
     var viewElements: [ViewElement] {
 //        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
