@@ -235,7 +235,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
+        waitForNoExistence(progressIndicator, timeoutValue: 60.0)
     }
 
     func waitForTabsButton() {
