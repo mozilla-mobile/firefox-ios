@@ -23,12 +23,12 @@ class FakespotViewModel {
                 elements = [.reliabilityCard,
                     .adjustRatingCard,
                     .highlightsCard,
-//                    .qualityDeterminationCard, // card not created yet (FXIOS-6963)
+                    .qualityDeterminationCard,
                     .settingsCard]
 
             case .error:
                 // add error card
-                elements = [.settingsCard] // [.qualityDeterminationCard, .settingsCard]  // card not created yet (FXIOS-6963)
+                elements = [.qualityDeterminationCard, .settingsCard]
             }
 
             return elements
@@ -48,7 +48,7 @@ class FakespotViewModel {
         case reliabilityCard
         case adjustRatingCard
         case highlightsCard
-//        case qualityDeterminationCard // card not created yet (FXIOS-6963)
+        case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
         case messageCard

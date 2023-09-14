@@ -197,6 +197,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             view.configure(cardViewModel)
             return view
 
+        case .qualityDeterminationCard:
+            let reviewQualityCardView: FakespotReviewQualityCardView = .build()
+            reviewQualityCardView.configure()
+            return reviewQualityCardView
+
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)

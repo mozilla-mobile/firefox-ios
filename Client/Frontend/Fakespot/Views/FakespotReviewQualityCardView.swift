@@ -7,7 +7,7 @@ import Common
 import Shared
 import ComponentLibrary
 
-final class FaekspotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
+final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     private struct UX {
         static let contentStackViewSpacing: CGFloat = 16
         static let footerStackViewSpacing: CGFloat = 8
