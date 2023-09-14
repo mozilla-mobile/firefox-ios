@@ -25,7 +25,7 @@ class FakespotTests: BaseTestCase {
         waitForExistence(app.otherElements["PopoverDismissRegion"])
         waitForExistence(app.staticTexts["Shopping.Sheet.HeaderTitle"])
         XCTAssertEqual(app.staticTexts["Shopping.Sheet.HeaderTitle"].label, "Review quality check")
-        
+
         // Tap outside of the popover to close the popover
         website.textFields["Search Amazon"].tap()
         waitForNoExistence(app.otherElements["PopoverDismissRegion"])
