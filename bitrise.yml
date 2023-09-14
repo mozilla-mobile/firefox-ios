@@ -1481,7 +1481,6 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
         - project_path: "$BITRISE_PROJECT_PATH"
-    - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
@@ -1494,12 +1493,16 @@ workflows:
                 -scheme Fennec_Enterprise \
                 -sdk iphoneos \
                 -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+                -derivedDataPath "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
+        is_always_run: true
         title: Verify App signature, Test, and Runner
         inputs:
         - content: |
+            echo "see files created"
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
             set -euxo pipefail
             echo "-- verify test and runner signature --"
             codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
@@ -1515,7 +1518,7 @@ workflows:
             set -euxo pipefail
             echo "-- create .zip artifact --"
             cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-x86_64.xctestrun
+            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
             mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:
