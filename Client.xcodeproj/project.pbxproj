@@ -490,7 +490,8 @@
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
-		787D4B172AB38EFF0081A864 /* FakespotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787D4B162AB38EFF0081A864 /* FakespotTests.swift */; };
+		787D4B1D2AB3C7EB0081A864 /* FakespotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787D4B1C2AB3C7EB0081A864 /* FakespotTests.swift */; };
+		787D4B1E2AB3C7EB0081A864 /* FakespotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787D4B1C2AB3C7EB0081A864 /* FakespotTests.swift */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
 		7B10AA9F1E3A15020002DD08 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AA9E1E3A15020002DD08 /* DataExtensions.swift */; };
 		7B10AABB1E3A1F650002DD08 /* URLRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */; };
@@ -4601,7 +4602,7 @@
 		781F4692919CC38F17A90EE3 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/Intro.strings; sourceTree = "<group>"; };
 		786E4F899C9E14715D44C1D2 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		78784AF7A74084713651DC6D /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
-		787D4B162AB38EFF0081A864 /* FakespotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FakespotTests.swift; path = Tests/XCUITests/FakespotTests.swift; sourceTree = "<group>"; };
+		787D4B1C2AB3C7EB0081A864 /* FakespotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FakespotTests.swift; path = Tests/XCUITests/FakespotTests.swift; sourceTree = "<group>"; };
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
 		78CD409D8D95F94C1738A444 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		797548C8B7F6A801A090D219 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -10467,7 +10468,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				787D4B162AB38EFF0081A864 /* FakespotTests.swift */,
+				787D4B1C2AB3C7EB0081A864 /* FakespotTests.swift */,
 				EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
@@ -12132,6 +12133,7 @@
 			files = (
 				5FC276572894AF8C00AF2721 /* PushCryptoTests.swift in Sources */,
 				5FC276562894AF8200AF2721 /* PushClientTests.swift in Sources */,
+				787D4B1D2AB3C7EB0081A864 /* FakespotTests.swift in Sources */,
 				2FA436421ABB8448008031D1 /* TokenServerClientTests.swift in Sources */,
 				2FA436401ABB8448008031D1 /* HawkHelperTests.swift in Sources */,
 				4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */,
@@ -12258,7 +12260,7 @@
 				3D71C89E1F5703A1008D8646 /* CopiedLinksTests.swift in Sources */,
 				2CF449A51E7BFE2C00FD7595 /* NavigationTest.swift in Sources */,
 				2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */,
-				787D4B172AB38EFF0081A864 /* FakespotTests.swift in Sources */,
+				787D4B1E2AB3C7EB0081A864 /* FakespotTests.swift in Sources */,
 				580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */,
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
 				3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */,
