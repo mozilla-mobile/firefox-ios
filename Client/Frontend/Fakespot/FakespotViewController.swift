@@ -133,7 +133,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private func setupView() {
         headerView.addSubviews(titleLabel, closeButton)
         view.addSubviews(headerView, scrollView)
-//        contentStackView.addArrangedSubview(optInCardView)
         contentStackView.addArrangedSubview(reliabilityCardView)
         contentStackView.addArrangedSubview(adjustRatingView)
         contentStackView.addArrangedSubview(highlightsCardView)

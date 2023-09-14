@@ -7,89 +7,21 @@ import Common
 import Shared
 import ComponentLibrary
 
-// MARK: View Model
-
-struct FakespotOptInCardViewModel {
-    private let tabManager: TabManager
-    private let prefs: Prefs
-    let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
-    var productSitename: String?
-    // MARK: Labels
-    let headerTitleLabel: String = .Shopping.OptInCardHeaderTitle
-    let headerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
-    let bodyFirstParagraphLabel: String = .Shopping.OptInCardCopy
-    let bodyFirstParagraphA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
-    let disclaimerTextLabel: String = .Shopping.OptInCardDisclaimerText
-    let disclaimerTextLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
-    // MARK: Buttons
-    let learnMoreButtonTitle: String = .Shopping.OptInCardLearnMoreButtonTitle
-    let learnMoreButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButtonTitle
-    let termsOfUseButtonTitle: String = .Shopping.OptInCardTermsOfUse
-    let termsOfUseButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.termsOfUseButtonTitle
-    let privacyPolicyButtonTitle: String = .Shopping.OptInCardPrivacyPolicy
-    let privacyPolicyButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.privacyPolicyButtonTitle
-    let mainButtonTitle: String = .Shopping.OptInCardMainButtonTitle
-    let mainButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.mainButtonTitle
-    let secondaryButtonTitle: String = .Shopping.OptInCardSecondaryButtonTitle
-    let secondaryButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButtonTitle
-    // MARK: Actions
-    func onTapLearnMore() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingLearnMoreButton)
-//        tabManager.addTabsForURLs([], zombie: false, shouldSelectTab: true) // no urls yet, will be added in another task
-    }
-
-    func onTapTermsOfUse() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingTermsOfUseButton)
-    }
-
-    func onTapPrivacyPolicy() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingPrivacyPolicyButton)
-    }
-
-    func onTapMainButton() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingOptIn)
-    }
-    func onTapSecondaryButton() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingNotNowButton)
-    }
-
-    var shouldOptIn: Bool {
-        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
-        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
-    }
-
-    init(profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve()) {
-        self.tabManager = tabManager
-        prefs = profile.prefs
-    }
-}
-
 // MARK: View
 final class OptInCardView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLabelFontSize: CGFloat = 28
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
-        static let bodySecondParagraphLabelFontSize: CGFloat = 15
         static let learnMoreButtonFontSize: CGFloat = 15
         static let termsOfUseButtonInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let disclaimerTextLabelFontSize: CGFloat = 13
         static let disclaimerBlockInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        static let learnMoreInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
         static let termsOfUseButtonTitleFontSize: CGFloat = 13
         static let privacyPolicyButtonTitleFontSize: CGFloat = 13
         static let mainButtonFontSize: CGFloat = 16
         static let mainButtonCornerRadius: CGFloat = 14
-        static let mainButtonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        static let mainButtonInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         static let secondaryButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16
@@ -142,20 +74,17 @@ final class OptInCardView: UIView, ThemeApplicable {
     // MARK: Buttons
     private lazy var learnMoreButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.buttonEdgeSpacing = 0
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.learnMoreButtonFontSize)
+        button.contentEdgeInsets = UX.learnMoreInsets
     }
 
     private lazy var termsOfUseButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.buttonEdgeSpacing = 0
         button.contentEdgeInsets = UX.disclaimerBlockInsets
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapTermsOfUse), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.termsOfUseButtonTitleFontSize)
@@ -163,10 +92,8 @@ final class OptInCardView: UIView, ThemeApplicable {
 
     private lazy var privacyPolicyButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.buttonEdgeSpacing = 0
         button.contentEdgeInsets = UX.disclaimerBlockInsets
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.privacyPolicyButtonTitleFontSize)
@@ -174,11 +101,9 @@ final class OptInCardView: UIView, ThemeApplicable {
 
     private lazy var mainButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .center
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.buttonEdgeSpacing = 0
         button.layer.cornerRadius = UX.mainButtonCornerRadius
         button.contentEdgeInsets = UX.mainButtonInsets
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapMainButton), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                                          size: UX.mainButtonFontSize,
@@ -187,9 +112,7 @@ final class OptInCardView: UIView, ThemeApplicable {
 
     private lazy var secondaryButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .center
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.buttonEdgeSpacing = 0
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapSecondaryButton), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.secondaryButtonFontSize)
@@ -258,13 +181,11 @@ final class OptInCardView: UIView, ThemeApplicable {
 
     @objc
     private func didTapMainButton() {
-        viewModel?.shouldOptIn = true
         viewModel?.onTapMainButton()
     }
 
     @objc
     private func didTapSecondaryButton() {
-        
         viewModel?.onTapSecondaryButton()
     }
 
@@ -275,69 +196,29 @@ final class OptInCardView: UIView, ThemeApplicable {
         headerLabel.text = viewModel.headerTitleLabel
         headerLabel.accessibilityIdentifier = viewModel.headerLabelA11yId
 
-        bodyFirstParagraphLabel.attributedText = getFirstParagraphText()
+        bodyFirstParagraphLabel.attributedText = viewModel.getFirstParagraphText()
         bodyFirstParagraphLabel.accessibilityIdentifier = viewModel.bodyFirstParagraphA11yId
 
-        disclaimerTextLabel.attributedText = getDisclaimerText()
+        disclaimerTextLabel.attributedText = viewModel.getDisclaimerText()
         disclaimerTextLabel.accessibilityIdentifier = viewModel.disclaimerTextLabelA11yId
 
-        learnMoreButton.setTitle(viewModel.learnMoreButtonTitle, for: .normal)
-        learnMoreButton.accessibilityIdentifier = viewModel.learnMoreButtonTitleA11yId
+        learnMoreButton.setTitle(viewModel.learnMoreButton, for: .normal)
+        learnMoreButton.accessibilityIdentifier = viewModel.learnMoreButtonA11yId
 
-        termsOfUseButton.setTitle(viewModel.termsOfUseButtonTitle, for: .normal)
-        termsOfUseButton.accessibilityIdentifier = viewModel.termsOfUseButtonTitleA11yId
+        termsOfUseButton.setTitle(viewModel.termsOfUseButton, for: .normal)
+        termsOfUseButton.accessibilityIdentifier = viewModel.termsOfUseButtonA11yId
 
-        privacyPolicyButton.setTitle(viewModel.privacyPolicyButtonTitle, for: .normal)
-        privacyPolicyButton.accessibilityIdentifier = viewModel.privacyPolicyButtonTitleA11yId
+        privacyPolicyButton.setTitle(viewModel.privacyPolicyButton, for: .normal)
+        privacyPolicyButton.accessibilityIdentifier = viewModel.privacyPolicyButtonA11yId
 
-        mainButton.setTitle(viewModel.mainButtonTitle, for: .normal)
-        mainButton.accessibilityIdentifier = viewModel.mainButtonTitleA11yId
+        mainButton.setTitle(viewModel.mainButton, for: .normal)
+        mainButton.accessibilityIdentifier = viewModel.mainButtonA11yId
 
-        secondaryButton.setTitle(viewModel.secondaryButtonTitle, for: .normal)
-        secondaryButton.accessibilityIdentifier = viewModel.secondaryButtonTitleA11yId
+        secondaryButton.setTitle(viewModel.secondaryButton, for: .normal)
+        secondaryButton.accessibilityIdentifier = viewModel.secondaryButtonA11yId
 
         let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
-    }
-
-    func getFirstParagraphText() -> NSAttributedString {
-        let websites = self.getFirstParagraphWebsites()
-        let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                          size: UX.bodyFirstParagraphLabelFontSize)
-        let plainText = String.localizedStringWithFormat(viewModel?.bodyFirstParagraphLabel ?? "", websites[0], websites[1], websites[2])
-        return plainText.attributedText(boldStrings: websites, font: font)
-    }
-
-    func getFirstParagraphWebsites() -> [String] {
-        let lowercasedName = self.viewModel?.productSitename?.lowercased() ?? "amazon"
-        var currentPartnerWebsites = ["amazon", "walmart", "bestbuy"]
-
-        // just in case this card will be shown from an unpartnered website in the future
-        guard currentPartnerWebsites.contains(lowercasedName) else {
-            currentPartnerWebsites[2] = "Best Buy"
-            return currentPartnerWebsites.map { $0.capitalized }
-        }
-
-        var websitesOrder = currentPartnerWebsites.filter { $0 != lowercasedName }
-        if lowercasedName == "bestbuy" {
-            websitesOrder.insert("Best Buy", at: 0)
-        } else {
-            websitesOrder.insert(lowercasedName.capitalized, at: 0)
-        }
-
-        return websitesOrder.map { $0.capitalized }
-    }
-
-    func getDisclaimerText() -> NSAttributedString {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.firstLineHeadIndent = UX.contentStackViewPadding
-        paragraphStyle.headIndent = UX.contentStackViewPadding
-
-        let attributes: [NSAttributedString.Key: Any] = [
-            .paragraphStyle: paragraphStyle
-        ]
-
-        return NSAttributedString(string: viewModel?.disclaimerTextLabel ?? "", attributes: attributes)
     }
 
     // MARK: - Theming System

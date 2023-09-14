@@ -3,6 +3,16 @@
     {
       "filename" : "optInCard.png",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "optInCard 1.png",
+      "idiom" : "universal"
     }
   ],
   "info" : {
