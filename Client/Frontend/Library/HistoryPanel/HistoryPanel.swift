@@ -187,7 +187,9 @@ class HistoryPanel: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            viewModel.shouldResetHistory = true
+        }
         bottomStackView.isHidden = !viewModel.isSearchInProgress
         if viewModel.shouldResetHistory {
             fetchDataAndUpdateLayout()
@@ -647,14 +649,16 @@ extension HistoryPanel: UITableViewDelegate {
         exitSearchState()
         updatePanelState(newState: .history(state: .inFolder))
 
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-        asGroupListVC.title = asGroupItem.displayTitle
-
+        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
+            historyCoordinatorDelegate?.showSearchGroupedItems(asGroupItem)
+        } else {
+            let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
+            let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
+            asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
+            asGroupListVC.title = asGroupItem.displayTitle
+            navigationController?.pushViewController(asGroupListVC, animated: true)
+        }
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
-
-        navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 
     @objc
