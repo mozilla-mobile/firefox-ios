@@ -575,7 +575,6 @@
 		8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */; };
 		8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */; };
 		8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */; };
-		8A3EF80B2A2FD03C00796E3A /* TogglePullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF80A2A2FD03C00796E3A /* TogglePullToRefresh.swift */; };
 		8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */; };
 		8A3EF80F2A2FD05D00796E3A /* ToggleInactiveTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF80E2A2FD05D00796E3A /* ToggleInactiveTabs.swift */; };
 		8A3EF8112A2FD06B00796E3A /* ToggleHistoryGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8102A2FD06B00796E3A /* ToggleHistoryGroups.swift */; };
@@ -4815,7 +4814,6 @@
 		8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetSyncAuthStateDebugSetting.swift; sourceTree = "<group>"; };
 		8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryIDSetting.swift; sourceTree = "<group>"; };
 		8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentsSettings.swift; sourceTree = "<group>"; };
-		8A3EF80A2A2FD03C00796E3A /* TogglePullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogglePullToRefresh.swift; sourceTree = "<group>"; };
 		8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetWallpaperOnboardingPage.swift; sourceTree = "<group>"; };
 		8A3EF80E2A2FD05D00796E3A /* ToggleInactiveTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleInactiveTabs.swift; sourceTree = "<group>"; };
 		8A3EF8102A2FD06B00796E3A /* ToggleHistoryGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleHistoryGroups.swift; sourceTree = "<group>"; };
@@ -8244,7 +8242,6 @@
 				8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */,
 				8A3EF8102A2FD06B00796E3A /* ToggleHistoryGroups.swift */,
 				8A3EF80E2A2FD05D00796E3A /* ToggleInactiveTabs.swift */,
-				8A3EF80A2A2FD03C00796E3A /* TogglePullToRefresh.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -12468,7 +12465,6 @@
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */,
 				8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */,
-				8A3EF80B2A2FD03C00796E3A /* TogglePullToRefresh.swift in Sources */,
 				E1516A3E2A7BC07E007819A4 /* FakespotReliabilityRating.swift in Sources */,
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
