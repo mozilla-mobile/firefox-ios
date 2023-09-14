@@ -11,6 +11,7 @@ struct ComponentData {
                 CardViewComponentViewModel(),
                 ShadowCardViewComponentViewModel(),
                 CollapsibleCardViewComponentViewModel(),
-                ActionFooterComponentViewModel()]
+                ActionFooterComponentViewModel(),
+                ContextualHintViewComponentViewModel()]
     }
 }
