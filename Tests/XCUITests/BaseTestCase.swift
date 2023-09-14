@@ -114,7 +114,7 @@ class BaseTestCase: XCTestCase {
     }
 
     // is up to 25x more performant than the above waitForExistence method
-    func mozWaitForElementToExist(element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
         while !element.exists {
@@ -131,7 +131,7 @@ class BaseTestCase: XCTestCase {
     }
 
     // is up to 25x more performant than the above waitForNoExistence method
-    func mozWaitForElementToNotExist(element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+    func mozWaitForElementToNotExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
         while element.exists {
