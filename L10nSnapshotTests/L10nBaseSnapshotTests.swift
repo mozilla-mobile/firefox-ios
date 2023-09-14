@@ -51,7 +51,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         let startTime = Date()
 
         while !element.exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeoutInSeconds {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
                 XCTFail("Timed out waiting for element \(element) to exist")
                 break
             }
@@ -80,7 +80,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         let startTime = Date()
 
         while element.exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeoutInSeconds {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
                 XCTFail("Timed out waiting for element \(element) to not exist")
                 break
             }
