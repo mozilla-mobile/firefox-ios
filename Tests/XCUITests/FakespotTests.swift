@@ -8,7 +8,7 @@ class FakespotTests: BaseTestCase {
     func testFakespotAvailable() {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()
-        
+
         // Search for and open a shoe listing
         let website = app.webViews["contentView"].firstMatch
         website.textFields["Search Amazon"].tap()
