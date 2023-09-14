@@ -398,7 +398,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "iana")
+        mozWaitForValueContains(app.textFields["url"], value: "iana")
         XCTAssertTrue(app.links["RFC 2606"].exists)
         mozWaitForElementToExist(app.buttons["Show Tabs"])
         let numTab = app.buttons["Show Tabs"].value as? String
@@ -422,7 +422,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         // Check that the tab has changed to the new open one and that the user is in private mode
         waitUntilPageLoad()
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: "iana")
+        mozWaitForValueContains(app.textFields["url"], value: "iana")
         navigator.goto(TabTray)
         XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
     }

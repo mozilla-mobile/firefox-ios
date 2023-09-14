@@ -49,7 +49,7 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(website2)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
+        mozWaitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 

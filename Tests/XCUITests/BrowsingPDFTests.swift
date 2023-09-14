@@ -10,7 +10,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
         // Swipe Up and Down
         app.swipeUp()
         mozWaitForElementToExist(app.staticTexts["1 of 1"])
@@ -28,12 +28,12 @@ class BrowsingPDFTests: BaseTestCase {
         // Click on a link on the pdf and check that the website is shown
         app.links.element(boundBy: 0).tapOnApp()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: PDF_website["urlValue"]!)
+        mozWaitForValueContains(app.textFields["url"], value: PDF_website["urlValue"]!)
         XCTAssertTrue(app.staticTexts["Education and schools"].exists)
 
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
          */
     }
 
@@ -80,7 +80,7 @@ class BrowsingPDFTests: BaseTestCase {
         let pdfTopSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].cells[PDF_website["bookmarkLabel"]!].children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         pdfTopSite.tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)

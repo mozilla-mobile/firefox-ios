@@ -238,7 +238,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.openURL("developer.mozilla.org/en-US")
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
-        waitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
+        mozWaitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
         app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields.element(boundBy: 0))
 

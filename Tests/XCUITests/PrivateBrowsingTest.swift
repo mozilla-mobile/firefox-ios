@@ -34,7 +34,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(url2)
-        waitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
@@ -64,7 +64,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         waitUntilPageLoad()
         navigator.openURL(url3)
-        waitForValueContains(app.textFields["url"], value: "test-example")
+        mozWaitForValueContains(app.textFields["url"], value: "test-example")
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -252,7 +252,7 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
         // Check that the tab has changed
         waitUntilPageLoad()
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: "iana")
+        mozWaitForValueContains(app.textFields["url"], value: "iana")
         XCTAssertTrue(app.links["RFC 2606"].exists)
         mozWaitForElementToExist(app.buttons["Show Tabs"])
         let numPrivTab = app.buttons["Show Tabs"].value as? String

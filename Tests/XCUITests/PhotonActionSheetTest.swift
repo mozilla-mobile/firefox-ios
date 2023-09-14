@@ -136,6 +136,6 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons["Cancel"].tap()
         // User is back to the BrowserTab where the sharesheet was launched
         mozWaitForElementToExist(app.textFields["url"])
-        waitForValueContains(app.textFields["url"], value: "example.com/")
+        mozWaitForValueContains(app.textFields["url"], value: "example.com/")
     }
 }

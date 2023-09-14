@@ -33,21 +33,21 @@ class NavigationTest: BaseTestCase {
         }
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "test-example.html")
+        mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
+        mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
         // Go back to previous visited web site
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
 
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "test-example.html")
+        mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
 
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
@@ -57,7 +57,7 @@ class NavigationTest: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
         }
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "test-mozilla-org")
+        mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org")
     }
 
     func testTapSignInShowsFxAFromTour() {
@@ -119,7 +119,7 @@ class NavigationTest: BaseTestCase {
     func testScrollsToTopWithMultipleTabs() {
         navigator.goto(TabTray)
         navigator.openURL(website_1["url"]!)
-        waitForValueContains(app.textFields["url"], value: website_1["value"]!)
+        mozWaitForValueContains(app.textFields["url"], value: website_1["value"]!)
         // Element at the TOP. TBChanged once the web page is correctly shown
         let topElement = app.links.staticTexts["Mozilla"].firstMatch
 
@@ -162,7 +162,7 @@ class NavigationTest: BaseTestCase {
         app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+        mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
     func testCopyLinkPrivateMode() {
@@ -177,7 +177,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Go"])
         app.buttons["Go"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+        mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
     func testLongPressOnAddressBar() throws {
@@ -273,7 +273,7 @@ class NavigationTest: BaseTestCase {
         // Tap on the just downloaded link to check that the web page is loaded
         app.tables.cells.staticTexts["example-domains.html"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "example-domains.html")
+        mozWaitForValueContains(app.textFields["url"], value: "example-domains.html")
     }
 
     func testShareLink() {
@@ -304,7 +304,7 @@ class NavigationTest: BaseTestCase {
 //
 //        // Check that there are no pop ups
 //        navigator.openURL(popUpTestUrl)
-//        waitForValueContains(app.textFields["url"], value: "blocker.html")
+//        mozWaitForValueContains(app.textFields["url"], value: "blocker.html")
 //        mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
 //
 //        let numTabs = app.buttons["Show Tabs"].value
@@ -321,7 +321,7 @@ class NavigationTest: BaseTestCase {
 //        // Check that now pop ups are shown, two sites loaded
 //        navigator.openURL(popUpTestUrl)
 //        waitUntilPageLoad()
-//        waitForValueContains(app.textFields["url"], value: "example.com")
+//        mozWaitForValueContains(app.textFields["url"], value: "example.com")
 //        let numTabsAfter = app.buttons["Show Tabs"].value
 //        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
@@ -393,7 +393,7 @@ class NavigationTest: BaseTestCase {
         app.typeText("example.com\n")
 
 //        waitUntilPageLoad()
-        waitForValueContains(urlBar, value: "example.com/")
+        mozWaitForValueContains(urlBar, value: "example.com/")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
     }

@@ -89,7 +89,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(homePageMenuItem, timeout: TIMEOUT)
         homePageMenuItem.tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "example")
+        mozWaitForValueContains(app.textFields["url"], value: "example")
     }
 
     func testClipboard() {
@@ -101,7 +101,7 @@ class HomePageSettingsUITests: BaseTestCase {
         app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
         mozWaitForElementToExist(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
-        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         let value = app.textFields["HomeAsCustomURLTextField"].value as! String
         XCTAssertEqual(value, websiteUrl1)
@@ -144,7 +144,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Workaround needed after Xcode 11.3 update Issue 5937
         // Lets check only that website is open
         mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
-        waitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
     func testDisableTopSitesSettingsRemovesSection() {
@@ -168,7 +168,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         // Enter a custom URL
         enterWebPageAsHomepage(text: websiteUrl1)
-        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Custom")
         // Switch to FXHome and check label

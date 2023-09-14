@@ -43,14 +43,14 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("moz")
 
-        waitForValueContains(app.textFields["address"], value: website["value"]!)
+        mozWaitForValueContains(app.textFields["address"], value: website["value"]!)
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
 
         // Enter the complete website and check that there is not more text added, just what user typed
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText(website["value"]!)
-        waitForValueContains(app.textFields["address"], value: website["value"]!)
+        mozWaitForValueContains(app.textFields["address"], value: website["value"]!)
         let value2 = app.textFields["address"].value
         XCTAssertEqual(value2 as? String, website["value"]!, "Wrong autocompletion")
     }
@@ -72,10 +72,10 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText("\u{0008}")
         // Then remove an extra char and check that the autocompletion stops working
         app.textFields["address"].typeText("\u{0008}")
-        waitForValueContains(app.textFields["address"], value: "mo")
+        mozWaitForValueContains(app.textFields["address"], value: "mo")
         // Then write another letter and the autocompletion works again
         app.textFields["address"].typeText("z")
-        waitForValueContains(app.textFields["address"], value: "moz")
+        mozWaitForValueContains(app.textFields["address"], value: "moz")
 
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
@@ -100,7 +100,7 @@ class DomainAutocompleteTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("ex")
-        waitForValueContains(app.otherElements.textFields["Address Bar"], value: "www.example.com/")
+        mozWaitForValueContains(app.otherElements.textFields["Address Bar"], value: "www.example.com/")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "example.com", "Wrong autocompletion")
     }
@@ -155,19 +155,19 @@ class DomainAutocompleteTest: BaseTestCase {
     func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("a")
-        waitForValueContains(app.textFields["address"], value: ".com")
+        mozWaitForValueContains(app.textFields["address"], value: ".com")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("an")
-        waitForValueContains(app.textFields["address"], value: ".com")
+        mozWaitForValueContains(app.textFields["address"], value: ".com")
         let value2 = app.textFields["address"].value
         XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("anc")
-        waitForValueContains(app.textFields["address"], value: ".com")
+        mozWaitForValueContains(app.textFields["address"], value: ".com")
         let value3 = app.textFields["address"].value
         XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
     }
@@ -176,21 +176,21 @@ class DomainAutocompleteTest: BaseTestCase {
     func testMixedCaseAutocompletion() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")
-        waitForValueContains(app.textFields["address"], value: ".org")
+        mozWaitForValueContains(app.textFields["address"], value: ".org")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "MoZilla.org", "Wrong autocompletion")
 
         // Test that leading spaces still show suggestions.
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("    moz")
-        waitForValueContains(app.textFields["address"], value: ".org")
+        mozWaitForValueContains(app.textFields["address"], value: ".org")
         let value2 = app.textFields["address"].value
         XCTAssertEqual(value2 as? String, "    mozilla.org", "Wrong autocompletion")
 
         // Test that trailing spaces do *not* show suggestions.
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("    moz ")
-        waitForValueContains(app.textFields["address"], value: "moz")
+        mozWaitForValueContains(app.textFields["address"], value: "moz")
         let value3 = app.textFields["address"].value
         // No autocompletion, just what user typed
         XCTAssertEqual(value3 as? String, "    moz ", "Wrong autocompletion")

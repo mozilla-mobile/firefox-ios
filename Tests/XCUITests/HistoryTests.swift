@@ -344,7 +344,7 @@ class HistoryTests: BaseTestCase {
         urlBarForwardButton.press(forDuration: 1)
         XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
         app.tables.staticTexts["The Book of Mozilla"].tap()
-        waitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
+        mozWaitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
     }
 
     // Private function created to select desired option from the "Clear Recent History" list

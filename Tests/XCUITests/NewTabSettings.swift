@@ -62,7 +62,7 @@ class NewTabSettingsTest: BaseTestCase {
         // Check the value typed
         app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
         let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as! String
-        waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         XCTAssertEqual(valueTyped, "mozilla.org")
         // Open new page and check that the custom url is used
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -71,7 +71,7 @@ class NewTabSettingsTest: BaseTestCase {
         // Disabling and modifying this check xcode 11.3 update Issue 5937
         // Let's just check that website is open
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: 20)
-        // waitForValueContains(app.textFields["url"], value: "mozilla")
+        // mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
     func testChangeNewTabSettingsLabel() {
@@ -81,7 +81,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabSettings)
         // Enter a custom URL
         app.textFields["NewTabAsCustomURLTextField"].typeText(websiteUrl)
-        waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
+        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         // Assert that the label showing up in Settings is equal to the URL entered (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD)
         XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Custom")

@@ -147,7 +147,7 @@ class SearchTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Check that the website is loaded
-        waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+        mozWaitForValueContains(app.textFields["url"], value: "www.mozilla.org")
         waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
@@ -155,7 +155,7 @@ class SearchTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         typeOnSearchBar(text: "moz")
-        waitForValueContains(app.textFields["address"], value: "mozilla.org")
+        mozWaitForValueContains(app.textFields["address"], value: "mozilla.org")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "mozilla.org")
     }
@@ -172,7 +172,7 @@ class SearchTests: BaseTestCase {
         navigator.openURL("foo bar")
         // Workaroud needed after xcode 11.3 update Issue 5937
         // mozWaitForElementToExist(app.webViews.firstMatch, timeout: 3)
-        waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
+        mozWaitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
     }
 
     // Smoketest
@@ -211,7 +211,7 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "google")
+        mozWaitForValueContains(app.textFields["url"], value: "google")
         // Now there should be two tabs open
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
@@ -223,7 +223,7 @@ class SearchTests: BaseTestCase {
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
         mozWaitForElementToExist(app.textFields["url"], timeout: 20)
-        waitForValueContains(app.textFields["url"], value: "google")
+        mozWaitForValueContains(app.textFields["url"], value: "google")
     }
 
     func testSearchIconOnAboutHome() throws {

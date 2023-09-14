@@ -10,7 +10,7 @@ class ClipBoardTests: BaseTestCase {
     // Check for test url in the browser
     func checkUrl() {
         let urlTextField = app.textFields["url"]
-        waitForValueContains(urlTextField, value: "www.example")
+        mozWaitForValueContains(urlTextField, value: "www.example")
     }
 
     // Copy url from the browser
@@ -62,7 +62,7 @@ class ClipBoardTests: BaseTestCase {
         if processIsTranslatedStr() == m1Rosetta {
             mozWaitForElementToNotExist(app.menuItems["Paste"])
         } else {
-            waitForValueContains(app.textFields["address"], value: "www.example.com")
+            mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
         }
     }
 
@@ -85,6 +85,6 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction])
         app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
         mozWaitForElementToExist(app.textFields["url"])
-        waitForValueContains(app.textFields["url"], value: "www.example.com")
+        mozWaitForValueContains(app.textFields["url"], value: "www.example.com")
     }
 }
