@@ -4,7 +4,7 @@
 
 import UIKit
 
-class StarRatingView: UIView {
+class FakespotStarRatingView: UIView {
     enum UX {
         static let starSize: CGFloat = 24
         static let starCount = 5
