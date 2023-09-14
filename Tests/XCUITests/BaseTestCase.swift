@@ -147,6 +147,20 @@ class BaseTestCase: XCTestCase {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }
 
+    func mozWaitForValueContains(_ element: XCUIElement, value: String, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while true {
+            if let elementValue = element.value as? String, elementValue.contains(value) {
+                break
+            } else if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to contain value \(value)")
+                break
+            }
+            usleep(10000) // waits for 0.01 seconds
+        }
+    }
+
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
