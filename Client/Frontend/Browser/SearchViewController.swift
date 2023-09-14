@@ -653,7 +653,7 @@ class SearchViewController: SiteTableViewController,
                 }
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
-                oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
+                oneLineCell.leftImageView.manuallySetImage(UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage())
                 oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)

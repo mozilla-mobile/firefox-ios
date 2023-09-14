@@ -44,7 +44,7 @@ class ShoppingProduct: FeatureFlaggable {
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
-        client: FakespotClientType = FakespotClient(environment: .staging)
+        client: FakespotClientType
     ) {
         self.url = url
         self.nimbusFakespotFeatureLayer = nimbusFakespotFeatureLayer
@@ -123,5 +123,21 @@ class ShoppingProduct: FeatureFlaggable {
     func fetchProductAdsData() async throws -> [ProductAdsData] {
         guard let product else { return [] }
         return try await client.fetchProductAdData(productId: product.id, website: product.host)
+    }
+
+    /// Triggers the analysis of the current product.
+    ///
+    /// - Returns: An optional `ProductAnalyzeResponse.AnalysisStatus` indicating the status of the analysis, or `nil` if there's no product available.
+    /// - Throws: An error of type `Error` if there's an issue triggering the analysis.
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
+    ///
+    func triggerProductAnalyze() async throws -> ProductAnalyzeResponse.AnalysisStatus? {
+        // Ensure that a valid product is available
+        guard let product = product else {
+            return nil
+        }
+
+        // Trigger product analysis using the product ID and website
+        return try await client.triggerProductAnalyze(productId: product.id, website: product.host).status
     }
 }

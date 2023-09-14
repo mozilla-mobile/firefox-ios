@@ -44,8 +44,6 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        siteImageView.image = nil
-        siteImageView.backgroundColor = UIColor.clear
     }
 
     func configure(with site: Site) {

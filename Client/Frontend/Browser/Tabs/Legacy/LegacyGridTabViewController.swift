@@ -125,9 +125,9 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
         self.tabToFocus = tabToFocus
         self.notificationCenter = notificationCenter
 
-        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
-                                                          with: profile)
-        self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        let contextualViewProvider = ContextualHintViewProvider(forHintType: .inactiveTabs,
+                                                                with: profile)
+        self.contextualHintViewController = ContextualHintViewController(with: contextualViewProvider)
         self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
@@ -489,11 +489,12 @@ extension LegacyGridTabViewController {
             animations: { [weak self] in
                 self?.collectionView.alpha = 1
                 self?.emptyPrivateTabsView.alpha = 1
-            }) { [weak self] _ in
-                guard let self else { return }
-                self.backgroundPrivacyOverlay.alpha = 0
-                self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
             }
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.backgroundPrivacyOverlay.alpha = 0
+            self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
+        }
     }
 }
 

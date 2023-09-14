@@ -537,10 +537,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             tabs.insert(tab, at: insertIndex)
         }
 
-        delegates.forEach { $0.get()?.tabManager(self,
-                                                 didAddTab: tab,
-                                                 placeNextToParentTab: placeNextToParentTab,
-                                                 isRestoring: store.isRestoringTabs) }
+        delegates.forEach {
+            $0.get()?.tabManager(self,
+                                 didAddTab: tab,
+                                 placeNextToParentTab: placeNextToParentTab,
+                                 isRestoring: store.isRestoringTabs)
+        }
 
         if !zombie {
             tab.createWebview()

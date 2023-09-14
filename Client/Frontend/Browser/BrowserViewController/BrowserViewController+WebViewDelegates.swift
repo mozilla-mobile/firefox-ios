@@ -195,12 +195,13 @@ extension BrowserViewController: WKUIDelegate {
                 let getImageData = { (_ url: URL, success: @escaping (Data) -> Void) in
                     makeURLSession(
                         userAgent: UserAgent.fxaUserAgent,
-                        configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+                        configuration: URLSessionConfiguration.default)
+                    .dataTask(with: url) { (data, response, error) in
                             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                                let data = data {
                                 success(data)
                             }
-                        }.resume()
+                    }.resume()
                 }
 
                 var actions = [UIAction]()
@@ -825,12 +826,14 @@ private extension BrowserViewController {
     // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
     // leave a 'Back to Safari' button in the status bar, which we do not want.
     func isStoreURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "itms-apps" {
-            if url.host == "itunes.apple.com" {
-                return true
-            }
-        }
-        return false
+      let isAppStoreScheme = ["itms-apps", "itms-appss"].contains(url.scheme)
+      if isAppStoreScheme {
+        return true
+      }
+
+      let isHttpScheme = ["http", "https"].contains(url.scheme)
+      let isAppStoreHost = ["itunes.apple.com", "apps.apple.com", "appsto.re"].contains(url.host)
+      return isHttpScheme && isAppStoreHost
     }
 
     // Use for sms and mailto links, which do not show a confirmation before opening.

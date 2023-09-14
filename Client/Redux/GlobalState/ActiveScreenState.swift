@@ -6,7 +6,7 @@ import Foundation
 import Redux
 
 enum AppScreenState: Equatable {
-   case themeSettings(ThemeSettingsState)
+    case themeSettings(ThemeSettingsState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {

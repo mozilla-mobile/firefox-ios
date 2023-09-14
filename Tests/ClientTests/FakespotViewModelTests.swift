@@ -7,16 +7,19 @@ import XCTest
 
 final class FakespotViewModelTests: XCTestCase {
     var client: MockShoppingProduct!
+    var apiClient: TestFakespotClient!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        client = MockShoppingProduct(url: URL(string: "https://www.example.com")!)
+        apiClient = TestFakespotClient()
+        client = MockShoppingProduct(url: URL(string: "https://www.example.com")!, client: apiClient)
     }
 
     override func tearDown() {
         super.tearDown()
         client = nil
+        apiClient = nil
     }
 
     // Mock ShoppingProduct for testing
