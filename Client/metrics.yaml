@@ -580,6 +580,7 @@ app:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16375
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -2475,6 +2476,7 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16375
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
