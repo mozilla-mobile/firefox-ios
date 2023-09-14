@@ -94,7 +94,7 @@ class HistoryTests: BaseTestCase {
         app.alerts.buttons["OK"].tap()
 
         // Wait for OK pop-up to disappear after confirming
-        mozWaitForElementToNotExist(app.alerts.buttons["OK"], timeoutValue: TIMEOUT)
+        mozWaitForElementToNotExist(app.alerts.buttons["OK"], timeout: TIMEOUT)
 
         // Try to tap on the disabled Clear Private Data button
         app.tables.cells["ClearPrivateData"].tap()

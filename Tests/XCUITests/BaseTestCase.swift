@@ -153,7 +153,7 @@ class BaseTestCase: XCTestCase {
         while true {
             if let elementValue = element.value as? String, elementValue.contains(value) {
                 break
-            } else if Date().timeIntervalSince(startTime) > timeout {
+            } else if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
                 XCTFail("Timed out waiting for element \(element) to contain value \(value)")
                 break
             }
@@ -283,7 +283,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        mozWaitForElementToNotExist(progressIndicator, timeoutValue: 60.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 60.0)
     }
 
     func waitForTabsButton() {
