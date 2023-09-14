@@ -113,6 +113,19 @@ class BaseTestCase: XCTestCase {
         waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
+    // is up to 25x more performant than the above waitForExistence method
+    func mozWaitForElementToExist(element: XCUIElement, timeoutInSeconds: TimeInterval) {
+        let startTime = Date()
+
+        while !element.exists {
+            if Date().timeIntervalSince(startTime) > timeoutInSeconds {
+                XCTFail("Timed out waiting for element \(element) to exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
+
     func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }

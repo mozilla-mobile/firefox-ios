@@ -300,7 +300,7 @@ class DownloadsPanel: UIViewController,
            let cell = cell as? TwoLineImageOverlayCell {
             cell.titleLabel.text = downloadedFile.filename
             cell.descriptionLabel.text = downloadedFile.formattedSize
-            cell.leftImageView.image = iconForFileExtension(downloadedFile.fileExtension)
+            cell.leftImageView.manuallySetImage(iconForFileExtension(downloadedFile.fileExtension) ?? UIImage())
             cell.applyTheme(theme: themeManager.currentTheme)
         }
         return cell

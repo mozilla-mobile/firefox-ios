@@ -7,7 +7,7 @@ import Common
 import Shared
 import ComponentLibrary
 
-struct NoAnalysisCardViewModel {
+struct FakespotNoAnalysisCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.card
     let headlineLabelText: String = .Shopping.NoAnalysisCardHeadlineLabelTitle
     let headlineLabelA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.headlineTitle
@@ -18,7 +18,7 @@ struct NoAnalysisCardViewModel {
     var onTapStartAnalysis: (() -> Void)?
 }
 
-final class NoAnalysisCardView: UIView, ThemeApplicable {
+final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private struct UX {
         static let noAnalysisImageViewSize: CGFloat = 104
         static let headlineLabelFontSize: CGFloat = 15
@@ -28,7 +28,7 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
         static let contentStackViewPadding: CGFloat = 8
     }
 
-    private var viewModel: NoAnalysisCardViewModel?
+    private var viewModel: FakespotNoAnalysisCardViewModel?
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var mainView: UIView = .build()
@@ -110,7 +110,7 @@ final class NoAnalysisCardView: UIView, ThemeApplicable {
         viewModel?.onTapStartAnalysis?()
     }
 
-    func configure(_ viewModel: NoAnalysisCardViewModel) {
+    func configure(_ viewModel: FakespotNoAnalysisCardViewModel) {
         self.viewModel = viewModel
 
         headlineLabel.text = viewModel.headlineLabelText

@@ -196,7 +196,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     private func recordTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .shoppingBottomSheet)
+                                     method: .tap,
+                                     object: .shoppingRecentReviews)
     }
 }

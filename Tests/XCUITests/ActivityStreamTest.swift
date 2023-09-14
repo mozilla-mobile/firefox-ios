@@ -25,7 +25,8 @@ class ActivityStreamTest: BaseTestCase {
                 LaunchArguments.SkipWhatsNew,
                 LaunchArguments.SkipETPCoverSheet,
                 LaunchArguments.LoadDatabasePrefix + pagesVisited,
-                LaunchArguments.SkipContextualHints]
+                LaunchArguments.SkipContextualHints,
+                LaunchArguments.DisableAnimations]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)

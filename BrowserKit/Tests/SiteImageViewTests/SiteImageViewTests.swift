@@ -68,6 +68,16 @@ final class SiteImageViewTests: XCTestCase {
 
         XCTAssertFalse(canMakeRequestSecondTime)
     }
+
+    func testCanMakeRequest_secondTime_newURL_true() {
+        let url = "https://www.firefox.com"
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        _ = subject.canMakeRequest(with: url)
+        let newURL = "https://www.google.com"
+        let canMakeRequestSecondTime = subject.canMakeRequest(with: newURL)
+
+        XCTAssertTrue(canMakeRequestSecondTime)
+    }
 }
 
 class MockSiteImageHandler: SiteImageHandler {
