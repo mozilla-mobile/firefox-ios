@@ -769,8 +769,8 @@
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
-		8C6F94652A972EB300415FF6 /* AdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */; };
-		8C6F94662A972EB300415FF6 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* StarRatingView.swift */; };
+		8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */; };
+		8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */; };
 		8C8D8C7A2AA067AD00490D32 /* FakespotCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */; };
 		8C8D8C822AA2229300490D32 /* FakespotViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */; };
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
@@ -1217,7 +1217,7 @@
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
-		DF1E6AAB2A976FE7000D4854 /* NoAnalysisCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */; };
+		DF1E6AAB2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */; };
 		DF529E9F2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */; };
 		DF529EA12AB1B421003C5373 /* FakespotReliabilityScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */; };
 		DF5D47522A9381C700D6AE74 /* FakespotSettingsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */; };
@@ -5035,8 +5035,8 @@
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
-		8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustRatingView.swift; sourceTree = "<group>"; };
-		8C6F94642A972EB300415FF6 /* StarRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotAdjustRatingView.swift; sourceTree = "<group>"; };
+		8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotStarRatingView.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotCoordinatorTests.swift; sourceTree = "<group>"; };
 		8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotViewModelTests.swift; sourceTree = "<group>"; };
@@ -6411,7 +6411,7 @@
 		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
-		DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoAnalysisCardView.swift; sourceTree = "<group>"; };
+		DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotNoAnalysisCardView.swift; sourceTree = "<group>"; };
 		DF46B9A32755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Today.strings"; sourceTree = "<group>"; };
 		DF46B9A42755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
 		DF46B9A52755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
@@ -9928,15 +9928,15 @@
 			isa = PBXGroup;
 			children = (
 				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
-				8C6F94632A972EB300415FF6 /* AdjustRatingView.swift */,
-				8C6F94642A972EB300415FF6 /* StarRatingView.swift */,
+				8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */,
+				8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */,
 				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
 				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
 				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
 				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
 				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
 				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
-				DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */,
+				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
 				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
 				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
 			);
@@ -12489,7 +12489,7 @@
 				C8680C5728BFDF7F00BC902A /* WallpaperThumbnailUtility.swift in Sources */,
 				C23889DF2A4EFCE500429673 /* ShareExtensionCoordinator.swift in Sources */,
 				8AE80BBE2891C21A00BC12EA /* JumpBackInSyncedTab.swift in Sources */,
-				8C6F94652A972EB300415FF6 /* AdjustRatingView.swift in Sources */,
+				8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */,
 				8A3EF7FD2A2FCFAC00796E3A /* AppReviewPromptSetting.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				E1FE133329C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift in Sources */,
@@ -12754,7 +12754,7 @@
 				8A3EF80F2A2FD05D00796E3A /* ToggleInactiveTabs.swift in Sources */,
 				435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
 				96EB6C3E27D9266500A9D159 /* HistoryActionables.swift in Sources */,
-				8C6F94662A972EB300415FF6 /* StarRatingView.swift in Sources */,
+				8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */,
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
 				C81B78A4280752A20000C15F /* NimbusFeatureFlagLayer.swift in Sources */,
 				4345441D26D2E52600D5EEAA /* SearchTermGroupsUtility.swift in Sources */,
@@ -13038,7 +13038,7 @@
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
-				DF1E6AAB2A976FE7000D4854 /* NoAnalysisCardView.swift in Sources */,
+				DF1E6AAB2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift in Sources */,
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
