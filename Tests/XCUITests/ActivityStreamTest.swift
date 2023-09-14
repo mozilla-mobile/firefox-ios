@@ -41,7 +41,7 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testDefaultSites() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: 60)
+            mozWaitForElementToExist(TopSiteCellgroup, timeout: 60)
         }
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
         // There should be 5 top sites by default
@@ -71,7 +71,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
+        mozWaitForElementToExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         // A new site has been added to the top sites
         if iPad() {
@@ -93,7 +93,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
+        mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT)
         if iPad() {
             app.textFields.element(boundBy: 0).tap()
             app.typeText("mozilla.org\n")
@@ -107,23 +107,23 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         let topSitesCells = app.collectionViews.cells["TopSitesCell"]
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Pin")
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
@@ -138,13 +138,13 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
 
         // Remove facebook top sites, first cell
-        waitForExistence(allTopSites.element(boundBy: 0), timeout: TIMEOUT)
+        mozWaitForElementToExist(allTopSites.element(boundBy: 0), timeout: TIMEOUT)
         allTopSites.element(boundBy: 0).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
         let updatedAllTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
-        waitForExistence(updatedAllTopSites.element(boundBy: 0))
+        mozWaitForElementToExist(updatedAllTopSites.element(boundBy: 0))
         let topSiteCells = updatedAllTopSites.staticTexts
         let topSiteFirstCellAfter = updatedAllTopSites.element(boundBy: 0).label
         XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
@@ -153,11 +153,11 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: 60)
+            mozWaitForElementToExist(TopSiteCellgroup, timeout: 60)
         }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on Wikipedia top site
-        waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 3)
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 3)
         app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
         app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
@@ -165,10 +165,10 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
+        mozWaitForElementToExist(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
 
         navigator.nowAt(TabTray)
-        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"], timeout: TIMEOUT)
         app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"].tap()
 
         // The website is open
@@ -180,13 +180,13 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: 60)
+            mozWaitForElementToExist(TopSiteCellgroup, timeout: 60)
         }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
-        waitForExistence(app.collectionViews.cells.element(boundBy: 4), timeout: 3)
+        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 4), timeout: 3)
         app.collectionViews.cells.element(boundBy: 4).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
 
@@ -198,7 +198,7 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+        mozWaitForElementToExist(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
         var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
@@ -208,7 +208,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
         let numberOfTopSites = app.collectionViews.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
 
@@ -220,7 +220,7 @@ class ActivityStreamTest: BaseTestCase {
         // can't scroll only to that area. Needs investigation
         if iPad() {
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
+            mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT)
             app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height

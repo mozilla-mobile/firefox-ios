@@ -22,7 +22,7 @@ class OnboardingTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -34,7 +34,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -44,7 +44,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -54,7 +54,7 @@ class OnboardingTests: BaseTestCase {
         // Finish onboarding
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        waitForExistence(topSites)
+        mozWaitForElementToExist(topSites)
     }
 
     // Smoketest
@@ -62,7 +62,7 @@ class OnboardingTests: BaseTestCase {
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        waitForExistence(topSites)
+        mozWaitForElementToExist(topSites)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/67227

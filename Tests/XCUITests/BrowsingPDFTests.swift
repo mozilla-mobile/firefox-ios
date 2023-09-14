@@ -13,7 +13,7 @@ class BrowsingPDFTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
         // Swipe Up and Down
         app.swipeUp()
-        waitForExistence(app.staticTexts["1 of 1"])
+        mozWaitForElementToExist(app.staticTexts["1 of 1"])
         app.swipeDown()
         XCTAssertTrue(app.staticTexts["1 of 1"].exists)
     }
@@ -43,11 +43,11 @@ class BrowsingPDFTests: BaseTestCase {
         // Long press on a link on the pdf and check the options shown
         app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
-        waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
-        waitForExistence(app.buttons["Open"])
-        waitForExistence(app.buttons["Add to Reading List"])
-        waitForExistence(app.buttons["Copy Link"])
-        waitForExistence(app.buttons["Share…"])
+        mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
+        mozWaitForElementToExist(app.buttons["Open"])
+        mozWaitForElementToExist(app.buttons["Add to Reading List"])
+        mozWaitForElementToExist(app.buttons["Copy Link"])
+        mozWaitForElementToExist(app.buttons["Share…"])
     }
 
     func testLongPressOnPDFLinkToAddToReadingList() {
@@ -56,14 +56,14 @@ class BrowsingPDFTests: BaseTestCase {
         // Long press on a link on the pdf and check the options shown
         app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
-        waitForExistence(app.staticTexts[PDF_website["longUrlValue"]!])
+        mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
         app.buttons["Add to Reading List"].tap()
         navigator.nowAt(BrowserTab)
 
         // Go to reading list and check that the item is there
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
-        waitForExistence(savedToReadingList)
+        mozWaitForElementToExist(savedToReadingList)
         XCTAssertTrue(savedToReadingList.exists)
     }
 
@@ -72,8 +72,8 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
-        waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
 
         // Open pdf from pinned site
@@ -84,11 +84,11 @@ class BrowsingPDFTests: BaseTestCase {
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        waitForExistence(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
+        mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }
 
@@ -99,7 +99,7 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.tables["Bookmarks List"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }
 }

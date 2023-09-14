@@ -16,7 +16,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 10)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
@@ -31,7 +31,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
 
         XCUIDevice.shared.orientation = .landscapeRight

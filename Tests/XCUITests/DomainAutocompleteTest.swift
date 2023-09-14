@@ -65,7 +65,7 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(CloseTabMenu)
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(URLBarOpen)
-        waitForExistence(app.textFields["address"])
+        mozWaitForElementToExist(app.textFields["address"])
         app.textFields["address"].typeText("moz")
 
         // First delete the autocompleted part
@@ -84,14 +84,14 @@ class DomainAutocompleteTest: BaseTestCase {
     func test6DeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
-        waitForExistence(app.buttons["Clear text"])
+        mozWaitForElementToExist(app.buttons["Clear text"])
         app.buttons["Clear text"].tap()
 
         // Check that the address field is empty and that the home panels are shown
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     // Ensure that the scheme is included in the autocompletion.
@@ -204,7 +204,7 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.typeText("gith")
 
-        waitForExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
+        mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
         // There should be only one matching entry
         XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
@@ -223,7 +223,7 @@ class DomainAutocompleteTest: BaseTestCase {
             app.typeText("\u{0008}")
         }
 
-        waitForNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        mozWaitForElementToNotExist(app.tables["SiteTable"].staticTexts[url2["label"]!])
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
     }

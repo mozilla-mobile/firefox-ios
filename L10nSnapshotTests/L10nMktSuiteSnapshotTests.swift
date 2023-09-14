@@ -13,7 +13,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         super.setUp()
     }
     func test1SettingsETP() {
-        waitForExistence(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(TrackingProtectionSettings)
         
@@ -22,7 +22,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         app.alerts.buttons.firstMatch.tap()
         sleep(3)
         snapshot("TrackingProtectionStrictWarning-01")
-        waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
+        mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
     }
     
     func testAwesemoBarWithResults() {
@@ -40,7 +40,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
 
     // DarkMode for these tests
     func test3DefaultTopSites() {
-        waitForExistence(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         // Enable Dark Mode
         navigator.goto(SettingsScreen)
@@ -58,14 +58,14 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         profile.prefs.setInt(0, forKey: PrefsKeys.ChronTabsPrefKey)
     }*/
     func test4PrivateBrowsingTabsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         snapshot("PrivateBrowsingMode")
     }
     
     func test5DefaultSearchEngine() {
-        waitForExistence(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)

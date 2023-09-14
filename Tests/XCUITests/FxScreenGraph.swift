@@ -1014,7 +1014,7 @@ extension MMNavigator where T == FxUserState {
     // Opens a URL in a new tab.
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
 
         self.goto(TabTray)
         createNewTab()
@@ -1033,7 +1033,7 @@ extension MMNavigator where T == FxUserState {
     func createSeveralTabsFromTabTray(numberTabs: Int) {
         let app = XCUIApplication()
         for _ in 1...numberTabs {
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
             self.goto(TabTray)
             self.goto(HomePanelsScreen)
         }

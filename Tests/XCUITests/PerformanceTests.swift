@@ -79,7 +79,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfTabs_3_20tabTray() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
@@ -103,7 +103,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfTabs_4_1280tabTray() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
@@ -127,7 +127,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory1startUp() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
@@ -148,7 +148,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory1openMenu() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
@@ -187,7 +187,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory100startUp() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
@@ -208,7 +208,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory100openMenu() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
@@ -247,7 +247,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1startUp() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
@@ -268,7 +268,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1openMenu() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
@@ -304,7 +304,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks100startUp() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
@@ -325,7 +325,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks100openMenu() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
@@ -361,7 +361,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1000startUp() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
         app.terminate()
@@ -382,7 +382,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1000openMenu() {
-        // Warning: Avoid using waitForExistence as it is up to 25x less performant
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
 
