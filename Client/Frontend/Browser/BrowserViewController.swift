@@ -59,9 +59,6 @@ class BrowserViewController: UIViewController,
     var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
 
-    // To avoid presenting multiple times in same launch when forcing to show
-    var hasPresentedUpgrade = false
-
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
