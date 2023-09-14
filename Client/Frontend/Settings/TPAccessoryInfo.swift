@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 // MARK: Additional information shown when the info accessory button is tapped.
 class TPAccessoryInfo: ThemedTableViewController {
@@ -28,7 +29,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
-        header.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumBoldFont
+        header.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .semibold)
         header.textColor = themeManager.currentTheme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
