@@ -3574,7 +3574,7 @@ extension String {
         public static let SheetHeaderTitle = MZLocalizedString(
             key: "", // Shopping.Sheet.Title.v118
             tableName: "Shopping",
-            value: "Review quality check",
+            value: "Review checker",
             comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
         public static let ReliabilityCardTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v118
