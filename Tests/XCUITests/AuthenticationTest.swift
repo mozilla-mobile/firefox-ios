@@ -26,6 +26,6 @@ class AuthenticationTest: BaseTestCase {
         // Skip login due to HTTP Basic Authentication crash in #5757
         // Dismiss authentication prompt
         app.alerts.buttons["Cancel"].tap()
-        mozWaitForElementToNotExist(app.alerts.buttons["Cancel"], timeoutValue: 5)
+        mozWaitForElementToNotExist(app.alerts.buttons["Cancel"])
     }
 }
