@@ -108,14 +108,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         }
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if presentingViewController == nil,
-            viewModel.settingsCardViewModel.isReviewQualityCheckOn {
-            recordDismissTelemetry()
-        }
-    }
-
     func applyTheme() {
         let theme = themeManager.currentTheme
 
@@ -201,11 +193,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 }
