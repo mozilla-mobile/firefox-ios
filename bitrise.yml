@@ -1496,6 +1496,7 @@ workflows:
                 -derivedDataPath "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
+        is_always_run: true
         title: Verify App signature, Test, and Runner
         inputs:
         - content: |
@@ -1582,13 +1583,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  workflow: Firebase_Performance_Test
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v119
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  workflow: Firebase_Performance_Test
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
