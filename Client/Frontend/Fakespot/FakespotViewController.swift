@@ -52,7 +52,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         button.accessibilityLabel = .CloseButtonTitle
     }
 
-    private lazy var errorCardView: FakespotErrorCardView = .build()
+    private lazy var errorCardView: FakespotMessageCardView = .build()
     private lazy var confirmationCardView: FakespotMessageCardView = .build()
     private lazy var reliabilityCardView: FakespotReliabilityCardView = .build()
     private lazy var highlightsCardView: FakespotHighlightsCardView = .build()

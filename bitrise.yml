@@ -1515,7 +1515,7 @@ workflows:
             set -euxo pipefail
             echo "-- create .zip artifact --"
             cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
+            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-x86_64.xctestrun
             mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:

@@ -223,8 +223,8 @@ private extension WallpaperSettingsViewController {
             viewModel: viewModel,
             theme: themeManager.currentTheme,
             completion: { buttonPressed in
-            if buttonPressed { self.dismissView() }
-        })
+                if buttonPressed { self.dismissView() }
+            })
 
         toast.showToast(viewController: self,
                         delay: Toast.UX.toastDelayBefore,

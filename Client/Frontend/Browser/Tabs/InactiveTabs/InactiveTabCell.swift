@@ -258,13 +258,14 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .inactive:
             let closeAction = UIContextualAction(
                 style: .destructive,
-                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { [weak self] _, _, completion in
-                    if let tab = self?.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
-                        self?.removeInactiveTab(at: indexPath)
-                        self?.delegate?.closeInactiveTab(tab, index: indexPath.item)
-                        completion(true)
-                    }
+                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle
+            ) { [weak self] _, _, completion in
+                if let tab = self?.inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
+                    self?.removeInactiveTab(at: indexPath)
+                    self?.delegate?.closeInactiveTab(tab, index: indexPath.item)
+                    completion(true)
                 }
+            }
             configuration = UISwipeActionsConfiguration(actions: [closeAction])
         case .closeAllTabsButton, .none: return nil
         }

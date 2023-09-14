@@ -13,9 +13,9 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var mockLaunchType: LaunchType?
 
     override init(profile: Profile,
-                  messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared ) {
+                  messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+                  onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,

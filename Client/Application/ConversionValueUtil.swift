@@ -19,7 +19,7 @@ struct ConversionValueUtil {
         case medium
         case high
 
-        @available(iOS 16.0, *)
+        @available(iOS 16.1, *)
         var value: SKAdNetwork.CoarseConversionValue {
             switch self {
             case .low:

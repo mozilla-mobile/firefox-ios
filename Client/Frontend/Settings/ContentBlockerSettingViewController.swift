@@ -73,7 +73,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                                                      object: .trackingProtectionMenu,
                                                      extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"])
                     }
-            })
+                })
 
             setting.onAccessoryButtonTapped = {
                 let vc = TPAccessoryInfo()
