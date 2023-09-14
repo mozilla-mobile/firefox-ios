@@ -81,8 +81,10 @@ struct FakespotOptInCardViewModel {
         let websites = self.getFirstParagraphWebsites()
         let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                           size: UX.bodyFirstParagraphLabelFontSize)
+        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
+                                                                  size: UX.bodyFirstParagraphLabelFontSize)
         let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel, websites[0], websites[1], websites[2])
-        return plainText.attributedText(boldStrings: websites, font: font)
+        return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
     }
 
     func getFirstParagraphWebsites() -> [String] {

@@ -18,19 +18,6 @@ extension String {
         return self.attributedText(boldIn: range, font: font)
     }
 
-    /// Returns an attributed string in which the first occurrence of the given
-    /// substrings is bold.
-    /// - Parameters:
-    ///     - boldStrings: the substrings that should be bold
-    ///     - font: font for entire string, part of string will be converted to bold version of this font
-    func attributedText(boldStrings: [String], font: UIFont) -> NSAttributedString {
-        let wordRanges = boldStrings.compactMap { self.range(of: $0) }
-        guard !wordRanges.isEmpty else {
-            return NSAttributedString(string: self)
-        }
-        return self.attributedText(boldInRanges: wordRanges, font: font)
-    }
-
     /// Returns an attributed string in which the characters in the given range
     /// are bold.
     /// - Parameters:
@@ -53,29 +40,37 @@ extension String {
         return attributedString
     }
 
-    /// Returns an attributed string in which the characters in the given ranges
-    /// are bold.
+    /// Creates an attributed string with specified parts of the original string bolded.
+    ///
     /// - Parameters:
-    ///     - boldInRanges: an array of character ranges in the string that should be bold
-    ///     - font: font for entire string, parts of the string will be converted to the bold version of this font
-    func attributedText(boldInRanges ranges: [Range<String.Index>], font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self,
-                                                         attributes: [NSAttributedString.Key.font: font])
-
-        var boldFont = UIFont.boldSystemFont(ofSize: font.pointSize)
-
-        // if we have a text style, we are using dynamic text so the attributed text should do too
-        if let textStyle = font.fontDescriptor.fontAttributes[.textStyle] as? UIFont.TextStyle {
-            boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: textStyle,
-                                                                  size: font.pointSize)
+    ///   - boldPartsOfString: An array of strings to be bolded within the original string.
+    ///   - initialFont: The initial font to be used for the non-bold parts of the attributed string.
+    ///   - boldFont: The font to be used for the bolded parts of the attributed string.
+    /// - Returns: An `NSAttributedString` with the specified parts bolded.
+    ///
+    /// - Note: This method takes an array of strings (`boldPartsOfString`) and makes those parts bold within the original string.
+    /// It returns an attributed string with the specified parts bolded, using the `boldFont` for those parts and the `initialFont` for the non-bold parts.
+    ///
+    /// - Example:
+    ///   ```
+    ///   let originalString = "This is an example."
+    ///   let boldParts = ["example"]
+    ///   let initialFont = UIFont.systemFont(ofSize: 16)
+    ///   let boldFont = UIFont.boldSystemFont(ofSize: 16)
+    ///   let attributedString = originalString.attributedText(boldPartsOfString: boldParts,
+    ///                                                        initialFont: initialFont,
+    ///                                                        boldFont: boldFont)
+    ///   ```
+    func attributedText(boldPartsOfString: [String],
+                        initialFont: UIFont,
+                        boldFont: UIFont) -> NSAttributedString {
+        let nsString = self as NSString
+        let boldString = NSMutableAttributedString(string: self,
+                                                   attributes: [NSAttributedString.Key.font: initialFont])
+        for i in 0 ..< boldPartsOfString.count {
+            boldString.addAttributes([NSAttributedString.Key.font: boldFont],
+                                     range: nsString.range(of: boldPartsOfString[i] as String))
         }
-
-        let boldFontAttribute = [NSAttributedString.Key.font: boldFont]
-
-        for range in ranges {
-            attributedString.addAttributes(boldFontAttribute, range: NSRange(range, in: self))
-        }
-
-        return attributedString
+        return boldString
     }
 }
