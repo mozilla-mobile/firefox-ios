@@ -206,11 +206,7 @@ private extension TabScrollingController {
     }
 
     func configureRefreshControl(isEnabled: Bool) {
-        let pullToRefreshEnabled = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
-
-        scrollView?.refreshControl = pullToRefreshEnabled ?
-        (isEnabled ? UIRefreshControl() : nil) : nil
-
+        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
 
