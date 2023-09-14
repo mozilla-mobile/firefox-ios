@@ -61,10 +61,10 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingPrivacyPolicyButton)
-        prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
     }
 
     func onTapMainButton() {
+        prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)
