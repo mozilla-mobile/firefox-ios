@@ -36,6 +36,7 @@
         "DragAndDropTests",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
+        "FakespotTests\/testFakespotAvailable()",
         "FindInPageTests",
         "FxScreenGraphTests",
         "HistoryTests",

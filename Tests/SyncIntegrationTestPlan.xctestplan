@@ -55,6 +55,7 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
+        "FakespotTests\/testFakespotAvailable()",
         "FindInPageTests",
         "FirstRunTourTests",
         "FxScreenGraphTests",
