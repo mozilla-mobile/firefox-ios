@@ -279,7 +279,7 @@ class BookmarkingTests: BaseTestCase {
             app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
             app.buttons[StandardImageIdentifiers.Large.delete].tap()
         }
-        mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
+        mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
 

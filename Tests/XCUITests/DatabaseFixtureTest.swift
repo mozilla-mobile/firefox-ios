@@ -6,7 +6,6 @@ import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
     let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"]
-    let TIMEOUT: TimeInterval = 15
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -36,14 +35,14 @@ class DatabaseFixtureTest: BaseTestCase {
     func testBookmarksDatabaseFixture() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+        mozWaitForElementToExist(element: tabsButton)
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(element: bookmarksList, timeoutInSeconds: TIMEOUT)
+        mozWaitForElementToExist(element: bookmarksList)
 
         do {
             // Take a custom snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
@@ -62,12 +61,12 @@ class DatabaseFixtureTest: BaseTestCase {
 
    func testHistoryDatabaseFixture() throws {
        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-       mozWaitForElementToExist(element: tabsButton, timeoutInSeconds: TIMEOUT)
+       mozWaitForElementToExist(element: tabsButton)
 
        navigator.goto(LibraryPanel_History)
 
        let historyList = app.tables["History List"].firstMatch
-       mozWaitForElementToExist(element: historyList, timeoutInSeconds: TIMEOUT)
+       mozWaitForElementToExist(element: historyList)
 
        do {
            let snapshot = try app.tables["History List"].snapshot()
