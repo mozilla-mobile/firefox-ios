@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 private typealias A11yId = AccessibilityIdentifiers.Shopping.HighlightsCard
 
@@ -25,11 +26,11 @@ enum FakespotHighlightType: String {
 
     var iconName: String {
         switch self {
-        case .price: return ImageIdentifiers.price
-        case .quality: return ImageIdentifiers.quality
-        case .competitiveness: return ImageIdentifiers.competitiveness
-        case .shipping: return ImageIdentifiers.shipping
-        case .packaging: return ImageIdentifiers.packaging
+        case .price: return StandardImageIdentifiers.Large.price
+        case .quality: return StandardImageIdentifiers.Large.quality
+        case .competitiveness: return StandardImageIdentifiers.Large.competitiveness
+        case .shipping: return StandardImageIdentifiers.Large.shipping
+        case .packaging: return StandardImageIdentifiers.Large.packaging
         }
     }
 
