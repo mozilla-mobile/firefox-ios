@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import ComponentLibrary
 import Shared
 
 struct LabelButtonHeaderViewModel {
