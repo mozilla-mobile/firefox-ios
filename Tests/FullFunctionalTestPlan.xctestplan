@@ -31,7 +31,6 @@
       "skippedTests" : [
         "ActivityStreamTest\/testActivityStreamPages()",
         "ActivityStreamTest\/testDefaultSites()",
-        "ActivityStreamTest\/testTopSites2Add()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
