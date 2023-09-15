@@ -265,6 +265,10 @@ class TelemetryWrapperTests: XCTestCase {
     func test_shoppingSettingsComponentOptedOut_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingSettingsCardTurnOffButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.shoppingSettingsComponentOptedOut)
+
+    func test_surfaceSettingsExpandClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSettingsChevronButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceSettingsExpandClicked)
     }
 
     // MARK: - Onboarding

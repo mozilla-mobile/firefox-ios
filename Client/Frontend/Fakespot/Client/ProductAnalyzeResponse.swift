@@ -4,16 +4,21 @@
 
 import Foundation
 
-struct ProductAnalyzeResponse: Decodable {
-    /// Enumeration representing different analysis statuses.
-    enum AnalysisStatus: String, Decodable {
-        case pending = "pending"
-        case inProgress = "in_progress"
-        case completed = "completed"
-        case notAnalyzable = "not_analyzable"
-        case notFound = "not_found"
-        case unprocessable = "unprocessable"
-    }
+/// Enumeration representing different analysis statuses.
+enum AnalysisStatus: String, Decodable {
+    case pending = "pending"
+    case inProgress = "in_progress"
+    case completed = "completed"
+    case notAnalyzable = "not_analyzable"
+    case notFound = "not_found"
+    case unprocessable = "unprocessable"
+}
 
+struct ProductAnalyzeResponse: Decodable {
     let status: AnalysisStatus
+}
+
+struct ProductAnalysisStatusResponse: Decodable {
+    let status: AnalysisStatus
+    let progress: Double
 }
