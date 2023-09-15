@@ -32,9 +32,10 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/issues/3425
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3465
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-03-14"
+    expires: never
 
   keyboard_type:
     type: string
@@ -98,12 +99,13 @@ mozilla_products:
       - https://github.com/mozilla-mobile/focus-ios/issues/2227
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2284
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - technical
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-09-01"
+    expires: never
 
 settings_screen:
   set_as_default_browser_pressed:
@@ -115,11 +117,12 @@ settings_screen:
       - https://github.com/mozilla-mobile/focus-ios/issues/3328
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3344
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2023-07-20"
+    expires: never
 
   autocomplete_domain_added:
     type: counter
@@ -360,11 +363,12 @@ browser_menu:
       - https://github.com/mozilla-mobile/focus-ios/issues/3004
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3015
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-02"
+    expires: never
     extra_keys:
       item:
         description: |
@@ -382,11 +386,12 @@ show_search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
   disabled_from_panel:
     type: event
     description: The "no"" option from the suggestion panel has been tapped.
@@ -394,11 +399,12 @@ show_search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
   changed_from_settings:
     type: event
     description: The enabled state has been changed from the settings screen.
@@ -406,11 +412,12 @@ show_search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       is_enabled:
         description: The new setting value, true for ON, false for OFF
@@ -424,11 +431,12 @@ search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -440,11 +448,12 @@ search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -456,11 +465,12 @@ search_suggestions:
       - https://github.com/mozilla-mobile/focus-ios/issues/3003
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
     data_sensitivity:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
 
 url_interaction:
   drag_started:
