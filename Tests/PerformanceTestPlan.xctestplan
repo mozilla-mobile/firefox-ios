@@ -36,7 +36,6 @@
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
         "FakespotTests",
-        "FakespotTests\/testFakespotAvailable()",
         "FindInPageTests",
         "FxScreenGraphTests",
         "HistoryTests",
