@@ -13,10 +13,12 @@ struct FakespotOptInCardViewModel {
         static let contentStackViewPadding: CGFloat = 16
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
     }
+    
     private let tabManager: TabManager
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
     var productSitename: String?
+
     // MARK: Labels
     let headerTitleLabel: String = .Shopping.OptInCardHeaderTitle
     let headerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
@@ -24,6 +26,7 @@ struct FakespotOptInCardViewModel {
     let bodyFirstParagraphA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
     let disclaimerTextLabel: String = .Shopping.OptInCardDisclaimerText
     let disclaimerTextLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
+
     // MARK: Buttons
     let learnMoreButton: String = .Shopping.OptInCardLearnMoreButtonTitle
     let learnMoreButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButtonTitle
