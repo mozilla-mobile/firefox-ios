@@ -6,7 +6,7 @@ import UIKit
 
 class FakespotStarRatingView: UIView {
     enum UX {
-        static let starSize: CGFloat = 24
+        static let starSize: CGFloat = 20
         static let starCount = 5
     }
 
@@ -57,14 +57,13 @@ class FakespotStarRatingView: UIView {
         }
     }
 
-    // TODO: FXIOS-7265 Update star icons for StarRatingView
     private func starImageName(for index: Int) -> String {
         if Double(index) <= rating {
-            return "bookmarkFillLarge"
+            return ImageIdentifiers.starFill
         } else if Double(index - 1) < rating {
-            return "bookmarkHalfLarge"
+            return ImageIdentifiers.starHalf
         } else {
-            return "bookmarkLarge"
+            return ImageIdentifiers.starEmpty
         }
     }
 }
