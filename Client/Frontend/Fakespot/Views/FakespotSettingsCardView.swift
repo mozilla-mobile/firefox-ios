@@ -176,7 +176,13 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
             expandButtonA11yLabelExpanded: .Shopping.SettingsCardExpandedAccessibilityLabel,
-            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel)
+            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel) { state in
+                if state == .expanded {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .view,
+                                                 object: .shoppingSettingsChevronButton)
+                }
+        }
         collapsibleContainer.configure(collapsibleCardViewModel)
         footerView.configure(viewModel: viewModel.footerModel)
     }
