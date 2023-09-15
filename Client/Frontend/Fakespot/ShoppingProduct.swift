@@ -131,13 +131,25 @@ class ShoppingProduct: FeatureFlaggable {
     /// - Throws: An error of type `Error` if there's an issue triggering the analysis.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func triggerProductAnalyze() async throws -> ProductAnalyzeResponse.AnalysisStatus? {
+    func triggerProductAnalyze() async throws -> AnalysisStatus? {
         // Ensure that a valid product is available
-        guard let product = product else {
-            return nil
-        }
+        guard let product = product else { return nil }
 
         // Trigger product analysis using the product ID and website
         return try await client.triggerProductAnalyze(productId: product.id, website: product.host).status
+    }
+
+    /// Retrieves the analysis status for the current product.
+    ///
+    /// - Returns: A `ProductAnalysisStatusResponse` containing the analysis status, or `nil` if there's no product available.
+    /// - Throws: An error of type `Error` if there's an issue retrieving the analysis status.
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
+    ///
+    func getProductAnalysisStatus() async throws -> ProductAnalysisStatusResponse? {
+        // Ensure that a valid product is available
+        guard let product = product else { return nil }
+
+        // Retrieve the product analysis status using the product ID and website
+        return try await client.getProductAnalysisStatus(productId: product.id, website: product.host)
     }
 }
