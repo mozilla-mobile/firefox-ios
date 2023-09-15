@@ -94,6 +94,27 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.website, "amazon.com")
     }
 
+    func testgetProductAnalysisStatusResponse_WithInvalidURL_ReturnsNil() async throws {
+        let url = URL(string: "https://www.example.com")!
+
+        let sut = ShoppingProduct(url: url, client: client)
+        let analyzeStatus = try await sut.getProductAnalysisStatus()
+
+        XCTAssertNil(analyzeStatus)
+    }
+
+    func testgetProductAnalysisStatusResponse_WithValidURL_CallsClientAPI() async throws {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+
+        let sut = ShoppingProduct(url: url, client: client)
+        let productData = try await sut.getProductAnalysisStatus()
+
+        XCTAssertNotNil(productData)
+        XCTAssertTrue(client.getProductAnalysisStatusCallCalled)
+        XCTAssertEqual(client.productId, "B087T8Q2C4")
+        XCTAssertEqual(client.website, "amazon.com")
+    }
+
     func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async throws {
         let url = URL(string: "https://www.example.com")!
 
@@ -149,6 +170,8 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     var fetchProductAnalysisDataCallCount = 0
     var fetchProductAdDataCallCount = 0
     var triggerProductAnalyzeCallCount = 0
+    var getProductAnalysisStatusCount = 0
+
     let error: Error
 
     init(error: Error) {
@@ -169,6 +192,11 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         triggerProductAnalyzeCallCount += 1
         throw error
     }
+
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> Client.ProductAnalysisStatusResponse {
+        getProductAnalysisStatusCount += 1
+        throw error
+    }
 }
 
 final class TestFakespotClient: FakespotClientType {
@@ -178,6 +206,7 @@ final class TestFakespotClient: FakespotClientType {
     var fetchProductAdsDataCalled = false
     var fetchProductAnalysisDataCallCount = 0
     var triggerProductAnalyzeCallCalled = false
+    var getProductAnalysisStatusCallCalled = false
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         self.fetchProductAnalysisDataCallCount += 1
@@ -199,6 +228,13 @@ final class TestFakespotClient: FakespotClientType {
         self.productId = productId
         self.website = website
         return .inProgress
+    }
+
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> Client.ProductAnalysisStatusResponse {
+        self.getProductAnalysisStatusCallCalled = true
+        self.productId = productId
+        self.website = website
+        return .init(status: .inProgress, progress: 99.9)
     }
 }
 

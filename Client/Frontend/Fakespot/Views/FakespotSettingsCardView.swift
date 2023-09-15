@@ -9,12 +9,12 @@ import ComponentLibrary
 
 class FakespotSettingsCardViewModel {
     let prefs: Prefs
-    let cardA11yId: String
-    let showProductsLabelTitle: String
-    let showProductsLabelTitleA11yId: String
-    let turnOffButtonTitle: String
-    let turnOffButtonTitleA11yId: String
-    let recommendedProductsSwitchA11yId: String
+    let cardA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.card
+    let showProductsLabelTitle: String = .Shopping.SettingsCardRecommendedProductsLabel
+    let showProductsLabelTitleA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel
+    let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
+    let turnOffButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton
+    let recommendedProductsSwitchA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
@@ -26,20 +26,8 @@ class FakespotSettingsCardViewModel {
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
     }
 
-    init(profile: Profile = AppContainer.shared.resolve(),
-         cardA11yId: String,
-         showProductsLabelTitle: String,
-         showProductsLabelTitleA11yId: String,
-         turnOffButtonTitle: String,
-         turnOffButtonTitleA11yId: String,
-         recommendedProductsSwitchA11yId: String) {
+    init(profile: Profile = AppContainer.shared.resolve()) {
         prefs = profile.prefs
-        self.cardA11yId = cardA11yId
-        self.showProductsLabelTitle = showProductsLabelTitle
-        self.showProductsLabelTitleA11yId = showProductsLabelTitleA11yId
-        self.turnOffButtonTitle = turnOffButtonTitle
-        self.turnOffButtonTitleA11yId = turnOffButtonTitleA11yId
-        self.recommendedProductsSwitchA11yId = recommendedProductsSwitchA11yId
     }
 }
 
@@ -154,7 +142,13 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
             expandButtonA11yLabelExpanded: .Shopping.SettingsCardExpandedAccessibilityLabel,
-            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel)
+            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel) { state in
+                if state == .expanded {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .view,
+                                                 object: .shoppingSettingsChevronButton)
+                }
+        }
         collapsibleContainer.configure(viewModel)
     }
 
@@ -178,6 +172,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         recommendedProductsSwitch.tintColor = colors.formKnob
 
         turnOffButton.backgroundColor = colors.actionSecondary
-        turnOffButton.setTitleColor(colors.textPrimary, for: .normal)
+        turnOffButton.setTitleColor(colors.textOnLight, for: .normal)
     }
 }

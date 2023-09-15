@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from pathlib import Path
 import subprocess
@@ -20,15 +21,30 @@ KLAATU_LOCAL_SERVER_URL = "http://localhost:1378"
 here = Path("./")
 
 
-def load_branches():
+def pytest_addoption(parser):
+    parser.addoption(
+        "--experiment", action="store", help="The experiments experimenter URL"
+    )
+    parser.addoption(
+        "--stage", action="store_true", default=None, help="Use the stage server"
+    )
+
+@pytest.fixture(name="load_branches")
+def fixture_load_branches(experiment_url):
     branches = []
-    data = requests.get(f"{KLAATU_SERVER_URL}/experiment").json()
-    for item in reversed(data):
-        if isinstance(item, dict):
+
+    if experiment_url:
+        data = experiment_url
+    else:
+        try:
+            data = requests.get(f"{KLAATU_SERVER_URL}/experiment").json()
+        except ConnectionRefusedError:
+            logging.warn("No URL or experiment slug provided, exiting.")
             exit()
         else:
-            data = item
-            break
+            for item in reversed(data):
+                data = item
+                break
     experiment = requests.get(data).json()
     for item in experiment["branches"]:
         branches.append(item["slug"])
@@ -82,7 +98,6 @@ def fixture_start_app():
 @pytest.fixture(name="experiment_data")
 def fixture_experiment_data(experiment_url):
     data = requests.get(experiment_url).json()
-    del data["branches"][0]["features"][0]["value"]["message-under-experiment"]
     for item in data["branches"][0]["features"][0]["value"]["messages"].values():
         for count, trigger in enumerate(item["trigger"]):
             if "USER_EN_SPEAKER" not in trigger:
@@ -91,17 +106,31 @@ def fixture_experiment_data(experiment_url):
 
 
 @pytest.fixture(name="experiment_url", scope="module")
-def fixture_experiment_url():
-    data = requests.get(f"{KLAATU_LOCAL_SERVER_URL}/experiment").json()
-    url = None
-    for item in data:
-        if isinstance(item, dict):
-            continue
+def fixture_experiment_url(request, variables):
+    if slug := request.config.getoption("--experiment"):
+        # Build URL from slug
+        if request.config.getoption("--stage"):
+            url = f"{variables['urls']['stage_server']}/api/v6/experiments/{slug}"
         else:
-            url = item
+            url = f"{variables['urls']['prod_server']}/api/v6/experiments/{slug}"
+    else:
+        try:
+            data = requests.get(f"{KLAATU_SERVER_URL}/experiment").json()
+        except requests.exceptions.ConnectionError:
+            logging.error("No URL or experiment slug provided, exiting.")
+            exit()
+        else:
+            for item in data:
+                if isinstance(item, dict):
+                    continue
+                else:
+                    url = item
     yield url
     return_data = {"url": url}
-    requests.put(f"{KLAATU_SERVER_URL}/experiment", json=return_data)
+    try:
+        requests.put(f"{KLAATU_SERVER_URL}/experiment", json=return_data)
+    except requests.exceptions.ConnectionError:
+        pass
 
 
 @pytest.fixture(name="json_data")
@@ -128,13 +157,17 @@ def fixture_send_test_results():
 
     with open(f"{here.resolve()}/results/index.html", "rb") as f:
         files = {"file": f}
-        requests.post(f"{KLAATU_SERVER_URL}/test_results", files=files)
+        try:
+            requests.post(f"{KLAATU_SERVER_URL}/test_results", files=files)    
+        except requests.exceptions.ConnectionError:
+            pass
 
 
-@pytest.fixture(name="setup_experiment", params=load_branches(), autouse=True)
+@pytest.fixture(name="setup_experiment")
 def setup_experiment(experiment_slug, json_data, request):
-    def _setup_experiment():
-        command = f"nimbus-cli --app firefox_ios --channel developer enroll {experiment_slug} --branch {request.param} --file {json_data} --reset-app"
+    def _setup_experiment(branch):
+        logging.info(f"Testing experiment {experiment_slug}, BRANCH: {branch[0]}")
+        command = f"nimbus-cli --app firefox_ios --channel developer enroll {experiment_slug} --branch {branch[0]} --file {json_data} --reset-app"
         out = subprocess.check_output(
             command,
             cwd=os.path.join(here, os.pardir),

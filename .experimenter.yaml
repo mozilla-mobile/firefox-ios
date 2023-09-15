@@ -36,9 +36,6 @@ general-app-features:
   hasExposure: true
   exposureDescription: ""
   variables:
-    pull-to-refresh:
-      type: json
-      description: This property defines whether or not the feature is enabled
     report-site-issue:
       type: json
       description: This property defines whether or not the feature is enabled

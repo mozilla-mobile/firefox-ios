@@ -39,4 +39,38 @@ extension String {
         attributedString.addAttributes(boldFontAttribute, range: NSRange(range, in: self))
         return attributedString
     }
+
+    /// Creates an attributed string with specified parts of the original string bolded.
+    ///
+    /// - Parameters:
+    ///   - boldPartsOfString: An array of strings to be bolded within the original string.
+    ///   - initialFont: The initial font to be used for the non-bold parts of the attributed string.
+    ///   - boldFont: The font to be used for the bolded parts of the attributed string.
+    /// - Returns: An `NSAttributedString` with the specified parts bolded.
+    ///
+    /// - Note: This method takes an array of strings (`boldPartsOfString`) and makes those parts bold within the original string.
+    /// It returns an attributed string with the specified parts bolded, using the `boldFont` for those parts and the `initialFont` for the non-bold parts.
+    ///
+    /// - Example:
+    ///   ```
+    ///   let originalString = "This is an example."
+    ///   let boldParts = ["example"]
+    ///   let initialFont = UIFont.systemFont(ofSize: 16)
+    ///   let boldFont = UIFont.boldSystemFont(ofSize: 16)
+    ///   let attributedString = originalString.attributedText(boldPartsOfString: boldParts,
+    ///                                                        initialFont: initialFont,
+    ///                                                        boldFont: boldFont)
+    ///   ```
+    func attributedText(boldPartsOfString: [NSString],
+                        initialFont: UIFont,
+                        boldFont: UIFont) -> NSAttributedString {
+        let nsString = self as NSString
+        let boldString = NSMutableAttributedString(string: self,
+                                                   attributes: [NSAttributedString.Key.font: initialFont])
+        for i in 0 ..< boldPartsOfString.count {
+            boldString.addAttributes([NSAttributedString.Key.font: boldFont],
+                                     range: nsString.range(of: boldPartsOfString[i] as String))
+        }
+        return boldString
+    }
 }
