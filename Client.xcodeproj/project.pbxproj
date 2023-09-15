@@ -1218,7 +1218,6 @@
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
 		DF1E6AAB2A976FE7000D4854 /* NoAnalysisCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6AAA2A976FE7000D4854 /* NoAnalysisCardView.swift */; };
-		DF529EA32AB31DCE003C5373 /* ShoppingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF529EA22AB31DCE003C5373 /* ShoppingButton.swift */; };
 		DF5D47522A9381C700D6AE74 /* FakespotSettingsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */; };
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
 		DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */; };
@@ -6418,7 +6417,6 @@
 		DF46B9A72755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
-		DF529EA22AB31DCE003C5373 /* ShoppingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingButton.swift; sourceTree = "<group>"; };
 		DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotSettingsCardView.swift; sourceTree = "<group>"; };
 		DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSyncManagerTests.swift; sourceTree = "<group>"; };
 		DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotSettingsCardViewModelTests.swift; sourceTree = "<group>"; };
@@ -8492,7 +8490,6 @@
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				8AD40FCE27BADC6A00672675 /* URLTextField.swift */,
 				2137786429832C8900D01309 /* OverlayModeManager.swift */,
-				DF529EA22AB31DCE003C5373 /* ShoppingButton.swift */,
 			);
 			path = "Toolbar+URLBar";
 			sourceTree = "<group>";
@@ -12512,7 +12509,6 @@
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
-				DF529EA32AB31DCE003C5373 /* ShoppingButton.swift in Sources */,
 				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				8A93F86229D36F0F004159D9 /* NavigationController.swift in Sources */,
