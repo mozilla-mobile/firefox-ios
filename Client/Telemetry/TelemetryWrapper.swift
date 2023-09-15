@@ -398,7 +398,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
-        case shoppingButton = "shopping--button"
+        case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
         case shoppingRecentReviews = "shopping-recent-reviews"
         case keyCommand = "key-command"
