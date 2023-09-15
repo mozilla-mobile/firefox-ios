@@ -21,7 +21,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case libraryCoordinatorRefactor
-    case onboardingFreshInstall
     case pocket
     case recentlySaved
     case reduxIntegration
@@ -85,7 +84,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .etpCoordinatorRefactor,
                 .fakespotFeature,
                 .libraryCoordinatorRefactor,
-                .onboardingFreshInstall,
                 .reduxIntegration,
                 .reportSiteIssue,
                 .searchHighlights,
