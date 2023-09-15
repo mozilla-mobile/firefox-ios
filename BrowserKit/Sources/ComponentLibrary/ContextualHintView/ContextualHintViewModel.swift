@@ -13,7 +13,7 @@ public struct ContextualHintViewModel {
 
     public var closeButtonAction: ((UIButton) -> Void)?
     public var actionButtonAction: ((UIButton) -> Void)?
-    
+
     public init(isActionType: Bool,
                 actionButtonTitle: String,
                 description: String,
