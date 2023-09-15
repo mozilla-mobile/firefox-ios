@@ -46,7 +46,7 @@ class SyncNowSetting: WithAccountSetting {
                 string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: LegacyDynamicFontHelper.defaultHelper.DefaultMediumFont
+                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .regular)
                 ]
             )
         }
