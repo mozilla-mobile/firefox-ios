@@ -10,4 +10,34 @@ protocol TabTrayController: UIViewController, UIAdaptivePresentationControllerDe
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
-class TabTrayViewController: LegacyTabTrayViewController {}
+class TabTrayViewController: LegacyTabTrayViewController {
+    private lazy var segmentedControlIpad: UISegmentedControl = {
+        let items = LegacyTabTrayViewModel.Segment.allCases.map { $0.label }
+        return createSegmentedControl(items: items,
+                                      action: #selector(segmentIpadChanged),
+                                      a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
+    }()
+
+    private lazy var segmentedControlIphone: UISegmentedControl = {
+        let items = [
+            LegacyTabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
+            LegacyTabTrayViewModel.Segment.privateTabs.image!,
+            LegacyTabTrayViewModel.Segment.syncedTabs.image!]
+        return createSegmentedControl(items: items,
+                                      action: #selector(segmentIphoneChanged),
+                                      a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
+    }()
+
+    @objc
+    private func segmentIpadChanged() {
+        segmentPanelChange()
+    }
+
+    @objc
+    private func segmentIphoneChanged() {
+        segmentPanelChange()
+    }
+
+    private func segmentPanelChange() {
+    }
+}
