@@ -15,6 +15,7 @@ class FakespotSettingsCardViewModel {
     let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
     let turnOffButtonTitleA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton
     let recommendedProductsSwitchA11yId: String = AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
+    var onTapTurnOffButton: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
@@ -28,6 +29,12 @@ class FakespotSettingsCardViewModel {
 
     init(profile: Profile = AppContainer.shared.resolve()) {
         prefs = profile.prefs
+    }
+
+    func recordTelemetryForShoppingOptedOut() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingSettingsCardTurnOffButton)
     }
 }
 
@@ -155,13 +162,15 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     @objc
-    func didToggleSwitch(_ sender: UISwitch) {
+    private func didToggleSwitch(_ sender: UISwitch) {
         viewModel?.areAdsEnabled = sender.isOn
     }
 
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
+        viewModel?.onTapTurnOffButton?()
+        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System
