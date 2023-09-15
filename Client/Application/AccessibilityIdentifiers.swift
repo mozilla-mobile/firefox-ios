@@ -186,6 +186,20 @@ public struct AccessibilityIdentifiers {
             static let bodyTitle = "Shopping.NoAnalysisCard.BodyTitle"
             static let analyzerButtonTitle = "Shopping.NoAnalysisCard.AnalyzerButtonTitle"
         }
+
+        struct ReviewQualityCard {
+            static let card = "Shopping.ReviewQualityCard.Card"
+            static let title = "Shopping.ReviewQualityCard.Title"
+            static let expandButton = "Shopping.ReviewQualityCard.ExpandButton"
+            static let headlineLabel = "Shopping.ReviewQualityCard.HeadlineLabel"
+            static let subHeadlineLabel = "Shopping.ReviewQualityCard.SubHeadlineLabel"
+            static let reliableReviewsLabel = "Shopping.ReviewQualityCard.ReliableReviewsLabel"
+            static let mixedReviewsLabel = "Shopping.ReviewQualityCard.MixedReviewsLabel"
+            static let unreliableReviewsLabel = "Shopping.ReviewQualityCard.UnreliableReviewsLabel"
+            static let adjustedRatingLabel = "Shopping.ReviewQualityCard.AdjustedRatingLabel"
+            static let highlightsLabel = "Shopping.ReviewQualityCard.HighlightsLabel"
+            static let learnMoreButtonTitle = "Shopping.ReviewQualityCard.LearnMoreButtonTitle"
+        }
     }
 
     struct TabTray {

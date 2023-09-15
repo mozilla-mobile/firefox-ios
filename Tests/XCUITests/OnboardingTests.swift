@@ -11,7 +11,8 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func setUp() {
-        launchArguments = [LaunchArguments.ClearProfile]
+        launchArguments = [LaunchArguments.ClearProfile,
+                           LaunchArguments.DisableAnimations]
         currentScreen = 0
         super.setUp()
     }

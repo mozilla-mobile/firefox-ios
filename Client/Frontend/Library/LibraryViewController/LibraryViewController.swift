@@ -316,7 +316,8 @@ class LibraryViewController: UIViewController, Themeable {
 
     func getCurrentPanel() -> LibraryPanel? {
         let panelNavigationController = childPanelControllers[viewModel.selectedPanel?.rawValue ?? 0]
-        if let panelVC = panelNavigationController.topViewController as? LibraryPanel {
+        let panelVC = panelNavigationController.viewControllers.last { $0 is LibraryPanel }
+        if let panelVC = panelVC as? LibraryPanel {
             return panelVC
         }
         return nil

@@ -15,15 +15,9 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler
-    var requestStartedWith: String?
+    var currentURLString: String?
     private var completionHandler: (() -> Void)?
 
-    override public var image: UIImage? {
-        didSet {
-            uniqueID = UUID()
-            requestStartedWith = nil
-        }
-    }
     // MARK: - Init
 
     override public init(frame: CGRect) {
@@ -48,18 +42,36 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     // MARK: - Public
 
+    /// Initiates the retrival of the favion image and sets it to the view
+    /// - Parameter viewModel: the configuration of the favicon
     public func setFavicon(_ viewModel: FaviconImageViewModel) {
         setupFaviconLayout(viewModel: viewModel)
         setURL(viewModel)
     }
 
+    /// Manually set the image for the favicon view
+    /// - Parameter image: the image to be set on the view
+    public func manuallySetImage(_ image: UIImage) {
+        uniqueID = UUID()
+        currentURLString = nil
+        self.image = image
+    }
+
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
-        guard canMakeRequest(with: viewModel.siteURLString ?? viewModel.faviconURL?.absoluteString) else { return }
+        guard let siteURLString = viewModel.siteURLString ?? viewModel.faviconURL?.absoluteString,
+              canMakeRequest(with: siteURLString)
+        else { return }
+
+        // If a new request is being made on an existing image it is likely a cell or view being reused.
+        // Continuing to display the previous image in this case would never be desired so reset to nil
+        image = nil
+        backgroundColor = .clear
 
         let id = UUID()
         uniqueID = id
+        currentURLString = siteURLString
 
         let model = SiteImageModel(id: id,
                                    expectedImageType: .favicon,

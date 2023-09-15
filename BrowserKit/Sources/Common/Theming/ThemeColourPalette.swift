@@ -27,6 +27,7 @@ public protocol ThemeColourPalette {
     var layerInfo: UIColor { get }
     var layerConfirmation: UIColor { get }
     var layerWarning: UIColor { get }
+    var layerError: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
@@ -39,6 +40,7 @@ public protocol ThemeColourPalette {
     var indicatorInactive: UIColor { get }
     var actionConfirmation: UIColor { get }
     var actionWarning: UIColor { get }
+    var actionError: UIColor { get }
 
     // MARK: - Text
     var textPrimary: UIColor { get }

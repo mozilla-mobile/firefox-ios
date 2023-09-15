@@ -18,7 +18,10 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["1 of 1"].exists)
     }
 
-    func testOpenLinkFromPDF() {
+    // Disabled due to link not loading
+    func testOpenLinkFromPDF() throws {
+        throw XCTSkip("Link inside pfd is not loading anymore")
+        /*
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
 
@@ -31,6 +34,7 @@ class BrowsingPDFTests: BaseTestCase {
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+         */
     }
 
     func testLongPressOnPDFLink() {

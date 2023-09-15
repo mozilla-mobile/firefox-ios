@@ -304,7 +304,7 @@ extension URL {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
             if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
                 if let queryItem = queryItems.find({ $0.name == "url"}), let value = queryItem.value {
-                    return URL(string: value)
+                    return URL(string: value)?.safeEncodedUrl
                 }
             }
         }
@@ -339,6 +339,45 @@ extension URL {
         }
         return string
     }()
+
+    public var safeEncodedUrl: URL? {
+        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
+
+        // HTML-encode scheme, host, and path
+        guard let host = components?.host?.htmlEntityEncodedString,
+            let scheme = components?.scheme?.htmlEntityEncodedString,
+            let path = components?.path.htmlEntityEncodedString else {
+            return nil
+        }
+
+        components?.path = path
+        components?.scheme = scheme
+        components?.host = host
+
+        // sanitize query items
+        if let queryItems = components?.queryItems {
+            var safeQueryItems: [URLQueryItem] = []
+
+            for item in queryItems {
+                // percent-encoded characters
+                guard let decodedValue = item.value?.removingPercentEncoding else {
+                    return nil
+                }
+
+                // HTML special characters
+                let htmlEncodedValue = decodedValue.htmlEntityEncodedString
+
+                // New query item with the HTML-encoded value
+                let safeItem = URLQueryItem(name: item.name, value: htmlEncodedValue)
+                safeQueryItems.append(safeItem)
+            }
+
+            // Replace the original query items with the "safe" ones
+            components?.queryItems = safeQueryItems
+        }
+
+        return components?.url
+    }
 }
 
 // Helpers to deal with ErrorPage URLs

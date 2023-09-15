@@ -113,12 +113,12 @@ open class SwiftData {
 
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
 
-        // Ensure that SQLite/SQLCipher has been compiled with
+        // Ensure that SQLite has been compiled with
         // `SQLITE_THREADSAFE=1` or `SQLITE_THREADSAFE=2`.
         // https://www.sqlite.org/compile.html#threadsafe
         // https://www.sqlite.org/threadsafe.html
         if sqlite3_threadsafe() < 0 {
-            logger.log("SQLite/SQLCipher was not compiled with SQLITE_THREADSAFE=1 or SQLITE_THREADSAFE=2",
+            logger.log("SQLite was not compiled with SQLITE_THREADSAFE=1 or SQLITE_THREADSAFE=2",
                        level: .warning,
                        category: .storage)
         }
