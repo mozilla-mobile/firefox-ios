@@ -101,7 +101,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         contentView.addSubviews(contentStackView, turnOffButton)
 
         [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview)
-        contentStackView.addArrangedSubview(labelSwitchStackView)
+
+        // FXIOS-7369: https://mozilla-hub.atlassian.net/browse/FXIOS-7369
+//        contentStackView.addArrangedSubview(labelSwitchStackView)
 
         NSLayoutConstraint.activate([
             collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
