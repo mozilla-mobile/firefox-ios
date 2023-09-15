@@ -2,17 +2,94 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
+import Common
+import Shared
 
 class FakespotViewModel {
-    enum ViewState<T> {
+    enum ViewState {
         case loading
-        case loaded(T)
+        case loaded(ProductAnalysisData?)
         case error(Error)
+
+        var viewElements: [ViewElement] {
+            var elements: [ViewElement] = []
+
+            switch self {
+            case .loading:
+                elements = [.loadingView]
+
+            case .loaded:
+                elements = [.reliabilityCard,
+                    .adjustRatingCard,
+                    .highlightsCard,
+                    .qualityDeterminationCard,
+                    .settingsCard]
+
+            case .error:
+                // add error card
+                elements = [.qualityDeterminationCard, .settingsCard]
+            }
+
+            return elements
+        }
+
+        var productData: ProductAnalysisData? {
+            switch self {
+            case .loading, .error: return nil
+            case .loaded(let data): return data
+            }
+        }
     }
 
-    @Published private(set) var state: ViewState<ProductAnalysisData?> = .loading
+    enum ViewElement {
+        case loadingView
+//        case onboarding // card not created yet (FXIOS-7270)
+        case reliabilityCard
+        case adjustRatingCard
+        case highlightsCard
+        case qualityDeterminationCard
+        case settingsCard
+        case noAnalysisCard
+        case messageCard
+    }
+
+    private(set) var state: ViewState = .loading {
+        didSet {
+            onStateChange?()
+        }
+    }
     let shoppingProduct: ShoppingProduct
+    var onStateChange: (() -> Void)?
+
+    var viewElements: [ViewElement] {
+//        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
+
+        return state.viewElements
+    }
+
+    private let prefs: Prefs
+    private var isOptedIn: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+    }
+
+    var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
+        guard let grade = state.productData?.grade,
+                let rating = FakespotReliabilityRating(rawValue: grade)
+        else { return nil }
+
+        return FakespotReliabilityCardViewModel(rating: rating)
+    }
+
+    var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
+        guard let highlights = state.productData?.highlights else { return nil }
+        return FakespotHighlightsCardViewModel(highlights: highlights)
+    }
+
+    var adjustRatingViewModel: FakespotAdjustRatingViewModel? {
+        guard let adjustedRating = state.productData?.adjustedRating else { return nil }
+        return FakespotAdjustRatingViewModel(rating: adjustedRating)
+    }
 
     let confirmationCardViewModel = FakespotMessageCardViewModel(
         type: .info,
@@ -21,15 +98,6 @@ class FakespotViewModel {
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.card,
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.title,
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
-    )
-
-    let reliabilityCardViewModel = FakespotReliabilityCardViewModel(
-        cardA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.card,
-        title: .Shopping.ReliabilityCardTitle,
-        titleA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.title,
-        rating: .gradeA,
-        ratingLetterA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter,
-        ratingDescriptionA11yId: AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
     )
 
     let errorCardViewModel = FakespotMessageCardViewModel(
@@ -42,39 +110,13 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.description,
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
     )
+    let settingsCardViewModel = FakespotSettingsCardViewModel()
+    let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
 
-    let highlightsCardViewModel = {
-        // Dummy data to show content until we integrate with the API
-        let highlights = Highlights(price: ["Great quality that one can expect from Apple.",
-                                            "Replacing iPad 5th gen that won't support iOS17, but still wanted to be able to charge all devices with the same lightning cable (especially when traveling).",
-                                            "I am very pleased with my decision to save some money and go with the 9th generation iPad."],
-                                    quality: ["Threw the box away so can't return it, but would not buy this model again, even at the discounted price."],
-                                    competitiveness: ["Please make sure to use some paper like screen protector if you’re using pencil on the screen."])
-        return FakespotHighlightsCardViewModel(highlights: highlights)
-    }()
-
-    let settingsCardViewModel = FakespotSettingsCardViewModel(
-        cardA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
-        showProductsLabelTitle: .Shopping.SettingsCardRecommendedProductsLabel,
-        showProductsLabelTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.productsLabel,
-        turnOffButtonTitle: .Shopping.SettingsCardTurnOffButton,
-        turnOffButtonTitleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.turnOffButton,
-        recommendedProductsSwitchA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.recommendedProductsSwitch
-    )
-
-    let adjustRatingViewModel = AdjustRatingViewModel(
-        title: .Shopping.AdjustedRatingTitle,
-        description: .Shopping.AdjustedRatingDescription,
-        titleA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.title,
-        cardA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.card,
-        descriptionA11yId: AccessibilityIdentifiers.Shopping.AdjustRating.description,
-        rating: 3.5
-    )
-
-    let noAnalysisCardViewModel = NoAnalysisCardViewModel()
-
-    init(shoppingProduct: ShoppingProduct) {
+    init(shoppingProduct: ShoppingProduct,
+         profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
+        self.prefs = profile.prefs
     }
 
     func fetchData() async {

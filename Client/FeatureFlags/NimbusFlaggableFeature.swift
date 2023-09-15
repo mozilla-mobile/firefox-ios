@@ -23,7 +23,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case libraryCoordinatorRefactor
     case onboardingFreshInstall
     case pocket
-    case pullToRefresh
     case recentlySaved
     case reduxIntegration
     case reportSiteIssue
@@ -71,8 +70,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.JumpBackInSection
         case .pocket:
             return FlagKeys.ASPocketStories
-        case .pullToRefresh:
-            return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
         case .startAtHome:

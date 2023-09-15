@@ -198,7 +198,7 @@
       "channel": "release",
       "userFacingName": "iOS Onboarding - Search Widget",
       "userFacingDescription": "Onboarding experiment",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",

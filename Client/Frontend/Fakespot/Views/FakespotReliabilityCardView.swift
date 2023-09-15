@@ -7,12 +7,12 @@ import Common
 import UIKit
 
 struct FakespotReliabilityCardViewModel {
-    let cardA11yId: String
-    let title: String
-    let titleA11yId: String
+    let cardA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.card
+    let title: String = .Shopping.ReliabilityCardTitle
+    let titleA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.title
     let rating: FakespotReliabilityRating
-    let ratingLetterA11yId: String
-    let ratingDescriptionA11yId: String
+    let ratingLetterA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter
+    let ratingDescriptionA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
 }
 
 class FakespotReliabilityCardView: UIView, ThemeApplicable {
