@@ -23,6 +23,7 @@ class FakespotSettingsCardViewModel {
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = URL(string: "http://fakespot.com/")
+    var dismissViewController: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
@@ -51,6 +52,7 @@ class FakespotSettingsCardViewModel {
     func onTapButton() {
         guard let footerActionUrl else { return }
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
     }
 }
 
