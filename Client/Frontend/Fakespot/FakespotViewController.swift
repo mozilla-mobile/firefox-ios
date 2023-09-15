@@ -94,6 +94,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
         if presentingViewController == nil {
             recordTelemetry()
         }

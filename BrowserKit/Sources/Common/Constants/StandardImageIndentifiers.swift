@@ -65,6 +65,7 @@ public struct StandardImageIdentifiers {
         public static let quality = "qualityLarge"
         public static let qrCode = "qrCodeLarge"
         public static let shipping = "shippingLarge"
+        public static let shopping = "shoppingLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warningFill = "warningFillLarge"
     }
