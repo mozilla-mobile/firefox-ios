@@ -26,4 +26,17 @@ struct Highlights: Codable {
     let price: [String]
     let quality: [String]
     let competitiveness: [String]
+
+    init(price: [String], quality: [String], competitiveness: [String]) {
+        self.price = price
+        self.quality = quality
+        self.competitiveness = competitiveness
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        price = try container.decodeIfPresent([String].self, forKey: .price) ?? []
+        quality = try container.decodeIfPresent([String].self, forKey: .quality) ?? []
+        competitiveness = try container.decodeIfPresent([String].self, forKey: .competitiveness) ?? []
+    }
 }

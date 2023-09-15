@@ -13,8 +13,7 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .autopushFeature:
             return checkAutopushFeature(from: nimbus)
-        case .pullToRefresh,
-                .reportSiteIssue:
+        case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
@@ -98,7 +97,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.generalAppFeatures.value()
 
         switch featureID {
-        case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
