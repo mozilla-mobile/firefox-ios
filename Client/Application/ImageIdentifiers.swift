@@ -62,6 +62,7 @@ public struct ImageIdentifiers {
     public static let share = "action_share"
     public static let shipping = "shipping"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
+    public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
     public static let signinSyncQRButton = "qr-code-icon-white"
     public static let sponsoredStar = "sponsored-star"
