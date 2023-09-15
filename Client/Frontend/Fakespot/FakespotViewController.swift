@@ -198,6 +198,10 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)
+            viewModel.settingsCardViewModel.onTapTurnOffButton = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
             return view
 
         case .noAnalysisCard:

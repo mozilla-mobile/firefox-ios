@@ -30,7 +30,7 @@ class FakespotSettingsCardViewModel {
     init(profile: Profile = AppContainer.shared.resolve()) {
         prefs = profile.prefs
     }
-    
+
     func recordTelemetryForShoppingOptedOut() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
