@@ -166,6 +166,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         recommendedProductsSwitch.tintColor = colors.formKnob
 
         turnOffButton.backgroundColor = colors.actionSecondary
-        turnOffButton.setTitleColor(colors.textPrimary, for: .normal)
+        turnOffButton.setTitleColor(colors.textOnLight, for: .normal)
     }
 }
