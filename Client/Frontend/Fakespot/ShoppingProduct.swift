@@ -56,7 +56,7 @@ class ShoppingProduct: FeatureFlaggable {
         return true
     }
 
-    var isShoppingCartButtonVisible: Bool {
+    var isShoppingButtonVisible: Bool {
         return product != nil && isFakespotFeatureEnabled
     }
 

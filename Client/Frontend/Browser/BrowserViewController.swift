@@ -1372,7 +1372,7 @@ class BrowserViewController: UIViewController,
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
-        urlBar.locationView.updateShoppingCartButtonVisibility(for: tab)
+        urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }

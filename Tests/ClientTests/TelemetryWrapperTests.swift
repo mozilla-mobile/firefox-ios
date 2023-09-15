@@ -238,12 +238,12 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Shopping Experience (Fakespot)
     func test_shoppingAddressBarIconClicked_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
     }
 
     func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
     }
 

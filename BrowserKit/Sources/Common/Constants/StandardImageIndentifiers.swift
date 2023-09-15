@@ -59,6 +59,7 @@ public struct StandardImageIdentifiers {
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
         public static let qrCode = "qrCodeLarge"
+        public static let shopping = "shoppingLarge"
         public static let tabTray = "tabTrayLarge"
         public static let criticalFill = "criticalFillLarge"
         public static let warningFill = "warningFillLarge"

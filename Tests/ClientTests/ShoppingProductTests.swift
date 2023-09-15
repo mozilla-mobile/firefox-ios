@@ -49,7 +49,7 @@ final class ShoppingProductTests: XCTestCase {
 
         let sut = ShoppingProduct(url: url, client: client)
 
-        XCTAssertFalse(sut.isShoppingCartButtonVisible)
+        XCTAssertFalse(sut.isShoppingButtonVisible)
     }
 
     func testFetchingProductAnalysisData_WithInvalidURL_ReturnsNil() async throws {
