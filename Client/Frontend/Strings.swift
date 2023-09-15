@@ -3701,6 +3701,11 @@ extension String {
             tableName: "Shopping",
             value: "Settings Card Collapsed",
             comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardFooterAction = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Footer.Action.v119
+            tableName: "Shopping",
+            value: "Review checker is powered by Fakespot by Mozilla",
+            comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
             tableName: "Shopping",
