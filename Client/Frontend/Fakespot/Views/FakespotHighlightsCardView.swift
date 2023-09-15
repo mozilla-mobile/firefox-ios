@@ -123,7 +123,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         highlightGroups.forEach { $0.applyTheme(theme: theme) }
 
         titleLabel.textColor = theme.colors.textPrimary
-        moreButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        moreButton.setTitleColor(theme.colors.textOnLight, for: .normal)
         moreButton.backgroundColor = theme.colors.actionSecondary
         dividerView.backgroundColor = theme.colors.borderPrimary
     }
