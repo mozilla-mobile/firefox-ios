@@ -120,9 +120,9 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
+    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
         guard let productURL = urlBar.currentURL else { return }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
         navigationHandler?.showFakespotFlow(productURL: productURL)
     }
 

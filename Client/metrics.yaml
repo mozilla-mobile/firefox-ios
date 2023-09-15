@@ -706,6 +706,19 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-06"
 
+  settings_component_opted_out:
+    type: event
+    description: |
+      Records when the 'Turn Off Review Quality Check' button was tapped
+      in Settings Card View
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16185
+    data_reviews:
+     - https://github.com/mozilla-mobile/firefox-ios/pull/16351
+    notification_emails:
+     - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-11"
+
   surface_settings_expand_clicked:
     type: event
     description: |

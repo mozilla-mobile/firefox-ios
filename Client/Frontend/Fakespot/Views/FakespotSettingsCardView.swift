@@ -54,6 +54,12 @@ class FakespotSettingsCardViewModel {
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
         dismissViewController?()
     }
+
+    func recordTelemetryForShoppingOptedOut() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingSettingsCardTurnOffButton)
+    }
 }
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
@@ -131,7 +137,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         contentView.addSubviews(contentStackView, turnOffButton)
 
         [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview)
-        contentStackView.addArrangedSubview(labelSwitchStackView)
+
+        // FXIOS-7369: https://mozilla-hub.atlassian.net/browse/FXIOS-7369
+//        contentStackView.addArrangedSubview(labelSwitchStackView)
 
         NSLayoutConstraint.activate([
             collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -188,13 +196,15 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     }
 
     @objc
-    func didToggleSwitch(_ sender: UISwitch) {
+    private func didToggleSwitch(_ sender: UISwitch) {
         viewModel?.areAdsEnabled = sender.isOn
     }
 
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
+        viewModel?.dismissViewController?()
+        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System

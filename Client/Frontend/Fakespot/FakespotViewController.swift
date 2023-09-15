@@ -94,9 +94,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if presentingViewController == nil {
-            recordTelemetry()
-        }
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
     }
 
     func applyTheme() {
@@ -223,7 +221,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         }
     }
 
-    private func recordTelemetry() {
+    private func recordDismissTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
                                      object: .shoppingBottomSheet)
@@ -238,11 +236,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 }
