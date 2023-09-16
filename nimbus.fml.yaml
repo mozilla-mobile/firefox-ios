@@ -22,7 +22,6 @@ include:
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/libraryCoordinatorRefactor.yaml
   - nimbus-features/messagingFeature.yaml
-  - nimbus-features/onboardingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/reduxIntegrationFeature.yaml
   - nimbus-features/searchFeature.yaml

@@ -45,9 +45,6 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .onboardingFreshInstall:
-            return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
-
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
 
@@ -209,18 +206,6 @@ final class NimbusFeatureFlagLayer {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
             default: return false
             }
-    }
-
-    private func checkNimbusForOnboardingFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.onboardingFeature.value()
-
-        switch featureID {
-        case .onboardingFreshInstall: return config.firstRunFlow
-        default: return false
-        }
     }
 
     public func checkNimbusForShareSheet(
