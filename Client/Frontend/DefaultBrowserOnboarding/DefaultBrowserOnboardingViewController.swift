@@ -102,7 +102,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }
 
-    private lazy var goToSettingsButton: ResizableButton = .build { button in
+    private lazy var goToSettingsButton: PrimaryButton = .build { button in
         button.layer.cornerRadius = UX.ctaButtonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.ctaButton
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 20)
