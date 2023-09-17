@@ -45,9 +45,6 @@ class LegacyDynamicFontHelper: NSObject {
     var DeviceFont: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize, weight: UIFont.Weight.medium)
     }
-    var DeviceFontSmall: UIFont {
-        return UIFont.systemFont(ofSize: deviceFontSize - 1, weight: UIFont.Weight.medium)
-    }
     var DeviceFontSmallLight: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize - 1, weight: UIFont.Weight.light)
     }
