@@ -9,7 +9,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
     private var warningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         label.text = .LoginsDevicePasscodeRequiredMessage
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -21,7 +21,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         return button
     }()
 
