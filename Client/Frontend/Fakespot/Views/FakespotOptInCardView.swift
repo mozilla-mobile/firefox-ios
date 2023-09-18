@@ -234,6 +234,5 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         mainButton.setTitleColor(colors.textInverted, for: .normal)
         mainButton.backgroundColor = colors.actionPrimary
         secondaryButton.setTitleColor(colors.textAccent, for: .normal)
-        optInImageView.image = UIImage(named: ImageIdentifiers.shoppingOptInCardImage)
     }
 }

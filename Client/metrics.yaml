@@ -721,7 +721,7 @@ shopping:
   surface_opt_in_accepted:
     type: event
     description: |
-      Records when the surface (opt in) is accepted
+      Records when the shopping surface opt in is accepted
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15477
     data_reviews:
@@ -733,7 +733,7 @@ shopping:
   surface_not_now_clicked:
     type: event
     description: |
-      Records when the surface (opt in) is dismissed from the not now button
+      Records when the shopping surface opt in is dismissed from the not now button
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15477
     data_reviews:
@@ -745,7 +745,7 @@ shopping:
   surface_show_terms_clicked:
     type: event
     description: |
-      Records when the terms of use is clicked in the surface (opt in)
+      Records when the terms of use is clicked in the shopping surface opt in
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15477
     data_reviews:
@@ -757,7 +757,7 @@ shopping:
   surface_show_privacy_policy_clicked:
     type: event
     description: |
-      Records when the privacy policy is clicked in the surface (opt in)
+      Records when the privacy policy is clicked in the shopping surface opt in
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15477
     data_reviews:
@@ -769,7 +769,7 @@ shopping:
   surface_learn_more_clicked:
     type: event
     description: |
-      Records when the learn more button in the surface (opt in) is displayed
+      Records when the learn more button in the shopping surface opt in is displayed
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15477
     data_reviews:

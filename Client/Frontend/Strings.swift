@@ -3779,7 +3779,7 @@ extension String {
         public static let OptInCardCopy = MZLocalizedString(
             key: "", // Shopping.OptInCard.FirstParagraph.Title.v119
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %@ before you buy. Review checker, an experimental feature from Firefox, is built right into the browser. It works on %@ and %@, too.\n\nUsing the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from Firefox, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
             comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are curently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "", // Shopping.OptInCard.LearnMoreButtonTitle.Title.v119
