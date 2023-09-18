@@ -208,14 +208,10 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        do {
-            let topSites = try app.collectionViews["FxCollectionView"].firstMatch.snapshot()
-            let numberOfTopSites = topSites.children.filter { $0.elementType == .cell }.dropFirst().count
-
-            XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
-        } catch {
-            XCTFail("Failed to take snapshot: \(error)")
-        }
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        let numberOfTopSites = app.collectionViews.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
+        XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
     func testContextMenuInLandscape() {
