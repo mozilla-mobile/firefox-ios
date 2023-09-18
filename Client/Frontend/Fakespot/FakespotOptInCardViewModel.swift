@@ -13,7 +13,7 @@ struct FakespotOptInCardViewModel {
         static let contentStackViewPadding: CGFloat = 16
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
     }
-    
+
     private let tabManager: TabManager
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
