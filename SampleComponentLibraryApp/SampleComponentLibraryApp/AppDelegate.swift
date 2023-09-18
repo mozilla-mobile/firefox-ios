@@ -2,15 +2,20 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    lazy var themeManager: ThemeManager = DefaultThemeManager(
+        sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
+    )
+
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        DependencyHelperMock().bootstrapDependencies()
+        DependencyHelper().bootstrapDependencies()
         return true
     }
 

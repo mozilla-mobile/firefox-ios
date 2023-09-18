@@ -6,7 +6,11 @@ import UIKit
 import Common
 import ComponentLibrary
 
-class RootViewController: UIViewController, Presenter {
+class RootViewController: UIViewController, Presenter, Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     // MARK: - Properties
     private let dataSource = ComponentDataSource()
     private let componentDelegate: ComponentDelegate
@@ -17,11 +21,10 @@ class RootViewController: UIViewController, Presenter {
     }
 
     // MARK: - Init
-    init() {
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.themeManager = themeManager
         componentDelegate = ComponentDelegate(componentData: dataSource.componentData)
         super.init(nibName: nil, bundle: nil)
-        view.backgroundColor = .white
-        tableView.backgroundColor = .clear
 
         componentDelegate.presenter = self
     }
@@ -33,6 +36,9 @@ class RootViewController: UIViewController, Presenter {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+
+        listenForThemeChange(view)
+        applyTheme()
     }
 
     private func setupTableView() {
@@ -48,5 +54,13 @@ class RootViewController: UIViewController, Presenter {
         tableView.dataSource = dataSource
         tableView.delegate = componentDelegate
         tableView.reloadData()
+    }
+
+    // MARK: Themeable
+
+    func applyTheme() {
+        tableView.backgroundColor = .clear
+        dataSource.theme = themeManager.currentTheme
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
