@@ -32,7 +32,6 @@ public enum KVOConstants: String {
 }
 
 public struct KeychainKey {
-    public static let fxaPushRegistration = "account.push-registration"
     public static let apnsToken = "apnsToken"
 }
 

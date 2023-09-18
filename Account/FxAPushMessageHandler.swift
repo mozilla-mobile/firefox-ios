@@ -25,47 +25,6 @@ class FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
-    /// Accepts the raw Push message from Autopush.
-    /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
-    /// and then effects changes on the logged in account.
-    func handle(userInfo: [AnyHashable: Any], completion: @escaping (Result<PushMessage, PushMessageError>) -> Void) {
-        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration, ofClass: PushRegistration.self) else {
-            // We've somehow lost our push registration, lets also reset our apnsToken so we trigger push registration
-            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            completion(.failure(PushMessageError.accountError))
-            return
-        }
-
-        let subscription = pushReg.defaultSubscription
-
-        guard let encoding = userInfo["con"] as? String, // content-encoding
-              let payload = userInfo["body"] as? String
-        else {
-            completion(.failure(PushMessageError.messageIncomplete("missing con or body")))
-            return
-        }
-
-        let plaintext: String?
-        if let cryptoKeyHeader = userInfo["cryptokey"] as? String,  // crypto-key
-            let encryptionHeader = userInfo["enc"] as? String, // encryption
-            encoding == "aesgcm" {
-            plaintext = subscription.aesgcm(payload: payload, encryptionHeader: encryptionHeader, cryptoHeader: cryptoKeyHeader)
-        } else if encoding == "aes128gcm" {
-            plaintext = subscription.aes128gcm(payload: payload)
-        } else {
-            plaintext = nil
-        }
-
-        guard let string = plaintext else {
-            // The app will detect this missing, and re-register. see AppDelegate+PushNotifications.swift.
-            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            completion(.failure(PushMessageError.notDecrypted))
-            return
-        }
-        handleDecryptedMessage(message: string, completion: completion)
-    }
-
     func handleDecryptedMessage(message: String, completion: @escaping (Result<PushMessage, PushMessageError>) -> Void) {
         // Reconfig has to happen on the main thread, since it calls `startup`
         // and `startup` asserts that we are on the main thread. Otherwise the notification

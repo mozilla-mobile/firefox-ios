@@ -123,13 +123,6 @@ extension AppDelegate {
             return
         }
 
-        guard LegacyFeatureFlagsManager.shared.isFeatureEnabled(.autopushFeature, checking: .buildOnly) else {
-            RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
-            return
-        }
-        // We set this here because the NotificationService can't depend on the nimbus setting yet
-        // and will read the profile pref directly
-        LegacyFeatureFlagsManager.shared.set(feature: .autopushFeature, to: true)
         Task {
             do {
                 let autopush = try await Autopush(files: profile.files)
