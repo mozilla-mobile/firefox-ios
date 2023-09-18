@@ -4,6 +4,7 @@
 import XCTest
 
 class FakespotTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288332
     func testFakespotAvailable() {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()
@@ -19,11 +20,12 @@ class FakespotTests: BaseTestCase {
         // Tap shopping cart icon on Awesome bar
         // Note: I can't find the label for the shopping cart icon.
         // Workaround: Tap somewhere left of the "Share" button
-        waitForExistence(app.buttons["TabLocationView.shareButton"])
-        app.buttons["TabLocationView.shareButton"].tapAtPoint(CGPoint(x: -10, y: 0))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton])
+        waitUntilPageLoad()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tapAtPoint(CGPoint(x: -10, y: 0))
         waitForExistence(app.otherElements["PopoverDismissRegion"])
-        waitForExistence(app.staticTexts["Shopping.Sheet.HeaderTitle"])
-        XCTAssertEqual(app.staticTexts["Shopping.Sheet.HeaderTitle"].label, "Review quality check")
+        waitForExistence(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review quality check")
 
         // Tap outside of the popover to close the popover
         website.textFields["Search Amazon"].tap()
