@@ -177,18 +177,6 @@ spotlight-search:
     searchable-content:
       type: string
       description: "The text content that is made searchable. If this is `null` then no additional content is used, and only the title and URL will be used.\n"
-start-at-home-feature:
-  description: The controls for Start at Home feature
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    setting:
-      type: string
-      description: This property provides a default setting for the startAtHomeFeature
-      enum:
-        - after-four-hours
-        - always
-        - disabled
 tab-tray-refactor-feature:
   description: "This feature is for managing the roll out of the Tab Tray refactor feature\n"
   hasExposure: true

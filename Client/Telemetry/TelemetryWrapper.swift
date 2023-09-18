@@ -327,9 +327,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
         GleanMetrics.Preferences.pocket.set(isPocketEnabled)
 
-        if let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) {
-            GleanMetrics.Preferences.openingScreen.set(startAtHomeSetting.rawValue)
-        }
+        // Laurie
+//        if let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) {
+//        GleanMetrics.Preferences.openingScreen.set(startAtHomeSetting.rawValue)
+//        }
     }
 
     @objc

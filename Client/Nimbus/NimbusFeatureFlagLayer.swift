@@ -59,9 +59,6 @@ final class NimbusFeatureFlagLayer {
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
 
-        case .startAtHome:
-            return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
-
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
 
@@ -77,17 +74,6 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-        }
-    }
-
-    public func checkNimbusConfigForStartAtHome(using nimbus: FxNimbus = FxNimbus.shared) -> StartAtHomeSetting {
-        let config = nimbus.features.startAtHomeFeature.value()
-        let nimbusSetting = config.setting
-
-        switch nimbusSetting {
-        case .disabled: return .disabled
-        case .afterFourHours: return .afterFourHours
-        case .always: return .always
         }
     }
 

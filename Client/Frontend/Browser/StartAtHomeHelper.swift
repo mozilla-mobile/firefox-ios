@@ -9,7 +9,7 @@ class StartAtHomeHelper: FeatureFlaggable {
     private var isRestoringTabs: Bool
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
-    lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
+    lazy var startAtHomeSetting: StartAtHomeSetting? = .afterFourHours // Laurie
     var launchSessionProvider: LaunchSessionProviderProtocol
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve(),
@@ -32,8 +32,7 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
-        guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly),
-              let setting = startAtHomeSetting,
+        guard let setting = startAtHomeSetting,
               setting != .disabled
         else { return false }
 

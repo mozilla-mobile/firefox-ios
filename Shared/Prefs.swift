@@ -76,12 +76,12 @@ public struct PrefsKeys {
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
-        public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
     }
 
     public struct UserFeatureFlagPrefs {
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
+        public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
 
     // Firefox contextual hint
