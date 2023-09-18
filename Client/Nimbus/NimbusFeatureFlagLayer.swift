@@ -45,6 +45,9 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
+        case .feltPrivacyUI:
+            return checkFeltPrivacyUIFeature(from: nimbus)
+
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
 
@@ -195,6 +198,11 @@ final class NimbusFeatureFlagLayer {
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkFeltPrivacyUIFeature(from nimbus: FxNimbus ) -> Bool {
+        let config = nimbus.features.privateBrowsing.value()
+        return config.feltPrivacyEnabled
     }
 
     public func checkNimbusForCreditCardAutofill(
