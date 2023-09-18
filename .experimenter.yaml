@@ -15,6 +15,14 @@ contextual-hint-feature:
     features-enabled:
       type: json
       description: "This property provides a lookup table of whether specific contextual hints are enabled.\n"
+credential-autofill-coordinator-refactor:
+  description: "This feature manages the roll out of the credential autofill coordinator as part of the coordinator refactor.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 credit-card-autofill:
   description: This property defines the credit card autofill feature
   hasExposure: true

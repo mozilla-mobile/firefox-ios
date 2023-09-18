@@ -15,6 +15,7 @@ channels:
 include:
   - nimbus-features/autopushFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
+  - nimbus-features/credentialAutofillCoordinatorRefactor.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/etpCoordinatorRefactor.yaml
   - nimbus-features/fakespotFeature.yaml

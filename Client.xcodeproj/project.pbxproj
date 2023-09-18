@@ -861,6 +861,9 @@
 		C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */; };
 		C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B982A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift */; };
 		C2D71B9B2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B9A2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift */; };
+		C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */; };
+		C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */; };
+		C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -5529,6 +5532,9 @@
 		C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedSubtitleTableViewCell.swift; sourceTree = "<group>"; };
 		C2D71B982A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedLeftAlignedTableViewCell.swift; sourceTree = "<group>"; };
 		C2D71B9A2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAutofillCoordinator.swift; sourceTree = "<group>"; };
+		C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAutofillCoordinatorTests.swift; sourceTree = "<group>"; };
+		C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBrowserCoordinator.swift; sourceTree = "<group>"; };
 		C2D8478BB059B9BFF018B491 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
@@ -7989,6 +7995,7 @@
 				5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */,
 				C23889E42A50329200429673 /* MockParentCoordinatorDelegate.swift */,
 				C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */,
+				C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -8353,6 +8360,7 @@
 				5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */,
 				C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */,
 				C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */,
+				C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -8377,6 +8385,7 @@
 				5A81C5DC2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift */,
 				C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */,
 				8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */,
+				C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -12464,6 +12473,7 @@
 				9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
+				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
@@ -13163,6 +13173,7 @@
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				5A70EF1D295E3C3500790249 /* TestSetup.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,
 				F98CB66E2A4123F1005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift in Sources */,
 				DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */,
 				C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */,
@@ -13254,6 +13265,7 @@
 				8A5038142A5DFCE000A1B02A /* MockBrowserProfile.swift in Sources */,
 				C23889E52A50329200429673 /* MockParentCoordinatorDelegate.swift in Sources */,
 				21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */,
+				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
 				5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,

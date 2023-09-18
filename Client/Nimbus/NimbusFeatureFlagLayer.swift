@@ -20,6 +20,9 @@ final class NimbusFeatureFlagLayer {
                 .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .credentialAutofillCoordinatorRefactor:
+            return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackIn,
                 .pocket,
                 .recentlySaved,
@@ -154,6 +157,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.libraryCoordinatorRefactor.value()
+        return config.enabled
+    }
+
+    private func checkCredentialAutofillCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.credentialAutofillCoordinatorRefactor.value()
         return config.enabled
     }
 
