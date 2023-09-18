@@ -90,7 +90,7 @@
         "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory()",
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount()",
         "PrivateBrowsingTestIpad",
-        "ReaderModeTests"
+        "ReaderModeTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests\/testCopyPasteComplete()",
