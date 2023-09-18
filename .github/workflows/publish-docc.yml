@@ -3,7 +3,7 @@ on:
   # Runs on pushes where BrowserKit files are modified
   push:
     paths:
-      - BrowserKit/**
+      - BrowserKit/Sources/ComponentLibrary/**
   workflow_dispatch: {} # adding the workflow_dispatch so it can be triggered manually
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -24,7 +24,8 @@ jobs:
       # Must be set to this for deploying to GitHub Pages
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: macos-12
+    runs-on: macos-13
+    needs: build
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -35,8 +36,10 @@ jobs:
             -destination 'generic/platform=iOS';
           xcrun docc process-archive transform-for-static-hosting \
             /tmp/docbuild/Build/Products/Debug-iphoneos/ComponentLibrary.doccarchive \
+            --hosting-base-path "firefox-ios" \
             --output-path docs;
           echo "<script>window.location.href += \"/documentation/componentlibrary\"</script>" > docs/index.html;
+          echo "Building DocC step done"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
