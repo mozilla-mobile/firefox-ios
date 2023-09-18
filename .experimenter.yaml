@@ -106,6 +106,14 @@ onboarding-framework-feature:
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
+private-browsing:
+  description: Private Browsing Mode
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    felt-privacy-enabled:
+      type: boolean
+      description: "If true, enable felt privacy related UI"
 redux-integration-feature:
   description: "This feature is for managing the roll out of the Redux integration feature\n"
   hasExposure: true

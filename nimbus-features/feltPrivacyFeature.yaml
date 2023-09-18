@@ -1,0 +1,18 @@
+# The configuration for the feltPrivacyFeature feature
+features:
+  private-browsing:
+    description: Private Browsing Mode
+    variables:
+      felt-privacy-enabled:
+        description: If true, enable felt privacy related UI
+        type: Boolean
+        default: false
+
+    defaults:
+      - channel: beta
+        value:
+          felt-privacy-enabled: false
+      - channel: developer
+        value:
+          felt-privacy-enabled: false
+

@@ -23,6 +23,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case jumpBackIn
     case libraryCoordinatorRefactor
     case pocket
+    case feltPrivacyUI
     case recentlySaved
     case reduxIntegration
     case reportSiteIssue
@@ -88,6 +89,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .libraryCoordinatorRefactor,
                 .reduxIntegration,
                 .reportSiteIssue,
+                .feltPrivacyUI,
                 .searchHighlights,
                 .shareExtensionCoordinatorRefactor,
                 .shareSheetChanges,
