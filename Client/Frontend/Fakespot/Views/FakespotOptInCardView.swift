@@ -8,7 +8,7 @@ import Shared
 import ComponentLibrary
 
 // MARK: View
-final class OptInCardView: UIView, ThemeApplicable {
+final class FakespotOptInCardView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLabelFontSize: CGFloat = 28
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
