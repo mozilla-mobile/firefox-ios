@@ -29,28 +29,6 @@ first-session:
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
 
-temp-baseline:
-  description: |
-    Temporary ping to measure when the app UI is visible to the user.
-  include_client_id: true
-  send_if_empty: true
-  bugs:
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=1850361
-  data_reviews:
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=1850361#c1
-  notification_emails:
-    - jrediger@mozilla.com
-  reasons:
-    dirty_startup: |
-      The ping was submitted at startup, because the application process was
-      killed before becoming inactive, in the last session.
-    inactive: |
-      The ping was submitted when becoming inactive.
-    active: |
-      The ping was submitted when the application starts.
-    foreground: |
-      The ping was submitted when the application became foregrounded.
-
 fx-suggest:
   description: |
     A ping representing a single event occurring with or to a Firefox Suggestion.
