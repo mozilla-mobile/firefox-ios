@@ -21,7 +21,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 19)
         return button
     }()
 
