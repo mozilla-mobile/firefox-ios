@@ -69,7 +69,6 @@ public struct PrefsKeys {
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
-        public static let AutopushFeature = "AutopushFeatureUserPrefKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"

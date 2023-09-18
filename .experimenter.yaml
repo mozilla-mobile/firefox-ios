@@ -1,12 +1,4 @@
 ---
-autopush-feature:
-  description: This property defines the autopush feature configuration
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    use-new-autopush-client:
-      type: boolean
-      description: "If true, the autopush client based on the Rust component will be used"
 contextual-hint-feature:
   description: This set holds all features pertaining to contextual hints.
   hasExposure: true
