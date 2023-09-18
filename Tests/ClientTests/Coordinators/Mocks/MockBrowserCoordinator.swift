@@ -14,7 +14,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showRequiredPassCodeCalled = 0
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
-    var showEnchanedTrackingProtectionCalled = 0
+    var showEnhancedTrackingProtectionCalled = 0
     var showShareExtensionCalled = 0
     var didFinishCalled = 0
 
@@ -43,7 +43,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     }
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
-        showEnchanedTrackingProtectionCalled += 1
+        showEnhancedTrackingProtectionCalled += 1
     }
 
     func didFinish(from childCoordinator: Coordinator) {
