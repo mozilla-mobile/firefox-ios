@@ -15,7 +15,7 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
     }
 
     func fetchDataForURL(_ url: URL) async throws -> Data {
-        let configuration = URLSessionConfiguration.default
+        let configuration = URLSessionConfiguration.ephemeral
         configuration.httpAdditionalHeaders = ["User-Agent": RequestConstants.userAgent]
         configuration.timeoutIntervalForRequest = RequestConstants.timeout
 
