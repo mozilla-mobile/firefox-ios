@@ -238,12 +238,12 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Shopping Experience (Fakespot)
     func test_shoppingAddressBarIconClicked_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
     }
 
     func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
     }
 
@@ -260,6 +260,16 @@ class TelemetryWrapperTests: XCTestCase {
     func test_shoppingSurfaceDisplayed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingBottomSheet)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
+    }
+
+    func test_shoppingSettingsComponentOptedOut_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingSettingsCardTurnOffButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.settingsComponentOptedOut)
+    }
+
+    func test_surfaceSettingsExpandClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSettingsChevronButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceSettingsExpandClicked)
     }
 
     // MARK: - Onboarding

@@ -28,6 +28,16 @@ protocol FakespotClientType {
     /// - Throws: An error if the analysis cannot be triggered.
     /// - Returns: A `ProductAnalyzeResponse` indicating the status of the analysis.
     func triggerProductAnalyze(productId: String, website: String) async throws -> ProductAnalyzeResponse
+
+    /// Retrieves the analysis status for a product on a specific website.
+    ///
+    /// - Parameters:
+    ///   - productId: The ID of the product to analyze.
+    ///   - website: The website associated with the product.
+    /// - Returns: A `ProductAnalysisStatusResponse` containing the analysis status.
+    /// - Throws: `FakeSpotClientError.invalidURL` if the API endpoint URL is missing or invalid,
+    ///           and any other errors that may occur during the API request.
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> ProductAnalysisStatusResponse
 }
 
 /// An enumeration representing different environments for the Fakespot client.
@@ -38,6 +48,7 @@ enum FakespotEnvironment {
     enum FakespotPath: String {
         case analyze = "/analyze"
         case analysis = "/analysis"
+        case analysisStatus = "/analysis_status"
     }
 
     private var baseURL: String {
@@ -66,6 +77,11 @@ enum FakespotEnvironment {
     /// Returns the API analysis endpoint URL based on the selected environment.
     var analysisEndpoint: URL? {
         buildURL(path: .analysis)
+    }
+
+    /// Returns the API analysis status endpoint URL based on the selected environment.
+    var analysisStatusEndpoint: URL? {
+        buildURL(path: .analysisStatus)
     }
 
     /// Returns the API ad endpoint URL based on the selected environment.
@@ -112,6 +128,23 @@ struct FakespotClient: FakespotClientType {
     /// Error enum for FakeSpotClient errors, including invalid URL.
     enum FakeSpotClientError: Error {
         case invalidURL
+    }
+
+    /// Retrieves the analysis status for a product on a specific website.
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> ProductAnalysisStatusResponse {
+        // Define the API endpoint URL
+        guard let endpointURL = environment.analysisEndpoint else {
+            throw FakeSpotClientError.invalidURL
+        }
+
+        // Prepare the request body
+        let requestBody = [
+            "product_id": productId,
+            "website": website
+        ]
+
+        // Perform the async API request and get the data
+        return try await fetch(ProductAnalysisStatusResponse.self, url: endpointURL, requestBody: requestBody)
     }
 
     /// Trigger product analyze for a given product ID and website.

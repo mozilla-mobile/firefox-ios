@@ -398,9 +398,11 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
-        case shoppingCartButton = "shopping-cart-button"
+        case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
         case shoppingRecentReviews = "shopping-recent-reviews"
+        case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
+        case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1018,9 +1020,9 @@ extension TelemetryWrapper {
             }
 
         // MARK: Shopping Experience (Fakespot)
-        case (.action, .tap, .shoppingCartButton, _, _):
+        case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
-        case (.action, .view, .shoppingCartButton, _, _):
+        case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceClosed.record()
@@ -1028,6 +1030,10 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceDisplayed.record()
+        case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
+            GleanMetrics.Shopping.settingsComponentOptedOut.record()
+        case (.action, .view, .shoppingSettingsChevronButton, _, _):
+            GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

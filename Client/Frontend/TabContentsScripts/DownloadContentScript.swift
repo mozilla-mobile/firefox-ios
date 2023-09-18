@@ -14,15 +14,18 @@ class DownloadContentScript: TabContentScript {
     // Blobs however, use the JS content script to download using XHR
     fileprivate static var blobUrlForDownload: URL?
     private let downloadQueue: DownloadQueue
+    private let notificationCenter: NotificationProtocol
 
     class func name() -> String {
         return "DownloadContentScript"
     }
 
     required init(tab: Tab,
-                  downloadQueue: DownloadQueue = AppContainer.shared.resolve()) {
+                  downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
+                  notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tab = tab
         self.downloadQueue = downloadQueue
+        self.notificationCenter = notificationCenter
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -56,12 +59,8 @@ class DownloadContentScript: TabContentScript {
               let data = Bytes.decodeBase64(base64String)
         else { return }
 
-        // TODO: Could we have a download queue per tab instead of resolving from foregroundBVC?
-        // Or one that is independent of BVC at least?
-        let browserViewController = BrowserViewController.foregroundBVC()
-
         defer {
-            browserViewController?.pendingDownloadWebView = nil
+            notificationCenter.post(name: .PendingBlobDownloadAddedToQueue, withObject: nil)
             DownloadContentScript.blobUrlForDownload = nil
         }
 

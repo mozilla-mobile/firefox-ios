@@ -105,7 +105,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         }
         cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
         if indexPath.row == 1 {
-            cell.textLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultMediumFont
+            cell.textLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .regular)
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0

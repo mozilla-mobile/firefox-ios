@@ -250,6 +250,7 @@ class SearchTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
             app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
 
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
