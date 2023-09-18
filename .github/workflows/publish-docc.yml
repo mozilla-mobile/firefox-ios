@@ -25,7 +25,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: macos-13
-    needs: build
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
