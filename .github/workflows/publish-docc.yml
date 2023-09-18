@@ -1,4 +1,4 @@
-name: Deploy Docc:
+name: Deploy Docc
 on:
   # Runs on pushes where BrowserKit files are modified
   push:
