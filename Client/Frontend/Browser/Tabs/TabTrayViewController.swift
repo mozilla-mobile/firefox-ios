@@ -109,5 +109,4 @@ class TabTrayViewController: UIViewController, TabTrayController {
     private func segmentPanelChange() {}
 }
 
-extension TabTrayViewController: UIToolbarDelegate {
-}
+extension TabTrayViewController: UIToolbarDelegate {}
