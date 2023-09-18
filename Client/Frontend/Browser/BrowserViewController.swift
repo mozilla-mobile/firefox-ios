@@ -215,6 +215,11 @@ class BrowserViewController: UIViewController,
         LegacyThemeManager.instance.statusBarStyle
     }
 
+    @objc
+    private func didAddPendingBlobDownloadToQueue() {
+        pendingDownloadWebView = nil
+    }
+
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
     @objc
@@ -512,46 +517,50 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(appWillResignActiveNotification),
             name: UIApplication.willResignActiveNotification,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(appDidBecomeActiveNotification),
             name: UIApplication.didBecomeActiveNotification,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(appDidEnterBackgroundNotification),
             name: UIApplication.didEnterBackgroundNotification,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(appMenuBadgeUpdate),
             name: .FirefoxAccountStateChange,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(searchBarPositionDidChange),
             name: .SearchBarPositionDidChange,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
             object: nil)
-        NotificationCenter.default.addObserver(
+        notificationCenter.addObserver(
             self,
             selector: #selector(didFinishAnnouncement),
             name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(didAddPendingBlobDownloadToQueue),
+                                       name: .PendingBlobDownloadAddedToQueue,
+                                       object: nil)
     }
 
     func addSubviews() {
@@ -2765,35 +2774,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                                                 theme: self.themeManager.currentTheme)
             }
         }
-    }
-}
-
-extension BrowserViewController {
-    /// This method now returns the BrowserViewController associated with the scene.
-    /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.
-    ///
-    /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
-    /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
-    ///
-    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
-    ///
-    /// NOTE: Do not use foregroundBVC in new code under any circumstances
-    public static func foregroundBVC() -> BrowserViewController? {
-        guard let scene = UIApplication.shared.connectedScenes.first else {
-            DefaultLogger.shared.log("No connected scenes exist.",
-                                     level: .fatal,
-                                     category: .lifecycle)
-            return nil
-        }
-
-        guard let sceneDelegate = scene.delegate as? SceneDelegate else {
-            DefaultLogger.shared.log("Scene could not be cast as SceneDelegate.",
-                                     level: .fatal,
-                                     category: .lifecycle)
-            return nil
-        }
-
-        return sceneDelegate.coordinatorBrowserViewController
     }
 }
 
