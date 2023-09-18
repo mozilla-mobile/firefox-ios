@@ -5,7 +5,8 @@
 import Common
 import XCTest
 
-class ReaderViewTest: BaseTestCase {
+class ReaderModeTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287278
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -24,6 +25,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287274
     // Smoketest
     func testAddToReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -46,6 +48,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287279
     func testAddToReadingListPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -83,6 +86,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287275
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
@@ -95,6 +99,7 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(app.buttons["Mark as Read"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287280
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
@@ -111,6 +116,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287281
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -133,6 +139,7 @@ class ReaderViewTest: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287282
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -157,6 +164,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287299
     func testAddToReadingListFromBrowserTabMenu() {
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -174,6 +182,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287300
     func testOpenSavedForReadingLongPressInNewTab() {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
@@ -197,6 +206,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertEqual(numTabAfter, "2")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287301
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
@@ -214,6 +224,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287276
     // Smoketest
     func testAddToReaderListOptions() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -223,6 +234,10 @@ class ReaderViewTest: BaseTestCase {
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
         app.buttons["ReaderModeBarView.settingsButton"].tap()
-        XCTAssertTrue(app.buttons["Light"].exists)
+        let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
+                             "Share this page", "Remove from Reading List"]
+        for option in layoutOptions {
+            XCTAssertTrue(app.buttons[option].exists, "Option \(option) doesn't exists")
+        }
     }
 }

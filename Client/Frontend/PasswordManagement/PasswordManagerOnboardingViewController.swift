@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
@@ -10,7 +11,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .Settings.Passwords.OnboardingMessage
-        label.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 19)
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -21,7 +22,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = LegacyDynamicFontHelper().DeviceFontExtraLarge
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 19)
         return button
     }()
 

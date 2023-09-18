@@ -53,7 +53,7 @@
         "PocketTest",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
-        "ReaderViewTest",
+        "ReaderModeTests",
         "SaveLoginTest",
         "ScreenGraphTest",
         "SearchSettingsUITests",
