@@ -33,9 +33,9 @@ jobs:
           xcodebuild docbuild -scheme ComponentLibrary \
             -derivedDataPath /tmp/docbuild \
             -destination 'generic/platform=iOS';
-          $(xcrun --find docc) process-archive \
-            transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/ComponentLibrary.doccarchive \
-            --output-path docs;
+          xcrun docc process-archive transform-for-static-hosting \
+            /tmp/docbuild/Build/Products/Debug-iphoneos/ComponentLibrary.doccarchive \
+            --output-path /docs;
           echo "<script>window.location.href += \"/documentation/componentlibrary\"</script>" > docs/index.html;
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
