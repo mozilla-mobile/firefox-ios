@@ -17,7 +17,7 @@ protocol TabTrayController: UIViewController,
 class TabTrayViewController: UIViewController, TabTrayController {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: Common.NotificationProtocol
+    var notificationCenter: NotificationProtocol
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
