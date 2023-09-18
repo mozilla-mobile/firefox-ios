@@ -1084,7 +1084,10 @@ class BrowserViewController: UIViewController,
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
-        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, model: profile.searchEngines, tabManager: tabManager)
+        let searchController = SearchViewController(profile: profile,
+                                                    viewModel: searchViewModel,
+                                                    model: profile.searchEngines,
+                                                    tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
