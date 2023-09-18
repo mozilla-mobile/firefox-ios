@@ -35,7 +35,6 @@ jobs:
             -destination 'generic/platform=iOS';
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/ComponentLibrary.doccarchive \
-            --hosting-base-path ComponentLibrary \
             --output-path docs;
           echo "<script>window.location.href += \"/documentation/componentlibrary\"</script>" > docs/index.html;
       - name: Upload artifact
