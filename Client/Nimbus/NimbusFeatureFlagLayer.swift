@@ -20,6 +20,9 @@ final class NimbusFeatureFlagLayer {
                 .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .bottomSheetCardCoordinatorRefactor:
+            return checkBottomSheetCardCordinatorRefactorFeature(from: nimbus)
+
         case .jumpBackIn,
                 .pocket,
                 .recentlySaved,
@@ -154,6 +157,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.libraryCoordinatorRefactor.value()
+        return config.enabled
+    }
+
+    private func checkBottomSheetCardCordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.bottomSheetCardCoordinatorRefactor.value()
         return config.enabled
     }
 

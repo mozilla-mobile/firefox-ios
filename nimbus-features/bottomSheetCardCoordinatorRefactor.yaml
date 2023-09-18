@@ -1,0 +1,19 @@
+# The configuration for the bottomSheetCardCoordinatorRefactor feature
+features:
+  bottom-sheet-card-coordinator-refactor:
+    description: >
+      This feature manages the roll out of the bottom sheet card coordinator as part of the coordinator refactor.
+    variables:
+      enabled:
+        description: >
+          Enables the feature
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
+
