@@ -7,7 +7,7 @@ import ComponentLibrary
 import Storage
 @testable import Client
 
-final class BottomSheetCardCoordinatorTests: XCTestCase {
+final class CredentialAutofillCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var router: MockRouter!
     private var parentCoordinator: MockBrowserCoordinator!
@@ -37,19 +37,19 @@ final class BottomSheetCardCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.presentCalled, 1)
     }
 
-    func testShowBottomSheetCard() {
+    func testShowCreditCardAutofill() {
         let subject = createSubject()
 
-        subject.showBottomSheetCardViewController(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
 
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
         XCTAssertEqual(router.presentCalled, 1)
     }
 
-    func testShowBottomSheetCard_didTapYesButton_callDidFinish() {
+    func testShowCreditCardAutofill_didTapYesButton_callDidFinish() {
         let subject = createSubject()
 
-        subject.showBottomSheetCardViewController(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -65,10 +65,10 @@ final class BottomSheetCardCoordinatorTests: XCTestCase {
         }
     }
 
-    func testShowBottomSheetCard_didTapCreditCardFill_callDidFinish() {
+    func testShowCreditCardAutofill_didTapCreditCardFill_callDidFinish() {
         let subject = createSubject()
 
-        subject.showBottomSheetCardViewController(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -84,10 +84,10 @@ final class BottomSheetCardCoordinatorTests: XCTestCase {
         }
     }
 
-    func testShowBottomSheetCard_didTapManageCards_callDidFinish() {
+    func testShowCreditCardAutofill_didTapManageCards_callDidFinish() {
         let subject = createSubject()
 
-        subject.showBottomSheetCardViewController(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -103,8 +103,8 @@ final class BottomSheetCardCoordinatorTests: XCTestCase {
         }
     }
 
-    private func createSubject() -> BottomSheetCardCoordinator {
-        let subject = BottomSheetCardCoordinator(
+    private func createSubject() -> CredentialAutofillCoordinator {
+        let subject = CredentialAutofillCoordinator(
             profile: profile,
             router: router,
             parentCoordinator: parentCoordinator

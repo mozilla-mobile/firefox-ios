@@ -1781,12 +1781,12 @@ class BrowserViewController: UIViewController,
             case .deviceOwnerAuthenticated:
                 // Note: Since we are injecting card info, we pass on the frame
                 // for special iframe cases
-                if CoordinatorFlagManager.isBottomSheetCardCoordinatorEnabled {
-                    self.navigationHandler?.showBottomSheetCard(creditCard: nil,
-                                                                decryptedCard: nil,
-                                                                viewType: .selectSavedCard,
-                                                                frame: frame,
-                                                                alertContainer: self.contentContainer)
+                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
+                    self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                                   decryptedCard: nil,
+                                                                   viewType: .selectSavedCard,
+                                                                   frame: frame,
+                                                                   alertContainer: self.contentContainer)
                 } else {
                     self.showBottomSheetCardViewController(creditCard: nil,
                                                            decryptedCard: nil,
@@ -1796,7 +1796,7 @@ class BrowserViewController: UIViewController,
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
-                if CoordinatorFlagManager.isBottomSheetCardCoordinatorEnabled {
+                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
                     self.navigationHandler?.showRequiredPassCode()
                 } else {
                     let passcodeViewController = DevicePasscodeRequiredViewController()
@@ -1813,12 +1813,12 @@ class BrowserViewController: UIViewController,
             existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isBottomSheetCardCoordinatorEnabled {
-                        self.navigationHandler?.showBottomSheetCard(creditCard: nil,
-                                                                    decryptedCard: fieldValues,
-                                                                    viewType: .save,
-                                                                    frame: nil,
-                                                                    alertContainer: self.contentContainer)
+                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
+                        self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                                       decryptedCard: fieldValues,
+                                                                       viewType: .save,
+                                                                       frame: nil,
+                                                                       alertContainer: self.contentContainer)
                     } else {
                         self.showBottomSheetCardViewController(creditCard: nil,
                                                                decryptedCard: fieldValues,
@@ -1831,12 +1831,12 @@ class BrowserViewController: UIViewController,
             // card already saved should update if any of its other values are different
             if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isBottomSheetCardCoordinatorEnabled {
-                        self.navigationHandler?.showBottomSheetCard(creditCard: existingCard,
-                                                                    decryptedCard: fieldValues,
-                                                                    viewType: .update,
-                                                                    frame: nil,
-                                                                    alertContainer: self.contentContainer)
+                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
+                        self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
+                                                                       decryptedCard: fieldValues,
+                                                                       viewType: .update,
+                                                                       frame: nil,
+                                                                       alertContainer: self.contentContainer)
                     } else {
                         self.showBottomSheetCardViewController(creditCard: existingCard,
                                                                decryptedCard: fieldValues,

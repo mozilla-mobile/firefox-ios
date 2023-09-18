@@ -17,8 +17,8 @@ struct CoordinatorFlagManager {
         NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
     }
 
-    static var isBottomSheetCardCoordinatorEnabled: Bool {
-        NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.bottomSheetCardCoordinatorRefactor)
+    static var isCredentialAutofillCoordinatorEnabled: Bool {
+        NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.credentialAutofillCoordinatorRefactor)
     }
 
     static var isEtpCoordinatorEnabled: Bool {

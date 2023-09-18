@@ -20,8 +20,8 @@ final class NimbusFeatureFlagLayer {
                 .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
-        case .bottomSheetCardCoordinatorRefactor:
-            return checkBottomSheetCardCordinatorRefactorFeature(from: nimbus)
+        case .credentialAutofillCoordinatorRefactor:
+            return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackIn,
                 .pocket,
@@ -160,8 +160,8 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkBottomSheetCardCordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.bottomSheetCardCoordinatorRefactor.value()
+    private func checkCredentialAutofillCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.credentialAutofillCoordinatorRefactor.value()
         return config.enabled
     }
 

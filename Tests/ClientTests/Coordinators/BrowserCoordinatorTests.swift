@@ -213,24 +213,24 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
-    func testShowBottomSheetCard_addsBottomSheetCardCoordinator() {
+    func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
-        subject.showBottomSheetCard(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is BottomSheetCardCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
-    func testShowRequiredPassCode_addsBottomSheetCardCoordinator() {
+    func testShowRequiredPassCode_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
         subject.showRequiredPassCode()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is BottomSheetCardCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
     }

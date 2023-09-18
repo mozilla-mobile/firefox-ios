@@ -396,25 +396,25 @@ class BrowserCoordinator: BaseCoordinator,
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
     }
 
-    func showBottomSheetCard(creditCard: CreditCard?,
-                             decryptedCard: UnencryptedCreditCardFields?,
-                             viewType state: CreditCardBottomSheetState,
-                             frame: WKFrameInfo?,
-                             alertContainer: UIView) {
-        let bottomSheetCoordinator = makeBottomSheetCardCoordinator()
-        bottomSheetCoordinator.showBottomSheetCardViewController(creditCard: creditCard, decryptedCard: decryptedCard, viewType: state, frame: frame, alertContainer: alertContainer)
+    func showCreditCardAutofill(creditCard: CreditCard?,
+                                decryptedCard: UnencryptedCreditCardFields?,
+                                viewType state: CreditCardBottomSheetState,
+                                frame: WKFrameInfo?,
+                                alertContainer: UIView) {
+        let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
+        bottomSheetCoordinator.showCreditCardAutofill(creditCard: creditCard, decryptedCard: decryptedCard, viewType: state, frame: frame, alertContainer: alertContainer)
     }
 
     func showRequiredPassCode() {
-        let bottomSheetCoordinator = makeBottomSheetCardCoordinator()
+        let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showPassCodeController()
     }
 
-    private func makeBottomSheetCardCoordinator() -> BottomSheetCardCoordinator {
-        if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is BottomSheetCardCoordinator }) as? BottomSheetCardCoordinator {
+    private func makeCredentialAutofillCoordinator() -> CredentialAutofillCoordinator {
+        if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = BottomSheetCardCoordinator(profile: profile, router: router, parentCoordinator: self)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }

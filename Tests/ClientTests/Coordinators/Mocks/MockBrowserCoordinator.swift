@@ -10,7 +10,7 @@ import Storage
 class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegate {
     var showSettingsCalled = 0
     var showFakespotCalled = 0
-    var showBottomSheetCard = 0
+    var showCreditCardAutofillCalled = 0
     var showRequiredPassCodeCalled = 0
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
@@ -26,8 +26,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showRequiredPassCodeCalled += 1
     }
 
-    func showBottomSheetCard(creditCard: CreditCard?, decryptedCard: UnencryptedCreditCardFields?, viewType state: CreditCardBottomSheetState, frame: WKFrameInfo?, alertContainer: UIView) {
-        showBottomSheetCard += 1
+    func showCreditCardAutofill(creditCard: CreditCard?, decryptedCard: UnencryptedCreditCardFields?, viewType state: CreditCardBottomSheetState, frame: WKFrameInfo?, alertContainer: UIView) {
+        showCreditCardAutofillCalled += 1
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {

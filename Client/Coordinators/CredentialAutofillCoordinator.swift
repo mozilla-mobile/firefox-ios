@@ -9,17 +9,7 @@ import Shared
 import WebKit
 import ComponentLibrary
 
-protocol BottomSheetCardCoordinatorDelegate: AnyObject {
-    func showBottomSheetCardViewController(creditCard: CreditCard?,
-                                           decryptedCard: UnencryptedCreditCardFields?,
-                                           viewType state: CreditCardBottomSheetState,
-                                           frame: WKFrameInfo?,
-                                           alertContainer: UIView)
-
-    func showPassCodeController()
-}
-
-class BottomSheetCardCoordinator: BaseCoordinator, BottomSheetCardCoordinatorDelegate {
+class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 
     typealias BottomSheetCardParentCoordinator = BrowserNavigationHandler & ParentCoordinatorDelegate
@@ -44,13 +34,13 @@ class BottomSheetCardCoordinator: BaseCoordinator, BottomSheetCardCoordinatorDel
         super.init(router: router)
     }
 
-    // MARK: - BottomSheetCardCoordinatorDelegate
+    // MARK: - Methods
 
-    func showBottomSheetCardViewController(creditCard: CreditCard?,
-                                           decryptedCard: UnencryptedCreditCardFields?,
-                                           viewType state: CreditCardBottomSheetState,
-                                           frame: WKFrameInfo?,
-                                           alertContainer: UIView) {
+    func showCreditCardAutofill(creditCard: CreditCard?,
+                                decryptedCard: UnencryptedCreditCardFields?,
+                                viewType state: CreditCardBottomSheetState,
+                                frame: WKFrameInfo?,
+                                alertContainer: UIView) {
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
