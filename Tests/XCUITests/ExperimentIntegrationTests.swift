@@ -7,7 +7,7 @@ import XCTest
 final class ExperimentIntegrationTests: BaseTestCase {
     override func setUpApp() {
         app.activate()
-        let closeButton = app.buttons["bottomSheet close"]
+        let closeButton = app.buttons["CloseButton"]
         if closeButton.exists {
             closeButton.tap()
         }
@@ -46,5 +46,20 @@ final class ExperimentIntegrationTests: BaseTestCase {
         wait(forElement: surveyLink.element, timeout: 15)
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
+    }
+
+    func testMessageNoThanksNavigatesCorrectly() throws {
+        let dismissLink = app.buttons.matching(
+            NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
+        )
+
+        wait(forElement: dismissLink.element, timeout: 15)
+        dismissLink.element.tap()
+
+        navigator.goto(NewTabScreen)
+        waitForTabsButton()
+
+        var tabsOpen = app.buttons["Show Tabs"].value
+        XCTAssertEqual("1", tabsOpen as? String)
     }
 }
