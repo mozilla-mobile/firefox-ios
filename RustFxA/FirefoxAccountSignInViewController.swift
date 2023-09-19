@@ -101,7 +101,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         )
         button.configure(viewModel: viewModel)
-        button.layer.cornerRadius = UX.buttonCornerRadius
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
