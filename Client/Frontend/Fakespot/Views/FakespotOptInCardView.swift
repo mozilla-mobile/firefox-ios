@@ -196,10 +196,10 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         headerLabel.text = viewModel.headerTitleLabel
         headerLabel.accessibilityIdentifier = viewModel.headerLabelA11yId
 
-        bodyFirstParagraphLabel.attributedText = viewModel.getFirstParagraphText()
+        bodyFirstParagraphLabel.attributedText = viewModel.firstParagraphText
         bodyFirstParagraphLabel.accessibilityIdentifier = viewModel.bodyFirstParagraphA11yId
 
-        disclaimerTextLabel.attributedText = viewModel.getDisclaimerText()
+        disclaimerTextLabel.attributedText = viewModel.disclaimerText
         disclaimerTextLabel.accessibilityIdentifier = viewModel.disclaimerTextLabelA11yId
 
         learnMoreButton.setTitle(viewModel.learnMoreButton, for: .normal)

@@ -206,11 +206,11 @@ public struct AccessibilityIdentifiers {
             static let headerTitle = "Shopping.OptInCard.HeaderTitle"
             static let optInCopy = "Shopping.OptInCard.BodyFirstParagraph"
             static let disclaimerText = "Shopping.OptInCard.DisclaimerText"
-            static let learnMoreButtonTitle = "Shopping.OptInCard.LearnMoreButtonTitle"
-            static let termsOfUseButtonTitle = "Shopping.OptInCard.TermsOfUseButtonTitle"
-            static let privacyPolicyButtonTitle = "Shopping.OptInCard.PrivacyPolicyButtonTitle"
-            static let mainButtonTitle = "Shopping.OptInCard.MainButtonTitle"
-            static let secondaryButtonTitle = "Shopping.OptInCard.SecondaryButtonTitle"
+            static let learnMoreButton = "Shopping.OptInCard.LearnMoreButtonTitle"
+            static let termsOfUseButton = "Shopping.OptInCard.TermsOfUseButtonTitle"
+            static let privacyPolicyButton = "Shopping.OptInCard.PrivacyPolicyButtonTitle"
+            static let mainButton = "Shopping.OptInCard.MainButtonTitle"
+            static let secondaryButton = "Shopping.OptInCard.SecondaryButtonTitle"
         }
     }
 

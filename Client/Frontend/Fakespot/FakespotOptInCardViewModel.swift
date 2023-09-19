@@ -14,6 +14,32 @@ struct FakespotOptInCardViewModel {
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
     }
 
+    public enum PartnerWebsite: String, CaseIterable {
+        case amazon
+        case walmart
+        case bestbuy
+
+        static func orderWebsites(for siteName: String?) -> [String] {
+            let lowercasedName = siteName?.lowercased() ?? "amazon"
+            var currentPartnerWebsites = PartnerWebsite.allCases.map { $0.rawValue }
+
+            // just in case this card will be shown from an unpartnered website in the future
+            guard currentPartnerWebsites.contains(lowercasedName) else {
+                currentPartnerWebsites[2] = "Best Buy"
+                return currentPartnerWebsites.map { $0.capitalized }
+            }
+
+            var websitesOrder = currentPartnerWebsites.filter { $0 != lowercasedName }
+            if lowercasedName == "bestbuy" {
+                websitesOrder.insert("Best Buy", at: 0)
+            } else {
+                websitesOrder.insert(lowercasedName.capitalized, at: 0)
+            }
+
+            return websitesOrder.map { $0.capitalized }
+        }
+    }
+
     private let tabManager: TabManager
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
@@ -29,15 +55,15 @@ struct FakespotOptInCardViewModel {
 
     // MARK: Buttons
     let learnMoreButton: String = .Shopping.OptInCardLearnMoreButtonTitle
-    let learnMoreButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButtonTitle
+    let learnMoreButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButton
     let termsOfUseButton: String = .Shopping.OptInCardTermsOfUse
-    let termsOfUseButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.termsOfUseButtonTitle
+    let termsOfUseButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.termsOfUseButton
     let privacyPolicyButton: String = .Shopping.OptInCardPrivacyPolicy
-    let privacyPolicyButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.privacyPolicyButtonTitle
+    let privacyPolicyButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.privacyPolicyButton
     let mainButton: String = .Shopping.OptInCardMainButtonTitle
-    let mainButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.mainButtonTitle
+    let mainButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.mainButton
     let secondaryButton: String = .Shopping.OptInCardSecondaryButtonTitle
-    let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButtonTitle
+    let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButton
 
     // MARK: Init
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -80,8 +106,8 @@ struct FakespotOptInCardViewModel {
     }
 
     // MARK: Text methods
-    func getFirstParagraphText() -> NSAttributedString {
-        let websites = getFirstParagraphWebsites()
+    var firstParagraphText: NSAttributedString {
+        let websites = PartnerWebsite.orderWebsites(for: productSitename)
         let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                           size: UX.bodyFirstParagraphLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
@@ -90,30 +116,11 @@ struct FakespotOptInCardViewModel {
         return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
     }
 
-    func getFirstParagraphWebsites() -> [String] {
-        let lowercasedName = productSitename?.lowercased() ?? "amazon"
-        var currentPartnerWebsites = ["amazon", "walmart", "bestbuy"]
-
-        // just in case this card will be shown from an unpartnered website in the future
-        guard currentPartnerWebsites.contains(lowercasedName) else {
-            currentPartnerWebsites[2] = "Best Buy"
-            return currentPartnerWebsites.map { $0.capitalized }
-        }
-
-        var websitesOrder = currentPartnerWebsites.filter { $0 != lowercasedName }
-        if lowercasedName == "bestbuy" {
-            websitesOrder.insert("Best Buy", at: 0)
-        } else {
-            websitesOrder.insert(lowercasedName.capitalized, at: 0)
-        }
-
-        return websitesOrder.map { $0.capitalized }
-    }
-
-    func getDisclaimerText() -> NSAttributedString {
+    var disclaimerText: NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.firstLineHeadIndent = UX.contentStackViewPadding
         paragraphStyle.headIndent = UX.contentStackViewPadding
+        paragraphStyle.tailIndent = UX.contentStackViewPadding
 
         let attributes: [NSAttributedString.Key: Any] = [
             .paragraphStyle: paragraphStyle
