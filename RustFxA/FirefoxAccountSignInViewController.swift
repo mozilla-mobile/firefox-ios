@@ -189,6 +189,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+        scanButton.applyTheme(theme: theme)
+        emailButton.applyTheme(theme: theme)
     }
 
     // MARK: - Helpers
