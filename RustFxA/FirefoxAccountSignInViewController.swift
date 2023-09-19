@@ -235,12 +235,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
         instructionsLabel.textColor = colors.textPrimary
-        scanButton.backgroundColor = colors.actionPrimary
-        scanButton.setTitleColor(colors.textInverted, for: .normal)
-        scanButton.setImage(signinSyncQRImage?
-            .tinted(withColor: colors.textInverted), for: .normal)
-        emailButton.backgroundColor = colors.actionSecondary
-        emailButton.setTitleColor(colors.textSecondaryAction, for: .normal)
     }
 
     // MARK: Button Tap Functions
