@@ -203,7 +203,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)
-            viewModel.settingsCardViewModel.onTapTurnOffButton = { [weak self] in
+            viewModel.settingsCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss()
             }
@@ -217,6 +217,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         case .messageCard:
             let view: FakespotMessageCardView = .build()
             view.configure(viewModel.errorCardViewModel)
+            return view
+
+        case .noConnectionError:
+            let view: FakespotMessageCardView = .build()
+            view.configure(viewModel.noConnectionViewModel)
             return view
         }
     }

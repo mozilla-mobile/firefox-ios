@@ -3701,6 +3701,11 @@ extension String {
             tableName: "Shopping",
             value: "Settings Card Collapsed",
             comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardFooterAction = MZLocalizedString(
+            key: "", // Shopping.SettingsCard.Footer.Action.v119
+            tableName: "Shopping",
+            value: "Review checker is powered by Fakespot by Mozilla",
+            comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
             tableName: "Shopping",
@@ -3771,6 +3776,16 @@ extension String {
             tableName: "Shopping",
             value: "Learn more about how Fakespot determines review quality",
             comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+        public static let WarningCardCheckNoConnectionTitle = MZLocalizedString(
+            key: "", // Shopping.WarningCard.CheckNoConnection.Title.v120
+            tableName: "Shopping",
+            value: "No network connection",
+            comment: "Title for error card displayed to the user when the device is disconnected from the network.")
+        public static let WarningCardCheckNoConnectionDescription = MZLocalizedString(
+            key: "", // Shopping.WarningCard.CheckNoConnection.Description.v120
+            tableName: "Shopping",
+            value: "Check your network connection and then try reloading the page.",
+            comment: "Text for body of error card displayed to the user when the device is disconnected from the network.")
     }
 }
 
