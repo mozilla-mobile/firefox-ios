@@ -25,20 +25,20 @@ class LoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["submit"], timeout: 10)
+        mozWaitForElementToExist(app.buttons["submit"], timeout: 10)
         app.buttons["submit"].tap()
-        waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
+        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
     private func openLoginsSettings() {
         navigator.goto(SettingsScreen)
-        waitForExistence(app.cells["SignInToSync"], timeout: 5)
+        mozWaitForElementToExist(app.cells["SignInToSync"], timeout: 5)
         app.cells["SignInToSync"].swipeUp()
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()
-        waitForExistence(app.tables["Login List"])
+        mozWaitForElementToExist(app.tables["Login List"])
     }
 
     private func openLoginsSettingsFromBrowserTab() {
@@ -59,7 +59,7 @@ class LoginTest: BaseTestCase {
         }
 
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
-        waitForExistence(passcodeInput, timeout: 20)
+        mozWaitForElementToExist(passcodeInput, timeout: 20)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
     }
@@ -70,7 +70,7 @@ class LoginTest: BaseTestCase {
         // Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        waitForExistence(app.tables["Login List"])
+        mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         app.buttons["Settings"].tap()
@@ -79,7 +79,7 @@ class LoginTest: BaseTestCase {
         // Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        waitForExistence(app.tables["Login List"])
+        mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
@@ -101,8 +101,8 @@ class LoginTest: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
 
         saveLogin(givenUrl: testLoginPage)
-        openLoginsSettingsFromBrowserTab()
-        waitForExistence(app.tables["Login List"])
+        openLoginsSettings()
+        mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
@@ -114,8 +114,8 @@ class LoginTest: BaseTestCase {
 
         navigator.nowAt(HomePanelsScreen)
         saveLogin(givenUrl: testSecondLoginPage)
-        openLoginsSettingsFromBrowserTab()
-        waitForExistence(app.tables["Login List"])
+        openLoginsSettings()
+        mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
         // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
@@ -153,7 +153,7 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
 
         app.staticTexts[domain].tap()
-        waitForExistence(app.buttons["Deselect All"])
+        mozWaitForElementToExist(app.buttons["Deselect All"])
 
         XCTAssertTrue(app.buttons["Deselect All"].exists)
         XCTAssertTrue(app.buttons["Delete"].exists)
@@ -165,9 +165,9 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
-        waitForExistence(app.alerts["Are you sure?"])
+        mozWaitForElementToExist(app.alerts["Are you sure?"])
         app.alerts.buttons["Delete"].tap()
-        waitForExistence(app.tables["Login List"])
+        mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertFalse(app.staticTexts[domain].exists)
         XCTAssertFalse(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
@@ -203,7 +203,7 @@ class LoginTest: BaseTestCase {
         // Type Text that does not match
         app.typeText("b")
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsEmptyFilterList)
-        // waitForExistence(app.tables["No logins found"])
+        // mozWaitForElementToExist(app.tables["No logins found"])
 
         // Clear Text
         app.buttons["Clear text"].tap()
@@ -216,7 +216,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
-        waitForExistence(app.webViews.staticTexts["Username:"], timeout: 15)
+        mozWaitForElementToExist(app.webViews.staticTexts["Username:"], timeout: 15)
 
         // Fill in the username text box
         app.webViews.textFields.element(boundBy: 0).tap()
@@ -227,7 +227,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
-        waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
+        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
         // Clear Data and go to test page, fields should be filled in
@@ -238,8 +238,7 @@ class LoginTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
-        // Investigate why locally the data is shown but not on TR
+        mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0), timeout: 3)
         // let emailValue = app.webViews.textFields.element(boundBy: 0).value!
         // XCTAssertEqual(emailValue as! String, mailLogin)
         // let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
@@ -252,9 +251,9 @@ class LoginTest: BaseTestCase {
         closeURLBar()
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        waitForExistence(app.tables["Login List"], timeout: 15)
+        mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
         app.buttons["Add"].tap()
-        waitForExistence(app.tables["Add Credential"], timeout: 15)
+        mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Username"].exists)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Password"].exists)
@@ -269,7 +268,7 @@ class LoginTest: BaseTestCase {
         enterTextInField(typedText: "bar")
 
         app.buttons["Save"].tap()
-        waitForExistence(app.tables["Login List"].otherElements["SAVED LOGINS"])
+        mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED LOGINS"])
         // XCTAssertTrue(app.cells.staticTexts["foo"].exists)
     }
 

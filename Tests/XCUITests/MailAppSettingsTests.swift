@@ -11,7 +11,7 @@ class MailAppSettingsTests: BaseTestCase {
         navigator.goto(OpenWithSettings)
 
         // Check that the list is shown
-        waitForExistence(app.tables["OpenWithPage.Setting.Options"])
+        mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
         XCTAssertTrue(app.tables["OpenWithPage.Setting.Options"].exists)
 
         // Check that the list is shown with all elements disabled
@@ -27,7 +27,7 @@ class MailAppSettingsTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["Fastmail"].isSelected)
 
         // Check that tapping on an element does nothing
-        waitForExistence(app.tables["OpenWithPage.Setting.Options"])
+        mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
         app.tables.cells.staticTexts["Airmail"].tap()
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
 

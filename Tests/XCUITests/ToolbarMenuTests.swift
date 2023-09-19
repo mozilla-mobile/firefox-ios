@@ -26,11 +26,11 @@ class ToolbarMenuTests: BaseTestCase {
             XCTAssertTrue(hamburgerMenu.isBelow(element: firstPocketCell), "Menu button is not below the pocket cells area")
         }
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()
         XCUIDevice.shared.orientation = .landscapeLeft
-        waitForExistence(hamburgerMenu, timeout: 15)
-        waitForNoExistence(app.tables["Context Menu"])
+        mozWaitForElementToExist(hamburgerMenu, timeout: 15)
+        mozWaitForElementToNotExist(app.tables["Context Menu"])
         if iPad() {
             XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: bookmarksButton), "Menu button is not on the right side of bookmarks button")
         } else {
@@ -38,10 +38,10 @@ class ToolbarMenuTests: BaseTestCase {
         }
         XCTAssertTrue(hamburgerMenu.isAbove(element: firstPocketCell), "Menu button is not below the pocket cells area")
         hamburgerMenu.tap()
-        waitForExistence(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()
         app.otherElements["PopoverDismissRegion"].tap()
-        waitForNoExistence(app.tables["Context Menu"])
+        mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
     private func validateMenuOptions() {

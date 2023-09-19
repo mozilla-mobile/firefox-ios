@@ -14,7 +14,7 @@ func path(forTestPage page: String) -> String {
     return "http://localhost:\(serverPort)/test-fixture/\(page)"
 }
 
-// Extended timeout values for waitForExistence and waitForNoExistence
+// Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 15
 let TIMEOUT_LONG: TimeInterval = 45
 
@@ -46,7 +46,7 @@ class BaseTestCase: XCTestCase {
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT_LONG)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
     }
 
@@ -55,7 +55,7 @@ class BaseTestCase: XCTestCase {
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
+        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
     }
 
@@ -115,11 +115,11 @@ class BaseTestCase: XCTestCase {
     }
 
     // is up to 25x more performant than the above waitForExistence method
-    func mozWaitForElementToExist(element: XCUIElement, timeoutInSeconds: TimeInterval) {
+    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
         while !element.exists {
-            if Date().timeIntervalSince(startTime) > timeoutInSeconds {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
                 XCTFail("Timed out waiting for element \(element) to exist")
                 break
             }
@@ -131,8 +131,35 @@ class BaseTestCase: XCTestCase {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
+    // is up to 25x more performant than the above waitForNoExistence method
+    func mozWaitForElementToNotExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to not exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
+
     func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
+    }
+
+    func mozWaitForValueContains(_ element: XCUIElement, value: String, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while true {
+            if let elementValue = element.value as? String, elementValue.contains(value) {
+                break
+            } else if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to contain value \(value)")
+                break
+            }
+            usleep(10000) // waits for 0.01 seconds
+        }
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
@@ -158,16 +185,16 @@ class BaseTestCase: XCTestCase {
     }
 
     func bookmark() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
         app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -197,10 +224,10 @@ class BaseTestCase: XCTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
         app.buttons["Reader View"].tap()
         waitUntilPageLoad()
-        waitForExistence(app.buttons["Add to Reading List"])
+        mozWaitForElementToExist(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].tap()
     }
 
@@ -208,16 +235,16 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        waitForExistence(savedToReadingList)
+        mozWaitForElementToExist(savedToReadingList)
 
         // Remove the item from reading list
         if processIsTranslatedStr() == m1Rosetta {
             savedToReadingList.press(forDuration: 2)
-            waitForExistence(app.otherElements["Remove"])
+            mozWaitForElementToExist(app.otherElements["Remove"])
             app.otherElements["Remove"].tap()
         } else {
             savedToReadingList.swipeLeft()
-            waitForExistence(app.buttons["Remove"])
+            mozWaitForElementToExist(app.buttons["Remove"])
             app.buttons["Remove"].tap()
         }
     }
@@ -225,7 +252,7 @@ class BaseTestCase: XCTestCase {
      func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
         app.tables["Context Menu"].cells.otherElements[option].tap()
-        waitForNoExistence(app.tables["Context Menu"])
+        mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #file, line: UInt = #line) {
@@ -257,11 +284,11 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitForNoExistence(progressIndicator, timeoutValue: 60.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 60.0)
     }
 
     func waitForTabsButton() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
     }
 }
 

@@ -15,7 +15,7 @@ let testBLOBFileSize = "35 bytes"
 class DownloadFilesTests: BaseTestCase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         if processIsTranslatedStr() == m1Rosetta {
             navigator.nowAt(LibraryPanel_Downloads)
             navigator.goto(HomePanelsScreen)
@@ -28,9 +28,9 @@ class DownloadFilesTests: BaseTestCase {
             let list = app.tables["DownloadsTable"].cells.count
             if list != 0 {
                 for _ in 0...list-1 {
-                    waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
+                    mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                     app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                    waitForExistence(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete])
+                    mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete])
                     app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
                 }
             }
@@ -40,14 +40,14 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
-        waitForExistence(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
         app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
     }
 
     func testDownloadFilesAppMenuFirstTime() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
-        waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables["DownloadsTable"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
         // Check that there is not any items and the default text shown is correct
         checkTheNumberOfDownloadedItems(items: 0)
@@ -64,7 +64,7 @@ class DownloadFilesTests: BaseTestCase {
         }
         app.webViews.links[testFileName].firstMatch.tap()
 
-        waitForExistence(app.tables["Context Menu"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables["Context Menu"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
         XCTAssertTrue(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].exists)
         app.buttons["Cancel"].tap()
@@ -79,7 +79,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables["DownloadsTable"], timeout: TIMEOUT)
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileNameDownloadPanel].exists)
@@ -88,11 +88,11 @@ class DownloadFilesTests: BaseTestCase {
 
     func testDownloadBLOBFile() {
         downloadBLOBFile()
-        waitForExistence(app.buttons["Downloads"])
+        mozWaitForElementToExist(app.buttons["Downloads"])
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
         // We can only check for the BLOB file size since the name is generated
@@ -103,12 +103,12 @@ class DownloadFilesTests: BaseTestCase {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         if processIsTranslatedStr() == m1Rosetta {
             throw XCTSkip("swipeLeft() does not work on M1")
         } else {
             deleteItem(itemName: testFileNameDownloadPanel)
-            waitForNoExistence(app.tables.cells.staticTexts[testFileNameDownloadPanel])
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts[testFileNameDownloadPanel])
             // After removing the number of items should be 0
             checkTheNumberOfDownloadedItems(items: 0)
         }
@@ -132,10 +132,10 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         // Commenting out until share sheet can be managed with automated tests issue #5477
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
-        waitForExistence(app.otherElements["ActivityListView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.otherElements["ActivityListView"], timeout: TIMEOUT)
         if !iPad() {
             app.buttons["Close"].tap()
         } else {
@@ -151,18 +151,18 @@ class DownloadFilesTests: BaseTestCase {
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
         for _ in 0..<numberOfDownloads {
-            waitForExistence(app.webViews.links[testFileName], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.webViews.links[testFileName], timeout: TIMEOUT)
 
             app.webViews.links[testFileName].firstMatch.tap()
 
-            waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download], timeout: TIMEOUT)
             app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
         }
     }
 
     private func downloadBLOBFile() {
         navigator.openURL(testBLOBURL)
-        waitForExistence(app.webViews.links["Download Text"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.webViews.links["Download Text"], timeout: TIMEOUT)
         app.webViews.links["Download Text"].press(forDuration: 1)
         app.buttons["Download Link"].tap()
     }
@@ -172,7 +172,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 2)
     }
 
@@ -189,12 +189,12 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"])
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
@@ -209,16 +209,16 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     private func checkTheNumberOfDownloadedItems(items: Int) {
-        waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables["DownloadsTable"], timeout: TIMEOUT)
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
     // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
-        waitForExistence(app.buttons["Downloads"])
+        mozWaitForElementToExist(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
-        waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables["DownloadsTable"], timeout: TIMEOUT)
         checkTheNumberOfDownloadedItems(items: 1)
     }
 }

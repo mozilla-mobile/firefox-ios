@@ -5,11 +5,11 @@
 import XCTest
 class NightModeTests: BaseTestCase {
     private func checkNightModeOn() {
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.nightMode])
     }
 
     private func checkNightModeOff() {
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.nightMode])
     }
 
     func testNightModeUI() {
