@@ -12,6 +12,8 @@
 		8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */; };
 		8A2FE65B2A55EE3F0036B6AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A2FE65A2A55EE3F0036B6AF /* Assets.xcassets */; };
 		8A2FE65E2A55EE3F0036B6AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A2FE65C2A55EE3F0036B6AF /* LaunchScreen.storyboard */; };
+		8A3BE7652AB1FDC900C7567C /* ContextualHintViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE7642AB1FDC900C7567C /* ContextualHintViewViewController.swift */; };
+		8A3BE7672AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE7662AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift */; };
 		8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0962A5730A100B4D401 /* ComponentData.swift */; };
 		8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */; };
 		8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6EE09A2A57317200B4D401 /* ComponentCell.swift */; };
@@ -45,6 +47,8 @@
 		8A2FE65A2A55EE3F0036B6AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A2FE65D2A55EE3F0036B6AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A2FE65F2A55EE3F0036B6AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A3BE7642AB1FDC900C7567C /* ContextualHintViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewViewController.swift; sourceTree = "<group>"; };
+		8A3BE7662AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewComponentViewModel.swift; sourceTree = "<group>"; };
 		8A6EE0962A5730A100B4D401 /* ComponentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentData.swift; sourceTree = "<group>"; };
 		8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewModel.swift; sourceTree = "<group>"; };
 		8A6EE09A2A57317200B4D401 /* ComponentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentCell.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 				E1FC23E92A85341B0089E14D /* CardView */,
 				E19891C52A790AB700CD256D /* CollapsibleCardView */,
 				8A6EE0A32A5863D600B4D401 /* Component */,
+				8A3BE7632AB1FDA300C7567C /* ContextualHintView */,
 				8ABC3CE42A6EECE100B69244 /* Dependency */,
 				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
 				8A6EE0AD2A5869C200B4D401 /* Protocol */,
@@ -129,6 +134,15 @@
 				8A6EE09C2A574E3700B4D401 /* BrowserKit */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		8A3BE7632AB1FDA300C7567C /* ContextualHintView */ = {
+			isa = PBXGroup;
+			children = (
+				8A3BE7642AB1FDC900C7567C /* ContextualHintViewViewController.swift */,
+				8A3BE7662AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift */,
+			);
+			path = ContextualHintView;
 			sourceTree = "<group>";
 		};
 		8A6EE09D2A574E3F00B4D401 /* Frameworks */ = {
@@ -337,11 +351,13 @@
 				8A6EE0AA2A5866C300B4D401 /* ComponentDelegate.swift in Sources */,
 				8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */,
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
+				8A3BE7672AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift in Sources */,
 				E1FC23EC2A85341B0089E14D /* CardViewViewController.swift in Sources */,
 				8CD02BC92A9493B50029106A /* ActionFooterViewController.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
 				8CD02BCB2A9493B90029106A /* ActionFooterComponentViewModel.swift in Sources */,
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
+				8A3BE7652AB1FDC900C7567C /* ContextualHintViewViewController.swift in Sources */,
 				8ABC3CE82A6EED0900B69244 /* MockThemeManager.swift in Sources */,
 				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
 				E1E0E8722A850479003D847E /* ShadowCardViewComponentViewModel.swift in Sources */,

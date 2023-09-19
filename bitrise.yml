@@ -1481,6 +1481,7 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
         - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
@@ -1541,8 +1542,7 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            ls /Users/vagrant/git/Fennec_Enterprise.zip
-            gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
+            $HOME/google-cloud-sdk/bin/gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --model=iphone14pro,version=16.4 \
                 --xcode-version=14.3.1
 app:

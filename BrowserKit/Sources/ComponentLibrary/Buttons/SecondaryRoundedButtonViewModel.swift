@@ -5,10 +5,10 @@
 import Foundation
 
 public struct SecondaryRoundedButtonViewModel {
-    public let title: String?
+    public let title: String
     public let a11yIdentifier: String
 
-    public init(title: String?, a11yIdentifier: String) {
+    public init(title: String, a11yIdentifier: String) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
     }

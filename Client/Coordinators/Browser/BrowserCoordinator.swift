@@ -396,6 +396,29 @@ class BrowserCoordinator: BaseCoordinator,
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
     }
 
+    func showCreditCardAutofill(creditCard: CreditCard?,
+                                decryptedCard: UnencryptedCreditCardFields?,
+                                viewType state: CreditCardBottomSheetState,
+                                frame: WKFrameInfo?,
+                                alertContainer: UIView) {
+        let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
+        bottomSheetCoordinator.showCreditCardAutofill(creditCard: creditCard, decryptedCard: decryptedCard, viewType: state, frame: frame, alertContainer: alertContainer)
+    }
+
+    func showRequiredPassCode() {
+        let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
+        bottomSheetCoordinator.showPassCodeController()
+    }
+
+    private func makeCredentialAutofillCoordinator() -> CredentialAutofillCoordinator {
+        if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
+            return bottomSheetCoordinator
+        }
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
+        add(child: bottomSheetCoordinator)
+        return bottomSheetCoordinator
+    }
+
     // MARK: - LibraryPanelDelegate
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

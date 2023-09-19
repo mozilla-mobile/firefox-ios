@@ -1,8 +1,0 @@
-features:
-  autopush-feature:
-    description: This property defines the autopush feature configuration
-    variables:
-      use-new-autopush-client:
-        description: If true, the autopush client based on the Rust component will be used
-        type: Boolean
-        default: true

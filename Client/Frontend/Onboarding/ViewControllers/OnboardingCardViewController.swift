@@ -12,7 +12,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let stackViewSpacingWithLink: CGFloat = 15
         static let stackViewSpacingWithoutLink: CGFloat = 24
         static let stackViewSpacingButtons: CGFloat = 16
-        static let buttonCornerRadius: CGFloat = 13
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
         static let topStackViewPaddingPhone: CGFloat = 90
@@ -117,34 +116,12 @@ class OnboardingCardViewController: UIViewController, Themeable {
         stack.axis = .vertical
     }
 
-    private lazy var primaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
-    private lazy var secondaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var secondaryButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)SecondaryButton"
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     private lazy var linkButton: ResizableButton = .build { button in
@@ -334,10 +311,15 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private func updateLayout() {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.body
-
         imageView.image = viewModel.image
-        primaryButton.setTitle(viewModel.buttons.primary.title,
-                               for: .normal)
+
+        let buttonViewModel = PrimaryRoundedButtonViewModel(
+            title: viewModel.buttons.primary.title,
+            a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
+        )
+        primaryButton.configure(viewModel: buttonViewModel)
+        primaryButton.applyTheme(theme: themeManager.currentTheme)
+
         setupSecondaryButton()
     }
 
@@ -350,7 +332,12 @@ class OnboardingCardViewController: UIViewController, Themeable {
             return
         }
 
-        secondaryButton.setTitle(buttonTitle, for: .normal)
+        let buttonViewModel = SecondaryRoundedButtonViewModel(
+            title: buttonTitle,
+            a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
+        )
+        secondaryButton.configure(viewModel: buttonViewModel)
+        secondaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupLinkButton() {
@@ -395,11 +382,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = theme.colors.actionPrimary
-
-        secondaryButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
-        secondaryButton.backgroundColor = theme.colors.actionSecondary
         setupSecondaryButton()
         setupLinkButton()
     }

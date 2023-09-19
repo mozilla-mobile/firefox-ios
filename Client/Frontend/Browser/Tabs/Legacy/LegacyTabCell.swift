@@ -56,7 +56,7 @@ class LegacyTabCell: UICollectionViewCell,
     private lazy var titleText: UILabel = .build { label in
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
-        label.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
     }
 
     private lazy var smallFaviconView: FaviconImageView = .build { _ in }
@@ -226,7 +226,7 @@ class LegacyTabCell: UICollectionViewCell,
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
-        self.titleText.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        self.titleText.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0

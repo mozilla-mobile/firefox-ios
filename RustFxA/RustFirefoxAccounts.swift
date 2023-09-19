@@ -222,7 +222,7 @@ open class RustFirefoxAccounts {
         return cachedUserProfile
     }
 
-    public func disconnect(useNewAutopush: Bool) {
+    public func disconnect() {
         guard let accountManager = accountManager.peek() else { return }
         accountManager.logout { _ in }
         let prefs = RustFirefoxAccounts.prefs
@@ -231,9 +231,6 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         self.syncAuthState.invalidate()
         cachedUserProfile = nil
-        if !useNewAutopush {
-            pushNotifications.unregister()
-        }
         MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
     }
 

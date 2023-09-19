@@ -118,6 +118,12 @@ public struct AccessibilityIdentifiers {
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
 
+        struct NoConnectionCard {
+            static let card = "Shopping.NoConnectionCard.Card"
+            static let title = "Shopping.NoConnectionCard.Title"
+            static let description = "Shopping.NoConnectionCard.Description"
+        }
+
         struct ErrorCard {
             static let card = "Shopping.ErrorCard.Card"
             static let title = "Shopping.ErrorCard.Title"
