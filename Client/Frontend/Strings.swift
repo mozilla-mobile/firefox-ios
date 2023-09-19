@@ -3596,11 +3596,6 @@ extension String {
             tableName: "Shopping",
             value: "Unreliable reviews",
             comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
-        public static let ErrorCardTitle = MZLocalizedString(
-            key: "", // Shopping.ErrorCard.Title.v118
-            tableName: "Shopping",
-            value: "Something Went Wrong",
-            comment: "Title of the error displayed in the shopping review quality bottom sheet.")
         public static let ConfirmationCardTitle = MZLocalizedString(
             key: "", // Shopping.ConfirmationCard.Title.v118
             tableName: "Shopping",
@@ -3611,16 +3606,6 @@ extension String {
             tableName: "Shopping",
             value: "Got It",
             comment: "Button text of the confirmation displayed in the shopping review quality bottom sheet.")
-        public static let ErrorCardDescription = MZLocalizedString(
-            key: "", // Shopping.ErrorCard.Description.v118
-            tableName: "Shopping",
-            value: "Couldn’t load information. Please try again.",
-            comment: "Description of the error displayed in the shopping review quality bottom sheet.")
-        public static let ErrorCardButtonText = MZLocalizedString(
-            key: "", // Shopping.ErrorCard.Button.Text.v118
-            tableName: "Shopping",
-            value: "Try Again",
-            comment: "Button text of the error displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardTitle = MZLocalizedString(
             key: "", // Shopping.HighlightsCard.Title.v119
             tableName: "Shopping",
@@ -3826,6 +3811,16 @@ extension String {
             tableName: "Shopping",
             value: "Check your network connection and then try reloading the page.",
             comment: "Text for body of error card displayed to the user when the device is disconnected from the network.")
+        public static let InfoCardNoInfoAvailableRightNowTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120
+            tableName: "Shopping",
+            value: "No Info Available Right Now",
+            comment: "Title for info card when no information is available at the moment")
+        public static let InfoCardNoInfoAvailableRightNowDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120
+            tableName: "Shopping",
+            value: "We’re working to resolve this issue. Please check back soon.",
+            comment: "Description for info card when no information is available at the moment")
     }
 }
 
