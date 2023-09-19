@@ -1545,7 +1545,7 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --device model=iphone14pro,version=16.6 \
-                --xcode-version=14.3.1
+                --xcode-version=14.3
 app:
   envs:
   - opts:
