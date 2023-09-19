@@ -1489,14 +1489,12 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
-            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
-            xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
-                "-scheme" "Fennec_Enterprise" \
-                "-configuration" "Fennec_Enterprise" \
-                "-sdk" "iphoneos" \
-                "-destination" "generic/platform=iOS" \
-                "-derivedDataPath" "/Users/vagrant/git/DerivedData"
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
+                -scheme Fennec_Enterprise \
+                -sdk iphoneos \
+                -destination "generic/platform=iOS" \
+                -derivedDataPath "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
@@ -1527,7 +1525,7 @@ workflows:
               echo "Google Cloud SDK not found, installing..."
               curl https://sdk.cloud.google.com > install.sh
               bash install.sh --disable-prompts
-              source $HOME/google-cloud-sdk/path.bash.
+              source $HOME/google-cloud-sdk/path.bash.inc
             fi
     - cache-push@2.7.1:
         inputs:
