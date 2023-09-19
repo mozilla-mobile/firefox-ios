@@ -1503,7 +1503,8 @@ workflows:
             -configuration Fennec_Enterprise \
             -destination generic/platform=iOS \
             CODE_SIGN_IDENTITY="iPhone Developer: Mozilla Corporation" \
-            PROVISIONING_PROFILE="0dd4c07d-3c78-4ea6-b17a-e90e4f72cf82"
+            PROVISIONING_PROFILE="0dd4c07d-3c78-4ea6-b17a-e90e4f72cf82" \
+            DEVELOPMENT_TEAM=9G8J6YA743
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
