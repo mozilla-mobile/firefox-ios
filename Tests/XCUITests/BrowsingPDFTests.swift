@@ -7,6 +7,7 @@ import Common
 
 let PDF_website = ["url": "www.orimi.com/pdf-test.pdf", "pdfValue": "www.orimi.com/pdf", "urlValue": "yukon.ca/en/educat", "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf", "longUrlValue": "http://www.education.gov.yk.ca/"]
 class BrowsingPDFTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198415
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -18,6 +19,7 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["1 of 1"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198418
     // Disabled due to link not loading
     func testOpenLinkFromPDF() throws {
         throw XCTSkip("Link inside pfd is not loading anymore")
@@ -37,6 +39,7 @@ class BrowsingPDFTests: BaseTestCase {
          */
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198421
     func testLongPressOnPDFLink() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -50,6 +53,7 @@ class BrowsingPDFTests: BaseTestCase {
         waitForExistence(app.buttons["Share…"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198422
     func testLongPressOnPDFLinkToAddToReadingList() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -67,6 +71,7 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(savedToReadingList.exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198423
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -92,6 +97,7 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2198424
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

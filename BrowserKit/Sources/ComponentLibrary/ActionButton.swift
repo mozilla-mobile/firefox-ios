@@ -2,12 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import ComponentLibrary
+import UIKit
 
 // A convenience button class to add a closure as an action on a button instead of a selector
-class ActionButton: ResizableButton {
-    var touchUpAction: ((UIButton) -> Void)? {
+public class ActionButton: ResizableButton {
+    public var touchUpAction: ((UIButton) -> Void)? {
         didSet {
             setupButton()
         }

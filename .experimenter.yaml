@@ -1,12 +1,4 @@
 ---
-autopush-feature:
-  description: This property defines the autopush feature configuration
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    use-new-autopush-client:
-      type: boolean
-      description: "If true, the autopush client based on the Rust component will be used"
 contextual-hint-feature:
   description: This set holds all features pertaining to contextual hints.
   hasExposure: true
@@ -15,6 +7,14 @@ contextual-hint-feature:
     features-enabled:
       type: json
       description: "This property provides a lookup table of whether specific contextual hints are enabled.\n"
+credential-autofill-coordinator-refactor:
+  description: "This feature manages the roll out of the credential autofill coordinator as part of the coordinator refactor.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 credit-card-autofill:
   description: This property defines the credit card autofill feature
   hasExposure: true
@@ -84,14 +84,6 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
-onboarding-feature:
-  description: The feature that controls whether to show or not Upgrade onboarding
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    first-run-flow:
-      type: boolean
-      description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
 onboarding-framework-feature:
   description: "The new onboarding framework feature that will allow onboarding to be experimentable through initial experiments.\n"
   hasExposure: true
@@ -106,6 +98,14 @@ onboarding-framework-feature:
     dismissable:
       type: boolean
       description: "Whether or not the entire onboarding is dismissable by pressing an X at the top right corner of the screen.\n"
+private-browsing:
+  description: Private Browsing Mode
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    felt-privacy-enabled:
+      type: boolean
+      description: "If true, enable felt privacy related UI"
 redux-integration-feature:
   description: "This feature is for managing the roll out of the Redux integration feature\n"
   hasExposure: true

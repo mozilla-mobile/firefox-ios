@@ -44,6 +44,7 @@ class BaseTestCase: XCTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
+        _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT_LONG)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()

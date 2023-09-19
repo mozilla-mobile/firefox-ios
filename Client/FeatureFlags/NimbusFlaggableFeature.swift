@@ -10,9 +10,9 @@ import UIKit
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
-    case autopushFeature
     case bottomSearchBar
     case contextualHintForToolbar
+    case credentialAutofillCoordinatorRefactor
     case creditCardAutofillStatus
     case etpCoordinatorRefactor
     case fakespotFeature
@@ -21,8 +21,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case libraryCoordinatorRefactor
-    case onboardingFreshInstall
     case pocket
+    case feltPrivacyUI
     case recentlySaved
     case reduxIntegration
     case reportSiteIssue
@@ -56,8 +56,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
-        case .autopushFeature:
-            return FlagKeys.AutopushFeature
         case .bottomSearchBar:
             return FlagKeys.SearchBarPosition
         case .historyHighlights:
@@ -82,12 +80,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .creditCardAutofillStatus,
+                .credentialAutofillCoordinatorRefactor,
                 .etpCoordinatorRefactor,
                 .fakespotFeature,
                 .libraryCoordinatorRefactor,
-                .onboardingFreshInstall,
                 .reduxIntegration,
                 .reportSiteIssue,
+                .feltPrivacyUI,
                 .searchHighlights,
                 .shareExtensionCoordinatorRefactor,
                 .shareSheetChanges,

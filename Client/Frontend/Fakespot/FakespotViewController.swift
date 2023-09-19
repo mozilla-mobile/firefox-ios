@@ -94,9 +94,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if presentingViewController == nil {
-            recordTelemetry()
-        }
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
     }
 
     func applyTheme() {
@@ -205,6 +203,10 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)
+            viewModel.settingsCardViewModel.onTapTurnOffButton = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
             return view
 
         case .noAnalysisCard:
@@ -216,10 +218,15 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             let view: FakespotMessageCardView = .build()
             view.configure(viewModel.errorCardViewModel)
             return view
+
+        case .noConnectionError:
+            let view: FakespotMessageCardView = .build()
+            view.configure(viewModel.noConnectionViewModel)
+            return view
         }
     }
 
-    private func recordTelemetry() {
+    private func recordDismissTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
                                      object: .shoppingBottomSheet)
@@ -234,11 +241,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 }

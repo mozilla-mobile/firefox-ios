@@ -35,14 +35,9 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        // TODO: FXIOS-7355 Move logic to BrowserCoordinator in
+        // TODO: FXIOS-7355 Move logic to BrowserCoordinator
         if isTabTrayRefactorEnabled {
-            self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                               profile: profile,
-                                                               tabToFocus: tabToFocus,
-                                                               tabManager: tabManager,
-                                                               overlayManager: overlayManager,
-                                                               focusedSegment: focusedSegment)
+            self.tabTrayViewController = TabTrayViewController()
         } else {
             self.tabTrayViewController = LegacyTabTrayViewController(
                 tabTrayDelegate: self,
@@ -120,9 +115,9 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton) {
+    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
         guard let productURL = urlBar.currentURL else { return }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingCartButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
         navigationHandler?.showFakespotFlow(productURL: productURL)
     }
 

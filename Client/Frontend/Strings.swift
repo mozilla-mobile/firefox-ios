@@ -3811,6 +3811,16 @@ extension String {
             tableName: "Shopping",
             value: "Not now",
             comment: "Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot)")
+        public static let WarningCardCheckNoConnectionTitle = MZLocalizedString(
+            key: "", // Shopping.WarningCard.CheckNoConnection.Title.v120
+            tableName: "Shopping",
+            value: "No network connection",
+            comment: "Title for error card displayed to the user when the device is disconnected from the network.")
+        public static let WarningCardCheckNoConnectionDescription = MZLocalizedString(
+            key: "", // Shopping.WarningCard.CheckNoConnection.Description.v120
+            tableName: "Shopping",
+            value: "Check your network connection and then try reloading the page.",
+            comment: "Text for body of error card displayed to the user when the device is disconnected from the network.")
     }
 }
 
