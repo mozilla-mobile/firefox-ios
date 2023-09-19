@@ -36,7 +36,7 @@ class ToolbarTests: BaseTestCase {
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
+        mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -49,7 +49,7 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(website2)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
+        mozWaitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
@@ -63,7 +63,7 @@ class ToolbarTests: BaseTestCase {
         // Open new tab and then go back to previous tab to test navigation buttons.
         waitForTabsButton()
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts[website1["label"]!])
+        mozWaitForElementToExist(app.cells.staticTexts[website1["label"]!])
         if iPad() {
             app.cells.element(boundBy: 1).tap()
         } else {
@@ -81,7 +81,7 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         waitForTabsButton()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
+        mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
 
@@ -100,12 +100,12 @@ class ToolbarTests: BaseTestCase {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            waitForExistence(app.otherElements["Navigation Toolbar"])
+            mozWaitForElementToExist(app.otherElements["Navigation Toolbar"])
 
             navigator.openURL(website1["url"]!, waitForLoading: true)
             // Adding the waiter right after navigating to the webpage in order to make the test more stable
             waitUntilPageLoad()
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
             let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
             app.swipeUp()
@@ -114,7 +114,7 @@ class ToolbarTests: BaseTestCase {
             XCTAssertTrue(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
             let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
-            waitForExistence(topElement, timeout: 10)
+            mozWaitForElementToExist(topElement, timeout: 10)
             XCTAssertTrue(topElement.isHittable)
         }
    }

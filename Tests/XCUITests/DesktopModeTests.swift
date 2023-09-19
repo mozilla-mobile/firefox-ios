@@ -100,16 +100,16 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceDesktop])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceDesktop])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceMobile])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceMobile])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
@@ -135,7 +135,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestMobileSite) // toggle off
@@ -181,7 +181,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        waitForExistence(app.webViews.staticTexts.firstMatch, timeout: 5)
+        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch, timeout: 5)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)

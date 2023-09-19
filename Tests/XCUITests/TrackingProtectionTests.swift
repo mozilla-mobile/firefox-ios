@@ -14,7 +14,7 @@ class TrackingProtectionTests: BaseTestCase {
     // Smoketest
     func testTrackingProtection() {
         navigator.goto(URLBarOpen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.back()
         navigator.goto(TrackingProtectionSettings)
 
@@ -29,8 +29,8 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -38,13 +38,13 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
+        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
         app.tables.otherElements[ImageIdentifiers.settings].tap()
         navigator.nowAt(SettingsScreen)
-        waitForExistence(app.tables.cells["NewTab"], timeout: 5)
+        mozWaitForElementToExist(app.tables.cells["NewTab"], timeout: 5)
         app.tables.cells["NewTab"].swipeUp()
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -57,12 +57,12 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     private func checkTrackingProtectionDisabledForSite() {
-        waitForNoExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
     }
 
     private func checkTrackingProtectionEnabledForSite() {
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
+        mozWaitForElementToExist(app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
     }
 
     private func enableStrictMode() {
@@ -76,9 +76,9 @@ class TrackingProtectionTests: BaseTestCase {
     func testETPLockMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
         if switchValue as! String == "0" {
@@ -93,7 +93,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Open TP Settings menu
         app.buttons["Protection Settings"].tap()
-        waitForExistence(app.navigationBars["Tracking Protection"], timeout: 5)
+        mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as! String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
@@ -102,7 +102,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
         XCTAssertFalse(app.switches.element.exists)
     }
 

@@ -26,9 +26,13 @@ class FakespotViewModel {
                     .qualityDeterminationCard,
                     .settingsCard]
 
-            case .error:
-                // add error card
-                elements = [.qualityDeterminationCard, .settingsCard]
+            case let .error(error):
+                let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
+                if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
+                    return [.noConnectionError] + baseElements
+                } else {
+                    return [.genericError] + baseElements
+                }
             }
 
             return elements
@@ -51,7 +55,8 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case messageCard
+        case genericError
+        case noConnectionError
     }
 
     private(set) var state: ViewState = .loading {
@@ -100,16 +105,24 @@ class FakespotViewModel {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
     )
 
-    let errorCardViewModel = FakespotMessageCardViewModel(
-        type: .error,
-        title: .Shopping.ErrorCardTitle,
-        description: .Shopping.ErrorCardDescription,
-        primaryActionText: .Shopping.ErrorCardButtonText,
-        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.card,
-        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.title,
-        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.description,
-        a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ErrorCard.primaryAction
+    let noConnectionViewModel = FakespotMessageCardViewModel(
+        type: .warning,
+        title: .Shopping.WarningCardCheckNoConnectionTitle,
+        description: .Shopping.WarningCardCheckNoConnectionDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.NoConnectionCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.NoConnectionCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.NoConnectionCard.description
     )
+
+    let genericErrorViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardNoInfoAvailableRightNowTitle,
+        description: .Shopping.InfoCardNoInfoAvailableRightNowDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.description
+    )
+
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
 

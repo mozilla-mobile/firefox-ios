@@ -6,12 +6,18 @@ import ComponentLibrary
 import Common
 import UIKit
 
-class ActionFooterViewController: UIViewController {
+class ActionFooterViewController: UIViewController, Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var actionFooterView: ActionFooterView = .build()
     private var viewModel: ActionFooterViewModel
 
-    init(viewModel: ActionFooterViewModel) {
+    init(viewModel: ActionFooterViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -23,9 +29,9 @@ class ActionFooterViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
-        view.backgroundColor = .white
 
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        listenForThemeChange(view)
+        applyTheme()
         actionFooterView.applyTheme(theme: themeManager.currentTheme)
     }
 
@@ -39,5 +45,11 @@ class ActionFooterViewController: UIViewController {
             actionFooterView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             actionFooterView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+
+    // MARK: Themeable
+
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
