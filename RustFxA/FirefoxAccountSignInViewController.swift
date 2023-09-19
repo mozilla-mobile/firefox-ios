@@ -102,14 +102,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         )
         button.configure(viewModel: viewModel)
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
 
-        let contentPadding = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                          left: UX.buttonHorizontalInset,
-                                          bottom: UX.buttonVerticalInset,
-                                          right: UX.buttonHorizontalInset)
         button.setInsets(forContentPadding: contentPadding, imageTitlePadding: UX.buttonHorizontalInset)
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
@@ -124,14 +117,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     // MARK: - Inits
