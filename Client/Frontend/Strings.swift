@@ -2216,7 +2216,7 @@ extension String {
         lastUsedInVersion: 119)
     public static let FxAFirefoxAccount = MZLocalizedString(
         key: "FxA.FirefoxAccount.v119",
-        tableName: nil,
+        tableName: "Settings",
         value: "account",
         comment: "Settings section title for account")
     public static let FxAManageAccount = MZLocalizedString(
@@ -2242,7 +2242,7 @@ extension String {
         lastUsedInVersion: 119)
     public static let FxASettingsTitle = MZLocalizedString(
         key: "Settings.FxA.Title.v119",
-        tableName: nil,
+        tableName: "Settings",
         value: "account",
         comment: "Title displayed in header of the FxA settings panel.")
     public static let FxASettingsSyncSettings = MZLocalizedString(
@@ -3518,7 +3518,7 @@ extension String {
         lastUsedInVersion: 119)
     public static let SendToNotSignedInText = MZLocalizedString(
         key: "SendTo.NotSignedIn.Title.v119",
-        tableName: nil,
+        tableName: "Share",
         value: "You are not signed in to your account.",
         comment: "See http://mzl.la/1ISlXnU")
     public static let SendToNotSignedInMessage = MZLocalizedString(
@@ -3534,7 +3534,7 @@ extension String {
         lastUsedInVersion: 119)
     public static let SendToNoDevicesFound = MZLocalizedString(
         key: "SendTo.NoDevicesFound.Message.v119",
-        tableName: nil,
+        tableName: "Share",
         value: "You don’t have any other devices connected to this account available to sync.",
         comment: "Error message shown in the remote tabs panel")
     public static let SendToTitle = MZLocalizedString(
