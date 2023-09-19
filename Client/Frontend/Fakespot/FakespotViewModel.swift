@@ -19,19 +19,26 @@ class FakespotViewModel {
             case .loading:
                 elements = [.loadingView]
 
-            case .loaded:
-                elements = [.reliabilityCard,
+            case let .loaded(product):
+                let baseElements = [
+                    ViewElement.reliabilityCard,
                     .adjustRatingCard,
                     .highlightsCard,
                     .qualityDeterminationCard,
-                    .settingsCard]
+                    .settingsCard
+                ]
+                if product?.productId == nil {
+                    elements = [.productCannotBeAnalyzed] + baseElements
+                } else {
+                    elements = baseElements
+                }
 
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
-                    return [.noConnectionError] + baseElements
+                    elements = [.noConnectionError] + baseElements
                 } else {
-                    return [.genericError] + baseElements
+                    elements = [.genericError] + baseElements
                 }
             }
 
@@ -57,6 +64,7 @@ class FakespotViewModel {
         case noAnalysisCard
         case genericError
         case noConnectionError
+        case productCannotBeAnalyzed
     }
 
     private(set) var state: ViewState = .loading {
@@ -121,6 +129,15 @@ class FakespotViewModel {
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.card,
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.title,
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.description
+    )
+
+    let doesNotAnalyzeReviewsViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsTitle,
+        description: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.description
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
