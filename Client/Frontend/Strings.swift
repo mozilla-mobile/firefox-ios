@@ -1636,10 +1636,10 @@ extension String {
 
         public struct Sync {
             public static let SyncTabs = MZLocalizedString(
-                key: "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
+                key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",
                 value: "Sync Tabs",
-                comment: "Button label to sync tabs in your Firefox Account")
+                comment: "Button label to sync tabs in your account")
 
             public static let SyncTabsDisabled = MZLocalizedString(
                 key: "TabsTray.Sync.SyncTabsDisabled.v116",
@@ -2202,10 +2202,10 @@ extension String {
 extension String {
     // Settings strings
     public static let FxAFirefoxAccount = MZLocalizedString(
-        key: "FxA.FirefoxAccount",
+        key: "FxA.FirefoxAccount.v119",
         tableName: nil,
-        value: "Firefox Account",
-        comment: "Settings section title for Firefox Account")
+        value: "account",
+        comment: "Settings section title for account")
     public static let FxAManageAccount = MZLocalizedString(
         key: "FxA.ManageAccount",
         tableName: nil,
@@ -2222,9 +2222,9 @@ extension String {
         value: "No Internet Connection",
         comment: "Label when no internet is present")
     public static let FxASettingsTitle = MZLocalizedString(
-        key: "Settings.FxA.Title",
+        key: "Settings.FxA.Title.v119",
         tableName: nil,
-        value: "Firefox Account",
+        value: "account",
         comment: "Title displayed in header of the FxA settings panel.")
     public static let FxASettingsSyncSettings = MZLocalizedString(
         key: "Settings.FxA.Sync.SectionName",
@@ -2294,7 +2294,7 @@ extension String {
 // For 'Advanced Sync Settings' view, which is a debug setting. English only, there is little value in maintaining L10N strings for these.
 extension String {
     public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
-    public static let SettingsAdvancedAccountCustomFxAContentServerURI = "Custom Firefox Account Content Server URI"
+    public static let SettingsAdvancedAccountCustomFxAContentServerURI = "Custom Account Content Server URI"
     public static let SettingsAdvancedAccountUseCustomFxAContentServerURITitle = "Use Custom FxA Content Server"
     public static let SettingsAdvancedAccountCustomSyncTokenServerURI = "Custom Sync Token Server URI"
     public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
@@ -3492,9 +3492,9 @@ extension String {
         value: "Close",
         comment: "Close button in top navigation bar")
     public static let SendToNotSignedInText = MZLocalizedString(
-        key: "SendTo.NotSignedIn.Title",
+        key: "SendTo.NotSignedIn.Title.v119",
         tableName: nil,
-        value: "You are not signed in to your Firefox Account.",
+        value: "You are not signed in to your account.",
         comment: "See http://mzl.la/1ISlXnU")
     public static let SendToNotSignedInMessage = MZLocalizedString(
         key: "SendTo.NotSignedIn.Message",
@@ -3502,9 +3502,9 @@ extension String {
         value: "Please open Firefox, go to Settings and sign in to continue.",
         comment: "See http://mzl.la/1ISlXnU")
     public static let SendToNoDevicesFound = MZLocalizedString(
-        key: "SendTo.NoDevicesFound.Message",
+        key: "SendTo.NoDevicesFound.Message.v119",
         tableName: nil,
-        value: "You don’t have any other devices connected to this Firefox Account available to sync.",
+        value: "You don’t have any other devices connected to this account available to sync.",
         comment: "Error message shown in the remote tabs panel")
     public static let SendToTitle = MZLocalizedString(
         key: "SendTo.NavBar.Title",
@@ -5218,9 +5218,9 @@ extension String {
         value: "No logins found",
         comment: "Label shown when there are no logins saved")
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Description",
+        key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.",
+        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your account.",
         comment: "Label shown when there are no logins to list")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
