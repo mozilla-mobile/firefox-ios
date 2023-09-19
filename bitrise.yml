@@ -1469,19 +1469,19 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-archive@4.7.2:
-        inputs:
-        - compile_bitcode: 'no'
-        - upload_bitcode: 'no'
-        - team_id: 9G8J6YA743
-        - export_method: development
-        - distribution_method: development
-        - export_development_team: 9G8J6YA743
-        - output_tool: xcodebuild
-        - scheme: Fennec_Enterprise
-        - configuration: Fennec_Enterprise
-        - project_path: "$BITRISE_PROJECT_PATH"
-    - deploy-to-bitrise-io@2: {}
+    # - xcode-archive@4.7.2:
+    #     inputs:
+    #     - compile_bitcode: 'no'
+    #     - upload_bitcode: 'no'
+    #     - team_id: 9G8J6YA743
+    #     - export_method: development
+    #     - distribution_method: development
+    #     - export_development_team: 9G8J6YA743
+    #     - output_tool: xcodebuild
+    #     - scheme: Fennec_Enterprise
+    #     - configuration: Fennec_Enterprise
+    #     - project_path: "$BITRISE_PROJECT_PATH"
+    # - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
