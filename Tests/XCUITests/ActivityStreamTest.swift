@@ -174,7 +174,7 @@ class ActivityStreamTest: BaseTestCase {
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
         XCTAssertTrue(app.textFields["url"].exists)
-        WaitForValueContains(app.textFields["url"], value: "wikipedia.org")
+        waitForValueContains(app.textFields["url"], value: "wikipedia.org")
     }
 
     // Smoketest

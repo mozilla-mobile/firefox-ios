@@ -143,7 +143,7 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func WaitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
+    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }
 
