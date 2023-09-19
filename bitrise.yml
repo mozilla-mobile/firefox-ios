@@ -1481,6 +1481,7 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
         - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
