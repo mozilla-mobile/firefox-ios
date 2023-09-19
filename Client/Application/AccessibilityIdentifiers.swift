@@ -184,6 +184,8 @@ public struct AccessibilityIdentifiers {
             static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
             static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
+            static let footerTitle = "Shopping.SettingCard.footerTitle"
+            static let footerAction = "Shopping.SettingCard.footerAction"
         }
 
         struct NoAnalysisCard {
