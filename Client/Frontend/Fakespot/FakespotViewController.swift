@@ -218,6 +218,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             let view: FakespotMessageCardView = .build()
             view.configure(viewModel.errorCardViewModel)
             return view
+
+        case .noConnectionError:
+            let view: FakespotMessageCardView = .build()
+            view.configure(viewModel.noConnectionViewModel)
+            return view
         }
     }
 
