@@ -95,11 +95,14 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         }
     }
 
-    private lazy var scanButton: ResizableButton = .build { button in
+    private lazy var scanButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .FxASignin_QRScanSignin,
+            a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
+        )
+        button.configure(viewModel: viewModel)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
-        button.setTitle(.FxASignin_QRScanSignin, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
@@ -112,7 +115,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
-    private lazy var emailButton: ResizableButton = .build { button in
+    private lazy var emailButton: SecondaryRoundedButton = .build { button in
+        let viewModel = SecondaryRoundedButtonViewModel(
+        title: .FxASignin_EmailSignin,
+        a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
+        )
+        button.configure(viewModel: viewModel)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
