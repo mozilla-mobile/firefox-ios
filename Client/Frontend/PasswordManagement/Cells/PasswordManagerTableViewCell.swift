@@ -119,9 +119,9 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
-        hostnameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline, size: 16.0)
+        hostnameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .title1, size: 16.0)
         usernameLabel.textColor = theme.colors.textSecondary
-        usernameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 14.0)
+        usernameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .title2, size: 14.0)
         breachAlertImageView.tintColor = theme.colors.iconWarning
     }
 }
