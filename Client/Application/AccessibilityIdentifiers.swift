@@ -208,6 +208,18 @@ public struct AccessibilityIdentifiers {
             static let highlightsLabel = "Shopping.ReviewQualityCard.HighlightsLabel"
             static let learnMoreButtonTitle = "Shopping.ReviewQualityCard.LearnMoreButtonTitle"
         }
+
+        struct OptInCard {
+            static let card = "Shopping.OptInCard.Card"
+            static let headerTitle = "Shopping.OptInCard.HeaderTitle"
+            static let optInCopy = "Shopping.OptInCard.BodyFirstParagraph"
+            static let disclaimerText = "Shopping.OptInCard.DisclaimerText"
+            static let learnMoreButton = "Shopping.OptInCard.LearnMoreButton"
+            static let termsOfUseButton = "Shopping.OptInCard.TermsOfUseButton"
+            static let privacyPolicyButton = "Shopping.OptInCard.PrivacyPolicyButton"
+            static let mainButton = "Shopping.OptInCard.MainButton"
+            static let secondaryButton = "Shopping.OptInCard.SecondaryButton"
+        }
     }
 
     struct TabTray {

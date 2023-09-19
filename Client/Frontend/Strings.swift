@@ -3776,6 +3776,46 @@ extension String {
             tableName: "Shopping",
             value: "Learn more about how Fakespot determines review quality",
             comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+        public static let OptInCardHeaderTitle = MZLocalizedString(
+            key: "", // Shopping.OptInCard.HeaderLabel.Title.v119
+            tableName: "Shopping",
+            value: "Try our trusted guide to product reviews",
+            comment: "Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot)")
+        public static let OptInCardCopy = MZLocalizedString(
+            key: "", // Shopping.OptInCard.FirstParagraph.Title.v119
+            tableName: "Shopping",
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from Firefox, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are curently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter")
+        public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
+            key: "", // Shopping.OptInCard.LearnMoreButtonTitle.Title.v119
+            tableName: "Shopping",
+            value: "Learn more",
+            comment: "Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot)")
+        public static let OptInCardDisclaimerText = MZLocalizedString(
+            key: "", // Shopping.OptInCard.DisclaimerText.Title.v119
+            tableName: "Shopping",
+            value: "By selecting “Yes, Try It” you agree to Fakespot by Mozilla’s:",
+            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot)")
+        public static let OptInCardPrivacyPolicy = MZLocalizedString(
+            key: "", // Shopping.OptInCard.PrivacyPolicyButtonTitle.Title.v119
+            tableName: "Shopping",
+            value: "Privacy policy",
+            comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
+        public static let OptInCardTermsOfUse = MZLocalizedString(
+            key: "", // Shopping.OptInCard.TermsOfUseButtonTitle.Title.v119
+            tableName: "Shopping",
+            value: "Terms of use",
+            comment: "Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
+        public static let OptInCardMainButtonTitle = MZLocalizedString(
+            key: "", // Shopping.OptInCard.MainButtonTitle.Title.v119
+            tableName: "Shopping",
+            value: "Yes, Try It",
+            comment: "Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot)")
+        public static let OptInCardSecondaryButtonTitle = MZLocalizedString(
+            key: "", // Shopping.OptInCard.SecondaryButtonTitle.Title.v119
+            tableName: "Shopping",
+            value: "Not now",
+            comment: "Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let WarningCardCheckNoConnectionTitle = MZLocalizedString(
             key: "", // Shopping.WarningCard.CheckNoConnection.Title.v120
             tableName: "Shopping",
