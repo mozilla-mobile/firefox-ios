@@ -1544,7 +1544,8 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
             $HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
-                --device model=iphone14pro,version=16.6
+                --device model=iphone14pro,version=16.6 \
+                --client-details=matrixLabel="Bitrise"
 app:
   envs:
   - opts:
