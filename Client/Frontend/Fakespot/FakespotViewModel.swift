@@ -12,7 +12,7 @@ class FakespotViewModel {
         case loaded(ProductAnalysisData?)
         case error(Error)
 
-        var viewElements: [ViewElement] {
+        fileprivate var viewElements: [ViewElement] {
             var elements: [ViewElement] = []
 
             switch self {
@@ -38,7 +38,7 @@ class FakespotViewModel {
             return elements
         }
 
-        var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error: return nil
             case .loaded(let data): return data
