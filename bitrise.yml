@@ -1489,13 +1489,14 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-            # xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild build-for-testing -project $BITRISE_PROJECT_PATH \
-                -scheme Fennec_Enterprise \
-                -configuration Fennec_Enterprise \
-                -sdk iphoneos \
-                -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData"
+            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
+            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
+            xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
+                "-scheme" "Fennec_Enterprise" \
+                "-configuration" "Fennec_Enterprise" \
+                "-sdk" "iphoneos" \
+                "-destination" "generic/platform=iOS" \
+                "-derivedDataPath" "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
