@@ -1482,29 +1482,21 @@ workflows:
         - configuration: Fennec_Enterprise
         - project_path: "$BITRISE_PROJECT_PATH"
     - deploy-to-bitrise-io@2: {}
-    # - script@1.1:
-    #     title: Firebase Build for Testing Physical Devices
-    #     inputs:
-    #     - content: |
-    #         set -euxo pipefail
-    #         echo "-- build-for-testing --"
-    #         mkdir DerivedData
-    #         # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
-    #         # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
-    #         # xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
-    #         #     "-scheme" "Fennec_Enterprise" \
-    #         #     "-configuration" "Fennec_Enterprise" \
-    #         #     "-sdk" "iphoneos" \
-    #         #     "-destination" "generic/platform=iOS" \
-    #         #     "-derivedDataPath" "/Users/vagrant/git/DerivedData"
-    #         xcodebuild \
-    #         -project $BITRISE_PROJECT_PATH \
-    #         -scheme Fennec_Enterprise \
-    #         -configuration Fennec_Enterprise \
-    #         -destination generic/platform=iOS \
-    #         CODE_SIGN_IDENTITY="iPhone Developer: Mozilla Corporation" \
-    #         PROVISIONING_PROFILE="0dd4c07d-3c78-4ea6-b17a-e90e4f72cf82" \
-    #         DEVELOPMENT_TEAM=9G8J6YA743
+    - script@1.1:
+        title: Firebase Build for Testing Physical Devices
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
+            xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
+            xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
+                "-scheme" "Fennec_Enterprise" \
+                "-configuration" "Fennec_Enterprise" \
+                "-sdk" "iphoneos" \
+                "-destination" "generic/platform=iOS" \
+                "-derivedDataPath" "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
@@ -1535,9 +1527,7 @@ workflows:
               echo "Google Cloud SDK not found, installing..."
               curl https://sdk.cloud.google.com > install.sh
               bash install.sh --disable-prompts
-              source $HOME/google-cloud-sdk/path.bash.inc
-              echo("gcloud version: ")
-              gcloud -v
+              source $HOME/google-cloud-sdk/path.bash.
             fi
     - cache-push@2.7.1:
         inputs:
@@ -1554,7 +1544,6 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            ls /Users/vagrant/git/Fennec_Enterprise.zip
             $HOME/google-cloud-sdk/bin/gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --model=iphone14pro,version=16.4 \
                 --xcode-version=14.3.1
@@ -1583,13 +1572,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  workflow: Firebase_Performance_Test
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v119
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  workflow: Firebase_Performance_Test
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
