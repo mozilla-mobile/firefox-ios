@@ -1490,8 +1490,9 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
+            xcodebuild build-for-testing -project $BITRISE_PROJECT_PATH \
                 -scheme Fennec_Enterprise \
+                -configuration Fennec_Enterprise \
                 -sdk iphoneos \
                 -destination "generic/platform=iOS" \
                 -derivedDataPath "/Users/vagrant/git/DerivedData"
