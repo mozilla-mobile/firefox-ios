@@ -22,6 +22,11 @@ Buildings blocks are classes uses by devs to enabled General or Feature componen
 
 ## Topics
 
+### Getting started
+
+- <doc:GettingStarted>
+- <doc:HowToAddNewComponent>
+
 ### General
 
 - ``ActionFooterView``
