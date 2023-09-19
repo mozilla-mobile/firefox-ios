@@ -68,7 +68,7 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
 
     var viewElements: [ViewElement] {
-//        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
+        guard isOptedIn else { return [.onboarding] }
 
         return state.viewElements
     }
