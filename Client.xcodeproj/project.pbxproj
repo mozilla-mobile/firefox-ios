@@ -3715,6 +3715,13 @@
 		43BDEEC02947458800C2FD7E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustMozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RustMozillaAppServices-Info.plist"; sourceTree = "<group>"; };
+		43BE738C2ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/CustomizeFirefoxHome.strings"; sourceTree = "<group>"; };
+		43BE738D2ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Notification.strings"; sourceTree = "<group>"; };
+		43BE738E2ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/RememberCard.strings"; sourceTree = "<group>"; };
+		43BE738F2ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SelectCreditCard.strings"; sourceTree = "<group>"; };
+		43BE73902ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/UpdateCard.strings"; sourceTree = "<group>"; };
+		43BE73912ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Upgrade.strings"; sourceTree = "<group>"; };
+		43BE73922ABA214A00F2E460 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ZoomPageBar.strings"; sourceTree = "<group>"; };
 		43BE95742A124BAD00DCFD17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
 		43BE95752A124BAD00DCFD17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Upgrade.strings; sourceTree = "<group>"; };
 		43C0DAB929D1B25700827785 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Alert.strings; sourceTree = "<group>"; };
@@ -13942,6 +13949,7 @@
 				43F1DA882A81085800CC66D6 /* da */,
 				43426F8B2A81089600555157 /* eo */,
 				43B187EC2A81098C00E2EADB /* ka */,
+				43BE738F2ABA214A00F2E460 /* en-CA */,
 			);
 			name = SelectCreditCard.strings;
 			sourceTree = "<group>";
@@ -14680,6 +14688,7 @@
 				436DE8552A24C0FD00DE00FC /* si */,
 				432559DC2A49A908001FCEE8 /* co */,
 				4303AEFD2A6557FD0043D90C /* br */,
+				43BE738D2ABA214A00F2E460 /* en-CA */,
 			);
 			name = Notification.strings;
 			sourceTree = "<group>";
@@ -14744,6 +14753,7 @@
 				432559DE2A49A909001FCEE8 /* co */,
 				4303AF072A6557FE0043D90C /* br */,
 				43D2F8BB2A8A45570095D4EB /* su */,
+				43BE73922ABA214A00F2E460 /* en-CA */,
 			);
 			name = ZoomPageBar.strings;
 			sourceTree = "<group>";
@@ -14874,6 +14884,7 @@
 				4303AEFF2A6557FD0043D90C /* br */,
 				437B0B372A6E941600DD9F66 /* hr */,
 				439273342A6E95B50014E253 /* su */,
+				43BE738E2ABA214A00F2E460 /* en-CA */,
 			);
 			name = RememberCard.strings;
 			sourceTree = "<group>";
@@ -14938,6 +14949,7 @@
 				4303AF052A6557FE0043D90C /* br */,
 				437B0B3D2A6E941600DD9F66 /* hr */,
 				43D2F8B92A8A45570095D4EB /* su */,
+				43BE73902ABA214A00F2E460 /* en-CA */,
 			);
 			name = UpdateCard.strings;
 			sourceTree = "<group>";
@@ -15070,6 +15082,7 @@
 				4303AF062A6557FE0043D90C /* br */,
 				437B0B3E2A6E941600DD9F66 /* hr */,
 				43D2F8BA2A8A45570095D4EB /* su */,
+				43BE73912ABA214A00F2E460 /* en-CA */,
 			);
 			name = Upgrade.strings;
 			sourceTree = "<group>";
@@ -15265,6 +15278,7 @@
 				43F1DA872A81085800CC66D6 /* da */,
 				43426F8A2A81089600555157 /* eo */,
 				43B187EB2A81098C00E2EADB /* ka */,
+				43BE738C2ABA214A00F2E460 /* en-CA */,
 			);
 			name = CustomizeFirefoxHome.strings;
 			sourceTree = "<group>";
