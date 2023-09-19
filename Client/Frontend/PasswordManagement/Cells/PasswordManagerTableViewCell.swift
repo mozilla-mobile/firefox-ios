@@ -42,12 +42,14 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
     lazy var hostnameLabel: UILabel = .build { label in
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
         label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     lazy var usernameLabel: UILabel = .build { label in
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var textStack: UIStackView = .build { [weak self] stack in
@@ -117,7 +119,9 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
+        hostnameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline, size: 16.0)
         usernameLabel.textColor = theme.colors.textSecondary
+        usernameLabel.font =  DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 14.0)
         breachAlertImageView.tintColor = theme.colors.iconWarning
     }
 }
