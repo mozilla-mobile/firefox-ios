@@ -45,6 +45,6 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
         wait(forElement: surveyLink.element, timeout: 15)
         surveyLink.element.tap()
-        waitForValueContains(app.textFields["url"], value: "survey")
+        mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
 }

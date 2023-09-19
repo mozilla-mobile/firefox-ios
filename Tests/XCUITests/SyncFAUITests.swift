@@ -27,15 +27,15 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.sync])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[ImageIdentifiers.sync])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 30)
-        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 10)
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 30)
+        mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 10)
         XCTAssertTrue(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].exists)
 
         // Verify the placeholdervalues here for the textFields
@@ -49,12 +49,12 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 60)
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
-        waitForExistence(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton], timeout: 20)
+        mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton], timeout: 20)
         navigator.performAction(Action.FxATapOnContinueButton)
-        waitForExistence(app.webViews.staticTexts["Valid email required"])
+        mozWaitForElementToExist(app.webViews.staticTexts["Valid email required"])
 
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "foo1bar2baz3@gmail.com"
@@ -65,23 +65,23 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitForExistence(app.webViews.staticTexts["At least 8 characters"])
+        mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
-        waitForExistence(app.secureTextFields["Repeat password"], timeout: 10)
+        mozWaitForElementToExist(app.secureTextFields["Repeat password"], timeout: 10)
     }
 
     func testCreateAnAccountLink() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.firstMatch, timeout: 20)
-        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 40)
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: 20)
+        mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 40)
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
-        waitForExistence(app.webViews.buttons["Create account"])
+        mozWaitForElementToExist(app.webViews.buttons["Create account"])
     }
 
     func testShowPassword() {
@@ -89,7 +89,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 20)
+        mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField], timeout: 20)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -97,10 +97,10 @@ class SyncUITests: BaseTestCase {
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
-        waitForExistence(app.webViews.otherElements["Show password"], timeout: 3)
+        mozWaitForElementToExist(app.webViews.otherElements["Show password"], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
-        waitForNoExistence(app.webViews.staticTexts["Show password"])
+        mozWaitForElementToNotExist(app.webViews.staticTexts["Show password"])
     }
 
     func testQRPairing() {
@@ -109,8 +109,8 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 5)
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 5)
         app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 }

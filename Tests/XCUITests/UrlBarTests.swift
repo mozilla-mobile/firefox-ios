@@ -33,21 +33,21 @@ class UrlBarTests: BaseTestCase {
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        waitForValueContains(app.textFields["url"], value: "google")
+        mozWaitForValueContains(app.textFields["url"], value: "google")
         // Add a custom search engine and add it as default search engine
         navigator.goto(SearchSettings)
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
-        waitForExistence(app.tables.cells.staticTexts[defaultSearchEngine1])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine1])
         defaultSearchEngine.tap()
         app.tables.staticTexts[defaultSearchEngine2].tap()
-        waitForExistence(app.tables.cells.staticTexts[defaultSearchEngine2])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
         navigator.goto(SettingsScreen)
         app.navigationBars.buttons["Done"].tap()
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        waitForValueContains(app.textFields["url"], value: "amazon")
+        mozWaitForValueContains(app.textFields["url"], value: "amazon")
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {
@@ -71,7 +71,7 @@ class UrlBarTests: BaseTestCase {
     private func typeSearchTermAndHitGo(searchTerm: String) {
         app.textFields["address"].typeText(searchTerm)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["Go"])
+        mozWaitForElementToExist(app.buttons["Go"])
         app.buttons["Go"].tap()
     }
 }

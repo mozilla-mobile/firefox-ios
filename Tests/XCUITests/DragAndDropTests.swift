@@ -26,7 +26,7 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-        waitForExistence(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
+        mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -38,7 +38,7 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
 
         navigator.openNewURL(urlString: thirdWebsite.url)
         waitUntilPageLoad()
@@ -190,7 +190,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
-        waitForExistence(app.collectionViews.cells.element(boundBy: 1))
+        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 1))
 
         // Drag and drop home tab from the second position to the first one
         dragAndDrop(dragElement: app.collectionViews.cells["Homepage"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
@@ -238,7 +238,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.openURL("developer.mozilla.org/en-US")
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
-        waitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
+        mozWaitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
         app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields.element(boundBy: 0))
 
@@ -254,7 +254,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
-        waitForExistence(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
@@ -279,10 +279,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         /*
         if skipPlatform { return }
 
-        waitForExistence(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(MobileBookmarks)
-        waitForExistence(app.tables["Bookmarks List"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
 
         let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[exampleDomainTitle]
         let secondEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 3).staticTexts[twitterTitle]
@@ -306,7 +306,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle])
+        mozWaitForElementToExist(app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle])
 
         app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
@@ -321,7 +321,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         navigator.goto(MobileBookmarks)
-        waitForExistence(app.tables["Bookmarks List"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
         app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
         // It is not allowed to drop the entry on the url field

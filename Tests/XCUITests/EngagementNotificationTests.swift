@@ -25,10 +25,10 @@ class EngagementNotificationTests: BaseTestCase {
         // XCUIDevice.shared.press(XCUIDevice.Button.home)
 
         // let notification = springboard.otherElements["Notification"]
-        // XCTAssertTrue(notification.waitForExistence(timeout: TIMEOUT_LONG)) // implicit wait
+        // XCTAssertTrue(notification.mozWaitForElementToExist(timeout: TIMEOUT_LONG)) // implicit wait
         // notification.tap()
 
-        // waitForExistence(app.textFields["url"])
+        // mozWaitForElementToExist(app.textFields["url"])
         // let url = app.textFields["url"].value as! String
         // XCTAssertEqual(url, "mozilla.com", "Wrong url loaded")
     }
@@ -38,7 +38,7 @@ class EngagementNotificationTests: BaseTestCase {
     private func goThroughOnboarding() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
@@ -46,7 +46,7 @@ class EngagementNotificationTests: BaseTestCase {
         // Go to the second screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
@@ -54,7 +54,7 @@ class EngagementNotificationTests: BaseTestCase {
         // Go to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        waitForExistence(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
@@ -70,6 +70,6 @@ class EngagementNotificationTests: BaseTestCase {
         }
 
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        waitForExistence(topSites)
+        mozWaitForElementToExist(topSites)
     }
 }

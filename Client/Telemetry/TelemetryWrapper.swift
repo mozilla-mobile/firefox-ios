@@ -403,6 +403,11 @@ extension TelemetryWrapper {
         case shoppingRecentReviews = "shopping-recent-reviews"
         case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
+        case shoppingOptIn = "shopping-opt-in"
+        case shoppingNotNowButton = "shopping-not-now-button"
+        case shoppingTermsOfUseButton = "shopping-terms-of-use-button"
+        case shoppingPrivacyPolicyButton = "shopping-privacy-policy-button"
+        case shoppingLearnMoreButton = "shopping-learn-more-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1034,6 +1039,16 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.settingsComponentOptedOut.record()
         case (.action, .view, .shoppingSettingsChevronButton, _, _):
             GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
+        case (.action, .tap, .shoppingOptIn, _, _):
+            GleanMetrics.Shopping.surfaceOptInAccepted.record()
+        case (.action, .tap, .shoppingNotNowButton, _, _):
+            GleanMetrics.Shopping.surfaceNotNowClicked.record()
+        case (.action, .tap, .shoppingTermsOfUseButton, _, _):
+            GleanMetrics.Shopping.surfaceShowTermsClicked.record()
+        case (.action, .tap, .shoppingPrivacyPolicyButton, _, _):
+            GleanMetrics.Shopping.surfaceShowPrivacyPolicyClicked.record()
+        case (.action, .tap, .shoppingLearnMoreButton, _, _):
+            GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

@@ -12,10 +12,10 @@ class OpeningScreenTests: BaseTestCase {
         // Close the app from app switcher. Relaunch the app
         closeFromAppSwitcherAndRelaunch()
         // After re-launching the app, the last visited page is displayed
-        waitForValueContains(app.textFields["url"], value: "test-mozilla-org")
+        mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org")
         // Background and restore Firefox
         restartInBackground()
         // After re-launching the app, the last visited page is displayed
-        waitForValueContains(app.textFields["url"], value: "test-mozilla-org")
+        mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org")
     }
 }

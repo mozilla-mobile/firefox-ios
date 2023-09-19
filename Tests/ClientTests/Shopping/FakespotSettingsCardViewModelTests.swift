@@ -12,6 +12,7 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
         viewModel = FakespotSettingsCardViewModel(profile: mockProfile)
     }

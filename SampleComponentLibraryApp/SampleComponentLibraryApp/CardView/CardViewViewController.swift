@@ -7,7 +7,7 @@ import Common
 import Foundation
 import UIKit
 
-class CardViewViewController: UIViewController {
+class CardViewViewController: UIViewController, Themeable {
     private let loremIpsum =
     """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -16,6 +16,10 @@ class CardViewViewController: UIViewController {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var cardView: CardView = .build { _ in }
 
     private lazy var contentLabel: UILabel = .build { label in
@@ -23,18 +27,28 @@ class CardViewViewController: UIViewController {
         label.numberOfLines = 0
     }
 
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
 
-        view.backgroundColor = .white
+        listenForThemeChange(view)
+        applyTheme()
+
         contentLabel.text = loremIpsum
         let viewModel = CardViewModel(view: contentLabel, a11yId: "CardView", backgroundColor: { theme in
             return theme.colors.layerAccentPrivateNonOpaque
         })
         cardView.configure(viewModel)
 
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         cardView.applyTheme(theme: themeManager.currentTheme)
     }
 
@@ -48,5 +62,11 @@ class CardViewViewController: UIViewController {
             cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
                                              constant: -20)
         ])
+    }
+
+    // MARK: Themeable
+
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

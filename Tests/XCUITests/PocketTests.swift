@@ -7,7 +7,7 @@ import XCTest
 class PocketTest: BaseTestCase {
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label, "Thought-Provoking Stories")
 
         // There should be at least 8 stories on iPhone and three on iPad
@@ -18,11 +18,11 @@ class PocketTest: BaseTestCase {
         navigator.performAction(Action.TogglePocketInNewTab)
 
         navigator.goto(NewTabScreen)
-        waitForNoExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         // Enable it again
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
 
         // Tap on the first Pocket element
         app.collectionViews.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell].firstMatch.tap()

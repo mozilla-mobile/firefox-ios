@@ -13,8 +13,8 @@ class FindInPageTests: BaseTestCase {
 
         navigator.goto(FindInPage)
 
-        waitForExistence(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton], timeout: 5)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton], timeout: 5)
         XCTAssertTrue(app.textFields["FindInPage.searchField"].exists)
     }
 
@@ -23,15 +23,15 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previous way with goto
         navigator.nowAt(BrowserTab)
 
-        waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage], timeout: 10)
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage], timeout: 10)
         app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage].tap()
 
         // Enter some text to start finding
         app.textFields["FindInPage.searchField"].typeText("Book")
-        waitForExistence(app.textFields["Book"], timeout: 15)
+        mozWaitForElementToExist(app.textFields["Book"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
@@ -44,31 +44,31 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("Book")
 
         // Once there are matches, test previous/next buttons
-        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         let nextInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton]
         nextInPageResultButton.tap()
-        waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         nextInPageResultButton.tap()
-        waitForExistence(app.staticTexts["3/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["3/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3/6"].exists)
 
         let previousInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton]
         previousInPageResultButton.tap()
 
-        waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         previousInPageResultButton.tap()
-        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         // Tapping on close dismisses the search bar
         navigator.goto(BrowserTab)
-        waitForNoExistence(app.textFields["Book"])
+        mozWaitForElementToNotExist(app.textFields["Book"])
     }
 
     func testFindInPageTwoWordsSearch() {
@@ -78,7 +78,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("The Book of")
 
         // Once there are matches, test previous/next buttons
-        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
     }
 
@@ -87,12 +87,12 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previous way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
         app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage].tap()
         app.textFields["FindInPage.searchField"].typeText("The Book of")
-        waitForExistence(app.textFields["The Book of"], timeout: 15)
+        mozWaitForElementToExist(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
@@ -103,7 +103,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("lorem")
 
         // There should be matches
-        waitForExistence(app.staticTexts["1/5"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["1/5"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/5"].exists)
     }
 
@@ -113,7 +113,7 @@ class FindInPageTests: BaseTestCase {
 
         // Try to find text which does not match and check that there are not results
         app.textFields["FindInPage.searchField"].typeText("foo")
-        waitForExistence(app.staticTexts["0/0"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["0/0"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["0/0"].exists, "There should not be any matches")
     }
 
@@ -126,7 +126,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["address"].typeText("\n")
 
         // Once the page is reloaded the search bar should not appear
-        waitForNoExistence(app.textFields[""])
+        mozWaitForElementToNotExist(app.textFields[""])
         XCTAssertFalse(app.textFields[""].exists)
     }
 
@@ -141,7 +141,7 @@ class FindInPageTests: BaseTestCase {
         // Going to tab tray and back to the website hides the search field.
         navigator.goto(TabTray)
 
-        waitForExistence(app.cells.staticTexts["The Book of Mozilla"])
+        mozWaitForElementToExist(app.cells.staticTexts["The Book of Mozilla"])
         app.cells.staticTexts["The Book of Mozilla"].firstMatch.tap()
         XCTAssertFalse(app.textFields[""].exists)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists)
@@ -155,20 +155,20 @@ class FindInPageTests: BaseTestCase {
 
         // Long press on the word to be found
         waitUntilPageLoad()
-        waitForExistence(app.webViews.staticTexts[textToFind])
+        mozWaitForElementToExist(app.webViews.staticTexts[textToFind])
         let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
         let firstStringToFind = stringToFind.element(boundBy: 0)
         firstStringToFind.press(forDuration: 3)
-        waitForExistence(app.menuItems["Copy"], timeout: 5)
+        mozWaitForElementToExist(app.menuItems["Copy"], timeout: 5)
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
         while !app.collectionViews.menuItems["Find in Page"].exists {
             app.buttons["Forward"].firstMatch.tap()
-            waitForExistence(app.collectionViews.menuItems.firstMatch)
-            waitForExistence(app.buttons["Forward"])
+            mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
+            mozWaitForElementToExist(app.buttons["Forward"])
         }
         app.menuItems["Find in Page"].tap()
-        waitForExistence(app.textFields[textToFind])
+        mozWaitForElementToExist(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists, "Find previous button exists")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists, "Find next button exists")
