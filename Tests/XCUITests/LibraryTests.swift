@@ -8,13 +8,13 @@ class LibraryTestsIpad: IpadOnlyTestCase {
     func testLibraryShortcut() {
         if skipPlatform {return}
         // Open Library from shortcut
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton])
         let libraryShorcutButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
         libraryShorcutButton.tap()
         navigator.nowAt(HomePanel_Library)
-        waitForExistence(app.tables["Bookmarks List"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
         // Go to a different panel, like History
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
     }
 }

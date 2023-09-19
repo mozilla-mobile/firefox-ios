@@ -43,13 +43,7 @@ class NotificationService: UNNotificationServiceExtension {
             }
             self.didFinish(event)
         }
-        let isUsingRustAutopushClient = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.AutopushFeature)
-        if let isUsingRustAutopushClient = isUsingRustAutopushClient, isUsingRustAutopushClient {
-            self.handleEncryptedPushMessage(userInfo: userInfo, profile: profile, completion: handlerCompletion)
-        } else {
-            let handler = FxAPushMessageHandler(with: profile)
-            handler.handle(userInfo: userInfo, completion: handlerCompletion)
-        }
+        self.handleEncryptedPushMessage(userInfo: userInfo, profile: profile, completion: handlerCompletion)
     }
 
     func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],

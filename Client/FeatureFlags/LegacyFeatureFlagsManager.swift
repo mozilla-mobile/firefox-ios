@@ -154,7 +154,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
                                                                        enabledFor: [.beta, .developer])
 
         let useStagingFakespotAPI = CoreFlaggableFeature(withID: .useStagingFakespotAPI,
-                                                         enabledFor: [.beta, .developer])
+                                                         enabledFor: [])
 
         coreFeatures[.useStagingContileAPI] = useStagingContileAPI
         coreFeatures[.useStagingSponsoredPocketStoriesAPI] = useStagingSponsoredPocketStoriesAPI

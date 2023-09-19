@@ -52,6 +52,8 @@ extension Notification.Name {
 
     public static let HomePanelPrefsChanged = Notification.Name("HomePanelPrefsChanged")
 
+    public static let FakespotViewControllerDidDismiss = Notification.Name("FakespotViewControllerDidDismiss")
+
     public static let FileDidDownload = Notification.Name("FileDidDownload")
 
     public static let SearchBarPositionDidChange = Notification.Name("SearchBarPositionDidChange")
@@ -77,6 +79,8 @@ extension Notification.Name {
     public static let SearchSettingsChanged = Notification.Name("SearchSettingsChanged")
 
     public static let TabDataUpdated = Notification.Name("TabDataUpdated")
+
+    public static let PendingBlobDownloadAddedToQueue = Notification.Name("PendingBlobDownloadAddedToQueue")
 
     // MARK: Tab manager
 

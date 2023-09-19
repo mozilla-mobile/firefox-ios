@@ -52,16 +52,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         button.accessibilityLabel = .CloseButtonTitle
     }
 
-    private lazy var errorCardView: FakespotMessageCardView = .build()
-    private lazy var confirmationCardView: FakespotMessageCardView = .build()
-    private lazy var reliabilityCardView: FakespotReliabilityCardView = .build()
-    private lazy var highlightsCardView: FakespotHighlightsCardView = .build()
-    private lazy var settingsCardView: FakespotSettingsCardView = .build()
-    private lazy var loadingView: FakespotLoadingView = .build()
-    private lazy var noAnalysisCardView: NoAnalysisCardView = .build()
-    private lazy var adjustRatingView: AdjustRatingView = .build()
-    private lazy var reviewQualityCardView: FaekspotReviewQualityCardView = .build()
-
     // MARK: - Initializers
     init(
         viewModel: FakespotViewModel,
@@ -72,6 +62,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+
+        viewModel.onStateChange = { [weak self] in
+            ensureMainThread {
+                self?.updateContent()
+            }
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -85,22 +81,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         setupView()
         listenForThemeChange(view)
         sendTelemetryOnAppear()
-
-        confirmationCardView.configure(viewModel.confirmationCardViewModel)
-        reliabilityCardView.configure(viewModel.reliabilityCardViewModel)
-        errorCardView.configure(viewModel.errorCardViewModel)
-        highlightsCardView.configure(viewModel.highlightsCardViewModel)
-        settingsCardView.configure(viewModel.settingsCardViewModel)
-        adjustRatingView.configure(viewModel.adjustRatingViewModel)
-        noAnalysisCardView.configure(viewModel.noAnalysisCardViewModel)
-        reviewQualityCardView.configure()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         applyTheme()
-        loadingView.animate()
         Task {
             await viewModel.fetchData()
         }
@@ -108,9 +94,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if presentingViewController == nil {
-            recordTelemetry()
-        }
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
     }
 
     func applyTheme() {
@@ -119,30 +103,18 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
 
-        errorCardView.applyTheme(theme: theme)
-        confirmationCardView.applyTheme(theme: theme)
-        reliabilityCardView.applyTheme(theme: theme)
-        highlightsCardView.applyTheme(theme: theme)
-        settingsCardView.applyTheme(theme: theme)
-        noAnalysisCardView.applyTheme(theme: theme)
-        loadingView.applyTheme(theme: theme)
-        adjustRatingView.applyTheme(theme: theme)
-        reviewQualityCardView.applyTheme(theme: theme)
+        contentStackView.arrangedSubviews.forEach { view in
+            guard let view = view as? ThemeApplicable else { return }
+            view.applyTheme(theme: theme)
+        }
     }
 
     private func setupView() {
         headerView.addSubviews(titleLabel, closeButton)
         view.addSubviews(headerView, scrollView)
-        contentStackView.addArrangedSubview(reliabilityCardView)
-        contentStackView.addArrangedSubview(adjustRatingView)
-        contentStackView.addArrangedSubview(highlightsCardView)
-        contentStackView.addArrangedSubview(confirmationCardView)
-        contentStackView.addArrangedSubview(errorCardView)
-        contentStackView.addArrangedSubview(settingsCardView)
-        contentStackView.addArrangedSubview(noAnalysisCardView)
-        contentStackView.addArrangedSubview(reviewQualityCardView)
-        contentStackView.addArrangedSubview(loadingView)
+
         scrollView.addSubview(contentStackView)
+        updateContent()
 
         let titleCenterYConstraint = titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor)
 
@@ -185,7 +157,76 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
-    private func recordTelemetry() {
+    private func updateContent() {
+        contentStackView.removeAllArrangedViews()
+
+        viewModel.state.viewElements.forEach { element in
+            guard let view = createContentView(viewElement: element) else { return }
+            contentStackView.addArrangedSubview(view)
+
+            if let loadingView = view as? FakespotLoadingView {
+                loadingView.animate()
+            }
+        }
+        applyTheme()
+    }
+
+    private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
+        switch viewElement {
+        case .loadingView:
+            let view: FakespotLoadingView = .build()
+            return view
+
+        case .reliabilityCard:
+            guard let cardViewModel = viewModel.reliabilityCardViewModel else { return nil }
+            let view: FakespotReliabilityCardView = .build()
+            view.configure(cardViewModel)
+            return view
+
+        case .adjustRatingCard:
+            guard let cardViewModel = viewModel.adjustRatingViewModel else { return nil }
+            let view: FakespotAdjustRatingView = .build()
+            view.configure(cardViewModel)
+            return view
+
+        case .highlightsCard:
+            guard let cardViewModel = viewModel.highlightsCardViewModel else { return nil }
+            let view: FakespotHighlightsCardView = .build()
+            view.configure(cardViewModel)
+            return view
+
+        case .qualityDeterminationCard:
+            let reviewQualityCardView: FakespotReviewQualityCardView = .build()
+            reviewQualityCardView.configure()
+            return reviewQualityCardView
+
+        case .settingsCard:
+            let view: FakespotSettingsCardView = .build()
+            view.configure(viewModel.settingsCardViewModel)
+            viewModel.settingsCardViewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
+            return view
+
+        case .noAnalysisCard:
+            let view: FakespotNoAnalysisCardView = .build()
+            view.configure(viewModel.noAnalysisCardViewModel)
+            return view
+
+        case .genericError:
+            let view: FakespotMessageCardView = .build()
+            view.configure(viewModel.genericErrorViewModel)
+            return view
+
+        case .noConnectionError:
+            let view: FakespotMessageCardView = .build()
+            view.configure(viewModel.noConnectionViewModel)
+            return view
+        }
+    }
+
+    private func recordDismissTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
                                      object: .shoppingBottomSheet)
@@ -200,11 +241,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
+        recordDismissTelemetry()
     }
 }

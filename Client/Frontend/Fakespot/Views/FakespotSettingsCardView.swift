@@ -8,13 +8,22 @@ import Shared
 import ComponentLibrary
 
 class FakespotSettingsCardViewModel {
-    let prefs: Prefs
-    let cardA11yId: String
-    let showProductsLabelTitle: String
-    let showProductsLabelTitleA11yId: String
-    let turnOffButtonTitle: String
-    let turnOffButtonTitleA11yId: String
-    let recommendedProductsSwitchA11yId: String
+    typealias a11yIds = AccessibilityIdentifiers.Shopping.SettingsCard
+    private let prefs: Prefs
+    private let tabManager: TabManager
+
+    let cardA11yId: String = a11yIds.card
+    let showProductsLabelTitle: String = .Shopping.SettingsCardRecommendedProductsLabel
+    let showProductsLabelTitleA11yId: String = a11yIds.productsLabel
+    let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
+    let turnOffButtonTitleA11yId: String = a11yIds.turnOffButton
+    let recommendedProductsSwitchA11yId: String = a11yIds.recommendedProductsSwitch
+    let footerTitle: String = ""
+    let footerActionTitle: String = .Shopping.SettingsCardFooterAction
+    let footerA11yTitleIdentifier: String = a11yIds.footerTitle
+    let footerA11yActionIdentifier: String = a11yIds.footerAction
+    let footerActionUrl = URL(string: "http://fakespot.com/")
+    var dismissViewController: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
@@ -26,20 +35,30 @@ class FakespotSettingsCardViewModel {
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
     }
 
+    var footerModel: ActionFooterViewModel {
+        return ActionFooterViewModel(title: footerTitle,
+                                     actionTitle: footerActionTitle,
+                                     a11yTitleIdentifier: footerA11yTitleIdentifier,
+                                     a11yActionIdentifier: footerA11yActionIdentifier,
+                                     onTap: { self.onTapButton() })
+    }
+
     init(profile: Profile = AppContainer.shared.resolve(),
-         cardA11yId: String,
-         showProductsLabelTitle: String,
-         showProductsLabelTitleA11yId: String,
-         turnOffButtonTitle: String,
-         turnOffButtonTitleA11yId: String,
-         recommendedProductsSwitchA11yId: String) {
+         tabManager: TabManager = AppContainer.shared.resolve()) {
         prefs = profile.prefs
-        self.cardA11yId = cardA11yId
-        self.showProductsLabelTitle = showProductsLabelTitle
-        self.showProductsLabelTitleA11yId = showProductsLabelTitleA11yId
-        self.turnOffButtonTitle = turnOffButtonTitle
-        self.turnOffButtonTitleA11yId = turnOffButtonTitleA11yId
-        self.recommendedProductsSwitchA11yId = recommendedProductsSwitchA11yId
+        self.tabManager = tabManager
+    }
+
+    func onTapButton() {
+        guard let footerActionUrl else { return }
+        tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
+    }
+
+    func recordTelemetryForShoppingOptedOut() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingSettingsCardTurnOffButton)
     }
 }
 
@@ -54,6 +73,8 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         static let labelSwitchStackViewSpacing: CGFloat = 12
         static let contentInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         static let buttonInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        static let cardBottomSpace: CGFloat = 8
+        static let footerHorizontalSpace: CGFloat = 8
     }
 
     private var viewModel: FakespotSettingsCardViewModel?
@@ -99,6 +120,8 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
                                                                          weight: .semibold)
     }
 
+    private lazy var footerView: ActionFooterView = .build()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -110,16 +133,19 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(collapsibleContainer)
+        addSubview(footerView)
         contentView.addSubviews(contentStackView, turnOffButton)
 
         [showProductsLabel, recommendedProductsSwitch].forEach(labelSwitchStackView.addArrangedSubview)
-        contentStackView.addArrangedSubview(labelSwitchStackView)
+
+        // FXIOS-7369: https://mozilla-hub.atlassian.net/browse/FXIOS-7369
+//        contentStackView.addArrangedSubview(labelSwitchStackView)
 
         NSLayoutConstraint.activate([
             collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             collapsibleContainer.topAnchor.constraint(equalTo: topAnchor),
             collapsibleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collapsibleContainer.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -UX.cardBottomSpace),
 
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -132,6 +158,10 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
             turnOffButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                     constant: UX.buttonLeadingTrailingPadding),
             turnOffButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            footerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            footerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            footerView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
@@ -147,25 +177,34 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
         recommendedProductsSwitch.accessibilityIdentifier = viewModel.recommendedProductsSwitchA11yId
 
-        let viewModel = CollapsibleCardViewModel(
+        let collapsibleCardViewModel = CollapsibleCardViewModel(
             contentView: contentView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.card,
             title: .Shopping.SettingsCardLabelTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
             expandButtonA11yLabelExpanded: .Shopping.SettingsCardExpandedAccessibilityLabel,
-            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel)
-        collapsibleContainer.configure(viewModel)
+            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel) { state in
+                if state == .expanded {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .view,
+                                                 object: .shoppingSettingsChevronButton)
+                }
+        }
+        collapsibleContainer.configure(collapsibleCardViewModel)
+        footerView.configure(viewModel: viewModel.footerModel)
     }
 
     @objc
-    func didToggleSwitch(_ sender: UISwitch) {
+    private func didToggleSwitch(_ sender: UISwitch) {
         viewModel?.areAdsEnabled = sender.isOn
     }
 
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
+        viewModel?.dismissViewController?()
+        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System
@@ -179,5 +218,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
         turnOffButton.backgroundColor = colors.actionSecondary
         turnOffButton.setTitleColor(colors.textPrimary, for: .normal)
+
+        footerView.applyTheme(theme: theme)
     }
 }

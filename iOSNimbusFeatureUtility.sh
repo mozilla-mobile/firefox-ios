@@ -56,15 +56,11 @@ features:
         default: false
     defaults:
       - channel: beta
-        value: {
-          \"new-variable\": true
-          }
-        }
+        value:
+          new-variable: false
       - channel: developer
-        value: {
-          \"new-variable\": true
-          }
-        }
+        value:
+          new-variable: false
 
 objects:
 

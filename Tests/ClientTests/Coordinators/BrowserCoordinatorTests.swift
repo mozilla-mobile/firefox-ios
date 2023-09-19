@@ -5,6 +5,7 @@
 import Common
 import XCTest
 import WebKit
+import ComponentLibrary
 @testable import Client
 
 final class BrowserCoordinatorTests: XCTestCase {
@@ -201,7 +202,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
     }
 
-    func testShowShareExtension() {
+    func testShowShareExtension_addsShareExtensionCoordinator() {
         let subject = createSubject()
 
         subject.showShareExtension(url: URL(string: "https://www.google.com")!, sourceView: UIView(), toastContainer: UIView())
@@ -210,6 +211,28 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+    }
+
+    func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
+        let subject = createSubject()
+
+        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
+    func testShowRequiredPassCode_addsCredentialAutofillCoordinator() {
+        let subject = createSubject()
+
+        subject.showRequiredPassCode()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
     }
 
     // MARK: - ParentCoordinatorDelegate

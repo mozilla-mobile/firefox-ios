@@ -1494,28 +1494,19 @@ workflows:
                 -scheme Fennec_Enterprise \
                 -sdk iphoneos \
                 -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+                -derivedDataPath "/Users/vagrant/git/DerivedData"
     - deploy-to-bitrise-io@2: {}
-    - script@1.1:
-        title: Verify App signature, Test, and Runner
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- verify test and runner signature --"
-            codesign --verify --deep --strict --verbose DerivedData/Build/Products/Debug-iphoneos/Client.app
-            echo "-- test app --"
-            xcodebuild -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -derivedDataPath "/Users/vagrant/git/DerivedData" test-without-building | xcpretty | tee xcodebuild_fennec.log
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
         - content: |
             set -euxo pipefail
             echo "-- create .zip artifact --"
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
+
             cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Debug-iphones Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-x86_64.xctestrun
+            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
             mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:
@@ -1551,8 +1542,7 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            ls /Users/vagrant/git/Fennec_Enterprise.zip
-            gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
+            $HOME/google-cloud-sdk/bin/gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --model=iphone14pro,version=16.4 \
                 --xcode-version=14.3.1
 app:

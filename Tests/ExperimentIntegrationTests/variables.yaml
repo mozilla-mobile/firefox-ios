@@ -1,0 +1,3 @@
+urls:
+  stage_server: "https://stage.experimenter.nonprod.dataops.mozgcp.net"
+  prod_server: "https://experimenter.services.mozilla.com"

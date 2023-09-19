@@ -118,11 +118,16 @@ public struct AccessibilityIdentifiers {
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
 
-        struct ErrorCard {
-            static let card = "Shopping.ErrorCard.Card"
-            static let title = "Shopping.ErrorCard.Title"
-            static let description = "Shopping.ErrorCard.Description"
-            static let primaryAction = "Shopping.ErrorCard.PrimaryAction"
+        struct GenericErrorInfoCard {
+            static let card = "Shopping.GenericErrorInfoCard.Card"
+            static let title = "Shopping.GenericErrorInfoCard.Title"
+            static let description = "Shopping.GenericErrorInfoCard.Description"
+        }
+
+        struct NoConnectionCard {
+            static let card = "Shopping.NoConnectionCard.Card"
+            static let title = "Shopping.NoConnectionCard.Title"
+            static let description = "Shopping.NoConnectionCard.Description"
         }
 
         struct ConfirmationCard {
@@ -178,6 +183,8 @@ public struct AccessibilityIdentifiers {
             static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
             static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
+            static let footerTitle = "Shopping.SettingCard.footerTitle"
+            static let footerAction = "Shopping.SettingCard.footerAction"
         }
 
         struct NoAnalysisCard {
@@ -199,6 +206,18 @@ public struct AccessibilityIdentifiers {
             static let adjustedRatingLabel = "Shopping.ReviewQualityCard.AdjustedRatingLabel"
             static let highlightsLabel = "Shopping.ReviewQualityCard.HighlightsLabel"
             static let learnMoreButtonTitle = "Shopping.ReviewQualityCard.LearnMoreButtonTitle"
+        }
+
+        struct OptInCard {
+            static let card = "Shopping.OptInCard.Card"
+            static let headerTitle = "Shopping.OptInCard.HeaderTitle"
+            static let optInCopy = "Shopping.OptInCard.BodyFirstParagraph"
+            static let disclaimerText = "Shopping.OptInCard.DisclaimerText"
+            static let learnMoreButton = "Shopping.OptInCard.LearnMoreButton"
+            static let termsOfUseButton = "Shopping.OptInCard.TermsOfUseButton"
+            static let privacyPolicyButton = "Shopping.OptInCard.PrivacyPolicyButton"
+            static let mainButton = "Shopping.OptInCard.MainButton"
+            static let secondaryButton = "Shopping.OptInCard.SecondaryButton"
         }
     }
 

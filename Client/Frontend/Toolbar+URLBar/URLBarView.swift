@@ -46,7 +46,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
-    func urlBarDidPressShoppingCart(_ urlBar: URLBarView, shoppingCart: UIButton)
+    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton)
 }
 
 protocol URLBarViewProtocol {
@@ -759,8 +759,8 @@ extension URLBarView: TabLocationViewDelegate {
         delegate?.urlBarDidPressShare(self, shareView: button)
     }
 
-    func tabLocationViewDidTapShoppingCart(_ tabLocationView: TabLocationView, button: UIButton) {
-        delegate?.urlBarDidPressShoppingCart(self, shoppingCart: button)
+    func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton) {
+        delegate?.urlBarDidPressShopping(self, shoppingButton: button)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {

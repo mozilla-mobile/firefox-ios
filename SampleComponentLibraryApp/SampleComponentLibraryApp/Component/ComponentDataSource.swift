@@ -2,11 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UIKit
 
 class ComponentDataSource: NSObject, UITableViewDataSource {
     var componentData = ComponentData()
+    var theme: Theme = LightTheme()
 
     // MARK: UITableViewDataSource
 
@@ -18,6 +20,7 @@ class ComponentDataSource: NSObject, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ComponentCell.cellIdentifier)
         guard let cell = cell as? ComponentCell else { return UITableViewCell() }
         cell.setup(componentData.data[indexPath.row])
+        cell.applyTheme(theme: theme)
         return cell
     }
 }

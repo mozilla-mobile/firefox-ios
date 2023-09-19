@@ -7,7 +7,7 @@ import XCTest
 
 let testPageBase = "http://www.example.com"
 let loremIpsumURL = "\(testPageBase)"
-
+let TIMEOUT: TimeInterval = 15
 class L10nBaseSnapshotTests: XCTestCase {
     var app: XCUIApplication!
     var navigator: MMNavigator<FxUserState>!
@@ -46,6 +46,19 @@ class L10nBaseSnapshotTests: XCTestCase {
             waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
+    // is up to 25x more performant than the above waitForExistence method
+    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while !element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
+
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
             let predicate = NSPredicate(format: predicateString)
             let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
@@ -62,6 +75,18 @@ class L10nBaseSnapshotTests: XCTestCase {
     func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
+    // is up to 25x more performant than the above waitForNoExistence method
+    func mozWaitForElementToNotExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to not exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
 
     func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
         userState.url = url
@@ -76,6 +101,6 @@ class L10nBaseSnapshotTests: XCTestCase {
     func waitUntilPageLoad() {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 20.0)
     }
 }

@@ -7,7 +7,7 @@ import XCTest
 class NoImageTests: BaseTestCase {
     private func checkShowImages(showImages: Bool = true) {
         let noImageStatusMode = app.otherElements.tables.cells.switches["NoImageModeStatus"]
-        waitForExistence(noImageStatusMode)
+        mozWaitForElementToExist(noImageStatusMode)
         if showImages {
             XCTAssertEqual(noImageStatusMode.value as! String, "0")
         } else {
@@ -25,14 +25,14 @@ class NoImageTests: BaseTestCase {
         let blockImagesSwitch = app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title]
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        waitForExistence(blockImagesSwitch)
+        mozWaitForElementToExist(blockImagesSwitch)
         navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages(showImages: false)
 
         // Select show images
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        waitForExistence(blockImagesSwitch)
+        mozWaitForElementToExist(blockImagesSwitch)
         navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages(showImages: true)
     }

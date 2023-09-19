@@ -2,11 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import ComponentLibrary
 import Foundation
 import UIKit
 
-class BottomSheetChildViewController: UIViewController, BottomSheetChild {
+class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themeable {
     private let loremIpsum =
     """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -15,6 +16,10 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild {
     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     """
 
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var contentLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
@@ -22,12 +27,23 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild {
 
     private var heightConstraint: NSLayoutConstraint!
 
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        listenForThemeChange(view)
+        applyTheme()
+
         contentLabel.text = String(repeating: "\(loremIpsum)", count: 1)
 
         setupView()
-        view.backgroundColor = .white
     }
 
     private func setupView() {
@@ -44,4 +60,10 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild {
     // MARK: BottomSheetChild
 
     func willDismiss() {}
+
+    // MARK: Themeable
+
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
+    }
 }

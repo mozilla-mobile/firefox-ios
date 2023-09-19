@@ -11,15 +11,15 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .autopushFeature:
-            return checkAutopushFeature(from: nimbus)
-        case .pullToRefresh,
-                .reportSiteIssue:
+        case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
                 .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
+
+        case .credentialAutofillCoordinatorRefactor:
+            return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackIn,
                 .pocket,
@@ -46,8 +46,8 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .onboardingFreshInstall:
-            return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
+        case .feltPrivacyUI:
+            return checkFeltPrivacyUIFeature(from: nimbus)
 
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
@@ -98,15 +98,9 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.generalAppFeatures.value()
 
         switch featureID {
-        case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
-    }
-
-    private func checkAutopushFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.autopushFeature.value()
-        return config.useNewAutopushClient
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
@@ -162,6 +156,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkCredentialAutofillCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.credentialAutofillCoordinatorRefactor.value()
+        return config.enabled
+    }
+
     private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
         return config.enabled
@@ -202,6 +201,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkFeltPrivacyUIFeature(from nimbus: FxNimbus ) -> Bool {
+        let config = nimbus.features.privateBrowsing.value()
+        return config.feltPrivacyEnabled
+    }
+
     public func checkNimbusForCreditCardAutofill(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
@@ -211,18 +215,6 @@ final class NimbusFeatureFlagLayer {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
             default: return false
             }
-    }
-
-    private func checkNimbusForOnboardingFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.onboardingFeature.value()
-
-        switch featureID {
-        case .onboardingFreshInstall: return config.firstRunFlow
-        default: return false
-        }
     }
 
     public func checkNimbusForShareSheet(
