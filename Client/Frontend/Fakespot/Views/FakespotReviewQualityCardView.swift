@@ -241,7 +241,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     @objc
     private func didTapLearnMore() {
-        #warning("TODO: Tap Action")
+        // didTapLearnMore will be enabled with task FXIOS-7427
     }
 
     func configure() {
