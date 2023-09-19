@@ -19,24 +19,29 @@ struct FakespotOptInCardViewModel {
         case walmart
         case bestbuy
 
-        static func orderWebsites(for siteName: String?) -> [String] {
-            let lowercasedName = siteName?.lowercased() ?? "amazon"
-            var currentPartnerWebsites = PartnerWebsite.allCases.map { $0.rawValue }
+        var title: String {
+            switch self {
+            case .bestbuy: return "Best Buy"
+            default: return self.rawValue.capitalized
+            }
+        }
 
-            // just in case this card will be shown from an unpartnered website in the future
-            guard currentPartnerWebsites.contains(lowercasedName) else {
-                currentPartnerWebsites[2] = "Best Buy"
-                return currentPartnerWebsites.map { $0.capitalized }
+        var orderWebsites: [String] {
+            let currentPartnerWebsites = PartnerWebsite.allCases.map { $0.title }
+
+            // make sure current website is first
+            var websitesOrder = currentPartnerWebsites.filter { $0 != self.title }
+            websitesOrder.insert(self.title, at: 0)
+
+            return websitesOrder
+        }
+
+        init?(for siteName: String?) {
+            guard let siteName = siteName, let partner = PartnerWebsite(rawValue: siteName) else {
+                return nil
             }
 
-            var websitesOrder = currentPartnerWebsites.filter { $0 != lowercasedName }
-            if lowercasedName == "bestbuy" {
-                websitesOrder.insert("Best Buy", at: 0)
-            } else {
-                websitesOrder.insert(lowercasedName.capitalized, at: 0)
-            }
-
-            return websitesOrder.map { $0.capitalized }
+            self = partner
         }
     }
 
@@ -105,9 +110,14 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingNotNowButton)
     }
 
+    var orderWebsites: [String] {
+        let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
+        return currentPartner.orderWebsites
+    }
+
     // MARK: Text methods
     var firstParagraphText: NSAttributedString {
-        let websites = PartnerWebsite.orderWebsites(for: productSitename)
+        let websites = orderWebsites
         let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                           size: UX.bodyFirstParagraphLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,

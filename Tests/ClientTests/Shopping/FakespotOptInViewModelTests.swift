@@ -26,19 +26,19 @@ final class FakespotOptInCardViewModelTests: XCTestCase {
 
     func testGetWebsites() {
         viewModel.productSitename = "bestbuy"
-        var websites = FakespotOptInCardViewModel.PartnerWebsite.orderWebsites(for: viewModel.productSitename)
-        XCTAssertEqual(websites[0], "Best Buy")
+        var websites = viewModel.orderWebsites
+        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.bestbuy.title)
 
         viewModel.productSitename = "amazon"
-        websites = FakespotOptInCardViewModel.PartnerWebsite.orderWebsites(for: viewModel.productSitename)
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.rawValue.capitalized)
+        websites = viewModel.orderWebsites
+        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.title)
 
         viewModel.productSitename = "walmart"
-        websites = FakespotOptInCardViewModel.PartnerWebsite.orderWebsites(for: viewModel.productSitename)
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.walmart.rawValue.capitalized)
+        websites = viewModel.orderWebsites
+        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.walmart.title)
 
         viewModel.productSitename = "randomShop"
-        websites = FakespotOptInCardViewModel.PartnerWebsite.orderWebsites(for: viewModel.productSitename)
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.rawValue.capitalized) // as "Amazon" is the default
+        websites = viewModel.orderWebsites
+        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.title) // as "Amazon" is the default
     }
 }
