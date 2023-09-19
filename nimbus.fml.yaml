@@ -16,7 +16,6 @@ include:
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/credentialAutofillCoordinatorRefactor.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
-  - nimbus-features/etpCoordinatorRefactor.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/generalFeatures.yaml
