@@ -1635,6 +1635,13 @@ extension String {
         }
 
         public struct Sync {
+            public static let SyncTabsNotUsed = MZLocalizedString(
+                key: "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
+                tableName: "TabsTray",
+                value: "Sync Tabs",
+                comment: "Button label to sync tabs in your Firefox Account",
+                lastUsedInVersion: 119)
+
             public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",
@@ -2201,6 +2208,12 @@ extension String {
 // MARK: - Firefox Account
 extension String {
     // Settings strings
+    public static let FxAFirefoxAccountNotUsed = MZLocalizedString(
+        key: "FxA.FirefoxAccount",
+        tableName: nil,
+        value: "Firefox Account",
+        comment: "Settings section title for Firefox Accoun",
+        lastUsedInVersion: 119)
     public static let FxAFirefoxAccount = MZLocalizedString(
         key: "FxA.FirefoxAccount.v119",
         tableName: nil,
@@ -2221,6 +2234,12 @@ extension String {
         tableName: nil,
         value: "No Internet Connection",
         comment: "Label when no internet is present")
+    public static let FxASettingsTitleNotUsed = MZLocalizedString(
+        key: "Settings.FxA.Title",
+        tableName: nil,
+        value: "Firefox Account",
+        comment: "Title displayed in header of the FxA settings panel.",
+        lastUsedInVersion: 119)
     public static let FxASettingsTitle = MZLocalizedString(
         key: "Settings.FxA.Title.v119",
         tableName: nil,
@@ -3491,6 +3510,12 @@ extension String {
         tableName: nil,
         value: "Close",
         comment: "Close button in top navigation bar")
+    public static let SendToNotSignedInTextNotUsed = MZLocalizedString(
+        key: "SendTo.NotSignedIn.Title",
+        tableName: nil,
+        value: "You are not signed in to your Firefox Account.",
+        comment: "See http://mzl.la/1ISlXnU",
+        lastUsedInVersion: 119)
     public static let SendToNotSignedInText = MZLocalizedString(
         key: "SendTo.NotSignedIn.Title.v119",
         tableName: nil,
@@ -3501,6 +3526,12 @@ extension String {
         tableName: nil,
         value: "Please open Firefox, go to Settings and sign in to continue.",
         comment: "See http://mzl.la/1ISlXnU")
+    public static let SendToNoDevicesFoundNotUsed = MZLocalizedString(
+        key: "SendTo.NoDevicesFound.Message",
+        tableName: nil,
+        value: "You don’t have any other devices connected to this Firefox Account available to sync.",
+        comment: "Error message shown in the remote tabs panel",
+        lastUsedInVersion: 119)
     public static let SendToNoDevicesFound = MZLocalizedString(
         key: "SendTo.NoDevicesFound.Message.v119",
         tableName: nil,
@@ -5217,6 +5248,12 @@ extension String {
         tableName: nil,
         value: "No logins found",
         comment: "Label shown when there are no logins saved")
+    public static let LoginsListNoLoginsFoundDescriptionNotUsed = MZLocalizedString(
+        key: "LoginsList.NoLoginsFound.Description",
+        tableName: nil,
+        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.",
+        comment: "Label shown when there are no logins to list",
+        lastUsedInVersion: 119)
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
         key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
