@@ -48,7 +48,7 @@ class FakespotViewModel {
 
     enum ViewElement {
         case loadingView
-//        case onboarding // card not created yet (FXIOS-7270)
+        case onboarding
         case reliabilityCard
         case adjustRatingCard
         case highlightsCard
