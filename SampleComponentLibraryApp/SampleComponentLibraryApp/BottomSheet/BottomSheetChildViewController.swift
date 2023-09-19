@@ -40,7 +40,7 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themea
         super.viewDidLoad()
         listenForThemeChange(view)
         applyTheme()
-        
+
         contentLabel.text = String(repeating: "\(loremIpsum)", count: 1)
 
         setupView()
