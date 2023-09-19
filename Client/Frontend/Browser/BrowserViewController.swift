@@ -1404,9 +1404,17 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams,
+                                     flowType: FxAPageType = .emailLoginFlow,
+                                     referringPage: ReferringPage = .none) {
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+                                                                                      flowType: flowType,
+                                                                                      referringPage: referringPage,
+                                                                                      profile: profile)
+        presentThemedViewController(navItemLocation: .Left,
+                                    navItemText: .Close,
+                                    vcBeingPresented: vcToPresent,
+                                    topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     func handle(query: String) {

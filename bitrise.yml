@@ -1542,9 +1542,9 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            $HOME/google-cloud-sdk/bin/gcloud firebase test ios run --test /Users/vagrant/git/Fennec_Enterprise.zip \
-                --model=iphone14pro,version=16.4 \
-                --xcode-version=14.3.1
+            $HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
+                --test /Users/vagrant/git/Fennec_Enterprise.zip \
+                --device model=iphone14pro,version=16.6
 app:
   envs:
   - opts:
