@@ -1469,42 +1469,42 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    # - xcode-archive@4.7.2:
-    #     inputs:
-    #     - compile_bitcode: 'no'
-    #     - upload_bitcode: 'no'
-    #     - team_id: 9G8J6YA743
-    #     - export_method: development
-    #     - distribution_method: development
-    #     - export_development_team: 9G8J6YA743
-    #     - output_tool: xcodebuild
-    #     - scheme: Fennec_Enterprise
-    #     - configuration: Fennec_Enterprise
-    #     - project_path: "$BITRISE_PROJECT_PATH"
-    # - deploy-to-bitrise-io@2: {}
-    - script@1.1:
-        title: Firebase Build for Testing Physical Devices
+    - xcode-archive@4.7.2:
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-            # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
-            # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
-            # xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
-            #     "-scheme" "Fennec_Enterprise" \
-            #     "-configuration" "Fennec_Enterprise" \
-            #     "-sdk" "iphoneos" \
-            #     "-destination" "generic/platform=iOS" \
-            #     "-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            xcodebuild \
-            -project $BITRISE_PROJECT_PATH \
-            -scheme Fennec_Enterprise \
-            -configuration Fennec_Enterprise \
-            -destination generic/platform=iOS \
-            CODE_SIGN_IDENTITY="iPhone Developer: Mozilla Corporation" \
-            PROVISIONING_PROFILE="0dd4c07d-3c78-4ea6-b17a-e90e4f72cf82" \
-            DEVELOPMENT_TEAM=9G8J6YA743
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2: {}
+    # - script@1.1:
+    #     title: Firebase Build for Testing Physical Devices
+    #     inputs:
+    #     - content: |
+    #         set -euxo pipefail
+    #         echo "-- build-for-testing --"
+    #         mkdir DerivedData
+    #         # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-resolvePackageDependencies"
+    #         # xcodebuild "-project" "$BITRISE_PROJECT_PATH" "-scheme" "Fennec_Enterprise" "-configuration" "Fennec_Enterprise" "-showBuildSettings"
+    #         # xcodebuild build-for-testing "-project" $BITRISE_PROJECT_PATH \
+    #         #     "-scheme" "Fennec_Enterprise" \
+    #         #     "-configuration" "Fennec_Enterprise" \
+    #         #     "-sdk" "iphoneos" \
+    #         #     "-destination" "generic/platform=iOS" \
+    #         #     "-derivedDataPath" "/Users/vagrant/git/DerivedData"
+    #         xcodebuild \
+    #         -project $BITRISE_PROJECT_PATH \
+    #         -scheme Fennec_Enterprise \
+    #         -configuration Fennec_Enterprise \
+    #         -destination generic/platform=iOS \
+    #         CODE_SIGN_IDENTITY="iPhone Developer: Mozilla Corporation" \
+    #         PROVISIONING_PROFILE="0dd4c07d-3c78-4ea6-b17a-e90e4f72cf82" \
+    #         DEVELOPMENT_TEAM=9G8J6YA743
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
