@@ -150,7 +150,7 @@ class SyncNowSetting: WithAccountSetting {
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.tintColor = theme.colors.actionPrimary
-        troubleshootButton.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
+        troubleshootButton.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
         troubleshootButton.sizeToFit()
         return troubleshootButton
     }()

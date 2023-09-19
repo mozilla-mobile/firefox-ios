@@ -85,8 +85,8 @@ class LegacyDynamicFontHelper: NSObject {
      * Small
      */
     fileprivate var defaultSmallFontSize: CGFloat
-    var DefaultSmallFontBold: UIFont {
-        return UIFont.boldSystemFont(ofSize: defaultSmallFontSize)
+    var DefaultSmallFont: UIFont {
+        return UIFont.systemFont(ofSize: defaultSmallFontSize, weight: UIFont.Weight.regular)
     }
 
     /**

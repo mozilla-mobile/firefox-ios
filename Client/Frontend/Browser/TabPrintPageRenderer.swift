@@ -2,12 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
+    static let PageTextFont = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
     static let PageMarginScale = CGFloat(0.5)
 }
 
