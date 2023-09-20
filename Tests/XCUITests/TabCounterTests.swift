@@ -75,7 +75,7 @@ class TabCounterTests: BaseTestCase {
 
         navigator.goto(TabTray)
         if isTablet {
-            mozWaitForElementToExist(app.navigationBars["Client.TabTrayView"])
+            mozWaitForElementToExist(app.navigationBars["Client.LegacyTabTrayView"])
         } else {
             mozWaitForElementToExist(app.navigationBars["Open Tabs"])
         }

@@ -64,7 +64,6 @@ class SyncUITests: BaseTestCase {
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
-        navigator.performAction(Action.FxATapOnSignInButton)
         mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
