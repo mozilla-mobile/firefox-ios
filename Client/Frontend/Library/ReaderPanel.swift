@@ -269,7 +269,7 @@ class ReadingListPanel: UITableViewController,
                 NSLayoutConstraint.activate([
                     emptyView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
                     emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                    emptyView.widthAnchor.constraint(lessThanOrEqualTo: scrollView.widthAnchor),
+                    emptyView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
                     emptyView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
                 ])
                 self.tableView.superview?.insertSubview(scrollView, aboveSubview: self.tableView)
