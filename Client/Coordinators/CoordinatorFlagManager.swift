@@ -20,9 +20,4 @@ struct CoordinatorFlagManager {
     static var isCredentialAutofillCoordinatorEnabled: Bool {
         NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.credentialAutofillCoordinatorRefactor)
     }
-
-    static var isEtpCoordinatorEnabled: Bool {
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.etpCoordinatorRefactor,
-                                                                 checking: .buildOnly)
-    }
 }
