@@ -13,7 +13,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         static let headerHorizontalSpacing: CGFloat = 18
         static let titleCloseSpacing: CGFloat = 16
         static let titleLabelFontSize: CGFloat = 17
-        static let titleBetaSpacing: CGFloat = 8
+        static let titleStackSpacing: CGFloat = 8
         static let betaLabelFontSize: CGFloat = 15
         static let betaBorderWidth: CGFloat = 2
         static let betaBorderWidthA11ySize: CGFloat = 4
@@ -56,7 +56,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     private var titleStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.spacing = UX.titleBetaSpacing
+        stackView.spacing = UX.titleStackSpacing
         stackView.alignment = .center
     }
 
