@@ -244,6 +244,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     @objc
     private func didTapLearnMore() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingLearnMoreReviewQualityButton)
         guard let fakespotLearnMoreLink else { return }
         tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
         dismissViewController?()
