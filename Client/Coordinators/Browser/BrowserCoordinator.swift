@@ -445,4 +445,26 @@ class BrowserCoordinator: BaseCoordinator,
             findAndHandle(route: savedRoute)
         }
     }
+
+    func showTabTray() {
+        // Create a TabTrayCoordinator like `makeBookmarksCoordinator`
+        // Create a new Router and create a new Coordinator with that router
+        // Move to TabTrayCoordinator like Fakespot coordinator is doing
+        if let tabTrayCoordinator = childCoordinators[TabTrayCoordinator.self] {
+            tabTrayCoordinator.start()
+            (tabTrayCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
+        } else {
+            let navigationController = DismissableNavigationViewController()
+            navigationController.modalPresentationStyle = .formSheet
+
+            let tabTrayCoordinator = TabTrayCoordinator(
+                router: DefaultRouter(navigationController: navigationController)
+            )
+            tabTrayCoordinator.parentCoordinator = self
+            add(child: tabTrayCoordinator)
+            tabTrayCoordinator.start()
+
+            router.present(navigationController)
+        }
+    }
 }
