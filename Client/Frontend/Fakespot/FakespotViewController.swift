@@ -55,7 +55,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private var titleStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.spacing = UX.titleBetaSpacing
-        stackView.distribution = .fill // fillEqually fillProportionally equalSpacing equalCentering
+        stackView.distribution = .fill
         stackView.alignment = .center
         stackView.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
     }
@@ -75,7 +75,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.betaLabelFontSize)
-//        label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
+        label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
         label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
     }
 
