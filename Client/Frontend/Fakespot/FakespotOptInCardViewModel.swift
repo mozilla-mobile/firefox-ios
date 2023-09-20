@@ -72,7 +72,7 @@ struct FakespotOptInCardViewModel {
 
     // MARK: Button Actions
     var dismissViewController: (() -> Void)?
-    var shouldOptIn: (() -> Void)?
+    var onOptIn: (() -> Void)?
 
     // MARK: Links
     let fakespotPrivacyPolicyLink = URL(string: "https://www.fakespot.com/privacy-policy")
@@ -119,7 +119,7 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)
-        shouldOptIn?()
+        onOptIn?()
     }
 
     func onTapSecondaryButton() {

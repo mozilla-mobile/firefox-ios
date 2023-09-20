@@ -182,7 +182,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss()
             }
-            viewModel.optInCardViewModel.shouldOptIn = { [weak self] in
+            viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
                 Task {
                     await self.viewModel.fetchData()
