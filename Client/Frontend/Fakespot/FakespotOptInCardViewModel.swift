@@ -119,7 +119,7 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)
-        dismissViewController?()
+        shouldOptIn?()
     }
 
     func onTapSecondaryButton() {
