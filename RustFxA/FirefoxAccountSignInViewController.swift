@@ -103,7 +103,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         button.configure(viewModel: viewModel)
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
 
-        button.setInsets(forContentPadding: contentPadding, imageTitlePadding: UX.buttonHorizontalInset)
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
