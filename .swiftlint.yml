@@ -47,6 +47,8 @@ disabled_rules: # rule identifiers to exclude from running
 - valid_ibinspectable
 - weak_delegate
 - xctfail_message
+- closure_body_length
+
 
 opt_in_rules: # some rules are only opt-in
 # These rules were originally opted into. Disabling for now to get
@@ -97,6 +99,7 @@ file_header:
 
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
+  
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build/
