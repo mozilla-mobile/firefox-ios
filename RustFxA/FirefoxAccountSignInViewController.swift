@@ -112,9 +112,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         )
         button.configure(viewModel: viewModel)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.setTitle(.FxASignin_EmailSignin, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
     }
 
