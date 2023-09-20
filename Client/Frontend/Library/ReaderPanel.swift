@@ -194,7 +194,7 @@ class ReadingListPanel: UITableViewController,
         (navigationController as? ThemedNavigationController)?.applyTheme()
         tableView.accessibilityIdentifier = "ReadingTable"
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
