@@ -76,7 +76,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
         switch featureID {
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
-        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
         }
     }
@@ -84,7 +83,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
         switch featureID {
         case .searchBarPosition: return .bottomSearchBar
-        case .startAtHome: return .startAtHome
         case .wallpaperVersion: return .wallpaperVersion
         }
     }
@@ -97,10 +95,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
-        // Do nothing if this is a non-binary feature
-        let nonbinaryStateFeatures: [NimbusFeatureFlagID] = [.startAtHome]
-        if nonbinaryStateFeatures.contains(featureID) { return }
-
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         feature.setUserPreference(to: desiredState)
     }
@@ -116,11 +110,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         switch featureID {
         case .searchBarPosition:
             if let option = desiredState as? SearchBarPosition {
-                feature.setUserPreference(to: option.rawValue)
-            }
-
-        case .startAtHome:
-            if let option = desiredState as? StartAtHomeSetting {
                 feature.setUserPreference(to: option.rawValue)
             }
 

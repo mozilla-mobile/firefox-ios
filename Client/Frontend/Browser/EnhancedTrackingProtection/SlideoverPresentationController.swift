@@ -78,10 +78,6 @@ class SlideOverPresentationController: UIPresentationController {
 
     @objc
     func dismissController() {
-        if CoordinatorFlagManager.isEtpCoordinatorEnabled {
-            enhancedTrackingProtectionMenuDelegate?.didFinish()
-        } else {
-            presentedViewController.dismiss(animated: true, completion: nil)
-        }
+        enhancedTrackingProtectionMenuDelegate?.didFinish()
     }
 }
