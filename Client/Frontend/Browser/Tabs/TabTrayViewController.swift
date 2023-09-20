@@ -52,6 +52,30 @@ class TabTrayViewController: UIViewController, TabTrayController {
         return shouldUseiPadSetup() ? LegacyTabTrayViewModel.Segment.allCases.map { $0.label } : iPhoneItems
     }
 
+    private lazy var deleteButton: UIBarButtonItem = {
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
+                                action: #selector(deleteTabsButtonTapped),
+                                a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
+                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+    }()
+
+    private lazy var newTabButton: UIBarButtonItem = {
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
+                                action: #selector(deleteTabsButtonTapped),
+                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
+                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+    }()
+
+    private lazy var flexibleSpace: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                               target: nil,
+                               action: nil)
+    }()
+
+    private lazy var bottomToolbarItems: [UIBarButtonItem] = {
+        return [deleteButton, flexibleSpace, newTabButton]
+    }()
+
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
@@ -69,6 +93,8 @@ class TabTrayViewController: UIViewController, TabTrayController {
         super.viewDidLoad()
 
         setupView()
+        listenForThemeChange(view)
+        setupToolbarItems()
     }
 
     func applyTheme() {
@@ -87,6 +113,16 @@ class TabTrayViewController: UIViewController, TabTrayController {
         ])
     }
 
+    private func setupToolbarItems() {
+//        switch viewModel.layout {
+//        case .compact:
+//            setToolbarItems(bottomToolbarItems, animated: true)
+//        case .regular:
+//            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
+//            navigationItem.leftBarButtonItem = deleteButtonIpad
+//        }
+    }
+
     private func createSegmentedControl(
         action: Selector,
         a11yId: String
@@ -101,9 +137,26 @@ class TabTrayViewController: UIViewController, TabTrayController {
         return segmentedControl
     }
 
+    private func createButtonItem(imageName: String,
+                                  action: Selector,
+                                  a11yId: String,
+                                  a11yLabel: String) -> UIBarButtonItem {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(imageName),
+                                     style: .plain,
+                                     target: self,
+                                     action: action)
+        button.accessibilityIdentifier = a11yId
+        button.accessibilityLabel = a11yLabel
+        return button
+    }
+
     @objc
     private func segmentChanged() {
         segmentPanelChange()
+    }
+
+    @objc func deleteTabsButtonTapped() {
+
     }
 
     private func segmentPanelChange() {}
