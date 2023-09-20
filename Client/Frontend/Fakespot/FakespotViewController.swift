@@ -13,6 +13,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         static let headerHorizontalSpacing: CGFloat = 18
         static let titleCloseSpacing: CGFloat = 16
         static let titleLabelFontSize: CGFloat = 17
+        static let titleBetaSpacing: CGFloat = 8
+        static let betaLabelFontSize: CGFloat = 15
+        static let betaBorderWidth: CGFloat = 2
+        static let betaCornerRadius: CGFloat = 8
+        static let betaHorizontalSpace: CGFloat = 6
+        static let betaVerticalSpace: CGFloat = 4
         static let closeButtonWidthHeight: CGFloat = 30
         static let scrollViewTopSpacing: CGFloat = 12
         static let scrollContentTopPadding: CGFloat = 16
@@ -44,6 +50,33 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
                                                             size: UX.titleLabelFontSize,
                                                             weight: .semibold)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
+    }
+
+    private var titleStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = UX.titleBetaSpacing
+        stackView.distribution = .fill // fillEqually fillProportionally equalSpacing equalCentering
+        stackView.alignment = .center
+        stackView.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
+    }
+
+    private lazy var betaContainerView: UIView = .build { view in
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    }
+
+    private lazy var betaView: UIView = .build { view in
+        view.layer.borderWidth = UX.betaBorderWidth
+        view.layer.cornerRadius = UX.betaCornerRadius
+    }
+
+    private lazy var betaLabel: UILabel = .build { label in
+        label.text = "BETA"
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                            size: UX.betaLabelFontSize)
+//        label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
+        label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -102,6 +135,8 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
+        betaLabel.textColor = theme.colors.textPrimary
+        betaView.layer.borderColor = theme.colors.actionSecondary.cgColor
 
         contentStackView.arrangedSubviews.forEach { view in
             guard let view = view as? ThemeApplicable else { return }
@@ -110,7 +145,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     }
 
     private func setupView() {
-        headerView.addSubviews(titleLabel, closeButton)
+        betaContainerView.addSubview(betaView)
+        betaView.addSubview(betaLabel)
+        titleStackView.addArrangedSubview(titleLabel)
+        titleStackView.addArrangedSubview(betaContainerView)
+        headerView.addSubviews(titleStackView, closeButton)
         view.addSubviews(headerView, scrollView)
 
         scrollView.addSubview(contentStackView)
@@ -141,20 +180,42 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                  constant: -UX.headerHorizontalSpacing),
 
-            titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.titleCloseSpacing),
-            titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-            titleCenterYConstraint,
+            titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
+            titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            titleStackView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                     constant: -UX.titleCloseSpacing),
+            titleStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+
+//            titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor),
+//            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+//            titleLabel.trailingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: -UX.titleBetaSpacing),
+//            titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+//            titleCenterYConstraint,
+//
+//            betaView.topAnchor.constraint(equalTo: headerView.topAnchor),
+//            betaView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+//                                               constant: -UX.titleCloseSpacing),
+//            betaView.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
 
             closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
             closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight)
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
+
+            betaView.topAnchor.constraint(equalTo: betaContainerView.topAnchor),
+            betaView.leadingAnchor.constraint(equalTo: betaContainerView.leadingAnchor),
+            betaView.trailingAnchor.constraint(lessThanOrEqualTo: betaContainerView.trailingAnchor),
+            betaView.bottomAnchor.constraint(equalTo: betaContainerView.bottomAnchor),
+            betaView.centerYAnchor.constraint(equalTo: betaContainerView.centerYAnchor),
+
+            betaLabel.topAnchor.constraint(equalTo: betaView.topAnchor, constant: UX.betaVerticalSpace),
+            betaLabel.leadingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: UX.betaHorizontalSpace),
+            betaLabel.trailingAnchor.constraint(equalTo: betaView.trailingAnchor, constant: -UX.betaHorizontalSpace),
+            betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace)
         ])
 
-        _ = titleCenterYConstraint.priority(.defaultLow)
+//        _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
     private func updateContent() {
