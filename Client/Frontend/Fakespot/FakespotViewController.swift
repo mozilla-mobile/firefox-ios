@@ -70,7 +70,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     }
 
     private lazy var betaLabel: UILabel = .build { label in
-        label.text = "BETA"
+        label.text = .Shopping.SheetHeaderBetaTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
