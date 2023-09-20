@@ -9,6 +9,7 @@ import Shared
 class FakespotViewModel {
     enum ViewState {
         case loading
+        case onboarding
         case loaded(ProductAnalysisData?)
         case error(Error)
 
@@ -25,7 +26,6 @@ class FakespotViewModel {
                     .highlightsCard,
                     .qualityDeterminationCard,
                     .settingsCard]
-
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
@@ -33,6 +33,8 @@ class FakespotViewModel {
                 } else {
                     return [.genericError] + baseElements
                 }
+            case .onboarding:
+                elements = [.onboarding]
             }
 
             return elements
@@ -40,7 +42,7 @@ class FakespotViewModel {
 
         var productData: ProductAnalysisData? {
             switch self {
-            case .loading, .error: return nil
+            case .loading, .error, .onboarding: return nil
             case .loaded(let data): return data
             }
         }
@@ -48,7 +50,7 @@ class FakespotViewModel {
 
     enum ViewElement {
         case loadingView
-//        case onboarding // card not created yet (FXIOS-7270)
+        case onboarding
         case reliabilityCard
         case adjustRatingCard
         case highlightsCard
@@ -68,7 +70,7 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
 
     var viewElements: [ViewElement] {
-//        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
+        guard isOptedIn else { return [.onboarding] }
 
         return state.viewElements
     }
@@ -125,10 +127,12 @@ class FakespotViewModel {
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
+    var optInCardViewModel = FakespotOptInCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
+        optInCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
     }
 

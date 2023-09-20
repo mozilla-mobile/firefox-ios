@@ -167,26 +167,31 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     @objc
     private func didTapLearnMore() {
         viewModel?.onTapLearnMore()
+        viewModel?.dismissViewController?()
     }
 
     @objc
     private func didTapTermsOfUse() {
         viewModel?.onTapTermsOfUse()
+        viewModel?.dismissViewController?()
     }
 
     @objc
     private func didTapPrivacyPolicy() {
         viewModel?.onTapPrivacyPolicy()
+        viewModel?.dismissViewController?()
     }
 
     @objc
     private func didTapMainButton() {
         viewModel?.onTapMainButton()
+        viewModel?.shouldOptIn?()
     }
 
     @objc
     private func didTapSecondaryButton() {
         viewModel?.onTapSecondaryButton()
+        viewModel?.dismissViewController?()
     }
 
     // MARK: View Setup

@@ -176,6 +176,18 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         case .loadingView:
             let view: FakespotLoadingView = .build()
             return view
+        case .onboarding:
+            let view: FakespotOptInCardView = .build()
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
+            viewModel.optInCardViewModel.shouldOptIn = { [weak self] in
+                guard let self = self else { return }
+                self.viewModel.fetchData()
+            }
+            view.configure(viewModel.optInCardViewModel)
+            return view
 
         case .reliabilityCard:
             guard let cardViewModel = viewModel.reliabilityCardViewModel else { return nil }
