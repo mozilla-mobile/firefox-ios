@@ -59,7 +59,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         waitForTabsButton()
 
-        var tabsOpen = app.buttons["Show Tabs"].value
+        let tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("1", tabsOpen as? String)
     }
 }
