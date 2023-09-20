@@ -327,9 +327,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
         GleanMetrics.Preferences.pocket.set(isPocketEnabled)
 
-        if let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) {
-            GleanMetrics.Preferences.openingScreen.set(startAtHomeSetting.rawValue)
-        }
+        let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
+        GleanMetrics.Preferences.openingScreen.set(startAtHomeOption)
     }
 
     @objc

@@ -52,8 +52,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.recentlySaved, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.topSites, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.topSites, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly))
@@ -61,7 +59,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     func testDefaultNimbusCustomFlags() {
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
         XCTAssertEqual(featureFlags.getCustomState(for: .wallpaperVersion), WallpaperVersion.v1)
     }
 
@@ -93,12 +90,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         mockProfile.prefs.setString(SearchBarPosition.bottom.rawValue,
                                     forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-
-        // StartAtHome
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
-        mockProfile.prefs.setString(StartAtHomeSetting.always.rawValue,
-                                    forKey: PrefsKeys.FeatureFlags.StartAtHome)
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.always)
     }
 
     func testManagerInterfaceForUpdatingBoolFlags() {
@@ -114,29 +105,5 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
         featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-
-        // StartAtHome
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
-        featureFlags.set(feature: .startAtHome, to: StartAtHomeSetting.always)
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.always)
-        featureFlags.set(feature: .startAtHome, to: StartAtHomeSetting.disabled)
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.disabled)
-    }
-
-    func testStartAtHomeBoolean() {
-        // Ensure defaults are operating correctly
-        XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.afterFourHours)
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly))
-        XCTAssertEqual(featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly), featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
-
-        // Now simulate user toggling to different settings
-        featureFlags.set(feature: .startAtHome, to: StartAtHomeSetting.always)
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
-
-        featureFlags.set(feature: .startAtHome, to: StartAtHomeSetting.disabled)
-        XCTAssertFalse(featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
-
-        featureFlags.set(feature: .startAtHome, to: StartAtHomeSetting.afterFourHours)
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.startAtHome, checking: .userOnly))
     }
 }
