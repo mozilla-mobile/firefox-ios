@@ -20,6 +20,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+    let tabManager: TabManager = AppContainer.shared.resolve()
+    var dismissViewController: (() -> Void)?
 
     private let aReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeA)
     private let bReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeB)
@@ -241,7 +244,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     @objc
     private func didTapLearnMore() {
-        // didTapLearnMore will be enabled with task FXIOS-7427
+        guard let fakespotLearnMoreLink else { return }
+        tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
     }
 
     func configure() {
