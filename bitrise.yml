@@ -1538,15 +1538,24 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e 
+            TIMESTAMP=$(date "+%Y%m%d%H%M%S")
+            RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
+
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            $HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
+
+            FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --device model=iphone14pro,version=16.6 \
                 --client-details=matrixLabel="Bitrise" \
-                --num-flaky-test-attempts=2
+                --num-flaky-test-attempts=2 \
+                --results-bucket=firefox_ios_test_artifacts \
+                --results-dir="$RESULTS_DIR" \
+                --format=json)
+                
+            echo $FIREBASE_TEST_RESULT
 app:
   envs:
   - opts:
