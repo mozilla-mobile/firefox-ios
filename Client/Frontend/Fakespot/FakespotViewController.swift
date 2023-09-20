@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
+class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -105,6 +105,10 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     override func viewDidLoad() {
         super.viewDidLoad()
         presentationController?.delegate = self
+
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+
         setupView()
         listenForThemeChange(view)
         sendTelemetryOnAppear()
@@ -135,6 +139,14 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         contentStackView.arrangedSubviews.forEach { view in
             guard let view = view as? ThemeApplicable else { return }
             view.applyTheme(theme: theme)
+        }
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
         }
     }
 
@@ -191,7 +203,21 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
             betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace)
         ])
 
+        adjustLayout()
+
 //        _ = titleCenterYConstraint.priority(.defaultLow)
+    }
+
+    private func adjustLayout() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+
+        if contentSizeCategory.isAccessibilityCategory {
+            titleStackView.axis = .vertical
+            titleStackView.alignment = .leading
+        } else {
+            titleStackView.axis = .horizontal
+            titleStackView.alignment = .center
+        }
     }
 
     private func updateContent() {
