@@ -256,7 +256,7 @@ class ReadingListPanel: UITableViewController,
         }
     }
 
-    func updateEmptyReadingListMessage(visible: Bool) {
+    private func updateEmptyReadingListMessage(visible: Bool) {
         ensureMainThread {
             self.tableView.isScrollEnabled = !visible
 
