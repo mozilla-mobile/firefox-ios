@@ -24,10 +24,6 @@ struct OnboardingPreview_Previews: PreviewProvider {
 struct ViewControllerContainerView<Controller: UIViewController>: UIViewControllerRepresentable {
     let controller: Controller
 
-    init(controller: Controller) {
-        self.controller = controller
-    }
-
     func makeUIViewController(context: Context) -> Controller {
         return controller
     }
