@@ -15,6 +15,13 @@ protocol TabTrayController: UIViewController,
 }
 
 class TabTrayViewController: UIViewController, TabTrayController {
+    struct UX {
+        struct NavigationMenu {
+            static let height: CGFloat = 32
+            static let width: CGFloat = 343
+        }
+    }
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -22,6 +29,9 @@ class TabTrayViewController: UIViewController, TabTrayController {
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
+    var layout: LegacyTabTrayViewModel.Layout = .compact
+
+    // MARK: - UI
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -61,7 +71,7 @@ class TabTrayViewController: UIViewController, TabTrayController {
 
     private lazy var newTabButton: UIBarButtonItem = {
         return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
-                                action: #selector(deleteTabsButtonTapped),
+                                action: #selector(newTabButtonTapped),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
@@ -70,6 +80,29 @@ class TabTrayViewController: UIViewController, TabTrayController {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                target: nil,
                                action: nil)
+    }()
+
+    private lazy var doneButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .done,
+                                     target: self,
+                                     action: #selector(doneButtonTapped))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.doneButton
+        return button
+    }()
+
+    private lazy var newTabButtonIpad: UIBarButtonItem = {
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
+                                action: #selector(newTabButtonTapped),
+                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
+                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+    }()
+
+    private lazy var fixedSpace: UIBarButtonItem = {
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
+                                         target: nil,
+                                         action: nil)
+        fixedSpace.width = CGFloat(UX.NavigationMenu.height)
+        return fixedSpace
     }()
 
     private lazy var bottomToolbarItems: [UIBarButtonItem] = {
@@ -91,15 +124,21 @@ class TabTrayViewController: UIViewController, TabTrayController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
         listenForThemeChange(view)
-        setupToolbarItems()
+        updateToolbarItems()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateToolbarItems()
     }
 
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
+        deleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        newTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
     }
 
     private func setupView() {
@@ -113,14 +152,15 @@ class TabTrayViewController: UIViewController, TabTrayController {
         ])
     }
 
-    private func setupToolbarItems() {
-//        switch viewModel.layout {
-//        case .compact:
-//            setToolbarItems(bottomToolbarItems, animated: true)
-//        case .regular:
-//            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
-//            navigationItem.leftBarButtonItem = deleteButtonIpad
-//        }
+    private func updateToolbarItems() {
+        switch layout {
+        case .compact:
+            navigationController?.isToolbarHidden = false
+            setToolbarItems(bottomToolbarItems, animated: true)
+        case .regular:
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
+            navigationItem.leftBarButtonItem = deleteButton
+        }
     }
 
     private func createSegmentedControl(
@@ -155,11 +195,16 @@ class TabTrayViewController: UIViewController, TabTrayController {
         segmentPanelChange()
     }
 
-    @objc func deleteTabsButtonTapped() {
-
-    }
-
     private func segmentPanelChange() {}
+
+    @objc
+    func deleteTabsButtonTapped() {}
+
+    @objc
+    func newTabButtonTapped() {}
+
+    @objc
+    func doneButtonTapped() {}
 }
 
 extension TabTrayViewController: UIToolbarDelegate {}

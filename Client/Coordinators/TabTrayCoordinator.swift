@@ -22,6 +22,5 @@ class TabTrayCoordinator: BaseCoordinator {
         router.setRootViewController(tabTrayViewController)
     }
 
-    func start() {
-    }
+    func start() {}
 }

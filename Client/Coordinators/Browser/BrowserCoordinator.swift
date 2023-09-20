@@ -447,9 +447,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray() {
-        // Create a TabTrayCoordinator like `makeBookmarksCoordinator`
-        // Create a new Router and create a new Coordinator with that router
-        // Move to TabTrayCoordinator like Fakespot coordinator is doing
         if let tabTrayCoordinator = childCoordinators[TabTrayCoordinator.self] {
             tabTrayCoordinator.start()
             (tabTrayCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
