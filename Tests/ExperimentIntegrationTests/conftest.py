@@ -155,7 +155,7 @@ def fixture_send_test_results():
     yield
     here = Path()
 
-    with open(f"{here.resolve()}/results/index.html", "rb") as f:
+    with open(f"{here.resolve()}/Tests/ExperimentIntegrationTests/results/index.html", "rb") as f:
         files = {"file": f}
         try:
             requests.post(f"{KLAATU_SERVER_URL}/test_results", files=files)    
