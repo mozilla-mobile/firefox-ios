@@ -50,18 +50,13 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
                                                             size: UX.titleLabelFontSize,
                                                             weight: .semibold)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private var titleStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.spacing = UX.titleBetaSpacing
-        stackView.distribution = .fill
         stackView.alignment = .center
-        stackView.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
-    }
-
-    private lazy var betaContainerView: UIView = .build { view in
-        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
     }
 
     private lazy var betaView: UIView = .build { view in
@@ -76,7 +71,6 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.betaLabelFontSize)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
-        label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -145,10 +139,9 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     }
 
     private func setupView() {
-        betaContainerView.addSubview(betaView)
         betaView.addSubview(betaLabel)
         titleStackView.addArrangedSubview(titleLabel)
-        titleStackView.addArrangedSubview(betaContainerView)
+        titleStackView.addArrangedSubview(betaView)
         headerView.addSubviews(titleStackView, closeButton)
         view.addSubviews(headerView, scrollView)
 
@@ -186,28 +179,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
                                                      constant: -UX.titleCloseSpacing),
             titleStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
 
-//            titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor),
-//            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-//            titleLabel.trailingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: -UX.titleBetaSpacing),
-//            titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-//            titleCenterYConstraint,
-//
-//            betaView.topAnchor.constraint(equalTo: headerView.topAnchor),
-//            betaView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
-//                                               constant: -UX.titleCloseSpacing),
-//            betaView.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
-
             closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
             closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-
-            betaView.topAnchor.constraint(equalTo: betaContainerView.topAnchor),
-            betaView.leadingAnchor.constraint(equalTo: betaContainerView.leadingAnchor),
-            betaView.trailingAnchor.constraint(lessThanOrEqualTo: betaContainerView.trailingAnchor),
-            betaView.bottomAnchor.constraint(equalTo: betaContainerView.bottomAnchor),
-            betaView.centerYAnchor.constraint(equalTo: betaContainerView.centerYAnchor),
 
             betaLabel.topAnchor.constraint(equalTo: betaView.topAnchor, constant: UX.betaVerticalSpace),
             betaLabel.leadingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: UX.betaHorizontalSpace),
