@@ -16,6 +16,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         static let titleBetaSpacing: CGFloat = 8
         static let betaLabelFontSize: CGFloat = 15
         static let betaBorderWidth: CGFloat = 2
+        static let betaBorderWidthA11ySize: CGFloat = 4
         static let betaCornerRadius: CGFloat = 8
         static let betaHorizontalSpace: CGFloat = 6
         static let betaVerticalSpace: CGFloat = 4
@@ -210,9 +211,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         if contentSizeCategory.isAccessibilityCategory {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
+            betaView.layer.borderWidth = UX.betaBorderWidthA11ySize
         } else {
             titleStackView.axis = .horizontal
             titleStackView.alignment = .center
+            betaView.layer.borderWidth = UX.betaBorderWidth
         }
     }
 
