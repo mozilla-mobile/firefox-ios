@@ -402,6 +402,7 @@ extension TelemetryWrapper {
         case shoppingRecentReviews = "shopping-recent-reviews"
         case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
+        case shoppingOnboarding = "shopping-onboarding"
         case shoppingOptIn = "shopping-opt-in"
         case shoppingNotNowButton = "shopping-not-now-button"
         case shoppingTermsOfUseButton = "shopping-terms-of-use-button"
@@ -1038,6 +1039,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.settingsComponentOptedOut.record()
         case (.action, .view, .shoppingSettingsChevronButton, _, _):
             GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
+        case (.action, .view, .shoppingOnboarding, _, _):
+            GleanMetrics.Shopping.surfaceOnboardingDisplayed.record()
         case (.action, .tap, .shoppingOptIn, _, _):
             GleanMetrics.Shopping.surfaceOptInAccepted.record()
         case (.action, .tap, .shoppingNotNowButton, _, _):

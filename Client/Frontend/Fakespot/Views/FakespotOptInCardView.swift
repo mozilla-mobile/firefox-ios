@@ -121,6 +121,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        sendTelemetryOnAppear()
     }
 
     required init?(coder: NSCoder) {
@@ -219,6 +220,13 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
 
         let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
+    }
+
+    // MARK: Telemetry
+    private func sendTelemetryOnAppear() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingOnboarding)
     }
 
     // MARK: - Theming System
