@@ -79,11 +79,9 @@ class FakespotViewModel {
     }
 
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
-        guard let grade = state.productData?.grade,
-                let rating = FakespotReliabilityRating(rawValue: grade)
-        else { return nil }
+        guard let grade = state.productData?.grade else { return nil }
 
-        return FakespotReliabilityCardViewModel(rating: rating)
+        return FakespotReliabilityCardViewModel(grade: grade)
     }
 
     var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
