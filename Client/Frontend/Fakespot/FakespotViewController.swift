@@ -160,8 +160,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         scrollView.addSubview(contentStackView)
         updateContent()
 
-        let titleCenterYConstraint = titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor)
-
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
                                                   constant: UX.scrollContentTopPadding),
@@ -204,8 +202,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         ])
 
         adjustLayout()
-
-//        _ = titleCenterYConstraint.priority(.defaultLow)
     }
 
     private func adjustLayout() {
