@@ -160,7 +160,7 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
     private func updateContent() {
         contentStackView.removeAllArrangedViews()
 
-        viewModel.state.viewElements.forEach { element in
+        viewModel.viewElements.forEach { element in
             guard let view = createContentView(viewElement: element) else { return }
             contentStackView.addArrangedSubview(view)
 
@@ -175,6 +175,12 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
         switch viewElement {
         case .loadingView:
             let view: FakespotLoadingView = .build()
+            return view
+
+        case .onboarding:
+            let viewModel = FakespotOptInCardViewModel()
+            let view: FakespotOptInCardView = .build()
+            view.configure(viewModel)
             return view
 
         case .reliabilityCard:
