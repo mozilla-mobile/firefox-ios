@@ -282,15 +282,23 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             view.configure(viewModel.noAnalysisCardViewModel)
             return view
 
-        case .genericError:
-            let view: FakespotMessageCardView = .build()
-            view.configure(viewModel.genericErrorViewModel)
-            return view
+        case .messageCard(let messageType):
+            switch messageType {
+            case .genericError:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.genericErrorViewModel)
+                return view
 
-        case .noConnectionError:
-            let view: FakespotMessageCardView = .build()
-            view.configure(viewModel.noConnectionViewModel)
-            return view
+            case .noConnectionError:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.noConnectionViewModel)
+                return view
+
+            case .productCannotBeAnalyzed:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
+                return view
+            }
         }
     }
 
