@@ -4,6 +4,7 @@
 
 import Foundation
 
+/// The view model used to configure a `SecondaryRoundedButton`
 public struct SecondaryRoundedButtonViewModel {
     public let title: String
     public let a11yIdentifier: String
