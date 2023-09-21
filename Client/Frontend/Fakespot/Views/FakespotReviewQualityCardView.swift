@@ -19,12 +19,12 @@ final class FakespotReviewQualityCardViewModel {
     }
 
     func onTapLearnMore() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingLearnMoreReviewQualityButton)
         guard let fakespotLearnMoreLink else { return }
         tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
         dismissViewController?()
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingLearnMoreReviewQualityButton)
     }
 }
 
