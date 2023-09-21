@@ -85,6 +85,8 @@
 		2137786529832C8900D01309 /* OverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137786429832C8900D01309 /* OverlayModeManager.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
+		21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */; };
+		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
 		215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
@@ -2111,6 +2113,8 @@
 		2137786429832C8900D01309 /* OverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayModeManager.swift; sourceTree = "<group>"; };
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
+		21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinator.swift; sourceTree = "<group>"; };
+		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabGroupData.swift; sourceTree = "<group>"; };
@@ -8340,6 +8344,7 @@
 				C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */,
 				C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */,
 				C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */,
+				21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -8365,6 +8370,7 @@
 				C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */,
 				8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */,
 				C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */,
+				21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -13053,6 +13059,7 @@
 				59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
+				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
 				5A70EF1F295E3DFC00790249 /* UnitTestAppDelegate.swift in Sources */,
 				2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */,
 				966B0DC82926F60500A85A7E /* UIResponder+Extensions.swift in Sources */,
@@ -13091,6 +13098,7 @@
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				5AF6254528A57B6700A90253 /* MockHistoryHighlightsManager.swift in Sources */,
 				E571EE7E28756A130051D9AA /* PocketStoryProviderTests.swift in Sources */,
+				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
 				8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */,
 				961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */,
 				E1AEC177286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift in Sources */,

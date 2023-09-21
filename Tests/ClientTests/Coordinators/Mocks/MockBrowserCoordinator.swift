@@ -16,6 +16,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showHomepanelSectionCalled = 0
     var showEnhancedTrackingProtectionCalled = 0
     var showShareExtensionCalled = 0
+    var showTabTrayCalled = 0
     var didFinishCalled = 0
 
     func show(settings: Route.SettingsSection) {
@@ -44,6 +45,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showEnhancedTrackingProtectionCalled += 1
+    }
+
+    func showTabTray() {
+        showTabTrayCalled += 1
     }
 
     func didFinish(from childCoordinator: Coordinator) {

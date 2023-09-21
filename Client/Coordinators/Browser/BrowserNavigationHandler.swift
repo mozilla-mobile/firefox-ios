@@ -43,6 +43,9 @@ protocol BrowserNavigationHandler: AnyObject {
 
     /// Shows authentication view controller to authorize access to sensitive data.
     func showRequiredPassCode()
+
+    /// Shows the Tab Tray View Controller 
+    func showTabTray()
 }
 
 extension BrowserNavigationHandler {

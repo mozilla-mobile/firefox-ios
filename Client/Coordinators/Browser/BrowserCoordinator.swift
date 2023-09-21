@@ -445,4 +445,22 @@ class BrowserCoordinator: BaseCoordinator,
             findAndHandle(route: savedRoute)
         }
     }
+
+    func showTabTray() {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+            return // flow is already handled
+        }
+
+        let navigationController = DismissableNavigationViewController()
+        navigationController.modalPresentationStyle = .formSheet
+
+        let tabTrayCoordinator = TabTrayCoordinator(
+            router: DefaultRouter(navigationController: navigationController)
+        )
+        tabTrayCoordinator.parentCoordinator = self
+        add(child: tabTrayCoordinator)
+        tabTrayCoordinator.start()
+
+        router.present(navigationController)
+    }
 }
