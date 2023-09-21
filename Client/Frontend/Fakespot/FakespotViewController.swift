@@ -253,12 +253,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             view.configure(viewModel.optInCardViewModel)
             return view
 
-        case .onboarding:
-            let viewModel = FakespotOptInCardViewModel()
-            let view: FakespotOptInCardView = .build()
-            view.configure(viewModel)
-            return view
-
         case .reliabilityCard:
             guard let cardViewModel = viewModel.reliabilityCardViewModel else { return nil }
             let view: FakespotReliabilityCardView = .build()
