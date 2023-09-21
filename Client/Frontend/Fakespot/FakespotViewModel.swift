@@ -18,7 +18,22 @@ class FakespotViewModel {
             case .loading:
                 return [.loadingView]
             case let .loaded(product):
-                if product?.productId == nil {
+                guard let product = product else {
+                    return [
+                        .messageCard(.genericError),
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+                }
+
+                if product.productId == nil, product.needsAnalysis == true {
+                    // Product was never analysed
+                    return [
+                        .noAnalysisCard,
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+                } else if product.productId == nil {
                     return [
                         .messageCard(.productCannotBeAnalyzed),
                         .qualityDeterminationCard,
@@ -26,7 +41,7 @@ class FakespotViewModel {
                     ]
                 } else {
                     return [
-                        ViewElement.reliabilityCard,
+                        .reliabilityCard,
                         .adjustRatingCard,
                         .highlightsCard,
                         .qualityDeterminationCard,
