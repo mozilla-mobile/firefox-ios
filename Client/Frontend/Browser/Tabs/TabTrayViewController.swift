@@ -19,7 +19,7 @@ class TabTrayViewController: UIViewController,
                              UIToolbarDelegate {
     struct UX {
         struct NavigationMenu {
-            static let height: CGFloat = 32
+            static let width: CGFloat = 32
         }
     }
 
@@ -103,7 +103,7 @@ class TabTrayViewController: UIViewController,
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                          target: nil,
                                          action: nil)
-        fixedSpace.width = CGFloat(UX.NavigationMenu.height)
+        fixedSpace.width = CGFloat(UX.NavigationMenu.width)
         return fixedSpace
     }()
 
