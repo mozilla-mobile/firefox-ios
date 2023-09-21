@@ -32,6 +32,7 @@ class FakespotViewModel {
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
+                }
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
