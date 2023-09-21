@@ -30,14 +30,7 @@ final class FakespotViewModelTests: XCTestCase {
             if shouldThrowError {
                 throw NSError(domain: "MockErrorDomain", code: 123, userInfo: nil)
             }
-            return ProductAnalysisData(
-                productId: "",
-                grade: "",
-                adjustedRating: 0,
-                needsAnalysis: false,
-                analysisUrl: URL(string: "https://www.example.com")!,
-                highlights: Highlights(price: [], quality: [], competitiveness: [])
-            )
+            return .empty
         }
     }
 
