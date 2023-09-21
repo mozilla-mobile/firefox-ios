@@ -6,7 +6,7 @@ import Foundation
 
 struct ProductAnalysisData: Codable {
     let productId: String?
-    let grade: String?
+    let grade: ReliabilityGrade?
     let adjustedRating: Double?
     let needsAnalysis: Bool?
     let analysisUrl: URL?

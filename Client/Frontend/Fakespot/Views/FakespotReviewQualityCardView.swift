@@ -21,11 +21,11 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private let aReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeA)
-    private let bReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeB)
-    private let cReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeC)
-    private let dReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeD)
-    private let fReliabilityScoreView = FakespotReliabilityScoreView(rating: .gradeF)
+    private let aReliabilityScoreView = FakespotReliabilityScoreView(grade: .a)
+    private let bReliabilityScoreView = FakespotReliabilityScoreView(grade: .b)
+    private let cReliabilityScoreView = FakespotReliabilityScoreView(grade: .c)
+    private let dReliabilityScoreView = FakespotReliabilityScoreView(grade: .d)
+    private let fReliabilityScoreView = FakespotReliabilityScoreView(grade: .f)
 
     private lazy var collapsibleContainer: CollapsibleCardView = .build()
 
