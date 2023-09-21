@@ -143,6 +143,7 @@ class FakespotViewModel {
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
+    let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
     var optInCardViewModel = FakespotOptInCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,

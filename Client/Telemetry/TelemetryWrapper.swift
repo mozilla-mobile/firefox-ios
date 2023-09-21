@@ -408,6 +408,7 @@ extension TelemetryWrapper {
         case shoppingTermsOfUseButton = "shopping-terms-of-use-button"
         case shoppingPrivacyPolicyButton = "shopping-privacy-policy-button"
         case shoppingLearnMoreButton = "shopping-learn-more-button"
+        case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1065,6 +1066,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowPrivacyPolicyClicked.record()
         case (.action, .tap, .shoppingLearnMoreButton, _, _):
             GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
+        case (.action, .tap, .shoppingLearnMoreReviewQualityButton, _, _):
+            GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
