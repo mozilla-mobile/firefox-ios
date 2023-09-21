@@ -74,7 +74,7 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     }
 
     func showPreview(_ showPreview: Bool) {
-        highlightLabel.numberOfLines = showPreview ? 3 : 0
+        highlightLabel.numberOfLines = showPreview ? 2 : 0
         highlightLabel.isShowingFade = showPreview
     }
 
