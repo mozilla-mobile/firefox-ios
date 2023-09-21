@@ -14,30 +14,34 @@ class FakespotViewModel {
         case error(Error)
 
         fileprivate var viewElements: [ViewElement] {
-            var elements: [ViewElement] = []
-
             switch self {
             case .loading:
-                elements = [.loadingView]
-
-            case .loaded:
-                elements = [.reliabilityCard,
-                    .adjustRatingCard,
-                    .highlightsCard,
-                    .qualityDeterminationCard,
-                    .settingsCard]
+                return [.loadingView]
+            case let .loaded(product):
+                if product?.productId == nil {
+                    return [
+                        .messageCard(.productCannotBeAnalyzed),
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+                } else {
+                    return [
+                        ViewElement.reliabilityCard,
+                        .adjustRatingCard,
+                        .highlightsCard,
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
-                    return [.noConnectionError] + baseElements
+                    return [.messageCard(.noConnectionError)] + baseElements
                 } else {
-                    return [.genericError] + baseElements
+                    return [.messageCard(.genericError)] + baseElements
                 }
             case .onboarding:
-                elements = [.onboarding]
+                return [.onboarding]
             }
-
-            return elements
         }
 
         fileprivate var productData: ProductAnalysisData? {
@@ -57,8 +61,12 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case genericError
-        case noConnectionError
+        case messageCard(MessageType)
+        enum MessageType {
+            case genericError
+            case productCannotBeAnalyzed
+            case noConnectionError
+        }
     }
 
     private(set) var state: ViewState = .loading {
@@ -121,6 +129,15 @@ class FakespotViewModel {
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.card,
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.title,
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.description
+    )
+
+    let doesNotAnalyzeReviewsViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsTitle,
+        description: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.description
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()

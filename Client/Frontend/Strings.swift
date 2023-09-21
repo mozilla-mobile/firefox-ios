@@ -3857,6 +3857,16 @@ extension String {
             tableName: "Shopping",
             value: "We’re working to resolve this issue. Please check back soon.",
             comment: "Description for info card when no information is available at the moment")
+        public static let InfoCardFakespotDoesNotAnalyzeReviewsTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120
+            tableName: "Shopping",
+            value: "Can’t Check These Reviews",
+            comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
+        public static let InfoCardFakespotDoesNotAnalyzeReviewsDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120
+            tableName: "Shopping",
+            value: "Unfortunately, we can’t check the review quality for certain types of products. For example, gift cards and streaming video, music, and games.",
+            comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
     }
 }
 
