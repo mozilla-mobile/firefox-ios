@@ -13,36 +13,35 @@ class FakespotViewModel {
         case error(Error)
 
         var viewElements: [ViewElement] {
-            var elements: [ViewElement] = []
-
             switch self {
             case .loading:
-                elements = [.loadingView]
+                return [.loadingView]
 
             case let .loaded(product):
-                let baseElements = [
-                    ViewElement.reliabilityCard,
-                    .adjustRatingCard,
-                    .highlightsCard,
-                    .qualityDeterminationCard,
-                    .settingsCard
-                ]
                 if product?.productId == nil {
-                    elements = [.messageCard(.productCannotBeAnalyzed)] + baseElements
+                    return [
+                        .messageCard(.productCannotBeAnalyzed),
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
                 } else {
-                    elements = baseElements
+                    return [
+                        ViewElement.reliabilityCard,
+                        .adjustRatingCard,
+                        .highlightsCard,
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
                 }
 
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
-                    elements = [.messageCard(.noConnectionError)] + baseElements
+                    return [.messageCard(.noConnectionError)] + baseElements
                 } else {
-                    elements = [.messageCard(.genericError)] + baseElements
+                    return [.messageCard(.genericError)] + baseElements
                 }
             }
-
-            return elements
         }
 
         var productData: ProductAnalysisData? {
