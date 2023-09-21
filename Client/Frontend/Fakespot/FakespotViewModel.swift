@@ -9,6 +9,7 @@ import Shared
 class FakespotViewModel {
     enum ViewState {
         case loading
+        case onboarding
         case loaded(ProductAnalysisData?)
         case error(Error)
 
@@ -16,7 +17,6 @@ class FakespotViewModel {
             switch self {
             case .loading:
                 return [.loadingView]
-
             case let .loaded(product):
                 if product?.productId == nil {
                     return [
@@ -33,7 +33,6 @@ class FakespotViewModel {
                         .settingsCard
                     ]
                 }
-
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
@@ -41,12 +40,14 @@ class FakespotViewModel {
                 } else {
                     return [.messageCard(.genericError)] + baseElements
                 }
+            case .onboarding:
+                return [.onboarding]
             }
         }
 
         fileprivate var productData: ProductAnalysisData? {
             switch self {
-            case .loading, .error: return nil
+            case .loading, .error, .onboarding: return nil
             case .loaded(let data): return data
             }
         }
@@ -142,10 +143,12 @@ class FakespotViewModel {
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
+    var optInCardViewModel = FakespotOptInCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
+        optInCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
     }
 
