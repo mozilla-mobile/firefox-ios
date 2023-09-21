@@ -3742,6 +3742,16 @@ extension String {
             tableName: "Shopping",
             value: "Check Review Quality",
             comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Headline.Title.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Label.Title.v119
             tableName: "Shopping",
