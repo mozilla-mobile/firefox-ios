@@ -138,8 +138,8 @@ class TabTrayViewController: UIViewController,
         updateToolbarItems()
     }
 
-    override func dismissVC() {
-        super.dismissVC()
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         delegate?.didDismissTabTray()
     }
 

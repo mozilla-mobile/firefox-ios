@@ -40,6 +40,12 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
+                                        focusedSegment: focusedSegment)
+    }
+
+    private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
+                                                 focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         self.tabTrayViewController = LegacyTabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
