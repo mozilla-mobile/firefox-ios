@@ -70,7 +70,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
         sleep(5)
         if app.tables.staticTexts["Sync Now"].exists {
@@ -145,7 +145,7 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
-        mozWaitForElementToExist(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT)
         app.tables.cells.element(boundBy: 2).tap()
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
@@ -286,7 +286,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
         app.swipeDown()
-        mozWaitForElementToExist(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT)
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: 35)
 
         // Check Bookmarks
