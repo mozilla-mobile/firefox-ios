@@ -1568,7 +1568,7 @@ workflows:
             echo $FIREBASE_XCRESULT_PATH
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
             mkdir firebase_xcresult
-            $HOME/google-cloud-sdk/bin/gsutil cp -r $FIREBASE_XCRESULT_PATH ./firebase_xcresult
+            $HOME/google-cloud-sdk/bin/gsutil -m cp -r $FIREBASE_XCRESULT_PATH ./firebase_xcresult
             ls -R ./firebase_xcresult
             mv ./firebase_xcresult/*.xcresult ./firebase_xcresult/Test-Fennec_Enterprise.xcresult
             ls ./firebase_xcresult
@@ -1589,19 +1589,22 @@ workflows:
             ls
             echo $FIREBASE_XCRESULT_PATH
             $HOME/google-cloud-sdk/bin/gsutil ls $FIREBASE_XCRESULT_PATH
+
             mkdir test_firebase_xcresult
-            $HOME/google-cloud-sdk/bin/gsutil cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
-            ls - R ./test_firebase_xcresult
+            $HOME/google-cloud-sdk/bin/gsutil -m cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
+            ls -R ./test_firebase_xcresult
             mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
             ls -R ./test_firebase_xcresult
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
+            FIREBASE_XCRESULT="./test_firebase_xcresult/Test-Fennec-test.xcresult"
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            mv ./test_firebase_xcresult/Test-Fennec-test.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
+            BITRISE_XCRESULT="/Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult"
+            mv $FIREBASE_XCRESULT $BITRISE_XCRESULT
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
-            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT
             ls ..
             python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
             cat data.txt
