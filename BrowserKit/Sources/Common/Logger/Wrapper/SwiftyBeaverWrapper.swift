@@ -61,6 +61,7 @@ struct DefaultSwiftyBeaverBuilder: SwiftyBeaverBuilder {
         file.format = defaultFormat
         file.minLevel = .debug
         file.levelString.error = "FATAL"
+        file.logFileAmount = 2
 
         let logger = SwiftyBeaver.self
         logger.removeAllDestinations()
