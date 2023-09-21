@@ -117,6 +117,7 @@ public struct AccessibilityIdentifiers {
 
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
+        static let sheetHeaderBetaLabel = "Shopping.Sheet.HeaderBetaLabel"
 
         struct DoesNotAnalyzeReviewsInfoCard {
             static let card = "Shopping.DoesNotAnalyzeReviewsInfoCard.Card"

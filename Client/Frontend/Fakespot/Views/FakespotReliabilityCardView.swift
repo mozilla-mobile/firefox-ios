@@ -10,9 +10,9 @@ struct FakespotReliabilityCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.card
     let title: String = .Shopping.ReliabilityCardTitle
     let titleA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.title
-    let rating: FakespotReliabilityRating
-    let ratingLetterA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter
-    let ratingDescriptionA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
+    let grade: ReliabilityGrade
+    let gradeLetterA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingLetter
+    let gradeDescriptionA11yId: String = AccessibilityIdentifiers.Shopping.ReliabilityCard.ratingDescription
 }
 
 class FakespotReliabilityCardView: UIView, ThemeApplicable {
@@ -79,10 +79,10 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
 
-        reliabilityLetterLabel.text = viewModel.rating.letter
-        reliabilityLetterLabel.accessibilityIdentifier = viewModel.ratingLetterA11yId
-        reliabilityDescriptionLabel.text = viewModel.rating.description
-        reliabilityDescriptionLabel.accessibilityIdentifier = viewModel.ratingDescriptionA11yId
+        reliabilityLetterLabel.text = viewModel.grade.rawValue
+        reliabilityLetterLabel.accessibilityIdentifier = viewModel.gradeLetterA11yId
+        reliabilityDescriptionLabel.text = viewModel.grade.description
+        reliabilityDescriptionLabel.accessibilityIdentifier = viewModel.gradeDescriptionA11yId
 
         let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
@@ -96,8 +96,8 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         reliabilityDescriptionLabel.textColor = theme.colors.textOnLight
 
         if let viewModel {
-            reliabilityLetterView.layer.backgroundColor = viewModel.rating.color(theme: theme).cgColor
-            reliabilityDescriptionView.layer.backgroundColor = viewModel.rating.color(theme: theme)
+            reliabilityLetterView.layer.backgroundColor = viewModel.grade.color(theme: theme).cgColor
+            reliabilityDescriptionView.layer.backgroundColor = viewModel.grade.color(theme: theme)
                 .withAlphaComponent(UX.descriptionBackgroundAlpha).cgColor
         }
     }

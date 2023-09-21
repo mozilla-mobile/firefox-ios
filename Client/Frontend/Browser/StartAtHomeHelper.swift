@@ -9,14 +9,16 @@ class StartAtHomeHelper: FeatureFlaggable {
     private var isRestoringTabs: Bool
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
-    lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
+    private let prefs: Prefs
     var launchSessionProvider: LaunchSessionProviderProtocol
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve(),
+         prefs: Prefs,
          isRestoringTabs: Bool,
          isRunningUITest: Bool = AppConstants.isRunningUITests
     ) {
         self.launchSessionProvider = appSessionManager.launchSessionProvider
+        self.prefs = prefs
         self.isRestoringTabs = isRestoringTabs
         self.isRunningUITest = isRunningUITest
     }
@@ -28,14 +30,22 @@ class StartAtHomeHelper: FeatureFlaggable {
         launchSessionProvider.openedFromExternalSource
     }
 
+    var startAtHomeSetting: StartAtHomeSetting {
+        get {
+            if let prefs = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) {
+                return StartAtHomeSetting(rawValue: prefs) ?? .afterFourHours
+            }
+            return .afterFourHours
+        }
+        set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.UserFeatureFlagPrefs.StartAtHome) }
+    }
+
     /// Determines whether the Start at Home feature is enabled, how long it has been since
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
-        guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly),
-              let setting = startAtHomeSetting,
-              setting != .disabled
-        else { return false }
+        let setting = startAtHomeSetting
+        guard setting != .disabled else { return false }
 
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
         let dateComponents = Calendar.current.dateComponents([.hour, .second],

@@ -9,28 +9,27 @@ import Shared
 import Common
 
 class StartAtHomeHelperTests: XCTestCase {
-    var helper: StartAtHomeHelper!
+    private var helper: StartAtHomeHelper!
     private var profile: MockProfile!
     private var tabManager: TabManager!
 
     override func setUp() {
         super.setUp()
 
-        profile = MockProfile(databasePrefix: "startAtHomeHelper_tests")
-        profile.reopen()
+        profile = MockProfile()
         tabManager = LegacyTabManager(profile: profile, imageStore: nil)
 
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
 
-        profile.shutdown()
         profile = nil
         tabManager = nil
         helper = nil
+
+        DependencyHelperMock().reset()
     }
 
     func testShouldNotSkipStartAtHome() throws {
@@ -125,6 +124,7 @@ class StartAtHomeHelperTests: XCTestCase {
     ) {
         helper = StartAtHomeHelper(
             appSessionManager: appSessionManager,
+            prefs: profile.prefs,
             isRestoringTabs: isRestoringTabs,
             isRunningUITest: false
         )

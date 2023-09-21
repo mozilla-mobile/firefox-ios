@@ -12,7 +12,7 @@ class FakespotViewModel {
         case loaded(ProductAnalysisData?)
         case error(Error)
 
-        var viewElements: [ViewElement] {
+        fileprivate var viewElements: [ViewElement] {
             switch self {
             case .loading:
                 return [.loadingView]
@@ -44,7 +44,7 @@ class FakespotViewModel {
             }
         }
 
-        var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error: return nil
             case .loaded(let data): return data
@@ -54,7 +54,7 @@ class FakespotViewModel {
 
     enum ViewElement {
         case loadingView
-//        case onboarding // card not created yet (FXIOS-7270)
+        case onboarding
         case reliabilityCard
         case adjustRatingCard
         case highlightsCard
@@ -78,7 +78,7 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
 
     var viewElements: [ViewElement] {
-//        guard isOptedIn else { return [.onboarding] } // card not created yet (FXIOS-7270)
+        guard isOptedIn else { return [.onboarding] }
 
         return state.viewElements
     }
@@ -89,11 +89,9 @@ class FakespotViewModel {
     }
 
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
-        guard let grade = state.productData?.grade,
-                let rating = FakespotReliabilityRating(rawValue: grade)
-        else { return nil }
+        guard let grade = state.productData?.grade else { return nil }
 
-        return FakespotReliabilityCardViewModel(rating: rating)
+        return FakespotReliabilityCardViewModel(grade: grade)
     }
 
     var highlightsCardViewModel: FakespotHighlightsCardViewModel? {

@@ -732,6 +732,18 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-12"
 
+  surface_onboarding_displayed:
+    type: event
+    description: |
+      Records when the shopping surface onboarding is displayed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16249
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16506
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-15"
+
   surface_opt_in_accepted:
     type: event
     description: |

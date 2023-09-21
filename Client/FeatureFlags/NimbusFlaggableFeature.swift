@@ -14,7 +14,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForToolbar
     case credentialAutofillCoordinatorRefactor
     case creditCardAutofillStatus
-    case etpCoordinatorRefactor
     case fakespotFeature
     case historyHighlights
     case historyGroups
@@ -30,7 +29,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
-    case startAtHome
     case tabTrayRefactor
     case topSites
     case wallpapers
@@ -43,7 +41,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
     case searchBarPosition
-    case startAtHome
     case wallpaperVersion
 }
 
@@ -70,8 +67,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.ASPocketStories
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
-        case .startAtHome:
-            return FlagKeys.StartAtHome
         case .topSites:
             return FlagKeys.TopSiteSection
         case .wallpapers:
@@ -81,7 +76,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForToolbar,
                 .creditCardAutofillStatus,
                 .credentialAutofillCoordinatorRefactor,
-                .etpCoordinatorRefactor,
                 .fakespotFeature,
                 .libraryCoordinatorRefactor,
                 .reduxIntegration,
@@ -127,14 +121,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// setting is required (ie. startAtHome, which has multiple types of setting),
     /// then we should be using `getUserPreference`
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        if featureID == .startAtHome {
-            guard let pref = getUserPreference(using: nimbusLayer) else {
-                return isNimbusEnabled(using: nimbusLayer)
-            }
-
-            return pref == StartAtHomeSetting.afterFourHours.rawValue || pref == StartAtHomeSetting.always.rawValue
-        }
-
         guard let optionsKey = featureKey,
               let option = profile.prefs.boolForKey(optionsKey)
         else { return isNimbusEnabled(using: nimbusLayer) }
@@ -153,9 +139,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
-
-        case .startAtHome:
-            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
 
         case .wallpaperVersion:
             return nimbusLayer.checkNimbusForWallpapersVersion()
@@ -187,9 +170,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         else { return }
 
         switch featureID {
-        case .startAtHome:
-            profile.prefs.setString(option, forKey: optionsKey)
-
         case .bottomSearchBar:
             profile.prefs.setString(option, forKey: optionsKey)
 
