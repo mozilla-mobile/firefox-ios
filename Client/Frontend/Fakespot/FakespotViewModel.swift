@@ -125,6 +125,7 @@ class FakespotViewModel {
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
+    let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
 
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {

@@ -197,11 +197,11 @@ class FakespotViewController: UIViewController, Themeable, UIAdaptivePresentatio
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            reviewQualityCardView.configure()
-            reviewQualityCardView.dismissViewController = { [weak self] in
+            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss()
             }
+            reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
