@@ -117,6 +117,7 @@ public struct AccessibilityIdentifiers {
 
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
+        static let sheetHeaderBetaLabel = "Shopping.Sheet.HeaderBetaLabel"
 
         struct GenericErrorInfoCard {
             static let card = "Shopping.GenericErrorInfoCard.Card"
