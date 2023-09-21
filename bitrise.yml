@@ -1468,46 +1468,46 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-archive@4.7.2:
-        inputs:
-        - compile_bitcode: 'no'
-        - upload_bitcode: 'no'
-        - team_id: 9G8J6YA743
-        - export_method: development
-        - distribution_method: development
-        - export_development_team: 9G8J6YA743
-        - output_tool: xcodebuild
-        - scheme: Fennec_Enterprise
-        - configuration: Fennec_Enterprise
-        - project_path: "$BITRISE_PROJECT_PATH"
-    - deploy-to-bitrise-io@2: {}
-    - script@1.1:
-        title: Firebase Build for Testing Physical Devices
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData"
-    - deploy-to-bitrise-io@2: {}
-    - script@1.1:
-        title: Create .zip artifact for Firebase Testing
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- create .zip artifact --"
-            ls /Users/vagrant/git/DerivedData
-            ls /Users/vagrant/git/DerivedData/Build/Products
+    # - xcode-archive@4.7.2:
+    #     inputs:
+    #     - compile_bitcode: 'no'
+    #     - upload_bitcode: 'no'
+    #     - team_id: 9G8J6YA743
+    #     - export_method: development
+    #     - distribution_method: development
+    #     - export_development_team: 9G8J6YA743
+    #     - output_tool: xcodebuild
+    #     - scheme: Fennec_Enterprise
+    #     - configuration: Fennec_Enterprise
+    #     - project_path: "$BITRISE_PROJECT_PATH"
+    # - deploy-to-bitrise-io@2: {}
+    # - script@1.1:
+    #     title: Firebase Build for Testing Physical Devices
+    #     inputs:
+    #     - content: |
+    #         set -euxo pipefail
+    #         echo "-- build-for-testing --"
+    #         mkdir DerivedData
+    #         xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+    #         xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
+    #             -scheme Fennec_Enterprise \
+    #             -sdk iphoneos \
+    #             -destination "generic/platform=iOS" \
+    #             -derivedDataPath "/Users/vagrant/git/DerivedData"
+    # - deploy-to-bitrise-io@2: {}
+    # - script@1.1:
+    #     title: Create .zip artifact for Firebase Testing
+    #     inputs:
+    #     - content: |
+    #         set -euxo pipefail
+    #         echo "-- create .zip artifact --"
+    #         ls /Users/vagrant/git/DerivedData
+    #         ls /Users/vagrant/git/DerivedData/Build/Products
 
-            cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
-            mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
-    - deploy-to-bitrise-io@2: {}
+    #         cd DerivedData/Build/Products
+    #         zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
+    #         mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+    # - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
@@ -1549,25 +1549,29 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
-            FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
-                --test /Users/vagrant/git/Fennec_Enterprise.zip \
-                --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
-                --client-details=matrixLabel="Bitrise" \
-                --num-flaky-test-attempts=2 \
-                --results-bucket="$GOOGLE_CLOUD_BUCKET" \
-                --results-dir="$RESULTS_DIR")
+            # FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
+            #     --test /Users/vagrant/git/Fennec_Enterprise.zip \
+            #     --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
+            #     --client-details=matrixLabel="Bitrise" \
+            #     --num-flaky-test-attempts=2 \
+            #     --results-bucket="$GOOGLE_CLOUD_BUCKET" \
+            #     --results-dir="$RESULTS_DIR")
 
-            echo "Your FIREBASE_TEST_RESULT:\n$FIREBASE_TEST_RESULT"
+            # echo "Your FIREBASE_TEST_RESULT:\n$FIREBASE_TEST_RESULT"
 
             echo $XCRESULT_PATH
             gsutil ls $XCRESULT_PATH
             gsutil ls $XCRESULT_PATH | grep ".xcresult"
-            FIREBASE_XCRESULT_PATH=$(gsutil ls $XCRESULT_PATH | grep ".xcresult")
+            # FIREBASE_XCRESULT_PATH=$(gsutil ls $XCRESULT_PATH | grep ".xcresult")
+            FIREBASE_XCRESULT_PATH="gs://firefox_ios_test_artifacts/firefox_ios_performance_tests_20230921102412/iphone14pro-16.6-en-portrait/TestLogs/Test-Fennec_Enterprise-2023.09.21_03-27-02--0700.xcresult"
             echo $FIREBASE_XCRESULT_PATH
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
-            mkdir firebase_xcresults
-            gsutil cp $FIREBASE_XCRESULT_PATH ./firebase_xcresults
-            ls -R ./firebase_xcresults
+            mkdir firebase_xcresult
+            gsutil cp -r $FIREBASE_XCRESULT_PATH ./firebase_xcresult
+            ls -R ./firebase_xcresult
+            mv ./firebase_xcresult/*.xcresult ./firebase_xcresult/Test-Fennec_Enterprise.xcresult
+            ls ./firebase_xcresult
+            ls -R ./firebase_xcresult
     - script@1.1:
         is_always_run: true
         title: Create Perfherder Data Object from Firebase
@@ -1585,14 +1589,14 @@ workflows:
             echo $FIREBASE_XCRESULT_PATH
             gsutil ls $FIREBASE_XCRESULT_PATH
             mkdir test_firebase_xcresult
-            gsutil cp $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
-            ls ./test_firebase_xcresults
-            mv ./test_firebase_xcresults/*.xcresults ./test_firebase_xcresults/Test-Fennec-test.xcresult
-            ls ./test_firebase_xcresults
+            gsutil cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
+            ls - R ./test_firebase_xcresult
+            mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
+            ls -R ./test_firebase_xcresult
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            mv ./test_firebase_xcresults/Test-Fennec-test.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
+            mv ./test_firebase_xcresult/Test-Fennec-test.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
