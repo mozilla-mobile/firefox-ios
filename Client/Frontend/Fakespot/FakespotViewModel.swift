@@ -13,7 +13,7 @@ class FakespotViewModel {
         case loaded(ProductAnalysisData?)
         case error(Error)
 
-        var viewElements: [ViewElement] {
+        fileprivate var viewElements: [ViewElement] {
             var elements: [ViewElement] = []
 
             switch self {
@@ -40,7 +40,7 @@ class FakespotViewModel {
             return elements
         }
 
-        var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error, .onboarding: return nil
             case .loaded(let data): return data
@@ -81,11 +81,9 @@ class FakespotViewModel {
     }
 
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
-        guard let grade = state.productData?.grade,
-                let rating = FakespotReliabilityRating(rawValue: grade)
-        else { return nil }
+        guard let grade = state.productData?.grade else { return nil }
 
-        return FakespotReliabilityCardViewModel(rating: rating)
+        return FakespotReliabilityCardViewModel(grade: grade)
     }
 
     var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
