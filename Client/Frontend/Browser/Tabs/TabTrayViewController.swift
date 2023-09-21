@@ -26,6 +26,7 @@ class TabTrayViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    weak var  delegate: TabTrayViewControllerDelegate?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
@@ -110,8 +111,10 @@ class TabTrayViewController: UIViewController,
         return [deleteButton, flexibleSpace, newTabButton]
     }()
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(delegate: TabTrayViewControllerDelegate,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -133,6 +136,11 @@ class TabTrayViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateToolbarItems()
+    }
+
+    override func dismissVC() {
+        super.dismissVC()
+        delegate?.didDismissTabTray()
     }
 
     // MARK: Themeable

@@ -4,13 +4,13 @@
 
 import Common
 
-protocol TabTrayCoordinatorDelegate: AnyObject {
-    func didDismissTabTray(from coordinator: TabTrayCoordinator)
+protocol TabTrayViewControllerDelegate: AnyObject {
+    func didDismissTabTray()
 }
 
-class TabTrayCoordinator: BaseCoordinator {
+class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate {
     private var tabTrayViewController: TabTrayViewController!
-    weak var parentCoordinator: LibraryCoordinatorDelegate?
+    weak var parentCoordinator: ParentCoordinatorDelegate?
 
     init(router: Router) {
         super.init(router: router)
@@ -18,9 +18,14 @@ class TabTrayCoordinator: BaseCoordinator {
     }
 
     private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController()
+        tabTrayViewController = TabTrayViewController(delegate: self)
         router.setRootViewController(tabTrayViewController)
     }
 
     func start() {}
+
+    func didDismissTabTray() {
+        router.dismiss(animated: true, completion: nil)
+        parentCoordinator?.didFinish(from: self)
+    }
 }
