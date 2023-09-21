@@ -16,7 +16,8 @@ struct ActionFooterComponentViewModel: ComponentViewModel {
             title: "Footer Title",
             actionTitle: "Action Title",
             a11yTitleIdentifier: "ActionFooterViewTitleIdentifier",
-            a11yActionIdentifier: "ActionFooterViewActionIdentifier"
+            a11yActionIdentifier: "ActionFooterViewActionIdentifier",
+            onTap: nil
         )
 
         viewController = ActionFooterViewController(

@@ -58,7 +58,7 @@ class RootViewController: UIViewController, Presenter, Themeable {
 
     // MARK: Themeable
 
-    func applyTheme() {
+    func applyTheme() { 
         tableView.backgroundColor = .clear
         dataSource.theme = themeManager.currentTheme
         view.backgroundColor = themeManager.currentTheme.colors.layer1
