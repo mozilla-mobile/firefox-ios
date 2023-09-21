@@ -17,7 +17,7 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private let rating: FakespotReliabilityRating
+    private let grade: ReliabilityGrade
 
     private lazy var reliabilityLetterView: UIView = .build()
 
@@ -31,14 +31,14 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     private var ratingHeightConstraint: NSLayoutConstraint?
     private var ratingWidthConstraint: NSLayoutConstraint?
 
-    init(rating: FakespotReliabilityRating) {
-        self.rating = rating
+    init(grade: ReliabilityGrade) {
+        self.grade = grade
         super.init(frame: .zero)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()
         setupView()
-        reliabilityLetterLabel.text = rating.letter
+        reliabilityLetterLabel.text = grade.rawValue
     }
 
     required init?(coder: NSCoder) {
@@ -93,6 +93,6 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        reliabilityLetterView.layer.backgroundColor = rating.color(theme: theme).cgColor
+        reliabilityLetterView.layer.backgroundColor = grade.color(theme: theme).cgColor
     }
 }

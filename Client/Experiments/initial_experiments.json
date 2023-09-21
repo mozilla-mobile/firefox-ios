@@ -337,7 +337,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('117.!') >= 0) && (language in ['en'])))",
       "startDate": "2023-09-08",
-      "enrollmentEndDate": "2023-09-22",
+      "enrollmentEndDate": "2023-09-19",
       "endDate": null,
       "proposedDuration": 25,
       "proposedEnrollment": 14,

@@ -70,6 +70,15 @@ struct FakespotOptInCardViewModel {
     let secondaryButton: String = .Shopping.OptInCardSecondaryButtonTitle
     let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButton
 
+    // MARK: Button Actions
+    var dismissViewController: (() -> Void)?
+    var onOptIn: (() -> Void)?
+
+    // MARK: Links
+    let fakespotPrivacyPolicyLink = URL(string: "https://www.fakespot.com/privacy-policy")
+    let fakespotTermsOfUseLink = URL(string: "https://www.fakespot.com/terms")
+    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+
     // MARK: Init
     init(profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve()) {
@@ -82,19 +91,27 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingLearnMoreButton)
-        //        tabManager.addTabsForURLs([], zombie: false, shouldSelectTab: true) // no urls yet, will be added in FXIOS-7383
+        guard let fakespotLearnMoreLink else { return }
+        tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
     }
 
     func onTapTermsOfUse() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingTermsOfUseButton)
+        guard let fakespotTermsOfUseLink else { return }
+        tabManager.addTabsForURLs([fakespotTermsOfUseLink], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
     }
 
     func onTapPrivacyPolicy() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingPrivacyPolicyButton)
+        guard let fakespotPrivacyPolicyLink else { return }
+        tabManager.addTabsForURLs([fakespotPrivacyPolicyLink], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
     }
 
     func onTapMainButton() {
@@ -102,12 +119,14 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)
+        onOptIn?()
     }
 
     func onTapSecondaryButton() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingNotNowButton)
+        dismissViewController?()
     }
 
     var orderWebsites: [String] {
