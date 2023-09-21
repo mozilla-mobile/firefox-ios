@@ -14,11 +14,12 @@ protocol TabTrayController: UIViewController,
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
-class TabTrayViewController: UIViewController, TabTrayController {
+class TabTrayViewController: UIViewController,
+                             TabTrayController,
+                             UIToolbarDelegate {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
-            static let width: CGFloat = 343
         }
     }
 
@@ -134,6 +135,7 @@ class TabTrayViewController: UIViewController, TabTrayController {
         updateToolbarItems()
     }
 
+    // MARK: Themeable
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
@@ -141,6 +143,7 @@ class TabTrayViewController: UIViewController, TabTrayController {
         newTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
     }
 
+    // MARK: Private
     private func setupView() {
         view.addSubview(navigationToolbar)
         navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -190,12 +193,12 @@ class TabTrayViewController: UIViewController, TabTrayController {
         return button
     }
 
+    private func segmentPanelChange() {}
+
     @objc
     private func segmentChanged() {
         segmentPanelChange()
     }
-
-    private func segmentPanelChange() {}
 
     @objc
     func deleteTabsButtonTapped() {}
@@ -206,5 +209,3 @@ class TabTrayViewController: UIViewController, TabTrayController {
     @objc
     func doneButtonTapped() {}
 }
-
-extension TabTrayViewController: UIToolbarDelegate {}

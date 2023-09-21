@@ -447,21 +447,20 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray() {
-        if let tabTrayCoordinator = childCoordinators[TabTrayCoordinator.self] {
-            tabTrayCoordinator.start()
-            (tabTrayCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
-        } else {
-            let navigationController = DismissableNavigationViewController()
-            navigationController.modalPresentationStyle = .formSheet
-
-            let tabTrayCoordinator = TabTrayCoordinator(
-                router: DefaultRouter(navigationController: navigationController)
-            )
-            tabTrayCoordinator.parentCoordinator = self
-            add(child: tabTrayCoordinator)
-            tabTrayCoordinator.start()
-
-            router.present(navigationController)
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+            return // flow is already handled
         }
+
+        let navigationController = DismissableNavigationViewController()
+        navigationController.modalPresentationStyle = .formSheet
+
+        let tabTrayCoordinator = TabTrayCoordinator(
+            router: DefaultRouter(navigationController: navigationController)
+        )
+        tabTrayCoordinator.parentCoordinator = self
+        add(child: tabTrayCoordinator)
+        tabTrayCoordinator.start()
+
+        router.present(navigationController)
     }
 }
