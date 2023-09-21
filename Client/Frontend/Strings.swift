@@ -5308,7 +5308,7 @@ extension String {
         key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
         value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
-        comment: "Label shown when there are no logins to list")
+        comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
         tableName: nil,
