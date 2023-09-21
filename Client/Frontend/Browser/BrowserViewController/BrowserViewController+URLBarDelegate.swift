@@ -35,18 +35,24 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        // TODO: FXIOS-7355 Move logic to BrowserCoordinator
-        if isTabTrayRefactorEnabled {
-            self.tabTrayViewController = TabTrayViewController()
-        } else {
-            self.tabTrayViewController = LegacyTabTrayViewController(
-                tabTrayDelegate: self,
-                profile: profile,
-                tabToFocus: tabToFocus,
-                tabManager: tabManager,
-                overlayManager: overlayManager,
-                focusedSegment: focusedSegment)
+        guard !isTabTrayRefactorEnabled else {
+            navigationHandler?.showTabTray()
+            return
         }
+
+        showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
+                                        focusedSegment: focusedSegment)
+    }
+
+    private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
+                                                 focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
+        self.tabTrayViewController = LegacyTabTrayViewController(
+            tabTrayDelegate: self,
+            profile: profile,
+            tabToFocus: tabToFocus,
+            tabManager: tabManager,
+            overlayManager: overlayManager,
+            focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)

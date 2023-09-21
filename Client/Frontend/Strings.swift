@@ -3605,8 +3605,13 @@ extension String {
         public static let SheetHeaderTitle = MZLocalizedString(
             key: "", // Shopping.Sheet.Title.v118
             tableName: "Shopping",
-            value: "Review quality check",
+            value: "Review checker",
             comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
+        public static let SheetHeaderBetaTitle = MZLocalizedString(
+            key: "", // Shopping.Sheet.Beta.Title.v119
+            tableName: "Shopping",
+            value: "BETA",
+            comment: "Beta label for the header of the Shopping Experience (Fakespot) sheet")
         public static let ReliabilityCardTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v118
             tableName: "Shopping",
@@ -3852,6 +3857,16 @@ extension String {
             tableName: "Shopping",
             value: "We’re working to resolve this issue. Please check back soon.",
             comment: "Description for info card when no information is available at the moment")
+        public static let InfoCardFakespotDoesNotAnalyzeReviewsTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120
+            tableName: "Shopping",
+            value: "Can’t Check These Reviews",
+            comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
+        public static let InfoCardFakespotDoesNotAnalyzeReviewsDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120
+            tableName: "Shopping",
+            value: "Unfortunately, we can’t check the review quality for certain types of products. For example, gift cards and streaming video, music, and games.",
+            comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
     }
 }
 
