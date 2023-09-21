@@ -20,10 +20,9 @@ struct FakespotNoAnalysisCardViewModel {
 
 final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let noAnalysisImageViewSize: CGFloat = 104
+        static let noAnalysisImageViewSize = CGSize(width: 280, height: 108)
         static let headlineLabelFontSize: CGFloat = 15
         static let bodyLabelFontSize: CGFloat = 13
-        static let analyzerButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 8
         static let contentStackViewPadding: CGFloat = 8
     }
@@ -58,14 +57,8 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
                                                             size: UX.bodyLabelFontSize)
     }
 
-    private lazy var analyzerButton: ResizableButton = .build { button in
-        button.contentHorizontalAlignment = .leading
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.buttonEdgeSpacing = 0
-        button.titleLabel?.numberOfLines = 0
+    private lazy var analyzerButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapStartAnalysis), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                         size: UX.analyzerButtonFontSize)
     }
 
     override init(frame: CGRect) {
@@ -78,7 +71,7 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        addSubviews(cardContainer, mainView)
+        addSubviews(cardContainer)
         mainView.addSubview(contentStackView)
         contentStackView.addArrangedSubview(noAnalysisImageView)
         contentStackView.addArrangedSubview(headlineLabel)
@@ -100,8 +93,8 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
             contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
                                                        constant: -UX.contentStackViewPadding),
 
-            noAnalysisImageView.widthAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize),
-            noAnalysisImageView.heightAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize)
+            noAnalysisImageView.widthAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize.width),
+            noAnalysisImageView.heightAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize.height)
         ])
     }
 
@@ -119,8 +112,9 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         bodyLabel.text = viewModel.bodyLabelText
         bodyLabel.accessibilityIdentifier = viewModel.bodyLabelA11yId
 
-        analyzerButton.setTitle(viewModel.analyzerButtonText, for: .normal)
-        analyzerButton.accessibilityIdentifier = viewModel.analyzerButtonA11yId
+        let buttonViewModel = PrimaryRoundedButtonViewModel(title: viewModel.analyzerButtonText,
+                                                            a11yIdentifier: viewModel.analyzerButtonA11yId)
+        analyzerButton.configure(viewModel: buttonViewModel)
 
         let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
@@ -129,9 +123,9 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
         cardContainer.applyTheme(theme: theme)
+        analyzerButton.applyTheme(theme: theme)
         let colors = theme.colors
         headlineLabel.textColor = colors.textPrimary
         bodyLabel.textColor = colors.textPrimary
-        analyzerButton.setTitleColor(colors.textAccent, for: .normal)
     }
 }
