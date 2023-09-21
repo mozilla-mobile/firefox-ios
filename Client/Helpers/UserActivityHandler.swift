@@ -128,7 +128,7 @@ extension UserActivityHandler {
             attributeSet.authors = [author]
         }
 
-        let identifier = !page.url.isEmptyOrWhitespace() ? page.url : tab.currentURL()?.absoluteString
+        let identifier = tab.currentURL()?.absoluteString
 
         let item = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "org.mozilla.ios.firefox", attributeSet: attributeSet)
 
@@ -145,20 +145,6 @@ extension UserActivityHandler {
             logger.log("Spotlight: Indexing error: \(error.localizedDescription)",
                        level: .warning,
                        category: .unlabeled)
-        }
-    }
-
-    func spotlightDeindex(_ page: ReadabilityResult) {
-        searchableIndex.deleteSearchableItems(withIdentifiers: [page.url]) { error in
-            if let error = error {
-                self.logger.log("Spotlight: Deindexing error: \(error.localizedDescription)",
-                                level: .warning,
-                                category: .unlabeled)
-            } else {
-                self.logger.log("Spotlight: Search item successfully removed!",
-                                level: .debug,
-                                category: .unlabeled)
-            }
         }
     }
 }

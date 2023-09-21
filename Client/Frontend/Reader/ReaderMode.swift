@@ -182,73 +182,79 @@ struct ReaderModeStyle {
 
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
-    var domain = ""
-    var url = ""
-    var content = ""
-    var textContent = ""
-    var title = ""
-    var credits = ""
-    var excerpt = ""
+    /// The `dir` global attribute is an enumerated attribute that indicates the directionality of the element's text
+    enum Direction: String {
+        /// Direction for languages that are written from the left to the right
+        case leftToRight = "ltr"
+        /// Direction for languages that are written from the right to the left
+        case rightToLeft = "rtl"
+        /// Direction base on the user agent algorithm, which uses a basic algorithm
+        /// as it parses the characters inside the element until it finds a character
+        /// with a strong directionality, then applies that directionality to the
+        /// whole element
+        case auto
+    }
+    let content: String
+    let textContent: String
+    let title: String
+    let credits: String
+    let byline: String
+    let excerpt: String
+    let length: Int
+    let language: String
+    let siteName: String
+    let direction: Direction
 
     init?(object: AnyObject?) {
-        if let dict = object as? NSDictionary {
-            if let uri = dict["uri"] as? NSDictionary {
-                if let url = uri["spec"] as? String {
-                    self.url = url
-                }
-                if let host = uri["host"] as? String {
-                    self.domain = host
-                }
-            }
-            if let content = dict["content"] as? String {
-                self.content = content
-            }
-            if let textContent = dict["textContent"] as? String {
-                self.textContent = textContent
-            }
-            if let excerpt = dict["excerpt"] as? String {
-                self.excerpt = excerpt
-            }
-            if let title = dict["title"] as? String {
-                self.title = title
-            }
-            if let credits = dict["byline"] as? String {
-                self.credits = credits
-            }
-        } else {
-            return nil
-        }
+        guard let dict = object as? NSDictionary else { return nil }
+
+        self.content = dict["content"] as? String ?? ""
+        self.textContent = dict["textContent"] as? String ?? ""
+        self.excerpt = dict["excerpt"] as? String ?? ""
+        self.title = dict["title"] as? String ?? ""
+        self.length = dict["length"] as? Int ?? .zero
+        self.language = dict["language"] as? String ?? ""
+        self.siteName = dict["siteName"] as? String ?? ""
+        self.credits = dict["credits"] as? String ?? ""
+        self.byline = dict["byline"] as? String ?? ""
+        self.direction = Direction(rawValue: dict["dir"] as? String ?? "") ?? .auto
     }
 
     /// Initialize from a JSON encoded string
     init?(string: String) {
         guard let data = string.data(using: .utf8),
-              let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: String] else { return nil }
+              let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
+              let content = object["content"] as? String,
+              let title = object["title"] as? String,
+              let credits = object["byline"] as? String
+        else { return nil }
 
-        let domain = object["domain"]
-        let url = object["url"]
-        let content = object["content"]
-        let textContent = object["textContent"]
-        let excerpt = object["excerpt"]
-        let title = object["title"]
-        let credits = object["credits"]
-
-        if domain == nil || url == nil || content == nil || title == nil || credits == nil {
-            return nil
-        }
-
-        self.domain = domain!
-        self.url = url!
-        self.content = content!
-        self.title = title!
-        self.credits = credits!
-        self.textContent = textContent ?? ""
-        self.excerpt = excerpt ?? ""
+        self.content = content
+        self.title = title
+        self.credits = credits
+        self.textContent = object["textContent"] as? String ?? ""
+        self.excerpt = object["excerpt"] as? String ?? ""
+        self.length = object["length"] as? Int ?? .zero
+        self.language = object["language"] as? String ?? ""
+        self.siteName = object["siteName"] as? String ?? ""
+        self.byline = object["byline"] as? String ?? ""
+        self.direction = Direction(rawValue: object["dir"] as? String ?? "") ?? .auto
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String: Any] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
+        return [
+            "content": content,
+            "title": title,
+            "credits": credits,
+            "textContent": textContent,
+            "excerpt": excerpt,
+            "byline": byline,
+            "length": length,
+            "dir": direction.rawValue,
+            "siteName": siteName,
+            "lang": language
+        ]
     }
 
     /// Encode to a JSON encoded string
