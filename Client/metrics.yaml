@@ -3216,6 +3216,24 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  restore_tabs_alert:
+    type: event
+    description: |
+      Recorded when a users choose an option on the restore tabs alert
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          Is enabled when the restore tabs is started
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7378
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16515
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-03-31"
 
 # Theme metrics
 theme:

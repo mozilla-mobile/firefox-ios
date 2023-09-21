@@ -544,6 +544,7 @@ extension TelemetryWrapper {
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
+        case restoreTabsAlert = "restore-tabs-alert"
         case fxaLoginWebpage = "fxa-login-webpage"
         case fxaLoginCompleteWebpage = "fxa-login-complete-webpage"
         case fxaRegistrationWebpage = "fxa-registration-webpage"
@@ -655,6 +656,7 @@ extension TelemetryWrapper {
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
+        case isRestoreTabsStarted = "is-restore-tabs-started"
         case awesomebarSearchTapType = "awesomebarSearchTapType"
 
         case preference = "pref"
@@ -872,6 +874,18 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
+        case(.action, .tap, .restoreTabsAlert, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isRestoreTabsStarted.rawValue] as? Bool {
+                let isEnabledExtra = GleanMetrics.Tabs.RestoreTabsAlertExtra(isEnabled: isEnabled)
+                GleanMetrics.Tabs.restoreTabsAlert.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
 
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
