@@ -28,7 +28,7 @@ class FakespotViewModel {
                     .settingsCard
                 ]
                 if product?.productId == nil {
-                    elements = [.productCannotBeAnalyzed] + baseElements
+                    elements = [.messageCard(.productCannotBeAnalyzed)] + baseElements
                 } else {
                     elements = baseElements
                 }
@@ -36,9 +36,9 @@ class FakespotViewModel {
             case let .error(error):
                 let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
                 if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
-                    elements = [.noConnectionError] + baseElements
+                    elements = [.messageCard(.noConnectionError)] + baseElements
                 } else {
-                    elements = [.genericError] + baseElements
+                    elements = [.messageCard(.genericError)] + baseElements
                 }
             }
 
@@ -62,9 +62,12 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case genericError
-        case noConnectionError
-        case productCannotBeAnalyzed
+        case messageCard(MessageType)
+        enum MessageType {
+            case genericError
+            case productCannotBeAnalyzed
+            case noConnectionError
+        }
     }
 
     private(set) var state: ViewState = .loading {
