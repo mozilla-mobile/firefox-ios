@@ -757,9 +757,9 @@ extension BrowserViewController: WKNavigationDelegate {
         // We notify the content blocker change so that content blocker status can be correctly shown on beside the URL bar
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
-        self.scrollController.showToolbars(animated: false)
 
         if tabManager.selectedTab === tab {
+            self.scrollController.showToolbars(animated: false)
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
         }
     }
