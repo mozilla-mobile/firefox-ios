@@ -19,19 +19,24 @@ class TabTrayViewController: UIViewController,
                              UIToolbarDelegate {
     struct UX {
         struct NavigationMenu {
-            static let width: CGFloat = 32
+            static let width: CGFloat = 343
         }
+
+        static let fixedSpaceWidth: CGFloat = 32
     }
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var  delegate: TabTrayViewControllerDelegate?
+    private var titleWidthConstraint: NSLayoutConstraint?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
+    // MARK: - Redux state
     var layout: LegacyTabTrayViewModel.Layout = .compact
+    var selectedSegment: LegacyTabTrayViewModel.Segment = .tabs
 
     // MARK: - UI
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
@@ -92,18 +97,18 @@ class TabTrayViewController: UIViewController,
         return button
     }()
 
-    private lazy var newTabButtonIpad: UIBarButtonItem = {
-        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
-                                action: #selector(newTabButtonTapped),
-                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
-                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
-    }()
+//    private lazy var newTabButtonIpad: UIBarButtonItem = {
+//        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
+//                                action: #selector(newTabButtonTapped),
+//                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
+//                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+//    }()
 
     private lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                          target: nil,
                                          action: nil)
-        fixedSpace.width = CGFloat(UX.NavigationMenu.width)
+        fixedSpace.width = CGFloat(UX.fixedSpaceWidth)
         return fixedSpace
     }()
 
@@ -138,9 +143,33 @@ class TabTrayViewController: UIViewController,
         updateToolbarItems()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        layout = shouldUseiPadSetup() ? .regular : .compact
+        updateLayout()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.didDismissTabTray()
+    }
+
+    private func updateLayout() {
+        let shouldUseiPadSetup = layout == .regular
+        navigationController?.isToolbarHidden = shouldUseiPadSetup
+        titleWidthConstraint?.isActive = shouldUseiPadSetup
+
+        switch layout {
+        case .compact:
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItems = [doneButton]
+        case .regular:
+            navigationItem.leftBarButtonItem = deleteButton
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+        }
+
+        updateToolbarItems()
     }
 
     // MARK: Themeable
@@ -149,10 +178,23 @@ class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
         deleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
         newTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        doneButton.tintColor = themeManager.currentTheme.colors.iconPrimary
     }
 
     // MARK: Private
     private func setupView() {
+        // iPad setup
+        guard shouldUseiPadSetup() else {
+            setupForiPhone()
+            return
+        }
+
+        setupForiPad()
+    }
+
+    private func setupForiPhone() {
+        navigationItem.titleView = nil
+        updateTitle()
         view.addSubview(navigationToolbar)
         navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
 
@@ -163,13 +205,26 @@ class TabTrayViewController: UIViewController,
         ])
     }
 
+    private func updateTitle() {
+        navigationItem.title = selectedSegment.navTitle
+    }
+
+    private func setupForiPad() {
+        navigationItem.titleView = segmentedControl
+
+        if let titleView = navigationItem.titleView {
+            titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
+            titleWidthConstraint?.isActive = true
+        }
+    }
+
     private func updateToolbarItems() {
         switch layout {
         case .compact:
             navigationController?.isToolbarHidden = false
             setToolbarItems(bottomToolbarItems, animated: true)
         case .regular:
-            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
             navigationItem.leftBarButtonItem = deleteButton
         }
     }
@@ -205,6 +260,8 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func segmentChanged() {
+        selectedSegment = LegacyTabTrayViewModel.Segment(rawValue: segmentedControl.selectedSegmentIndex) ?? .tabs
+        updateTitle()
         segmentPanelChange()
     }
 
@@ -215,5 +272,9 @@ class TabTrayViewController: UIViewController,
     func newTabButtonTapped() {}
 
     @objc
-    func doneButtonTapped() {}
+    func doneButtonTapped() {
+        notificationCenter.post(name: .TabsTrayDidClose)
+        // TODO: Update mode when closing tabTray
+        self.dismiss(animated: true, completion: nil)
+    }
 }
