@@ -19,8 +19,7 @@ private enum SearchListSection: Int, CaseIterable {
 }
 
 private struct SearchViewControllerUX {
-    // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
-    static let EngineButtonHeight: Float = 44
+    static let EngineButtonHeight: Float = 44 // Equivalent to toolbar height, fixed at the moment
     static let EngineButtonWidth = EngineButtonHeight * 1.4
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 

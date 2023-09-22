@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class EmptyPlaceholderCell: UITableViewCell {
     static let identifier = "emptyPlaceholderCell"
@@ -14,7 +15,7 @@ class EmptyPlaceholderCell: UITableViewCell {
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
-        label.text = .LoginsListNoLoginsFoundDescription
+        label.text = String(format: .LoginsListNoLoginsFoundDescription, AppName.shortName.rawValue)
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .systemGray
         label.textAlignment = .center

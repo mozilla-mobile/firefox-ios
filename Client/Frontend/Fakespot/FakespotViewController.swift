@@ -238,11 +238,19 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         case .loadingView:
             let view: FakespotLoadingView = .build()
             return view
-
         case .onboarding:
-            let viewModel = FakespotOptInCardViewModel()
             let view: FakespotOptInCardView = .build()
-            view.configure(viewModel)
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
+            viewModel.optInCardViewModel.onOptIn = { [weak self] in
+                guard let self = self else { return }
+                Task {
+                    await self.viewModel.fetchData()
+                }
+            }
+            view.configure(viewModel.optInCardViewModel)
             return view
 
         case .reliabilityCard:
@@ -265,7 +273,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            reviewQualityCardView.configure()
+            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
+            reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
@@ -282,15 +294,23 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             view.configure(viewModel.noAnalysisCardViewModel)
             return view
 
-        case .genericError:
-            let view: FakespotMessageCardView = .build()
-            view.configure(viewModel.genericErrorViewModel)
-            return view
+        case .messageCard(let messageType):
+            switch messageType {
+            case .genericError:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.genericErrorViewModel)
+                return view
 
-        case .noConnectionError:
-            let view: FakespotMessageCardView = .build()
-            view.configure(viewModel.noConnectionViewModel)
-            return view
+            case .noConnectionError:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.noConnectionViewModel)
+                return view
+
+            case .productCannotBeAnalyzed:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
+                return view
+            }
         }
     }
 
