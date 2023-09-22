@@ -1324,7 +1324,6 @@ workflows:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
         - test_plan: PerformanceTestPlan   
-    
     - script@1.1:
         is_always_run: true
         title: Create perfherder data object
@@ -1537,9 +1536,13 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e 
+            set -ex
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
+            GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
+            DEVICE_MODEL="iphone14pro"
+            DEVICE_VERSION="16.6"
+            XCRESULT_PATH="gs://$GOOGLE_CLOUD_BUCKET/$RESULTS_DIR/$DEVICE_MODEL-$DEVICE_VERSION-en-portrait/TestLogs/"
 
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
             $HOME/google-cloud-sdk/bin/gcloud version
@@ -1548,14 +1551,66 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
-                --device model=iphone14pro,version=16.6 \
+                --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
-                --results-bucket=firefox_ios_test_artifacts \
-                --results-dir="$RESULTS_DIR" \
-                --format=json)
-                
-            echo $FIREBASE_TEST_RESULT
+                --results-bucket="$GOOGLE_CLOUD_BUCKET" \
+                --results-dir="$RESULTS_DIR")
+
+            echo "Your FIREBASE_TEST_RESULT:\n$FIREBASE_TEST_RESULT"
+
+            # the following code is temporary and only here to verify scope within bitrise
+            # it will be handled entirely in the next step and removed after testing
+            echo $XCRESULT_PATH
+            $HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH
+            $HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult"
+            FIREBASE_XCRESULT_PATH=$($HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult")
+            echo $FIREBASE_XCRESULT_PATH
+            envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
+            mkdir firebase_xcresult
+            $HOME/google-cloud-sdk/bin/gsutil -m cp -r $FIREBASE_XCRESULT_PATH ./firebase_xcresult
+            ls -R ./firebase_xcresult
+            mv ./firebase_xcresult/*.xcresult ./firebase_xcresult/Test-Fennec_Enterprise.xcresult
+            ls ./firebase_xcresult
+            ls -R ./firebase_xcresult
+    - script@1.1:
+        is_always_run: true
+        title: Create Perfherder Data Object from Firebase
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # get dependency
+            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+
+            ls
+            echo $FIREBASE_XCRESULT_PATH
+            $HOME/google-cloud-sdk/bin/gsutil ls $FIREBASE_XCRESULT_PATH
+
+            mkdir test_firebase_xcresult
+            $HOME/google-cloud-sdk/bin/gsutil -m cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
+            ls -R ./test_firebase_xcresult
+            mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
+            ls -R ./test_firebase_xcresult
+            echo "DerivedData/Client/Log/Tests"
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData
+            FIREBASE_XCRESULT="./test_firebase_xcresult/Test-Fennec-test.xcresult"
+            CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
+            BITRISE_XCRESULT="/Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult"
+            mv $FIREBASE_XCRESULT $BITRISE_XCRESULT
+
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
+
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT
+            ls ..
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
+            cat data.txt
+            sed 's/.*=//;s/'\''/"/g' data.txt > test.json
+            cat test.json
+            python3 perfTestTransform.py
 app:
   envs:
   - opts:
