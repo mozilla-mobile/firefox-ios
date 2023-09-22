@@ -38,6 +38,15 @@ class TabTrayViewController: UIViewController,
     var layout: LegacyTabTrayViewModel.Layout = .compact
     var selectedSegment: LegacyTabTrayViewModel.Segment = .tabs
 
+    var isSyncTabsPanel: Bool {
+        return selectedSegment == .syncedTabs
+    }
+
+    // iPad Layout
+    var isRegularLayout: Bool {
+        return layout == .regular
+    }
+
     // MARK: - UI
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
@@ -97,12 +106,29 @@ class TabTrayViewController: UIViewController,
         return button
     }()
 
-//    private lazy var newTabButtonIpad: UIBarButtonItem = {
-//        return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
-//                                action: #selector(newTabButtonTapped),
-//                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
-//                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
-//    }()
+    private lazy var syncTabButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .TabsTray.Sync.SyncTabs,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(syncTabsTapped))
+
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncTabsButton
+        return button
+    }()
+
+    private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
+        let syncingLabel = UILabel()
+        syncingLabel.text = .SyncingMessageWithEllipsis
+        syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
+
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = themeManager.currentTheme.colors.textPrimary
+        activityIndicator.startAnimating()
+
+        stackView.addArrangedSubview(syncingLabel)
+        stackView.addArrangedSubview(activityIndicator)
+        stackView.spacing = 12
+    }
 
     private lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
@@ -114,6 +140,10 @@ class TabTrayViewController: UIViewController,
 
     private lazy var bottomToolbarItems: [UIBarButtonItem] = {
         return [deleteButton, flexibleSpace, newTabButton]
+    }()
+
+    private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
+        return [flexibleSpace, syncTabButton]
     }()
 
     init(delegate: TabTrayViewControllerDelegate,
@@ -156,20 +186,16 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateLayout() {
-        let shouldUseiPadSetup = layout == .regular
-        navigationController?.isToolbarHidden = shouldUseiPadSetup
-        titleWidthConstraint?.isActive = shouldUseiPadSetup
+        navigationController?.isToolbarHidden = isRegularLayout
+        titleWidthConstraint?.isActive = isRegularLayout
 
         switch layout {
         case .compact:
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = [doneButton]
         case .regular:
-            navigationItem.leftBarButtonItem = deleteButton
-            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+            updateToolbarItems()
         }
-
-        updateToolbarItems()
     }
 
     // MARK: Themeable
@@ -179,6 +205,7 @@ class TabTrayViewController: UIViewController,
         deleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
         newTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
         doneButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        syncTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
     }
 
     // MARK: Private
@@ -219,14 +246,26 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateToolbarItems() {
-        switch layout {
-        case .compact:
-            navigationController?.isToolbarHidden = false
-            setToolbarItems(bottomToolbarItems, animated: true)
-        case .regular:
-            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
-            navigationItem.leftBarButtonItem = deleteButton
+        // if iPad
+        guard !isRegularLayout else {
+            setupToolbarForIpad()
+            return
         }
+
+        navigationController?.isToolbarHidden = false
+        let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        setToolbarItems(toolbarItems, animated: true)
+    }
+
+    private func setupToolbarForIpad() {
+        guard !isSyncTabsPanel else {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = syncTabButton
+            return
+        }
+
+        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+        navigationItem.leftBarButtonItem = deleteButton
     }
 
     private func createSegmentedControl(
@@ -262,6 +301,7 @@ class TabTrayViewController: UIViewController,
     private func segmentChanged() {
         selectedSegment = LegacyTabTrayViewModel.Segment(rawValue: segmentedControl.selectedSegmentIndex) ?? .tabs
         updateTitle()
+        updateLayout()
         segmentPanelChange()
     }
 
@@ -277,4 +317,7 @@ class TabTrayViewController: UIViewController,
         // TODO: Update mode when closing tabTray
         self.dismiss(animated: true, completion: nil)
     }
+
+    @objc
+    func syncTabsTapped() {}
 }
