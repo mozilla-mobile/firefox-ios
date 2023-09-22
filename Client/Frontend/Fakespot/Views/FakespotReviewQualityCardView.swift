@@ -7,6 +7,27 @@ import Common
 import Shared
 import ComponentLibrary
 
+// MARK: View Model
+final class FakespotReviewQualityCardViewModel {
+    private let tabManager: TabManager
+    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+    var dismissViewController: (() -> Void)?
+
+    // MARK: Init
+    init(tabManager: TabManager = AppContainer.shared.resolve()) {
+        self.tabManager = tabManager
+    }
+
+    func onTapLearnMore() {
+        guard let fakespotLearnMoreLink else { return }
+        tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
+        dismissViewController?()
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .shoppingLearnMoreReviewQualityButton)
+    }
+}
+
 final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     private struct UX {
         static let contentStackViewSpacing: CGFloat = 16
@@ -19,6 +40,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         static let contentStackViewInsets = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
     }
 
+    private var viewModel: FakespotReviewQualityCardViewModel?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private let aReliabilityScoreView = FakespotReliabilityScoreView(grade: .a)
@@ -241,10 +263,11 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     @objc
     private func didTapLearnMore() {
-        // didTapLearnMore will be enabled with task FXIOS-7427
+        viewModel?.onTapLearnMore()
     }
 
-    func configure() {
+    func configure(_ viewModel: FakespotReviewQualityCardViewModel) {
+        self.viewModel = viewModel
         let viewModel = CollapsibleCardViewModel(
             contentView: contentStackView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.card,

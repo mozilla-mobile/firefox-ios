@@ -17,7 +17,7 @@ class ButtonsViewController: UIViewController, Themeable {
 
     private lazy var buttonStackView: UIStackView = .build { stackView in
         stackView.distribution = .fillEqually
-        stackView.alignment = .center
+        stackView.alignment = .fill
         stackView.axis = .vertical
         stackView.spacing = 16
     }

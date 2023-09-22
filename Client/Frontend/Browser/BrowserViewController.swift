@@ -937,10 +937,20 @@ class BrowserViewController: UIViewController,
         }
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
+                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: true]
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .restoreTabsAlert,
+                                             extras: extra)
                 self.isCrashAlertShowing = false
                 self.tabManager.restoreTabs(true)
             },
             noCallback: { _ in
+                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: false]
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .restoreTabsAlert,
+                                             extras: extra)
                 self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
                 self.openUrlAfterRestore()

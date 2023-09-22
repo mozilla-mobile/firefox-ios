@@ -273,7 +273,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            reviewQualityCardView.configure()
+            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss()
+            }
+            reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
@@ -305,6 +309,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             case .productCannotBeAnalyzed:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
+                return view
+
+            case .notEnoughReviews:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.notEnoughReviewsViewModel)
                 return view
             }
         }

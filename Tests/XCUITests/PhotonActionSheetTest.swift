@@ -64,7 +64,7 @@ class PhotonActionSheetTest: BaseTestCase {
         mozWaitForElementToExist(app.cells["Send Link to Device"], timeout: 10)
         app.cells["Send Link to Device"].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
     }
     // Disable issue #5554, More button is not accessible
     /*
@@ -127,7 +127,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.staticTexts["Send to Device"].tap()
         mozWaitForElementToExist(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton], timeout: 10)
 
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 

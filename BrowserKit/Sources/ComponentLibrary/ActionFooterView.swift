@@ -10,14 +10,14 @@ public struct ActionFooterViewModel {
     let actionTitle: String
     let a11yTitleIdentifier: String
     let a11yActionIdentifier: String
-    let onTap: (() -> Void)
+    let onTap: (() -> Void)?
 
     public init(
         title: String,
         actionTitle: String,
         a11yTitleIdentifier: String,
         a11yActionIdentifier: String,
-        onTap: @escaping (() -> Void)
+        onTap: (() -> Void)?
     ) {
         self.title = title
         self.actionTitle = actionTitle
@@ -73,7 +73,7 @@ public final class ActionFooterView: UIView, ThemeApplicable {
 
     @objc
     private func didTapButton() {
-        viewModel?.onTap()
+        viewModel?.onTap?()
     }
 
     private func setupLayout() {

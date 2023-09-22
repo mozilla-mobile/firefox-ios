@@ -195,6 +195,15 @@ class ReadingListPanel: UITableViewController,
         tableView.accessibilityIdentifier = "ReadingTable"
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Set reading list accessibility content size as needed
+        let size = CGSize(width: self.emptyStateViewA11YScroll.frame.size.width,
+                          height: self.emptyStateView.frame.size.height)
+        self.emptyStateViewA11YScroll.contentSize = size
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -237,20 +246,57 @@ class ReadingListPanel: UITableViewController,
             records = newRecords
 
             if let records = records, records.isEmpty {
-                tableView.isScrollEnabled = false
-                DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
+                updateEmptyReadingListMessage(visible: true)
             } else {
                 if prevNumberOfRecords == 0 {
-                    tableView.isScrollEnabled = true
-                    DispatchQueue.main.async { self.tableView.backgroundView = nil }
+                    updateEmptyReadingListMessage(visible: false)
                 }
             }
             self.tableView.reloadData()
         }
     }
 
+    private func updateEmptyReadingListMessage(visible: Bool) {
+        ensureMainThread {
+            self.tableView.isScrollEnabled = !visible
+
+            let scrollView = self.emptyStateViewA11YScroll
+            let emptyView = self.emptyStateView
+
+            if visible {
+                guard scrollView.superview == nil else { return }
+                scrollView.addSubview(emptyView)
+                NSLayoutConstraint.activate([
+                    emptyView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                    emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                    emptyView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+                    emptyView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
+                ])
+                self.tableView.superview?.insertSubview(scrollView, aboveSubview: self.tableView)
+                scrollView.frame = self.tableView.bounds
+                scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                scrollView.translatesAutoresizingMaskIntoConstraints = true
+                scrollView.isScrollEnabled = true
+            } else {
+                scrollView.subviews.forEach { $0.removeFromSuperview() }
+                scrollView.removeFromSuperview()
+            }
+        }
+    }
+
+    private lazy var emptyStateViewA11YScroll: UIScrollView = {
+        let scrollView: UIScrollView = .build { scrollView in
+            scrollView.showsHorizontalScrollIndicator = false
+            scrollView.bouncesZoom = false
+            scrollView.minimumZoomScale = 1.0
+            scrollView.maximumZoomScale = 1.0
+        }
+
+        return scrollView
+    }()
+
     private lazy var emptyStateView: UIView = {
-        let view = UIView()
+        let view: UIView = .build()
 
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
@@ -311,7 +357,7 @@ class ReadingListPanel: UITableViewController,
             readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
             readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
 
-            readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor),
+            readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor).priority(.defaultLow),
 
             // overall positioning of emptyStateViewWrapper
             emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
@@ -319,8 +365,11 @@ class ReadingListPanel: UITableViewController,
             emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
 
             emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding)
+            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding),
+            emptyStateViewWrapper.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        readingListLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         return view
     }()

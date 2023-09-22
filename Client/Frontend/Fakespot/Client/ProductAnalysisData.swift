@@ -20,6 +20,18 @@ struct ProductAnalysisData: Codable {
         case analysisUrl = "analysis_url"
         case highlights
     }
+
+    var notAnalyzedCardVisible: Bool {
+        productId == nil && needsAnalysis == true
+    }
+
+    var cannotBeAnalyzedCardVisible: Bool {
+        productId == nil && needsAnalysis == false // && not supported = true
+    }
+
+    var notEnoughReviewsCardVisible: Bool {
+        (grade == nil || adjustedRating == nil) && needsAnalysis == true
+    }
 }
 
 struct Highlights: Codable {
