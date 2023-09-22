@@ -73,24 +73,9 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
         highlightLabel.textColor = theme.colors.textPrimary
     }
 
-    func showPreview(_ showPreview: Bool) {
+    func showPreview(_ showPreview: Bool, showFade: Bool) {
         highlightLabel.numberOfLines = showPreview ? 2 : 0
-        highlightLabel.isShowingFade = showPreview
-
-        if maxHighlightLabelNumberOfLines == 1, showPreview {
-            highlightLabel.isShowingFade = false
-        }
-    }
-
-    private var maxHighlightLabelNumberOfLines: Int {
-        let maxSize = CGSize(width: highlightLabel.frame.size.width, height: CGFloat(MAXFLOAT))
-        let text = (highlightLabel.text ?? "") as NSString
-        let textHeight = text.boundingRect(with: maxSize,
-                                           options: .usesLineFragmentOrigin,
-                                           attributes: [.font: highlightLabel.font],
-                                           context: nil).height
-        let lineHeight = highlightLabel.font.lineHeight
-        return Int(ceil(textHeight / lineHeight))
+        highlightLabel.isShowingFade = showFade
     }
 
     private func setupLayout() {

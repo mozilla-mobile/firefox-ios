@@ -9804,13 +9804,15 @@
 			path = HistoryHighlights;
 			sourceTree = "<group>";
 		};
-		DF1E6AA92A964358000D4854 /* Shopping */ = {
+		DF1E6AA92A964358000D4854 /* Fakespot */ = {
 			isa = PBXGroup;
 			children = (
-				DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */,
+				E16C76802ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift */,
 				AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */,
+				DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */,
+				8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */,
 			);
-			path = Shopping;
+			path = Fakespot;
 			sourceTree = "<group>";
 		};
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
@@ -10530,7 +10532,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				DF1E6AA92A964358000D4854 /* Shopping */,
 				8A171A6029F82AD90085770E /* Application */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */,
@@ -10547,6 +10548,7 @@
 				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
+				DF1E6AA92A964358000D4854 /* Fakespot */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
@@ -10598,7 +10600,6 @@
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
-				8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
 				8A6E13992A71BA8B00A88FA8 /* TabLayoutDelegateTests.swift */,
 				8A6E139B2A71BB5700A88FA8 /* TabCellTests.swift */,
