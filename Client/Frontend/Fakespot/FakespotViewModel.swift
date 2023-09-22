@@ -18,9 +18,15 @@ class FakespotViewModel {
             case .loading:
                 return [.loadingView]
             case let .loaded(product):
-                if product?.productId == nil {
+                if product?.cannotBeAnalyzedCardVisible == true {
                     return [
                         .messageCard(.productCannotBeAnalyzed),
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+                } else if product?.notEnoughReviewsCardVisible == true {
+                    return [
+                        .messageCard(.notEnoughReviews),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
@@ -67,6 +73,7 @@ class FakespotViewModel {
             case genericError
             case productCannotBeAnalyzed
             case noConnectionError
+            case notEnoughReviews
         }
     }
 
@@ -139,6 +146,15 @@ class FakespotViewModel {
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.card,
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.title,
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.description
+    )
+
+    let notEnoughReviewsViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardNotEnoughReviewsTitle,
+        description: .Shopping.InfoCardNotEnoughReviewsDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.NotEnoughReviewsInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.NotEnoughReviewsInfoCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.NotEnoughReviewsInfoCard.description
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()

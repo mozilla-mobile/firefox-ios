@@ -3867,6 +3867,16 @@ extension String {
             tableName: "Shopping",
             value: "Unfortunately, we can’t check the review quality for certain types of products. For example, gift cards and streaming video, music, and games.",
             comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
+        public static let InfoCardNotEnoughReviewsTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Title.v119
+            tableName: "Shopping",
+            value: "Not Enough Reviews Yet",
+            comment: "Title for info card when there are not enough reviews for a product")
+        public static let InfoCardNotEnoughReviewsDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Description.v119
+            tableName: "Shopping",
+            value: "When this product has more reviews, we’ll be able to analyze them.",
+            comment: "Description for info card when there are not enough reviews for a product")
     }
 }
 

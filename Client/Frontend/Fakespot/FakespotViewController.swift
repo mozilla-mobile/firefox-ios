@@ -310,6 +310,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
                 return view
+
+            case .notEnoughReviews:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.notEnoughReviewsViewModel)
+                return view
             }
         }
     }
