@@ -65,7 +65,6 @@ struct Highlights: Codable {
         items.append(FakespotHighlightGroup(type: .competitiveness, reviews: competitiveness))
         items.append(FakespotHighlightGroup(type: .shipping, reviews: shipping))
         items.append(FakespotHighlightGroup(type: .packaging, reviews: packaging))
-        items.compactMap { group in group.reviews.isEmpty ? nil : group }
-        return items
+        return items.compactMap { group in group.reviews.isEmpty ? nil : group }
     }
 }
