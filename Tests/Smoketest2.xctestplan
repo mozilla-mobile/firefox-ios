@@ -32,6 +32,7 @@
         "DisplaySettingTests",
         "DomainAutocompleteTest",
         "DownloadFilesTests",
+        "DownloadsTests",
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",

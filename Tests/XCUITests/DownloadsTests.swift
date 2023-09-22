@@ -12,7 +12,7 @@ let testURL = "https://storage.googleapis.com/mobile_test_assets/test_app/downlo
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
-class DownloadFilesTests: BaseTestCase {
+class DownloadsTests: BaseTestCase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
         mozWaitForElementToExist(app.tables["DownloadsTable"])
@@ -30,8 +30,8 @@ class DownloadFilesTests: BaseTestCase {
                 for _ in 0...list-1 {
                     mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                     app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                    mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete])
-                    app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
+                    mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
+                    app.tables.cells.buttons["Delete"].tap()
                 }
             }
         }
@@ -40,10 +40,11 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
-        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
-        app.tables.cells.buttons[StandardImageIdentifiers.Large.delete].tap()
+        mozWaitForElementToExist(app.tables.cells.buttons["Delete"], timeout: TIMEOUT)
+        app.tables.cells.buttons["Delete"].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301366
     func testDownloadFilesAppMenuFirstTime() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
@@ -54,6 +55,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["Downloaded files will show up here."].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301367
     func testDownloadFileContextMenu() {
         navigator.openURL(testURL)
         waitUntilPageLoad()
@@ -73,6 +75,7 @@ class DownloadFilesTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 0)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301369
     // Smoketest
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
@@ -86,6 +89,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301371
     func testDownloadBLOBFile() {
         downloadBLOBFile()
         mozWaitForElementToExist(app.buttons["Downloads"])
@@ -99,6 +103,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[testBLOBFileSize].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301477
     func testDeleteDownloadedFile() throws {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -114,6 +119,7 @@ class DownloadFilesTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301479
     func testShareDownloadedFile() throws {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -121,12 +127,27 @@ class DownloadFilesTests: BaseTestCase {
         if processIsTranslatedStr() == m1Rosetta {
             throw XCTSkip("swipeLeft() does not work on M1")
         } else {
+            let shareButton = app.tables.buttons.staticTexts["Share"]
             app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
-            XCTAssertTrue(app.tables.buttons.staticTexts["Share"].exists)
-            XCTAssertTrue(app.tables.buttons.staticTexts[StandardImageIdentifiers.Large.delete].exists)
+            mozWaitForElementToExist(shareButton)
+            XCTAssertTrue(shareButton.exists)
+            XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
+            shareButton.tap(force: true)
+            mozWaitForElementToExist(app.tables["DownloadsTable"])
+            XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
+            XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
+            if !iPad() {
+                app.buttons["Close"].tap()
+            } else {
+                // Workaround to close the context menu.
+                // XCUITest does not allow me to click the greyed out portion of the app.
+                app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
+                app.navigationBars["Add Tag"].buttons["Done"].tap()
+            }
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301538
     func testLongPressOnDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -136,6 +157,8 @@ class DownloadFilesTests: BaseTestCase {
         // Commenting out until share sheet can be managed with automated tests issue #5477
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"], timeout: TIMEOUT)
+        XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
         if !iPad() {
             app.buttons["Close"].tap()
         } else {
@@ -167,6 +190,7 @@ class DownloadFilesTests: BaseTestCase {
         app.buttons["Download Link"].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301539
     func testDownloadMoreThanOneFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
@@ -176,6 +200,7 @@ class DownloadFilesTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 2)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301540
     func testRemoveUserDataRemovesDownloadedFiles() {
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
@@ -204,7 +229,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
-        // Check there is still one item
+        // Check the item has been removed
         checkTheNumberOfDownloadedItems(items: 0)
     }
 
@@ -213,6 +238,8 @@ class DownloadFilesTests: BaseTestCase {
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2301363
     // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
