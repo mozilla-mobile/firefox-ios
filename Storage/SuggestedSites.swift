@@ -7,7 +7,7 @@ import Shared
 
 open class SuggestedSite: Site {
     override open var tileURL: URL {
-        return URL(string: url as String) ?? URL(string: "about:blank")!
+        return URL(string: url as String, encodingInvalidCharacters: false) ?? URL(string: "about:blank")!
     }
 
     let trackingId: Int

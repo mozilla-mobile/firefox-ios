@@ -32,7 +32,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
 
     func getURLFromCache(cacheKey: String) async throws -> URL {
         guard let favicon = urlCache[cacheKey],
-              let url = URL(string: favicon.faviconURL)
+              let url = URL(string: favicon.faviconURL, encodingInvalidCharacters: false)
         else { throw SiteImageError.noURLInCache }
 
         // Update the element in the cache so it's time to expire is reset

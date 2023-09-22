@@ -171,7 +171,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
     }
 
     private func handleSiteItemTapped(site: Site) {
-        guard let url = URL(string: site.url) else {
+        guard let url = URL(string: site.url, encodingInvalidCharacters: false) else {
             logger.log("Couldn't navigate to site",
                        level: .warning,
                        category: .library)

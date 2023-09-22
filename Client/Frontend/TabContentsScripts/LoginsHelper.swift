@@ -32,7 +32,7 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
-        guard let uri = URL(string: uriString),
+        guard let uri = URL(string: uriString, encodingInvalidCharacters: false),
               let scheme = uri.scheme, !scheme.isEmpty,
               let host = uri.host
         else {

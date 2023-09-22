@@ -188,7 +188,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
-        guard let url = URL(string: urlString) else {
+        guard let url = URL(string: urlString, encodingInvalidCharacters: false) else {
             self.onMalformedMessage(id: message.id, surface: message.surface)
             return
         }

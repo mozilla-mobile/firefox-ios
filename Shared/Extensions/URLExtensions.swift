@@ -302,9 +302,11 @@ extension URL {
 
     public var decodeReaderModeURL: URL? {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
-                if let queryItem = queryItems.find({ $0.name == "url"}), let value = queryItem.value {
-                    return URL(string: value)?.safeEncodedUrl
+            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+                let queryItems = components.queryItems {
+                if let queryItem = queryItems.find({ $0.name == "url"}),
+                    let value = queryItem.value {
+                    return URL(string: value, encodingInvalidCharacters: false)?.safeEncodedUrl
                 }
             }
         }
@@ -313,7 +315,7 @@ extension URL {
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
         if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
-            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
+            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)", encodingInvalidCharacters: false) {
                 return aboutReaderURL
             }
         }
@@ -470,7 +472,7 @@ public struct InternalURL {
 
     public var extractedUrlParam: URL? {
         if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
-            return URL(string: nestedUrl)
+            return URL(string: nestedUrl, encodingInvalidCharacters: false)
         }
         return nil
     }
@@ -489,7 +491,7 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let url = URL(string: stripAuthorization) else { return nil }
+        guard let url = URL(string: stripAuthorization, encodingInvalidCharacters: false) else { return nil }
 
         if url.path.hasPrefix(aboutPath) {
             return String(url.path.dropFirst(aboutPath.count))

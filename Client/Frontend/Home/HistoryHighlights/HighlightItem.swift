@@ -36,7 +36,7 @@ extension HistoryHighlight: HighlightItem {
     }
 
     var siteUrl: URL? {
-        return URL(string: url)
+        return URL(string: url, encodingInvalidCharacters: false)
     }
 
     var urlString: String? {

@@ -50,13 +50,13 @@ extension ContextMenuHelper: TabContentScript {
         var linkURL: URL?
         if let urlString = data["link"] as? String,
                 let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
-            linkURL = URL(string: escapedURLString)
+            linkURL = URL(string: escapedURLString, encodingInvalidCharacters: false)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String,
                 let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
-            imageURL = URL(string: escapedURLString)
+            imageURL = URL(string: escapedURLString, encodingInvalidCharacters: false)
         }
 
         if linkURL != nil || imageURL != nil {
