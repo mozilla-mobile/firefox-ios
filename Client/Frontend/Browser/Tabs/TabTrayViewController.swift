@@ -296,6 +296,21 @@ class TabTrayViewController: UIViewController,
             navigationItem.leftBarButtonItem = deleteButton
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
+
+        navigationController?.isToolbarHidden = false
+        let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        setToolbarItems(toolbarItems, animated: true)
+    }
+
+    private func setupToolbarForIpad() {
+        guard !isSyncTabsPanel else {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = syncTabButton
+            return
+        }
+
+        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+        navigationItem.leftBarButtonItem = deleteButton
     }
 
     private func createSegmentedControl(
