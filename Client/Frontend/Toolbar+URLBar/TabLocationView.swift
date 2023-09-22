@@ -435,6 +435,8 @@ extension TabLocationView: TabEventHandler {
             trackingProtectionButton.alpha = 1.0
             let themeManager: ThemeManager = AppContainer.shared.resolve()
             self.blockerStatus = blocker.status
+            // We need to hide the trackingProtectionButton when the user activates the reader mode(Bug 16400). When user turns on the reader mode the url is changed to localhost hence we check whether url contains http://localhost or not, according to this we will hide or show the trackingProtectionButton.
+            self.trackingProtectionButton.isHidden = tab.webView?.url?.absoluteString.contains("http://localhost") ?? false
             self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
             setTrackingProtection(theme: themeManager.currentTheme)
         }
