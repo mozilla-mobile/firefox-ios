@@ -1267,6 +1267,7 @@
 		E16258EF2A83BE0800522742 /* FakespotLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */; };
 		E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */; };
 		E16AD22C2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */; };
+		E16C76812ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C76802ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
 		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
 		E17496382991A2720096900A /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496372991A2720096900A /* AdaptiveStack.swift */; };
@@ -6470,6 +6471,7 @@
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLMailTests.swift; sourceTree = "<group>"; };
 		E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightsCardView.swift; sourceTree = "<group>"; };
+		E16C76802ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightsCardViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
 		E17496372991A2720096900A /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
@@ -13212,6 +13214,7 @@
 				8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */,
 				217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */,
+				E16C76812ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift in Sources */,
 				2137786129802B7000D01309 /* DownloadsPanelViewModelTests.swift in Sources */,
 				8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */,
 				C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */,
