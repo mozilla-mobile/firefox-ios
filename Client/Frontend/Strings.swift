@@ -2217,8 +2217,8 @@ extension String {
     public static let FxAFirefoxAccount = MZLocalizedString(
         key: "FxA.FirefoxAccount.v119",
         tableName: "Settings",
-        value: "account",
-        comment: "Settings section title for account")
+        value: "Account",
+        comment: "Settings section title for the old Firefox account")
     public static let FxAManageAccount = MZLocalizedString(
         key: "FxA.ManageAccount",
         tableName: nil,
@@ -2243,7 +2243,7 @@ extension String {
     public static let FxASettingsTitle = MZLocalizedString(
         key: "Settings.FxA.Title.v119",
         tableName: "Settings",
-        value: "account",
+        value: "Account",
         comment: "Title displayed in header of the FxA settings panel.")
     public static let FxASettingsSyncSettings = MZLocalizedString(
         key: "Settings.FxA.Sync.SectionName",
@@ -3520,7 +3520,7 @@ extension String {
         key: "SendTo.NotSignedIn.Title.v119",
         tableName: "Share",
         value: "You are not signed in to your account.",
-        comment: "See http://mzl.la/1ISlXnU")
+        comment: "This message appears when a user tries to use 'Send Link to Device' action while not logged in")
     public static let SendToNotSignedInMessage = MZLocalizedString(
         key: "SendTo.NotSignedIn.Message",
         tableName: nil,
@@ -5322,8 +5322,8 @@ extension String {
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
         key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your account.",
-        comment: "Label shown when there are no logins to list")
+        value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
+        comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
         tableName: nil,
