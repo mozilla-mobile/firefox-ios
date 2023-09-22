@@ -24,6 +24,12 @@ class FakespotViewModel {
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
+                } else if product?.notAnalyzedCardVisible == true {
+                    return [
+                        .noAnalysisCard,
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
                 } else if product?.notEnoughReviewsCardVisible == true {
                     return [
                         .messageCard(.notEnoughReviews),
@@ -32,7 +38,7 @@ class FakespotViewModel {
                     ]
                 } else {
                     return [
-                        ViewElement.reliabilityCard,
+                        .reliabilityCard,
                         .adjustRatingCard,
                         .highlightsCard,
                         .qualityDeterminationCard,

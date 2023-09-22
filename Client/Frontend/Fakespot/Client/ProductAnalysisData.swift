@@ -21,8 +21,12 @@ struct ProductAnalysisData: Codable {
         case highlights
     }
 
-    var cannotBeAnalyzedCardVisible: Bool {
+    var notAnalyzedCardVisible: Bool {
         productId == nil && needsAnalysis == true
+    }
+
+    var cannotBeAnalyzedCardVisible: Bool {
+        productId == nil && needsAnalysis == false // && not supported = true
     }
 
     var notEnoughReviewsCardVisible: Bool {

@@ -3730,18 +3730,28 @@ extension String {
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
             tableName: "Shopping",
-            value: "No analysis for these reviews, yet",
+            value: "No info about these reviews yet",
             comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
             tableName: "Shopping",
-            value: "Launch the Fakespot by Mozilla analyzer and you’ll know in about 60 seconds whether this product’s reviews are reliable.",
+            value: "To know whether this product’s reviews are reliable, check the review quality. It only takes about 60 seconds.",
             comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
             tableName: "Shopping",
-            value: "Launch analyzer on Fakespot.com",
+            value: "Check Review Quality",
             comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Headline.Title.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Label.Title.v119
             tableName: "Shopping",
