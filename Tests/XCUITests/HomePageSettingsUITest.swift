@@ -219,7 +219,6 @@ class HomePageSettingsUITests: BaseTestCase {
         bookmarkPages()
         addContentToReaderView()
         navigator.performAction(Action.GoToHomePage)
-        // print(app.debugDescription)
         mozWaitForElementToExist(app.staticTexts["Recently Saved"])
         navigator.performAction(Action.ToggleRecentlySaved)
         // On iPad we have the homepage button always present,
