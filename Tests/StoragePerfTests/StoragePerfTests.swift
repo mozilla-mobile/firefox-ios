@@ -15,9 +15,9 @@ class MockFiles: FileAccessor {
 }
 
 class HistoryFrecencyPerfTests: XCTestCase {
-    func testFrecencyPerf() {
+    func testFrecencyPerf() throws {
         let files = MockFiles()
-        let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
+        let placesDatabasePath = URL(fileURLWithPath: (try files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
         let places = RustPlaces(databasePath: placesDatabasePath)
         _ = places.reopenIfClosed()
         let count = 100

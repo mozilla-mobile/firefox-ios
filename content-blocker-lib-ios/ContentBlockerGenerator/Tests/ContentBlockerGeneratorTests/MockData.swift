@@ -6,14 +6,14 @@ import Foundation
 
 // MARK: - Data
 struct ParserData {
-    func getDictData(from dict: DictData) -> [String: Any] {
-        return try! JSONSerialization.jsonObject(with: dict.getData(),
-                                                 options: []) as! [String: Any]
+    func getDictData(from dict: DictData) throws -> [String: Any] {
+        try JSONSerialization.jsonObject(with: dict.getData(),
+                                         options: []) as! [String: Any]
     }
 
-    func getListData(from list: ListData) -> [String] {
-        return try! JSONSerialization.jsonObject(with: list.getData(),
-                                                 options: []) as! [String]
+    func getListData(from list: ListData) throws -> [String] {
+        try JSONSerialization.jsonObject(with: list.getData(),
+                                         options: []) as! [String]
     }
 }
 
