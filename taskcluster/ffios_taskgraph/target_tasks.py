@@ -23,3 +23,12 @@ def target_tasks_default(full_task_graph, parameters, graph_config):
         return task.kind == "performance"
 
     return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]
+
+@_target_task('firebase_performance_test')
+def target_tasks_default(full_task_graph, parameters, graph_config):
+    """Target the tasks which have indicated they should be run on this project
+    via the `run_on_projects` attributes."""
+    def filter(task, parameters):
+        return task.kind == "firebase-performance"
+
+    return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]
