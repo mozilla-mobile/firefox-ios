@@ -17,3 +17,10 @@ jobs:
           treeherder-symbol: tab-performance-test
       when: 
         - {hour: 22, minute: 0}
+    - name: firebase-performance-test
+      job:
+          type: decision-task
+          target-tasks-method: firebase_performance_test
+          treeherder-symbol: firebase-performance-test
+      when: 
+        - {hour: 22, minute: 0}
