@@ -3770,7 +3770,7 @@ extension String {
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Headline.Label.v119
             tableName: "Shopping",
-            value: "We use AI technology from Fakespot by Mozilla to analyze the reliability of product reviews. This analysis will only help you assess review quality, not product quality.",
+            value: "We use AI technology from Fakespot by Mozilla to check the reliability of product reviews. This will only help you assess review quality, not product quality.",
             comment: "Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardSubHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.v119

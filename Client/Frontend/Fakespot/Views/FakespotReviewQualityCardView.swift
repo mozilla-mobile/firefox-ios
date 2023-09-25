@@ -69,7 +69,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize)
     }
 
@@ -79,7 +79,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize)
     }
 
@@ -126,7 +126,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize)
     }
 
@@ -136,7 +136,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize)
     }
 
@@ -146,7 +146,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize)
     }
 
@@ -160,7 +160,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var adjustedRatingLabel: UILabel = .build { label in
         let text = String.Shopping.ReviewQualityCardAdjustedRatingLabel
-        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                 size: UX.labelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.labelFontSize)
         label.attributedText = text.attributedText(boldPartsOfString: ["adjusted rating"],
@@ -174,9 +174,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var highlightsLabel: UILabel = .build { label in
         let text = String.Shopping.ReviewQualityCardHighlightsLabel
-        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                 size: UX.labelFontSize)
-        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.labelFontSize)
+        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .subheadline, size: UX.labelFontSize)
         label.attributedText = text.attributedText(boldPartsOfString: ["Highlights"],
                                                    initialFont: normalFont,
                                                    boldFont: boldFont)
@@ -194,7 +194,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         button.buttonEdgeSpacing = 0
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                          size: UX.labelFontSize)
     }
 
