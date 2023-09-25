@@ -18,7 +18,7 @@
         "ActivityStreamTest",
         "AuthenticationTest",
         "BaseTestCase",
-        "BookmarkingTests",
+        "BookmarksTests",
         "BrowsingPDFTests\/testLongPressOnPDFLink()",
         "BrowsingPDFTests\/testLongPressOnPDFLinkToAddToReadingList()",
         "BrowsingPDFTests\/testOpenPDFViewer()",

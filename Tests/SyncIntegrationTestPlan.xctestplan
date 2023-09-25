@@ -40,7 +40,7 @@
         "ActivityStreamTest",
         "AuthenticationTest",
         "BaseTestCase",
-        "BookmarkingTests",
+        "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
         "CopiedLinksTests",
