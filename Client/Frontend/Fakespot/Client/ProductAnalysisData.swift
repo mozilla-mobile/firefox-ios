@@ -11,6 +11,7 @@ struct ProductAnalysisData: Codable {
     let needsAnalysis: Bool?
     let analysisUrl: URL?
     let highlights: Highlights?
+    let pageNotSupported: Bool?
 
     private enum CodingKeys: String, CodingKey {
         case productId = "product_id"
@@ -19,6 +20,19 @@ struct ProductAnalysisData: Codable {
         case needsAnalysis = "needs_analysis"
         case analysisUrl = "analysis_url"
         case highlights
+        case pageNotSupported = "page_not_supported"
+    }
+
+    var notAnalyzedCardVisible: Bool {
+        productId == nil && needsAnalysis == true
+    }
+
+    var cannotBeAnalyzedCardVisible: Bool {
+        needsAnalysis == false && pageNotSupported == true
+    }
+
+    var notEnoughReviewsCardVisible: Bool {
+        (grade == nil || adjustedRating == nil) && needsAnalysis == true
     }
 }
 

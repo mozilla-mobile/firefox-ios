@@ -369,6 +369,8 @@ class ReadingListPanel: UITableViewController,
             emptyStateViewWrapper.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+        welcomeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        readerModeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         readingListLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         return view

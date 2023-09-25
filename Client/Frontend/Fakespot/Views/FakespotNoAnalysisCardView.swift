@@ -15,20 +15,23 @@ struct FakespotNoAnalysisCardViewModel {
     let bodyLabelA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle
     let analyzerButtonText: String = .Shopping.NoAnalysisCardAnalyzerButtonTitle
     let analyzerButtonA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.analyzerButtonTitle
+    let inProgressHeadlineText: String = .Shopping.NoAnalysisCardInProgressTitle
+    let inProgressBodyText: String = .Shopping.NoAnalysisCardInProgressBodyLabel
     var onTapStartAnalysis: (() -> Void)?
 }
 
 final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let noAnalysisImageViewSize: CGFloat = 104
+        static let noAnalysisImageViewSize = CGSize(width: 280, height: 108)
         static let headlineLabelFontSize: CGFloat = 15
         static let bodyLabelFontSize: CGFloat = 13
-        static let analyzerButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 8
         static let contentStackViewPadding: CGFloat = 8
+        static let titleStackViewSpacing: CGFloat = 8
     }
 
     private var viewModel: FakespotNoAnalysisCardViewModel?
+    private var isAnalysisInProgress = false
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var mainView: UIView = .build()
@@ -58,15 +61,15 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
                                                             size: UX.bodyLabelFontSize)
     }
 
-    private lazy var analyzerButton: ResizableButton = .build { button in
-        button.contentHorizontalAlignment = .leading
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.buttonEdgeSpacing = 0
-        button.titleLabel?.numberOfLines = 0
+    private lazy var analyzerButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapStartAnalysis), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                         size: UX.analyzerButtonFontSize)
     }
+
+    private lazy var titleStackView: UIStackView = .build { view in
+        view.axis = .horizontal
+        view.spacing = UX.titleStackViewSpacing
+    }
+    private lazy var activityIndicatorView: UIActivityIndicatorView = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,11 +80,40 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(_ viewModel: FakespotNoAnalysisCardViewModel) {
+        self.viewModel = viewModel
+
+        headlineLabel.text = viewModel.headlineLabelText
+        headlineLabel.accessibilityIdentifier = viewModel.headlineLabelA11yId
+
+        bodyLabel.text = viewModel.bodyLabelText
+        bodyLabel.accessibilityIdentifier = viewModel.bodyLabelA11yId
+
+        let buttonViewModel = PrimaryRoundedButtonViewModel(title: viewModel.analyzerButtonText,
+                                                            a11yIdentifier: viewModel.analyzerButtonA11yId)
+        analyzerButton.configure(viewModel: buttonViewModel)
+
+        let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
+        cardContainer.configure(cardModel)
+    }
+
+    // MARK: - Theming System
+    func applyTheme(theme: Theme) {
+        cardContainer.applyTheme(theme: theme)
+        analyzerButton.applyTheme(theme: theme)
+
+        let colors = theme.colors
+        headlineLabel.textColor = colors.textPrimary
+        bodyLabel.textColor = colors.textPrimary
+        activityIndicatorView.color = colors.textPrimary
+    }
+
     private func setupLayout() {
-        addSubviews(cardContainer, mainView)
+        addSubviews(cardContainer)
+        titleStackView.addArrangedSubview(headlineLabel)
         mainView.addSubview(contentStackView)
         contentStackView.addArrangedSubview(noAnalysisImageView)
-        contentStackView.addArrangedSubview(headlineLabel)
+        contentStackView.addArrangedSubview(titleStackView)
         contentStackView.addArrangedSubview(bodyLabel)
         contentStackView.addArrangedSubview(analyzerButton)
 
@@ -100,38 +132,27 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
             contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
                                                        constant: -UX.contentStackViewPadding),
 
-            noAnalysisImageView.widthAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize),
-            noAnalysisImageView.heightAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize)
+            noAnalysisImageView.widthAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize.width),
+            noAnalysisImageView.heightAnchor.constraint(equalToConstant: UX.noAnalysisImageViewSize.height)
         ])
     }
 
     @objc
     private func didTapStartAnalysis() {
         viewModel?.onTapStartAnalysis?()
+        updateLayoutForInProgress()
     }
 
-    func configure(_ viewModel: FakespotNoAnalysisCardViewModel) {
-        self.viewModel = viewModel
+    private func updateLayoutForInProgress() {
+        isAnalysisInProgress = true
 
-        headlineLabel.text = viewModel.headlineLabelText
-        headlineLabel.accessibilityIdentifier = viewModel.headlineLabelA11yId
+        contentStackView.removeArrangedSubview(analyzerButton)
+        analyzerButton.removeFromSuperview()
 
-        bodyLabel.text = viewModel.bodyLabelText
-        bodyLabel.accessibilityIdentifier = viewModel.bodyLabelA11yId
+        headlineLabel.text = viewModel?.inProgressHeadlineText
+        bodyLabel.text = viewModel?.inProgressBodyText
 
-        analyzerButton.setTitle(viewModel.analyzerButtonText, for: .normal)
-        analyzerButton.accessibilityIdentifier = viewModel.analyzerButtonA11yId
-
-        let cardModel = ShadowCardViewModel(view: mainView, a11yId: viewModel.cardA11yId)
-        cardContainer.configure(cardModel)
-    }
-
-    // MARK: - Theming System
-    func applyTheme(theme: Theme) {
-        cardContainer.applyTheme(theme: theme)
-        let colors = theme.colors
-        headlineLabel.textColor = colors.textPrimary
-        bodyLabel.textColor = colors.textPrimary
-        analyzerButton.setTitleColor(colors.textAccent, for: .normal)
+        titleStackView.insertArrangedSubview(activityIndicatorView, at: 0)
+        activityIndicatorView.startAnimating()
     }
 }
