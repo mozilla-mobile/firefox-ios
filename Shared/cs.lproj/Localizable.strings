@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Tady se zobrazí uložené přihlašovací údaje. Pokud jste si přihlašovací údaje uložili do Firefoxu na jiném zařízení, přihlaste se ke svému účtu Firefoxu.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Zde se zobrazí uložená přihlášení. Pokud jste přihlašovací údaje uložili do %@ na jiném zařízení, přihlaste se ke svému účtu.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Nenalezeny žádné přihlašovací údaje";
 

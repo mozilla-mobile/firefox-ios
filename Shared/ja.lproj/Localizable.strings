@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "保存されたログイン情報がここに表示されます。別の端末の Firefox で保存したログイン情報を表示するには、Firefox アカウントにログインしてください。";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "保存されたログイン情報がここに表示されます。別の端末の %@ で保存したログイン情報を表示するには、アカウントにログインしてください。";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ログイン情報はありません";
 
