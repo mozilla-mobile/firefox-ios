@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Les identifiants enregistrés apparaîtront ici. Si vous avez enregistré vos identifiants dans Firefox sur un autre appareil, connectez-vous à votre compte Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Les identifiants enregistrés apparaîtront ici. Si vous avez enregistré vos identifiants dans %@ sur un autre appareil, connectez-vous à votre compte.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Aucun identifiant trouvé";
 
