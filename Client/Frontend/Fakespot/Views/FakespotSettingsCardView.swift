@@ -65,7 +65,7 @@ class FakespotSettingsCardViewModel {
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLabelFontSize: CGFloat = 17
-        static let buttonLabelFontSize: CGFloat = 17
+        static let buttonLabelFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 14
         static let buttonLeadingTrailingPadding: CGFloat = 8
         static let buttonTopPadding: CGFloat = 16
@@ -217,7 +217,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         recommendedProductsSwitch.tintColor = colors.formKnob
 
         turnOffButton.backgroundColor = colors.actionSecondary
-        turnOffButton.setTitleColor(colors.textPrimary, for: .normal)
+        turnOffButton.setTitleColor(colors.textOnLight, for: .normal)
 
         footerView.applyTheme(theme: theme)
     }
