@@ -1577,7 +1577,18 @@ workflows:
 
             # Get the process ID of the backgrounded gsutil command
             PID=$!
-            sleep 60
+
+            TIMEOUT=60
+            CHECK_INTERVAL=5
+            ITERATIONS=$((TIMEOUT / CHECK_INTERVAL))
+
+            for ((i = 0; i < ITERATIONS; i++)); do
+                echo "Waiting for gsutil to complete..."
+                sleep $CHECK_INTERVAL
+                if ! ps -p $PID > /dev/null; then
+                    break
+                fi
+            done
 
             # if gsutil is still running after 60s, it is hanging and needs to be killed
             if ps -p $PID > /dev/null; then
