@@ -209,8 +209,8 @@ class TabTrayViewController: UIViewController,
             navigationItem.titleView = nil
         case .regular:
             navigationItem.titleView = segmentedControl
-            updateToolbarItems()
         }
+        updateToolbarItems()
     }
 
     // MARK: Themeable
