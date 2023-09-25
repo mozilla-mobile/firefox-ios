@@ -153,11 +153,9 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        if hasSyncableAccount {
-            return [flexibleSpace, syncTabButton]
-        } else {
-            return []
-        }
+        guard hasSyncableAccount else { return [] }
+
+        return [flexibleSpace, syncTabButton]
     }()
     
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
