@@ -35,7 +35,10 @@ class TabTrayViewController: UIViewController,
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
     // MARK: - Redux state
-    var layout: LegacyTabTrayViewModel.Layout = .compact
+    lazy var layout: LegacyTabTrayViewModel.Layout = {
+        return shouldUseiPadSetup() ? .regular : .compact
+    }()
+
     var selectedSegment: LegacyTabTrayViewModel.Segment = .tabs
 
     var isSyncTabsPanel: Bool {
@@ -75,7 +78,7 @@ class TabTrayViewController: UIViewController,
             LegacyTabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
             LegacyTabTrayViewModel.Segment.privateTabs.image!,
             LegacyTabTrayViewModel.Segment.syncedTabs.image!]
-        return shouldUseiPadSetup() ? LegacyTabTrayViewModel.Segment.allCases.map { $0.label } : iPhoneItems
+        return isRegularLayout ? LegacyTabTrayViewModel.Segment.allCases.map { $0.label } : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -163,6 +166,7 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupView()
         listenForThemeChange(view)
         updateToolbarItems()
@@ -176,8 +180,17 @@ class TabTrayViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        layout = shouldUseiPadSetup() ? .regular : .compact
         updateLayout()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        applyTheme()
+
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            updateLayout()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -193,7 +206,9 @@ class TabTrayViewController: UIViewController,
         case .compact:
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = [doneButton]
+            navigationItem.titleView = nil
         case .regular:
+            navigationItem.titleView = segmentedControl
             updateToolbarItems()
         }
     }
@@ -210,8 +225,8 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Private
     private func setupView() {
-        // iPad setup
-        guard shouldUseiPadSetup() else {
+        // Should use Regular layout used for iPad
+        guard isRegularLayout else {
             setupForiPhone()
             return
         }
@@ -252,7 +267,6 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        navigationController?.isToolbarHidden = false
         let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }

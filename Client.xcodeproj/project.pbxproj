@@ -130,6 +130,7 @@
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
+		21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */; };
 		21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */; };
 		21E77E502AA8BAEC00FABA10 /* TabTrayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4F2AA8BAEC00FABA10 /* TabTrayModel.swift */; };
 		21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */; };
@@ -761,7 +762,7 @@
 		8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */; };
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
-		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
+		8AFE4C2127480D0C00B97C65 /* LegacyTabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */; };
 		8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */; };
@@ -2156,6 +2157,7 @@
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
+		21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewControllerTests.swift; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewController.swift; sourceTree = "<group>"; };
 		21E77E4F2AA8BAEC00FABA10 /* TabTrayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayModel.swift; sourceTree = "<group>"; };
@@ -5089,7 +5091,7 @@
 		8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
 		8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinatorTests.swift; sourceTree = "<group>"; };
 		8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchFinishedLoadingDelegate.swift; sourceTree = "<group>"; };
-		8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayViewControllerTests.swift; sourceTree = "<group>"; };
+		8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyTabTrayViewControllerTests.swift; sourceTree = "<group>"; };
 		8B3245D190D4FA80C3B46EC8 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Search.strings"; sourceTree = "<group>"; };
 		8B674438A5487ABCD2DD7CA5 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8B6C441B9DAA1DDC100358D0 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -7284,6 +7286,17 @@
 				E4A961371AC06FA50069AD6F /* ReaderViewLoading.html */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		21D8EA942ABE0511003FF16E /* TabTray */ = {
+			isa = PBXGroup;
+			children = (
+				8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */,
+				8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */,
+				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
+				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
+			);
+			path = TabTray;
 			sourceTree = "<group>";
 		};
 		23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */ = {
@@ -10454,12 +10467,10 @@
 				2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
 				C83B7DD129BBAF52005565C2 /* SurveySurface */,
-				8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */,
-				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
+				21D8EA942ABE0511003FF16E /* TabTray */,
 				8AED868428CA7B1200351A50 /* TabManagement */,
 				D525DFB225FBE5E000B18763 /* TabTests.swift */,
 				D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */,
-				8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
@@ -12988,6 +12999,7 @@
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
 				5AF6254928A58BB400A90253 /* MockHistoryHighlightsDelegate.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
+				21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */,
 				AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */,
 				8C8D8C822AA2229300490D32 /* FakespotViewModelTests.swift in Sources */,
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
@@ -13172,7 +13184,7 @@
 				8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */,
 				C8699153289177FB007ACC5C /* WallpaperDataServiceTests.swift in Sources */,
 				C23889E32A50319A00429673 /* ShareExtensionCoordinatorTests.swift in Sources */,
-				8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */,
+				8AFE4C2127480D0C00B97C65 /* LegacyTabTrayViewControllerTests.swift in Sources */,
 				E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */,
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,

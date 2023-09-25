@@ -10,7 +10,7 @@ import XCTest
 import Common
 import Shared
 
-class TabTrayViewControllerTests: XCTestCase {
+class LegacyTabTrayViewControllerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: TabManager!
     var tabTray: LegacyTabTrayViewController!
