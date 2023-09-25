@@ -10016,13 +10016,13 @@
 		E1D3FFAF2A66A9BD002D31EF /* Fakespot */ = {
 			isa = PBXGroup;
 			children = (
+				8C92DE942A7128FB0090BD28 /* Client */,
 				E16258F02A83D5DE00522742 /* Views */,
 				E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */,
-				E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */,
 				AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */,
+				E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */,
 				E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */,
 				8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */,
-				8C92DE942A7128FB0090BD28 /* Client */,
 			);
 			path = Fakespot;
 			sourceTree = "<group>";
