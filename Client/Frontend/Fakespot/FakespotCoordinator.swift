@@ -38,6 +38,7 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
             if let sheet = fakespotViewController.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
 
+                // Show onboarding in full height
                 if !isOptedIn {
                     sheet.selectedDetentIdentifier = .large
                 }
