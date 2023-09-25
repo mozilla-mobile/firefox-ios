@@ -44,6 +44,13 @@ class TabTrayViewController: UIViewController,
     var isSyncTabsPanel: Bool {
         return selectedSegment == .syncedTabs
     }
+    
+    var hasSyncableAccount: Bool {
+        // Temporary. Added for early testing.
+        // Eventually we will update this to use Redux state. -mr
+        guard let profile = (UIApplication.shared.delegate as? AppDelegate)?.profile else { return false }
+        return profile.hasSyncableAccount()
+    }
 
     // iPad Layout
     var isRegularLayout: Bool {
@@ -146,8 +153,20 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        return [flexibleSpace, syncTabButton]
+        if hasSyncableAccount {
+            return [flexibleSpace, syncTabButton]
+        } else {
+            return []
+        }
     }()
+    
+    private var rightBarButtonItemsForSync: [UIBarButtonItem] {
+        if hasSyncableAccount {
+            return [doneButton, fixedSpace, syncTabButton]
+        } else {
+            return [doneButton]
+        }
+    }
 
     init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -272,14 +291,13 @@ class TabTrayViewController: UIViewController,
     }
 
     private func setupToolbarForIpad() {
-        guard !isSyncTabsPanel else {
+        if isSyncTabsPanel {
             navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItem = syncTabButton
-            return
+            navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
+        } else {
+            navigationItem.leftBarButtonItem = deleteButton
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
-
-        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
-        navigationItem.leftBarButtonItem = deleteButton
     }
 
     private func createSegmentedControl(
