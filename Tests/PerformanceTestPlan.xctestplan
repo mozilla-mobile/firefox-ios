@@ -16,7 +16,7 @@
       "skippedTests" : [
         "ActivityStreamTest",
         "AuthenticationTest",
-        "BookmarkingTests",
+        "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
         "CopiedLinksTests",
