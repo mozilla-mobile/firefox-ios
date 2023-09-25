@@ -29,7 +29,7 @@ struct FakespotHighlightsCardViewModel {
     var shouldShowMoreButton: Bool {
         guard let firstItem = highlights.first else { return false }
 
-        return highlights.count > 1 || firstItem.reviews.count ?? 0 > 1
+        return highlights.count > 1 || firstItem.reviews.count > 1
     }
 
     var shouldShowFadeInPreview: Bool {
