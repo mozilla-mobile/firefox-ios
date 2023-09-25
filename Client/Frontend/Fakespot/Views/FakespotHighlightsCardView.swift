@@ -203,7 +203,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         let shouldShowFade = isShowingPreview && viewModel?.shouldShowFadeInPreview ?? false
         let groupsToShow = isShowingPreview ? highlightPreviewGroups : highlightGroups
 
-        for (index, group) in groupsToShow.enumerated() {
+        for (_, group) in groupsToShow.enumerated() {
             highlightStackView.addArrangedSubview(group)
             group.showPreview(isShowingPreview, showFade: shouldShowFade)
         }

@@ -8,13 +8,11 @@ import Common
 @testable import Client
 
 final class FakespotHighlightsCardViewModelTests: XCTestCase {
-    private var viewModel: FakespotHighlightsCardViewModel!
-
     func testShowMore_MultipleGroups() {
         var highlights = [FakespotHighlightGroup]()
         highlights.append(createGroup(type: .price, numberOfReviews: 2))
         highlights.append(createGroup(type: .packaging, numberOfReviews: 2))
-        var viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
+        let viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
 
         XCTAssertEqual(viewModel.shouldShowMoreButton, true)
         XCTAssertEqual(viewModel.shouldShowFadeInPreview, true)
@@ -23,7 +21,7 @@ final class FakespotHighlightsCardViewModelTests: XCTestCase {
     func testShowMore_OneGroupMultipleReviews() {
         var highlights = [FakespotHighlightGroup]()
         highlights.append(createGroup(type: .price, numberOfReviews: 2))
-        var viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
+        let viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
 
         XCTAssertEqual(viewModel.shouldShowMoreButton, true)
         XCTAssertEqual(viewModel.shouldShowFadeInPreview, true)
@@ -32,7 +30,7 @@ final class FakespotHighlightsCardViewModelTests: XCTestCase {
     func testShowMore_OneGroupOneReviews() {
         var highlights = [FakespotHighlightGroup]()
         highlights.append(createGroup(type: .price, numberOfReviews: 1))
-        var viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
+        let viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
 
         XCTAssertEqual(viewModel.shouldShowMoreButton, false)
         XCTAssertEqual(viewModel.shouldShowFadeInPreview, false)
@@ -42,7 +40,7 @@ final class FakespotHighlightsCardViewModelTests: XCTestCase {
         var highlights = [FakespotHighlightGroup]()
         highlights.append(createGroup(type: .price, numberOfReviews: 1))
         highlights.append(createGroup(type: .packaging, numberOfReviews: 1))
-        var viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
+        let viewModel = FakespotHighlightsCardViewModel(highlights: highlights)
 
         XCTAssertEqual(viewModel.shouldShowMoreButton, true)
         XCTAssertEqual(viewModel.shouldShowFadeInPreview, true)
