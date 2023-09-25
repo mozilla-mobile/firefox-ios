@@ -30,6 +30,9 @@ class TabTrayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     weak var  delegate: TabTrayViewControllerDelegate?
     private var titleWidthConstraint: NSLayoutConstraint?
+    private var containerView: UIView = .build { view in }
+    private var compactContainerTopConstraint: NSLayoutConstraint!
+    private var regularContainerTopConstraint: NSLayoutConstraint!
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
@@ -257,10 +260,19 @@ class TabTrayViewController: UIViewController,
         view.addSubview(navigationToolbar)
         navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
 
+        view.addSubviews(containerView)
+        compactContainerTopConstraint = containerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor)
+        regularContainerTopConstraint = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+
         NSLayoutConstraint.activate([
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            compactContainerTopConstraint,
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -340,7 +352,39 @@ class TabTrayViewController: UIViewController,
         return button
     }
 
-    private func segmentPanelChange() {}
+    // MARK: Child panels
+    private func showPanel(_ panel: UIViewController) {
+//        addChild(panel)
+//        panel.beginAppearanceTransition(true, animated: true)
+//        containerView.addSubview(panel.view)
+//        containerView.bringSubviewToFront(navigationToolbar)
+//        panel.endAppearanceTransition()
+//        panel.view.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+//            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+//            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+//            panel.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+//        ])
+//
+//        panel.didMove(toParent: self)
+//        updateTitle()
+    }
+
+    private func hideCurrentPanel() {
+//        if let panel = children.first {
+//            panel.willMove(toParent: nil)
+//            panel.beginAppearanceTransition(false, animated: true)
+//            panel.view.removeFromSuperview()
+//            panel.endAppearanceTransition()
+//            panel.removeFromParent()
+//        }
+    }
+
+    private func segmentPanelChange() {
+        
+    }
 
     @objc
     private func segmentChanged() {
