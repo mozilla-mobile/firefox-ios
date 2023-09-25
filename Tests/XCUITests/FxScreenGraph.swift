@@ -465,24 +465,29 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(MobileBookmarksEdit) { screenState in
-        screenState.tap(app.buttons["Add"], to: MobileBookmarksAdd)
+        screenState.tap(app.buttons["libraryPanelBottomLeftButton"], to: MobileBookmarksAdd)
         screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            app.buttons[StandardImageIdentifiers.Large.delete].tap()
+            if app.buttons["Delete Test Folder"].exists {
+                app.buttons["Delete Test Folder"].tap()
+                app.buttons["Delete"].tap()
+            } else {
+                app.buttons["Delete"].tap()
+            }
         }
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
         screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
-            app.tables.cells[StandardImageIdentifiers.Large.bookmark].tap()
+            app.otherElements["New Bookmark"].tap()
         }
         screenState.gesture(forAction: Action.AddNewFolder) { userState in
-            app.tables.cells["bookmarkFolder"].tap()
+            app.otherElements["New Folder"].tap()
         }
         screenState.gesture(forAction: Action.AddNewSeparator) { userState in
-            app.tables.cells["nav-menu"].tap()
+            app.otherElements["New Separator"].tap()
         }
     }
 
