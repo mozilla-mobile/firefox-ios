@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਹੈ। ਵਧਾਈ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਬੰਦ ਹੈ।";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਹੈ। ਵਧਾਈ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਬੰਦ ਹੈ।";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਹੈ";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "ਇਹ ਸਫ਼ੇ ਨੂੰ ਸਾਂਝਾ ਕਰੋ";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "ਪੜਤਾਲ ਜਾਂਚਕਰਤਾ";
+

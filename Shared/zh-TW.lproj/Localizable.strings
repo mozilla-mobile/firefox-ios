@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "儲存的登入資訊將顯示於此處。若您在其他裝置上儲存了登入資訊，請登入您的 Firefox 帳號。";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "儲存的登入資訊將顯示於此處。若您在其他裝置將登入資訊儲存到 %@，請登入帳號。";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "找不到登入資訊";
 
