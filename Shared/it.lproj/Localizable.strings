@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Le credenziali salvate verranno visualizzate qui. Se hai salvato le tue credenziali in Firefox su un dispositivo diverso, accedi al tuo account Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Le credenziali salvate verranno visualizzate qui. Se hai salvato i tuoi dati di accesso in %@ su un altro dispositivo, accedi al tuo account.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Nessuna credenziale salvata";
 

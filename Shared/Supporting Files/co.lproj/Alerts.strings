@@ -8,5 +8,5 @@
 "Alerts.RestoreTabs.Message.v109" = "Chì peccatu ! Risturà l’unghjette per ripiglià induve vi site piantati.";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
-"Alerts.RestoreTabs.Title.v109.v2" = "%@ s’hè lampatu ! Risturà e vostre unghjette ?";
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ s’hè lampatu. Risturà e vostre unghjette ?";
 

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Thông tin đăng nhập đã lưu sẽ hiển thị ở đây. Nếu bạn đã lưu thông tin đăng nhập của mình vào Firefox trên một thiết bị khác, hãy đăng nhập vào tài khoản Firefox của bạn.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Thông tin đăng nhập đã lưu sẽ hiển thị ở đây. Nếu bạn đã lưu thông tin đăng nhập của mình vào %@ trên thiết bị khác, hãy đăng nhập vào tài khoản của bạn.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Không tìm thấy thông tin đăng nhập";
 

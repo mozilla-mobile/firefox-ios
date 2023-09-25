@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Сақталған логиндер осында көрсетіледі. Егер сіз логинді басқа құрылғыда Firefox-қа сақтаған болсаңыз, Firefox тіркелгіңізге кіріңіз.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Сақталған логиндер осында көрсетіледі. Егер сіз логинді басқа құрылғыда %@ ішінде сақтаған болсаңыз, өз тіркелгіңізге кіріңіз.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Логиндер табылмады";
 

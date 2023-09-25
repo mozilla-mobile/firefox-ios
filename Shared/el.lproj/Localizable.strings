@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Οι αποθηκευμένες συνδέσεις θα εμφανίζονται εδώ. Εάν αποθηκεύσατε τις συνδέσεις σας στο Firefox διαφορετικής συσκευής, συνδεθείτε στον λογαριασμό Firefox σας.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Οι αποθηκευμένες συνδέσεις θα εμφανίζονται εδώ. Εάν αποθηκεύσατε τις συνδέσεις σας στο %@ κάποιας άλλης συσκευής, συνδεθείτε στον λογαριασμό σας.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Δεν βρέθηκαν συνδέσεις";
 

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Kaydedilen hesaplar burada görünecektir. Hesaplarınızı farklı bir cihazda Firefox’a kaydettiyseniz Firefox hesabınıza giriş yapın.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Kaydedilen hesaplar burada görünecektir. Hesaplarınızı farklı bir cihazda %@’a kaydettiyseniz hesabınıza giriş yapın.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Hiç hesap bulunamadı";
 

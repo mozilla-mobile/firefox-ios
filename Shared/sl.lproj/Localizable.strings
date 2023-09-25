@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Tukaj se bodo prikazale shranjene prijave. Če ste prijave shranili v Firefox na drugi napravi, se prijavite v Firefox Račun.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Tukaj se bodo prikazale shranjene prijave. Če ste prijave shranili v %@ na drugi napravi, se prijavite v račun.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Ni prijav";
 
