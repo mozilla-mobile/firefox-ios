@@ -1597,7 +1597,7 @@ workflows:
 
                 rm -rf ./test_firebase_xcresult
                 mkdir ./test_firebase_xcresult
-                echo "Retrying xcresult copy without multithreading..."
+                echo "Retrying xcresult copy without multi-processing..."
                 $HOME/google-cloud-sdk/bin/gsutil cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
             fi
 
