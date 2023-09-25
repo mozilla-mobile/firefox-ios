@@ -1547,13 +1547,17 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
+            # Firebase returns a non-zero exit code on test failure, which causes the script to exit
+            #     leaving FIREBASE_XCRESULT_PATH empty for the next step.
+            # We need to ignore any non-zero exit code for now until Firebase issues are fixed
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
-                --results-dir="$RESULTS_DIR")
+                --results-dir="$RESULTS_DIR" || true)
+
 
             FIREBASE_XCRESULT_PATH=$($HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult")
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
