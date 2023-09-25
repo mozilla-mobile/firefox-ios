@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "optInCard.png",
+      "filename" : "mobile iOS opt-in 1x 280x160 light 72dpi.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "optInCard 1.png",
+      "filename" : "mobile iOS opt-in 1x 280x160 dark 72dpi.png",
       "idiom" : "universal"
     }
   ],
