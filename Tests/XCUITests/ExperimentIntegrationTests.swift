@@ -62,4 +62,19 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("1", tabsOpen as? String)
     }
+
+    func testMessageLandscapeUILooksCorrect() throws {
+        XCUIDevice.shared.orientation = .landscapeLeft
+
+        let surveyLink = app.buttons.matching(
+            NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
+        )
+        let dismissLink = app.buttons.matching(
+            NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
+        )
+
+        wait(forElement: surveyLink.element, timeout: 15)
+        surveyLink.element.tap()
+        mozWaitForValueContains(app.textFields["url"], value: "survey")
+    }
 }
