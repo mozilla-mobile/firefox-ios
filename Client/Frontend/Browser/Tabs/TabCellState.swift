@@ -17,9 +17,7 @@ struct TabCellState {
     let hasHomeScreenshot: Bool // TBD.
 
     let margin: CGFloat // (Changes depending on fullscreen)
-}
 
-extension TabCellState {
     static func emptyTabState() -> TabCellState {
         return TabCellState(isSelected: false,
                             isPrivate: false,
