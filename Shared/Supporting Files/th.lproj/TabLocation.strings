@@ -1,0 +1,9 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "การเชื่อมต่อไม่ปลอดภัย";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "การเชื่อมต่อปลอดภัย";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "แบ่งปันหน้านี้";
+

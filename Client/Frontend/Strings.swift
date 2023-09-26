@@ -2240,8 +2240,8 @@ extension String {
     public static let FxAFirefoxAccount = MZLocalizedString(
         key: "FxA.FirefoxAccount.v119",
         tableName: "Settings",
-        value: "account",
-        comment: "Settings section title for account")
+        value: "Account",
+        comment: "Settings section title for the old Firefox account")
     public static let FxAManageAccount = MZLocalizedString(
         key: "FxA.ManageAccount",
         tableName: nil,
@@ -2266,7 +2266,7 @@ extension String {
     public static let FxASettingsTitle = MZLocalizedString(
         key: "Settings.FxA.Title.v119",
         tableName: "Settings",
-        value: "account",
+        value: "Account",
         comment: "Title displayed in header of the FxA settings panel.")
     public static let FxASettingsSyncSettings = MZLocalizedString(
         key: "Settings.FxA.Sync.SectionName",
@@ -3543,7 +3543,7 @@ extension String {
         key: "SendTo.NotSignedIn.Title.v119",
         tableName: "Share",
         value: "You are not signed in to your account.",
-        comment: "See http://mzl.la/1ISlXnU")
+        comment: "This message appears when a user tries to use 'Send Link to Device' action while not logged in")
     public static let SendToNotSignedInMessage = MZLocalizedString(
         key: "SendTo.NotSignedIn.Message",
         tableName: nil,
@@ -3733,7 +3733,7 @@ extension String {
         public static let SettingsCardTurnOffButton = MZLocalizedString(
             key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
             tableName: "Shopping",
-            value: "Turn Off Review Quality Check",
+            value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118
@@ -3753,18 +3753,28 @@ extension String {
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
             tableName: "Shopping",
-            value: "No analysis for these reviews, yet",
+            value: "No info about these reviews yet",
             comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
             tableName: "Shopping",
-            value: "Launch the Fakespot by Mozilla analyzer and you’ll know in about 60 seconds whether this product’s reviews are reliable.",
+            value: "To know whether this product’s reviews are reliable, check the review quality. It only takes about 60 seconds.",
             comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
             tableName: "Shopping",
-            value: "Launch analyzer on Fakespot.com",
+            value: "Check Review Quality",
             comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Headline.Title.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+        public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
+            key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v118
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Label.Title.v119
             tableName: "Shopping",
@@ -3890,6 +3900,16 @@ extension String {
             tableName: "Shopping",
             value: "Unfortunately, we can’t check the review quality for certain types of products. For example, gift cards and streaming video, music, and games.",
             comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
+        public static let InfoCardNotEnoughReviewsTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Title.v119
+            tableName: "Shopping",
+            value: "Not Enough Reviews Yet",
+            comment: "Title for info card when there are not enough reviews for a product")
+        public static let InfoCardNotEnoughReviewsDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Description.v119
+            tableName: "Shopping",
+            value: "When this product has more reviews, we’ll be able to analyze them.",
+            comment: "Description for info card when there are not enough reviews for a product")
     }
 }
 
@@ -5345,8 +5365,8 @@ extension String {
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
         key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your account.",
-        comment: "Label shown when there are no logins to list")
+        value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
+        comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
         tableName: nil,

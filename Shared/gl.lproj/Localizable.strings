@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Os inicios de sesión gardados aparecerán aquí. Se gardou os seus inicios de sesión en Firefox nun dispositivo diferente, inicie sesión na súa conta de Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Os inicios de sesión gardados aparecerán aquí. Se gardou os seus inicios de sesión en %@ nun dispositivo diferente, inicie sesión na súa conta.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Non se atoparon inicios de sesión";
 

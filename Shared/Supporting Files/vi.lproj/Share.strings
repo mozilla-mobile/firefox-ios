@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Bạn không có sẵn bất kỳ thiết bị nào khác được kết nối với tài khoản này để đồng bộ hóa.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Bạn chưa đăng nhập vào tài khoản của mình.";
+

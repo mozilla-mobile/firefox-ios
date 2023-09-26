@@ -449,7 +449,7 @@
 "HistoryPanel.EmptyState.Title" = "මෑතදී ගොඩවැදුණු වියමන අඩවි මෙහි පෙන්වනු ඇත.";
 
 /* Description for the empty synced tabs null state in the History Panel */
-"HistoryPanel.EmptySyncedTabsNullState.Description" = "වෙනත් උපාංගවලින් ඔබගේ පටිති මෙහි පෙන්වයි.";
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "ඔබගේ වෙනත් උපාංගවල පටිති මෙහි පෙන්වයි.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "වෙනත් උපාංගයන්ගෙන් පටිති ලේඛනය බැලිමට ඇතුළු වන්න.";
@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ හි සියළුම අඩවි මකන්නද?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ඉතිහාසය (අන් උපාංග වලින් සමමුහූර්ත ඉතිහාසය ද), දත්තකඩ හා වෙනත් පිරික්සුම් දත්ත ඉවත් කරයි.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ඉතිහාසය (අනෙකුත් උපාංග වලින් සමමුහූර්ත ඉතිහාසය ද), දත්තකඩ හා වෙනත් පිරික්සුම් දත්ත ඉවත් කරයි.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "මකන්න";
@@ -1019,7 +1019,7 @@
 "Search" = "සොයන්න";
 
 /* The text shown in the URL bar on about:home */
-"Search or enter address" = "ලිපිනය යොදන්න හෝ සොයන්න";
+"Search or enter address" = "ලිපිනය ලියන්න හෝ සොයන්න";
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "පටිත්තට මාරුවන්න";
@@ -1700,7 +1700,7 @@
 "The page could not be displayed in Reader View." = "පිටුව කියවන දැක්මෙහි දර්ශනය කළ නොහැකිය.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ඔබගේ අනෙකුත් උපාංගවලින් පටිති වෙත ප්‍රවේශ වීමේ ගැටළුවක් මතු විය. සුළු මොහොතකින් නැවත උත්සාහ කරන්න.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ඔබගේ අනෙකුත් උපාංගවල පටිති වෙත ප්‍රවේශ වීමේ ගැටළුවක් මතු විය. සුළු මොහොතකින් නැවත උත්සාහ කරන්න.";
 
 /* Error displayed when reader mode cannot be enabled */
 "There was an error converting the page" = "පිටුව හැරවීමේදී දෝෂයක් ඇති විය";
@@ -1799,7 +1799,7 @@
 "Yesterday" = "ඊයේ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "ඔබගේ අනෙකුත් උපාංගවල ෆයර්ෆොක්ස් හි පටිති කිසිවක් විවෘත කර නැත.";
+"You don’t have any tabs open in Firefox on your other devices." = "ඔබගේ අනෙකුත් උපාංගවල ෆයර්ෆොක්ස් පටිති කිසිවක් විවෘත කර නැත.";
 
 /* Your Rights settings section title */
 "Your Rights" = "ඔබගේ අයිතීන්";

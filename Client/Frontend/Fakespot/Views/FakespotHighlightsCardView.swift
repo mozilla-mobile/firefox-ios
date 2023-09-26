@@ -15,26 +15,25 @@ struct FakespotHighlightsCardViewModel {
     let lessButtonTitle: String = .Shopping.HighlightsCardLessButtonTitle
     let lessButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.lessButton
 
-    let highlights: Highlights
+    let highlights: [FakespotHighlightGroup]
 
     var highlightGroupViewModels: [FakespotHighlightGroupViewModel] {
         var highlightGroups: [FakespotHighlightGroupViewModel] = []
 
-        if !highlights.price.isEmpty {
-            highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: FakespotHighlightGroup(type: .price, reviews: highlights.price)))
-        }
-
-        if !highlights.quality.isEmpty {
-            highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: FakespotHighlightGroup(type: .quality, reviews: highlights.quality)))
-        }
-
-        if !highlights.competitiveness.isEmpty {
-            highlightGroups.append(FakespotHighlightGroupViewModel(
-                highlightGroup: FakespotHighlightGroup(type: .competitiveness, reviews: highlights.competitiveness)))
+        highlights.forEach { group in
+            highlightGroups.append(FakespotHighlightGroupViewModel(highlightGroup: group))
         }
         return highlightGroups
+    }
+
+    var shouldShowMoreButton: Bool {
+        guard let firstItem = highlights.first else { return false }
+
+        return highlights.count > 1 || firstItem.reviews.count > 1
+    }
+
+    var shouldShowFadeInPreview: Bool {
+        shouldShowMoreButton
     }
 }
 
@@ -47,8 +46,10 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         static let buttonVerticalInset: CGFloat = 12
         static let contentHorizontalSpace: CGFloat = 8
         static let contentTopSpace: CGFloat = 8
+        static let contentStackSpacing: CGFloat = 8
         static let highlightSpacing: CGFloat = 16
         static let highlightStackBottomSpace: CGFloat = 16
+        static let dividerHeight: CGFloat = 1
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
@@ -60,6 +61,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             withTextStyle: .headline,
             size: UX.titleFontSize)
         label.numberOfLines = 0
+    }
+
+    private lazy var contentStackView: UIStackView = .build { view in
+        view.axis = .vertical
+        view.spacing = UX.contentStackSpacing
     }
 
     private lazy var highlightStackView: UIStackView = .build { view in
@@ -82,8 +88,10 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     }
 
     private lazy var dividerView: UIView = .build()
+    private var contentStackBottomConstraint: NSLayoutConstraint?
 
     private var highlightGroups: [FakespotHighlightGroupView] = []
+    private var highlightPreviewGroups: [FakespotHighlightGroupView] = []
     private var viewModel: FakespotHighlightsCardViewModel?
     private var isShowingPreview = true
 
@@ -108,6 +116,9 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             highlightGroup.configure(viewModel: viewModel)
             highlightGroups.append(highlightGroup)
         }
+        if let firstItem = highlightGroups.first {
+            highlightPreviewGroups = [firstItem]
+        }
         updateHighlights()
 
         titleLabel.text = viewModel.title
@@ -115,6 +126,15 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
         moreButton.setTitle(viewModel.moreButtonTitle, for: .normal)
         moreButton.accessibilityIdentifier = viewModel.moreButtonA11yId
+
+        if !viewModel.shouldShowMoreButton {
+            // remove divider & button and adjust bottom spacing
+            for view in [dividerView, moreButton] {
+                contentStackView.removeArrangedSubview(view)
+                view.removeFromSuperview()
+            }
+            contentStackBottomConstraint?.constant = -UX.highlightStackBottomSpace
+        }
     }
 
     func applyTheme(theme: Theme) {
@@ -129,11 +149,16 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
+        contentStackView.addArrangedSubview(highlightStackView)
+        contentStackView.addArrangedSubview(dividerView)
+        contentStackView.addArrangedSubview(moreButton)
+        contentStackView.setCustomSpacing(UX.highlightStackBottomSpace, after: highlightStackView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(highlightStackView)
-        contentView.addSubview(dividerView)
-        contentView.addSubview(moreButton)
+        contentView.addSubview(contentStackView)
         addSubview(cardContainer)
+
+        contentStackBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        contentStackBottomConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -146,23 +171,13 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.contentTopSpace),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -UX.contentHorizontalSpace),
-            titleLabel.bottomAnchor.constraint(equalTo: highlightStackView.topAnchor, constant: -UX.highlightSpacing),
+            titleLabel.bottomAnchor.constraint(equalTo: contentStackView.topAnchor, constant: -UX.highlightSpacing),
 
-            highlightStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                        constant: UX.contentHorizontalSpace),
-            highlightStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                         constant: -UX.contentHorizontalSpace),
-            highlightStackView.bottomAnchor.constraint(equalTo: dividerView.topAnchor,
-                                                       constant: -UX.highlightStackBottomSpace),
-
-            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            dividerView.bottomAnchor.constraint(equalTo: moreButton.topAnchor, constant: -8),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
-
-            moreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            moreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                      constant: UX.contentHorizontalSpace),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                       constant: -UX.contentHorizontalSpace),
+            dividerView.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
         ])
     }
 
@@ -185,12 +200,12 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     private func updateHighlights() {
         highlightStackView.removeAllArrangedViews()
+        let shouldShowFade = isShowingPreview && viewModel?.shouldShowFadeInPreview ?? false
+        let groupsToShow = isShowingPreview ? highlightPreviewGroups : highlightGroups
 
-        for (index, group) in highlightGroups.enumerated() {
-            guard (isShowingPreview && index == 0) || !isShowingPreview else { return }
-
+        for (_, group) in groupsToShow.enumerated() {
             highlightStackView.addArrangedSubview(group)
-            group.showPreview(isShowingPreview)
+            group.showPreview(isShowingPreview, showFade: shouldShowFade)
         }
     }
 

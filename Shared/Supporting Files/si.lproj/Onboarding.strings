@@ -38,7 +38,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "දැනුම්දීම් සක්‍රිය කරන්න";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "ඔබ නතර කළ තැනින් අතට ගැනීමට ඔබගේ අනෙකුත් උපාංගවලින් පටිති සහ මුරපද ගන්න.";
+"Onboarding.Sync.Description.v114" = "ඔබ නතර කළ තැනින් අතට ගැනීමට ඔබගේ අනෙකුත් උපාංගවල පටිති සහ මුරපද අරගන්න.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "පිවිසෙන්න";

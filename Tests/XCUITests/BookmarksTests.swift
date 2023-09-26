@@ -9,10 +9,8 @@ let url_1 = "test-example.html"
 let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
 let urlLabelExample_3 = "Example Domain"
 let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
-let urlLabelExample_4 = "Example Login Page 2"
-let url_4 = "test-password-2.html"
 
-class BookmarkingTests: BaseTestCase {
+class BookmarksTests: BaseTestCase {
     private func checkBookmarked() {
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
@@ -44,6 +42,7 @@ class BookmarkingTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302739
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.nowAt(NewTabScreen)
@@ -88,15 +87,22 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
     }
 
-    private func checkItemInBookmarkList() {
+    private func checkItemInBookmarkList(oneItemBookmarked: Bool) {
         mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
         let bookmarksList = app.tables["Bookmarks List"]
         let list = bookmarksList.cells.count
-        XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
-        XCTAssertTrue(bookmarksList.cells.element(boundBy: 0).staticTexts["Desktop Bookmarks"].exists)
-        XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[url_2["bookmarkLabel"]!].exists)
+        if oneItemBookmarked == true {
+            XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
+            XCTAssertTrue(bookmarksList.cells.element(boundBy: 0).staticTexts["Desktop Bookmarks"].exists)
+            XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[url_2["bookmarkLabel"]!].exists)
+        } else {
+            XCTAssertEqual(list, 3, "There should be an entry in the bookmarks list")
+            XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[urlLabelExample_3].exists)
+            XCTAssertTrue(bookmarksList.cells.element(boundBy: 2).staticTexts[url_2["bookmarkLabel"]!].exists)
+        }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302741
     func testAccessBookmarksFromContextMenu() {
         // Add a bookmark
         navigator.nowAt(NewTabScreen)
@@ -108,9 +114,10 @@ class BookmarkingTests: BaseTestCase {
 
         // There should be a bookmark
         navigator.goto(LibraryPanel_Bookmarks)
-        checkItemInBookmarkList()
+        checkItemInBookmarkList(oneItemBookmarked: true)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302746
     // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -150,65 +157,77 @@ class BookmarkingTests: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts["mozilla.org"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303040
     func testAddBookmark() {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 0).tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 1).tap()
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303041
     func testAddNewFolder() {
-        navigator.goto(MobileBookmarks)
-        navigator.goto(MobileBookmarksAdd)
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewFolder)
-        mozWaitForElementToExist(app.navigationBars["New Folder"])
+        mozWaitForElementToExist(app.navigationBars["Bookmarks"])
         // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("Test Folder")
+        app.tables.cells.textFields.element(boundBy: 0).tap()
+        app.tables.cells.textFields.element(boundBy: 0).typeText("Test Folder")
         app.buttons["Save"].tap()
         app.buttons["Done"].tap()
-        checkItemsInBookmarksList(items: 1)
+        checkItemsInBookmarksList(items: 2)
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons[StandardImageIdentifiers.Large.delete])
+        mozWaitForElementToExist(app.buttons["Delete Test Folder"])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        checkItemsInBookmarksList(items: 0)
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        checkItemsInBookmarksList(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303042
     func testAddNewMarker() {
-        navigator.goto(MobileBookmarks)
-        navigator.goto(MobileBookmarksAdd)
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewSeparator)
         app.buttons["Done"].tap()
-        checkItemsInBookmarksList(items: 1)
+        // There is one item plus the default Desktop Bookmarks folder
+        checkItemsInBookmarksList(items: 2)
 
         // Remove it
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons[StandardImageIdentifiers.Large.delete])
+        mozWaitForElementToExist(app.buttons["Delete"])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        checkItemsInBookmarksList(items: 0)
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        checkItemsInBookmarksList(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303043
     func testDeleteBookmarkSwiping() {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons[StandardImageIdentifiers.Large.delete].tap()
-        checkItemsInBookmarksList(items: 0)
+        app.buttons["Delete"].tap()
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        checkItemsInBookmarksList(items: 1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303044
     func testDeleteBookmarkContextMenu() {
         addNewBookmark()
         // Remove by long press and select option from context menu
-        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells[StandardImageIdentifiers.Large.bookmarkSlash].tap()
-        checkItemsInBookmarksList(items: 0)
-    }*/
+        app.tables.otherElements["Remove Bookmark"].tap()
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        checkItemsInBookmarksList(items: 1)
+    }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302748
+    // Smoketest
     func testUndoDeleteBookmark() {
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
@@ -220,18 +239,20 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func addNewBookmark() {
-        navigator.goto(MobileBookmarksAdd)
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewBookmark)
-        mozWaitForElementToExist(app.navigationBars["New Bookmark"], timeout: 3)
+        mozWaitForElementToExist(app.navigationBars["Bookmarks"], timeout: 3)
         // Enter the bookmarks details
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("BBC")
+        app.tables.cells.textFields.element(boundBy: 0).tap()
+        app.tables.cells.textFields.element(boundBy: 0).typeText("BBC")
 
-        app.tables["SiteTable"].cells.textFields["https://"].tap()
-        app.tables["SiteTable"].cells.textFields["https://"].typeText("bbc.com")
+        app.tables.cells.textFields["https://"].tap()
+        app.tables.cells.textFields["https://"].typeText("bbc.com")
         navigator.performAction(Action.SaveCreatedBookmark)
         app.buttons["Done"].tap()
-        checkItemsInBookmarksList(items: 1)
+        // There is one item plus the default Desktop Bookmarks folder
+        checkItemsInBookmarksList(items: 2)
     }
 
     private func checkItemsInBookmarksList(items: Int) {
@@ -245,6 +266,7 @@ class BookmarkingTests: BaseTestCase {
         app.textFields["address"].typeText(text)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302781
     // Smoketest
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
@@ -277,12 +299,14 @@ class BookmarkingTests: BaseTestCase {
             app.tables.otherElements["Remove Bookmark"].tap()
         } else {
             app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-            app.buttons[StandardImageIdentifiers.Large.delete].tap()
+            app.buttons["Delete"].tap()
         }
         mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302782
+    // Smoketest
     func testDesktopFoldersArePresent() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         navigator.nowAt(NewTabScreen)
@@ -296,5 +320,21 @@ class BookmarkingTests: BaseTestCase {
         app.tables["Bookmarks List"].cells.firstMatch.tap()
         mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/361719
+    func testRecentlyBookmarked() {
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitForTabsButton()
+        bookmark()
+        navigator.goto(LibraryPanel_Bookmarks)
+        checkItemInBookmarkList(oneItemBookmarked: true)
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(NewTabScreen)
+        navigator.openURL(path(forTestPage: url_1))
+        waitForTabsButton()
+        bookmark()
+        navigator.goto(LibraryPanel_Bookmarks)
+        checkItemInBookmarkList(oneItemBookmarked: false)
     }
 }
