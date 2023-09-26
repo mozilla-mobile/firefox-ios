@@ -10,17 +10,30 @@ import SiteImageView
 
 /// WIP. Defines tab-sepcific state that is reflected in the new TabCell.
 struct TabCellState {
-    let isSelected = false
-    let isPrivate = false
-    let isFxHomeTab = false
+    let isSelected: Bool
+    let isPrivate: Bool
+    let isFxHomeTab: Bool
 
-    let tabTitle: String = ""
-    let url: URL? = nil
+    let tabTitle: String
+    let url: URL?
 
-    let screenshot: UIImage? = nil // TBD.
-    let hasHomeScreenshot = false // TBD.
+    let screenshot: UIImage? // TBD.
+    let hasHomeScreenshot: Bool // TBD.
 
-    let margin: CGFloat = 0.0 // (Changes depending on fullscreen)
+    let margin: CGFloat // (Changes depending on fullscreen)
+}
+
+extension TabCellState {
+    static func emptyTabState() -> TabCellState {
+        return TabCellState(isSelected: false,
+                            isPrivate: false,
+                            isFxHomeTab: false,
+                            tabTitle: "",
+                            url: nil,
+                            screenshot: nil,
+                            hasHomeScreenshot: false,
+                            margin: 0.0)
+    }
 }
 
 private struct TabCellUILayout {
@@ -37,7 +50,7 @@ protocol TabCellDelegate: AnyObject {
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - Properties
 
-    private(set) var state = TabCellState()
+    private(set) var state = TabCellState.emptyTabState()
 
     var isSelectedTab: Bool { return state.isSelected }
     var animator: SwipeAnimator?
@@ -79,7 +92,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     // MARK: - Configuration
 
-    func configure(with state: TabCellState, theme: Theme) {
+    func configure(with state: TabCellState, theme: Theme?) {
         self.state = state
 
         titleText.text = state.tabTitle
@@ -94,12 +107,16 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
         }
 
-        updateUIForSelectedState(state.isSelected, isPrivate: state.isPrivate, theme: theme)
+        updateUIForSelectedState(state.isSelected,
+                                 isPrivate: state.isPrivate,
+                                 theme: theme)
 
         faviconBG.isHidden = true
         configureScreenshot(state: state)
 
-        applyTheme(theme: theme)
+        if let theme = theme {
+            applyTheme(theme: theme)
+        }
     }
 
     // MARK: - Actions
@@ -124,7 +141,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         if let url = state.url,
            let tabScreenshot = state.screenshot,
            (url.absoluteString.starts(with: "internal") && state.hasHomeScreenshot) {
-            // Regular screenshot for home or internal url when tab has home screenshot
+            // Regular screenshot for home or internal url when
+            // tab has home screenshot
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?
                 .withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
@@ -152,7 +170,10 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         }
     }
 
-    private func updateUIForSelectedState(_ selected: Bool, isPrivate: Bool, theme: Theme) {
+    private func updateUIForSelectedState(_ selected: Bool,
+                                          isPrivate: Bool,
+                                          theme: Theme?) {
+        guard let theme = theme else { return }
         if selected {
             layoutMargins = UIEdgeInsets(top: LegacyTabCell.borderWidth,
                                          left: LegacyTabCell.borderWidth,
