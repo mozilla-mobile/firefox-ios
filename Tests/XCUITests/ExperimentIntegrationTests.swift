@@ -69,7 +69,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let surveyLink = app.buttons.matching(
             NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
         )
-        let dismissLink = app.buttons.matching(
+        _ = app.buttons.matching(
             NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
         )
 
