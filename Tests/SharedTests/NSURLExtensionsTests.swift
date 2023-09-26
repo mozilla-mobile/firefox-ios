@@ -392,4 +392,28 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertNotNil(genericUrl)
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;XSS%26%2339;)"))
     }
+
+    func testSafeEncodedUrlEmptyPath() {
+        let url = URL(string: "http://localhost:1234")!
+        let safeUrl = url.safeEncodedUrl
+        XCTAssertNotNil(safeUrl)
+    }
+
+    func testSafeEncodedUrlEmptyScheme() {
+        let url = URL(string: "//localhost:1234/page")!
+        let safeUrl = url.safeEncodedUrl
+        XCTAssertNil(safeUrl)
+    }
+
+    func testSafeEncodedUrlMissingComponentsJS() {
+        let url = URL(string: "javascript:blob")!
+        let safeUrl = url.safeEncodedUrl
+        XCTAssertNil(safeUrl)
+    }
+
+    func testSafeEncodedUrlMissingComponents() {
+        let url = URL(string: "/page?url=javascript")!
+        let safeUrl = url.safeEncodedUrl
+        XCTAssertNil(safeUrl)
+    }
 }
