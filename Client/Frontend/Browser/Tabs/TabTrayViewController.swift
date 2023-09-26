@@ -44,7 +44,7 @@ class TabTrayViewController: UIViewController,
     var isSyncTabsPanel: Bool {
         return selectedSegment == .syncedTabs
     }
-    
+
     var hasSyncableAccount: Bool {
         // Temporary. Added for early testing.
         // Eventually we will update this to use Redux state. -mr
@@ -157,7 +157,7 @@ class TabTrayViewController: UIViewController,
 
         return [flexibleSpace, syncTabButton]
     }()
-    
+
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
         if hasSyncableAccount {
             return [doneButton, fixedSpace, syncTabButton]
