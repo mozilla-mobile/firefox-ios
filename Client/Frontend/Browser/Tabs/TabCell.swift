@@ -8,34 +8,6 @@ import UIKit
 import Shared
 import SiteImageView
 
-/// WIP. Defines tab-specific state that is reflected in the new TabCell.
-struct TabCellState {
-    let isSelected: Bool
-    let isPrivate: Bool
-    let isFxHomeTab: Bool
-
-    let tabTitle: String
-    let url: URL?
-
-    let screenshot: UIImage? // TBD.
-    let hasHomeScreenshot: Bool // TBD.
-
-    let margin: CGFloat // (Changes depending on fullscreen)
-}
-
-extension TabCellState {
-    static func emptyTabState() -> TabCellState {
-        return TabCellState(isSelected: false,
-                            isPrivate: false,
-                            isFxHomeTab: false,
-                            tabTitle: "",
-                            url: nil,
-                            screenshot: nil,
-                            hasHomeScreenshot: false,
-                            margin: 0.0)
-    }
-}
-
 private struct TabCellUILayout {
     static let borderWidth: CGFloat = 3.0
 }
