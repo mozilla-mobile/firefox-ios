@@ -175,20 +175,20 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            layoutMargins = UIEdgeInsets(top: LegacyTabCell.borderWidth,
-                                         left: LegacyTabCell.borderWidth,
-                                         bottom: LegacyTabCell.borderWidth,
-                                         right: LegacyTabCell.borderWidth)
+            layoutMargins = UIEdgeInsets(top: TabCellUILayout.borderWidth,
+                                         left: TabCellUILayout.borderWidth,
+                                         bottom: TabCellUILayout.borderWidth,
+                                         right: TabCellUILayout.borderWidth)
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-            layer.borderWidth = LegacyTabCell.borderWidth
+            layer.borderWidth = TabCellUILayout.borderWidth
             layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
+            LegacyGridTabViewController.UX.cornerRadius + TabCellUILayout.borderWidth
         } else {
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
             layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
+            LegacyGridTabViewController.UX.cornerRadius + TabCellUILayout.borderWidth
         }
     }
 
