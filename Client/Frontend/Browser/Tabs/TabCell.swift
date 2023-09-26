@@ -10,18 +10,17 @@ import SiteImageView
 
 /// WIP. Defines tab-sepcific state that is reflected in the new TabCell.
 struct TabCellState {
-    let isSelected: Bool = false
-    let isPrivate: Bool = false
-
-    let url: URL = URL()
-
-    // TBD:
-    let screenshot: UIImage?
-    let hasHomeScreenshot: Bool = false
+    let isSelected = false
+    let isPrivate = false
+    let isFxHomeTab = false
 
     let tabTitle: String = ""
+    let url: URL? = nil
+
+    let screenshot: UIImage? = nil // TBD.
+    let hasHomeScreenshot = false // TBD.
+
     let margin: CGFloat = 0.0 // (Changes depending on fullscreen)
-    let isFxHomeTab: Bool
 }
 
 private struct TabCellUILayout {
@@ -36,10 +35,9 @@ protocol TabCellDelegate: AnyObject {
 /// updated to avoid capturing state within the cell itself, instead consuming and returning
 /// read-only state from our Redux app state (and more specifically `TabCellState`).
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
-
     // MARK: - Properties
 
-    private(set) var state: TabCellState = TabCellState()
+    private(set) var state = TabCellState()
 
     var isSelectedTab: Bool { return state.isSelected }
     var animator: SwipeAnimator?
@@ -92,7 +90,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?
             .withRenderingMode(.alwaysTemplate)
 
-        if !state.isFxHomeTab, let tabURL = tab.url?.absoluteString {
+        if !state.isFxHomeTab, let tabURL = state.url?.absoluteString {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
         }
 
@@ -131,17 +129,15 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                 .withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             screenshotView.image = tabScreenshot
-
         } else if let url = state.url,
                   (!url.absoluteString.starts(with: "internal") && state.hasHomeScreenshot) {
             // Favicon or letter image when home screenshot is present for
             // a regular (non-internal) url
-            
+
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             faviconBG.isHidden = false
             screenshotView.image = nil
-
         } else if let tabScreenshot = state.screenshot {
             // Tab screenshot when available
             screenshotView.image = tabScreenshot
@@ -290,7 +286,7 @@ extension TabCell {
     func getA11yTitleLabel(state: TabCellState) -> String? {
         let baseName = state.tabTitle
 
-        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
+        if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
             return String.TabTrayCurrentlySelectedTabAccessibilityLabel
