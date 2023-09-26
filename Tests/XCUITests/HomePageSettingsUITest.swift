@@ -219,8 +219,7 @@ class HomePageSettingsUITests: BaseTestCase {
         bookmarkPages()
         addContentToReaderView()
         navigator.performAction(Action.GoToHomePage)
-        waitForTabsButton()
-        checkRecentlySaved()
+        mozWaitForElementToExist(app.staticTexts["Recently Saved"])
         navigator.performAction(Action.ToggleRecentlySaved)
         // On iPad we have the homepage button always present,
         // on iPhone we have the search button instead when we're on a new tab page

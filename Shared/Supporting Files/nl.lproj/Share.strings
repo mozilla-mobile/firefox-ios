@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "U hebt geen andere aan deze account gekoppelde apparaten beschikbaar voor synchronisatie.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "U bent niet aangemeld bij uw account.";
+

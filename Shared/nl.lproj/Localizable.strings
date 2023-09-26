@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Opgeslagen aanmeldingen worden hier getoond. Als u uw aanmeldingen bij Firefox op een ander apparaat hebt opgeslagen, meld u dan aan bij uw Firefox-account.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Opgeslagen aanmeldingen worden hier getoond. Als u uw aanmeldingen bij %@ op een ander apparaat hebt opgeslagen, meld u dan aan bij uw account.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Geen aanmeldingen gevonden";
 

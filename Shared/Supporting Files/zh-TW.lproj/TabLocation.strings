@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "連線不安全。加強型追蹤保護已關閉。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "連線安全，加強型追蹤保護已關閉。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "不安全連線";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "安全連線";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "分享此頁面";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "商品評論檢查器";
+

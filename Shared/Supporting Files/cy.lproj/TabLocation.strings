@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Nid yw'r cysylltiad yn ddiogel. Mae Diogelwch Uwch rhag Tracio wedi'i ddiffodd.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Cysylltiad diogel. Mae Diogelwch Uwch rhag Tracio wedi'i ddiffodd.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Nid yw’r cysylltiad yn ddiogel";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Cysylltiadau diogel";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Rhannwch y dudalen hon";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "Gwirydd adolygiadau";
+

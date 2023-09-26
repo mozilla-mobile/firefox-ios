@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Le credentiales salvate apparera hic. Si tu ha salvate tu credentiales in Firefox sur un altere apparato, aperi session in tu Conto de Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Le credentiales salvate apparera hic. Si tu ha salvate tu credentiales pro %@ sur un altere apparato, aperi session in tu conto.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Nulle credentiales trovate";
 

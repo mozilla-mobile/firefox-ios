@@ -10,7 +10,7 @@ import ComponentLibrary
 // MARK: View Model
 final class FakespotReviewQualityCardViewModel {
     private let tabManager: TabManager
-    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+    let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
     var dismissViewController: (() -> Void)?
 
     // MARK: Init

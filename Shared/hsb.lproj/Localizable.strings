@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Składowane přizjewjenja so tu pokazaja. Jeli sće swoje přizjewjenja Firefox na druhim graće składował, přizjewće so pola swojeho konta Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Składowane přizjewjenja so tu pokazaja. Jeli sće swoje přizjewjenja %@ na druhim graće składował, přizjewće so pola swojeho konta.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Žane přizjewjenja namakane";
 

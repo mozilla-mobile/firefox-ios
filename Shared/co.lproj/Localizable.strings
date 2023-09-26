@@ -1493,7 +1493,7 @@
 "Settings.Studies.Toggle.Title" = "Studii";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "Cunnittitevi per sincrunizà unghjette, indette, parolle d’intesa è ancu di più";
+"Settings.Sync.ButtonDescription.v103" = "Cunnittitevi per sincrunizà unghjette, indette, parolle d’intesa è ancu di più.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sincrunizà è arregistrà i dati";

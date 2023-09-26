@@ -3710,7 +3710,7 @@ extension String {
         public static let SettingsCardTurnOffButton = MZLocalizedString(
             key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
             tableName: "Shopping",
-            value: "Turn Off Review Quality Check",
+            value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118

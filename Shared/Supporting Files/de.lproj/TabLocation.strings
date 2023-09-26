@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Verbindung nicht sicher. Verbesserter Schutz vor Aktivitätenverfolgung ist deaktiviert.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Sichere Verbindung. Verbesserter Schutz vor Aktivitätenverfolgung ist deaktiviert.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Verbindung nicht sicher";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Sichere Verbindung";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Diese Seite teilen";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "Rezensionsprüfer";
+

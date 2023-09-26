@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "接続が安全ではありません。強化型トラッキング防止がオフになっています。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "接続は安全ですが、強化型トラッキング防止がオフになっています。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "安全でない接続";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "安全な接続";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "このページを共有";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "レビューチェッカー";
+

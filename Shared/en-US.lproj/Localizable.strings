@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "No logins found";
 

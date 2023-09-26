@@ -695,7 +695,10 @@
 "LoginsList.LoginsListSearchPlaceholder" = "סינון";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "כניסות שמורות תופענה כאן. גאם שמרת את הכניסות שלך ב־Firefox על מכשיר אחר, יש להתחבר לחשבון ה־Firefox שלך.";
+"LoginsList.NoLoginsFound.Description" = "כניסות שמורות תופענה כאן. אם שמרת את הכניסות שלך ב־Firefox על מכשיר אחר, יש להתחבר לחשבון ה־Firefox שלך.";
+
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "כניסות שמורות תופענה כאן. אם שמרת את הכניסות שלך ב־%@ על מכשיר אחר, יש להתחבר לחשבון שלך.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "לא נמצאו כניסות";

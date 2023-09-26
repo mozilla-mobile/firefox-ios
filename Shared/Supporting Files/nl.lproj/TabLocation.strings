@@ -1,0 +1,18 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Verbinding niet beveiligd. Verbeterde bescherming tegen volgen is uit.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Beveiligde verbinding. Verbeterde bescherming tegen volgen is uit.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Verbinding niet beveiligd";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Beveiligde verbinding";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Deze pagina delen";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v119" = "Beoordelingscontrole";
+
