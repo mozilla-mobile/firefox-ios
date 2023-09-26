@@ -18,6 +18,8 @@ protocol TabCellDelegate: AnyObject {
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let borderWidth: CGFloat = 3.0
+        static let subviewDefaultPadding: CGFloat = 6.0
+        static let faviconYOffset: CGFloat = 10.0
     }
     // MARK: - Properties
 
@@ -215,6 +217,14 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - Auto Layout
 
     private func setupConstraints() {
+        let defaultPadding = TabCell.UX.subviewDefaultPadding
+        let faviconYOffset = TabCell.UX.faviconYOffset
+        let faviconSize = LegacyGridTabViewController.UX.faviconSize
+        let closeButtonSize = LegacyGridTabViewController.UX.closeButtonSize
+        let textBoxHeight = LegacyGridTabViewController.UX.textBoxHeight
+        let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
+        let topSiteIconSize = TopSiteItemCell.UX.iconSize
+
         NSLayoutConstraint.activate([
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -224,20 +234,22 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
             title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
             title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-            title.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.textBoxHeight),
+            title.heightAnchor.constraint(equalToConstant: textBoxHeight),
 
-            favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
-            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (LegacyGridTabViewController.UX.textBoxHeight - LegacyGridTabViewController.UX.faviconSize) / 2),
-            favicon.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
-            favicon.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
+            favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: defaultPadding),
+            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (LegacyGridTabViewController.UX.textBoxHeight - faviconSize) / 2.0),
+            favicon.heightAnchor.constraint(equalToConstant: faviconSize),
+            favicon.widthAnchor.constraint(equalToConstant: faviconSize),
 
-            closeButton.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: closeButtonSize),
+            closeButton.widthAnchor.constraint(equalToConstant: closeButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
-            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
-            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
+            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor,
+                                               constant: defaultPadding),
+            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                constant: defaultPadding),
             titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
 
             screenshotView.topAnchor.constraint(equalTo: topAnchor),
@@ -245,13 +257,13 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
             screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
 
-            faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10),
+            faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: faviconYOffset),
             faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: imageBackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.width),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: topSiteIconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: topSiteIconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])
