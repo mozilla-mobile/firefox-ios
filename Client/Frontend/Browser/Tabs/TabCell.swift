@@ -32,6 +32,40 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private var title =
         UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
 
+    // MARK: - UI
+
+    private lazy var backgroundHolder: UIView = .build { view in
+        view.layer.cornerRadius =
+        LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
+        view.clipsToBounds = true
+    }
+
+    private lazy var faviconBG: UIView = .build { view in
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
+        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+    }
+
+    private lazy var screenshotView: UIImageView = .build { view in
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = false
+    }
+
+    private lazy var titleText: UILabel = .build { label in
+        label.isUserInteractionEnabled = false
+        label.numberOfLines = 1
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
+    }
+
+    private lazy var closeButton: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
+        button.imageView?.contentMode = .scaleAspectFit
+        button.contentMode = .center
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
+    }
+
     // MARK: - Initializer
 
     override init(frame: CGRect) {
@@ -97,7 +131,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         delegate?.tabCellDidClose(self)
     }
 
-    // MARK: - UI
+    // MARK: - Configuration
 
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
@@ -161,38 +195,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             layer.cornerRadius =
             LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
         }
-    }
-
-    private lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius =
-        LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
-        view.clipsToBounds = true
-    }
-
-    private lazy var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
-        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
-    }
-
-    private lazy var screenshotView: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        view.isUserInteractionEnabled = false
-    }
-
-    private lazy var titleText: UILabel = .build { label in
-        label.isUserInteractionEnabled = false
-        label.numberOfLines = 1
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
-    }
-
-    private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
-        button.imageView?.contentMode = .scaleAspectFit
-        button.contentMode = .center
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
     }
 
     // MARK: UICollectionViewCell
