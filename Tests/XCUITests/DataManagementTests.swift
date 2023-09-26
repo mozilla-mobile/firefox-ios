@@ -12,7 +12,7 @@ class DataManagementTests: BaseTestCase {
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"], timeout: 3)
         app.tables.otherElements["Website Data"].swipeDown()
-        mozWaitForElementToExist(app.searchFields["Filter Sites"], timeout: 3)
+        mozWaitForElementToExist(app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
         app.typeText("bing")
         mozWaitForElementToExist(app.tables["Search results"])
