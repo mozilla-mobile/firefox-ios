@@ -35,7 +35,7 @@ class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.titleFontSize,
-                                                            weight: .medium)
+                                                            weight: .semibold)
         label.numberOfLines = 0
     }
 
