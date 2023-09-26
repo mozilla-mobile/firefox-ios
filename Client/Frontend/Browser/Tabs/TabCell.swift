@@ -8,7 +8,7 @@ import UIKit
 import Shared
 import SiteImageView
 
-/// WIP. Defines tab-sepcific state that is reflected in the new TabCell.
+/// WIP. Defines tab-specific state that is reflected in the new TabCell.
 struct TabCellState {
     let isSelected: Bool
     let isPrivate: Bool
