@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Gespeicherte Zugangsdaten werden hier angezeigt. Wenn Sie Ihre Zugangsdaten auf einem anderen Gerät in Firefox gespeichert haben, melden Sie sich mit Ihrem Firefox-Konto an.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Gespeicherte Zugangsdaten werden hier angezeigt. Wenn Sie Ihre Zugangsdaten auf einem anderen Gerät zu %@ gespeichert haben, melden Sie sich mit Ihrem Konto an.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Keine Zugangsdaten gefunden";
 

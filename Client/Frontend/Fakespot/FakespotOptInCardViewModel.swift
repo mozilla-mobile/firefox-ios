@@ -75,9 +75,9 @@ struct FakespotOptInCardViewModel {
     var onOptIn: (() -> Void)?
 
     // MARK: Links
-    let fakespotPrivacyPolicyLink = URL(string: "https://www.fakespot.com/privacy-policy")
-    let fakespotTermsOfUseLink = URL(string: "https://www.fakespot.com/terms")
-    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+    let fakespotPrivacyPolicyLink = FakespotUtils.privacyPolicyUrl
+    let fakespotTermsOfUseLink = FakespotUtils.termsOfUseUrl
+    let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
 
     // MARK: Init
     init(profile: Profile = AppContainer.shared.resolve(),

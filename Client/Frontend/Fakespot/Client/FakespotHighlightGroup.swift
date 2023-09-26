@@ -65,7 +65,7 @@ enum FakespotHighlightType: String {
     }
 }
 
-struct FakespotHighlightGroup {
+struct FakespotHighlightGroup: Equatable {
     let type: FakespotHighlightType
     let reviews: [String]
 }

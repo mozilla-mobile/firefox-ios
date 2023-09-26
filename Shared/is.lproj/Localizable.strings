@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Vistaðar innskráningar munu birtast hér. Ef þú vistaðir innskráningar þínar í Firefox á öðru tæki skaltu skrá þig inn á Firefox reikninginn þinn.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Vistaðar innskráningar munu birtast hér. Ef þú vistaðir innskráningar þínar í %@ á öðru tæki, skaltu skrá þig inn á reikninginn þinn.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Engar innskráningar fundust";
 

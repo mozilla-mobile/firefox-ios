@@ -203,7 +203,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: - Accessibility
 
-    private lazy var _accessibilityElements = [urlTextField, readerModeButton, readerModeButton, reloadButton, trackingProtectionButton, shareButton]
+    private lazy var _accessibilityElements = [urlTextField, shoppingButton, readerModeButton, reloadButton, trackingProtectionButton, shareButton]
 
     override var accessibilityElements: [Any]? {
         get {
@@ -339,7 +339,7 @@ private extension TabLocationView {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
 
-        readerModeButton.isHidden = !shoppingButton.isHidden || (newReaderModeState == .unavailable)
+        readerModeButton.isHidden = shoppingButton.isHidden ? newReaderModeState == .unavailable : true
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {

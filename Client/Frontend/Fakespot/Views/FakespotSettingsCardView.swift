@@ -22,7 +22,7 @@ class FakespotSettingsCardViewModel {
     let footerActionTitle: String = .Shopping.SettingsCardFooterAction
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
-    let footerActionUrl = URL(string: "http://fakespot.com/")
+    let footerActionUrl = FakespotUtils.fakespotUrl
     var dismissViewController: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {

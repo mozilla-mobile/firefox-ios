@@ -96,13 +96,12 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         cardContainer.applyTheme(theme: theme)
         reliabilityScoreView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         reliabilityScoreView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
-        reliabilityLetterLabel.textColor = theme.colors.textOnDark
+        reliabilityLetterLabel.textColor = theme.colors.textOnLight
         reliabilityDescriptionLabel.textColor = theme.colors.textOnLight
 
         if let viewModel {
             reliabilityLetterView.layer.backgroundColor = viewModel.grade.color(theme: theme).cgColor
-            reliabilityDescriptionView.layer.backgroundColor = viewModel.grade.color(theme: theme)
-                .withAlphaComponent(UX.descriptionBackgroundAlpha).cgColor
+            reliabilityDescriptionView.layer.backgroundColor = viewModel.grade.colorSubdued(theme: theme).cgColor
         }
     }
 

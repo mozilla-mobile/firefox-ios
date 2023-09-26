@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Skłaźone pśizjawjenja se how pokaže. Jolic sćo składł swóje pśizjawjenja Firefox na drugem rěźe, pśizjawśo se pla swójogo konta Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Skłaźone pśizjawjenja se how pokaže. Jolic sćo składł swóje pśizjawjenja %@ na drugem rěźe, pśizjawśo se pla swójogo konta.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Žedne pśizjawjenja namakane";
 

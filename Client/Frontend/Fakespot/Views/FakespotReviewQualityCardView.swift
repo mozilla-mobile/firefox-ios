@@ -14,7 +14,7 @@ final class FakespotReviewQualityCardViewModel {
     }
 
     private let tabManager: TabManager
-    let fakespotLearnMoreLink = URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+    let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
     var dismissViewController: (() -> Void)?
     var productSitename: String?
     var highlightsText: NSAttributedString {

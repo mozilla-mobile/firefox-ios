@@ -33,6 +33,16 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
     var layerError: UIColor = FXColors.Red10
+    var layerRatingA: UIColor = FXColors.Green20
+    var layerRatingASubdued: UIColor = FXColors.Green05.withAlphaComponent(0.7)
+    var layerRatingB: UIColor = FXColors.Blue10
+    var layerRatingBSubdued: UIColor = FXColors.Blue05.withAlphaComponent(0.4)
+    var layerRatingC: UIColor = FXColors.Yellow20
+    var layerRatingCSubdued: UIColor = FXColors.Yellow05.withAlphaComponent(0.7)
+    var layerRatingD: UIColor = FXColors.Orange20
+    var layerRatingDSubdued: UIColor = FXColors.Orange05.withAlphaComponent(0.7)
+    var layerRatingF: UIColor = FXColors.Red30
+    var layerRatingFSubdued: UIColor = FXColors.Red05.withAlphaComponent(0.6)
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue50

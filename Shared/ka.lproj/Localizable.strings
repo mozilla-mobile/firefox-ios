@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "შენახული ანგარიშები აქ გამოჩნდება. თუ სხვა მოწყობილობის Firefox-ზე ინახავთ, შედით თქვენი Firefox-ანგარიშით.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "შენახული ანგარიშები აქ გამოჩნდება. თუ თქვენი შესვლის მონაცემებს სხვა მოწყობილობის %@ ინახავს, შედით ანგარიშზე.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "მონაცემები ვერ მოიძებნა";
 
@@ -1706,7 +1709,7 @@
 "The page could not be displayed in Reader View." = "გვერდის კითხვის რეჟიმში ჩვენება შეუძლებელია.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "სხვა მოწყობილობების ჩანართებთან წვდომისას წარმოიქმნა ხარვეზი. სცადეთ ხელახლა, ოდნავ მოგვიანებით.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "სხვა მოწყობილობების ჩანართებთან წვდომისას წარმოიქმნა ხარვეზი. სცადეთ ხელახლა ცოტა ხანში.";
 
 /* Error displayed when reader mode cannot be enabled */
 "There was an error converting the page" = "გვერდის გარდაქმნისას წარმოიშვა შეცდომა";
