@@ -36,7 +36,8 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
     private lazy var titleLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
         view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                           size: UX.titleFontSize)
+                                                           size: UX.titleFontSize,
+                                                           weight: .semibold)
         view.numberOfLines = 0
     }
 
@@ -51,7 +52,9 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var reliabilityLetterLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .footnote, size: UX.letterFontSize)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
+                                                           size: UX.letterFontSize,
+                                                           weight: .semibold)
     }
 
     private lazy var reliabilityDescriptionLabel: UILabel = .build { view in
