@@ -112,9 +112,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var copy: String
         switch copyType {
         case .action:
-            copy = if hasOptedIn { CFRStrings.Shopping.OptedInAction } else { CFRStrings.Shopping.NotOptedInAction }
+            copy = hasOptedIn ? CFRStrings.Shopping.OptedInAction : CFRStrings.Shopping.NotOptedInAction
         case .description:
-            copy = if hasOptedIn { CFRStrings.Shopping.OptedInBody } else { CFRStrings.Shopping.NotOptedInBody }
+            copy = hasOptedIn ? CFRStrings.Shopping.OptedInBody : CFRStrings.Shopping.NotOptedInBody
         }
         return copy
     }

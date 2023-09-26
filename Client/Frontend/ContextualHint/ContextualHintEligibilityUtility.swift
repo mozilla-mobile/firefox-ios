@@ -101,7 +101,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
             let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.LastRecordedTimestamp)
             #warning("TODO: Needs time change to 24 hours")
-            let hasTimePassed = if let lastTimestamp { Date.hasTimePassedBy(seconds: 30, lastTimestamp: lastTimestamp) } else { false }
+            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(seconds: 30, lastTimestamp: lastTimestamp!) : false
 
             if cfrCounter == 1, !hasOptedIn, hasTimePassed {
                 profile.prefs.setInt(2, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)

@@ -148,8 +148,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasPassed() {
-        let viewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
-        viewProvider.markContextualHintConfiguration(configured: true)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
 
         let lastTimestamp: Timestamp = 1632632400000
         profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
@@ -160,8 +159,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasPassed() {
-        let viewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
-        viewProvider.markContextualHintConfiguration(configured: true)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
 
         let lastTimestamp: Timestamp = 1632632400000
         profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
@@ -172,8 +170,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasNotPassed() {
-        let viewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
-        viewProvider.markContextualHintConfiguration(configured: true)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
 
         let lastTimestamp: Timestamp = Date.now()
         profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
@@ -184,8 +181,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasNotPassed() {
-        let viewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
-        viewProvider.markContextualHintConfiguration(configured: true)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
 
         let lastTimestamp: Timestamp = Date.now()
         profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)

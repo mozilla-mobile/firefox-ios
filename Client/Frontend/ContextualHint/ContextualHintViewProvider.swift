@@ -67,8 +67,6 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
             profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInConfiguredKey.rawValue)
         case .jumpBackInSyncedTab:
             profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
-        case .shoppingExperience:
-            profile.prefs.setBool(configured, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
         default:
             break
         }
