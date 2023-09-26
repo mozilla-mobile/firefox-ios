@@ -9,21 +9,21 @@ import Shared
 import SiteImageView
 
 // MARK: - Tab Tray Cell Protocol
-protocol TabTrayCell where Self: UICollectionViewCell {
+protocol LegacyTabTrayCell where Self: UICollectionViewCell {
     /// True when the tab is the selected tab in the tray
     var isSelectedTab: Bool { get }
 
     /// Configure a tab cell using a Tab object, setting it's selected state at the same time
-    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme)
+    func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme)
 }
 
-protocol TabCellDelegate: AnyObject {
+protocol LegacyTabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: LegacyTabCell)
 }
 
 // MARK: - Tab Cell
 class LegacyTabCell: UICollectionViewCell,
-               TabTrayCell,
+               LegacyTabTrayCell,
                ReusableCell,
                ThemeApplicable {
     // MARK: - Constants
@@ -74,7 +74,7 @@ class LegacyTabCell: UICollectionViewCell,
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
-    weak var delegate: TabCellDelegate?
+    weak var delegate: LegacyTabCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
     private var margin = CGFloat(0)
@@ -155,7 +155,7 @@ class LegacyTabCell: UICollectionViewCell,
     }
 
     // MARK: - Configure tab cell with a Tab
-    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
+    func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
 
         titleText.text = tab.getTabTrayTitle()
@@ -264,7 +264,7 @@ class LegacyTabCell: UICollectionViewCell,
 }
 
 // MARK: - Extension Tab Tray Cell protocol
-extension TabTrayCell {
+extension LegacyTabTrayCell {
     func getA11yTitleLabel(tab: Tab) -> String? {
         let baseName = tab.getTabTrayTitle()
 
