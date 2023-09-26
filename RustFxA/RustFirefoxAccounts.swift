@@ -179,7 +179,7 @@ open class RustFirefoxAccounts {
     private func update() {
         guard let accountManager = accountManager.peek() else { return }
         let avatarUrl = accountManager.accountProfile()?.avatar
-        if let str = avatarUrl, let url = URL(string: str) {
+        if let str = avatarUrl, let url = URL(string: str, encodingInvalidCharacters: false) {
             avatar = Avatar(url: url)
         }
 

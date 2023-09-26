@@ -9,7 +9,7 @@ enum HomePanelType: Int {
     case topSites = 0
 
     var internalUrl: URL {
-        let aboutUrl: URL! = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")
+        let aboutUrl: URL! = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)", encodingInvalidCharacters: false)
         return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
     }
 }

@@ -149,7 +149,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
         for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-            newTab.url = URL(string: tabData.siteUrl)
+            newTab.url = URL(string: tabData.siteUrl, encodingInvalidCharacters: false)
             newTab.lastTitle = tabData.title
             newTab.tabUUID = tabData.id.uuidString
             newTab.screenshotUUID = tabData.id

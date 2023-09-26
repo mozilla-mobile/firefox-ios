@@ -26,7 +26,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
     /// Makes a header-only request to an endpoint and hands off the endpoint's etag to a completion handler.
     func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void) {
-        guard let url = URL(string: endpoint.rawValue) else { return }
+        guard let url = URL(string: endpoint.rawValue, encodingInvalidCharacters: false) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "HEAD"
 
@@ -51,7 +51,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
     /// Makes a network request to an endpoint and hands off the result to a completion handler.
     func fetchData(endpoint: Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void) {
-        guard let url = URL(string: endpoint.rawValue) else { return }
+        guard let url = URL(string: endpoint.rawValue, encodingInvalidCharacters: false) else { return }
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in

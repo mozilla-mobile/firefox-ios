@@ -20,12 +20,12 @@ open class Site: Identifiable {
     open var guid: String?
 
     open var tileURL: URL {
-        return URL(string: url)?.domainURL ?? URL(string: "about:blank")!
+        return URL(string: url, encodingInvalidCharacters: false)?.domainURL ?? URL(string: "about:blank")!
     }
 
     // i.e. `http://www.example.com/` --> `example`
     open var secondLevelDomain: String? {
-        return URL(string: url)?.host?.components(separatedBy: ".").suffix(2).first
+        return URL(string: url, encodingInvalidCharacters: false)?.host?.components(separatedBy: ".").suffix(2).first
     }
 
     public let url: String

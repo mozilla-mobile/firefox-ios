@@ -452,7 +452,7 @@ class WebPageSetting: StringPrefSetting {
         guard let string = string, !string.isEmpty else {
             return true
         }
-        return URL(string: string)?.isWebPage() ?? false
+        return URL(string: string, encodingInvalidCharacters: false)?.isWebPage() ?? false
     }
 }
 

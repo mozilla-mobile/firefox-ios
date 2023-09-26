@@ -20,8 +20,8 @@ public extension String {
         // Let's escape | for them.
         // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
         // none seem to be quite suitable.
-        return URL(string: self) ??
-               URL(string: self.stringWithAdditionalEscaping)
+        return URL(string: self, encodingInvalidCharacters: false) ??
+               URL(string: self.stringWithAdditionalEscaping, encodingInvalidCharacters: false)
     }
 
     // MARK: - Hashing & Encoding

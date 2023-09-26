@@ -93,7 +93,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     func canOpenMailScheme(_ scheme: String) -> Bool {
-        if let url = URL(string: scheme) {
+        if let url = URL(string: scheme, encodingInvalidCharacters: false) {
             return UIApplication.shared.canOpenURL(url)
         }
         return false
