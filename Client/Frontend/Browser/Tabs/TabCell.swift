@@ -270,11 +270,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         animator?.close(right: right)
         return true
     }
-}
 
-// MARK: - AX Extension
-
-extension TabCell {
     func getA11yTitleLabel(state: TabCellState) -> String? {
         let baseName = state.tabTitle
 
