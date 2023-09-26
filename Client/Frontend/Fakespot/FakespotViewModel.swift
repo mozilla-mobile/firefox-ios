@@ -172,6 +172,7 @@ class FakespotViewModel {
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
+        reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
     }
 
