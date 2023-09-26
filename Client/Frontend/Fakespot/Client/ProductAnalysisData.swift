@@ -40,11 +40,27 @@ struct Highlights: Codable {
     let price: [String]
     let quality: [String]
     let competitiveness: [String]
+    let shipping: [String]
+    let packaging: [String]
 
-    init(price: [String], quality: [String], competitiveness: [String]) {
+    private enum CodingKeys: String, CodingKey {
+        case price
+        case quality
+        case competitiveness
+        case shipping
+        case packaging = "packaging/appearance"
+    }
+
+    init(price: [String],
+         quality: [String],
+         competitiveness: [String],
+         shipping: [String],
+         packaging: [String]) {
         self.price = price
         self.quality = quality
         self.competitiveness = competitiveness
+        self.shipping = shipping
+        self.packaging = packaging
     }
 
     init(from decoder: Decoder) throws {
@@ -52,5 +68,17 @@ struct Highlights: Codable {
         price = try container.decodeIfPresent([String].self, forKey: .price) ?? []
         quality = try container.decodeIfPresent([String].self, forKey: .quality) ?? []
         competitiveness = try container.decodeIfPresent([String].self, forKey: .competitiveness) ?? []
+        shipping = try container.decodeIfPresent([String].self, forKey: .shipping) ?? []
+        packaging = try container.decodeIfPresent([String].self, forKey: .packaging) ?? []
+    }
+
+    var items: [FakespotHighlightGroup] {
+        var items = [FakespotHighlightGroup]()
+        items.append(FakespotHighlightGroup(type: .price, reviews: price))
+        items.append(FakespotHighlightGroup(type: .quality, reviews: quality))
+        items.append(FakespotHighlightGroup(type: .competitiveness, reviews: competitiveness))
+        items.append(FakespotHighlightGroup(type: .shipping, reviews: shipping))
+        items.append(FakespotHighlightGroup(type: .packaging, reviews: packaging))
+        return items.compactMap { group in group.reviews.isEmpty ? nil : group }
     }
 }
