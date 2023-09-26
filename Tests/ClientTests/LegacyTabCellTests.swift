@@ -6,7 +6,7 @@
 
 import XCTest
 
-class TabCellTests: XCTestCase {
+class LegacyTabCellTests: XCTestCase {
     func testTabCellDeinit() {
         let subject = LegacyTabCell(frame: .zero)
         trackForMemoryLeaks(subject)
