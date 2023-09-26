@@ -94,5 +94,6 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         reliabilityLetterView.layer.backgroundColor = grade.color(theme: theme).cgColor
+        reliabilityLetterLabel.textColor = theme.colors.textOnLight
     }
 }

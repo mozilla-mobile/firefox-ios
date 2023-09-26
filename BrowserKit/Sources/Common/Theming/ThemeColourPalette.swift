@@ -28,6 +28,16 @@ public protocol ThemeColourPalette {
     var layerConfirmation: UIColor { get }
     var layerWarning: UIColor { get }
     var layerError: UIColor { get }
+    var layerRatingA: UIColor { get }
+    var layerRatingASubdued: UIColor { get }
+    var layerRatingB: UIColor { get }
+    var layerRatingBSubdued: UIColor { get }
+    var layerRatingC: UIColor { get }
+    var layerRatingCSubdued: UIColor { get }
+    var layerRatingD: UIColor { get }
+    var layerRatingDSubdued: UIColor { get }
+    var layerRatingF: UIColor { get }
+    var layerRatingFSubdued: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
