@@ -864,7 +864,7 @@ extension LegacyTabDisplayManager: TabEventHandler {
                                      isSelected: isSelected,
                                      theme: theme)
     }
-    
+
     func removeAllTabsFromView() {
         operations.removeAll()
         dataStore.removeAll()
