@@ -14,25 +14,24 @@ class FakespotTests: BaseTestCase {
 
             // Search for and open a shoe listing
             let website = app.webViews["contentView"].firstMatch
+            mozWaitForElementToExist(website.textFields["Search Amazon"])
+            XCTAssert(website.textFields["Search Amazon"].isEnabled)
             website.textFields["Search Amazon"].tap()
             website.textFields["Search Amazon"].typeText("Shoe")
             website.buttons["Go"].tap()
             waitUntilPageLoad()
             website.images.firstMatch.tap()
 
-            // Tap shopping cart icon on Awesome bar
-            // Note: I can't find the label for the shopping cart icon.
-            // Workaround: Tap somewhere left of the "Share" button
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton])
+            // Tap the shopping cart icon
             waitUntilPageLoad()
-            app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tapAtPoint(CGPoint(x: -10, y: 0))
-            waitForExistence(app.otherElements["PopoverDismissRegion"])
-            waitForExistence(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review quality check")
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review checker")
 
-            // Tap outside of the popover to close the popover
-            website.textFields["Search Amazon"].tap()
-            waitForNoExistence(app.otherElements["PopoverDismissRegion"])
+            // Close the popover
+            app.otherElements.buttons["Close"].tap()
+            mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         }
     }
 }
