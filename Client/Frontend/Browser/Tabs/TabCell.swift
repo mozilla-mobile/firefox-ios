@@ -8,10 +8,6 @@ import UIKit
 import Shared
 import SiteImageView
 
-private struct TabCellUILayout {
-    static let borderWidth: CGFloat = 3.0
-}
-
 protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
 }
@@ -20,6 +16,9 @@ protocol TabCellDelegate: AnyObject {
 /// updated to avoid capturing state within the cell itself, instead consuming and returning
 /// read-only state from our Redux app state (and more specifically `TabCellState`).
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
+    struct UX {
+        static let borderWidth: CGFloat = 3.0
+    }
     // MARK: - Properties
 
     private(set) var state = TabCellState.emptyTabState()
@@ -147,26 +146,26 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            layoutMargins = UIEdgeInsets(top: TabCellUILayout.borderWidth,
-                                         left: TabCellUILayout.borderWidth,
-                                         bottom: TabCellUILayout.borderWidth,
-                                         right: TabCellUILayout.borderWidth)
+            layoutMargins = UIEdgeInsets(top: TabCell.UX.borderWidth,
+                                         left: TabCell.UX.borderWidth,
+                                         bottom: TabCell.UX.borderWidth,
+                                         right: TabCell.UX.borderWidth)
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-            layer.borderWidth = TabCellUILayout.borderWidth
+            layer.borderWidth = TabCell.UX.borderWidth
             layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + TabCellUILayout.borderWidth
+            LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
         } else {
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
             layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + TabCellUILayout.borderWidth
+            LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
         }
     }
 
     private lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius =
-        LegacyGridTabViewController.UX.cornerRadius + TabCellUILayout.borderWidth
+        LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
         view.clipsToBounds = true
     }
 
