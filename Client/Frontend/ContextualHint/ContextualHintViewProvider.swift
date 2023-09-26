@@ -17,6 +17,7 @@ enum ContextualHintType: String {
     case jumpBackInSyncedTab = "JumpBackInSyncedTab"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
+    case shoppingExperience = "ShoppingExperience"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
@@ -66,6 +67,8 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
             profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInConfiguredKey.rawValue)
         case .jumpBackInSyncedTab:
             profile.prefs.setBool(configured, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
+        case .shoppingExperience:
+            profile.prefs.setBool(configured, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
         default:
             break
         }
@@ -111,7 +114,8 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     var isActionType: Bool {
         switch hintType {
         case .inactiveTabs,
-                .toolbarLocation:
+                .toolbarLocation,
+                .shoppingExperience:
             return true
 
         default: return false

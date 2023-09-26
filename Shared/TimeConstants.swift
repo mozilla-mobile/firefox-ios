@@ -141,6 +141,19 @@ extension Date {
                               second: second)
     }
 
+    /// Checks if a specified amount of time has passed since a given timestamp.
+    ///
+    /// - Parameters:
+    ///   - seconds: The number of seconds to check for elapsed time.
+    ///   - lastTimestamp: The timestamp to compare against.
+    ///
+    /// - Returns: `true` if the specified time has passed since the lastTimestamp; `false` otherwise.
+    public static func hasTimePassedBy(seconds: Timestamp,
+                                       lastTimestamp: Timestamp) -> Bool {
+        let timeDifference = Date.now() - lastTimestamp
+        return timeDifference >= seconds * 1000
+    }
+
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
         return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }

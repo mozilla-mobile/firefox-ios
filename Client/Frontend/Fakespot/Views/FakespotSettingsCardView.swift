@@ -26,7 +26,7 @@ class FakespotSettingsCardViewModel {
     var dismissViewController: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {
-        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
     }
 

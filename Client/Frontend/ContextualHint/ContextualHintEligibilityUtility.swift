@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// Public interface for contextual hint consumers
 protocol ContextualHintEligibilityUtilityProtocol {
@@ -40,6 +41,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = isSearchBarLocationFeatureEnabled
         case .inactiveTabs:
             hintTypeShouldBePresented = true
+        case .shoppingExperience:
+            return canPresentShoppingCFR
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
@@ -90,6 +93,29 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - The Home Tab Banner isn't being displayed (not specified by Product, but the CFR might show when the anchor point isn't on screen)
     private var canPresentJumpBackInSyncedTab: Bool {
         return shouldCheckToolbarHasShown
+    }
+
+    private var canPresentShoppingCFR: Bool {
+        guard !hasAlreadyBeenPresented(.shoppingExperience) else {
+            let cfrCounter = profile.prefs.intForKey(PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue) ?? 1
+            let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+            let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.LastRecordedTimestamp)
+            #warning("TODO: Needs time change to 24 hours")
+            let hasTimePassed = if let lastTimestamp { Date.hasTimePassedBy(seconds: 30, lastTimestamp: lastTimestamp) } else { false }
+
+            if cfrCounter == 1, !hasOptedIn, hasTimePassed {
+                profile.prefs.setInt(2, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                return true
+            } else if cfrCounter < 3, hasOptedIn, hasTimePassed {
+                profile.prefs.setInt(3, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                return true
+            }
+            return false
+        }
+
+        profile.prefs.setInt(1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+        profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.LastRecordedTimestamp)
+        return true
     }
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
