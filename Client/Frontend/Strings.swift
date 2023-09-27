@@ -3777,6 +3777,11 @@ extension String {
             tableName: "Shopping",
             value: "We assign each product’s reviews a letter grade from A to F.",
             comment: "Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+        public static let ReviewQualityCardSubHeadlineLabelBoldString = MZLocalizedString(
+            key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.BoldStrings.v119
+            tableName: "Shopping",
+            value: "letter grade",
+            comment: "The bold parts of the string inside the label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardReliableReviewsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.ReliableReviews.Label.v119
             tableName: "Shopping",
@@ -3797,11 +3802,21 @@ extension String {
             tableName: "Shopping",
             value: "The adjusted rating is based only on reviews we believe to be reliable.",
             comment: "Adujusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+        public static let ReviewQualityCardAdjustedRatingBoldString = MZLocalizedString(
+            key: "", // Shopping.ReviewQualityCard.AdjustedRating.Label.BoldStrings.v119
+            tableName: "Shopping",
+            value: "adjusted rating",
+            comment: "the part of the string that should become bold from the text above")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Highlights.Label.v119
             tableName: "Shopping",
             value: "Highlights are from %1@ reviews within the last 80 days that we believe to be reliable.",
             comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from")
+        public static let ReviewQualityCardHighlightsLabelBoldString = MZLocalizedString(
+            key: "", // Shopping.ReviewQualityCard.Highlights.Label.BoldStrings.v119
+            tableName: "Shopping",
+            value: "Highlights",
+            comment: "The bold part of the text from the Highlights label in the How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.LearnMoreButton.Title.v119
             tableName: "Shopping",

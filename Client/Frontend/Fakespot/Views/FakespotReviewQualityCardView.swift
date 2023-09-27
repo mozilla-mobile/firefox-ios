@@ -24,9 +24,12 @@ final class FakespotReviewQualityCardViewModel {
                                                               size: UX.labelFontSize,
                                                               weight: .semibold)
 
-        let highlightedWebsite = PartnerWebsite(for: productSitename?.lowercased())?.orderWebsites.first ?? "Amazon"
+        let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
+        let highlightedWebsite = currentPartner.title
         let plainText = String.localizedStringWithFormat(String.Shopping.ReviewQualityCardHighlightsLabel, highlightedWebsite)
-        return plainText.attributedText(boldPartsOfString: ["Highlights"], initialFont: normalFont, boldFont: boldFont)
+        let boldedText = String.Shopping.ReviewQualityCardHighlightsLabelBoldString
+
+        return plainText.attributedText(boldPartsOfString: [boldedText], initialFont: normalFont, boldFont: boldFont)
     }
 
     // MARK: Init
@@ -96,7 +99,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         let boldFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                               size: UX.labelFontSize,
                                                               weight: .semibold)
-        label.attributedText = text.attributedText(boldPartsOfString: ["letter grade"],
+        let boldedString = String.Shopping.ReviewQualityCardSubHeadlineLabelBoldString
+        label.attributedText = text.attributedText(boldPartsOfString: [boldedString],
                                                    initialFont: normalFont,
                                                    boldFont: boldFont)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.subHeadlineLabel
@@ -187,7 +191,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         let boldFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                               size: UX.labelFontSize,
                                                               weight: .semibold)
-        label.attributedText = text.attributedText(boldPartsOfString: ["adjusted rating"],
+        let localizedBoldString = String.Shopping.ReviewQualityCardAdjustedRatingBoldString
+        label.attributedText = text.attributedText(boldPartsOfString: [localizedBoldString],
                                                    initialFont: normalFont,
                                                    boldFont: boldFont)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.adjustedRatingLabel
