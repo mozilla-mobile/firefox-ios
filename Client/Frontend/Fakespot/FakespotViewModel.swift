@@ -116,6 +116,7 @@ class FakespotViewModel {
     }
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    @Published var analysisStatus: AnalysisStatus?
 
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
@@ -219,7 +220,7 @@ class FakespotViewModel {
         self.prefs = profile.prefs
     }
 
-    func fetchData() async {
+    func fetchProductAnalysis() async {
         state = .loading
         do {
             async let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -230,15 +231,13 @@ class FakespotViewModel {
         }
     }
 
-    @Published var analysisStatus: AnalysisStatus?
-
     func triggerProductAnalyze() async {
         analysisStatus = try? await shoppingProduct.triggerProductAnalyze()
-        try? await getProductAnalysisStatus()
-        await fetchData()
+        try? await observeProductAnalysisStatus()
+        await fetchProductAnalysis()
     }
 
-    func getProductAnalysisStatus() async throws {
+    func observeProductAnalysisStatus() async throws {
         var sleepDuration: UInt64 = NSEC_PER_SEC * 30
 
         while true {

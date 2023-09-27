@@ -149,8 +149,8 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             }
 
         Task {
-            await viewModel.fetchData()
-            try? await viewModel.getProductAnalysisStatus()
+            await viewModel.fetchProductAnalysis()
+            try? await viewModel.observeProductAnalysisStatus()
         }
     }
 
@@ -283,7 +283,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
                 Task {
-                    await self.viewModel.fetchData()
+                    await self.viewModel.fetchProductAnalysis()
                 }
             }
             view.configure(viewModel.optInCardViewModel)
