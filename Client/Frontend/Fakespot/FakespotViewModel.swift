@@ -229,9 +229,9 @@ class FakespotViewModel {
     func fetchProductAnalysis() async {
         state = .loading
         do {
-            async let product = try await shoppingProduct.fetchProductAnalysisData()
-            async let analysis = try? await shoppingProduct.getProductAnalysisStatus()?.status
-            state = try await .loaded(product, analysis)
+            let product = try await shoppingProduct.fetchProductAnalysisData()
+            let analysis = try? await shoppingProduct.getProductAnalysisStatus()?.status
+            state = .loaded(product, analysis)
         } catch {
             state = .error(error)
         }
