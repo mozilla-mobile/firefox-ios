@@ -129,8 +129,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
             var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
 
-            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-            settings["defaultSearchEngine"] = searchEngines.defaultEngine?.engineID ?? "custom"
+            if let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files),
+               let defaultEngineID = searchEngines.defaultEngine?.engineID {
+                settings["defaultSearchEngine"] = defaultEngineID
+            }
 
             if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
@@ -231,8 +233,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Record default search engine setting
-        let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-        GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine?.engineID ?? "custom")
+        if let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files),
+           let defaultEngineID = searchEngines.defaultEngine?.engineID {
+            GleanMetrics.Search.defaultEngine.set(defaultEngineID)
+       }
 
         // Record the open tab count
         let delegate = UIApplication.shared.delegate as? AppDelegate
