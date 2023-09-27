@@ -102,7 +102,6 @@ workflows:
 
             echo "bitrise_xcode"
             COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
-            cat /Users/vagrant/git/xcodebuild_fennec.log
             
             envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
