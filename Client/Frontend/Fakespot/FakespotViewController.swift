@@ -78,6 +78,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
         button.accessibilityLabel = .CloseButtonTitle
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetCloseButton
     }
 
     // MARK: - Initializers
