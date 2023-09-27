@@ -140,11 +140,12 @@ extension BrowserViewController: URLBarDelegate {
             presentedUsing: {
                 self.present(contextHintVC, animated: true)
                 TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
+                                             method: .navigate,
                                              object: .shoppingButton,
                                              value: .shoppingCFRsDisplayed)
             },
-            andActionForButton: {
+            andActionForButton: { [weak self] in
+                guard let self else { return }
                 guard let productURL = self.urlBar.currentURL else { return }
                 self.navigationHandler?.showFakespotFlow(productURL: productURL)
             },

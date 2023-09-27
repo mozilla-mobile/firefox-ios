@@ -148,10 +148,10 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasPassed() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        let lastTimestamp: Timestamp = 1695719918000 // Date and time (GMT): Tuesday, 26 September 2023 09:18:38
 
-        let lastTimestamp: Timestamp = 1632632400000
-        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
         profile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
 
         let result = subject.canPresent(.shoppingExperience)
@@ -159,10 +159,10 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasPassed() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        let lastTimestamp: Timestamp = 1695719918000 // Date and time (GMT): Tuesday, 26 September 2023 09:18:38
 
-        let lastTimestamp: Timestamp = 1632632400000
-        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
         profile.prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
 
         let result = subject.canPresent(.shoppingExperience)
@@ -170,10 +170,10 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasNotPassed() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
-
         let lastTimestamp: Timestamp = Date.now()
-        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
         profile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
 
         let result = subject.canPresent(.shoppingExperience)
@@ -181,10 +181,10 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasNotPassed() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
-
         let lastTimestamp: Timestamp = Date.now()
-        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.LastRecordedTimestamp)
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
         profile.prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
 
         let result = subject.canPresent(.shoppingExperience)

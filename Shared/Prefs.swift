@@ -92,7 +92,7 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
-        case shoppingOnboardingKey = "ShoppingOnboardingKey"
+        case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
         case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
     }
 
@@ -142,8 +142,8 @@ public struct PrefsKeys {
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
 
-    // The last recorded timestamp
-    public static let LastRecordedTimestamp = "LastRecordedTimestamp"
+    // The last recorded CFR timestamp
+    public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"

@@ -95,26 +95,35 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return shouldCheckToolbarHasShown
     }
 
+    // There are 2 types of CFRs
+    //
+    // Shopping CFR-1: The user has not opted in for the Shopping Experience
+    // Shopping CFR-2: The user has opted in for the Shopping Experience
     private var canPresentShoppingCFR: Bool {
         guard !hasAlreadyBeenPresented(.shoppingExperience) else {
+            // Retrieve the counter for shopping onboarding CFRs
             let cfrCounter = profile.prefs.intForKey(PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue) ?? 1
+            // Check if the user has opted in for Shopping Experience
             let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
-            let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.LastRecordedTimestamp)
-            #warning("TODO: Needs time change to 24 hours")
-            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(seconds: 30, lastTimestamp: lastTimestamp!) : false
+            // Retrieve the last timestamp for Fakespot CFRs
+            let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.FakespotLastCFRTimestamp)
+            // Check if 24 hours have passed since the last timestamp
+            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(hours: 24, lastTimestamp: lastTimestamp!) : false
 
             if cfrCounter == 1, !hasOptedIn, hasTimePassed {
+                // - Display CFR-1
                 profile.prefs.setInt(2, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
                 return true
             } else if cfrCounter < 3, hasOptedIn, hasTimePassed {
+                // - Display CFR-2
                 profile.prefs.setInt(3, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
                 return true
             }
             return false
         }
-
+        // - Display CFR-1
         profile.prefs.setInt(1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
-        profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.LastRecordedTimestamp)
+        profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.FakespotLastCFRTimestamp)
         return true
     }
 

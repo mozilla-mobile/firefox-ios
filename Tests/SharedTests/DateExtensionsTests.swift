@@ -57,12 +57,14 @@ class DateExtensionsTests: XCTestCase {
     }
 
     func test_hasTimePassedBy() {
-        let lastTimestamp: Timestamp = Date.now() - 10000  // Assuming 10 seconds difference.
+        let tenHoursInMilliseconds: Timestamp = 3_600_000 * 10
 
-        XCTAssertTrue(Date.hasTimePassedBy(seconds: 10, lastTimestamp: lastTimestamp))
+        let lastTimestamp: Timestamp = Date.now() - tenHoursInMilliseconds  // Assuming 10 hours difference.
 
-        XCTAssertTrue(Date.hasTimePassedBy(seconds: 5, lastTimestamp: lastTimestamp))
+        XCTAssertTrue(Date.hasTimePassedBy(hours: 10, lastTimestamp: lastTimestamp))
 
-        XCTAssertFalse(Date.hasTimePassedBy(seconds: 30, lastTimestamp: lastTimestamp))
+        XCTAssertTrue(Date.hasTimePassedBy(hours: 5, lastTimestamp: lastTimestamp))
+
+        XCTAssertFalse(Date.hasTimePassedBy(hours: 30, lastTimestamp: lastTimestamp))
     }
 }
