@@ -8,7 +8,7 @@ import Shared
 import Common
 @testable import Client
 
-class RemoteTabsPanelTests: XCTestCase {
+class LegacyRemoteTabsPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -102,7 +102,7 @@ class RemoteTabsPanelTests: XCTestCase {
     }
 }
 
-private extension RemoteTabsPanelTests {
+private extension LegacyRemoteTabsPanelTests {
     var remoteClient: RemoteClient {
         return RemoteClient(guid: nil,
                             name: "Fake client",
