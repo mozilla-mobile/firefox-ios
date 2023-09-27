@@ -129,8 +129,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
             var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
 
-            if let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files),
-               let defaultEngineID = searchEngines.defaultEngine?.engineID {
+            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+            if let defaultEngineID = searchEngines.defaultEngine?.engineID {
                 settings["defaultSearchEngine"] = defaultEngineID
             }
 
@@ -233,8 +233,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Record default search engine setting
-        if let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files),
-           let defaultEngineID = searchEngines.defaultEngine?.engineID {
+        let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+        if let defaultEngineID = searchEngines.defaultEngine?.engineID {
             GleanMetrics.Search.defaultEngine.set(defaultEngineID)
        }
 
