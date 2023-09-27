@@ -119,6 +119,18 @@ public struct AccessibilityIdentifiers {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
         static let sheetHeaderBetaLabel = "Shopping.Sheet.HeaderBetaLabel"
 
+        struct AnalysisProgressInfoCard {
+            static let card = "Shopping.AnalysisProgressInfoCard.Card"
+            static let title = "Shopping.AnalysisProgressInfoCard.Title"
+            static let description = "Shopping.AnalysisProgressInfoCard.Description"
+        }
+
+        struct NeedsAnalysisInfoCard {
+            static let card = "Shopping.NeedsAnalysisInfoCard.Card"
+            static let title = "Shopping.NeedsAnalysisInfoCard.Title"
+            static let primaryAction = "Shopping.NeedsAnalysisInfoCard.PrimaryAction"
+        }
+
         struct NotEnoughReviewsInfoCard {
             static let card = "Shopping.NotEnoughReviewsInfoCard.Card"
             static let title = "Shopping.NotEnoughReviewsInfoCard.Title"

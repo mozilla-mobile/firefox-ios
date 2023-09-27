@@ -13,6 +13,7 @@ struct FakespotMessageCardViewModel {
         case info
         case infoLoading
         case error
+        case infoTransparent
 
         var id: String { self.rawValue }
 
@@ -21,8 +22,9 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.textPrimary
             case .warning: return theme.colors.textPrimary
             case .info: return theme.colors.textOnDark
-            case .infoLoading: return theme.colors.textOnDark
+            case .infoLoading: return theme.colors.textPrimary
             case .error: return theme.colors.textPrimary
+            case .infoTransparent: return theme.colors.textPrimary
             }
         }
 
@@ -31,8 +33,9 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.actionConfirmation
             case .warning: return theme.colors.actionWarning
             case .info: return theme.colors.actionPrimary
-            case .infoLoading: return theme.colors.actionPrimary
+            case .infoLoading: return theme.colors.actionSecondary
             case .error: return theme.colors.actionError
+            case .infoTransparent: return theme.colors.actionSecondary
             }
         }
 
@@ -41,8 +44,9 @@ struct FakespotMessageCardViewModel {
             case .confirmation: return theme.colors.layerConfirmation
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
-            case .infoLoading: return theme.colors.layerInfo
+            case .infoLoading: return .clear
             case .error: return theme.colors.layerError
+            case .infoTransparent: return .clear
             }
         }
 
@@ -62,6 +66,8 @@ struct FakespotMessageCardViewModel {
             case .infoLoading:
                 return .progress
             case .error:
+                return .image(name: StandardImageIdentifiers.Large.criticalFill)
+            case .infoTransparent:
                 return .image(name: StandardImageIdentifiers.Large.criticalFill)
             }
         }

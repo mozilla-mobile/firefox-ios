@@ -10,32 +10,57 @@ class FakespotViewModel {
     enum ViewState {
         case loading
         case onboarding
-        case loaded(ProductAnalysisData?)
+        case loaded(ProductAnalysisData?, AnalysisStatus?)
         case error(Error)
 
         fileprivate var viewElements: [ViewElement] {
             switch self {
             case .loading:
                 return [.loadingView]
-            case let .loaded(product):
-                if product?.cannotBeAnalyzedCardVisible == true {
+            case let .loaded(product, analysisStatus):
+                guard let product else {
+                    return [
+                        .messageCard(.genericError),
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+                }
+
+                if product.cannotBeAnalyzedCardVisible {
                     return [
                         .messageCard(.productCannotBeAnalyzed),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
-                } else if product?.notAnalyzedCardVisible == true {
+                } else if product.notAnalyzedCardVisible {
                     return [
                         .noAnalysisCard,
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
-                } else if product?.notEnoughReviewsCardVisible == true {
+                } else if product.notEnoughReviewsCardVisible {
                     return [
                         .messageCard(.notEnoughReviews),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
+                } else if product.needsAnalysisCardVisible {
+                    // Don't show needs analysis message card if analysis is in progress
+                    var cards: [ViewElement] = []
+
+                    if analysisStatus != .inProgress && analysisStatus != .pending {
+                        cards.append(.messageCard(.needsAnalysis))
+                    }
+
+                    cards += [
+                        .reliabilityCard,
+                        .adjustRatingCard,
+                        .highlightsCard,
+                        .qualityDeterminationCard,
+                        .settingsCard
+                    ]
+
+                    return cards
                 } else {
                     return [
                         .reliabilityCard,
@@ -60,7 +85,7 @@ class FakespotViewModel {
         fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error, .onboarding: return nil
-            case .loaded(let data): return data
+            case .loaded(let data, _): return data
             }
         }
     }
@@ -80,6 +105,7 @@ class FakespotViewModel {
             case productCannotBeAnalyzed
             case noConnectionError
             case notEnoughReviews
+            case needsAnalysis
         }
     }
 
@@ -163,6 +189,24 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.NotEnoughReviewsInfoCard.description
     )
 
+    var needsAnalysisViewModel = FakespotMessageCardViewModel(
+        type: .infoTransparent,
+        title: .Shopping.InfoCardNeedsAnalysisTitle,
+        primaryActionText: .Shopping.InfoCardNeedsAnalysisPrimaryAction,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.NeedsAnalysisInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.NeedsAnalysisInfoCard.title,
+        a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.NeedsAnalysisInfoCard.primaryAction
+    )
+
+    let analysisProgressViewModel = FakespotMessageCardViewModel(
+        type: .infoLoading,
+        title: .Shopping.InfoCardProgressAnalysisTitle,
+        description: .Shopping.InfoCardProgressAnalysisDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.description
+    )
+
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
@@ -178,9 +222,40 @@ class FakespotViewModel {
     func fetchData() async {
         state = .loading
         do {
-            state = try await .loaded(shoppingProduct.fetchProductAnalysisData())
+            async let product = try await shoppingProduct.fetchProductAnalysisData()
+            async let analysis = try? await shoppingProduct.getProductAnalysisStatus()?.status
+            state = try await .loaded(product, analysis)
         } catch {
             state = .error(error)
+        }
+    }
+
+    @Published var analysisStatus: AnalysisStatus?
+
+    func triggerProductAnalyze() async {
+        analysisStatus = try? await shoppingProduct.triggerProductAnalyze()
+        try? await getProductAnalysisStatus()
+        await fetchData()
+    }
+
+    func getProductAnalysisStatus() async throws {
+        var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+
+        while true {
+            let result = try await shoppingProduct.getProductAnalysisStatus()
+            analysisStatus = result?.status
+            guard result?.status == .pending ||  result?.status == .inProgress else {
+                analysisStatus = nil
+                break
+            }
+
+            // Sleep for the current duration
+            try await Task.sleep(nanoseconds: sleepDuration)
+
+            // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
+            if sleepDuration > NSEC_PER_SEC * 10 {
+                sleepDuration -= NSEC_PER_SEC * 10
+            }
         }
     }
 }
