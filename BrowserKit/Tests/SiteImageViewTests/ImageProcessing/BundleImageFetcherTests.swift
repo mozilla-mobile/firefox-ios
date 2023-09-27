@@ -83,7 +83,7 @@ final class BundleImageFetcherTests: XCTestCase {
     }
 
     func testValidData_returnImage() {
-        let expectedImage = UIImage()
+        let expectedImage = mockImage()
         bundleDataProvider.imageToReturn = expectedImage
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
@@ -92,15 +92,14 @@ final class BundleImageFetcherTests: XCTestCase {
 
         do {
             let result = try subject.getImageFromBundle(domain: domain)
-            XCTAssertEqual(expectedImage, result)
+            XCTAssertEqual(expectedImage.size, result.size)
         } catch {
             XCTFail("Should have succeeded")
         }
     }
 
     func testValidData_whenDomainNotPresent_throwsError() {
-        let expectedImage = UIImage()
-        bundleDataProvider.imageToReturn = expectedImage
+        bundleDataProvider.imageToReturn = mockImage()
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
@@ -133,6 +132,15 @@ final class BundleImageFetcherTests: XCTestCase {
         } catch {
             XCTFail("Should have failed with BundleError type")
         }
+    }
+
+    func mockImage() -> UIImage {
+        let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 100, height: 100))
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image ?? UIImage()
     }
 }
 

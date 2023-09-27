@@ -180,7 +180,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
-            guard let url = URL(string: site.url, encodingInvalidCharacters: false) else { return }
+            guard let url = URL(string: site.url, invalidCharacters: false) else { return }
 
             if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
                 self.browserNavigationHandler?.showShareExtension(

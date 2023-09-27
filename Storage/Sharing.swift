@@ -18,7 +18,7 @@ public struct ShareItem {
 
     // We only support sharing HTTP and HTTPS URLs, as well as data URIs.
     public var isShareable: Bool {
-        return URL(string: url, encodingInvalidCharacters: false)?.isWebPage() ?? false
+        return URL(string: url, invalidCharacters: false)?.isWebPage() ?? false
     }
 }
 

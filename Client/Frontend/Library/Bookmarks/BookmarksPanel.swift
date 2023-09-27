@@ -383,7 +383,7 @@ class BookmarksPanel: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolder))
         if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
             if let itemData = bookmarkCell as? BookmarkItemData,
-                let url = URL(string: itemData.url, encodingInvalidCharacters: false) {
+                let url = URL(string: itemData.url, invalidCharacters: false) {
                 libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
             } else {
                 guard let folder = bookmarkCell as? FxBookmarkNode else { return }

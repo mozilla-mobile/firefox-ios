@@ -315,7 +315,7 @@ extension BrowserViewController: URLBarDelegate {
                 let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, encodingInvalidCharacters: false) {
+                if let url = URL(string: urlString, invalidCharacters: false) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
