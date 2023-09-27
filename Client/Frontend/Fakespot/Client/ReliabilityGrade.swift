@@ -22,11 +22,21 @@ enum ReliabilityGrade: String, Codable {
 
     func color(theme: Theme) -> UIColor {
         switch self {
-        case .a: return theme.colors.layerAccentPrivate // Update in FXIOS-7154
-        case .b: return theme.colors.layerAccentPrivateNonOpaque // Update in FXIOS-7154
-        case .c: return theme.colors.layerSepia // Update in FXIOS-7154
-        case .d: return theme.colors.layerAccentNonOpaque // Update in FXIOS-7154
-        case .f: return theme.colors.layer1 // Update in FXIOS-7154
+        case .a: return theme.colors.layerRatingA
+        case .b: return theme.colors.layerRatingB
+        case .c: return theme.colors.layerRatingC
+        case .d: return theme.colors.layerRatingD
+        case .f: return theme.colors.layerRatingF
+        }
+    }
+
+    func colorSubdued(theme: Theme) -> UIColor {
+        switch self {
+        case .a: return theme.colors.layerRatingASubdued
+        case .b: return theme.colors.layerRatingBSubdued
+        case .c: return theme.colors.layerRatingCSubdued
+        case .d: return theme.colors.layerRatingDSubdued
+        case .f: return theme.colors.layerRatingFSubdued
         }
     }
 }

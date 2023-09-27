@@ -25,8 +25,8 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         static let descriptionVerticalPadding: CGFloat = 6
         static let descriptionHorizontalPadding: CGFloat = 8
         static let titleFontSize: CGFloat = 17
-        static let letterFontSize: CGFloat = 15
-        static let descriptionFontSize: CGFloat = 12
+        static let letterFontSize: CGFloat = 13
+        static let descriptionFontSize: CGFloat = 13
         static let descriptionBackgroundAlpha: CGFloat = 0.15
     }
 
@@ -51,7 +51,9 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var reliabilityLetterLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.letterFontSize)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                           size: UX.letterFontSize,
+                                                           weight: .semibold)
     }
 
     private lazy var reliabilityDescriptionLabel: UILabel = .build { view in
@@ -92,13 +94,12 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         cardContainer.applyTheme(theme: theme)
         reliabilityScoreView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         reliabilityScoreView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
-        reliabilityLetterLabel.textColor = theme.colors.textOnDark
+        reliabilityLetterLabel.textColor = theme.colors.textOnLight
         reliabilityDescriptionLabel.textColor = theme.colors.textOnLight
 
         if let viewModel {
             reliabilityLetterView.layer.backgroundColor = viewModel.grade.color(theme: theme).cgColor
-            reliabilityDescriptionView.layer.backgroundColor = viewModel.grade.color(theme: theme)
-                .withAlphaComponent(UX.descriptionBackgroundAlpha).cgColor
+            reliabilityDescriptionView.layer.backgroundColor = viewModel.grade.colorSubdued(theme: theme).cgColor
         }
     }
 

@@ -134,13 +134,13 @@ class Tab: NSObject {
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
-           let siteURL = URL(string: string) {
+           let siteURL = URL(string: string, encodingInvalidCharacters: false) {
             // If the canonical URL from the page metadata doesn't contain the
             // "#" fragment, check if the tab's URL has a fragment and if so,
             // append it to the canonical URL.
             if siteURL.fragment == nil,
                let fragment = self.url?.fragment,
-               let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
+               let siteURLWithFragment = URL(string: "\(string)#\(fragment)", encodingInvalidCharacters: false) {
                 return siteURLWithFragment
             }
 
@@ -252,7 +252,7 @@ class Tab: NSObject {
     var faviconURL: String? {
         didSet {
             faviconHelper.cacheFaviconURL(siteURL: url,
-                                          faviconURL: URL(string: faviconURL ?? ""))
+                                          faviconURL: URL(string: faviconURL ?? "", encodingInvalidCharacters: false))
         }
     }
     fileprivate var lastRequest: URLRequest?
@@ -261,7 +261,7 @@ class Tab: NSObject {
     var url: URL? {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
-                url = URL(string: internalUrl.stripAuthorization)
+                url = URL(string: internalUrl.stripAuthorization, encodingInvalidCharacters: false)
             }
         }
     }
@@ -523,7 +523,7 @@ class Tab: NSObject {
 
             guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
 
-            if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
+            if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)", encodingInvalidCharacters: false) {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
                 webView.load(request)
                 lastRequest = request

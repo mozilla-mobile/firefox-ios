@@ -40,7 +40,7 @@ struct WallpaperCollection: Codable, Equatable {
 
     var learnMoreUrl: URL? {
         guard let urlString = learnMoreURLString else { return nil }
-        return URL(string: urlString)
+        return URL(string: urlString, encodingInvalidCharacters: false)
     }
 
     /// Wallpaper collections availability:

@@ -18,7 +18,7 @@ struct FormPostData {
               let target = messageBodyDict["target"],
               let enctype = messageBodyDict["enctype"],
               let requestBodyString = messageBodyDict["requestBody"],
-              let action = URL(string: actionString),
+              let action = URL(string: actionString, encodingInvalidCharacters: false),
               let requestBody = requestBodyString.data(using: .utf8)
         else {
                 return nil

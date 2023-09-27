@@ -124,7 +124,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
             params.append(URLQueryItem(name: "consumer_key", value: pocketKey))
         }
 
-        guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else { return nil }
+        guard let feedURL = URL(string: pocketGlobalFeed, encodingInvalidCharacters: false)?.withQueryParams(params) else { return nil }
 
         return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
     }
