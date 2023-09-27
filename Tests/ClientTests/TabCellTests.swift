@@ -7,8 +7,46 @@
 import XCTest
 
 class TabCellTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+    }
+
     func testTabCellDeinit() {
-        let subject = LegacyTabCell(frame: .zero)
+        let subject = TabCell(frame: .zero)
         trackForMemoryLeaks(subject)
+    }
+
+    func testConfigureTabAXLabel() {
+        let cell = TabCell(frame: .zero)
+        let state = createDefaultState()
+        cell.configure(with: state, theme: nil)
+        XCTAssert(cell.accessibilityLabel!.contains(state.tabTitle))
+    }
+
+    func testConfigureTabAXHint() {
+        let cell = TabCell(frame: .zero)
+        let state = createDefaultState()
+        cell.configure(with: state, theme: nil)
+        XCTAssertEqual(cell.accessibilityHint!,
+                       String.TabTraySwipeToCloseAccessibilityHint)
+    }
+
+    func testConfigureTabSelectedState() {
+        let cell = TabCell(frame: .zero)
+        let state = createDefaultState()
+        cell.configure(with: state, theme: nil)
+        XCTAssertEqual(cell.isSelectedTab,
+                       state.isSelected)
+    }
+
+    private func createDefaultState() -> TabCellState {
+        return TabCellState(isSelected: false,
+                            isPrivate: false,
+                            isFxHomeTab: false,
+                            tabTitle: "Firefox Browser",
+                            url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
+                            screenshot: nil,
+                            hasHomeScreenshot: false,
+                            margin: 0.0)
     }
 }

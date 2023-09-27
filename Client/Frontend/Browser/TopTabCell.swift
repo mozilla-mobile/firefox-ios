@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCell {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, ReusableCell {
     struct UX {
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2
@@ -60,7 +60,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
         setupLayout()
     }
 
-    func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
+    func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
 
         titleText.text = tab.getTabTrayTitle()
