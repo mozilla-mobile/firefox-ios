@@ -17,7 +17,7 @@ tasks:
         description: Run performance tests and generate data
         run-on-tasks-for: []
         treeherder:
-            symbol: perf
+            symbol: bitrise-performance
             kind: test
-            platform: ios/opt
+            platform: ios-simulator-iphone14pro-16.4
             tier: 1
