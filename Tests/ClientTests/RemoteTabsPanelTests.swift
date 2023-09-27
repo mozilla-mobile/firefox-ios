@@ -123,7 +123,7 @@ private extension RemoteTabsPanelTests {
                           icon: nil)]
     }
 
-    func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {
+    func panelRefreshWithExpectation(panel: LegacyRemoteTabsPanel, completion: @escaping () -> Void) {
         let expectation = expectation(description: "Tabs should be refreshed")
         panel.tableViewController.refreshTabs {
             completion()
@@ -136,12 +136,12 @@ private extension RemoteTabsPanelTests {
                      hasSyncEnabled: Bool = true,
                      clientAndTabs: [ClientAndTabs] = [],
                      file: StaticString = #file,
-                     line: UInt = #line) -> RemoteTabsPanel {
+                     line: UInt = #line) -> LegacyRemoteTabsPanel {
         let profile = MockProfile()
         profile.prefs.setBool(hasSyncEnabled, forKey: PrefsKeys.TabSyncEnabled)
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs
-        let panel = RemoteTabsPanel(profile: profile)
+        let panel = LegacyRemoteTabsPanel(profile: profile)
         panel.viewDidLoad()
 
         trackForMemoryLeaks(panel, file: file, line: line)

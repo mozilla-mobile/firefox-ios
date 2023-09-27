@@ -57,7 +57,7 @@ class LegacyTabTrayViewModel {
 
     // Tab Tray Views
     let tabTrayView: TabTrayViewDelegate
-    let syncedTabsController: RemoteTabsPanel
+    let syncedTabsController: LegacyRemoteTabsPanel
 
     var segmentToFocus: LegacyTabTrayViewModel.Segment?
     var layout: Layout = .compact
@@ -80,7 +80,7 @@ class LegacyTabTrayViewModel {
                                                        profile: profile,
                                                        tabTrayDelegate: tabTrayDelegate,
                                                        tabToFocus: tabToFocus)
-        self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
+        self.syncedTabsController = LegacyRemoteTabsPanel(profile: self.profile)
         self.segmentToFocus = segmentToFocus
     }
 

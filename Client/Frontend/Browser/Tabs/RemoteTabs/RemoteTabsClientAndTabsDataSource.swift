@@ -14,12 +14,12 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     }
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
-    weak var remoteTabPanel: RemoteTabsPanel?
+    weak var remoteTabPanel: LegacyRemoteTabsPanel?
     var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
     private var theme: Theme
 
-    init(remoteTabPanel: RemoteTabsPanel,
+    init(remoteTabPanel: LegacyRemoteTabsPanel,
          clientAndTabs: [ClientAndTabs],
          profile: Profile,
          theme: Theme) {
