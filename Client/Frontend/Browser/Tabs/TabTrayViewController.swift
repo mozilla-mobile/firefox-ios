@@ -31,8 +31,6 @@ class TabTrayViewController: UIViewController,
     weak var  delegate: TabTrayViewControllerDelegate?
     private var titleWidthConstraint: NSLayoutConstraint?
     private var containerView: UIView = .build { _ in }
-//    private var compactContainerTopConstraint: NSLayoutConstraint!
-//    private var regularContainerTopConstraint: NSLayoutConstraint!
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
@@ -169,9 +167,11 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(delegate: TabTrayViewControllerDelegate,
+    init(selectedSegment: LegacyTabTrayViewModel.Segment,
+         delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.selectedSegment = selectedSegment
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -327,7 +327,7 @@ class TabTrayViewController: UIViewController,
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
 
-        navigationController?.isToolbarHidden = false
+        navigationController?.isToolbarHidden = true
         let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }
@@ -400,18 +400,18 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    func deleteTabsButtonTapped() {}
+    private func deleteTabsButtonTapped() {}
 
     @objc
-    func newTabButtonTapped() {}
+    private func newTabButtonTapped() {}
 
     @objc
-    func doneButtonTapped() {
+    private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // TODO: FXIOS-6928 Update mode when closing tabTray
         self.dismiss(animated: true, completion: nil)
     }
 
     @objc
-    func syncTabsTapped() {}
+    private func syncTabsTapped() {}
 }
