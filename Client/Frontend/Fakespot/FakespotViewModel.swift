@@ -114,9 +114,15 @@ class FakespotViewModel {
             onStateChange?()
         }
     }
+    private(set) var analysisStatus: AnalysisStatus? {
+        didSet {
+            onAnalysisStatusChange?()
+        }
+    }
+
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
-    @Published var analysisStatus: AnalysisStatus?
+    var onAnalysisStatusChange: (() -> Void)?
 
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }

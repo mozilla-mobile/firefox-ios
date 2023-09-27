@@ -6,7 +6,6 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
-import Combine
 
 class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
@@ -83,7 +82,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     private lazy var needsAnalysisView: FakespotMessageCardView = {
         let view: FakespotMessageCardView = .build()
-        viewModel.needsAnalysisViewModel.primaryAction = self.needsAnalysisTapped
+        viewModel.needsAnalysisViewModel.primaryAction = { [weak self] in
+            Task {
+                await self?.viewModel.triggerProductAnalyze()
+            }
+        }
         view.configure(viewModel.needsAnalysisViewModel)
         return view
     }()
@@ -111,13 +114,27 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 self?.updateContent()
             }
         }
+
+        viewModel.onAnalysisStatusChange = { [weak self] in
+            ensureMainThread {
+                guard let status = viewModel.analysisStatus, let self else {
+                    self?.progressView.removeFromSuperview()
+                    return
+                }
+                switch status {
+                case .pending, .inProgress:
+                    self.needsAnalysisView.removeFromSuperview()
+                    self.contentStackView.insertArrangedSubview(self.progressView, at: 0)
+                default:
+                    self.progressView.removeFromSuperview()
+                }
+            }
+        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    var cancellable: AnyCancellable?
 
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
@@ -130,23 +147,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         setupView()
         listenForThemeChange(view)
         sendTelemetryOnAppear()
-
-        cancellable = viewModel
-            .$analysisStatus
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] status in
-                guard let status, let self else {
-                    self?.progressView.removeFromSuperview()
-                    return
-                }
-                switch status {
-                case .pending, .inProgress:
-                    self.needsAnalysisView.removeFromSuperview()
-                    self.contentStackView.insertArrangedSubview(progressView, at: 0)
-                default:
-                    self.progressView.removeFromSuperview()
-                }
-            }
 
         Task {
             await viewModel.fetchProductAnalysis()
@@ -355,12 +355,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             case .needsAnalysis:
                 return needsAnalysisView
             }
-        }
-    }
-
-    private func needsAnalysisTapped() {
-        Task {
-            await self.viewModel.triggerProductAnalyze()
         }
     }
 
