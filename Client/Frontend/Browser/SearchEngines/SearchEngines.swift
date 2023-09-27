@@ -43,7 +43,11 @@ class SearchEngines {
     weak var delegate: SearchEngineDelegate?
     private var logger: Logger = DefaultLogger.shared
 
-    init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
+    init(
+        prefs: Prefs,
+        files: FileAccessor,
+        engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()
+    ) {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
