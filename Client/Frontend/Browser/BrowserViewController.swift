@@ -639,6 +639,7 @@ class BrowserViewController: UIViewController,
         contextHintVC.configure(
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
+            andDelegate: self,
             presentedUsing: { self.presentContextualHint() },
             andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .toolbar) },
             overlayState: overlayManager)

@@ -398,6 +398,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         jumpBackInContextualHintViewController.configure(
             anchor: view,
             withArrowDirection: .down,
+            andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
             sourceRect: rect,
             andActionForButton: { self.openTabsSettings() },
@@ -414,6 +415,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         syncTabContextualHintViewController.configure(
             anchor: cell.getContextualHintAnchor(),
             withArrowDirection: .down,
+            andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
             overlayState: overlayManager)
     }

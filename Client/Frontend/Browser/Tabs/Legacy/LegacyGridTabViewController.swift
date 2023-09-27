@@ -750,6 +750,7 @@ extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
         contextualHintViewController.configure(
             anchor: title,
             withArrowDirection: .up,
+            andDelegate: self,
             presentedUsing: { self.presentCFROnView() },
             andActionForButton: {
                 self.dismissTabTray()

@@ -125,6 +125,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     func configure(
         anchor: UIView,
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
+        andDelegate delegate: UIPopoverPresentationControllerDelegate? = nil,
         presentedUsing presentation: (() -> Void)?,
         sourceRect: CGRect = CGRect.null,
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
@@ -138,13 +139,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         popoverPresentationController?.sourceRect = sourceRect
         popoverPresentationController?.sourceView = anchor
         popoverPresentationController?.permittedArrowDirections = arrowDirection
-        presentationController?.delegate = self
+        popoverPresentationController?.delegate = delegate
         onViewSummoned = preAction
         onViewDismissed = postAction
         onActionTapped = buttonAction
         viewProvider.presentFromTimer = presentation
         viewProvider.arrowDirection = arrowDirection
         viewProvider.overlayState = overlayState
+
+        if delegate == nil { presentationController?.delegate = self }
 
         var viewModel = ContextualHintViewModel(isActionType: viewProvider.isActionType,
                                                 actionButtonTitle: viewProvider.getCopyFor(.action),
