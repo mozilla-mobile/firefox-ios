@@ -19,5 +19,5 @@ tasks:
         treeherder:
             symbol: bitrise-performance
             kind: test
-            platform: ios-simulator-iphone14pro-16.4
+            platform: ios-simulator-iphone14pro-16.4/opt
             tier: 1
