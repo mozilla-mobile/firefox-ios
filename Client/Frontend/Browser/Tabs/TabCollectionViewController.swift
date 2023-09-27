@@ -18,12 +18,12 @@ class TabCollectionViewController: UIViewController,
     private var collectionView: UICollectionView!
 
     // Redux state
-    var isPrivateMode: Bool {
-        return false
-    }
+    var isPrivateMode: Bool
 
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
+    init(isPrivateMode: Bool,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.isPrivateMode = isPrivateMode
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)

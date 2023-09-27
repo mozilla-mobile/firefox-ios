@@ -77,7 +77,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        // TODO: Connect to regular tabs count
+        // TODO: FXIOS-7356 Connect to regular tabs count
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -252,7 +252,18 @@ class TabTrayViewController: UIViewController,
             setupForiPhone()
         }
 
-        showPanel(TabCollectionViewController())
+        showPanel(getChildViewController())
+    }
+
+    private func getChildViewController() -> UIViewController {
+        switch selectedSegment {
+        case .tabs:
+            return TabCollectionViewController(isPrivateMode: false)
+        case .privateTabs:
+            return TabCollectionViewController(isPrivateMode: true)
+            // TODO: FXIOS-6921 Integrate synctab View Controller
+        default: return UIViewController()
+        }
     }
 
     private func setupForiPhone() {
@@ -266,8 +277,9 @@ class TabTrayViewController: UIViewController,
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // TODO: FXIOS-6926 Remove priority once collection view layout is configured
+            navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
 
-            containerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -280,6 +292,7 @@ class TabTrayViewController: UIViewController,
 
     private func setupForiPad() {
         navigationItem.titleView = segmentedControl
+        view.addSubviews(containerView)
 
         if let titleView = navigationItem.titleView {
             titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
@@ -317,17 +330,6 @@ class TabTrayViewController: UIViewController,
         navigationController?.isToolbarHidden = false
         let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
-    }
-
-    private func setupToolbarForIpad() {
-        guard !isSyncTabsPanel else {
-            navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItem = syncTabButton
-            return
-        }
-
-        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
-        navigationItem.leftBarButtonItem = deleteButton
     }
 
     private func createSegmentedControl(
