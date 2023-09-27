@@ -161,7 +161,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         hintView.configure(viewModel: viewModel)
         applyTheme()
 
-        if viewProvider.shouldPresentContextualHint() && shouldStartTimer {
+        if shouldStartTimer {
             viewProvider.startTimer()
         }
 

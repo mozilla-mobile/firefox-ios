@@ -47,6 +47,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
     func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton)
+    func urlBarPresentCFR(at sourceView: UIView)
 }
 
 protocol URLBarViewProtocol {
@@ -764,6 +765,10 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton) {
         delegate?.urlBarDidPressShopping(self, shoppingButton: button)
+    }
+
+    func tabLocationViewPresentCFR(at sourceView: UIView) {
+        delegate?.urlBarPresentCFR(at: sourceView)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {

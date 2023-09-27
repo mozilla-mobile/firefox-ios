@@ -15,6 +15,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton)
+    func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult
@@ -290,6 +291,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         shoppingButton.isHidden = shouldHideButton
         if !shouldHideButton {
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
+            delegate?.tabLocationViewPresentCFR(at: shoppingButton)
         }
     }
 

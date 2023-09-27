@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// Public interface for contextual hint consumers
 protocol ContextualHintEligibilityUtilityProtocol {
@@ -40,6 +41,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = isSearchBarLocationFeatureEnabled
         case .inactiveTabs:
             hintTypeShouldBePresented = true
+        case .shoppingExperience:
+            return canPresentShoppingCFR
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
@@ -90,6 +93,38 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - The Home Tab Banner isn't being displayed (not specified by Product, but the CFR might show when the anchor point isn't on screen)
     private var canPresentJumpBackInSyncedTab: Bool {
         return shouldCheckToolbarHasShown
+    }
+
+    // There are 2 types of CFRs
+    //
+    // Shopping CFR-1: The user has not opted in for the Shopping Experience
+    // Shopping CFR-2: The user has opted in for the Shopping Experience
+    private var canPresentShoppingCFR: Bool {
+        guard !hasAlreadyBeenPresented(.shoppingExperience) else {
+            // Retrieve the counter for shopping onboarding CFRs
+            let cfrCounter = profile.prefs.intForKey(PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue) ?? 1
+            // Check if the user has opted in for Shopping Experience
+            let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+            // Retrieve the last timestamp for Fakespot CFRs
+            let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.FakespotLastCFRTimestamp)
+            // Check if 24 hours have passed since the last timestamp
+            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(hours: 24, lastTimestamp: lastTimestamp!) : false
+
+            if cfrCounter == 1, !hasOptedIn, hasTimePassed {
+                // - Display CFR-1
+                profile.prefs.setInt(2, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                return true
+            } else if cfrCounter < 3, hasOptedIn, hasTimePassed {
+                // - Display CFR-2
+                profile.prefs.setInt(3, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                return true
+            }
+            return false
+        }
+        // - Display CFR-1
+        profile.prefs.setInt(1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+        profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        return true
     }
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
