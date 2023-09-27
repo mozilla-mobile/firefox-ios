@@ -10,12 +10,13 @@ import XCTest
 import Common
 import Shared
 
-class LegacyTabTrayViewControllerTests: XCTestCase {
+final class LegacyTabTrayViewControllerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: TabManager!
     var tabTray: LegacyTabTrayViewController!
     var gridTab: LegacyGridTabViewController!
     var overlayManager: MockOverlayModeManager!
+    var notificationCenter: MockNotificationCenter!
     var urlBar: MockURLBarView!
 
     override func setUp() {
@@ -27,11 +28,13 @@ class LegacyTabTrayViewControllerTests: XCTestCase {
         urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
+        notificationCenter = MockNotificationCenter()
         tabTray = LegacyTabTrayViewController(tabTrayDelegate: nil,
                                               profile: profile,
                                               tabToFocus: nil,
                                               tabManager: manager,
-                                              overlayManager: overlayManager)
+                                              overlayManager: overlayManager,
+                                              and: notificationCenter)
         gridTab = LegacyGridTabViewController(tabManager: manager, profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
@@ -57,15 +60,15 @@ class LegacyTabTrayViewControllerTests: XCTestCase {
 
         gridTab.tabDisplayManager.performCloseAction(for: tabToRemove)
         // Wait for notification of .TabClosed when tab is removed
-        weak var expectation = self.expectation(description: "notificationReceived")
+        let expectation = expectation(description: "notificationReceived")
         NotificationCenter.default.addObserver(forName: .UpdateLabelOnTabClosed, object: nil, queue: nil) { notification in
-            expectation?.fulfill()
+            expectation.fulfill()
 
             XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")
             XCTAssertEqual(self.tabTray.countLabel.text, "1")
         }
 
-        waitForExpectations(timeout: 3.0, handler: nil)
+        waitForExpectations(timeout: 3.0)
     }
 
     func testTabTrayInPrivateMode_WhenTabIsCreated() {
