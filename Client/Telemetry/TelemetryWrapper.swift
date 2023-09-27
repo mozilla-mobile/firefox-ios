@@ -647,6 +647,7 @@ extension TelemetryWrapper {
         case bookmarkItem = "bookmark-item"
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
+        case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case awesomebarShareTap = "awesomebar-share-tap"
     }
 
@@ -1068,6 +1069,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
         case (.action, .tap, .shoppingLearnMoreReviewQualityButton, _, _):
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
+        case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
+            GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

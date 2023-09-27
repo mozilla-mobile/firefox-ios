@@ -12,7 +12,7 @@ private let searchLimit = 1000
 
 extension HistoryHighlight {
     var urlFromString: URL? {
-        return URL(string: url)
+        return URL(string: url, encodingInvalidCharacters: false)
     }
 }
 

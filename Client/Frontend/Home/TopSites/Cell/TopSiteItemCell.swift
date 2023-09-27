@@ -151,7 +151,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         var imageURL: URL?
 
         if let site = topSite.site as? SponsoredTile {
-            imageURL = URL(string: site.imageURL)
+            imageURL = URL(string: site.imageURL, encodingInvalidCharacters: false)
         }
         let viewModel = FaviconImageViewModel(siteURLString: urlRequest,
                                               faviconURL: imageURL)

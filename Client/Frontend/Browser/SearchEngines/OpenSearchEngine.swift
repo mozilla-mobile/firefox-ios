@@ -144,7 +144,8 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     private func isSearchURLForEngine(_ url: URL?) -> Bool {
         guard let urlHost = url?.shortDisplayString,
               let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
-              let templateURL = URL(string: String(searchTemplate[..<queryEndIndex])) else { return false }
+              let templateURL = URL(string: String(searchTemplate[..<queryEndIndex]), encodingInvalidCharacters: false)
+        else { return false }
         return urlHost == templateURL.shortDisplayString
     }
 
@@ -162,7 +163,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
                 let urlString = encodedSearchTemplate
                     .replacingOccurrences(of: searchTermComponent, with: escapedQuery, options: .literal, range: nil)
                     .replacingOccurrences(of: localeTermComponent, with: localeString, options: .literal, range: nil)
-                return URL(string: urlString)
+                return URL(string: urlString, encodingInvalidCharacters: false)
             }
         }
 

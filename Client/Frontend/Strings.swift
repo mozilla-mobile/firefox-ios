@@ -172,6 +172,29 @@ extension String {
                 value: "Move the toolbar to the top if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
         }
+
+        public struct Shopping {
+            public static let NotOptedInBody = MZLocalizedString(
+                key: "", // "ContextualHints.Shopping.NotOptedIn.v120"
+                tableName: "Shopping",
+                value: "Find out if you can trust this product’s reviews — before you buy.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature.")
+            public static let NotOptedInAction = MZLocalizedString(
+                key: "", // "ContextualHints.Shopping.NotOptedInAction.v120"
+                tableName: "Shopping",
+                value: "Try review checker",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action.")
+            public static let OptedInBody = MZLocalizedString(
+                key: "", // "ContextualHints.Shopping.OptedInBody.v120"
+                tableName: "Shopping",
+                value: "Are these reviews reliable? Check now to see an adjusted rating.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button.")
+            public static let OptedInAction = MZLocalizedString(
+                key: "", // "ContextualHints.Shopping.OptedInAction.v120"
+                tableName: "Shopping",
+                value: "Open review checker",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action.")
+        }
     }
 }
 

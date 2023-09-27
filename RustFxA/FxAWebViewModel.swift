@@ -287,7 +287,7 @@ extension FxAWebViewModel {
         // The app handles this event fully in native UI.
         let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationURL {
-            let expectedRedirectURL = URL(string: redirectUrl)!
+            let expectedRedirectURL = URL(string: redirectUrl, encodingInvalidCharacters: false)!
             if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
                 return .cancel
             }

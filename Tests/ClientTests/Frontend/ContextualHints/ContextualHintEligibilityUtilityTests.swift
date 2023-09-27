@@ -139,4 +139,55 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }
+
+    // Test Shopping CFRs
+    func test_canPresentShoppingCFR_FirstDisplay_UserHasNotOptedIn() {
+        subject = ContextualHintEligibilityUtility(with: profile, overlayState: overlayState)
+        let result = subject.canPresent(.shoppingExperience)
+        XCTAssertTrue(result)
+    }
+
+    func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasPassed() {
+        let lastTimestamp: Timestamp = 1695719918000 // Date and time (GMT): Tuesday, 26 September 2023 09:18:38
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        profile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
+
+        let result = subject.canPresent(.shoppingExperience)
+        XCTAssertTrue(result)
+    }
+
+    func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasPassed() {
+        let lastTimestamp: Timestamp = 1695719918000 // Date and time (GMT): Tuesday, 26 September 2023 09:18:38
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        profile.prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
+
+        let result = subject.canPresent(.shoppingExperience)
+        XCTAssertTrue(result)
+    }
+
+    func test_canPresentShoppingCFR_SecondDisplay_UserHasNotOptedIn_TimeHasNotPassed() {
+        let lastTimestamp: Timestamp = Date.now()
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        profile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
+
+        let result = subject.canPresent(.shoppingExperience)
+        XCTAssertFalse(result)
+    }
+
+    func test_canPresentShoppingCFR_SecondDisplay_UserHasOptedIn_TimeHasNotPassed() {
+        let lastTimestamp: Timestamp = Date.now()
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        profile.prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
+
+        let result = subject.canPresent(.shoppingExperience)
+        XCTAssertFalse(result)
+    }
 }

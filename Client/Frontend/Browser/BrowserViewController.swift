@@ -1961,7 +1961,7 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         case .some(.link(let url)):
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)") {
+            if let url = URL(string: "tel:\(phoneNumber)", encodingInvalidCharacters: false) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()

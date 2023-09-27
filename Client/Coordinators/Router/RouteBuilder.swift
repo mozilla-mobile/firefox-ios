@@ -134,7 +134,7 @@ final class RouteBuilder {
         if userActivity.activityType == CSSearchableItemActionType {
             guard let userInfo = userActivity.userInfo,
                   let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                  let url = URL(string: urlString)
+                  let url = URL(string: urlString, encodingInvalidCharacters: false)
             else {
                 return nil
             }
