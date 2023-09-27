@@ -43,7 +43,7 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
             if let refresh = meta["http-equiv"], refresh == "Refresh",
                let content = meta["content"],
                let index = content.range(of: "URL="),
-               let url = URL(string: String(content[index.upperBound...]), encodingInvalidCharacters: false) {
+               let url = URL(string: String(content[index.upperBound...]), invalidCharacters: false) {
                 reloadURL = url
             }
         }
@@ -63,7 +63,7 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
         // Fallback to the favicon at the root of the domain
         // This is a fall back because it's generally low res
-        if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico", encodingInvalidCharacters: false) {
+        if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico", invalidCharacters: false) {
             return faviconURL
         }
 

@@ -152,7 +152,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
                                          value: .recentlySavedBookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         } else if let item = recentItems[safe: indexPath.row] as? ReadingListItem,
-                  let url = URL(string: item.url, encodingInvalidCharacters: false),
+                  let url = URL(string: item.url, invalidCharacters: false),
                   let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             let visitType = VisitType.bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)

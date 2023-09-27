@@ -8,9 +8,9 @@ import Shared
 
 class URIFixup {
     static func getURL(_ entry: String) -> URL? {
-        if let url = URL(string: entry, encodingInvalidCharacters: false),
+        if let url = URL(string: entry, invalidCharacters: false),
             InternalURL.isValid(url: url) {
-            return URL(string: entry, encodingInvalidCharacters: false)
+            return URL(string: entry, invalidCharacters: false)
         }
 
         let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -49,7 +49,7 @@ class URIFixup {
             string = replaceHashMarks(url: string)
         }
 
-        guard let url = URL(string: string, encodingInvalidCharacters: false) else { return nil }
+        guard let url = URL(string: string, invalidCharacters: false) else { return nil }
 
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if AppConstants.punyCode {

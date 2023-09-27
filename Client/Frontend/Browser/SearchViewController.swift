@@ -532,13 +532,13 @@ class SearchViewController: SiteTableViewController,
             if let site = data[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
-                if let url = URL(string: site.url, encodingInvalidCharacters: false) {
+                if let url = URL(string: site.url, invalidCharacters: false) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
             }
         case .searchHighlights:
             if let urlString = searchHighlights[indexPath.row].urlString,
-                let url = URL(string: urlString, encodingInvalidCharacters: false) {
+                let url = URL(string: urlString, invalidCharacters: false) {
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }

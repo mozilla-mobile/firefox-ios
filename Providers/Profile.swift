@@ -608,7 +608,7 @@ open class BrowserProfile: Profile {
                     switch command {
                     case .tabReceived(_, let tabData):
                         let url = tabData.entries.last?.url ?? ""
-                        return URL(string: url, encodingInvalidCharacters: false)
+                        return URL(string: url, invalidCharacters: false)
                     }
                 }
                 self.sendTabDelegate?.openSendTabs(for: urls)

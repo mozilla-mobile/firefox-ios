@@ -26,7 +26,7 @@ class TopSitesWidgetManager: TopSitesWidget {
             var widgetkitTopSites = [WidgetKitTopSiteModel]()
             sites.forEach { site in
                 let imageKey = site.tileURL.baseDomain ?? ""
-                if let webUrl = URL(string: site.url, encodingInvalidCharacters: false) {
+                if let webUrl = URL(string: site.url, invalidCharacters: false) {
                     widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title,
                                                                    url: webUrl,
                                                                    imageKey: imageKey))
