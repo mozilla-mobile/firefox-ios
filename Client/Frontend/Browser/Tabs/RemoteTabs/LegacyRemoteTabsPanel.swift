@@ -14,7 +14,7 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class LegacyRemoteTabsPanel: UIViewController, Themeable {
+class LegacyRemoteTabsPanel: UIViewController, Themeable, RemoteTabsClientAndTabsDataSourceDelegate {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -92,6 +92,11 @@ class LegacyRemoteTabsPanel: UIViewController, Themeable {
             // no need to do anything at all
             break
         }
+    }
+
+    func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
+        // Pass event along to our delegate
+        remotePanelDelegate?.remotePanel(didSelectURL: url, visitType: VisitType.typed)
     }
 }
 
@@ -243,7 +248,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
             return
         }
 
-        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(actionDelegate: remoteTabsPanel,
                                                                     clientAndTabs: nonEmptyClientAndTabs,
                                                                     profile: profile,
                                                                     theme: themeManager.currentTheme)
