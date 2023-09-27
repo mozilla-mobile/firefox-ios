@@ -39,7 +39,7 @@ struct FakespotHighlightsCardViewModel {
 
 class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let titleFontSize: CGFloat = 17
+        static let titleFontSize: CGFloat = 15
         static let buttonFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
@@ -57,9 +57,9 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .headline,
-            size: UX.titleFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                            size: UX.titleFontSize,
+                                                            weight: .semibold)
         label.numberOfLines = 0
     }
 
