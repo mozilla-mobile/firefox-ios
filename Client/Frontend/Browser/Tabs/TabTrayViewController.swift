@@ -344,7 +344,7 @@ class TabTrayViewController: UIViewController,
     @objc
     func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
-        // TODO: Update mode when closing tabTray
+        // TODO: FXIOS-6928 Update mode when closing tabTray
         self.dismiss(animated: true, completion: nil)
     }
 
