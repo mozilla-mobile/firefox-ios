@@ -452,7 +452,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController)
