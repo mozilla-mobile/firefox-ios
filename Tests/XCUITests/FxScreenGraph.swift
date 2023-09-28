@@ -506,11 +506,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.recentlyClosedCell], to: HistoryRecentlyClosed)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
-            app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView]
-                .cells
-                .matching(identifier: AccessibilityIdentifiers.LibraryPanels.HistoryPanel.clearHistoryCell)
-                .element(boundBy: 0)
-                .tap()
+            app.toolbars.matching(identifier: "Toolbar").buttons["historyBottomDeleteButton"].tap()
         }
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
                 app.buttons["Done"].tap()

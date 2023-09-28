@@ -18,7 +18,7 @@ class OnboardingTests: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/471228
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306814
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
@@ -58,14 +58,14 @@ class OnboardingTests: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2250844
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306816
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/67227
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306815
     func testWhatsNewPage() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         navigator.goto(BrowserTabMenu)

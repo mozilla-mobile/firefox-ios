@@ -6,7 +6,7 @@ import XCTest
 
 let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2298623
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
@@ -18,7 +18,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertTrue(app.tables.cells["NewTabAsCustomURL"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2298624
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307027
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
@@ -38,7 +38,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2298625
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
         waitForTabsButton()
@@ -58,7 +58,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2298626
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
         navigator.nowAt(NewTabScreen)
@@ -82,7 +82,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2298628
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
