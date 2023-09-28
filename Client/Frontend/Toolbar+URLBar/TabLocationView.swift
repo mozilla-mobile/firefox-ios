@@ -287,12 +287,28 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
+        if product.product != nil {
+            sendProductPageDetectedTelemetry()
+        }
+
         let shouldHideButton = !product.isShoppingButtonVisible || tab.isPrivate
         shoppingButton.isHidden = shouldHideButton
         if !shouldHideButton {
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
             delegate?.tabLocationViewPresentCFR(at: shoppingButton)
         }
+    }
+
+    private func sendProductPageDetectedTelemetry() {
+        let profile: Profile = AppContainer.shared.resolve()
+        let prefs = profile.prefs
+        let productPageVisitsCounter = (prefs.intForKey(PrefsKeys.Shopping2023ProductPageVisitsCount) ?? 0) + 1
+        let pageVisitsEventCounter = [TelemetryWrapper.EventExtraKey.productPageVisitsCount.rawValue: productPageVisitsCounter]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .shoppingProductPageVisits,
+                                     extras: pageVisitsEventCounter)
+        prefs.setInt(productPageVisitsCounter, forKey: PrefsKeys.Shopping2023ProductPageVisitsCount)
     }
 
     private func updateTextWithURL() {
