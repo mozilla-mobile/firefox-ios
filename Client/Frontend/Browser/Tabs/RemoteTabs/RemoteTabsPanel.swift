@@ -6,38 +6,68 @@ import UIKit
 import Storage
 import Common
 import Shared
+import Redux
 
-protocol RemotePanelDelegateProvider: AnyObject {
-    var remotePanelDelegate: RemotePanelDelegate? { get }
+/// Captures state needed to populate the Sync tab UI. Some aspects of how we
+/// will handle management of state are still TBD as part of the Redux refactors.
+struct RemoteTabsPanelState {
+    let refreshState: RemoteTabsPanelRefreshState
+    let clientAndTabs: [ClientAndTabs]
+    let allowsRefresh: Bool // True if hasSyncableAccount
+    let syncIsSupported: Bool // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
+
+    static func emptyState() -> RemoteTabsPanelState {
+        return RemoteTabsPanelState(refreshState: .loaded,
+                                    clientAndTabs: [],
+                                    allowsRefresh: false,
+                                    syncIsSupported: true)
+    }
 }
 
-protocol RemotePanelDelegate: AnyObject {
-    func remotePanelDidRequestToSignIn()
-    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func remotePanel(didSelectURL url: URL, visitType: VisitType)
+enum RemoteTabsPanelRefreshState {
+    case loaded
+    case refreshing
 }
 
-// MARK: - RemoteTabsPanel
-class LegacyRemoteTabsPanel: UIViewController,
-                             Themeable,
-                             RemoteTabsClientAndTabsDataSourceDelegate,
-                             RemotePanelDelegateProvider {
+enum RemoteTabsPanelAction: Action {
+    case refreshCachedTabs
+    case refreshTabs
+}
+
+class RemoteTabsPanel: UIViewController,
+                       StoreSubscriber,
+                       Themeable,
+                       RemoteTabsClientAndTabsDataSourceDelegate,
+                       RemotePanelDelegateProvider {
+    private(set) var state: RemoteTabsPanelState
+    var tableViewController: RemoteTabsTableViewController
+    var remotePanelDelegate: RemotePanelDelegate?
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    var remotePanelDelegate: RemotePanelDelegate?
-    var profile: Profile
-    var tableViewController: LegacyRemoteTabsTableViewController
 
-    init(profile: Profile,
+    init(state: RemoteTabsPanelState,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.profile = profile
+        self.state = state
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile)
+        self.tableViewController = RemoteTabsTableViewController(state: state)
 
         super.init(nibName: nil, bundle: nil)
+
+        self.tableViewController.remoteTabsPanel = self
+
+        observeNotifications()
+    }
+
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    func observeNotifications() {
+        // TODO: State to be provided by forthcoming Redux updates. TBD.
+        // For now, continue to observe notifications.
+        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
                                        selector: #selector(notificationReceived),
                                        name: .FirefoxAccountChanged,
@@ -48,13 +78,8 @@ class LegacyRemoteTabsPanel: UIViewController,
                                        object: nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableViewController.remoteTabsPanel = self
 
         listenForThemeChange(view)
         setupLayout()
@@ -80,24 +105,20 @@ class LegacyRemoteTabsPanel: UIViewController,
         tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
         tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs()
+        tableViewController.refreshTabs(state: state)
     }
 
     func forceRefreshTabs() {
-        tableViewController.refreshTabs(updateCache: true)
+        tableViewController.refreshTabs(state: state, updateCache: true)
     }
 
     @objc
     func notificationReceived(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            DispatchQueue.main.async {
-                self.tableViewController.refreshTabs()
+        let name = notification.name
+        if name == .FirefoxAccountChanged || name == .ProfileDidFinishSyncing {
+            ensureMainThread {
+                self.tableViewController.refreshTabs(state: self.state)
             }
-            break
-        default:
-            // no need to do anything at all
-            break
         }
     }
 
@@ -107,24 +128,20 @@ class LegacyRemoteTabsPanel: UIViewController,
     }
 }
 
-protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
-}
-
-protocol CollapsibleTableViewSection: AnyObject {
-    func hideTableViewSection(_ section: Int)
-}
-
-// MARK: - RemoteTabsTableViewController
-class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
+class RemoteTabsTableViewController: UITableViewController,
+                                     Themeable,
+                                     CollapsibleTableViewSection,
+                                     LibraryPanelContextMenu  {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
 
-    weak var remoteTabsPanel: LegacyRemoteTabsPanel?
-    private var profile: Profile!
+    private(set) var state: RemoteTabsPanelState
+    
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    weak var remoteTabsPanel: RemoteTabsPanel?
     var tableViewDelegate: RemoteTabsPanelDataSource? {
         didSet {
             tableView.dataSource = tableViewDelegate
@@ -136,26 +153,16 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    var isTabSyncEnabled: Bool {
-        guard let isEnabled = profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) else {
-            return false
-        }
-
-        return isEnabled
-    }
-
-    init(profile: Profile,
+    init(state: RemoteTabsPanelState,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.profile = profile
+        self.state = state
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -188,13 +195,13 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
 
-        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
-        // logged in, remove any existing control.
-        if profile.hasSyncableAccount() && refreshControl == nil {
+        // Add a refresh control if the user is logged in and the control was not added before.
+        // If the user is not logged in, remove any existing control.
+        if state.allowsRefresh && refreshControl == nil {
             addRefreshControl()
         }
 
-        refreshTabs(updateCache: true)
+        refreshTabs(state: state, updateCache: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -228,7 +235,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
     @objc
     func onRefreshPulled() {
         refreshControl?.beginRefreshing()
-        refreshTabs(updateCache: true)
+        refreshTabs(state: state, updateCache: true)
     }
 
     func endRefreshing() {
@@ -236,7 +243,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
-        if !profile.hasSyncableAccount() {
+        if !state.allowsRefresh {
             removeRefreshControl()
         }
     }
@@ -264,50 +271,65 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         tableView.reloadData()
     }
 
-    func refreshTabs(updateCache: Bool = false, completion: (() -> Void)? = nil) {
+    func refreshTabs(state: RemoteTabsPanelState, updateCache: Bool = false, completion: (() -> Void)? = nil) {
         ensureMainThread { [self] in
-            // Short circuit if the user is not logged in
-            guard profile.hasSyncableAccount() else {
-                endRefreshing()
-                showEmptyTabsViewWith(.notLoggedIn)
+            self.state = state
+            performRefresh(updateCache: updateCache, completion: completion)
+        }
+    }
+
+    private func performRefresh(updateCache: Bool, completion: (() -> Void)?) {
+        // Short circuit if the user is not logged in
+        guard state.allowsRefresh else {
+            endRefreshing()
+            showEmptyTabsViewWith(.notLoggedIn)
+            return
+        }
+
+        // TODO: Send Redux action to get cached clients & tabs, update once new state is received. Forthcoming.
+        // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
+        
+        // Previous code for reference. Will be removed soon.
+        /*
+        // Get cached tabs.
+        profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
+            guard let clientAndTabs = result.successValue else {
+                self?.endRefreshing()
+                self?.showEmptyTabsViewWith(.failedToSync)
                 return
             }
 
-            // Get cached tabs.
-            profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
-                guard let clientAndTabs = result.successValue else {
-                    self?.endRefreshing()
-                    self?.showEmptyTabsViewWith(.failedToSync)
-                    return
-                }
+            // Update UI with cached data.
+            self?.updateDelegateClientAndTabData(clientAndTabs)
 
-                // Update UI with cached data.
-                self?.updateDelegateClientAndTabData(clientAndTabs)
-
-                if updateCache {
-                    // Fetch updated tabs.
-                    self?.profile.getClientsAndTabs().uponQueue(.main) { result in
-                        if let clientAndTabs = result.successValue {
-                            // Update UI with updated tabs.
-                            self?.updateDelegateClientAndTabData(clientAndTabs)
-                        }
-
-                        self?.endRefreshing()
-                        completion?()
-                    }
-                } else {
-                    self?.endRefreshing()
-                    completion?()
-                }
+            if updateCache {
+                
+                // TODO: Send Redux action to refresh tabs, and then update once new state is received. Forthcoming.
+                // store.dispatch(RemoteTabsPanelAction.refreshTabs)
+                
+                // Original code:
+                // self?.profile.getClientsAndTabs().uponQueue(.main) { result in
+                //     if let clientAndTabs = result.successValue {
+                //         // Update UI with updated tabs.
+                //         self?.updateDelegateClientAndTabData(clientAndTabs)
+                //     }
+                // 
+                //     self?.endRefreshing()
+                //     completion?()
+                // }
+            } else {
+                self?.endRefreshing()
+                completion?()
             }
         }
+         */
     }
 
     private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         var errorMessage = error
 
-        if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
+        if !state.syncIsSupported { errorMessage = .syncDisabledByUser }
 
         let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
                                                             error: errorMessage,
@@ -324,9 +346,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)
     }
-}
 
-extension LegacyRemoteTabsTableViewController: CollapsibleTableViewSection {
     func hideTableViewSection(_ section: Int) {
         guard let dataSource = tableViewDelegate as? RemoteTabsClientAndTabsDataSource else { return }
 
@@ -338,10 +358,7 @@ extension LegacyRemoteTabsTableViewController: CollapsibleTableViewSection {
 
         tableView.reloadData()
     }
-}
 
-// MARK: LibraryPanelContextMenu
-extension LegacyRemoteTabsTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
