@@ -301,7 +301,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         self.alpha = alpha
     }
-    
+
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
