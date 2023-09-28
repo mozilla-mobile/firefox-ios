@@ -25,11 +25,11 @@ class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeAppli
         }
     }
 
-    weak var remoteTabsPanel: RemoteTabsPanel?
+    weak var remoteTabsPanel: LegacyRemoteTabsPanel?
     var error: ErrorType
     private var theme: Theme
 
-    init(remoteTabsPanel: RemoteTabsPanel,
+    init(remoteTabsPanel: LegacyRemoteTabsPanel,
          error: ErrorType,
          theme: Theme) {
         self.remoteTabsPanel = remoteTabsPanel
