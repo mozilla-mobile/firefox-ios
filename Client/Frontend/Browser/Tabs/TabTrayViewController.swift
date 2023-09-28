@@ -30,6 +30,7 @@ class TabTrayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     weak var  delegate: TabTrayViewControllerDelegate?
     private var titleWidthConstraint: NSLayoutConstraint?
+    private var containerView: UIView = .build { _ in }
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
@@ -74,7 +75,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        // TODO: Connect to regular tabs count
+        // TODO: FXIOS-7356 Connect to regular tabs count
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -166,9 +167,11 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(delegate: TabTrayViewControllerDelegate,
+    init(selectedSegment: LegacyTabTrayViewModel.Segment,
+         delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.selectedSegment = selectedSegment
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -243,24 +246,43 @@ class TabTrayViewController: UIViewController,
     // MARK: Private
     private func setupView() {
         // Should use Regular layout used for iPad
-        guard isRegularLayout else {
+        if isRegularLayout {
+            setupForiPad()
+        } else {
             setupForiPhone()
-            return
         }
 
-        setupForiPad()
+        showPanel(getChildViewController())
+    }
+
+    private func getChildViewController() -> UIViewController {
+        switch selectedSegment {
+        case .tabs:
+            return TabCollectionViewController(isPrivateMode: false)
+        case .privateTabs:
+            return TabCollectionViewController(isPrivateMode: true)
+            // TODO: FXIOS-6921 Integrate synctab View Controller
+        default: return UIViewController()
+        }
     }
 
     private func setupForiPhone() {
         navigationItem.titleView = nil
         updateTitle()
         view.addSubview(navigationToolbar)
+        view.addSubviews(containerView)
         navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
 
         NSLayoutConstraint.activate([
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // TODO: FXIOS-6926 Remove priority once collection view layout is configured
+            navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
+
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -270,11 +292,19 @@ class TabTrayViewController: UIViewController,
 
     private func setupForiPad() {
         navigationItem.titleView = segmentedControl
+        view.addSubviews(containerView)
 
         if let titleView = navigationItem.titleView {
             titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
             titleWidthConstraint?.isActive = true
         }
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     private func updateToolbarItems() {
@@ -296,6 +326,10 @@ class TabTrayViewController: UIViewController,
             navigationItem.leftBarButtonItem = deleteButton
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
+
+        navigationController?.isToolbarHidden = true
+        let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        setToolbarItems(toolbarItems, animated: true)
     }
 
     private func createSegmentedControl(
@@ -325,6 +359,36 @@ class TabTrayViewController: UIViewController,
         return button
     }
 
+    // MARK: Child panels
+    private func showPanel(_ panel: UIViewController) {
+        addChild(panel)
+        panel.beginAppearanceTransition(true, animated: true)
+        containerView.addSubview(panel.view)
+        containerView.bringSubviewToFront(navigationToolbar)
+        panel.endAppearanceTransition()
+        panel.view.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+
+        panel.didMove(toParent: self)
+        updateTitle()
+    }
+
+    private func hideCurrentPanel() {
+        if let panel = children.first {
+            panel.willMove(toParent: nil)
+            panel.beginAppearanceTransition(false, animated: true)
+            panel.view.removeFromSuperview()
+            panel.endAppearanceTransition()
+            panel.removeFromParent()
+        }
+    }
+
     private func segmentPanelChange() {}
 
     @objc
@@ -336,18 +400,18 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    func deleteTabsButtonTapped() {}
+    private func deleteTabsButtonTapped() {}
 
     @objc
-    func newTabButtonTapped() {}
+    private func newTabButtonTapped() {}
 
     @objc
-    func doneButtonTapped() {
+    private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // TODO: FXIOS-6928 Update mode when closing tabTray
         self.dismiss(animated: true, completion: nil)
     }
 
     @objc
-    func syncTabsTapped() {}
+    private func syncTabsTapped() {}
 }
