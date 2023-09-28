@@ -1315,7 +1315,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.3.x-ventura
         machine_type_id: g2-m1.8core
-  perfherder-test:
+  Bitrise_Performance_Test:
     steps:
     - cache-pull@2.1:
         is_always_run: true
