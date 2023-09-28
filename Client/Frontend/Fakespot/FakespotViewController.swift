@@ -134,7 +134,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
-        betaLabel.textColor = theme.colors.textPrimary
+        betaLabel.textColor = theme.colors.textSecondary
         betaView.layer.borderColor = theme.colors.actionSecondary.cgColor
 
         contentStackView.arrangedSubviews.forEach { view in
