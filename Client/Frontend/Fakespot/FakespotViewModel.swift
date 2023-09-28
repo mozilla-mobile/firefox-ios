@@ -114,6 +114,7 @@ class FakespotViewModel {
             onStateChange?()
         }
     }
+
     private(set) var analysisStatus: AnalysisStatus? {
         didSet {
             onAnalysisStatusChange?()
@@ -131,7 +132,7 @@ class FakespotViewModel {
     }
 
     private let prefs: Prefs
-    private var isOptedIn: Bool {
+    public var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
@@ -230,7 +231,8 @@ class FakespotViewModel {
         state = .loading
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let analysis = try? await shoppingProduct.getProductAnalysisStatus()?.status
+            let needsAnalysis = product?.needsAnalysis ?? false
+            let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
             state = .loaded(product, analysis)
         } catch {
             state = .error(error)

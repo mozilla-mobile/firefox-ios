@@ -148,9 +148,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         listenForThemeChange(view)
         sendTelemetryOnAppear()
 
-        Task {
-            await viewModel.fetchProductAnalysis()
-            try? await viewModel.observeProductAnalysisStatus()
+        if viewModel.isOptedIn {
+            Task {
+                await viewModel.fetchProductAnalysis()
+                try? await viewModel.observeProductAnalysisStatus()
+            }
         }
     }
 
