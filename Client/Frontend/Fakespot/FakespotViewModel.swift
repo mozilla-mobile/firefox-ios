@@ -109,7 +109,7 @@ class FakespotViewModel {
     }
 
     var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
-        guard let highlights = state.productData?.highlights else { return nil }
+        guard let highlights = state.productData?.highlights, !highlights.items.isEmpty else { return nil }
         return FakespotHighlightsCardViewModel(highlights: highlights.items)
     }
 

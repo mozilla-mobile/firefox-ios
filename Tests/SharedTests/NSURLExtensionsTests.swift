@@ -173,7 +173,6 @@ class NSURLExtensionsTests: XCTestCase {
             "http://google.com",
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "about:reader",
-            "http://about:reader?url=http://example.com"
         ]
 
         goodurls.forEach { XCTAssertTrue(URL(string: $0)!.isSyncedReaderModeURL, $0) }

@@ -25,7 +25,7 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .headline,
+            withTextStyle: .subheadline,
             size: UX.titleFontSize,
             weight: .semibold)
         label.numberOfLines = 0

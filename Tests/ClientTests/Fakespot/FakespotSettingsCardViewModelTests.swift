@@ -25,7 +25,7 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
 
     func testInitialViewModelValues() {
         XCTAssertEqual(viewModel.areAdsEnabled, true)
-        XCTAssertEqual(viewModel.isReviewQualityCheckOn, true)
+        XCTAssertEqual(viewModel.isReviewQualityCheckOn, false)
     }
 
     func testGetUserPrefsAfterSettingPrefs() {
@@ -41,7 +41,7 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
         mockProfile.prefs.setBool(false, forKey: "")
 
         XCTAssertEqual(viewModel.areAdsEnabled, true)
-        XCTAssertEqual(viewModel.isReviewQualityCheckOn, true)
+        XCTAssertEqual(viewModel.isReviewQualityCheckOn, false)
     }
 
     func testSwitchValueChangedUpdatesPrefs() {

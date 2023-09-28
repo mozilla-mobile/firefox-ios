@@ -29,13 +29,13 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         var imageModel = site
 
         // urlStringRequest possibly cannot be a URL
-        if let siteURL = URL(string: site.siteURLString ?? "") {
+        if let siteURL = URL(string: site.siteURLString ?? "", invalidCharacters: false) {
             let domain = generateDomainURL(siteURL: siteURL)
             imageModel.siteURL = siteURL
             imageModel.domain = domain
         }
 
-        imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? ""),
+        imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? "", invalidCharacters: false),
                                                faviconURL: imageModel.faviconURL,
                                                type: imageModel.expectedImageType)
 

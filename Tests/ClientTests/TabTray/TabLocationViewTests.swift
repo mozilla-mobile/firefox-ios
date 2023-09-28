@@ -27,6 +27,7 @@ class TabLocationViewTests: XCTestCase {
 
 // A mock delegate
 class MockTabLocationViewDelegate: TabLocationViewDelegate {
+    func tabLocationViewPresentCFR(at sourceView: UIView) {}
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {}

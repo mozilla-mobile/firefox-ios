@@ -463,7 +463,7 @@ extension LegacyGridTabViewController: TabDisplayerDelegate {
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
+        tabCell.configureLegacyCellWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
         return tabCell
     }
 }
@@ -565,7 +565,7 @@ extension LegacyGridTabViewController: SwipeAnimatorDelegate {
 }
 
 // MARK: - TabCellDelegate
-extension LegacyGridTabViewController: TabCellDelegate {
+extension LegacyGridTabViewController: LegacyTabCellDelegate {
     func tabCellDidClose(_ cell: LegacyTabCell) {
         if let indexPath = collectionView.indexPath(for: cell),
            let tab = tabDisplayManager.dataStore.at(indexPath.item) {
