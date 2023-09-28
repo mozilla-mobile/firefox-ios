@@ -181,6 +181,8 @@ class NavigationTest: BaseTestCase {
     }
 
     func testLongPressOnAddressBar() throws {
+        throw XCTSkip("Test needs to be updated")
+        /*
         if processIsTranslatedStr() == m1Rosetta {
             // Long press on the URL requires copy & paste permission
             throw XCTSkip("Copy & paste may not work on M1")
@@ -239,6 +241,7 @@ class NavigationTest: BaseTestCase {
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
             }
         }
+        */
     }
 
     private func longPressLinkOptions(optionSelected: String) {

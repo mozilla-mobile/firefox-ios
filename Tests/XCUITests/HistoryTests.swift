@@ -445,16 +445,12 @@ class HistoryTests: BaseTestCase {
         navigateToGoogle()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("Swipe gesture does not work on M1")
-        } else {
-            navigateToGoogle()
-            navigator.goto(LibraryPanel_History)
-            mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
-            app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-            mozWaitForElementToExist(app.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
-            app.buttons[StandardImageIdentifiers.Large.delete].tap()
-            mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
-        }
+        navigateToGoogle()
+        navigator.goto(LibraryPanel_History)
+        mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
+        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+        mozWaitForElementToExist(app.buttons[StandardImageIdentifiers.Large.delete], timeout: TIMEOUT)
+        app.buttons[StandardImageIdentifiers.Large.delete].tap()
+        mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
     }
 }

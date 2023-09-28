@@ -163,6 +163,8 @@ class LoginTest: BaseTestCase {
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
         mozWaitForElementToExist(app.alerts["Are you sure?"])
@@ -195,6 +197,8 @@ class LoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // Enter on Search mode
+        mozWaitForElementToExist(app.searchFields["Filter"])
+        XCTAssert(app.searchFields["Filter"].isEnabled)
         app.searchFields["Filter"].tap()
         // Type Text that matches user, website
         app.searchFields["Filter"].typeText("test")
