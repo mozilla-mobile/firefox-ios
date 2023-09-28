@@ -120,6 +120,7 @@ features:
               trigger:
                 - I_AM_NOT_DEFAULT_BROWSER
                 - SUPPORTS_DEFAULT_BROWSER
+                - ON_FOURTH_LAUNCH_THIS_YEAR
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
