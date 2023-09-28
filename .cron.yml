@@ -10,7 +10,7 @@ jobs:
           target-tasks-method: l10n_screenshots
           treeherder-symbol: l10-screenshots
       when: []  # Manual trigger only
-    - name: tab-performance-test
+    - name: bitrise-performance-test
       job:
           type: decision-task
           target-tasks-method: bitrise_performance_test
