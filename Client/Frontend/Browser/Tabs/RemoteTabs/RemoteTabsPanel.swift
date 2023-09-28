@@ -131,13 +131,13 @@ class RemoteTabsPanel: UIViewController,
 class RemoteTabsTableViewController: UITableViewController,
                                      Themeable,
                                      CollapsibleTableViewSection,
-                                     LibraryPanelContextMenu  {
+                                     LibraryPanelContextMenu {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
 
     private(set) var state: RemoteTabsPanelState
-    
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -288,7 +288,7 @@ class RemoteTabsTableViewController: UITableViewController,
 
         // TODO: Send Redux action to get cached clients & tabs, update once new state is received. Forthcoming.
         // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
-        
+
         // Previous code for reference. Will be removed soon.
         /*
         // Get cached tabs.
