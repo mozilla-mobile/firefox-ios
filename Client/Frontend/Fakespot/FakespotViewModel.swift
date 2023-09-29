@@ -48,7 +48,9 @@ class FakespotViewModel {
                     // Don't show needs analysis message card if analysis is in progress
                     var cards: [ViewElement] = []
 
-                    if analysisStatus != .inProgress && analysisStatus != .pending {
+                    if analysisStatus?.isAnalyzing == true {
+                        cards.append(.messageCard(.analysisInProgress))
+                    } else {
                         cards.append(.messageCard(.needsAnalysis))
                     }
 
@@ -106,6 +108,7 @@ class FakespotViewModel {
             case noConnectionError
             case notEnoughReviews
             case needsAnalysis
+            case analysisInProgress
         }
     }
 
@@ -251,7 +254,7 @@ class FakespotViewModel {
         while true {
             let result = try await shoppingProduct.getProductAnalysisStatus()
             analysisStatus = result?.status
-            guard result?.status == .pending ||  result?.status == .inProgress else {
+            guard result?.status.isAnalyzing == true else {
                 analysisStatus = nil
                 break
             }

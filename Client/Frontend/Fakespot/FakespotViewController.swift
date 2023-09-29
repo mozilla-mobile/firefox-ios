@@ -80,24 +80,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         button.accessibilityLabel = .CloseButtonTitle
     }
 
-    private lazy var needsAnalysisView: FakespotMessageCardView = {
-        let view: FakespotMessageCardView = .build()
-        viewModel.needsAnalysisViewModel.primaryAction = { [weak self] in
-            Task {
-                await self?.viewModel.triggerProductAnalyze()
-            }
-        }
-        view.configure(viewModel.needsAnalysisViewModel)
-        return view
-    }()
-
-    private lazy var progressView: FakespotMessageCardView = {
-        let view: FakespotMessageCardView = .build()
-        view.configure(viewModel.analysisProgressViewModel)
-        view.applyTheme(theme: themeManager.currentTheme)
-        return view
-    }()
-
     // MARK: - Initializers
     init(
         viewModel: FakespotViewModel,
@@ -114,27 +96,14 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 self?.updateContent()
             }
         }
-
-        viewModel.onAnalysisStatusChange = { [weak self] in
-            ensureMainThread {
-                guard let status = viewModel.analysisStatus, let self else {
-                    self?.progressView.removeFromSuperview()
-                    return
-                }
-                switch status {
-                case .pending, .inProgress:
-                    self.needsAnalysisView.removeFromSuperview()
-                    self.contentStackView.insertArrangedSubview(self.progressView, at: 0)
-                default:
-                    self.progressView.removeFromSuperview()
-                }
-            }
-        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    private var fetchProductTask: Task<Void, Never>?
+    private var observeProductTask: Task<Void, Never>?
 
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
@@ -149,9 +118,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         sendTelemetryOnAppear()
 
         if viewModel.isOptedIn {
-            Task {
-                await viewModel.fetchProductAnalysis()
-                try? await viewModel.observeProductAnalysisStatus()
+            fetchProductTask = Task { @MainActor [weak self] in
+                await self?.viewModel.fetchProductAnalysis()
+                try? await self?.viewModel.observeProductAnalysisStatus()
             }
         }
     }
@@ -355,8 +324,40 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 return view
 
             case .needsAnalysis:
-                return needsAnalysisView
+                let view: FakespotMessageCardView = .build()
+                viewModel.needsAnalysisViewModel.primaryAction = { [weak view, weak self] in
+                    self?.onNeedsAnalysisTap(sender: view)
+                }
+                view.configure(viewModel.needsAnalysisViewModel)
+                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                    self?.onAnalysisStatusChange(sender: view)
+                }
+                return view
+
+            case .analysisInProgress:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.analysisProgressViewModel)
+                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                    self?.onAnalysisStatusChange(sender: view)
+                }
+                return view
             }
+        }
+    }
+
+    private func onAnalysisStatusChange(sender: UIView?) {
+        guard viewModel.analysisStatus?.isAnalyzing == true else {
+            ensureMainThread {
+                sender?.removeFromSuperview()
+            }
+            return
+        }
+    }
+
+    private func onNeedsAnalysisTap(sender: FakespotMessageCardView?) {
+        sender?.configure(self.viewModel.analysisProgressViewModel)
+        observeProductTask = Task { @MainActor [weak self] in
+            await self?.viewModel.triggerProductAnalyze()
         }
     }
 
@@ -376,6 +377,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
         recordDismissTelemetry()
+    }
+
+    deinit {
+        fetchProductTask?.cancel()
+        observeProductTask?.cancel()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
