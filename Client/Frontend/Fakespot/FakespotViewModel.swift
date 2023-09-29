@@ -128,6 +128,9 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
     var onAnalysisStatusChange: (() -> Void)?
 
+    var fetchProductTask: Task<Void, Never>?
+    var observeProductTask: Task<Void, Never>?
+
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
 
@@ -267,5 +270,10 @@ class FakespotViewModel {
                 sleepDuration -= NSEC_PER_SEC * 10
             }
         }
+    }
+
+    func onViewControllerDeinit() {
+        fetchProductTask?.cancel()
+        observeProductTask?.cancel()
     }
 }

@@ -102,9 +102,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var fetchProductTask: Task<Void, Never>?
-    private var observeProductTask: Task<Void, Never>?
-
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,7 +115,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         sendTelemetryOnAppear()
 
         if viewModel.isOptedIn {
-            fetchProductTask = Task { @MainActor [weak self] in
+            viewModel.fetchProductTask = Task { @MainActor [weak self] in
                 await self?.viewModel.fetchProductAnalysis()
                 try? await self?.viewModel.observeProductAnalysisStatus()
             }
@@ -356,7 +353,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     private func onNeedsAnalysisTap(sender: FakespotMessageCardView?) {
         sender?.configure(self.viewModel.analysisProgressViewModel)
-        observeProductTask = Task { @MainActor [weak self] in
+        viewModel.observeProductTask = Task { @MainActor [weak self] in
             await self?.viewModel.triggerProductAnalyze()
         }
     }
@@ -380,8 +377,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     }
 
     deinit {
-        fetchProductTask?.cancel()
-        observeProductTask?.cancel()
+        viewModel.onViewControllerDeinit()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
