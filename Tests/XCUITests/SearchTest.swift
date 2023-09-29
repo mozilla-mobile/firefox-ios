@@ -239,6 +239,7 @@ class SearchTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
 
             let addressBar = app.textFields["address"]
+            mozWaitForElementToExist(addressBar)
             XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
             let keyboardCount = app.keyboards.count
             XCTAssert(keyboardCount > 0, "The keyboard is not shown")
@@ -259,6 +260,7 @@ class SearchTests: BaseTestCase {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
 
+            mozWaitForElementToExist(addressBar)
             XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
             let keyboardsCount = app.keyboards.count
             XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
