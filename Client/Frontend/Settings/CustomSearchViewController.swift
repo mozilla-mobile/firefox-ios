@@ -88,7 +88,7 @@ class CustomSearchViewController: SettingsTableViewController {
     func createEngine(query: String, name: String) async throws -> OpenSearchEngine {
         guard let template = getSearchTemplate(withString: query),
               let encodedTemplate = template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed),
-              let url = URL(string: encodedTemplate, encodingInvalidCharacters: false),
+              let url = URL(string: encodedTemplate, invalidCharacters: false),
               url.isWebPage()
         else {
             throw CustomSearchError(.FormInput)
@@ -143,7 +143,7 @@ class CustomSearchViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         func URLFromString(_ string: String?) -> URL? {
             guard let string = string else { return nil }
-            return URL(string: string, encodingInvalidCharacters: false)
+            return URL(string: string, invalidCharacters: false)
         }
 
         let titleField = CustomSearchEngineTextView(

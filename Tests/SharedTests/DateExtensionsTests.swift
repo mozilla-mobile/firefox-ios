@@ -55,4 +55,16 @@ class DateExtensionsTests: XCTestCase {
 
         return Calendar(identifier: .gregorian).date(from: dateComponents)
     }
+
+    func test_hasTimePassedBy() {
+        let tenHoursInMilliseconds: Timestamp = 3_600_000 * 10
+
+        let lastTimestamp: Timestamp = Date.now() - tenHoursInMilliseconds  // Assuming 10 hours difference.
+
+        XCTAssertTrue(Date.hasTimePassedBy(hours: 10, lastTimestamp: lastTimestamp))
+
+        XCTAssertTrue(Date.hasTimePassedBy(hours: 5, lastTimestamp: lastTimestamp))
+
+        XCTAssertFalse(Date.hasTimePassedBy(hours: 30, lastTimestamp: lastTimestamp))
+    }
 }

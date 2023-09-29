@@ -116,6 +116,7 @@ struct FakespotOptInCardViewModel {
 
     func onTapMainButton() {
         prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptIn)
+        prefs.setTimestamp(Date.now(), forKey: PrefsKeys.FakespotLastCFRTimestamp)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)

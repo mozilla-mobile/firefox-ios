@@ -235,7 +235,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     private func isBookmarkItemURLValid() -> Bool {
-        let url = URL(string: bookmarkItemURL ?? "", encodingInvalidCharacters: false)
+        let url = URL(string: bookmarkItemURL ?? "", invalidCharacters: false)
         return url?.schemeIsValid == true && url?.host != nil
     }
 

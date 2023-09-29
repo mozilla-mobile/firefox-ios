@@ -36,7 +36,7 @@ extension LibraryPanelContextMenu {
     }
 
     func getRecentlyClosedTabContexMenuActions(for site: Site, recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url, encodingInvalidCharacters: false) else { return nil }
+        guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: false)
@@ -50,7 +50,7 @@ extension LibraryPanelContextMenu {
     }
 
     func getRemoteTabContextMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url, encodingInvalidCharacters: false) else { return nil }
+        guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
@@ -64,7 +64,7 @@ extension LibraryPanelContextMenu {
     }
 
     func getDefaultContextMenuActions(for site: Site, libraryPanelDelegate: LibraryPanelDelegate?) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url, encodingInvalidCharacters: false) else { return nil }
+        guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle,
                                                        iconString: StandardImageIdentifiers.Large.plus) { _ in

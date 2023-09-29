@@ -37,6 +37,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
+        case .firefoxSuggestFeature:
+            return checkFirefoxSuggestFeature(from: nimbus)
+
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
@@ -248,6 +251,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.zoomFeature.value()
+
+        return config.status
+    }
+
+    private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
     }

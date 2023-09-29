@@ -102,8 +102,8 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
 
     private var resourceEndpoint: URL? {
         if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
-            return URL(string: ContileProvider.contileStagingResourceEndpoint, encodingInvalidCharacters: false)
+            return URL(string: ContileProvider.contileStagingResourceEndpoint, invalidCharacters: false)
         }
-        return URL(string: ContileProvider.contileProdResourceEndpoint, encodingInvalidCharacters: false)
+        return URL(string: ContileProvider.contileProdResourceEndpoint, invalidCharacters: false)
     }
 }

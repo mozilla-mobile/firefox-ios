@@ -6,7 +6,7 @@ import Foundation
 
 extension URL {
     /// Temporary init that will be removed with the update to XCode 15 where this URL API is available
-    public init?(string: String, encodingInvalidCharacters: Bool) {
+    public init?(string: String, invalidCharacters: Bool) {
         self.init(string: string)
     }
 

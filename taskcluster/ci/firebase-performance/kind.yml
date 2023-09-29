@@ -1,0 +1,23 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - ffios_taskgraph.transforms.bitrise:transforms
+    - ffios_taskgraph.transforms.secrets:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+
+tasks:
+    tests:
+        bitrise-workflow: Firebase_Performance_Test
+        description: Run Performance Tests on Physical Devices in Firebase
+        run-on-tasks-for: []
+        treeherder:
+            symbol: firebase-performance
+            kind: test
+            platform: ios-physical-iphone13pro-15.7/opt
+            tier: 1

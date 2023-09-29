@@ -47,6 +47,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
     func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton)
+    func urlBarPresentCFR(at sourceView: UIView)
 }
 
 protocol URLBarViewProtocol {
@@ -723,7 +724,7 @@ extension URLBarView: TabLocationViewDelegate {
         var overlayText = locationText
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
         if let text = locationText,
-            let url = URL(string: text, encodingInvalidCharacters: false),
+            let url = URL(string: text, invalidCharacters: false),
             let host = url.host,
             AppConstants.punyCode {
             overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
@@ -764,6 +765,10 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton) {
         delegate?.urlBarDidPressShopping(self, shoppingButton: button)
+    }
+
+    func tabLocationViewPresentCFR(at sourceView: UIView) {
+        delegate?.urlBarPresentCFR(at: sourceView)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {

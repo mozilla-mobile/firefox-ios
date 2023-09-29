@@ -13,11 +13,11 @@ transforms:
 
 tasks:
     tests:
-        bitrise-workflow: perfherder-test
-        description: Run performance tests and generate data
+        bitrise-workflow: Bitrise_Performance_Test
+        description: Run Performance Tests on iOS Simulator in Bitrise
         run-on-tasks-for: []
         treeherder:
-            symbol: perf
+            symbol: bitrise-performance
             kind: test
-            platform: ios/opt
+            platform: ios-simulator-iphone14-16.4/opt
             tier: 1

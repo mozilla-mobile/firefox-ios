@@ -165,8 +165,8 @@ public class RustRemoteTabs {
 
 public extension RemoteTabRecord {
     func toRemoteTab(client: RemoteClient) -> RemoteTab? {
-        guard let url = Foundation.URL(string: self.urlHistory[0], encodingInvalidCharacters: false) else { return nil }
-        let history = self.urlHistory[1...].map { url in Foundation.URL(string: url, encodingInvalidCharacters: false) }.compactMap { $0 }
+        guard let url = Foundation.URL(string: self.urlHistory[0], invalidCharacters: false) else { return nil }
+        let history = self.urlHistory[1...].map { url in Foundation.URL(string: url, invalidCharacters: false) }.compactMap { $0 }
         let icon = self.icon != nil ? Foundation.URL(fileURLWithPath: self.icon ?? "") : nil
 
         return RemoteTab(clientGUID: client.guid, URL: url, title: self.title, history: history, lastUsed: Timestamp(self.lastUsed), icon: icon)

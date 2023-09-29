@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 import Shared
 
-class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable {
+class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let contextualHintWidth: CGFloat = 350
     }
@@ -125,7 +125,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     func configure(
         anchor: UIView,
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
-        andDelegate delegate: UIPopoverPresentationControllerDelegate,
+        andDelegate delegate: UIPopoverPresentationControllerDelegate? = nil,
         presentedUsing presentation: (() -> Void)?,
         sourceRect: CGRect = CGRect.null,
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
@@ -147,6 +147,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         viewProvider.arrowDirection = arrowDirection
         viewProvider.overlayState = overlayState
 
+        if delegate == nil { presentationController?.delegate = self }
+
         var viewModel = ContextualHintViewModel(isActionType: viewProvider.isActionType,
                                                 actionButtonTitle: viewProvider.getCopyFor(.action),
                                                 description: viewProvider.getCopyFor(.description),
@@ -161,7 +163,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         hintView.configure(viewModel: viewModel)
         applyTheme()
 
-        if viewProvider.shouldPresentContextualHint() && shouldStartTimer {
+        if shouldStartTimer {
             viewProvider.startTimer()
         }
 
@@ -183,5 +185,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     func applyTheme() {
         let theme = themeManager.currentTheme
         hintView.applyTheme(theme: theme)
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        .none
+    }
+
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        false
     }
 }

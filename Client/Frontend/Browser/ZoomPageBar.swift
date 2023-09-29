@@ -6,14 +6,20 @@ import UIKit
 import Common
 import Shared
 
+// MARK: - ZoomPageBarDelegate Protocol
+
 protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
     func didChangeZoomLevel()
 }
 
 class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
+    // MARK: - Constants
+
     private struct UX {
-        static let leadingTrailingPadding: CGFloat = 20
+        static let padding: CGFloat = 20
+        static let buttonPadding: CGFloat = 12
+        static let buttonInsets = UIEdgeInsets(top: 6, left: buttonPadding, bottom: 6, right: buttonPadding)
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
@@ -21,7 +27,6 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let stepperCornerRadius: CGFloat = 8
         static let stepperMinTrailing: CGFloat = 10
         static let stepperShadowRadius: CGFloat = 4
-        static let stepperSpacing: CGFloat = 12
         static let stepperShadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
@@ -29,28 +34,28 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
-        static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 12)
-        static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 0)
     }
+
+    // MARK: - Properties
 
     weak var delegate: ZoomPageBarDelegate?
     private let gestureRecognizer = UITapGestureRecognizer()
     private var stepperCompactConstraints = [NSLayoutConstraint]()
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
     private var gradientViewHeightConstraint = NSLayoutConstraint()
-
     private let tab: Tab
+
+    // MARK: - UI Elements
 
     private let leftSeparator: UIView = .build()
     private let rightSeparator: UIView = .build()
     private let gradientView: UIView = .build()
     private let gradient = CAGradientLayer()
 
-    private let stepperContainer: UIStackView = .build { view in
+    private lazy var stepperContainer: UIStackView = .build { view in
         view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
-        view.spacing = UX.stepperSpacing
+        view.distribution = .fillProportionally
         view.layer.cornerRadius = UX.stepperCornerRadius
         view.layer.shadowRadius = UX.stepperShadowRadius
         view.layer.shadowOffset = UX.stepperShadowOffset
@@ -58,16 +63,16 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         view.clipsToBounds = false
     }
 
-    private let zoomOutButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.subtract), for: [])
-        button.accessibilityLabel = .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
+    private lazy var zoomOutButton: UIButton = .build { button in
+        self.configureButton(button,
+                             image: UIImage.templateImageNamed(ImageIdentifiers.subtract),
+                             accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
+                             accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.zoomOutButtonInsets, imageTitlePadding: 0)
+        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
     }
 
-    private let zoomLevel: UILabel = .build { label in
+    private lazy var zoomLevel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
                                                             size: UX.fontSize,
                                                             weight: .semibold)
@@ -77,32 +82,26 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         label.textAlignment = .center
     }
 
-    private let zoomInButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: [])
-        button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
+    private lazy var zoomInButton: UIButton = .build { button in
+        self.configureButton(button,
+                             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+                             accessibilityLabel: .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
+                             accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.zoomInButtonInsets, imageTitlePadding: 0)
+        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
     }
 
-    private let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
-        button.accessibilityLabel = .AppMenu.ZoomPageCloseAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    private lazy var closeButton: UIButton = .build { button in
+        self.configureButton(button,
+                             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+                             accessibilityLabel: .AppMenu.ZoomPageCloseAccessibilityLabel,
+                             accessibilityIdentifier: AccessibilityIdentifiers.FindInPage.findInPageCloseButton)
     }
 
-    private lazy var animation: CABasicAnimation = {
-        let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fillMode = .forwards
-        animation.isRemovedOnCompletion = false
-        return animation
-    }()
+    // MARK: - Initializers
 
     init(tab: Tab) {
         self.tab = tab
-
         super.init(frame: .zero)
 
         setupViews()
@@ -116,12 +115,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        remakeGradientViewHeightConstraint()
-        updateStepperConstraintsBasedOnSizeClass()
-        layoutIfNeeded()
-    }
+    // MARK: - View Setup
 
     private func setupViews() {
         zoomInButton.addTarget(self, action: #selector(didPressZoomIn), for: .touchUpInside)
@@ -144,10 +138,10 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     private func setupLayout() {
         stepperCompactConstraints.append(stepperContainer.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                                                   constant: UX.leadingTrailingPadding))
+                                                                                   constant: UX.padding))
         stepperDefaultConstraints.append(stepperContainer.centerXAnchor.constraint(equalTo: centerXAnchor))
         stepperDefaultConstraints.append(stepperContainer.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
-                                                                                   constant: UX.leadingTrailingPadding))
+                                                                                   constant: UX.padding))
         setupSeparator(leftSeparator)
         setupSeparator(rightSeparator)
 
@@ -164,7 +158,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                  constant: -UX.leadingTrailingPadding),
+                                                  constant: -UX.padding),
         ])
     }
 
@@ -189,6 +183,27 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         } else {
             gradientView.bottomAnchor.constraint(equalTo: topAnchor).isActive = true
         }
+    }
+
+    // MARK: - Layout Overrides
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        remakeGradientViewHeightConstraint()
+        updateStepperConstraintsBasedOnSizeClass()
+        layoutIfNeeded()
+    }
+
+    // MARK: - Helper Methods
+
+    private func configureButton(_ button: UIButton,
+                                 image: UIImage?,
+                                 accessibilityLabel: String?,
+                                 accessibilityIdentifier: String?) {
+        button.setImage(image, for: [])
+        button.accessibilityLabel = accessibilityLabel
+        button.accessibilityIdentifier = accessibilityIdentifier
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private func remakeGradientViewHeightConstraint() {
@@ -239,6 +254,8 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         }
     }
 
+    // MARK: - Actions
+
     @objc
     private func didPressZoomIn(_ sender: UIButton) {
         tab.zoomIn()
@@ -279,9 +296,13 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         }
     }
 
+    // MARK: - AlphaDimmable
+
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         self.alpha = alpha
     }
+
+    // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors

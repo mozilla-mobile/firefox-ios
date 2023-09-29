@@ -396,7 +396,7 @@ class ReadingListPanel: UITableViewController,
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReadingListTableViewCell", for: indexPath) as! ReadingListTableViewCell
         if let record = records?[indexPath.row] {
             cell.title = record.title
-            cell.url = URL(string: record.url, encodingInvalidCharacters: false)!
+            cell.url = URL(string: record.url, invalidCharacters: false)!
             cell.unread = record.unread
             cell.applyTheme(theme: themeManager.currentTheme)
         }
@@ -433,7 +433,7 @@ class ReadingListPanel: UITableViewController,
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row],
-            let url = URL(string: record.url, encodingInvalidCharacters: false),
+            let url = URL(string: record.url, invalidCharacters: false),
             let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             // Mark the item as read
             profile.readingList.updateRecord(record, unread: false)
@@ -512,7 +512,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
 extension ReadingListPanel: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard let site = getSiteDetails(for: indexPath),
-              let url = URL(string: site.url, encodingInvalidCharacters: false),
+              let url = URL(string: site.url, invalidCharacters: false),
               let itemProvider = NSItemProvider(contentsOf: url)
         else { return [] }
 

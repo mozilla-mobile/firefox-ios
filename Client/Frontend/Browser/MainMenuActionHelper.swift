@@ -515,7 +515,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl,
-            let url = URL(string: str, encodingInvalidCharacters: false) {
+            let url = URL(string: str, invalidCharacters: false) {
             iconURL = url
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
