@@ -68,7 +68,7 @@
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIpad\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
         "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateModeBrowserTab()",
-        "ReaderModeTests",
+        "ReadingListTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests",

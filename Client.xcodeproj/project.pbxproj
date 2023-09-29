@@ -171,7 +171,7 @@
 		2C28F96C201B2D4C00ABA8A5 /* MailAppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */; };
 		2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */; };
 		2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A91281FA2410D002E36BD /* HistoryTests.swift */; };
-		2C31A7A91E8BFB2200DAC646 /* ReaderModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A7A81E8BFB2200DAC646 /* ReaderModeTests.swift */; };
+		2C31A7A91E8BFB2200DAC646 /* ReadingListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A7A81E8BFB2200DAC646 /* ReadingListTests.swift */; };
 		2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */; };
 		2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3406C71E719F00000FD889 /* SettingsTest.swift */; };
 		2C473BD0209778900008C853 /* DownloadsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C473BCF209778900008C853 /* DownloadsTests.swift */; };
@@ -842,9 +842,9 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
-		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
 		BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */; };
 		BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */; };
+		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
 		BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */; };
@@ -2271,7 +2271,7 @@
 		2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailAppSettingsTests.swift; sourceTree = "<group>"; };
 		2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTest.swift; sourceTree = "<group>"; };
 		2C2A91281FA2410D002E36BD /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
-		2C31A7A81E8BFB2200DAC646 /* ReaderModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeTests.swift; sourceTree = "<group>"; };
+		2C31A7A81E8BFB2200DAC646 /* ReadingListTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTests.swift; sourceTree = "<group>"; };
 		2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsUITest.swift; sourceTree = "<group>"; };
 		2C33410CB7E921A125379D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2C3406C71E719F00000FD889 /* SettingsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTest.swift; sourceTree = "<group>"; };
@@ -5557,9 +5557,9 @@
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggest.swift; sourceTree = "<group>"; };
 		BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFirefoxSuggestIngestUtility.swift; sourceTree = "<group>"; };
-		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
 		BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettings.swift; sourceTree = "<group>"; };
 		BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettingsViewController.swift; sourceTree = "<group>"; };
+		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
 		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackButton.swift; sourceTree = "<group>"; };
@@ -7730,7 +7730,7 @@
 				D81127D71F84023B0050841D /* PhotonActionSheetTest.swift */,
 				2CF21D0820A4A163000D08B7 /* PocketTests.swift */,
 				2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */,
-				2C31A7A81E8BFB2200DAC646 /* ReaderModeTests.swift */,
+				2C31A7A81E8BFB2200DAC646 /* ReadingListTests.swift */,
 				2CCB296620A99C9500121DD8 /* LoginsTests.swift */,
 				39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */,
 				2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */,
@@ -12150,7 +12150,7 @@
 				0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */,
 				2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */,
 				2CEA6F791E93E3A600D4100E /* SearchSettingsUITest.swift in Sources */,
-				2C31A7A91E8BFB2200DAC646 /* ReaderModeTests.swift in Sources */,
+				2C31A7A91E8BFB2200DAC646 /* ReadingListTests.swift in Sources */,
 				2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */,
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				B10997432A97251D00CC8860 /* UrlBarTests.swift in Sources */,

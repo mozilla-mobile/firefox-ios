@@ -99,7 +99,7 @@
         "PocketTest",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
-        "ReaderModeTests",
+        "ReadingListTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests",
