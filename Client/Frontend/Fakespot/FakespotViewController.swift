@@ -114,12 +114,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         listenForThemeChange(view)
         sendTelemetryOnAppear()
 
-        if viewModel.isOptedIn {
-            viewModel.fetchProductTask = Task { @MainActor [weak self] in
-                await self?.viewModel.fetchProductAnalysis()
-                try? await self?.viewModel.observeProductAnalysisStatus()
-            }
-        }
+        viewModel.fetchProductIfOptedIn()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -250,9 +245,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
-                Task {
-                    await self.viewModel.fetchProductAnalysis()
-                }
+                self.viewModel.fetchProductIfOptedIn()
             }
             view.configure(viewModel.optInCardViewModel)
             return view
@@ -353,9 +346,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     private func onNeedsAnalysisTap(sender: FakespotMessageCardView?) {
         sender?.configure(self.viewModel.analysisProgressViewModel)
-        viewModel.observeProductTask = Task { @MainActor [weak self] in
-            await self?.viewModel.triggerProductAnalyze()
-        }
+        viewModel.triggerProductAnalysis()
     }
 
     private func recordDismissTelemetry() {

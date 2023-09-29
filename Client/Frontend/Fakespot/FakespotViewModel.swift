@@ -128,8 +128,8 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
     var onAnalysisStatusChange: (() -> Void)?
 
-    var fetchProductTask: Task<Void, Never>?
-    var observeProductTask: Task<Void, Never>?
+    private var fetchProductTask: Task<Void, Never>?
+    private var observeProductTask: Task<Void, Never>?
 
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
@@ -138,7 +138,7 @@ class FakespotViewModel {
     }
 
     private let prefs: Prefs
-    public var isOptedIn: Bool {
+    private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
@@ -233,7 +233,22 @@ class FakespotViewModel {
         self.prefs = profile.prefs
     }
 
-    func fetchProductAnalysis() async {
+    func fetchProductIfOptedIn() {
+        if isOptedIn {
+            fetchProductTask = Task { @MainActor [weak self] in
+                await self?.fetchProductAnalysis()
+                try? await self?.observeProductAnalysisStatus()
+            }
+        }
+    }
+
+    func triggerProductAnalysis() {
+        observeProductTask = Task { @MainActor [weak self] in
+            await self?.triggerProductAnalyze()
+        }
+    }
+
+    private func fetchProductAnalysis() async {
         state = .loading
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -245,13 +260,13 @@ class FakespotViewModel {
         }
     }
 
-    func triggerProductAnalyze() async {
+    private func triggerProductAnalyze() async {
         analysisStatus = try? await shoppingProduct.triggerProductAnalyze()
         try? await observeProductAnalysisStatus()
         await fetchProductAnalysis()
     }
 
-    func observeProductAnalysisStatus() async throws {
+    private func observeProductAnalysisStatus() async throws {
         var sleepDuration: UInt64 = NSEC_PER_SEC * 30
 
         while true {
