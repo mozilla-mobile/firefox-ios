@@ -287,7 +287,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil {
+        if product.product != nil && !tab.isPrivate {
             sendProductPageDetectedTelemetry()
         }
 
@@ -300,15 +300,9 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func sendProductPageDetectedTelemetry() {
-        let profile: Profile = AppContainer.shared.resolve()
-        let prefs = profile.prefs
-        let productPageVisitsCounter = (prefs.intForKey(PrefsKeys.Shopping2023ProductPageVisitsCount) ?? 0) + 1
-        let pageVisitsEventCounter = [TelemetryWrapper.EventExtraKey.productPageVisitsCount.rawValue: productPageVisitsCounter]
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
-                                     object: .shoppingProductPageVisits,
-                                     extras: pageVisitsEventCounter)
-        prefs.setInt(productPageVisitsCounter, forKey: PrefsKeys.Shopping2023ProductPageVisitsCount)
+                                     object: .shoppingProductPageVisits)
     }
 
     private func updateTextWithURL() {

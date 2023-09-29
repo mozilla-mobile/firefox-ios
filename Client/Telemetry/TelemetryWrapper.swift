@@ -726,9 +726,6 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
-
-        // Shopping (Fakespot)
-        case productPageVisitsCount = "productPageVisitsCount"
     }
 
     func recordEvent(category: EventCategory,
@@ -1075,13 +1072,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
-        case(.information, .view, .shoppingProductPageVisits, _, let extras):
-            if let productPageVisitsCount = extras?[EventExtraKey.productPageVisitsCount.rawValue] as? Int64 {
-                GleanMetrics.Shopping.productPageVisits.set(productPageVisitsCount)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
+        case(.information, .view, .shoppingProductPageVisits, _, _):
+            GleanMetrics.Shopping.productPageVisits.add()
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,

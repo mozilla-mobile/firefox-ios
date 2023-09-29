@@ -243,18 +243,11 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_productPageVisits_GleanIsCalled() {
-        let expectedPageVisits: Int64 = 100
-        let extra = [TelemetryWrapper.EventExtraKey.productPageVisitsCount.rawValue: expectedPageVisits]
-        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .shoppingProductPageVisits, value: nil, extras: extra)
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .shoppingProductPageVisits)
 
-        testQuantityMetricSuccess(metric: GleanMetrics.Shopping.productPageVisits,
-                                  expectedValue: expectedPageVisits,
-                                  failureMessage: "Should have \(expectedPageVisits) product page visits for the current user")
-    }
-
-    func test_productPageVisitsWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .shoppingProductPageVisits, value: nil, extras: nil)
-        XCTAssertNil(GleanMetrics.Shopping.productPageVisits.testGetValue())
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Shopping.productPageVisits)
     }
 
     func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {

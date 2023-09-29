@@ -648,7 +648,7 @@ downloads:
 # Shopping Experience (Fakespot)
 shopping:
   product_page_visits:
-    type: quantity
+    type: counter
     description: |
       A count of the number of eligible product pages the user has visited.
     bugs:
