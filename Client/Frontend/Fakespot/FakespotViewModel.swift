@@ -248,7 +248,7 @@ class FakespotViewModel {
         }
     }
 
-    private func fetchProductAnalysis() async {
+    func fetchProductAnalysis() async {
         state = .loading
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
