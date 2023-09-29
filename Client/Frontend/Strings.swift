@@ -3890,12 +3890,12 @@ extension String {
         public static let InfoCardNeedsAnalysisTitle = MZLocalizedString(
             key: "", // Shopping.InfoCard.NeedsAnalysis.Title.v119
             tableName: "Shopping",
-            value: "New info to check",
+            value: "New Info To Check",
             comment: "Title for info card when the product needs analysis")
         public static let InfoCardNeedsAnalysisPrimaryAction = MZLocalizedString(
             key: "", // Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v119
             tableName: "Shopping",
-            value: "Check now",
+            value: "Check Now",
             comment: "Primary action title for info card when the product needs analysis")
         public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
             key: "", // Shopping.InfoCard.ProgressAnalysis.Title.v119

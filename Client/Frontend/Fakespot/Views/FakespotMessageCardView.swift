@@ -198,6 +198,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         self.type = viewModel.type
 
         titleLabel.text = viewModel.title
+        titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
 
         let accessoryView: UIView
         switch viewModel.type.accessoryType {
@@ -213,6 +214,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             accessoryView = spinner
         }
 
+        iconContainerView.subviews.forEach { $0.removeFromSuperview() }
         iconContainerView.addSubview(accessoryView)
         NSLayoutConstraint.activate([
             accessoryView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
@@ -221,9 +223,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             accessoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor),
         ])
 
-        if let title = viewModel.primaryActionText {
-            primaryButton.setTitle(title, for: .normal)
+        if let primaryActionText = viewModel.primaryActionText {
+            primaryButton.setTitle(primaryActionText, for: .normal)
             primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
+            if primaryButton.superview == nil {
+                containerStackView.addArrangedSubview(primaryButton)
+            }
         } else {
             primaryButton.removeFromSuperview()
         }
@@ -231,18 +236,22 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         if let description = viewModel.description {
             descriptionLabel.text = description
             descriptionLabel.accessibilityIdentifier = viewModel.a11yDescriptionIdentifier
+            if descriptionLabel.superview == nil {
+                labelContainerStackView.addArrangedSubview(descriptionLabel)
+            }
         } else {
             descriptionLabel.removeFromSuperview()
         }
 
-        if let title = viewModel.linkText {
-            linkButton.setTitle(title, for: .normal)
-            primaryButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+        if let linkText = viewModel.linkText {
+            linkButton.setTitle(linkText, for: .normal)
+            linkButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+            if linkButton.superview == nil {
+                labelContainerStackView.addArrangedSubview(linkButton)
+            }
         } else {
             linkButton.removeFromSuperview()
         }
-
-        titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
 
         let cardModel = CardViewModel(view: contentView,
                                       a11yId: viewModel.a11yCardIdentifier,
