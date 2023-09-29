@@ -540,7 +540,7 @@ extension TabDisplayManagerTests {
     func testSelectedCells(tabDisplayManager: LegacyTabDisplayManager, numberOfCells: Int, selectedIndex: Int, file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertEqual(tabDisplayManager.dataStore.count, numberOfCells, file: file, line: line)
         for index in 0..<numberOfCells {
-            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
+            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! LegacyTabTrayCell
             if index == selectedIndex {
                 XCTAssertTrue(cell.isSelectedTab, file: file, line: line)
             } else {
@@ -554,9 +554,9 @@ extension TabDisplayManagerTests: TabDisplayerDelegate {
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TabTrayCell else { return UICollectionViewCell() }
+        guard let tabCell = cell as? LegacyTabTrayCell else { return UICollectionViewCell() }
         let isSelected = (tab == manager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected, theme: LightTheme())
+        tabCell.configureLegacyCellWith(tab: tab, isSelected: isSelected, theme: LightTheme())
         return tabCell
     }
 }

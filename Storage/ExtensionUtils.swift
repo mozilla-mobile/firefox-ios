@@ -88,7 +88,7 @@ public struct ExtensionUtils {
             if !text.hasPrefix("http") {
                 text = "http://" + text
             }
-            let url = URL(string: text, encodingInvalidCharacters: false)
+            let url = URL(string: text, invalidCharacters: false)
             return url?.publicSuffix != nil ? url : nil
         }
 

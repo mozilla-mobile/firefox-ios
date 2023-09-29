@@ -6,5 +6,6 @@
 #import <sqlite3.h>
 
 #import "Shared-Bridging-Header.h"
+#import "Client-Bridging-Header.h"
 
 #endif

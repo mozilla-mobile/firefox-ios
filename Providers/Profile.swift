@@ -83,6 +83,7 @@ protocol Profile: AnyObject {
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
+    var firefoxSuggest: RustFirefoxSuggest? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -608,7 +609,7 @@ open class BrowserProfile: Profile {
                     switch command {
                     case .tabReceived(_, let tabData):
                         let url = tabData.entries.last?.url ?? ""
-                        return URL(string: url, encodingInvalidCharacters: false)
+                        return URL(string: url, invalidCharacters: false)
                     }
                 }
                 self.sendTabDelegate?.openSendTabs(for: urls)
@@ -624,6 +625,23 @@ open class BrowserProfile: Profile {
         let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
 
         return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+    }()
+
+    lazy var firefoxSuggest: RustFirefoxSuggest? = {
+        do {
+            let databaseFileURL = try FileManager.default.url(
+                for: .cachesDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            ).appendingPathComponent("suggest.db", isDirectory: false)
+            return try RustFirefoxSuggest(databasePath: databaseFileURL.path)
+        } catch {
+            logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .storage)
+            return nil
+        }
     }()
 
     func hasSyncAccount(completion: @escaping (Bool) -> Void) {

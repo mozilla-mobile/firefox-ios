@@ -16,6 +16,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showDevicePassCode()
     func showCreditCardSettings()
     func showExperiments()
+    func showFirefoxSuggest()
     func showPasswordManager(shouldShowOnboarding: Bool)
 
     func didFinishShowingSettings()
@@ -307,7 +308,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getDebugSettings() -> [SettingSection] {
-        let hiddenDebugOptions = [
+        var hiddenDebugOptions = [
             ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
@@ -325,6 +326,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self),
         ]
+
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildOnly) {
+            hiddenDebugOptions.append(FirefoxSuggestSettings(settings: self, settingsDelegate: self))
+        }
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
@@ -351,6 +356,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
         applicationHelper.open(url)
+    }
+
+    func pressedFirefoxSuggest() {
+        parentCoordinator?.showFirefoxSuggest()
     }
 
     // MARK: SharedSettingsDelegate

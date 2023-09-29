@@ -138,6 +138,9 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
     var onAnalysisStatusChange: (() -> Void)?
 
+    private var fetchProductTask: Task<Void, Never>?
+    private var observeProductTask: Task<Void, Never>?
+
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
 
@@ -145,7 +148,7 @@ class FakespotViewModel {
     }
 
     private let prefs: Prefs
-    public var isOptedIn: Bool {
+    private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
@@ -156,7 +159,7 @@ class FakespotViewModel {
     }
 
     var highlightsCardViewModel: FakespotHighlightsCardViewModel? {
-        guard let highlights = state.productData?.highlights else { return nil }
+        guard let highlights = state.productData?.highlights, !highlights.items.isEmpty else { return nil }
         return FakespotHighlightsCardViewModel(highlights: highlights.items)
     }
 
@@ -240,6 +243,21 @@ class FakespotViewModel {
         self.prefs = profile.prefs
     }
 
+    func fetchProductIfOptedIn() {
+        if isOptedIn {
+            fetchProductTask = Task { @MainActor [weak self] in
+                await self?.fetchProductAnalysis()
+                try? await self?.observeProductAnalysisStatus()
+            }
+        }
+    }
+
+    func triggerProductAnalysis() {
+        observeProductTask = Task { @MainActor [weak self] in
+            await self?.triggerProductAnalyze()
+        }
+    }
+
     func fetchProductAnalysis() async {
         state = .loading
         do {
@@ -252,13 +270,13 @@ class FakespotViewModel {
         }
     }
 
-    func triggerProductAnalyze() async {
+    private func triggerProductAnalyze() async {
         analysisStatus = try? await shoppingProduct.triggerProductAnalyze()
         try? await observeProductAnalysisStatus()
         await fetchProductAnalysis()
     }
 
-    func observeProductAnalysisStatus() async throws {
+    private func observeProductAnalysisStatus() async throws {
         var sleepDuration: UInt64 = NSEC_PER_SEC * 30
 
         while true {
@@ -277,5 +295,10 @@ class FakespotViewModel {
                 sleepDuration -= NSEC_PER_SEC * 10
             }
         }
+    }
+
+    func onViewControllerDeinit() {
+        fetchProductTask?.cancel()
+        observeProductTask?.cancel()
     }
 }

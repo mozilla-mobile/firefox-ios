@@ -29,8 +29,8 @@ struct PocketFeedStory {
                       return nil
                   }
 
-            guard let url = URL(string: urlS, encodingInvalidCharacters: false),
-                  let imageURL = URL(string: imageURLS, encodingInvalidCharacters: false)
+            guard let url = URL(string: urlS, invalidCharacters: false),
+                  let imageURL = URL(string: imageURLS, invalidCharacters: false)
             else { return nil }
 
             return PocketFeedStory(

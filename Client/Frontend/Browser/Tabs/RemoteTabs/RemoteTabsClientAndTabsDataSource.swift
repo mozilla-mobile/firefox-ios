@@ -8,22 +8,26 @@ import Storage
 import Shared
 import SiteImageView
 
+protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
+    func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
+}
+
 class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     struct UX {
         static let headerHeight = SiteTableViewControllerUX.RowHeight
     }
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
-    weak var remoteTabPanel: RemoteTabsPanel?
+    weak var actionDelegate: RemoteTabsClientAndTabsDataSourceDelegate?
     var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
     private var theme: Theme
 
-    init(remoteTabPanel: RemoteTabsPanel,
+    init(actionDelegate: RemoteTabsClientAndTabsDataSourceDelegate?,
          clientAndTabs: [ClientAndTabs],
          profile: Profile,
          theme: Theme) {
-        self.remoteTabPanel = remoteTabPanel
+        self.actionDelegate = actionDelegate
         self.clientAndTabs = clientAndTabs
         self.theme = theme
     }
@@ -114,6 +118,6 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
         tableView.deselectRow(at: indexPath, animated: false)
         let tab = tabAtIndexPath(indexPath)
         // Remote panel delegate for cell selection
-        remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
+        actionDelegate?.remoteTabsClientAndTabsDataSourceDidSelectURL(tab.URL, visitType: VisitType.typed)
     }
 }

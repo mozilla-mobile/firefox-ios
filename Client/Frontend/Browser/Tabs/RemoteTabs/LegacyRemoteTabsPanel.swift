@@ -14,13 +14,13 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class RemoteTabsPanel: UIViewController, Themeable {
+class LegacyRemoteTabsPanel: UIViewController, Themeable, RemoteTabsClientAndTabsDataSourceDelegate {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
-    var tableViewController: RemoteTabsTableViewController
+    var tableViewController: LegacyRemoteTabsTableViewController
 
     init(profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -28,7 +28,7 @@ class RemoteTabsPanel: UIViewController, Themeable {
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = RemoteTabsTableViewController(profile: profile)
+        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile)
 
         super.init(nibName: nil, bundle: nil)
         notificationCenter.addObserver(self,
@@ -93,6 +93,11 @@ class RemoteTabsPanel: UIViewController, Themeable {
             break
         }
     }
+
+    func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
+        // Pass event along to our delegate
+        remotePanelDelegate?.remotePanel(didSelectURL: url, visitType: VisitType.typed)
+    }
 }
 
 protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
@@ -103,12 +108,12 @@ protocol CollapsibleTableViewSection: AnyObject {
 }
 
 // MARK: - RemoteTabsTableViewController
-class RemoteTabsTableViewController: UITableViewController, Themeable {
+class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
 
-    weak var remoteTabsPanel: RemoteTabsPanel?
+    weak var remoteTabsPanel: LegacyRemoteTabsPanel?
     private var profile: Profile!
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -243,7 +248,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
             return
         }
 
-        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(actionDelegate: remoteTabsPanel,
                                                                     clientAndTabs: nonEmptyClientAndTabs,
                                                                     profile: profile,
                                                                     theme: themeManager.currentTheme)
@@ -315,7 +320,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
     }
 }
 
-extension RemoteTabsTableViewController: CollapsibleTableViewSection {
+extension LegacyRemoteTabsTableViewController: CollapsibleTableViewSection {
     func hideTableViewSection(_ section: Int) {
         guard let dataSource = tableViewDelegate as? RemoteTabsClientAndTabsDataSource else { return }
 
@@ -330,7 +335,7 @@ extension RemoteTabsTableViewController: CollapsibleTableViewSection {
 }
 
 // MARK: LibraryPanelContextMenu
-extension RemoteTabsTableViewController: LibraryPanelContextMenu {
+extension LegacyRemoteTabsTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }

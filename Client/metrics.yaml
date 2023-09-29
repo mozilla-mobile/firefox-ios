@@ -816,6 +816,18 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-20"
 
+  address_bar_feature_callout_displayed:
+    type: event
+    description: |
+      Records an event everytime a shopping CFR is shown on the screen
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/15461
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16593
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-25"
+
 # Key Commands
 key_commands:
   press_key_command_action:

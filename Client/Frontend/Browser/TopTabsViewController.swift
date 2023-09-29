@@ -295,9 +295,9 @@ extension TopTabsViewController: TabDisplayerDelegate {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
-        tabCell.configureWith(tab: tab,
-                              isSelected: isSelected,
-                              theme: themeManager.currentTheme)
+        tabCell.configureLegacyCellWith(tab: tab,
+                                        isSelected: isSelected,
+                                        theme: themeManager.currentTheme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
         tabCell.applyTheme(theme: themeManager.currentTheme)

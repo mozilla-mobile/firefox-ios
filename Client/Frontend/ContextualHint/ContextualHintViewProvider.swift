@@ -17,6 +17,7 @@ enum ContextualHintType: String {
     case jumpBackInSyncedTab = "JumpBackInSyncedTab"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
+    case shoppingExperience = "ShoppingExperience"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
@@ -111,7 +112,8 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     var isActionType: Bool {
         switch hintType {
         case .inactiveTabs,
-                .toolbarLocation:
+                .toolbarLocation,
+                .shoppingExperience:
             return true
 
         default: return false

@@ -70,6 +70,7 @@ public struct PrefsKeys {
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
+        public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
@@ -92,6 +93,8 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
+        case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
+        case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
     }
 
     // Activity Stream
@@ -139,6 +142,9 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
+
+    // The last recorded CFR timestamp
+    public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"

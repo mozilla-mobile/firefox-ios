@@ -18,7 +18,8 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate {
     }
 
     private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController(delegate: self)
+        tabTrayViewController = TabTrayViewController(selectedSegment: .tabs,
+                                                      delegate: self)
         router.setRootViewController(tabTrayViewController)
     }
 

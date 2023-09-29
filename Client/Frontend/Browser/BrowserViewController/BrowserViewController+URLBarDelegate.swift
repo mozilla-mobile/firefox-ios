@@ -127,6 +127,30 @@ extension BrowserViewController: URLBarDelegate {
         navigationHandler?.showFakespotFlow(productURL: productURL)
     }
 
+    func urlBarPresentCFR(at sourceView: UIView) {
+        let contextualViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
+                                                                with: profile)
+
+        let contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+
+        contextHintVC.configure(
+            anchor: sourceView,
+            withArrowDirection: isBottomSearchBar ? .down : .up,
+            presentedUsing: {
+                self.present(contextHintVC, animated: true)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .navigate,
+                                             object: .shoppingButton,
+                                             value: .shoppingCFRsDisplayed)
+            },
+            andActionForButton: { [weak self] in
+                guard let self else { return }
+                guard let productURL = self.urlBar.currentURL else { return }
+                self.navigationHandler?.showFakespotFlow(productURL: productURL)
+            },
+            overlayState: overlayManager)
+    }
+
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
@@ -290,7 +314,7 @@ extension BrowserViewController: URLBarDelegate {
                 let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, encodingInvalidCharacters: false) {
+                if let url = URL(string: urlString, invalidCharacters: false) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }

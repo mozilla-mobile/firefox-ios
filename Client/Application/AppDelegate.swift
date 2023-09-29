@@ -141,6 +141,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         backgroundWorkUtility = BackgroundFetchAndProcessingUtility()
         backgroundWorkUtility?.registerUtility(BackgroundSyncUtility(profile: profile, application: application))
         backgroundWorkUtility?.registerUtility(BackgroundNotificationSurfaceUtility())
+        if let firefoxSuggest = profile.firefoxSuggest {
+            backgroundWorkUtility?.registerUtility(BackgroundFirefoxSuggestIngestUtility(
+                firefoxSuggest: firefoxSuggest
+            ))
+        }
 
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,

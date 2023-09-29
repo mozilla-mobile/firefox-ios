@@ -28,12 +28,12 @@ private func migrate(urls: [URL]) -> [URL] {
                     urlStr = newItem + (comp.last ?? "")
                     assertionFailure("SessionData urls have nested internal links, investigate: [\(url.absoluteString)]")
                 }
-                url = URL(string: urlStr, encodingInvalidCharacters: false) ?? url
+                url = URL(string: urlStr, invalidCharacters: false) ?? url
             }
         }
 
         if let internalUrl = InternalURL(url), internalUrl.isAuthorized,
-            let stripped = URL(string: internalUrl.stripAuthorization, encodingInvalidCharacters: false) {
+            let stripped = URL(string: internalUrl.stripAuthorization, invalidCharacters: false) {
             return stripped
         }
 

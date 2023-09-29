@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+import Common
 
 enum ContextualHintCopyType {
     case action, description
@@ -15,9 +17,12 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
     /// Arrow direction infuences toolbar copy, so it exists here.
     private var arrowDirection: UIPopoverArrowDirection?
+    private let prefs: Prefs
 
-    init(arrowDirecton: UIPopoverArrowDirection? = nil) {
+    init(profile: Profile = AppContainer.shared.resolve(),
+         arrowDirecton: UIPopoverArrowDirection? = nil) {
         self.arrowDirection = arrowDirecton
+        self.prefs = profile.prefs
     }
 
     // MARK: - Public interface
@@ -59,6 +64,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .toolbarLocation:
             return getToolbarDescriptionCopy(with: arrowDirection)
+
+        case .shoppingExperience:
+            descriptionCopy = getShoppingCopy(.description)
         }
 
         return descriptionCopy
@@ -72,6 +80,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .toolbarLocation:
             actionCopy = CFRStrings.Toolbar.SearchBarPlacementButtonText
+        case .shoppingExperience:
+            actionCopy = getShoppingCopy(.action)
         case .jumpBackIn,
                 .jumpBackInSyncedTab:
             actionCopy = ""
@@ -95,5 +105,17 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             return CFRStrings.Toolbar.SearchBarBottomPlacement
         default: return ""
         }
+    }
+
+    private func getShoppingCopy(_ copyType: ContextualHintCopyType) -> String {
+        let hasOptedIn = prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+        var copy: String
+        switch copyType {
+        case .action:
+            copy = hasOptedIn ? CFRStrings.Shopping.OptedInAction : CFRStrings.Shopping.NotOptedInAction
+        case .description:
+            copy = hasOptedIn ? CFRStrings.Shopping.OptedInBody : CFRStrings.Shopping.NotOptedInBody
+        }
+        return copy
     }
 }
