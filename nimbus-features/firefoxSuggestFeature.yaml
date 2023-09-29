@@ -1,0 +1,18 @@
+features:
+  firefox-suggest-feature:
+    description: Configuration for the Firefox Suggest feature.
+    variables:
+      status:
+        description: >
+          Whether the feature is enabled. When Firefox Suggest is enabled,
+          Firefox will download and store new search suggestions in the
+          background, and show additional Search settings to control which
+          suggestions appear in the awesomebar. When Firefox Suggest is
+          disabled, Firefox will not download new suggestions, and hide the
+          additional Search settings.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value:
+          status: true

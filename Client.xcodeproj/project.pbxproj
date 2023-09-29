@@ -840,6 +840,11 @@
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
+		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
+		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
+		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
+		BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */; };
+		BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */; };
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
 		BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */; };
@@ -5550,6 +5555,11 @@
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
+		BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggest.swift; sourceTree = "<group>"; };
+		BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFirefoxSuggestIngestUtility.swift; sourceTree = "<group>"; };
+		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
+		BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettings.swift; sourceTree = "<group>"; };
+		BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettingsViewController.swift; sourceTree = "<group>"; };
 		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackButton.swift; sourceTree = "<group>"; };
@@ -7447,6 +7457,7 @@
 				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 				3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */,
+				BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */,
 				DFACBF83277B9B36003D5F41 /* HomepageSettings */,
 				C8656D76270F858900E199EA /* TabsSettingsViewControler.swift */,
 				C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */,
@@ -8223,6 +8234,7 @@
 				8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */,
 				8A3EF7F62A2FCF6D00796E3A /* ExportLogDataSetting.swift */,
 				8A3EF8002A2FCFC900796E3A /* FasterInactiveTabs.swift */,
+				BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */,
 				8A3EF7FA2A2FCF9D00796E3A /* ForceCrashSetting.swift */,
 				8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */,
 				8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */,
@@ -9414,6 +9426,8 @@
 				D057B2AA220103BC000614E0 /* RustLogins.swift */,
 				D05434E2225BBC4100FDE4EF /* RustShared.swift */,
 				15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */,
+				BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */,
+				BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */,
 			);
 			path = Rust;
 			sourceTree = "<group>";
@@ -10526,6 +10540,7 @@
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
 				AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */,
 				E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */,
+				BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */,
 				E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */,
 				5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */,
 				602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */,
@@ -12031,6 +12046,8 @@
 				D0A627662270C982006AFA2E /* photon-colors.swift in Sources */,
 				2FCAE25F1ABB531100877008 /* Cursor.swift in Sources */,
 				28302E401AF0747800521E2E /* DatabaseError.swift in Sources */,
+				BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */,
+				BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12959,6 +12976,9 @@
 				E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */,
 				8A3EF7FB2A2FCF9D00796E3A /* ForceCrashSetting.swift in Sources */,
 				2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */,
+				BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */,
+				BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */,
+				BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

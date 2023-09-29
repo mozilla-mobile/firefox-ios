@@ -16,6 +16,7 @@ private enum SearchListSection: Int, CaseIterable {
     case openedTabs
     case bookmarksAndHistory
     case searchHighlights
+    case firefoxSuggestions
 }
 
 private struct SearchViewControllerUX {
@@ -68,6 +69,7 @@ class SearchViewController: SiteTableViewController,
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
+    private var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
@@ -95,6 +97,7 @@ class SearchViewController: SiteTableViewController,
             || !filteredOpenedTabs.isEmpty
             || !filteredRemoteClientTabs.isEmpty
             || !searchHighlights.isEmpty
+            || !firefoxSuggestions.isEmpty
     }
 
     init(profile: Profile,
@@ -160,6 +163,26 @@ class SearchViewController: SiteTableViewController,
             guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
+        }
+    }
+
+    private func loadFirefoxSuggestions() {
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
+
+        profile.firefoxSuggest?.interruptReader()
+
+        let tempSearchQuery = searchQuery
+        Task { [weak self] in
+            guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
+                tempSearchQuery,
+                includeSponsored: true,
+                includeNonSponsored: true
+            ) else { return }
+            await MainActor.run {
+                guard let self, self.searchQuery == tempSearchQuery else { return }
+                self.firefoxSuggestions = suggestions
+                self.tableView.reloadData()
+            }
         }
     }
 
@@ -474,6 +497,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         loadSearchHighlights()
+        loadFirefoxSuggestions()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
@@ -542,6 +566,9 @@ class SearchViewController: SiteTableViewController,
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
+        case .firefoxSuggestions:
+            let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+            searchDelegate?.searchViewController(self, didSelectURL: firefoxSuggestion.url, searchTerm: nil)
         }
     }
 
@@ -602,6 +629,8 @@ class SearchViewController: SiteTableViewController,
             return data.count
         case .searchHighlights:
             return searchHighlights.count
+        case .firefoxSuggestions:
+            return firefoxSuggestions.count
         }
     }
 
@@ -720,6 +749,22 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
             twoLineCell.accessoryView = nil
             cell = twoLineCell
+        case .firefoxSuggestions:
+            let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+            twoLineCell.titleLabel.text = firefoxSuggestion.title
+            if firefoxSuggestion.isSponsored {
+                twoLineCell.descriptionLabel.isHidden = false
+                twoLineCell.descriptionLabel.text = .Search.SponsoredSuggestionDescription
+            } else {
+                twoLineCell.descriptionLabel.isHidden = true
+            }
+            twoLineCell.leftOverlayImageView.image = nil
+            twoLineCell.leftImageView.contentMode = .scaleAspectFit
+            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.manuallySetImage(firefoxSuggestion.iconImage ?? UIImage())
+            twoLineCell.accessoryView = nil
+            cell = twoLineCell
         }
 
         // We need to set the correct theme on the cells when the initial display happens
@@ -791,6 +836,9 @@ private extension SearchViewController {
                         TelemetryWrapper.EventValue.historyItem.rawValue
         case .searchHighlights:
             extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
+        case .firefoxSuggestions:
+            // TODO (FXIOS-7393): Add telemetry for Firefox Suggest suggestions.
+            return
         }
 
         TelemetryWrapper.recordEvent(category: .action,

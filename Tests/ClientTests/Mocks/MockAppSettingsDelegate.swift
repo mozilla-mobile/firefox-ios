@@ -26,6 +26,8 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
         pressedExperimentsCalled += 1
     }
 
+    func pressedFirefoxSuggest() {}
+
     func askedToShow(alert: AlertController) {
         askedToShowAlertCalled += 1
     }
