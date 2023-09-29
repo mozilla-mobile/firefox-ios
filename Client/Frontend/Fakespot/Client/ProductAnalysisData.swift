@@ -23,6 +23,10 @@ struct ProductAnalysisData: Codable {
         case pageNotSupported = "page_not_supported"
     }
 
+    var needsAnalysisCardVisible: Bool {
+        productId != nil && needsAnalysis == true
+    }
+
     var notAnalyzedCardVisible: Bool {
         productId == nil && needsAnalysis == true
     }
