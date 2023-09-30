@@ -37,7 +37,7 @@ class FakeReduxMiddleware {
     private func decreaseCounter(currentValue: Int) -> Int {
         return currentValue - 1
     }
-    
+
     private func generateInitialValue() -> Int {
         return Int.random(in: 1...9)
     }
