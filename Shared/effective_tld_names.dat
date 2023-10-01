@@ -1059,22 +1059,11 @@ gouv.fr
 nom.fr
 prd.fr
 tm.fr
-// Former "domaines sectoriels", still registration suffixes
-aeroport.fr
-avocat.fr
+// Other SLDs now selfmanaged out of AFNIC range. Former "domaines sectoriels", still registration suffixes
 avoues.fr
 cci.fr
-chambagri.fr
-chirurgiens-dentistes.fr
-experts-comptables.fr
-geometre-expert.fr
 greta.fr
 huissier-justice.fr
-medecin.fr
-notaires.fr
-pharmacien.fr
-port.fr
-veterinaire.fr
 
 // ga : https://en.wikipedia.org/wiki/.ga
 ga
@@ -5892,6 +5881,7 @@ kyiv.ua
 lg.ua
 lt.ua
 lugansk.ua
+luhansk.ua
 lutsk.ua
 lv.ua
 lviv.ua
@@ -5915,11 +5905,13 @@ te.ua
 ternopil.ua
 uz.ua
 uzhgorod.ua
+uzhhorod.ua
 vinnica.ua
 vinnytsia.ua
 vn.ua
 volyn.ua
 yalta.ua
+zakarpattia.ua
 zaporizhzhe.ua
 zaporizhzhia.ua
 zhitomir.ua
@@ -6031,7 +6023,6 @@ k12.ca.us
 k12.co.us
 k12.ct.us
 k12.dc.us
-k12.de.us
 k12.fl.us
 k12.ga.us
 k12.gu.us
@@ -6719,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-08-26T15:11:08Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-09-30T15:11:25Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7417,7 +7408,7 @@ cbs
 // https://www.iana.org/domains/root/db/center.html
 center
 
-// ceo : CEOTLD Pty Ltd
+// ceo : XYZ.COM LLC
 // https://www.iana.org/domains/root/db/ceo.html
 ceo
 
@@ -14422,6 +14413,20 @@ bounty-full.com
 alpha.bounty-full.com
 beta.bounty-full.com
 
+// Smallregistry by Promopixel SARL: https://www.smallregistry.net
+// Former AFNIC's SLDs 
+// Submitted by Jérôme Lipowicz <support@promopixel.com>
+aeroport.fr
+avocat.fr
+chambagri.fr
+chirurgiens-dentistes.fr
+experts-comptables.fr
+medecin.fr
+notaires.fr
+pharmacien.fr
+port.fr
+veterinaire.fr
+
 // Small Technology Foundation : https://small-tech.org
 // Submitted by Aral Balkan <aral@small-tech.org>
 small-web.org
@@ -14886,6 +14891,8 @@ js.wpenginepowered.com
 // Submitted by Shahar Talmi <shahar@wix.com>
 wixsite.com
 editorx.io
+wixstudio.io
+wix.run
 
 // XenonCloud GbR: https://xenoncloud.net
 // Submitted by Julian Uphoff <publicsuffixlist@xenoncloud.net>
