@@ -35,7 +35,6 @@ enum RemoteTabsPanelAction: Action {
 }
 
 class RemoteTabsPanel: UIViewController,
-                       StoreSubscriber,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemotePanelDelegateProvider {
