@@ -8,8 +8,6 @@ import Common
 import Shared
 import Redux
 
-
-
 class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
