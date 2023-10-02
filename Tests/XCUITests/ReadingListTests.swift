@@ -5,8 +5,8 @@
 import Common
 import XCTest
 
-class ReaderModeTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306994
+class ReadingListTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287278f
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))

@@ -58,7 +58,7 @@
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIphone",
-        "ReaderModeTests",
+        "ReadingListTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests",
