@@ -92,9 +92,7 @@ class RemoteTabsTableViewController: UITableViewController,
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        if let delegate = tableViewDelegate as? RemoteTabsErrorDataSource {
-            delegate.applyTheme(theme: themeManager.currentTheme)
-        }
+        // TODO: Ensure theme applied to any subviews or custom cells.
     }
 
     // MARK: - Refreshing TableView
@@ -131,13 +129,13 @@ class RemoteTabsTableViewController: UITableViewController,
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         guard !clientAndTabs.isEmpty else {
-            showEmptyTabsViewWith(.noClients)
+            showEmptyTabsView(for: .noClients)
             return
         }
 
         let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
         guard !nonEmptyClientAndTabs.isEmpty else {
-            showEmptyTabsViewWith(.noTabs)
+            showEmptyTabsView(for: .noTabs)
             return
         }
 
@@ -161,7 +159,7 @@ class RemoteTabsTableViewController: UITableViewController,
         // Short circuit if the user is not logged in
         guard state.allowsRefresh else {
             endRefreshing()
-            showEmptyTabsViewWith(.notLoggedIn)
+            showEmptyTabsView(for: .notLoggedIn)
             return
         }
 
@@ -169,18 +167,8 @@ class RemoteTabsTableViewController: UITableViewController,
         // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
     }
 
-    private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {
-        guard let remoteTabsPanel = remoteTabsPanel else { return }
-        var errorMessage = error
-
-        if !state.syncIsSupported { errorMessage = .syncDisabledByUser }
-
-        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
-                                                            error: errorMessage,
-                                                            theme: themeManager.currentTheme)
-        tableViewDelegate = remoteTabsErrorView
-
-        tableView.reloadData()
+    private func showEmptyTabsView(for error: RemoteTabsPanelErrorState) {
+        // TODO: Show empty view. Forthcoming in FXIOS-6934.
     }
 
     @objc

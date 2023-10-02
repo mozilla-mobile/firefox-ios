@@ -11,12 +11,14 @@ struct RemoteTabsPanelState {
     let refreshState: RemoteTabsPanelRefreshState
     let clientAndTabs: [ClientAndTabs]
     let allowsRefresh: Bool // True if hasSyncableAccount
+    let showingError: RemoteTabsPanelErrorState?
     let syncIsSupported: Bool // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
 
     static func emptyState() -> RemoteTabsPanelState {
         return RemoteTabsPanelState(refreshState: .loaded,
                                     clientAndTabs: [],
                                     allowsRefresh: false,
+                                    showingError: nil,
                                     syncIsSupported: true)
     }
 }
@@ -24,4 +26,13 @@ struct RemoteTabsPanelState {
 enum RemoteTabsPanelRefreshState {
     case loaded
     case refreshing
+}
+
+// This now replaces RemoteTabsErrorDataSource.ErrorType
+enum RemoteTabsPanelErrorState {
+    case notLoggedIn
+    case noClients
+    case noTabs
+    case failedToSync
+    case syncDisabledByUser
 }
