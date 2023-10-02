@@ -56,9 +56,6 @@ class EmptyPrivateTabsView: UIView {
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                          size: UX.buttonSizeFont)
-        button.addTarget(self,
-                         action: #selector(didTapLearnMore),
-                         for: .touchUpInside)
     }
 
     private let iconImageView: UIImageView = .build { imageView in
@@ -78,6 +75,9 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private func setupLayout() {
+        button.addTarget(self,
+                         action: #selector(didTapLearnMore),
+                         for: .touchUpInside)
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
