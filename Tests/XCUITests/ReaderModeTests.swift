@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 class ReaderModeTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287278
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306994
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -25,7 +25,7 @@ class ReaderModeTests: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287274
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306991
     // Smoketest
     func testAddToReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -48,7 +48,7 @@ class ReaderModeTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287279
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306995
     func testAddToReadingListPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -86,7 +86,7 @@ class ReaderModeTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287275
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306992
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
@@ -99,7 +99,7 @@ class ReaderModeTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Mark as Read"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287280
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306996
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
@@ -116,7 +116,7 @@ class ReaderModeTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287281
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306997
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -139,7 +139,7 @@ class ReaderModeTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287282
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306998
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -164,7 +164,7 @@ class ReaderModeTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287299
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306999
     func testAddToReadingListFromBrowserTabMenu() {
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -182,7 +182,7 @@ class ReaderModeTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287300
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
@@ -206,7 +206,7 @@ class ReaderModeTests: BaseTestCase {
         XCTAssertEqual(numTabAfter, "2")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287301
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307001
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
@@ -224,7 +224,7 @@ class ReaderModeTests: BaseTestCase {
         XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287276
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
