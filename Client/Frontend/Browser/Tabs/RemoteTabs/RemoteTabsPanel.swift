@@ -288,41 +288,6 @@ class RemoteTabsTableViewController: UITableViewController,
 
         // TODO: Send Redux action to get cached clients & tabs, update once new state is received. Forthcoming.
         // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
-
-        // Previous code for reference. Will be removed soon.
-        /*
-        // Get cached tabs.
-        profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
-            guard let clientAndTabs = result.successValue else {
-                self?.endRefreshing()
-                self?.showEmptyTabsViewWith(.failedToSync)
-                return
-            }
-
-            // Update UI with cached data.
-            self?.updateDelegateClientAndTabData(clientAndTabs)
-
-            if updateCache {
-                
-                // TODO: Send Redux action to refresh tabs, and then update once new state is received. Forthcoming.
-                // store.dispatch(RemoteTabsPanelAction.refreshTabs)
-                
-                // Original code:
-                // self?.profile.getClientsAndTabs().uponQueue(.main) { result in
-                //     if let clientAndTabs = result.successValue {
-                //         // Update UI with updated tabs.
-                //         self?.updateDelegateClientAndTabData(clientAndTabs)
-                //     }
-                // 
-                //     self?.endRefreshing()
-                //     completion?()
-                // }
-            } else {
-                self?.endRefreshing()
-                completion?()
-            }
-        }
-         */
     }
 
     private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {

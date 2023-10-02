@@ -263,8 +263,6 @@ class TabTrayViewController: UIViewController,
             return TabDisplayViewController(isPrivateMode: true)
         case .syncedTabs:
             return RemoteTabsPanel(state: RemoteTabsPanelState.emptyState())
-        default:
-            return UIViewController()
         }
     }
 
