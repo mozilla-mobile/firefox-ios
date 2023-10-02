@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "ການລັອກອິນທີ່ໄດ້ບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້. ເຂົ້າສູ່ລະບົບບັນຊີ Firefox ຂອງທ່ານ ຖ້າຫາກວ່າທ່ານໄດ້ບັນທຶກການລັອກອິນຂອງທ່ານໄວ້ໃນ Firefox ໃນອຸປະກອນອື່ນໆ.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "ການເຂົ້າສູ່ລະບົບທີ່ບັນທຶກໄວ້ຈະປາກົດຢູ່ບ່ອນນີ້. ຖ້າທ່ານບັນທຶກການເຂົ້າສູ່ລະບົບຂອງທ່ານໄປທີ່ %@ ໃນອຸປະກອນອື່ນ, ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານ.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ບໍ່ພົບການລັອກອິນ";
 

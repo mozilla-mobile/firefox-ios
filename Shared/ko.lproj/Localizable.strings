@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "저장된 로그인이 여기에 보여집니다. 다른 기기의 Firefox에서 로그인을 저장했다면 Firefox 계정에 로그인 하세요.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "저장된 로그인이 여기에 표시됩니다. 다른 기기에서 %@에 대한 로그인을 저장한 경우 계정에 로그인하세요.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "로그인을 찾을 수 없음";
 

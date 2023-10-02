@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Nid oes gennych unrhyw ddyfeisiau eraill wedi eu cysylltu i'r Cyfrif Firefox hwn i'w cydweddu nhw.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Nid ydych wedi mewngofnodi i'ch cyfrif.";
+

@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Դուք չունեք որևէ այլ սարք՝ կապակցված այս հաշվի հետ և մատչելի համաժամեցման համար:";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Դուք մուտք չեք գործել ձեր հաշիվ:";
+
