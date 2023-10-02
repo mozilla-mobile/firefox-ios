@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "A mentett fiókok itt fognak megjelenni. Ha más eszközén mentette a Firefoxba a bejelentkezéseit, akkor jelentkezzen be a Firefox-fiókjába.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "A mentett fiókok itt fognak megjelenni. Ha egy másik eszközén mentette a %@ba a bejelentkezéseit, akkor jelentkezzen be a fiókjába.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Nincsenek bejelentkezések";
 

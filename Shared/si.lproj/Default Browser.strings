@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "කෙසේදැයි දැනගන්න";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "ෆයර්ෆොක්ස් හි ස්වයංක්‍රීයව විවෘත වීමට අඩවි, වි-තැපැල් සහ පණිවිඩ වලින් සබැඳි සකසන්න.";
+"DefaultBrowserCard.Description" = "ෆයර්ෆොක්ස් අතිරික්සුවේ ස්වයංක්‍රීයව විවෘත වීමට පණිවිඩ, වි-තැපැල් සහ අඩවිවල සබැඳි සකසන්න.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "ෆයර්ෆොක්ස් ඔබගේ පෙරනිමි අතිරික්සුව ලෙස තේරීමෙන් වේගය, ආරක්‍ෂාව හා පෞද්ගලිකත්‍වය ස්වයංක්‍රීයව.";

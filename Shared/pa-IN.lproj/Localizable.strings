@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "ਸੰਭਾਲੇ ਹੋਏ ਲਾਗਇਨ ਇੱਥੇ ਵੇਖਾਏ ਜਾਣਗੇ। ਜੇ ਤੁਸੀਂ ਆਪਣੇ ਲਾਗਇਨ ਵੱਖਰੇ ਡਿਵਾਈਸ ਉੱਤੇ Firefox ਵਿੱਚ ਸੰਭਾਲੇ ਹਨ ਤਾਂ ਆਪਣੇ Firefox ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ।";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "ਸੰਭਾਲੇ ਹੋਏ ਲਾਗਇਨ ਇੱਥੇ ਵੇਖਾਏ ਜਾਣਗੇ। ਜੇ ਤੁਸੀਂ ਆਪਣੇ ਲਾਗਇਨ ਵੱਖਰੇ ਡਿਵਾਈਸ ਉੱਤੇ %@ ਵਿੱਚ ਸੰਭਾਲੇ ਹਨ ਤਾਂ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ।";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ਕੋਈ ਲਾਗਇਨ ਨਹੀਂ ਲੱਭਿਆ";
 
