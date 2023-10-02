@@ -42,7 +42,7 @@ class BookmarksTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302739
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306905
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.nowAt(NewTabScreen)
@@ -102,7 +102,7 @@ class BookmarksTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302741
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306906
     func testAccessBookmarksFromContextMenu() {
         // Add a bookmark
         navigator.nowAt(NewTabScreen)
@@ -117,7 +117,7 @@ class BookmarksTests: BaseTestCase {
         checkItemInBookmarkList(oneItemBookmarked: true)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302746
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306907
     // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -158,7 +158,7 @@ class BookmarksTests: BaseTestCase {
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303040
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306913
     func testAddBookmark() {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
@@ -166,7 +166,7 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303041
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306914
     func testAddNewFolder() {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
@@ -187,7 +187,7 @@ class BookmarksTests: BaseTestCase {
         checkItemsInBookmarksList(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303042
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306915
     func testAddNewMarker() {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
@@ -205,7 +205,7 @@ class BookmarksTests: BaseTestCase {
         checkItemsInBookmarksList(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303043
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306916
     // Test failing in M1s because the swipe gesture. Needs work to run only on Intel.
     func testDeleteBookmarkSwiping() {
         addNewBookmark()
@@ -226,7 +226,7 @@ class BookmarksTests: BaseTestCase {
         checkItemsInBookmarksList(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2303044
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306917
     func testDeleteBookmarkContextMenu() {
         addNewBookmark()
         // Remove by long press and select option from context menu
@@ -237,7 +237,7 @@ class BookmarksTests: BaseTestCase {
         checkItemsInBookmarksList(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302748
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306908
     // Smoketest
     func testUndoDeleteBookmark() {
         navigator.openURL(path(forTestPage: url_1))
@@ -277,7 +277,7 @@ class BookmarksTests: BaseTestCase {
         app.textFields["address"].typeText(text)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302781
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306909
     // Smoketest
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
@@ -316,7 +316,7 @@ class BookmarksTests: BaseTestCase {
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2302782
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306910
     // Smoketest
     func testDesktopFoldersArePresent() {
         // Verify that there are only 1 cell (desktop bookmark folder)
@@ -333,7 +333,7 @@ class BookmarksTests: BaseTestCase {
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/361719
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306911
     func testRecentlyBookmarked() {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()

@@ -18,6 +18,7 @@ include:
   - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
+  - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/libraryCoordinatorRefactor.yaml

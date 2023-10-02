@@ -55,6 +55,7 @@ features:
             NOT_INSTALLED_TODAY:      days_since_install > 0
             NOT_LAUNCHED_YESTERDAY:   "'app_cycle.foreground'|eventLastSeen('Days', 1) > 1"
             AFTER_THREE_LAUNCHES_THIS_WEEK: "'app_cycle.foreground'|eventSum('Weeks', 1, 0) >= 3"
+            ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
             USER_RECENTLY_INSTALLED:  days_since_install < 7
             USER_RECENTLY_UPDATED:    days_since_update < 7 && days_since_install != days_since_update
             MORE_THAN_24H_SINCE_INSTALLED_OR_UPDATED: days_since_update >= 1
@@ -119,6 +120,7 @@ features:
               trigger:
                 - I_AM_NOT_DEFAULT_BROWSER
                 - SUPPORTS_DEFAULT_BROWSER
+                - ON_FOURTH_LAUNCH_THIS_YEAR
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
