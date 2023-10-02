@@ -31,11 +31,16 @@ class ToolbarMenuTests: BaseTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         mozWaitForElementToExist(hamburgerMenu, timeout: 15)
         mozWaitForElementToNotExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.webViews["contentView"])
         if iPad() {
+            mozWaitForElementToExist(bookmarksButton)
             XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: bookmarksButton), "Menu button is not on the right side of bookmarks button")
         } else {
+            mozWaitForElementToExist(tabsButton)
             XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: tabsButton), "Menu button is not on the right side of tabs button")
         }
+        mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(hamburgerMenu.isAbove(element: firstPocketCell), "Menu button is not below the pocket cells area")
         hamburgerMenu.tap()
         mozWaitForElementToExist(app.tables["Context Menu"])

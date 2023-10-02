@@ -304,14 +304,8 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
 
         // Delete the Bookmark added, check it is removed
-        if processIsTranslatedStr() == m1Rosetta {
-            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].press(forDuration: 1)
-            mozWaitForElementToExist(app.tables["Context Menu"])
-            app.tables.otherElements["Remove Bookmark"].tap()
-        } else {
-            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-            app.buttons["Delete"].tap()
-        }
+        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+        app.buttons["Delete"].tap()
         mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
