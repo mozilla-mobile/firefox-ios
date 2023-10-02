@@ -8,31 +8,7 @@ import Common
 import Shared
 import Redux
 
-/// Captures state needed to populate the Sync tab UI. Some aspects of how we
-/// will handle management of state are still TBD as part of the Redux refactors.
-struct RemoteTabsPanelState {
-    let refreshState: RemoteTabsPanelRefreshState
-    let clientAndTabs: [ClientAndTabs]
-    let allowsRefresh: Bool // True if hasSyncableAccount
-    let syncIsSupported: Bool // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
 
-    static func emptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(refreshState: .loaded,
-                                    clientAndTabs: [],
-                                    allowsRefresh: false,
-                                    syncIsSupported: true)
-    }
-}
-
-enum RemoteTabsPanelRefreshState {
-    case loaded
-    case refreshing
-}
-
-enum RemoteTabsPanelAction: Action {
-    case refreshCachedTabs
-    case refreshTabs
-}
 
 class RemoteTabsPanel: UIViewController,
                        Themeable,
