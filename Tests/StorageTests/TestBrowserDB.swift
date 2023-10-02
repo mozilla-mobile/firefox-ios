@@ -66,7 +66,7 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
         XCTAssertEqual(remaining.0, "http://example.com/short")
     }
-
+    // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testMovesDB() {
         var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.

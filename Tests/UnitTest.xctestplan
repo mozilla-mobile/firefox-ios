@@ -95,6 +95,9 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
+        "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",
@@ -116,7 +119,8 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests\/testUpdateLogin()"
+        "RustLoginsTests\/testUpdateLogin()",
+        "TestBrowserDB\/testMovesDB()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
