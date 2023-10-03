@@ -51,6 +51,7 @@ class FakespotSettingsCardViewModel {
 
     func onTapButton() {
         guard let footerActionUrl else { return }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
         dismissViewController?()
     }
