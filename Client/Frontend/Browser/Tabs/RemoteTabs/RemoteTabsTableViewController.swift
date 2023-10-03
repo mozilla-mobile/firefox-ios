@@ -69,7 +69,12 @@ class RemoteTabsTableViewController: UITableViewController,
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
         
         tableView.addSubview(emptyView)
-        emptyView.frame = tableView.bounds
+        NSLayoutConstraint.activate([
+            emptyView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            emptyView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            emptyView.widthAnchor.constraint(greaterThanOrEqualToConstant: 500),
+            emptyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 250),
+        ])
         
         listenForThemeChange(view)
         applyTheme()
@@ -108,14 +113,18 @@ class RemoteTabsTableViewController: UITableViewController,
     private func refreshUI() {
         emptyView.isHidden = !isShowingEmptyView
 
-        if !isShowingEmptyView {
+        if isShowingEmptyView {
+            configureEmptyView()
+        } else {
             tableView.reloadData()
         }
     }
 
     private func configureEmptyView() {
         guard let emptyState = state.showingEmptyState else { return }
-        emptyView.configure(state: emptyState, theme: nil, delegate: remoteTabsPanel?.remotePanelDelegate)
+        emptyView.configure(state: emptyState,
+                            theme: themeManager.currentTheme,
+                            delegate: remoteTabsPanel?.remotePanelDelegate)
     }
 
     // MARK: - Refreshing TableView
