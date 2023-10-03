@@ -26,6 +26,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16
         static let disclaimerStackViewSpacing: CGFloat = 3
+        static let optInImageViewIpadVerticalSpace: CGFloat = 5
     }
 
     private var viewModel: FakespotOptInCardViewModel?
@@ -138,6 +139,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         contentStackView.addArrangedSubview(learnMoreButton)
 
         contentStackView.addArrangedSubview(optInImageView)
+        addVerticalSpaceToImageView()
 
         disclaimerStackView.addArrangedSubview(disclaimerTextLabel)
         disclaimerStackView.addArrangedSubview(privacyPolicyButton)
@@ -162,6 +164,19 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
                                                        constant: -UX.contentStackViewPadding),
         ])
+    }
+
+    private func addVerticalSpaceToImageView() {
+        guard UIDevice.current.userInterfaceIdiom == .pad,
+                let imageIndex = contentStackView.subviews.firstIndex(of: optInImageView) else { return }
+
+        let topSpacer = UIView()
+        let bottomSpacer = UIView()
+
+        topSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadVerticalSpace).isActive = true
+        bottomSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadVerticalSpace).isActive = true
+        contentStackView.insertArrangedSubview(topSpacer, at: imageIndex)
+        contentStackView.insertArrangedSubview(bottomSpacer, at: imageIndex + 2)
     }
 
     // MARK: Button Actions
