@@ -36,7 +36,6 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
         fakespotViewController.delegate = self
         if #available(iOS 15.0, *) {
             if let sheet = fakespotViewController.sheetPresentationController {
-//                sheet.largestUndimmedDetentIdentifier = .medium
                 sheet.detents = [.medium(), .large()]
 
                 // Show onboarding in full height
