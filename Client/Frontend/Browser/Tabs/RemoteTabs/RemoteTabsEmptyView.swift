@@ -116,9 +116,6 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
         ])
-
-        titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        instructionsLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
 
     func applyTheme(theme: Theme) {
