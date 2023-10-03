@@ -208,6 +208,13 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         let areAllSelected = viewModel.listSelectionHelper.numberOfSelectedCells == viewModel.count
         selectionButton.setTitle(areAllSelected ? .LoginListDeselctAll : .LoginListSelctAll, for: [])
     }
+
+    // MARK: Telemetry
+    private func sendLoginsDeletedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .delete,
+                                     object: .loginsDeleted)
+    }
 }
 
 extension PasswordManagerListViewController: UISearchResultsUpdating {
@@ -305,6 +312,7 @@ private extension PasswordManagerListViewController {
                 self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
+                    self.sendLoginsDeletedTelemetry()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 

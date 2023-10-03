@@ -156,6 +156,9 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             if engineName == .creditcards {
                 self.creditCardSyncEnabledTelemetry(status: enabled)
             }
+            else if engineName == .passwords {
+                self.loginsSyncEnabledTelemetry(status: enabled)
+            }
 
             if self.profile.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
                 self.profile.prefs.removeObjectForKey(prefName)
@@ -172,6 +175,17 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             category: .action,
             method: .tap,
             object: .creditCardSyncToggle,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardSyncToggleEnabled.rawValue: status
+            ]
+        )
+    }
+
+    private func loginsSyncEnabledTelemetry(status: Bool) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .loginsSyncEnabled,
             extras: [
                 TelemetryWrapper.ExtraKey.isCreditCardSyncToggleEnabled.rawValue: status
             ]

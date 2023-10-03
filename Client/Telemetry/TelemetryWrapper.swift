@@ -451,6 +451,20 @@ extension TelemetryWrapper {
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
+        case settingsMenuPasswords = "passwords"
+        // MARK: Logins and Passwords
+        case loginsPasswordDetected = "logins_password_detected"
+        case loginsAutofillPromptShown = "logins_autofill_prompt_shown"
+        case loginsAutofillPromptDismissed = "logins_autofill_prompt_dismissed"
+        case loginsAutofilled = "logins_autofilled"
+        case loginsAutofillFailed = "logins_autofill_failed"
+        case loginsManagementAddTapped = "logins_management_add_tapped"
+        case loginsManagementLoginsTapped = "logins_management_logins_tapped"
+        case loginsSaved = "logins-saved"
+        case loginsSavedAll = "logins-saved-all"
+        case loginsDeleted = "logins-deleted"
+        case loginsModified = "logins-modified"
+        case loginsSyncEnabled = "logins-sync-enabled"
         // MARK: Credit Card
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case creditCardFormDetected = "creditCardFormDetected"
@@ -725,6 +739,10 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
+
+        // Password Manager
+        case loginsQuantity = "loginsQuantity"
+        case isLoginSyncEnabled = "sync-enabled"
     }
 
     func recordEvent(category: EventCategory,
@@ -972,10 +990,51 @@ extension TelemetryWrapper {
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
-
+        case(.action, .open, .settingsMenuPasswords, _, _):
+            GleanMetrics.SettingsMenu.passwords.record()
         case(.action, .tap, .settingsMenuShowTour, _, _):
             GleanMetrics.SettingsMenu.showTourPressed.record()
 
+        // MARK: Logins and Passwords
+        case(.information, .emailLogin, .loginsPasswordDetected, _, _):
+            GleanMetrics.Logins.passwordDetected.record()
+        case(.action, .view, .loginsAutofillPromptShown, _, _):
+            GleanMetrics.Logins.autofillPromptShown.record()
+        case(.action, .close, .loginsAutofillPromptDismissed, _, _):
+            GleanMetrics.Logins.autofillPromptDismissed.record()
+        case(.action, .tap, .loginsAutofilled, _, _):
+            GleanMetrics.Logins.autofilled.record()
+        case(.action, .tap, .loginsAutofillFailed, _, _):
+            GleanMetrics.Logins.autofillFailed.record()
+        case(.action, .tap, .loginsManagementAddTapped, _, _):
+            GleanMetrics.Logins.managementAddTapped.record()
+        case(.action, .tap, .loginsManagementLoginsTapped, _, _):
+            GleanMetrics.Logins.managementLoginsTapped.record()
+        case(.action, .add, .loginsSaved, _, _):
+            GleanMetrics.Logins.saved.add()
+        case(.information, .foreground, .loginsSavedAll, _, let extras):
+            if let quantity = extras?[EventExtraKey.loginsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Logins.savedAll.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.action, .delete, .loginsDeleted, _, _):
+            GleanMetrics.Logins.deleted.add()
+        case(.action, .change, .loginsModified, _, _):
+            GleanMetrics.Logins.modified.add()
+        case(.action, .tap, .loginsSyncEnabled, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isLoginSyncEnabled.rawValue]
+                as? Bool {
+                let isEnabledExtra = GleanMetrics.Logins.SyncEnabledExtra(isEnabled: isEnabled)
+                GleanMetrics.Logins.syncEnabled.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
@@ -1352,6 +1411,8 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.customizeHomepage.add()
         case (.action, .open, .settings, _, _):
             GleanMetrics.AppMenu.settings.add()
+        case(.action, .open, .logins, _, _):
+            GleanMetrics.AppMenu.passwords.record()
 
         // MARK: Page Menu
         case (.action, .tap, .sharePageWith, _, _):

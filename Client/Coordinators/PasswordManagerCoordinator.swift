@@ -71,6 +71,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
         let viewController = PasswordDetailViewController(viewModel: model)
         viewController.coordinator = self
+        sendLoginsManagementLoginsTappedTelemetry()
         router.push(viewController)
     }
 
@@ -78,11 +79,24 @@ class PasswordManagerCoordinator: BaseCoordinator,
         let viewController = AddCredentialViewController(didSaveAction: completion)
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .formSheet
+        sendLoginsManagementAddTappedTelemetry()
         passwordManager?.present(navigationController, animated: true)
     }
 
     func openURL(url: URL) {
         parentCoordinator?.settingsOpenURLInNewTab(url)
         parentCoordinator?.didFinishPasswordManager(from: self)
+    }
+
+    private func sendLoginsManagementAddTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementAddTapped)
+    }
+
+    private func sendLoginsManagementLoginsTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementLoginsTapped)
     }
 }
