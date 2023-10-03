@@ -421,6 +421,8 @@ class TabTrayViewController: UIViewController,
     @objc
     private func syncTabsTapped() {}
 
+    // MARK: - RemotePanelDelegate
+
     func remotePanelDidRequestToSignIn() {
         fxaSignInOrCreateAccountHelper()
     }
