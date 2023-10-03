@@ -9,7 +9,8 @@ import Storage
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
-                            Themeable {
+                            Themeable,
+                            RemotePanelDelegate {
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
@@ -262,7 +263,9 @@ class TabTrayViewController: UIViewController,
         case .privateTabs:
             return TabDisplayViewController(isPrivateMode: true)
         case .syncedTabs:
-            return RemoteTabsPanel(state: RemoteTabsPanelState.emptyState())
+            let panel = RemoteTabsPanel(state: RemoteTabsPanelState.emptyState())
+            panel.remotePanelDelegate = self
+            return panel
         }
     }
 
@@ -414,4 +417,25 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func syncTabsTapped() {}
+
+    func remotePanelDidRequestToSignIn() {
+        fxaSignInOrCreateAccountHelper()
+    }
+
+    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        self.openInNewTab?(url, isPrivate)
+        self.dismissVC()
+    }
+
+    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        self.didSelectUrl?(url, visitType)
+        self.dismissVC()
+    }
+
+    // Sign In and Create Account Helper
+    func fxaSignInOrCreateAccountHelper() {
+        // TODO: Present Firefox account sign-in. Forthcoming.
+    }
 }
