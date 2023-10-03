@@ -167,6 +167,7 @@ class DownloadsTests: BaseTestCase {
 
     private func downloadBLOBFile() {
         navigator.openURL(testBLOBURL)
+        waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"], timeout: TIMEOUT)
         app.webViews.links["Download Text"].press(forDuration: 1)
         app.buttons["Download Link"].tap()
