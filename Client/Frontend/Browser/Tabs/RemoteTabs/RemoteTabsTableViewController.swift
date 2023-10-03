@@ -14,6 +14,8 @@ class RemoteTabsTableViewController: UITableViewController,
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
+    
+    // MARK: - Properties
 
     private(set) var state: RemoteTabsPanelState
 
@@ -21,16 +23,15 @@ class RemoteTabsTableViewController: UITableViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
-    var tableViewDelegate: RemoteTabsPanelDataSource? {
-        didSet {
-            tableView.dataSource = tableViewDelegate
-            tableView.delegate = tableViewDelegate
-        }
-    }
+    
+    private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
+    private let emptyView: RemoteTabsEmptyView = .build()
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+    
+    // MARK: - Initializer
 
     init(state: RemoteTabsPanelState,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -42,6 +43,8 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    // MARK: - View Controller
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +54,9 @@ class RemoteTabsTableViewController: UITableViewController,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(RemoteTabsErrorCell.self,
-                           forCellReuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
+
+        tableView.delegate = self
+        tableView.dataSource = self
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
@@ -62,20 +66,24 @@ class RemoteTabsTableViewController: UITableViewController,
             tableView.sectionHeaderTopPadding = 0.0
         }
 
-        tableView.delegate = nil
-        tableView.dataSource = nil
-
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
+        
+        tableView.addSubview(emptyView)
+        emptyView.frame = tableView.bounds
+        
         listenForThemeChange(view)
         applyTheme()
+        
+        refreshUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
 
-        // Add a refresh control if the user is logged in and the control was not added before.
-        // If the user is not logged in, remove any existing control.
+        // Add a refresh control if the user is logged in and the control
+        // was not added before. If the user is not logged in, remove any
+        // existing control.
         if state.allowsRefresh && refreshControl == nil {
             addRefreshControl()
         }
@@ -89,10 +97,25 @@ class RemoteTabsTableViewController: UITableViewController,
             removeRefreshControl()
         }
     }
+    
+    // MARK: - UI
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
         // TODO: Ensure theme applied to any subviews or custom cells.
+    }
+
+    private func refreshUI() {
+        emptyView.isHidden = !isShowingEmptyView
+
+        if !isShowingEmptyView {
+            tableView.reloadData()
+        }
+    }
+
+    private func configureEmptyView() {
+        guard let emptyState = state.showingEmptyState else { return }
+        emptyView.configure(state: emptyState, theme: nil, delegate: remoteTabsPanel?.remotePanelDelegate)
     }
 
     // MARK: - Refreshing TableView
@@ -126,26 +149,9 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
-        guard let remoteTabsPanel = remoteTabsPanel else { return }
+        // TODO: Forthcoming as part of ongoing tab tray Redux refactors.
 
-        guard !clientAndTabs.isEmpty else {
-            showEmptyTabsView(for: .noClients)
-            return
-        }
-
-        let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
-        guard !nonEmptyClientAndTabs.isEmpty else {
-            showEmptyTabsView(for: .noTabs)
-            return
-        }
-
-        let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(actionDelegate: remoteTabsPanel,
-                                                                    clientAndTabs: nonEmptyClientAndTabs,
-                                                                    theme: themeManager.currentTheme)
-        tabsPanelDataSource.collapsibleSectionDelegate = self
-        tableViewDelegate = tabsPanelDataSource
-
-        tableView.reloadData()
+        refreshUI()
     }
 
     func refreshTabs(state: RemoteTabsPanelState, updateCache: Bool = false, completion: (() -> Void)? = nil) {
@@ -159,16 +165,11 @@ class RemoteTabsTableViewController: UITableViewController,
         // Short circuit if the user is not logged in
         guard state.allowsRefresh else {
             endRefreshing()
-            showEmptyTabsView(for: .notLoggedIn)
             return
         }
 
         // TODO: Send Redux action to get cached clients & tabs, update once new state is received. Forthcoming.
         // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
-    }
-
-    private func showEmptyTabsView(for error: RemoteTabsPanelErrorState) {
-        // TODO: Show empty view. Forthcoming in FXIOS-6934.
     }
 
     @objc
@@ -180,15 +181,9 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func hideTableViewSection(_ section: Int) {
-        guard let dataSource = tableViewDelegate as? RemoteTabsClientAndTabsDataSource else { return }
+        // TODO: Forthcoming as part of ongoing Redux refactors.
 
-        if dataSource.hiddenSections.contains(section) {
-            dataSource.hiddenSections.remove(section)
-        } else {
-            dataSource.hiddenSections.insert(section)
-        }
-
-        tableView.reloadData()
+        refreshUI()
     }
 
     func presentContextMenu(for site: Site, with indexPath: IndexPath,
@@ -199,13 +194,43 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let tab = (tableViewDelegate as? RemoteTabsClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else {
-            return nil
-        }
-        return Site(url: String(describing: tab.URL), title: tab.title)
+        // TODO: Forthcoming as part of ongoing Redux refactors.
+        
+        return nil
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         return getRemoteTabContextMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
+    }
+    
+    // MARK: - UITableView
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if isShowingEmptyView {
+            return 0
+        } else {
+            // TODO: Show clients and tabs. Forthcoming.
+            return 0
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isShowingEmptyView {
+            return 0
+        } else {
+            // TODO: Show clients and tabs. Forthcoming.
+            return 0
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !isShowingEmptyView else { assertionFailure("Empty view state should always have 0 sections/rows."); return .build() }
+
+        // TODO: Show clients and tabs. Forthcoming.
+        return UITableViewCell(frame: .zero)
     }
 }
