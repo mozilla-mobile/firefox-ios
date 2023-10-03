@@ -113,7 +113,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
         setupView()
         listenForThemeChange(view)
-        sendTelemetryOnAppear()
+        viewModel.sendTelemetryOnAppear()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -125,9 +125,19 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        viewModel.isSwiping = false
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        viewModel.isSwiping = true
     }
 
     func applyTheme() {
@@ -241,9 +251,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
-            viewModel.optInCardViewModel.dismissViewController = { [weak self] in
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss()
+                guard let action else { return }
+                viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
@@ -284,9 +296,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)
-            viewModel.settingsCardViewModel.dismissViewController = { [weak self] in
+            viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss()
+                guard let action else { return }
+                viewModel.recordDismissTelemetry(by: action)
             }
             return view
 
@@ -320,28 +334,24 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         }
     }
 
-    private func recordDismissTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .shoppingBottomSheet)
-    }
-
-    private func sendTelemetryOnAppear() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .shoppingBottomSheet)
-    }
-
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
-        recordDismissTelemetry()
+        viewModel.recordDismissTelemetry(by: .closeButton)
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
-        recordDismissTelemetry()
+        guard #available(iOS 15.0, *) else { return }
+        guard let sheetPresentationController = presentationController as? UISheetPresentationController else { return }
+
+        let currentDetent = sheetPresentationController.selectedDetentIdentifier
+        if viewModel.isSwiping || currentDetent == .large {
+            viewModel.recordDismissTelemetry(by: .swipingTheSurfaceHandle)
+        } else {
+            viewModel.recordDismissTelemetry(by: .clickOutside)
+        }
     }
 }

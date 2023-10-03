@@ -675,6 +675,12 @@ shopping:
     type: event
     description: |
       Records when the surface (bottom sheet) is dismissed
+    extra_keys:
+      action:
+        type: string
+        description: |
+          Records how the surface was closed:
+          "close-button/click-outside/interaction-with-a-link/swiping-the-surface-handle/opting-out-of-the-feature"
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15681
     data_reviews:

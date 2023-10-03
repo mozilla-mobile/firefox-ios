@@ -90,6 +90,7 @@ class FakespotViewModel {
     }
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    var isSwiping = false
 
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
@@ -182,5 +183,21 @@ class FakespotViewModel {
         } catch {
             state = .error(error)
         }
+    }
+
+    // MARK: - Telemetry
+    func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .shoppingBottomSheet,
+            extras: [TelemetryWrapper.ExtraKey.action.rawValue: action.rawValue]
+        )
+    }
+
+    func sendTelemetryOnAppear() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet)
     }
 }
