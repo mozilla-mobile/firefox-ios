@@ -13,10 +13,21 @@ class TabDisplayView: UIView,
                       UICollectionViewDropDelegate {
     enum UX {}
 
+    enum CollectionViewSection: Int, CaseIterable {
+        case inactiveTabs = 0
+    }
+
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero,
+        let collectionView = UICollectionView(frame: self.bounds,
                                               collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(cellType: LegacyTabCell.self)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(cellType: InactiveTabsCell.self)
+        collectionView.register(InactiveTabsHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier)
+        collectionView.register(InactiveTabsFooterView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: InactiveTabsFooterView.cellIdentifier)
 
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
@@ -49,6 +60,24 @@ class TabDisplayView: UIView,
         ])
     }
 
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout {
+            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            let section = self.getSectionLayout(sectionIndex)
+            switch section {
+            case .inactiveTabs:
+                return InactiveTabsSectionManager().layoutSection(layoutEnvironment)
+            }
+        }
+        return layout
+    }
+
+    private func getSectionLayout(_ sectionIndex: Int) -> CollectionViewSection {
+        guard let section = CollectionViewSection(rawValue: sectionIndex) else { return .inactiveTabs }
+
+        return section
+    }
+
     func applyTheme(theme: Theme) {
         collectionView.backgroundColor = theme.colors.layer3
     }
@@ -59,7 +88,7 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyTabCell.cellIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath)
 
         return cell
     }
