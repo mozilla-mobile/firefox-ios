@@ -35,6 +35,7 @@
         "DragAndDropTests",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
+        "FakespotTests",
         "FindInPageTests",
         "FxScreenGraphTests",
         "HistoryTests",

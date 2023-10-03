@@ -31,6 +31,7 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
+        "FakespotTests",
         "FindInPageTests",
         "FxScreenGraphTests",
         "HistoryTests",

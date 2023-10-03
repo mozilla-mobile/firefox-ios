@@ -74,6 +74,7 @@
         "DragAndDropTestIpad",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
+        "FakespotTests",
         "FindInPageTests\/testBarDissapearsWhenOpeningTabsTray()",
         "FindInPageTests\/testBarDissapearsWhenReloading()",
         "FindInPageTests\/testFindFromSelection()",
