@@ -115,9 +115,9 @@ class RemoteTabsTableViewController: UITableViewController,
 
         if isShowingEmptyView {
             configureEmptyView()
-        } else {
-            tableView.reloadData()
         }
+
+        tableView.reloadData()
     }
 
     private func configureEmptyView() {
