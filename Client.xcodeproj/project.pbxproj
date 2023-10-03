@@ -842,9 +842,9 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
-		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
 		BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */; };
 		BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */; };
+		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
 		BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */; };
@@ -5557,9 +5557,9 @@
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggest.swift; sourceTree = "<group>"; };
 		BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFirefoxSuggestIngestUtility.swift; sourceTree = "<group>"; };
-		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
 		BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettings.swift; sourceTree = "<group>"; };
 		BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettingsViewController.swift; sourceTree = "<group>"; };
+		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
 		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackButton.swift; sourceTree = "<group>"; };
@@ -17500,6 +17500,7 @@
 				DEFINES_MODULE = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
 			name = Fennec;
@@ -17509,6 +17510,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -17527,6 +17529,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -17553,6 +17556,7 @@
 					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FxA/FxA/lib",
@@ -17566,6 +17570,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -17576,6 +17581,7 @@
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = YES;
@@ -17587,6 +17593,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -17668,6 +17675,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -17677,6 +17685,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -17686,6 +17695,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -17698,6 +17708,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.XCUITests 2021-08-12";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
@@ -17713,6 +17724,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -17727,6 +17739,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -17741,7 +17754,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -17759,6 +17772,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -17782,7 +17796,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox.WidgetKit";
@@ -17798,6 +17812,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.WidgetKit";
@@ -17818,6 +17833,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -17842,6 +17858,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -17867,6 +17884,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -17891,6 +17909,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -17927,6 +17946,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
@@ -17946,6 +17966,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EXCLUDED_SOURCE_FILE_NAMES = "Client/Nimbus/TestData/*";
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -17970,6 +17991,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18011,6 +18033,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -18028,6 +18051,7 @@
 				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 			};
 			name = Firefox;
@@ -18038,6 +18062,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18058,6 +18083,7 @@
 					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FxA/FxA/lib",
@@ -18072,6 +18098,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18086,6 +18113,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
 			name = Firefox;
@@ -18095,6 +18123,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18138,6 +18167,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -18147,6 +18177,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -18156,6 +18187,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -18165,6 +18197,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -18173,6 +18206,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
@@ -18198,6 +18232,7 @@
 					"Client/Nimbus/TestData/*",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18249,6 +18284,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -18265,6 +18301,7 @@
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 			};
 			name = Fennec_Enterprise;
@@ -18284,6 +18321,7 @@
 					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FxA/FxA/lib",
@@ -18300,6 +18338,7 @@
 				DEFINES_MODULE = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
 			name = Fennec_Enterprise;
@@ -18309,6 +18348,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18330,6 +18370,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18340,6 +18381,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18350,6 +18392,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18360,6 +18403,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18387,6 +18431,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise XCUITests";
@@ -18400,6 +18445,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -18409,6 +18455,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18419,6 +18466,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18428,6 +18476,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
@@ -18447,6 +18496,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EXCLUDED_SOURCE_FILE_NAMES = "Client/Nimbus/TestData/*";
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18471,6 +18521,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18511,6 +18562,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -18527,6 +18579,7 @@
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
@@ -18537,6 +18590,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18558,6 +18612,7 @@
 					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FxA/FxA/lib",
@@ -18572,6 +18627,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18590,6 +18646,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
@@ -18601,6 +18658,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18611,6 +18669,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18672,6 +18731,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18746,6 +18806,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18819,6 +18880,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18891,6 +18953,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18917,6 +18980,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
@@ -18935,6 +18999,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -18960,6 +19025,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
