@@ -392,7 +392,10 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    private func segmentPanelChange() {}
+    private func segmentPanelChange() {
+        hideCurrentPanel()
+        showPanel(getChildViewController())
+    }
 
     @objc
     private func segmentChanged() {

@@ -72,8 +72,6 @@ class RemoteTabsTableViewController: UITableViewController,
         NSLayoutConstraint.activate([
             emptyView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
             emptyView.topAnchor.constraint(equalTo: tableView.topAnchor),
-            emptyView.widthAnchor.constraint(greaterThanOrEqualToConstant: 500),
-            emptyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 250),
         ])
 
         listenForThemeChange(view)
