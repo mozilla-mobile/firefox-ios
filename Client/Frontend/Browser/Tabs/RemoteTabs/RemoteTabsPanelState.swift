@@ -19,7 +19,7 @@ struct RemoteTabsPanelState {
         return RemoteTabsPanelState(refreshState: .loaded,
                                     clientAndTabs: [],
                                     allowsRefresh: false,
-                                    showingEmptyState: nil,
+                                    showingEmptyState: .noTabs,
                                     syncIsSupported: true)
     }
 }

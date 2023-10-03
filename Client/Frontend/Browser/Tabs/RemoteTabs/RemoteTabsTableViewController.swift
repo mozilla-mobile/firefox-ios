@@ -67,7 +67,7 @@ class RemoteTabsTableViewController: UITableViewController,
         }
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
-        
+
         tableView.addSubview(emptyView)
         NSLayoutConstraint.activate([
             emptyView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
@@ -75,10 +75,10 @@ class RemoteTabsTableViewController: UITableViewController,
             emptyView.widthAnchor.constraint(greaterThanOrEqualToConstant: 500),
             emptyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 250),
         ])
-        
+
         listenForThemeChange(view)
         applyTheme()
-        
+
         refreshUI()
     }
 
@@ -102,7 +102,7 @@ class RemoteTabsTableViewController: UITableViewController,
             removeRefreshControl()
         }
     }
-    
+
     // MARK: - UI
 
     func applyTheme() {
@@ -204,16 +204,16 @@ class RemoteTabsTableViewController: UITableViewController,
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         // TODO: Forthcoming as part of ongoing Redux refactors.
-        
+
         return nil
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         return getRemoteTabContextMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
     }
-    
+
     // MARK: - UITableView
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         if isShowingEmptyView {
             return 0

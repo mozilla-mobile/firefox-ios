@@ -77,7 +77,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
                    theme: Theme?,
                    delegate: RemotePanelDelegate?) {
         self.delegate = delegate
-        
+
         if let theme = theme {
             // TODO: Theming forthcoming as part of Redux updates.
             applyTheme(theme: theme)
@@ -116,7 +116,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
         ])
-        
+
         titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         instructionsLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
