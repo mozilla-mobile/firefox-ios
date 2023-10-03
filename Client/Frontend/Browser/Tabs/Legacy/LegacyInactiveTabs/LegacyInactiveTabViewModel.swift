@@ -25,7 +25,7 @@ struct InactiveTabStates: Codable {
     var nextState: InactiveTabStatus?
 }
 
-struct InactiveTabModel: Codable {
+struct LegacyInactiveTabModel: Codable {
     // Contains [TabUUID String : InactiveTabState current or for next launch]
     var tabWithStatus: [String: InactiveTabStates] = [String: InactiveTabStates]()
 
@@ -38,7 +38,7 @@ struct InactiveTabModel: Codable {
         set(value) { userDefaults.setValue(value, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun) }
     }
 
-    static func save(tabModel: InactiveTabModel) {
+    static func save(tabModel: LegacyInactiveTabModel) {
         userDefaults.removeObject(forKey: PrefsKeys.KeyInactiveTabsModel)
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(tabModel) {
@@ -46,11 +46,11 @@ struct InactiveTabModel: Codable {
         }
     }
 
-    static func get() -> InactiveTabModel? {
+    static func get() -> LegacyInactiveTabModel? {
         if let inactiveTabsModel = userDefaults.object(forKey: PrefsKeys.KeyInactiveTabsModel) as? Data {
             do {
                 let jsonDecoder = JSONDecoder()
-                let inactiveTabModel = try jsonDecoder.decode(InactiveTabModel.self, from: inactiveTabsModel)
+                let inactiveTabModel = try jsonDecoder.decode(LegacyInactiveTabModel.self, from: inactiveTabsModel)
                 return inactiveTabModel
             } catch {}
         }
@@ -62,8 +62,8 @@ struct InactiveTabModel: Codable {
     }
 }
 
-class InactiveTabViewModel {
-    private var inactiveTabModel = InactiveTabModel()
+class LegacyInactiveTabViewModel {
+    private var inactiveTabModel = LegacyInactiveTabModel()
     private var allTabs = [Tab]()
     private var selectedTab: Tab?
     var inactiveTabs = [Tab]()
@@ -88,7 +88,7 @@ class InactiveTabViewModel {
         self.selectedTab = selectedTab
         clearAll()
 
-        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
+        inactiveTabModel.tabWithStatus = LegacyInactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
 
         updateModelState(state: appSessionManager.tabUpdateState)
         appSessionManager.tabUpdateState = .sameSession
@@ -136,8 +136,8 @@ class InactiveTabViewModel {
             defaultOldDay = day14Old
         }
 
-        let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
-        if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }
+        let hasRunInactiveTabFeatureBefore = LegacyInactiveTabModel.hasRunInactiveTabFeatureBefore
+        if hasRunInactiveTabFeatureBefore == false { LegacyInactiveTabModel.hasRunInactiveTabFeatureBefore = true }
 
         for tab in self.allTabs {
             // Append selected tab to normal tab as we don't want to remove that
@@ -177,11 +177,11 @@ class InactiveTabViewModel {
             }
         }
 
-        InactiveTabModel.save(tabModel: inactiveTabModel)
+        LegacyInactiveTabModel.save(tabModel: inactiveTabModel)
     }
 
     private func updateFilteredTabs() {
-        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
+        inactiveTabModel.tabWithStatus = LegacyInactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
         clearAll()
         for tab in self.allTabs {
             let status = inactiveTabModel.tabWithStatus[tab.tabUUID]
