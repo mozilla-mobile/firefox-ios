@@ -7,6 +7,10 @@ import Storage
 import Common
 import Shared
 
+protocol RemotePanelDelegateProvider: AnyObject {
+    var remotePanelDelegate: RemotePanelDelegate? { get }
+}
+
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
@@ -14,7 +18,10 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class LegacyRemoteTabsPanel: UIViewController, Themeable, RemoteTabsClientAndTabsDataSourceDelegate {
+class LegacyRemoteTabsPanel: UIViewController,
+                             Themeable,
+                             RemoteTabsClientAndTabsDataSourceDelegate,
+                             RemotePanelDelegateProvider {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -250,7 +257,6 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
         let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(actionDelegate: remoteTabsPanel,
                                                                     clientAndTabs: nonEmptyClientAndTabs,
-                                                                    profile: profile,
                                                                     theme: themeManager.currentTheme)
         tabsPanelDataSource.collapsibleSectionDelegate = self
         tableViewDelegate = tabsPanelDataSource
@@ -303,7 +309,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
         if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
 
-        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
                                                             error: errorMessage,
                                                             theme: themeManager.currentTheme)
         tableViewDelegate = remoteTabsErrorView

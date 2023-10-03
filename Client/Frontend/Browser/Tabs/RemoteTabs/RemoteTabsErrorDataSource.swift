@@ -25,14 +25,14 @@ class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeAppli
         }
     }
 
-    weak var remoteTabsPanel: LegacyRemoteTabsPanel?
+    weak var remoteTabsPanelDelegateProvider: RemotePanelDelegateProvider?
     var error: ErrorType
     private var theme: Theme
 
-    init(remoteTabsPanel: LegacyRemoteTabsPanel,
+    init(remoteTabsDelegateProvider: RemotePanelDelegateProvider,
          error: ErrorType,
          theme: Theme) {
-        self.remoteTabsPanel = remoteTabsPanel
+        self.remoteTabsPanelDelegateProvider = remoteTabsDelegateProvider
         self.error = error
         self.theme = theme
     }
@@ -59,7 +59,7 @@ class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeAppli
         tableView.separatorStyle = .none
         cell.configure(error: error,
                        theme: theme,
-                       delegate: remoteTabsPanel?.remotePanelDelegate)
+                       delegate: remoteTabsPanelDelegateProvider?.remotePanelDelegate)
         return cell
     }
 

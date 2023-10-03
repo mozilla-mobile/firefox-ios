@@ -25,7 +25,6 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
 
     init(actionDelegate: RemoteTabsClientAndTabsDataSourceDelegate?,
          clientAndTabs: [ClientAndTabs],
-         profile: Profile,
          theme: Theme) {
         self.actionDelegate = actionDelegate
         self.clientAndTabs = clientAndTabs
