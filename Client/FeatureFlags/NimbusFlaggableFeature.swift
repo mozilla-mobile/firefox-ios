@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case credentialAutofillCoordinatorRefactor
     case creditCardAutofillStatus
     case fakespotFeature
+    case firefoxSuggestFeature
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -55,6 +56,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return FlagKeys.SearchBarPosition
+        case .firefoxSuggestFeature:
+            return FlagKeys.FirefoxSuggest
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
         case .historyGroups:

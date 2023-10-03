@@ -1187,6 +1187,11 @@ extension String {
             tableName: nil,
             value: "Firefox Suggest",
             comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions.")
+        public static let SponsoredSuggestionDescription = MZLocalizedString(
+            key: "Search.SponsoredSuggestionDescription.v119",
+            tableName: "Search",
+            value: "Sponsored",
+            comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a label for sponsored Firefox suggestions.")
         public static let EngineSectionTitle = MZLocalizedString(
             key: "Search.EngineSection.Title.v108",
             tableName: "SearchHeaderTitle",
@@ -3910,6 +3915,26 @@ extension String {
             tableName: "Shopping",
             value: "When this product has more reviews, we’ll be able to analyze them.",
             comment: "Description for info card when there are not enough reviews for a product")
+        public static let InfoCardNeedsAnalysisTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NeedsAnalysis.Title.v119
+            tableName: "Shopping",
+            value: "New Info To Check",
+            comment: "Title for info card when the product needs analysis")
+        public static let InfoCardNeedsAnalysisPrimaryAction = MZLocalizedString(
+            key: "", // Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v119
+            tableName: "Shopping",
+            value: "Check Now",
+            comment: "Primary action title for info card when the product needs analysis")
+        public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.ProgressAnalysis.Title.v119
+            tableName: "Shopping",
+            value: "Checking review quality",
+            comment: "Title for info card when the product is in analysis mode")
+        public static let InfoCardProgressAnalysisDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.ProgressAnalysis.Description.v119
+            tableName: "Shopping",
+            value: "This could take about 60 seconds.",
+            comment: "Description for info card when the product is in analysis mode")
     }
 }
 

@@ -133,7 +133,7 @@ struct FakespotClient: FakespotClientType {
     /// Retrieves the analysis status for a product on a specific website.
     func getProductAnalysisStatus(productId: String, website: String) async throws -> ProductAnalysisStatusResponse {
         // Define the API endpoint URL
-        guard let endpointURL = environment.analysisEndpoint else {
+        guard let endpointURL = environment.analysisStatusEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 

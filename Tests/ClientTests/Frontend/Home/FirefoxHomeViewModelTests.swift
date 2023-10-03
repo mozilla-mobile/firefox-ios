@@ -29,14 +29,13 @@ class FirefoxHomeViewModelTests: XCTestCase {
 
     // MARK: Number of sections
 
-    func testNumberOfSection_withoutUpdatingData_has3Sections() {
+    func testNumberOfSection_withoutUpdatingData_has2Sections() {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           theme: LightTheme())
-        XCTAssertEqual(viewModel.shownSections.count, 3)
+        XCTAssertEqual(viewModel.shownSections.count, 2)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.messageCard)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.customizeHome)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.customizeHome)
     }
 }

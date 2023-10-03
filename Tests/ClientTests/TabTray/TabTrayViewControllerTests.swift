@@ -41,6 +41,32 @@ final class TabTrayViewControllerTests: XCTestCase {
         XCTAssertNil(viewController.navigationItem.titleView)
     }
 
+    func testBottomToolbarItems_ForTabsInCompact() {
+        let viewController = createSubject()
+
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 3)
+    }
+
+    func testBottomToolbarItems_ForPrivateTabsInCompact() {
+        let viewController = createSubject(selectedSegment: .privateTabs)
+
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 3)
+    }
+
+    func testBottomToolbarItems_ForSyncTabsEnabledInCompact() {
+        let viewController = createSubject(selectedSegment: .syncedTabs)
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 0)
+    }
+
     // MARK: Regular layout
     func testToolbarItems_ForRegular() {
         let viewController = createSubject()
@@ -58,10 +84,12 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(selectedSegment: LegacyTabTrayViewModel.Segment = .tabs,
+                               file: StaticString = #file,
                                line: UInt = #line) -> TabTrayViewController {
         let navigationController = createNavigationController()
-        let subject = TabTrayViewController(delegate: delegate)
+        let subject = TabTrayViewController(selectedSegment: selectedSegment,
+                                            delegate: delegate)
         navigationController.setViewControllers([subject], animated: false)
         navigationController.isNavigationBarHidden = false
 
