@@ -14,7 +14,7 @@ class RemoteTabsTableViewController: UITableViewController,
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
-    
+
     // MARK: - Properties
 
     private(set) var state: RemoteTabsPanelState
@@ -23,14 +23,14 @@ class RemoteTabsTableViewController: UITableViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
-    
+
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
     private let emptyView: RemoteTabsEmptyView = .build()
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
-    
+
     // MARK: - Initializer
 
     init(state: RemoteTabsPanelState,
@@ -43,7 +43,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
+
     // MARK: - View Controller
 
     override func viewDidLoad() {
