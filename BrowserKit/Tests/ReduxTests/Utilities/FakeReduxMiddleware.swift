@@ -6,39 +6,39 @@ import Foundation
 
 @testable import Redux
 class FakeReduxMiddleware {
-    var counter: Int = 0
-
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
         switch action {
         case FakeReduxAction.requestInitialValue:
-            self.getInitialValue()
+            let initialValue = self.generateInitialValue()
             DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.initialValueLoaded(self.counter))
+                store.dispatch(FakeReduxAction.initialValueLoaded(initialValue))
             }
         case FakeReduxAction.increaseCounter:
-            self.increaseCounter()
+            let existingValue = state.counter
+            let newValue = self.increaseCounter(currentValue: existingValue)
             DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.counterIncreased(self.counter))
+                store.dispatch(FakeReduxAction.counterIncreased(newValue))
             }
         case FakeReduxAction.decreaseCounter:
-            self.decreaseCounter()
+            let existingValue = state.counter
+            let newValue = self.decreaseCounter(currentValue: existingValue)
             DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.counterDecreased(self.counter))
+                store.dispatch(FakeReduxAction.counterDecreased(newValue))
             }
         default:
            break
         }
     }
 
-    private func increaseCounter() {
-        counter += 1
+    private func increaseCounter(currentValue: Int) -> Int {
+        return currentValue + 1
     }
 
-    private func decreaseCounter() {
-        counter -= 1
+    private func decreaseCounter(currentValue: Int) -> Int {
+        return currentValue - 1
     }
 
-    private func getInitialValue() {
-        counter = Int.random(in: Range(1...9))
+    private func generateInitialValue() -> Int {
+        return Int.random(in: 1...9)
     }
 }

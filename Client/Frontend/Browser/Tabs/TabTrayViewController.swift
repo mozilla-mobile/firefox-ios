@@ -258,9 +258,9 @@ class TabTrayViewController: UIViewController,
     private func getChildViewController() -> UIViewController {
         switch selectedSegment {
         case .tabs:
-            return TabCollectionViewController(isPrivateMode: false)
+            return TabDisplayViewController(isPrivateMode: false)
         case .privateTabs:
-            return TabCollectionViewController(isPrivateMode: true)
+            return TabDisplayViewController(isPrivateMode: true)
             // TODO: FXIOS-6921 Integrate synctab View Controller
         default: return UIViewController()
         }

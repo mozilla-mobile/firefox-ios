@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class TabCollectionViewController: UIViewController,
+class TabDisplayViewController: UIViewController,
                                    Themeable {
     struct UX {}
 
@@ -15,7 +15,7 @@ class TabCollectionViewController: UIViewController,
 
     // MARK: UI elements
     private var backgroundPrivacyOverlay: UIView = .build { _ in }
-    private var collectionView: UICollectionView!
+    private var tabDisplayView: TabDisplayView = .build { _ in }
 
     // Redux state
     var isPrivateMode: Bool
@@ -42,52 +42,26 @@ class TabCollectionViewController: UIViewController,
     }
 
     private func setupView() {
-        setupCollectionView()
-        view.addSubview(collectionView)
+        view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabDisplayView.topAnchor.constraint(equalTo: view.topAnchor),
+            tabDisplayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabDisplayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tabDisplayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             backgroundPrivacyOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundPrivacyOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundPrivacyOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         backgroundPrivacyOverlay.isHidden = !isPrivateMode
         // TODO: Empty private tabs view FXIOS-6925
     }
 
-    private func setupCollectionView() {
-        collectionView = UICollectionView(frame: .zero,
-                                          collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(cellType: LegacyTabCell.self)
-
-        // TODO: FXIOS-6926 Create TabDisplayManager and update delegates
-        collectionView.dataSource = self
-        collectionView.delegate = self
-    }
-
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
-        collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
-    }
-}
-
-// TODO: Remove once FXIOS-6926 is done
-extension TabCollectionViewController: UICollectionViewDataSource,
-                                       UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyTabCell.cellIdentifier, for: indexPath)
-
-        return cell
     }
 }

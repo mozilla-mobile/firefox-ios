@@ -21,6 +21,7 @@ class IntroViewControllerTests: XCTestCase {
         mockNotificationCenter = nil
     }
 
+    // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testBasicSetupReturnsExpectedItems() {
         let subject = createSubject()
         XCTAssertEqual(subject.viewModel.availableCards.count, 3)
