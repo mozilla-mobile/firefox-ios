@@ -12,6 +12,15 @@ enum AnalysisStatus: String, Decodable {
     case notAnalyzable = "not_analyzable"
     case notFound = "not_found"
     case unprocessable = "unprocessable"
+
+    var isAnalyzing: Bool {
+        switch self {
+        case .pending, .inProgress:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 struct ProductAnalyzeResponse: Decodable {

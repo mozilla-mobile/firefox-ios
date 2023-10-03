@@ -11,7 +11,7 @@ let store = Store(state: FakeReduxState(),
 
 final class IntegrationTests: XCTestCase {
     var fakeViewController: FakeReduxViewController!
-    var initialValue: Int!
+    var expectedValue: Int!
 
     override func setUp() {
         super.setUp()
@@ -25,7 +25,7 @@ final class IntegrationTests: XCTestCase {
     }
 
     func testDispatchStore_IncreaseCounter() {
-        getInitialValue(shouldIncrease: true)
+        getExpectedValue(shouldIncrease: true)
         fakeViewController.increaseCounter()
 
         // Needed to wait for Redux action handled async in main thread
@@ -33,13 +33,13 @@ final class IntegrationTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
             let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.initialValue)
+            XCTAssertEqual(intValue, self.expectedValue)
         }
         waitForExpectations(timeout: 1)
     }
 
     func testDispatchStore_DecreaseCounter() {
-        getInitialValue(shouldIncrease: false)
+        getExpectedValue(shouldIncrease: false)
         fakeViewController.decreaseCounter()
 
         // Needed to wait for Redux action handled async in main thread
@@ -47,21 +47,21 @@ final class IntegrationTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
             let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.initialValue)
+            XCTAssertEqual(intValue, self.expectedValue)
         }
         waitForExpectations(timeout: 1)
     }
 
-    private func getInitialValue(shouldIncrease: Bool) {
+    private func getExpectedValue(shouldIncrease: Bool) {
         // Needed to wait for Redux action handled async in main thread
         let expectation = self.expectation(description: "Redux integration test")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
-            self.initialValue = store.state.counter
+            self.expectedValue = store.state.counter
             if shouldIncrease {
-                self.initialValue += 1
+                self.expectedValue += 1
             } else {
-                self.initialValue -= 1
+                self.expectedValue -= 1
             }
         }
         waitForExpectations(timeout: 1)

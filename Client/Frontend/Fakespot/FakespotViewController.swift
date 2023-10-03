@@ -114,15 +114,13 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         setupView()
         listenForThemeChange(view)
         viewModel.sendTelemetryOnAppear()
+        viewModel.fetchProductIfOptedIn()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         applyTheme()
-        Task {
-            await viewModel.fetchData()
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -259,9 +257,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
-                Task {
-                    await self.viewModel.fetchData()
-                }
+                self.viewModel.fetchProductIfOptedIn()
             }
             view.configure(viewModel.optInCardViewModel)
             return view
@@ -330,14 +326,51 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.notEnoughReviewsViewModel)
                 return view
+
+            case .needsAnalysis:
+                let view: FakespotMessageCardView = .build()
+                viewModel.needsAnalysisViewModel.primaryAction = { [weak view, weak self] in
+                    self?.onNeedsAnalysisTap(sender: view)
+                }
+                view.configure(viewModel.needsAnalysisViewModel)
+                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                    self?.onAnalysisStatusChange(sender: view)
+                }
+                return view
+
+            case .analysisInProgress:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.analysisProgressViewModel)
+                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                    self?.onAnalysisStatusChange(sender: view)
+                }
+                return view
             }
         }
+    }
+
+    private func onAnalysisStatusChange(sender: UIView?) {
+        guard viewModel.analysisStatus?.isAnalyzing == true else {
+            ensureMainThread {
+                sender?.removeFromSuperview()
+            }
+            return
+        }
+    }
+
+    private func onNeedsAnalysisTap(sender: FakespotMessageCardView?) {
+        sender?.configure(self.viewModel.analysisProgressViewModel)
+        viewModel.triggerProductAnalysis()
     }
 
     @objc
     private func closeTapped() {
         delegate?.fakespotControllerDidDismiss()
         viewModel.recordDismissTelemetry(by: .closeButton)
+    }
+
+    deinit {
+        viewModel.onViewControllerDeinit()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

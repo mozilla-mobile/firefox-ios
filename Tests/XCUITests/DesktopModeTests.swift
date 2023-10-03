@@ -8,7 +8,7 @@ import XCTest
 // swiftlint:disable empty_count
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/52777
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.nowAt(NewTabScreen)
@@ -36,7 +36,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 }
 
 class DesktopModeTestsIphone: IphoneOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2285548
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306853
     func testClearPrivateData() {
         if skipPlatform { return }
 
@@ -61,7 +61,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2285685
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
         if skipPlatform { return }
 
@@ -92,7 +92,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2285612
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306854
     // Smoketest
     func testChangeModeInSameTab() {
         if skipPlatform { return }
@@ -116,7 +116,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2285689
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
 
@@ -151,7 +151,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2285693
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode() {
         if skipPlatform { return }
 

@@ -69,6 +69,7 @@ class RustSyncManagerTests: XCTestCase {
         }
     }
 
+    // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testGetEnginesAndKeysWithNoKey() {
         rustSyncManager.getEnginesAndKeys(engines: [.tabs]) { (engines, keys) in
             XCTAssertEqual(engines.count, 1)
@@ -108,6 +109,7 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertFalse(changes["creditcards"]!)
     }
 
+    // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testUpdateEnginePrefs_bookmarksEnabled() throws {
         profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
