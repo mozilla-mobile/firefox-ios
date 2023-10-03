@@ -1566,10 +1566,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '118.1'
+    BITRISE_RELEASE_VERSION: '118.2'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '118.1'
+    BITRISE_BETA_VERSION: '118.2'
 
 meta:
   bitrise.io:
