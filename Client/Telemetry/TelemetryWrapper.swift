@@ -726,6 +726,15 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
+
+        // Shopping Experience
+        public enum Shopping: String {
+            case clickOutside = "click-outside"
+            case interactionWithALink = "interaction-with-a-link"
+            case swipingTheSurfaceHandle = "swiping-the-surface-handle"
+            case optingOutOfTheFeature = "opting-out-of-the-feature"
+            case closeButton = "close-button"
+        }
     }
 
     func recordEvent(category: EventCategory,
@@ -1046,8 +1055,18 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
-        case (.action, .close, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceClosed.record()
+        case (.action, .close, .shoppingBottomSheet, _, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.Shopping.SurfaceClosedExtra(action: action)
+                GleanMetrics.Shopping.surfaceClosed.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, _):

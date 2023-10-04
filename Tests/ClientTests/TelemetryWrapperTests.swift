@@ -247,8 +247,48 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
     }
 
-    func test_shoppingSurfaceClosed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .shoppingBottomSheet)
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledClickOutsideAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.clickOutside.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledCloseButtonAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.closeButton.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledInteractionWithALinkAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.interactionWithALink.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledOptingOutOfTheFeatureAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.optingOutOfTheFeature.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledSwipingTheSurfaceHandleAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.swipingTheSurfaceHandle.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
     }
 
