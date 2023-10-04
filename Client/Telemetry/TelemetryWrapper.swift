@@ -729,11 +729,15 @@ extension TelemetryWrapper {
 
         // Shopping Experience
         public enum Shopping: String {
+            // Extra Keys for `surface_closed` event
             case clickOutside = "click-outside"
             case interactionWithALink = "interaction-with-a-link"
             case swipingTheSurfaceHandle = "swiping-the-surface-handle"
             case optingOutOfTheFeature = "opting-out-of-the-feature"
             case closeButton = "close-button"
+            // Extra Keys for `surface_displayed` event
+            case halfView = "half-view"
+            case fullView = "full-view"
         }
     }
 
@@ -1069,8 +1073,18 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
-        case (.action, .view, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceDisplayed.record()
+        case (.action, .view, .shoppingBottomSheet, _, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(action: action)
+                GleanMetrics.Shopping.surfaceDisplayed.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
             GleanMetrics.Shopping.settingsComponentOptedOut.record()
         case (.action, .view, .shoppingSettingsChevronButton, _, _):

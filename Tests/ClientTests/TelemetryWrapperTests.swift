@@ -297,8 +297,21 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked)
 	}
 
-    func test_shoppingSurfaceDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingBottomSheet)
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledFullViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.fullView.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
+    }
+
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledHalfViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.halfView.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
     }
 
