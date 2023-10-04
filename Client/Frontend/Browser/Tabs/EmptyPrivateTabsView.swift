@@ -75,9 +75,9 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private func setupLayout() {
-        button.addTarget(self,
-                         action: #selector(didTapLearnMore),
-                         for: .touchUpInside)
+        learnMoreButton.addTarget(self,
+                                  action: #selector(didTapLearnMore),
+                                  for: .touchUpInside)
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
