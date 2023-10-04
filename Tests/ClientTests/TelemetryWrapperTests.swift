@@ -247,8 +247,48 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
     }
 
-    func test_shoppingSurfaceClosed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .shoppingBottomSheet)
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledClickOutsideAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.clickOutside.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledCloseButtonAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.closeButton.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledInteractionWithALinkAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.interactionWithALink.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledOptingOutOfTheFeatureAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.optingOutOfTheFeature.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
+    }
+
+    func test_shoppingSurfaceClosedWithExtras_GleanIsCalledSwipingTheSurfaceHandleAction() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.swipingTheSurfaceHandle.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceClosed)
     }
 
@@ -310,6 +350,11 @@ class TelemetryWrapperTests: XCTestCase {
     func test_addressBarFeatureCalloutDisplayed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .shoppingButton, value: .shoppingCFRsDisplayed)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed)
+    }
+
+    func test_surfacePoweredByFakespotLinkClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked)
     }
 
     // MARK: - Onboarding

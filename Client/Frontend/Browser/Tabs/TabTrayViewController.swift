@@ -261,8 +261,8 @@ class TabTrayViewController: UIViewController,
             return TabDisplayViewController(isPrivateMode: false)
         case .privateTabs:
             return TabDisplayViewController(isPrivateMode: true)
-            // TODO: FXIOS-6921 Integrate synctab View Controller
-        default: return UIViewController()
+        case .syncedTabs:
+            return RemoteTabsPanel(state: RemoteTabsPanelState.emptyState())
         }
     }
 

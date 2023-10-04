@@ -71,7 +71,7 @@ struct FakespotOptInCardViewModel {
     let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButton
 
     // MARK: Button Actions
-    var dismissViewController: (() -> Void)?
+    var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
     var onOptIn: (() -> Void)?
 
     // MARK: Links
@@ -93,7 +93,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingLearnMoreButton)
         guard let fakespotLearnMoreLink else { return }
         tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
+        dismissViewController?(.interactionWithALink)
     }
 
     func onTapTermsOfUse() {
@@ -102,7 +102,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingTermsOfUseButton)
         guard let fakespotTermsOfUseLink else { return }
         tabManager.addTabsForURLs([fakespotTermsOfUseLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
+        dismissViewController?(.interactionWithALink)
     }
 
     func onTapPrivacyPolicy() {
@@ -111,7 +111,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingPrivacyPolicyButton)
         guard let fakespotPrivacyPolicyLink else { return }
         tabManager.addTabsForURLs([fakespotPrivacyPolicyLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
+        dismissViewController?(.interactionWithALink)
     }
 
     func onTapMainButton() {
@@ -127,7 +127,7 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingNotNowButton)
-        dismissViewController?()
+        dismissViewController?(nil)
     }
 
     var orderWebsites: [String] {

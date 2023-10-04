@@ -126,6 +126,7 @@ class FakespotViewModel {
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    var isSwiping = false
     var onAnalysisStatusChange: (() -> Void)?
 
     private var fetchProductTask: Task<Void, Never>?
@@ -290,5 +291,21 @@ class FakespotViewModel {
     func onViewControllerDeinit() {
         fetchProductTask?.cancel()
         observeProductTask?.cancel()
+    }
+
+    // MARK: - Telemetry
+    func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .shoppingBottomSheet,
+            extras: [TelemetryWrapper.ExtraKey.action.rawValue: action.rawValue]
+        )
+    }
+
+    func sendTelemetryOnAppear() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet)
     }
 }

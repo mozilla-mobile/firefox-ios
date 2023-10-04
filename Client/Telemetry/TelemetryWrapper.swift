@@ -409,6 +409,7 @@ extension TelemetryWrapper {
         case shoppingPrivacyPolicyButton = "shopping-privacy-policy-button"
         case shoppingLearnMoreButton = "shopping-learn-more-button"
         case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
+        case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -743,6 +744,14 @@ extension TelemetryWrapper {
         // Password Manager
         case loginsQuantity = "loginsQuantity"
         case isLoginSyncEnabled = "sync-enabled"
+        // Shopping Experience
+        public enum Shopping: String {
+            case clickOutside = "click-outside"
+            case interactionWithALink = "interaction-with-a-link"
+            case swipingTheSurfaceHandle = "swiping-the-surface-handle"
+            case optingOutOfTheFeature = "opting-out-of-the-feature"
+            case closeButton = "close-button"
+        }
     }
 
     func recordEvent(category: EventCategory,
@@ -1104,8 +1113,18 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
-        case (.action, .close, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceClosed.record()
+        case (.action, .close, .shoppingBottomSheet, _, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.Shopping.SurfaceClosedExtra(action: action)
+                GleanMetrics.Shopping.surfaceClosed.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, _):
@@ -1130,6 +1149,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
+        case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
+            GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
