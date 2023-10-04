@@ -15,7 +15,7 @@ final class FakespotReviewQualityCardViewModel {
                                                                      size: UX.labelFontSize)
     }
 
-    private let subject = MarkupAttributeUtility(baseFont: UX.baseFont)
+    let markupUtility = MarkupAttributeUtility(baseFont: UX.baseFont)
     private let tabManager: TabManager
     let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
     var dismissViewController: (() -> Void)?
@@ -24,7 +24,7 @@ final class FakespotReviewQualityCardViewModel {
         let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
         let highlightedWebsite = currentPartner.title
         let plainText = String.localizedStringWithFormat(String.Shopping.ReviewQualityCardHighlightsLabel, highlightedWebsite)
-        let result = subject.addAttributesTo(text: plainText)
+        let result = markupUtility.addAttributesTo(text: plainText)
 
         return result
     }
@@ -61,7 +61,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     private var viewModel: FakespotReviewQualityCardViewModel?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private let subject = MarkupAttributeUtility(baseFont: UX.baseFont)
     private let aReliabilityScoreView = FakespotReliabilityScoreView(grade: .a)
     private let bReliabilityScoreView = FakespotReliabilityScoreView(grade: .b)
     private let cReliabilityScoreView = FakespotReliabilityScoreView(grade: .c)
@@ -93,7 +92,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var subHeadlineLabel: UILabel = .build { label in
         let text = String.Shopping.ReviewQualityCardSubHeadlineLabel
-        label.attributedText = self.subject.addAttributesTo(text: text)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.subHeadlineLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -175,7 +173,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var adjustedRatingLabel: UILabel = .build { label in
         let text = String.Shopping.ReviewQualityCardAdjustedRatingLabel
-        label.attributedText = self.subject.addAttributesTo(text: text)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.adjustedRatingLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -271,6 +268,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     func configure(_ viewModel: FakespotReviewQualityCardViewModel) {
         self.viewModel = viewModel
         highlightsLabel.attributedText = viewModel.highlightsText
+        subHeadlineLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardSubHeadlineLabel)
+        adjustedRatingLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardAdjustedRatingLabel)
+
         let viewModel = CollapsibleCardViewModel(
             contentView: contentStackView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.card,
