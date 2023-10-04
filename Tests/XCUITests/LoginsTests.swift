@@ -163,6 +163,8 @@ class LoginTest: BaseTestCase {
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
         mozWaitForElementToExist(app.alerts["Are you sure?"])
@@ -195,6 +197,8 @@ class LoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // Enter on Search mode
+        mozWaitForElementToExist(app.searchFields["Filter"])
+        XCTAssert(app.searchFields["Filter"].isEnabled)
         app.searchFields["Filter"].tap()
         // Type Text that matches user, website
         app.searchFields["Filter"].typeText("test")
@@ -252,6 +256,12 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
+        mozWaitForElementToExist(app.navigationBars["Passwords"])
+        mozWaitForElementToExist(app.staticTexts["No logins found"])
+        mozWaitForElementToExist(app.buttons["Add"])
+        mozWaitForElementToExist(app.buttons["Edit"])
+        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertTrue(app.buttons["Add"].isEnabled)
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)

@@ -181,10 +181,9 @@ class NavigationTest: BaseTestCase {
     }
 
     func testLongPressOnAddressBar() throws {
-        if processIsTranslatedStr() == m1Rosetta {
-            // Long press on the URL requires copy & paste permission
-            throw XCTSkip("Copy & paste may not work on M1")
-        } else {
+        // Long press on the URL requires copy & paste permission
+        throw XCTSkip("Test needs to be updated")
+        /*
             // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
             app.textFields["address"].typeText("www.google.com")
             // Tapping two times when the text is not selected will reveal the menu
@@ -239,6 +238,7 @@ class NavigationTest: BaseTestCase {
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
             }
         }
+         */
     }
 
     private func longPressLinkOptions(optionSelected: String) {

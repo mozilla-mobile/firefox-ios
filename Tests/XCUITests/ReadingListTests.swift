@@ -128,15 +128,11 @@ class ReadingListTests: BaseTestCase {
         XCTAssertTrue(savedToReadingList.exists)
 
         // Mark it as read/unread
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("swipeLeft() does not work on M1")
-        } else {
-            savedToReadingList.swipeLeft()
-            mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: TIMEOUT)
-            app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
-            savedToReadingList.swipeLeft()
-            mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
-        }
+        savedToReadingList.swipeLeft()
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: TIMEOUT)
+        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
+        savedToReadingList.swipeLeft()
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306998
@@ -149,15 +145,9 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(savedToReadingList)
 
         // Remove the item from reading list
-        if processIsTranslatedStr() == m1Rosetta {
-            savedToReadingList.press(forDuration: 2)
-            mozWaitForElementToExist(app.otherElements["Remove"])
-            app.otherElements["Remove"].tap()
-        } else {
-            savedToReadingList.swipeLeft()
-            mozWaitForElementToExist(app.buttons["Remove"])
-            app.buttons["Remove"].tap()
-        }
+        savedToReadingList.swipeLeft()
+        mozWaitForElementToExist(app.buttons["Remove"])
+        app.buttons["Remove"].tap()
         XCTAssertFalse(savedToReadingList.exists)
 
         // Reader list view should be empty

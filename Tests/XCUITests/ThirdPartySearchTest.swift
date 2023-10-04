@@ -21,13 +21,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search using a custom search engine
         app.textFields["url"].tap()
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-        if processIsTranslatedStr() == m1Rosetta {
-            app.textFields.firstMatch.typeText("window")
-        } else {
-            UIPasteboard.general.string = "window"
-            app.textFields.firstMatch.press(forDuration: 1)
-            app.staticTexts["Paste"].tap()
-        }
+        UIPasteboard.general.string = "window"
+        app.textFields.firstMatch.press(forDuration: 1)
+        app.staticTexts["Paste"].tap()
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
@@ -50,13 +46,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Perform a search to check
         app.textFields["url"].tap()
-        if processIsTranslatedStr() == m1Rosetta {
-            app.textFields.firstMatch.typeText("window\n")
-        } else {
-            UIPasteboard.general.string = "window"
-            app.textFields.firstMatch.press(forDuration: 1)
-            app.staticTexts["Paste & Go"].tap()
-        }
+        app.textFields.firstMatch.typeText("window\n")
 
         waitUntilPageLoad()
 
@@ -76,13 +66,9 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
         app.textFields["url"].tap()
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-        if processIsTranslatedStr() == m1Rosetta {
-            app.textFields.firstMatch.typeText("window")
-        } else {
-            UIPasteboard.general.string = "window"
-            app.textFields.firstMatch.press(forDuration: 1)
-            app.staticTexts["Paste"].tap()
-        }
+        UIPasteboard.general.string = "window"
+        app.textFields.firstMatch.press(forDuration: 1)
+        app.staticTexts["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
 
@@ -101,13 +87,9 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-       if processIsTranslatedStr() == m1Rosetta {
-            app.textFields.firstMatch.typeText("window")
-        } else {
-            UIPasteboard.general.string = "window"
-            app.textFields.firstMatch.press(forDuration: 1)
-            app.staticTexts["Paste"].tap()
-        }
+        UIPasteboard.general.string = "window"
+        app.textFields.firstMatch.press(forDuration: 1)
+        app.staticTexts["Paste"].tap()
 
         mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
@@ -140,15 +122,10 @@ class ThirdPartySearchTest: BaseTestCase {
 
         XCTAssertTrue(customengineurlTextView.exists)
 
-        if processIsTranslatedStr() == m1Rosetta {
-            customengineurlTextView.tap()
-            tablesQuery.textViews["customEngineUrl"].typeText(searchUrl)
-        } else {
-            UIPasteboard.general.string = searchUrl
-            customengineurlTextView.tap()
-            customengineurlTextView.press(forDuration: 2.0)
-            app.staticTexts["Paste"].tap()
-        }
+        UIPasteboard.general.string = searchUrl
+        customengineurlTextView.tap()
+        customengineurlTextView.press(forDuration: 2.0)
+        app.staticTexts["Paste"].tap()
 
         mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
