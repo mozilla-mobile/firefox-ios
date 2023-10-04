@@ -34,7 +34,6 @@ class ToolbarMenuTests: BaseTestCase {
         validateMenuOptions()
         XCUIDevice.shared.orientation = .landscapeLeft
         mozWaitForElementToExist(hamburgerMenu, timeout: 15)
-        mozWaitForElementToExist(app.textFields["url"])
         mozWaitForElementToNotExist(app.tables["Context Menu"])
         mozWaitForElementToExist(app.textFields["url"])
         mozWaitForElementToExist(app.webViews["contentView"])
