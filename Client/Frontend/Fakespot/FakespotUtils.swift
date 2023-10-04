@@ -3,12 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// Utility functions related to Fakespot
 public struct FakespotUtils {
     public static var learnMoreUrl: URL? {
         // Returns the predefined URL associated to learn more button action.
-        return URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+        return SupportUtils.URLForTopic("review_checker_mobile")
     }
 
     public static var privacyPolicyUrl: URL? {
