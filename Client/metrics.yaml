@@ -828,6 +828,19 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-25"
 
+  surface_powered_by_fakespot_link_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      'Review checker is powered by Fakespot by mozilla' link.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16633
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16655
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+
 # Key Commands
 key_commands:
   press_key_command_action:
