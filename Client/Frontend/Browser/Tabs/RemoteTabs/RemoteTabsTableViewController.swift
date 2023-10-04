@@ -271,6 +271,13 @@ class RemoteTabsTableViewController: UITableViewController,
          hideTableViewSection(section)
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let tab = state.clientAndTabs[indexPath.section].tabs[indexPath.item]
+        // Remote panel delegate for cell selection
+        remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidSelectURL(tab.URL, visitType: VisitType.typed)
+    }
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }

@@ -435,6 +435,7 @@ class TabTrayViewController: UIViewController,
 
     func remotePanel(didSelectURL url: URL, visitType: VisitType) {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        // TODO: Need to provide handler for didSelectURL. Forthcoming.
         self.didSelectUrl?(url, visitType)
         self.dismissVC()
     }
