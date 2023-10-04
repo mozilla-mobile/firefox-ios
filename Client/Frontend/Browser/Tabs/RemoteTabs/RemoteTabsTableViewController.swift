@@ -271,7 +271,8 @@ class RemoteTabsTableViewController: UITableViewController,
          hideTableViewSection(section)
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let tab = state.clientAndTabs[indexPath.section].tabs[indexPath.item]
         // Remote panel delegate for cell selection

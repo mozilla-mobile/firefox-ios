@@ -44,8 +44,28 @@ final class RemoteTabPanelTests: XCTestCase {
     }
 
     private func generateStateOneClientTwoTabs() -> RemoteTabsPanelState {
-        let fakeTabs: [RemoteTab] = [RemoteTab(clientGUID: "123", URL: URL(string: "https://mozilla.com")!, title: "Mozilla Homepage", history: [], lastUsed: 0, icon: nil), RemoteTab(clientGUID: "123", URL: URL(string: "https://google.com")!, title: "Google Homepage", history: [], lastUsed: 0, icon: nil)]
-        let fakeData: [ClientAndTabs] = [ClientAndTabs(client: RemoteClient(guid: "123", name: "Test Client", modified: 0, type: "Test Type", formfactor: "Test", os: "Test", version: "v1.0", fxaDeviceId: "12345"), tabs: fakeTabs)]
+        let tab1 = RemoteTab(clientGUID: "123",
+                             URL: URL(string: "https://mozilla.com")!,
+                             title: "Mozilla Homepage",
+                             history: [],
+                             lastUsed: 0,
+                             icon: nil)
+        let tab2 = RemoteTab(clientGUID: "123",
+                             URL: URL(string: "https://google.com")!,
+                             title: "Google Homepage",
+                             history: [],
+                             lastUsed: 0,
+                             icon: nil)
+        let fakeTabs: [RemoteTab] = [tab1, tab2]
+        let client = RemoteClient(guid: "123",
+                                  name: "Client",
+                                  modified: 0,
+                                  type: "Type (Test)",
+                                  formfactor: "Test",
+                                  os: "macOS",
+                                  version: "v1.0",
+                                  fxaDeviceId: "12345")
+        let fakeData = [ClientAndTabs(client: client, tabs: fakeTabs)]
         return RemoteTabsPanelState(refreshState: .loaded,
                                     clientAndTabs: fakeData,
                                     allowsRefresh: true,
