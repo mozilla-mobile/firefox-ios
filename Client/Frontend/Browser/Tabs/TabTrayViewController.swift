@@ -263,7 +263,8 @@ class TabTrayViewController: UIViewController,
         case .privateTabs:
             return TabDisplayViewController(isPrivateMode: true)
         case .syncedTabs:
-            let panel = RemoteTabsPanel(state: RemoteTabsPanelState.emptyState())
+            let fakeData: [ClientAndTabs] = [ClientAndTabs(client: RemoteClient(guid: "123", name: "Test Client", modified: 0, type: "Test Type", formfactor: "Test", os: "Test", version: "v1.0", fxaDeviceId: "12345"), tabs: [RemoteTab(clientGUID: "123", URL: URL(string:"https://mozilla.com")!, title: "Mozilla Homepage", history: [], lastUsed: 0, icon: nil), RemoteTab(clientGUID: "123", URL: URL(string:"https://google.com")!, title: "Google Homepage", history: [], lastUsed: 0, icon: nil)])]
+            let panel = RemoteTabsPanel(state: RemoteTabsPanelState(refreshState: .loaded, clientAndTabs: fakeData, allowsRefresh: true, showingEmptyState: nil, syncIsSupported: true))
             panel.remotePanelDelegate = self
             return panel
         }
