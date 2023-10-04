@@ -17,7 +17,7 @@ tasks:
         description: Run Performance Tests on Physical Devices in Firebase
         run-on-tasks-for: []
         treeherder:
-            symbol: firebase-performance
+            symbol: firebase-perf
             kind: test
-            platform: ios-physical-iphone13pro-15.7/opt
+            platform: ios-physical-iphone13pro-15-7/opt
             tier: 1
