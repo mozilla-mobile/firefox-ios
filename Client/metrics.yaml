@@ -717,6 +717,12 @@ shopping:
     type: event
     description: |
       Records when the surface (bottom sheet) is displayed
+    extra_keys:
+      size:
+        type: string
+        description: |
+          Records the state of the bottom sheet:
+          "half-view / full-view"
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16248
     data_reviews:

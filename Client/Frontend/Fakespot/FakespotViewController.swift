@@ -113,7 +113,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
         setupView()
         listenForThemeChange(view)
-        viewModel.sendTelemetryOnAppear()
         viewModel.fetchProductIfOptedIn()
     }
 
@@ -126,6 +125,12 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard #available(iOS 15.0, *) else { return }
+        viewModel.recordBottomSheetDisplayed(presentationController)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -378,9 +383,8 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
         guard #available(iOS 15.0, *) else { return }
-        guard let sheetPresentationController = presentationController as? UISheetPresentationController else { return }
+        let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
-        let currentDetent = sheetPresentationController.selectedDetentIdentifier
         if viewModel.isSwiping || currentDetent == .large {
             viewModel.recordDismissTelemetry(by: .swipingTheSurfaceHandle)
         } else {
