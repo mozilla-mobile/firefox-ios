@@ -2290,6 +2290,12 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
+        if let tabUrl = selected?.url, tabUrl.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") {
+            if let urlString = tabUrl.getQuery()["url"], !urlString.isEmpty, let url = URL(string: urlString) {
+                selected?.webView?.replaceLocation(with: url)
+                return
+            }
+        }
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 
