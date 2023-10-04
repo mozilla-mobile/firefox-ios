@@ -75,7 +75,7 @@ class AsyncReducerTests: XCTestCase {
         waitForExpectations(timeout: timeoutPeriod, handler: nil)
     }
 
-    func testAccumulation() {
+    func testAccumulation() throws {
         var addDuring: [String] = ["bar", "baz"]
         var reducer: AsyncReducer<[String: Bool], String>!
 
@@ -85,7 +85,7 @@ class AsyncReducerTests: XCTestCase {
 
             // Pretend that some new work arrived while we were handling this.
             if let nextUp = addDuring.popLast() {
-                _ = try! reducer.append(nextUp)
+                _ = XCTAssertNoThrow(try reducer.append(nextUp))
             }
 
             return deferMaybe(out)
@@ -93,7 +93,7 @@ class AsyncReducerTests: XCTestCase {
 
         // Start with 'foo'.
         reducer = AsyncReducer(initialValue: deferMaybe([:]), combine: combine)
-        _ = try! reducer.append("foo")
+        _ = try reducer.append("foo")
 
         // Wait for the result. We should have handled all three by the time this returns.
         let result = reducer.terminal.value

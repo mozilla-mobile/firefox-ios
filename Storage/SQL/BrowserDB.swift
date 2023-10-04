@@ -27,9 +27,17 @@ open class BrowserDB {
                    level: .debug,
                    category: .storage)
 
-        self.databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
+        do {
+            let directory = try files.getAndEnsureDirectory()
+            self.databasePath = URL(fileURLWithPath: directory).appendingPathComponent(filename).path
 
-        self.db = SwiftData(filename: self.databasePath, schema: schema, files: files)
+            self.db = SwiftData(filename: self.databasePath, schema: schema, files: files)
+        } catch {
+            logger.log("Could not create directory at root path: \(error)",
+                       level: .fatal,
+                       category: .storage)
+            fatalError("Could not create directory at root path: \(error)")
+        }
     }
 
     /*

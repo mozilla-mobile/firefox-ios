@@ -10,11 +10,11 @@ class RustPlacesTests: XCTestCase {
     var files: FileAccessor!
     var places: RustPlaces!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         files = MockFiles()
 
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
+        let databasePath = URL(fileURLWithPath: (try files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
         try? files.remove("testplaces.db")
 
         places = RustPlaces(databasePath: databasePath)

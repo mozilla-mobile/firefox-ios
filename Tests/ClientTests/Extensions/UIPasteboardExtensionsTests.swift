@@ -20,17 +20,17 @@ class UIPasteboardExtensionsTests: XCTestCase {
         pasteboard = nil
     }
 
-    func testAddPNGImage() {
+    func testAddPNGImage() throws {
         let path = Bundle(for: self.classForCoder).path(forResource: "image", ofType: "png")!
-        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+        let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypePNG)
     }
 
-    func testAddGIFImage() {
+    func testAddGIFImage() throws {
         let path = Bundle(for: self.classForCoder).path(forResource: "image", ofType: "gif")!
-        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+        let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypeGIF)
