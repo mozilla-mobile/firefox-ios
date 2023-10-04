@@ -192,7 +192,11 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func hideTableViewSection(_ section: Int) {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
+        if hiddenSections.contains(section) {
+            hiddenSections.remove(section)
+        } else {
+            hiddenSections.insert(section)
+        }
 
         refreshUI()
     }
@@ -217,22 +221,16 @@ class RemoteTabsTableViewController: UITableViewController,
     // MARK: - UITableView
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if isShowingEmptyView {
-            return 0
-        } else {
-            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
-            return state.clientAndTabs.count
-        }
+        guard !isShowingEmptyView else { return 0 }
+        
+        return state.clientAndTabs.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isShowingEmptyView {
-            return 0
-        } else {
-            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
+        guard !isShowingEmptyView else { return 0 }
 
-            return state.clientAndTabs[section].tabs.count
-        }
+        guard !hiddenSections.contains(section) else { return 0 }
+        return state.clientAndTabs[section].tabs.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -269,8 +267,8 @@ class RemoteTabsTableViewController: UITableViewController,
 
     @objc
     private func sectionHeaderTapped(sender: UIGestureRecognizer) {
-        // guard let section = sender.view?.tag else { return }
-        // collapsibleSectionDelegate?.hideTableViewSection(section)
+         guard let section = sender.view?.tag else { return }
+         hideTableViewSection(section)
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
