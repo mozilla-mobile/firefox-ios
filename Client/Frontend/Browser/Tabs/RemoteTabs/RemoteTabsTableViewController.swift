@@ -158,7 +158,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
-        // TODO: Forthcoming as part of ongoing tab tray Redux refactors.
+        // TODO: Forthcoming as part of ongoing tab tray Redux refactors. [FXIOS-6942] & [FXIOS-7509]
 
         refreshUI()
     }
@@ -177,7 +177,7 @@ class RemoteTabsTableViewController: UITableViewController,
             return
         }
 
-        // TODO: Send Redux action to get cached clients & tabs, update once new state is received. Forthcoming.
+        // TODO: Send Redux action to get clients & tabs, update once state received. Forthcoming.  [FXIOS-6942] & [FXIOS-7509]
         // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
     }
 
@@ -190,7 +190,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func hideTableViewSection(_ section: Int) {
-        // TODO: Forthcoming as part of ongoing Redux refactors.
+        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
 
         refreshUI()
     }
@@ -203,7 +203,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        // TODO: Forthcoming as part of ongoing Redux refactors.
+        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
 
         return nil
     }
@@ -218,7 +218,7 @@ class RemoteTabsTableViewController: UITableViewController,
         if isShowingEmptyView {
             return 0
         } else {
-            // TODO: Show clients and tabs. Forthcoming.
+            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
             return 0
         }
     }
@@ -227,7 +227,7 @@ class RemoteTabsTableViewController: UITableViewController,
         if isShowingEmptyView {
             return 0
         } else {
-            // TODO: Show clients and tabs. Forthcoming.
+            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
             return 0
         }
     }
@@ -239,7 +239,7 @@ class RemoteTabsTableViewController: UITableViewController,
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !isShowingEmptyView else { assertionFailure("Empty view state should always have 0 sections/rows."); return .build() }
 
-        // TODO: Show clients and tabs. Forthcoming.
+        // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
         return UITableViewCell(frame: .zero)
     }
 }
