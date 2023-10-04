@@ -130,8 +130,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard #available(iOS 15.0, *) else { return }
-        let currentDetent = viewModel.getCurrentDetent(for: presentationController)
-        viewModel.recordBottomSheetDisplayed(in: currentDetent == .large ? .fullView : .halfView)
+        viewModel.recordBottomSheetDisplayed(presentationController)
     }
 
     override func viewDidDisappear(_ animated: Bool) {

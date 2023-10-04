@@ -309,12 +309,15 @@ class FakespotViewModel {
         )
     }
 
-    func recordBottomSheetDisplayed(in state: TelemetryWrapper.EventExtraKey.Shopping) {
+    @available(iOS 15.0, *)
+    func recordBottomSheetDisplayed(_ presentedController: UIPresentationController?) {
+        let currentDetent = getCurrentDetent(for: presentedController)
+        let state: TelemetryWrapper.EventExtraKey.Shopping = currentDetent == .large ? .fullView : .halfView
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,
             object: .shoppingBottomSheet,
-            extras: [TelemetryWrapper.ExtraKey.action.rawValue: state.rawValue]
+            extras: [TelemetryWrapper.ExtraKey.size.rawValue: state.rawValue]
         )
     }
 }

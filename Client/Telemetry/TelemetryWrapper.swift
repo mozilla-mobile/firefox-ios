@@ -666,6 +666,7 @@ extension TelemetryWrapper {
         case preferenceChanged = "to"
         case isPrivate = "is-private"
         case action = "action"
+        case size = "size"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -1074,9 +1075,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
         case (.action, .view, .shoppingBottomSheet, _, let extras):
-            if let action = extras?[EventExtraKey.action.rawValue] as? String {
-                let actionExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(action: action)
-                GleanMetrics.Shopping.surfaceDisplayed.record(actionExtra)
+            if let size = extras?[EventExtraKey.size.rawValue] as? String {
+                let sizeExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(size: size)
+                GleanMetrics.Shopping.surfaceDisplayed.record(sizeExtra)
             } else {
                 recordUninstrumentedMetrics(
                     category: category,

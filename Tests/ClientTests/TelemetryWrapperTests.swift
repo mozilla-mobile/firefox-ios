@@ -301,7 +301,7 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .shoppingBottomSheet,
-                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
                                                 TelemetryWrapper.EventExtraKey.Shopping.fullView.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
     }
@@ -310,7 +310,7 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .shoppingBottomSheet,
-                                     extras: [TelemetryWrapper.ExtraKey.action.rawValue:
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
                                                 TelemetryWrapper.EventExtraKey.Shopping.halfView.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
     }

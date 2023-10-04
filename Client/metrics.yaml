@@ -706,7 +706,7 @@ shopping:
     description: |
       Records when the surface (bottom sheet) is displayed
     extra_keys:
-      action:
+      size:
         type: string
         description: |
           Records the state of the bottom sheet:
