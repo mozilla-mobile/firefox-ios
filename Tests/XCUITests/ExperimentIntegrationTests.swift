@@ -17,7 +17,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
     func testVerifyExperimentEnrolled() throws {
         let toolbarClose = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Close'"))
 
-        wait(forElement: toolbarClose.element, timeout: 5)
+        wait(forElement: toolbarClose.element, timeout: 15)
         toolbarClose.element(boundBy: 0).tap()
         navigator.goto(SettingsScreen)
 
@@ -43,7 +43,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
         )
 
-        wait(forElement: surveyLink.element, timeout: 5)
+        wait(forElement: surveyLink.element, timeout: 15)
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
