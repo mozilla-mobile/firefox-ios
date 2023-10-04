@@ -7,23 +7,6 @@ import Redux
 import Shared
 import Storage
 
-/// State for RemoteTabsPanel. WIP.
-struct RemoteTabsPanelState {
-    let refreshState: RemoteTabsPanelRefreshState
-    let clientAndTabs: [ClientAndTabs]
-    let allowsRefresh: Bool                                // True if `hasSyncableAccount()`
-    let showingEmptyState: RemoteTabsPanelEmptyState?      // If showing empty (or error) state
-    let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
-
-    static func emptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(refreshState: .loaded,
-                                    clientAndTabs: [],
-                                    allowsRefresh: false,
-                                    showingEmptyState: .noTabs,
-                                    syncIsSupported: true)
-    }
-}
-
 /// Status of tab refresh.
 enum RemoteTabsPanelRefreshState {
     case loaded
@@ -46,5 +29,22 @@ enum RemoteTabsPanelEmptyState {
         case .failedToSync: return .RemoteTabErrorFailedToSync
         case .syncDisabledByUser: return .TabsTray.Sync.SyncTabsDisabled
         }
+    }
+}
+
+/// State for RemoteTabsPanel. WIP.
+struct RemoteTabsPanelState {
+    let refreshState: RemoteTabsPanelRefreshState
+    let clientAndTabs: [ClientAndTabs]
+    let allowsRefresh: Bool                                // True if `hasSyncableAccount()`
+    let showingEmptyState: RemoteTabsPanelEmptyState?      // If showing empty (or error) state
+    let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
+
+    static func emptyState() -> RemoteTabsPanelState {
+        return RemoteTabsPanelState(refreshState: .loaded,
+                                    clientAndTabs: [],
+                                    allowsRefresh: false,
+                                    showingEmptyState: .noTabs,
+                                    syncIsSupported: true)
     }
 }
