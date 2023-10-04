@@ -107,7 +107,8 @@ class RemoteTabsTableViewController: UITableViewController,
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        // TODO: Ensure theme applied to any subviews or custom cells.
+        emptyView.applyTheme(theme: themeManager.currentTheme)
+        // TODO: Ensure theme applied to any custom cells.
     }
 
     private func refreshUI() {
@@ -122,9 +123,8 @@ class RemoteTabsTableViewController: UITableViewController,
 
     private func configureEmptyView() {
         guard let emptyState = state.showingEmptyState else { return }
-        emptyView.configure(state: emptyState,
-                            theme: themeManager.currentTheme,
-                            delegate: remoteTabsPanel?.remotePanelDelegate)
+        emptyView.configure(state: emptyState, delegate: remoteTabsPanel?.remotePanelDelegate)
+        emptyView.applyTheme(theme: themeManager.currentTheme)
     }
 
     // MARK: - Refreshing TableView

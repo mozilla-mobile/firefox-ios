@@ -74,14 +74,8 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
     }
 
     func configure(state: RemoteTabsPanelEmptyState,
-                   theme: Theme?,
                    delegate: RemotePanelDelegate?) {
         self.delegate = delegate
-
-        if let theme = theme {
-            // TODO: Theming forthcoming as part of Redux updates.
-            applyTheme(theme: theme)
-        }
 
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
