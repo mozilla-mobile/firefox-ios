@@ -7,8 +7,12 @@ import UIKit
 import Foundation
 import Shared
 
+protocol EmptyPrivateTabsViewDelegate: AnyObject {
+    func didTapLearnMore(urlRequest: URLRequest)
+}
+
 // View we display when there are no private tabs created
-class LegacyEmptyPrivateTabsView: UIView {
+class EmptyPrivateTabsView: UIView {
     struct UX {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
@@ -20,6 +24,8 @@ class LegacyEmptyPrivateTabsView: UIView {
     }
 
     // MARK: - Properties
+
+    weak var delegate: EmptyPrivateTabsViewDelegate?
 
     // UI
     private let scrollView: UIScrollView = .build { scrollview in
@@ -69,6 +75,9 @@ class LegacyEmptyPrivateTabsView: UIView {
     }
 
     private func setupLayout() {
+        learnMoreButton.addTarget(self,
+                                  action: #selector(didTapLearnMore),
+                                  for: .touchUpInside)
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -120,5 +129,14 @@ class LegacyEmptyPrivateTabsView: UIView {
         descriptionLabel.textColor = theme.colors.textPrimary
         learnMoreButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
         iconImageView.tintColor = theme.colors.indicatorActive
+    }
+
+    @objc
+    private func didTapLearnMore() {
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        if let langID = Locale.preferredLanguages.first {
+            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
+            delegate?.didTapLearnMore(urlRequest: learnMoreRequest)
+        }
     }
 }
