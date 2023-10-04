@@ -647,6 +647,18 @@ downloads:
 
 # Shopping Experience (Fakespot)
 shopping:
+  product_page_visits:
+    type: counter
+    description: |
+      A count of the number of eligible product pages the user has visited.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16539
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16635
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+    unit: counter of product pages
   address_bar_icon_clicked:
     type: event
     description: |

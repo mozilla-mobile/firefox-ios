@@ -399,6 +399,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
+        case shoppingProductPageVisits = "product_page_visits"
         case shoppingRecentReviews = "shopping-recent-reviews"
         case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
@@ -1091,9 +1092,10 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
+        case(.information, .view, .shoppingProductPageVisits, _, _):
+            GleanMetrics.Shopping.productPageVisits.add()
         case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
             GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
-
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
