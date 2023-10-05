@@ -87,4 +87,19 @@ final class ExperimentIntegrationTests: BaseTestCase {
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
+
+    func testHomeScreenMessageDismissesCorrectly() throws {
+        let surveyLink = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS 'Close'")
+        )
+
+        wait(forElement: surveyLink.element, timeout: 15)
+        surveyLink.element.tap()
+
+        navigator.goto(NewTabScreen)
+        waitForTabsButton()
+
+        let tabsOpen = app.buttons["Show Tabs"].value
+        XCTAssertEqual("1", tabsOpen as? String)
+    }
 }
