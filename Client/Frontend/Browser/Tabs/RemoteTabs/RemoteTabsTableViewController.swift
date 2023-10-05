@@ -227,9 +227,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard !isShowingEmptyView else { return 0 }
-
-        guard !hiddenSections.contains(section) else { return 0 }
+        guard !isShowingEmptyView, !hiddenSections.contains(section) else { return 0 }
         return state.clientAndTabs[section].tabs.count
     }
 
