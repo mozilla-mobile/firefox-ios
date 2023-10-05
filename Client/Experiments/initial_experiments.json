@@ -220,6 +220,97 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "release-ios-set-to-default-instructions-no-x-treatment-b-rollout",
+      "id": "release-ios-set-to-default-instructions-no-x-treatment-b-rollout",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "[release] iOS set to default instructions / no X - Treatment B Rollout",
+      "userFacingDescription": "Onboarding experiment with showing instructions for how to set to default and removing X",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-release-mobile_first_run-rollout-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "default_browser",
+          "priority": "primary"
+        },
+        {
+          "slug": "onboarding",
+          "priority": "primary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "welcome": {
+                    "title": "Onboarding/Onboarding.Welcome.Title.TreatementA.v114",
+                    "body": "Onboarding/Onboarding.Welcome.Description.TreatementA.v114",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Welcome.ActionTreatementA.v114",
+                        "action": "open-instructions-popup"
+                      },
+                      "secondary": {
+                        "title": "Onboarding/Onboarding.Welcome.Skip.v114",
+                        "action": "next-card"
+                      }
+                    },
+                    "instructions-popup": {
+                      "title": "Switch Your Default Browser",
+                      "button-title": "Go to Settings",
+                      "instructions": [
+                        "1. Go to *Settings*",
+                        "2. Tap *Default Browser App*",
+                        "3. Select *Firefox*"
+                      ],
+                      "button-action": "open-ios-fx-settings"
+                    }
+                  }
+                },
+                "dismissable": true
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('119.!') >= 0)))",
+      "startDate": "2023-10-05",
+      "enrollmentEndDate": "2023-10-31",
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "treatment-b",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null
     }
   ]
 }
