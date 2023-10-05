@@ -263,7 +263,7 @@ class TabTrayViewController: UIViewController,
         case .privateTabs:
             return TabDisplayViewController(isPrivateMode: true)
         case .syncedTabs:
-            let state = RemoteTabsPanelState.emptyState() // Temporary
+            let state = RemoteTabsPanelState.emptyState() // Temporary. [FXIOS-6942]
             let panel = RemoteTabsPanel(state: state)
             panel.remotePanelDelegate = self
             return panel
@@ -436,7 +436,7 @@ class TabTrayViewController: UIViewController,
 
     func remotePanel(didSelectURL url: URL, visitType: VisitType) {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        // TODO: Need to provide handler for didSelectURL. Forthcoming.
+        // TODO: [FXIOS-6928] Provide handler for didSelectURL.
         self.didSelectUrl?(url, visitType)
         self.dismissVC()
     }
