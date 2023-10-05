@@ -1,17 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "mobile iOS opt-in 1x 280x160 light 72dpi.png",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "mobile iOS opt-in 1x 280x160 dark 72dpi.png",
+      "filename" : "mobile iOS opt-in 1x 280x160 72dpi.png",
       "idiom" : "universal"
     }
   ],
