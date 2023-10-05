@@ -293,6 +293,12 @@ class FakespotViewModel {
         observeProductTask?.cancel()
     }
 
+    @available(iOS 15.0, *)
+    func getCurrentDetent(for presentedController: UIPresentationController?) -> UISheetPresentationController.Detent.Identifier? {
+        guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
+        return sheetController.selectedDetentIdentifier
+    }
+
     // MARK: - Telemetry
     func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
         TelemetryWrapper.recordEvent(
@@ -303,9 +309,15 @@ class FakespotViewModel {
         )
     }
 
-    func sendTelemetryOnAppear() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .shoppingBottomSheet)
+    @available(iOS 15.0, *)
+    func recordBottomSheetDisplayed(_ presentedController: UIPresentationController?) {
+        let currentDetent = getCurrentDetent(for: presentedController)
+        let state: TelemetryWrapper.EventExtraKey.Shopping = currentDetent == .large ? .fullView : .halfView
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            extras: [TelemetryWrapper.ExtraKey.size.rawValue: state.rawValue]
+        )
     }
 }

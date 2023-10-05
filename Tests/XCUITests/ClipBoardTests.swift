@@ -59,11 +59,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
-        if processIsTranslatedStr() == m1Rosetta {
-            mozWaitForElementToNotExist(app.menuItems["Paste"])
-        } else {
-            mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
-        }
+        mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
     }
 
     // Smoketest

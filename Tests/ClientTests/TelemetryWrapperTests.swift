@@ -242,6 +242,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
     }
 
+    func test_productPageVisits_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .shoppingProductPageVisits)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Shopping.productPageVisits)
+    }
+
     func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
@@ -297,8 +305,21 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked)
 	}
 
-    func test_shoppingSurfaceDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingBottomSheet)
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledFullViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.fullView.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
+    }
+
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledHalfViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.halfView.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
     }
 
