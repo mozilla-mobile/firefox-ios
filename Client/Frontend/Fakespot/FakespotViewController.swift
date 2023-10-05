@@ -124,6 +124,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         applyTheme()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        adjustLayout()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
@@ -207,10 +212,10 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        let textSize = self.sizeOfString(titleLabel.text!, usingFont: titleLabel.font)
-        let maxLabelWidth = UIScreen.main.bounds.width - self.sizeOfString(betaLabel.text!, usingFont: betaLabel.font).width
+        let titleTextWidth = widthOfString(titleLabel.text!, usingFont: titleLabel.font)
+        let maxLabelWidth = headerView.frame.width - widthOfString(betaLabel.text!, usingFont: betaLabel.font)
 
-        if contentSizeCategory.isAccessibilityCategory || textSize.width > maxLabelWidth {
+        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxLabelWidth {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
             betaView.layer.borderWidth = UX.betaBorderWidthA11ySize
@@ -221,9 +226,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         }
     }
 
-    private func sizeOfString(_ string: String, usingFont font: UIFont) -> CGSize {
+    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
         let attributes: [NSAttributedString.Key: Any] = [.font: font]
-        return string.size(withAttributes: attributes)
+        return string.size(withAttributes: attributes).width
     }
 
     private func updateContent() {
