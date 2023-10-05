@@ -5,8 +5,9 @@
 import Common
 import UIKit
 
-class TabCollectionViewController: UIViewController,
-                                   Themeable {
+class TabDisplayViewController: UIViewController,
+                                Themeable,
+                                EmptyPrivateTabsViewDelegate {
     struct UX {}
 
     var notificationCenter: NotificationProtocol
@@ -15,10 +16,19 @@ class TabCollectionViewController: UIViewController,
 
     // MARK: UI elements
     private var backgroundPrivacyOverlay: UIView = .build { _ in }
-    private var collectionView: UICollectionView!
+    private var tabDisplayView: TabDisplayView = .build { _ in }
 
-    // Redux state
+    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
+        let emptyView = EmptyPrivateTabsView()
+        return emptyView
+    }()
+
+    // MARK: Redux state
     var isPrivateMode: Bool
+    var privateTabsAreEmpty: Bool {
+        // TODO: FXIOS-6937 Use var from state if private tabs are empty
+        return isPrivateMode && true
+    }
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -42,52 +52,35 @@ class TabCollectionViewController: UIViewController,
     }
 
     private func setupView() {
-        setupCollectionView()
-        view.addSubview(collectionView)
+        view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
+        view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabDisplayView.topAnchor.constraint(equalTo: view.topAnchor),
+            tabDisplayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabDisplayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tabDisplayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             backgroundPrivacyOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundPrivacyOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundPrivacyOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            emptyPrivateTabsView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyPrivateTabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyPrivateTabsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            emptyPrivateTabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         backgroundPrivacyOverlay.isHidden = !isPrivateMode
-        // TODO: Empty private tabs view FXIOS-6925
-    }
-
-    private func setupCollectionView() {
-        collectionView = UICollectionView(frame: .zero,
-                                          collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(cellType: LegacyTabCell.self)
-
-        // TODO: FXIOS-6926 Create TabDisplayManager and update delegates
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
     }
 
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
-        collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
-    }
-}
-
-// TODO: Remove once FXIOS-6926 is done
-extension TabCollectionViewController: UICollectionViewDataSource,
-                                       UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyTabCell.cellIdentifier, for: indexPath)
-
-        return cell
-    }
+    // MARK: EmptyPrivateTabsViewDelegate
+    func didTapLearnMore(urlRequest: URLRequest) {}
 }

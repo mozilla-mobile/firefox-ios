@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Збережені паролі з'являтимуться тут. Якщо ви зберегли свої паролі у Firefox на іншому пристрої, увійдіть у свій обліковий запис Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Збережені паролі з'являтимуться тут. Якщо ви зберегли свої паролі у %@ на іншому пристрої, увійдіть у свій обліковий запис.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Паролів не знайдено";
 

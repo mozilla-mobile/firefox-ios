@@ -399,6 +399,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
+        case shoppingProductPageVisits = "product_page_visits"
         case shoppingRecentReviews = "shopping-recent-reviews"
         case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
@@ -409,6 +410,7 @@ extension TelemetryWrapper {
         case shoppingPrivacyPolicyButton = "shopping-privacy-policy-button"
         case shoppingLearnMoreButton = "shopping-learn-more-button"
         case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
+        case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -665,6 +667,7 @@ extension TelemetryWrapper {
         case preferenceChanged = "to"
         case isPrivate = "is-private"
         case action = "action"
+        case size = "size"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -725,6 +728,19 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
+
+        // Shopping Experience
+        public enum Shopping: String {
+            // Extra Keys for `surface_closed` event
+            case clickOutside = "click-outside"
+            case interactionWithALink = "interaction-with-a-link"
+            case swipingTheSurfaceHandle = "swiping-the-surface-handle"
+            case optingOutOfTheFeature = "opting-out-of-the-feature"
+            case closeButton = "close-button"
+            // Extra Keys for `surface_displayed` event
+            case halfView = "half-view"
+            case fullView = "full-view"
+        }
     }
 
     func recordEvent(category: EventCategory,
@@ -1045,12 +1061,32 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
-        case (.action, .close, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceClosed.record()
+        case (.action, .close, .shoppingBottomSheet, _, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.Shopping.SurfaceClosedExtra(action: action)
+                GleanMetrics.Shopping.surfaceClosed.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
-        case (.action, .view, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceDisplayed.record()
+        case (.action, .view, .shoppingBottomSheet, _, let extras):
+            if let size = extras?[EventExtraKey.size.rawValue] as? String {
+                let sizeExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(size: size)
+                GleanMetrics.Shopping.surfaceDisplayed.record(sizeExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
             GleanMetrics.Shopping.settingsComponentOptedOut.record()
         case (.action, .view, .shoppingSettingsChevronButton, _, _):
@@ -1071,7 +1107,10 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
-
+        case(.information, .view, .shoppingProductPageVisits, _, _):
+            GleanMetrics.Shopping.productPageVisits.add()
+        case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
+            GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,

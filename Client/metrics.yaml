@@ -647,6 +647,18 @@ downloads:
 
 # Shopping Experience (Fakespot)
 shopping:
+  product_page_visits:
+    type: counter
+    description: |
+      A count of the number of eligible product pages the user has visited.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16539
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16635
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+    unit: counter of product pages
   address_bar_icon_clicked:
     type: event
     description: |
@@ -675,6 +687,12 @@ shopping:
     type: event
     description: |
       Records when the surface (bottom sheet) is dismissed
+    extra_keys:
+      action:
+        type: string
+        description: |
+          Records how the surface was closed:
+          "close-button/click-outside/interaction-with-a-link/swiping-the-surface-handle/opting-out-of-the-feature"
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/15681
     data_reviews:
@@ -699,6 +717,12 @@ shopping:
     type: event
     description: |
       Records when the surface (bottom sheet) is displayed
+    extra_keys:
+      size:
+        type: string
+        description: |
+          Records the state of the bottom sheet:
+          "half-view / full-view"
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16248
     data_reviews:
@@ -827,6 +851,19 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-25"
+
+  surface_powered_by_fakespot_link_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      'Review checker is powered by Fakespot by mozilla' link.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16633
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16655
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
 
 # Key Commands
 key_commands:

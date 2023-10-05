@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Պահված մուտքագրումները կցուցադրվեն այստեղ: Եթե Firefox-ում մուտքագրումները պահել եք այլ սարքում, ապա մուտք գործեք ձեր Firefox հաշիվ:";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Պահված մուտքագրումները կցուցադրվեն այստեղ: Եթե ձեր մուտքագրումները պահել եք %@-ում այլ սարքում, ապա մուտք գործեք ձեր հաշիվ:";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Մուտքագրումներ չկան";
 

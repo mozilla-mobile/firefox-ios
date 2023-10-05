@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "У вас няма ніводнай прылады, злучанай з гэтым уліковым запісам і даступнай для сінхранізацыі.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Вы не увайшлі ў свой ўліковы запіс.";
+

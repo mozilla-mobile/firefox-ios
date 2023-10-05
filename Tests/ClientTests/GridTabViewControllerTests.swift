@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-final class GridTabViewControllerTests: XCTestCase {
+final class LegacyGridTabViewControllerTests: XCTestCase {
     private var manager: TabManager!
     private var profile: MockProfile!
 

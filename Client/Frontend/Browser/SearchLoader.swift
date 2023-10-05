@@ -8,7 +8,7 @@ import Storage
 import Glean
 import Common
 
-private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
+private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
 
 /**
  * Shared data source for the SearchViewController and the URLBar domain completion.
@@ -30,9 +30,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         super.init()
     }
 
-    fileprivate lazy var topDomains: [String] = {
-        let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
+    fileprivate lazy var topDomains: [String]? = {
+        guard let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
+        else { return nil }
+
+        return try? String(contentsOfFile: filePath).components(separatedBy: "\n")
     }()
 
     fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: UInt, completionHandler: @escaping (([Site]) -> Void)) {
@@ -135,10 +137,12 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                     }
 
                     // If there are no search history matches, try matching one of the Alexa top domains.
-                    for domain in self.topDomains {
-                        if let completion = self.completionForDomain(domain) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
-                            return
+                    if let topDomains = self.topDomains {
+                        for domain in topDomains {
+                            if let completion = self.completionForDomain(domain) {
+                                self.urlBar.setAutocompleteSuggestion(completion)
+                                return
+                            }
                         }
                     }
                 }
@@ -155,7 +159,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
         // Note that we won't match non-HTTP(S) URLs.
-        guard let match = URLBeforePathRegex.firstMatch(
+        guard let match = URLBeforePathRegex?.firstMatch(
             in: url,
             options: [],
             range: NSRange(location: 0, length: url.count))

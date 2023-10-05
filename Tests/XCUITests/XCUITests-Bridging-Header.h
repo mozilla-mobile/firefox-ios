@@ -7,6 +7,7 @@
 
 #import "XCTest/XCUIApplication.h"
 #import "XCTest/XCUIElement.h"
+#import "Shared-Bridging-Header.h"
 @interface XCUIApplication (Private)
 - (id)initPrivateWithPath:(NSString *)path bundleID:(NSString *)bundleID;
 @end
