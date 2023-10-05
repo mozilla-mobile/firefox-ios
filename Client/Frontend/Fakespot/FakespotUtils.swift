@@ -9,7 +9,14 @@ import Shared
 public struct FakespotUtils {
     public static var learnMoreUrl: URL? {
         // Returns the predefined URL associated to learn more button action.
-        return SupportUtils.URLForTopic("review_checker_mobile")
+        guard let url = SupportUtils.URLForTopic("review_checker_mobile") else { return nil }
+
+        let queryItems = [URLQueryItem(name: "utm_campaign", value: "fakespot-by-mozilla"),
+                          URLQueryItem(name: "utm_term", value: "core-sheet")]
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        urlComponents?.queryItems = queryItems
+
+        return urlComponents?.url
     }
 
     public static var privacyPolicyUrl: URL? {
