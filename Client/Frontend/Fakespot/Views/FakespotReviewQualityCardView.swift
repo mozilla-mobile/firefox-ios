@@ -140,8 +140,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.labelFontSize)
+        label.font = UX.baseFont
     }
 
     private lazy var mixReliableReviewsLabel: UILabel = .build { label in
