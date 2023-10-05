@@ -16,23 +16,13 @@ class DownloadsTests: BaseTestCase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
         mozWaitForElementToExist(app.tables["DownloadsTable"])
-        if processIsTranslatedStr() == m1Rosetta {
-            navigator.nowAt(LibraryPanel_Downloads)
-            navigator.goto(HomePanelsScreen)
-            navigator.nowAt(NewTabScreen)
-            navigator.goto(ClearPrivateDataSettings)
-            app.cells.switches["Downloaded Files"].tap()
-            app.tables.cells["ClearPrivateData"].tap()
-            app.alerts.buttons["OK"].tap()
-        } else {
-            let list = app.tables["DownloadsTable"].cells.count
-            if list != 0 {
-                for _ in 0...list-1 {
-                    mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
-                    app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                    mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
-                    app.tables.cells.buttons["Delete"].tap()
-                }
+        let list = app.tables["DownloadsTable"].cells.count
+        if list != 0 {
+            for _ in 0...list-1 {
+                mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
+                app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
+                mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
+                app.tables.cells.buttons["Delete"].tap()
             }
         }
         super.tearDown()
@@ -109,14 +99,10 @@ class DownloadsTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("swipeLeft() does not work on M1")
-        } else {
-            deleteItem(itemName: testFileNameDownloadPanel)
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts[testFileNameDownloadPanel])
-            // After removing the number of items should be 0
-            checkTheNumberOfDownloadedItems(items: 0)
-        }
+        deleteItem(itemName: testFileNameDownloadPanel)
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[testFileNameDownloadPanel])
+        // After removing the number of items should be 0
+        checkTheNumberOfDownloadedItems(items: 0)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306901
@@ -124,26 +110,22 @@ class DownloadsTests: BaseTestCase {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
-        if processIsTranslatedStr() == m1Rosetta {
-            throw XCTSkip("swipeLeft() does not work on M1")
+        let shareButton = app.tables.buttons.staticTexts["Share"]
+        app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
+        mozWaitForElementToExist(shareButton)
+        XCTAssertTrue(shareButton.exists)
+        XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
+        shareButton.tap(force: true)
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
+        XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
+        if !iPad() {
+            app.buttons["Close"].tap()
         } else {
-            let shareButton = app.tables.buttons.staticTexts["Share"]
-            app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
-            mozWaitForElementToExist(shareButton)
-            XCTAssertTrue(shareButton.exists)
-            XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
-            shareButton.tap(force: true)
-            mozWaitForElementToExist(app.tables["DownloadsTable"])
-            XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
-            XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
-            if !iPad() {
-                app.buttons["Close"].tap()
-            } else {
-                // Workaround to close the context menu.
-                // XCUITest does not allow me to click the greyed out portion of the app.
-                app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
-                app.navigationBars["Add Tag"].buttons["Done"].tap()
-            }
+            // Workaround to close the context menu.
+            // XCUITest does not allow me to click the greyed out portion of the app.
+            app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
+            app.navigationBars["Add Tag"].buttons["Done"].tap()
         }
     }
 
@@ -185,6 +167,7 @@ class DownloadsTests: BaseTestCase {
 
     private func downloadBLOBFile() {
         navigator.openURL(testBLOBURL)
+        waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"], timeout: TIMEOUT)
         app.webViews.links["Download Text"].press(forDuration: 1)
         app.buttons["Download Link"].tap()

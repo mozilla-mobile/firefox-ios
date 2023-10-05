@@ -97,49 +97,20 @@ open class MockProfile: Client.Profile {
     }
 
     // Read/Writeable properties for mocking
-    public var places: RustPlaces
-    public var tabs: RustRemoteTabs
+
     public var files: FileAccessor
-    public var logins: RustLogins
     public var syncManager: ClientSyncManager!
     public var firefoxSuggest: RustFirefoxSuggest?
 
-    fileprivate var legacyPlaces: PinnedSites
-
-    public var pinnedSites: PinnedSites
-
-    var database: BrowserDB
-    var readingListDB: BrowserDB
-
     fileprivate let name: String = "mockaccount"
+
+    private let directory: String
+    private let databasePrefix: String
 
     init(databasePrefix: String = "mock") {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
-
-        let oldLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
-        try? files.remove("\(databasePrefix)_logins.db")
-
-        let newLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
-        try? files.remove("\(databasePrefix)_loginsPerField.db")
-
-        logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
-        _ = logins.reopenIfClosed()
-        database = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
-        readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
-        let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
-        try? files.remove("\(databasePrefix)_places.db")
-
-        places = RustPlaces(databasePath: placesDatabasePath)
-        _ = places.reopenIfClosed()
-
-        let tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
-
-        tabs = RustRemoteTabs(databasePath: tabsDbPath)
-
-        legacyPlaces = BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
-
-        pinnedSites = legacyPlaces
+        self.databasePrefix = databasePrefix
 
         do {
             let firefoxSuggestDatabaseName = "\(databasePrefix)_suggest.db"
@@ -154,6 +125,13 @@ open class MockProfile: Client.Profile {
             firefoxSuggest = try RustFirefoxSuggest(databasePath: firefoxSuggestDatabaseURL.path)
         } catch {
             fatalError("Failed to open Firefox Suggest database: \(error.localizedDescription)")
+        }
+
+        do {
+            directory = try files.getAndEnsureDirectory()
+        } catch {
+            XCTFail("Could not create directory at root path: \(error)")
+            fatalError("Could not create directory at root path: \(error)")
         }
     }
 
@@ -205,8 +183,10 @@ open class MockProfile: Client.Profile {
         return MockProfilePrefs()
     }()
 
-    lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
-    public lazy var autofill = RustAutofill(databasePath: autofillDbPath)
+    public lazy var autofill: RustAutofill = {
+        let autofillDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("autofill.db").path
+        return RustAutofill(databasePath: autofillDbPath)
+    }()
 
     public lazy var readingList: ReadingList = {
         return SQLiteReadingList(db: self.readingListDB)
@@ -214,6 +194,52 @@ open class MockProfile: Client.Profile {
 
     public lazy var recentlyClosedTabs: ClosedTabsStore = {
         return ClosedTabsStore(prefs: self.prefs)
+    }()
+
+    public lazy var logins: RustLogins = {
+        let oldLoginsDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
+        try? files.remove("\(databasePrefix)_logins.db")
+
+        let newLoginsDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
+        try? files.remove("\(databasePrefix)_loginsPerField.db")
+
+        let logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
+        _ = logins.reopenIfClosed()
+
+        return logins
+    }()
+
+    lazy var database: BrowserDB = {
+        BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
+    }()
+
+    lazy var readingListDB: BrowserDB = {
+        BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
+    }()
+
+    public lazy var places: RustPlaces = {
+        let placesDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
+        try? files.remove("\(databasePrefix)_places.db")
+
+        let places = RustPlaces(databasePath: placesDatabasePath)
+        _ = places.reopenIfClosed()
+
+        return places
+    }()
+
+    public lazy var tabs: RustRemoteTabs = {
+        let tabsDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
+        let tabs = RustRemoteTabs(databasePath: tabsDbPath)
+
+        return tabs
+    }()
+
+    fileprivate lazy var legacyPlaces: PinnedSites = {
+        BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
+    }()
+
+    public lazy var pinnedSites: PinnedSites = {
+        legacyPlaces
     }()
 
     public func hasSyncAccount(completion: @escaping (Bool) -> Void) {

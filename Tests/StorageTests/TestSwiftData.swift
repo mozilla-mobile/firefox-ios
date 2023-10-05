@@ -14,14 +14,14 @@ class TestSwiftData: XCTestCase {
     var urlCounter = 1
     var testDB: String!
 
-    override func setUp() {
+    override func setUpWithError() throws {
         super.setUp()
         let files = MockFiles()
         do {
             try files.remove("testSwiftData.db")
         } catch _ {
         }
-        testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
+        testDB = (try (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB, schema: BrowserSchema(), files: files)
         let table = BrowserSchema()
 
@@ -105,8 +105,8 @@ class TestSwiftData: XCTestCase {
             return
         }
         db.withConnection(SwiftData.Flags.readWriteCreate) { db in
-            try! db.executeChange("CREATE TABLE foo ( bar TEXT, baz INTEGER )")
-            try! db.executeChange("INSERT INTO foo VALUES (NULL, 1), ('here', 2)")
+            try db.executeChange("CREATE TABLE foo ( bar TEXT, baz INTEGER )")
+            try db.executeChange("INSERT INTO foo VALUES (NULL, 1), ('here', 2)")
             let shouldBeString = db.executeQuery("SELECT bar FROM foo WHERE baz = 2", factory: { (row) in row["bar"] }).asArray()[0]
             guard let s = shouldBeString as? String else {
                 XCTFail("Couldn't cast.")

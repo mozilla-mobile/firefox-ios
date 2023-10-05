@@ -17,7 +17,10 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidCloseLastTab(toast: ButtonToast)
 }
 
-class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
+class LegacyGridTabViewController: UIViewController,
+                                   TabTrayViewDelegate,
+                                   Themeable,
+                                   EmptyPrivateTabsViewDelegate {
     struct UX {
         static let cornerRadius: CGFloat = 6
         static let textBoxHeight: CGFloat = 32
@@ -91,11 +94,9 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
         return true
     }
 
-    private lazy var emptyPrivateTabsView: LegacyEmptyPrivateTabsView = {
-        let emptyView = LegacyEmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self,
-                                            action: #selector(didTapLearnMore),
-                                            for: .touchUpInside)
+    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
+        let emptyView = EmptyPrivateTabsView()
+        emptyView.delegate = self
         return emptyView
     }()
 
@@ -314,13 +315,10 @@ class LegacyGridTabViewController: UIViewController, TabTrayViewDelegate, Themea
         collectionView.reloadData()
     }
 
-    @objc
-    func didTapLearnMore() {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        if let langID = Locale.preferredLanguages.first {
-            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
-            openNewTab(learnMoreRequest, isPrivate: tabDisplayManager.isPrivate)
-        }
+    // MARK: EmptyPrivateTabsViewDelegate
+    func didTapLearnMore(urlRequest: URLRequest) {
+        openNewTab(urlRequest,
+                   isPrivate: tabDisplayManager.isPrivate)
     }
 
     func closeTabsTrayBackground() {
