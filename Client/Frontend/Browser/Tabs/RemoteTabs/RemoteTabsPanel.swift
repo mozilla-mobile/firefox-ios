@@ -14,7 +14,7 @@ class RemoteTabsPanel: UIViewController,
                        RemotePanelDelegateProvider {
     private(set) var state: RemoteTabsPanelState
     var tableViewController: RemoteTabsTableViewController
-    var remotePanelDelegate: RemotePanelDelegate?
+    weak var remotePanelDelegate: RemotePanelDelegate?
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?

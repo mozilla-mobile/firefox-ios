@@ -238,15 +238,9 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(savedToReadingList)
 
         // Remove the item from reading list
-        if processIsTranslatedStr() == m1Rosetta {
-            savedToReadingList.press(forDuration: 2)
-            mozWaitForElementToExist(app.otherElements["Remove"])
-            app.otherElements["Remove"].tap()
-        } else {
-            savedToReadingList.swipeLeft()
-            mozWaitForElementToExist(app.buttons["Remove"])
-            app.buttons["Remove"].tap()
-        }
+        savedToReadingList.swipeLeft()
+        mozWaitForElementToExist(app.buttons["Remove"])
+        app.buttons["Remove"].tap()
     }
 
      func selectOptionFromContextMenu(option: String) {

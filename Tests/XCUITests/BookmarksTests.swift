@@ -210,18 +210,9 @@ class BookmarksTests: BaseTestCase {
     func testDeleteBookmarkSwiping() {
         addNewBookmark()
         // Remove by swiping
-        if processIsTranslatedStr() != m1Rosetta {
-            app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-            mozWaitForElementToExist(app.buttons["Delete"])
-            app.buttons["Delete"].tap()
-        } else {
-            // Workaround for deleting bookmark by using edit button
-            app.buttons["Edit"].tap()
-            mozWaitForElementToExist(app.tables["Bookmarks List"].buttons["Delete BBC"])
-            app.tables["Bookmarks List"].buttons["Delete BBC"].tap()
-            mozWaitForElementToExist(app.buttons["Delete"])
-            app.buttons["Delete"].tap()
-        }
+        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
+        mozWaitForElementToExist(app.buttons["Delete"])
+        app.buttons["Delete"].tap()
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)
     }
@@ -304,14 +295,8 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
 
         // Delete the Bookmark added, check it is removed
-        if processIsTranslatedStr() == m1Rosetta {
-            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].press(forDuration: 1)
-            mozWaitForElementToExist(app.tables["Context Menu"])
-            app.tables.otherElements["Remove Bookmark"].tap()
-        } else {
-            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-            app.buttons["Delete"].tap()
-        }
+        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+        app.buttons["Delete"].tap()
         mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }

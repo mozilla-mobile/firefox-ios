@@ -55,9 +55,6 @@ let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 
-let m1Rosetta = "rosetta"
-let intel = "intel"
-
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
 // This list should only be for settings screens that can be navigated to
@@ -319,12 +316,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarLongPressMenu) { screenState in
         let menu = app.tables["Context Menu"].firstMatch
 
-        if !(processIsTranslatedStr() == m1Rosetta) {
-            if #unavailable(iOS 16) {
-                screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
-                    UIPasteboard.general.string = userState.url ?? defaultURL
-                    menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
-                }
+        if #unavailable(iOS 16) {
+            screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
+                UIPasteboard.general.string = userState.url ?? defaultURL
+                                menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
             }
         }
 
@@ -644,13 +639,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             let tablesQuery = app.tables
             let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
             sleep(1)
-            if processIsTranslatedStr() == m1Rosetta {
-                customengineurlTextView.typeText(searchEngineUrl)
-            } else {
-                UIPasteboard.general.string = searchEngineUrl
-                customengineurlTextView.press(forDuration: 1.0)
-                app.staticTexts["Paste"].tap()
-            }
+            UIPasteboard.general.string = searchEngineUrl
+            customengineurlTextView.press(forDuration: 1.0)
+            app.staticTexts["Paste"].tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -1003,9 +994,7 @@ extension MMNavigator where T == FxUserState {
         userState.url = urlString
         userState.waitForLoading = waitForLoading
         // Using LoadURLByTyping for Intel too on Xcode14
-        if processIsTranslatedStr() == m1Rosetta {
-            performAction(Action.LoadURLByTyping)
-        } else if #available (iOS 16, *) {
+        if #available (iOS 16, *) {
             performAction(Action.LoadURLByTyping)
         } else {
             performAction(Action.LoadURL)
@@ -1050,38 +1039,6 @@ extension MMNavigator where T == FxUserState {
             self.goto(TabTray)
             self.goto(HomePanelsScreen)
         }
-    }
-}
-
-// Temporary code to detect the MacOS where tests are running
-// and so load websites one way or the other as per the condition above
-// in the openURLBar method. This is due to issue:
-// https://github.com/mozilla-mobile/firefox-ios/issues/9910#issue-1120710818
-
-let NATIVE_EXECUTION    = Int32(0)
-let EMULATED_EXECUTION   = Int32(1)
-
-func processIsTranslated() -> Int32 {
-    var ret = Int32(0)
-    var size = ret.bitWidth
-    let result = sysctlbyname("sysctl.proc_translated", &ret, &size, nil, 0)
-    if result == -1 {
-        if errno == ENOENT {
-          return 0
-        }
-        return -1
-      }
-    return ret
-}
-
-func processIsTranslatedStr() -> String {
-    switch processIsTranslated() {
-    case NATIVE_EXECUTION:
-        return "native"
-    case EMULATED_EXECUTION:
-        return "rosetta"
-    default:
-        return "unkown"
     }
 }
 
