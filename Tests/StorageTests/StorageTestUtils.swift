@@ -45,7 +45,7 @@ func populateHistoryForFrecencyCalculations(_ places: RustPlaces, siteCount coun
 }
 
 func addVisitForSite(_ site: Site, intoPlaces places: RustPlaces, atTime: MicrosecondTimestamp) {
-    let visit = VisitObservation(url: site.url, visitType: VisitTransition.link, at: Int64(atTime) / 1000)
+    let visit = VisitObservation(url: site.url, visitType: .link, at: Int64(atTime) / 1000)
     _ = places.applyObservation(visitObservation: visit).value
 }
 

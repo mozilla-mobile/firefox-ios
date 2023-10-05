@@ -353,17 +353,17 @@ open class BrowserProfile: Profile {
 
     @objc
     func onLocationChange(notification: NSNotification) {
-        if let v = notification.userInfo!["visitType"] as? Int,
-           let visitType = VisitType(rawValue: v),
-           let url = notification.userInfo!["url"] as? URL, !isIgnoredURL(url),
-           let title = notification.userInfo!["title"] as? NSString {
+        let v = notification.userInfo!["visitType"] as? Int
+        let visitType = VisitType.fromRawValue(rawValue: v)
+        if let url = notification.userInfo!["url"] as? URL, !isIgnoredURL(url),
+        let title = notification.userInfo!["title"] as? NSString {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 let result = self.places.applyObservation(
                     visitObservation: VisitObservation(
                         url: url.description,
                         title: title as String,
-                        visitType: VisitTransition.fromVisitType(visitType: visitType)
+                        visitType: visitType
                     )
                 )
                 result.upon { result in
