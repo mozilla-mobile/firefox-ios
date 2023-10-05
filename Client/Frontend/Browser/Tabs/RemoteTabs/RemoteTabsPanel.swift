@@ -47,6 +47,7 @@ class RemoteTabsPanel: UIViewController,
 
     deinit {
         if isReduxIntegrationEnabled {
+            store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
             store.unsubscribe(self)
         }
     }
