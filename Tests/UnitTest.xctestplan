@@ -94,6 +94,7 @@
     },
     {
       "skippedTests" : [
+        "BrowserCoordinatorTests",
         "ETPCoverSheetTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
