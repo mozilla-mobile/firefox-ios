@@ -24,13 +24,6 @@ public protocol DynamicFontHelper {
     static func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle,
                                   size: CGFloat
     ) -> UIFont
-
-    /// Returns the size of the string using the specified font.
-    /// - Parameters:
-    ///   - string: The string whose size you want to compute.
-    ///   - font: The UIFont to use when measuring the string.
-    /// - Returns: The size of the string for the specified font.
-    static func sizeOfString(_ string: String, usingFont font: UIFont) -> CGSize
 }
 
 public extension DynamicFontHelper {
@@ -67,10 +60,5 @@ public struct DefaultDynamicFontHelper: DynamicFontHelper {
 
     public static func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {
         return preferredFont(withTextStyle: textStyle, size: size, weight: .bold)
-    }
-
-    public static func sizeOfString(_ string: String, usingFont font: UIFont) -> CGSize {
-        let attributes: [NSAttributedString.Key: Any] = [.font: font]
-        return string.size(withAttributes: attributes)
     }
 }
