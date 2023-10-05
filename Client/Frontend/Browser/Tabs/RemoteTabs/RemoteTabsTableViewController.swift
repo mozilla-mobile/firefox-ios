@@ -6,6 +6,7 @@ import Common
 import Storage
 import Shared
 import Redux
+import SiteImageView
 
 class RemoteTabsTableViewController: UITableViewController,
                                      Themeable,
@@ -18,6 +19,7 @@ class RemoteTabsTableViewController: UITableViewController,
     // MARK: - Properties
 
     private(set) var state: RemoteTabsPanelState
+    private var hiddenSections = Set<Int>()
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -190,7 +192,11 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func hideTableViewSection(_ section: Int) {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
+        if hiddenSections.contains(section) {
+            hiddenSections.remove(section)
+        } else {
+            hiddenSections.insert(section)
+        }
 
         refreshUI()
     }
@@ -215,31 +221,97 @@ class RemoteTabsTableViewController: UITableViewController,
     // MARK: - UITableView
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if isShowingEmptyView {
-            return 0
-        } else {
-            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
-            return 0
-        }
+        guard !isShowingEmptyView else { return 0 }
+
+        return state.clientAndTabs.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isShowingEmptyView {
-            return 0
-        } else {
-            // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
-            return 0
-        }
+        guard !isShowingEmptyView, !hiddenSections.contains(section) else { return 0 }
+        return state.clientAndTabs[section].tabs.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !isShowingEmptyView else { assertionFailure("Empty view state should always have 0 sections/rows."); return .build() }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
 
-        // TODO: Show clients and tabs. Forthcoming. [FXIOS-6942]
-        return UITableViewCell(frame: .zero)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !isShowingEmptyView else {
+            assertionFailure("Empty state; expecting 0 sections/rows.")
+            return .build()
+        }
+
+        let identifier = TwoLineImageOverlayCell.cellIdentifier
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        guard let cell = dequeuedCell as? TwoLineImageOverlayCell else { return UITableViewCell() }
+
+        let tab = state.clientAndTabs[indexPath.section].tabs[indexPath.item]
+        configureCell(cell, for: tab)
+
+        return cell
+    }
+
+    private func configureCell(_ cell: TwoLineImageOverlayCell, for tab: RemoteTab) {
+        cell.titleLabel.text = tab.title
+        cell.descriptionLabel.text = tab.URL.absoluteString
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.URL.absoluteString))
+        cell.accessoryView = nil
+        cell.applyTheme(theme: themeManager.currentTheme)
+    }
+
+    @objc
+    private func sectionHeaderTapped(sender: UIGestureRecognizer) {
+         guard let section = sender.view?.tag else { return }
+         hideTableViewSection(section)
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let tab = state.clientAndTabs[indexPath.section].tabs[indexPath.item]
+        // Remote panel delegate for cell selection
+        remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidSelectURL(tab.URL, visitType: VisitType.typed)
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
+
+        let clientTabs = state.clientAndTabs[section]
+        let client = clientTabs.client
+
+        let isCollapsed = hiddenSections.contains(section)
+        let collapsibleState = isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down
+        let headerModel = SiteTableViewHeaderModel(title: client.name,
+                                                   isCollapsible: true,
+                                                   collapsibleState: collapsibleState)
+        headerView.configure(headerModel)
+        headerView.showBorder(for: .bottom, true)
+        headerView.showBorder(for: .top, section != 0)
+
+        // Configure tap to collapse/expand section
+        headerView.tag = section
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(sectionHeaderTapped(sender:)))
+        headerView.addGestureRecognizer(tapGesture)
+        headerView.applyTheme(theme: themeManager.currentTheme)
+        /*
+        * (Copied from legacy RemoteTabsClientAndTabsDataSource)
+        * A note on timestamps.
+        * We have access to two timestamps here: the timestamp of the remote client record,
+        * and the set of timestamps of the client's tabs.
+        * Neither is "last synced". The client record timestamp changes whenever the remote
+        * client uploads its record (i.e., infrequently), but also whenever another device
+        * sends a command to that client -- which can be much later than when that client
+        * last synced.
+        * The client's tabs haven't necessarily changed, but it can still have synced.
+        * Ideally, we should save and use the modified time of the tabs record itself.
+        * This will be the real time that the other client uploaded tabs.
+        */
+        return headerView
     }
 }
