@@ -119,8 +119,7 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests\/testUpdateLogin()",
-        "TestBrowserDB\/testMovesDB()"
+        "RustLoginsTests\/testUpdateLogin()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
