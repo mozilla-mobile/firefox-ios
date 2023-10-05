@@ -203,6 +203,16 @@ extension Profile {
 
 open class BrowserProfile: Profile {
     private let logger: Logger
+    private lazy var directory: String = {
+        do {
+            return try self.files.getAndEnsureDirectory()
+        } catch {
+            logger.log("Could not create directory at root path: \(error)",
+                       level: .fatal,
+                       category: .setup)
+            fatalError("Could not create directory at root path: \(error)")
+        }
+    }()
     fileprivate let name: String
     fileprivate let keychain: MZKeychainWrapper
     var isShutdown = false
@@ -452,8 +462,8 @@ open class BrowserProfile: Profile {
         return SQLiteMetadata(db: self.database)
     }()
 
-    lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
-    lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
+    lazy var browserDbPath = URL(fileURLWithPath: directory).appendingPathComponent("browser.db").path
+    lazy var placesDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("places.db").path
     lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
@@ -472,11 +482,11 @@ open class BrowserProfile: Profile {
         )
     }
 
-    lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
+    lazy var tabsDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("tabs.db").path
 
     lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-    lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
+    lazy var autofillDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("autofill.db").path
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
@@ -619,10 +629,10 @@ open class BrowserProfile: Profile {
 
     lazy var logins: RustLogins = {
         // TODO: #16076 - We should avoid force unwraps
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("loginsPerField.db").path
+        let databasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("loginsPerField.db").path
         // Though we don't migrate SQLCipher DBs anymore, we keep this call to
         // delete any existing DBs if they still exist
-        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
+        let sqlCipherDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("logins.db").path
 
         return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
     }()

@@ -60,7 +60,11 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                     try? FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
-                try! FileManager.default.copyItem(at: input, to: output)
+                do {
+                    try FileManager.default.copyItem(at: input, to: output)
+                } catch {
+                    fatalError("Could not copy items from \(input) to \(output): \(error)")
+                }
 
                 // Tests currently load a browserdb history, we make sure we migrate it everytime
                 UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
@@ -83,11 +87,20 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 let enumerator = FileManager.default.enumerator(atPath: "\(tabDirectory)/window-data")
                 let filePaths = enumerator?.allObjects as? [String]
                 filePaths?.filter { $0.contains("window-") }.forEach { item in
-                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)"))
+                    do {
+                        try FileManager.default.removeItem(at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)"))
+                    } catch {
+                        fatalError("Could not remove items at \(tabDirectory)/window-data/\(item): \(error)")
+                    }
                 }
 
                 try? FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
-                try! FileManager.default.copyItem(at: input, to: outputFile)
+
+                do {
+                    try FileManager.default.copyItem(at: input, to: outputFile)
+                } catch {
+                    fatalError("Could not copy items at from \(input) to \(outputFile): \(error)")
+                }
             }
         }
 
@@ -173,13 +186,17 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         let rootPath = appRootDir()
         let manager = FileManager.default
         let documents = URL(fileURLWithPath: rootPath)
-        let docContents = try! manager.contentsOfDirectory(atPath: rootPath)
-        for content in docContents {
-            do {
-                try manager.removeItem(at: documents.appendingPathComponent(content))
-            } catch {
-                // Couldn't delete some document contents.
+        do {
+            let docContents = try manager.contentsOfDirectory(atPath: rootPath)
+            for content in docContents {
+                do {
+                    try manager.removeItem(at: documents.appendingPathComponent(content))
+                } catch {
+                    // Couldn't delete some document contents.
+                }
             }
+        } catch {
+            fatalError("Could not retrieve documents at \(rootPath): \(error)")
         }
     }
 
