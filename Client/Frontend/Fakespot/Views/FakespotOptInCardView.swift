@@ -26,8 +26,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16
         static let disclaimerStackViewSpacing: CGFloat = 3
-        static let optInImageViewIpadTopSpace: CGFloat = 5
-        static let optInImageViewIpadBottomSpace: CGFloat = 15
+        static let optInImageViewIpadTopSpace: CGFloat = 30
+        static let optInImageViewIpadBottomSpace: CGFloat = 40
     }
 
     private var viewModel: FakespotOptInCardViewModel?
@@ -168,16 +168,10 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     }
 
     private func addVerticalSpaceToImageView() {
-        guard UIDevice.current.userInterfaceIdiom == .pad,
-                let imageIndex = contentStackView.subviews.firstIndex(of: optInImageView) else { return }
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
 
-        let topSpacer = UIView()
-        let bottomSpacer = UIView()
-
-        topSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadTopSpace).isActive = true
-        bottomSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadBottomSpace).isActive = true
-        contentStackView.insertArrangedSubview(topSpacer, at: imageIndex)
-        contentStackView.insertArrangedSubview(bottomSpacer, at: imageIndex + 2)
+        contentStackView.setCustomSpacing(UX.optInImageViewIpadTopSpace, after: learnMoreButton)
+        contentStackView.setCustomSpacing(UX.optInImageViewIpadBottomSpace, after: optInImageView)
     }
 
     // MARK: Button Actions
