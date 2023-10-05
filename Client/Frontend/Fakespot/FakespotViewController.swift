@@ -208,8 +208,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         let textSize = DefaultDynamicFontHelper.sizeOfString(titleLabel.text!, usingFont: titleLabel.font)
+        let maxLabelWidth = titleStackView.frame.width - betaLabel.frame.width
 
-        if contentSizeCategory.isAccessibilityCategory || textSize.width > titleStackView.frame.width {
+        if contentSizeCategory.isAccessibilityCategory || textSize.width > maxLabelWidth {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
             betaView.layer.borderWidth = UX.betaBorderWidthA11ySize
