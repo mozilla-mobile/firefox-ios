@@ -41,22 +41,36 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
 
     init(_ appState: AppState) {
-//        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
-//            self.init()
-//            logger.log("Error retrieving screen state",
-//                       level: .debug,
-//                       category: .redux)
-//        }
-//        self.init(
-        self.init()
+        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
+            self.init()
+            return
+        }
+
+        self.init(refreshState: panelState.refreshState,
+                  clientAndTabs: panelState.clientAndTabs,
+                  allowsRefresh: panelState.allowsRefresh,
+                  showingEmptyState: panelState.showingEmptyState,
+                  syncIsSupported: panelState.syncIsSupported)
     }
 
     init() {
-        refreshState = .loaded
-        clientAndTabs = []
-        allowsRefresh = false
-        showingEmptyState = .noTabs
-        syncIsSupported = false
+        self.init(refreshState: .loaded,
+                  clientAndTabs: [],
+                  allowsRefresh: true,
+                  showingEmptyState: .noTabs,
+                  syncIsSupported: true)
+    }
+
+    init(refreshState: RemoteTabsPanelRefreshState,
+         clientAndTabs: [ClientAndTabs],
+         allowsRefresh: Bool,
+         showingEmptyState: RemoteTabsPanelEmptyState?,
+         syncIsSupported: Bool) {
+        self.refreshState = refreshState
+        self.clientAndTabs = clientAndTabs
+        self.allowsRefresh = allowsRefresh
+        self.showingEmptyState = showingEmptyState
+        self.syncIsSupported = syncIsSupported
     }
 
     static let reducer: Reducer<Self> = { state, action in
