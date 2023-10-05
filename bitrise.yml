@@ -1538,8 +1538,8 @@ workflows:
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
-            DEVICE_MODEL="iphone13pro"
-            DEVICE_VERSION="15.7"
+            DEVICE_MODEL="iphone14pro" # if updating device model and version, also update firebase-performance.kind
+            DEVICE_VERSION="16.6"
             XCRESULT_PATH="gs://$GOOGLE_CLOUD_BUCKET/$RESULTS_DIR/$DEVICE_MODEL-$DEVICE_VERSION-en-portrait/TestLogs/"
 
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
