@@ -33,18 +33,35 @@ enum RemoteTabsPanelEmptyState {
 }
 
 /// State for RemoteTabsPanel. WIP.
-struct RemoteTabsPanelState {
+struct RemoteTabsPanelState: ScreenState, Equatable {
     let refreshState: RemoteTabsPanelRefreshState
     let clientAndTabs: [ClientAndTabs]
     let allowsRefresh: Bool                                // True if `hasSyncableAccount()`
     let showingEmptyState: RemoteTabsPanelEmptyState?      // If showing empty (or error) state
     let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
 
-    static func emptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(refreshState: .loaded,
-                                    clientAndTabs: [],
-                                    allowsRefresh: false,
-                                    showingEmptyState: .noTabs,
-                                    syncIsSupported: true)
+    init(_ appState: AppState) {
+//        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
+//            self.init()
+//            logger.log("Error retrieving screen state",
+//                       level: .debug,
+//                       category: .redux)
+//        }
+//        self.init(
+        self.init()
+    }
+
+    init() {
+        refreshState = .loaded
+        clientAndTabs = []
+        allowsRefresh = false
+        showingEmptyState = .noTabs
+        syncIsSupported = false
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        switch action {
+        default: return state
+        }
     }
 }

@@ -263,8 +263,7 @@ class TabTrayViewController: UIViewController,
         case .privateTabs:
             return TabDisplayViewController(isPrivateMode: true)
         case .syncedTabs:
-            let state = RemoteTabsPanelState.emptyState() // Temporary. [FXIOS-6942]
-            let panel = RemoteTabsPanel(state: state)
+            let panel = RemoteTabsPanel()
             panel.remotePanelDelegate = self
             return panel
         }
