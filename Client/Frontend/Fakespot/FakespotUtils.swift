@@ -31,6 +31,6 @@ public struct FakespotUtils {
 
     public static var fakespotUrl: URL? {
         // Returns the predefined URL associated to Fakespot button action.
-        return URL(string: "https://www.fakespot.com/review-checker?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+        return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
     }
 }
