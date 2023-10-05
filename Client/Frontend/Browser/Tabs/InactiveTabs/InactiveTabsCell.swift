@@ -33,10 +33,14 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     func configure(text: String) {
         setupView()
 
-//        applyTheme(theme: <#T##Theme#>)
+        titleLabel.text = text
     }
 
-    func applyTheme(theme: Theme) {}
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer2
+        bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
+    }
 
     private func setupView() {
         containerView.addSubviews(titleLabel)
@@ -73,8 +77,6 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
         ])
-
-//        leftImageView.setContentHuggingPriority(.required, for: .vertical)
 
         selectedBackgroundView = selectedView
     }

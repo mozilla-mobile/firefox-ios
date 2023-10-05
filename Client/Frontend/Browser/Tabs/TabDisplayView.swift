@@ -19,7 +19,7 @@ class TabDisplayView: UIView,
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds,
-                                              collectionViewLayout: UICollectionViewFlowLayout())
+                                              collectionViewLayout: compositionalLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(cellType: InactiveTabsCell.self)
         collectionView.register(InactiveTabsHeaderView.self,
@@ -60,7 +60,7 @@ class TabDisplayView: UIView,
         ])
     }
 
-    private func createLayout() -> UICollectionViewLayout {
+    private func compositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             let section = self.getSectionLayout(sectionIndex)
@@ -84,12 +84,14 @@ class TabDisplayView: UIView,
 
     // MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 5
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
+        else { return UICollectionViewCell() }
 
+        cell.configure(text: "test")
         return cell
     }
 
