@@ -49,6 +49,99 @@ class TestBrowserDB: XCTestCase {
         }
     }
 
+    func mozWaitForCondition(_ condition: @autoclosure () -> Bool, timeout: TimeInterval = 5.0, errorMessage: String) {
+        let startTime = Date()
+
+        while !condition() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(errorMessage)
+                break
+            }
+            usleep(10000)
+        }
+    }
+
+    func mozWaitForEqual<T: Equatable>(_ expected: T, _ actual: @autoclosure () -> T?, timeout: TimeInterval = 5.0, errorMessage: String) {
+        let startTime = Date()
+
+        while actual() != expected {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(errorMessage)
+                break
+            }
+            usleep(10000)
+        }
+    }
+
+    func mozWaitForComparison(_ comparison: @autoclosure () -> ComparisonResult, toBe result: ComparisonResult, timeout: TimeInterval = 5.0, errorMessage: String) {
+        let startTime = Date()
+
+        while comparison() != result {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(errorMessage)
+                break
+            }
+            usleep(10000)
+        }
+    }
+
+    func mozWaitForNotEqual<T: Equatable>(_ value1: @autoclosure () -> T, _ value2: @autoclosure () -> T, timeout: TimeInterval = 5.0, errorMessage: String) {
+        let startTime = Date()
+
+        while value1() == value2() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(errorMessage)
+                break
+            }
+            usleep(10000)
+        }
+    }
+
+    func mozWaitForAttributes(file: String, errorMessage: String, timeout: TimeInterval = 5.0) -> [FileAttributeKey: Any]? {
+        let startTime = Date()
+
+        var attributes: [FileAttributeKey: Any]?
+        while Date().timeIntervalSince(startTime) < timeout {
+            do {
+                attributes = try self.files.attributesForFileAt(relativePath: file)
+                if !attributes!.isEmpty {
+                    return attributes
+                }
+            } catch {
+                // Simply continue the loop in case of an error.
+            }
+
+            // Pause for a fraction of a second to avoid tight-loop spinning.
+            Thread.sleep(forTimeInterval: 0.05)
+        }
+
+        // If the loop exits without returning, it means the condition was not satisfied within the timeout.
+        print(errorMessage)
+        return nil
+    }
+
+    @discardableResult
+    func waitForNotification(name: Notification.Name, timeout: TimeInterval = 5.0, action: () -> Void) -> Bool {
+        let semaphore = DispatchSemaphore(value: 0)
+        var observed = false
+        let token = NotificationCenter.default.addObserver(forName: name, object: nil, queue: nil) { _ in
+            observed = true
+            semaphore.signal()
+        }
+
+        action()  // Trigger the action after setting up the observer.
+
+        defer { NotificationCenter.default.removeObserver(token) }
+
+        _ = semaphore.wait(timeout: .now() + timeout)
+
+        if !observed {
+            XCTFail("Waited for \(name.rawValue) notification but did not receive it.")
+        }
+
+        return observed
+    }
+
     func testUpgradeV33toV34RemovesLongURLs() {
         let db = BrowserDB(filename: "v33.db", schema: BrowserSchema(), files: SupportingFiles())
         let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1", args: nil, factory: { row in
@@ -66,56 +159,56 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
         XCTAssertEqual(remaining.0, "http://example.com/short")
     }
+
     // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testMovesDB() throws {
         var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
-        db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
-        XCTAssertTrue(files.exists("foo.db"))
-        XCTAssertTrue(files.exists("foo.db-shm"))
-        XCTAssertTrue(files.exists("foo.db-wal"))
+        db.run("CREATE TABLE foo (bar TEXT)").succeeded()
 
-        // Grab a pointer to the -shm so we can compare later.
+        mozWaitForCondition(files.exists("foo.db"), errorMessage: "Expected foo.db to exist")
+        mozWaitForCondition(files.exists("foo.db-shm"), errorMessage: "Expected foo.db-shm to exist")
+        mozWaitForCondition(files.exists("foo.db-wal"), errorMessage: "Expected foo.db-wal to exist")
+
         let shmAAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
         let creationA = shmAAttributes[FileAttributeKey.creationDate] as! Date
         let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
 
-        XCTAssertFalse(files.exists("foo.db.bak.1"))
-        XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
-        XCTAssertFalse(files.exists("foo.db.bak.1-wal"))
+        mozWaitForCondition(!files.exists("foo.db.bak.1"), errorMessage: "Expected foo.db.bak.1 not to exist")
+        mozWaitForCondition(!files.exists("foo.db.bak.1-shm"), errorMessage: "Expected foo.db.bak.1-shm not to exist")
+        mozWaitForCondition(!files.exists("foo.db.bak.1-wal"), errorMessage: "Expected foo.db.bak.1-wal not to exist")
 
         let center = NotificationCenter.default
         let listener = MockListener()
         center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
-        // It'll still fail, but it moved our old DB.
-        // Our current observation is that closing the DB deletes the .shm file and also
-        // checkpoints the WAL.
-        db.forceClose()
+        waitForNotification(name: .DatabaseWasClosed) {
+                db.forceClose()
+        }
 
         db = BrowserDB(filename: "foo.db", schema: MockFailingSchema(), files: self.files)
-        db.run("CREATE TABLE foo (bar TEXT)").failed() // This won't actually write since we'll get a failed connection
+        db.run("CREATE TABLE foo (bar TEXT)").failed() // This might not actually write since we'll get a failed connection
+
         db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
-        db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
+        db.run("CREATE TABLE foo (bar TEXT)").succeeded()
 
-        XCTAssertTrue(files.exists("foo.db"))
-        XCTAssertTrue(files.exists("foo.db-shm"))
-        XCTAssertTrue(files.exists("foo.db-wal"))
+        mozWaitForCondition(files.exists("foo.db"), errorMessage: "Expected foo.db to exist")
+        mozWaitForCondition(files.exists("foo.db-shm"), errorMessage: "Expected foo.db-shm to exist")
+        mozWaitForCondition(files.exists("foo.db-wal"), errorMessage: "Expected foo.db-wal to exist")
 
-        // But now it's been reopened, it's not the same -shm!
         let shmBAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
         let creationB = shmBAttributes[FileAttributeKey.creationDate] as! Date
         let inodeB = (shmBAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
-        XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.orderedDescending)
-        XCTAssertNotEqual(inodeA, inodeB)
 
-        XCTAssertTrue(files.exists("foo.db.bak.1"))
-        XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
-        XCTAssertFalse(files.exists("foo.db.bak.1-wal"))
+        mozWaitForComparison(creationA.compare(creationB), toBe: .orderedAscending, errorMessage: "Expected creationA to be ordered ascending compared to creationB")
+        mozWaitForNotEqual(inodeA, inodeB, errorMessage: "Expected inodeA to not be equal to inodeB")
 
-        // The right notification was issued.
-        XCTAssertEqual("foo.db", (listener.notification?.object as? String))
+        mozWaitForCondition(files.exists("foo.db.bak.1"), errorMessage: "Expected foo.db.bak.1 to exist")
+        mozWaitForCondition(!files.exists("foo.db.bak.1-shm"), errorMessage: "Expected foo.db.bak.1-shm not to exist")
+        mozWaitForCondition(!files.exists("foo.db.bak.1-wal"), errorMessage: "Expected foo.db.bak.1-wal not to exist")
+
+        mozWaitForEqual("foo.db", listener.notification?.object as? String, errorMessage: "Expected listener.notification?.object to equal foo.db")
     }
 
     func testConcurrentQueriesDealloc() {
