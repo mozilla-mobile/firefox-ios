@@ -1,17 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "mobile iOS no-analysis 1x 280x108 light 72dpi MARGIN.png",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "mobile iOS no-analysis 1x 280x108 dark 72dpi MARGIN.png",
+      "filename" : "mobile iOS no-analysis 1x 280x108 72dpi MARGIN.png",
       "idiom" : "universal"
     }
   ],
