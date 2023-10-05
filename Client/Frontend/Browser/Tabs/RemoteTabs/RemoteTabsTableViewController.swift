@@ -124,8 +124,9 @@ class RemoteTabsTableViewController: UITableViewController,
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        emptyView.applyTheme(theme: themeManager.currentTheme)
-        // TODO: Ensure theme applied to any custom cells.
+        let theme = themeManager.currentTheme
+        emptyView.applyTheme(theme: theme)
+        tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
     private func configureEmptyView() {
