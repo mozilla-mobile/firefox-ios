@@ -26,7 +26,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16
         static let disclaimerStackViewSpacing: CGFloat = 3
-        static let optInImageViewIpadVerticalSpace: CGFloat = 5
+        static let optInImageViewIpadTopSpace: CGFloat = 5
+        static let optInImageViewIpadBottomSpace: CGFloat = 15
     }
 
     private var viewModel: FakespotOptInCardViewModel?
@@ -173,8 +174,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         let topSpacer = UIView()
         let bottomSpacer = UIView()
 
-        topSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadVerticalSpace).isActive = true
-        bottomSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadVerticalSpace).isActive = true
+        topSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadTopSpace).isActive = true
+        bottomSpacer.heightAnchor.constraint(equalToConstant: UX.optInImageViewIpadBottomSpace).isActive = true
         contentStackView.insertArrangedSubview(topSpacer, at: imageIndex)
         contentStackView.insertArrangedSubview(bottomSpacer, at: imageIndex + 2)
     }
