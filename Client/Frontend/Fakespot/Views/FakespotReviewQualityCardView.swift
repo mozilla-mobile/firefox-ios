@@ -91,7 +91,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var subHeadlineLabel: UILabel = .build { label in
-        let text = String.Shopping.ReviewQualityCardSubHeadlineLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.subHeadlineLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -172,7 +171,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var adjustedRatingLabel: UILabel = .build { label in
-        let text = String.Shopping.ReviewQualityCardAdjustedRatingLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.adjustedRatingLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
