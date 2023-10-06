@@ -26,7 +26,8 @@ class TabDisplayView: UIView,
 
     var tabDisplayState: TabDisplayViewState
     var inactiveTabsSectionManager: InactiveTabsSectionManager
-    var theme: Theme!
+    var theme: Theme?
+    static let defaultIdentifier = "DefaultCollectionReusableView"
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds,
@@ -44,7 +45,7 @@ class TabDisplayView: UIView,
         collectionView.register(
             UICollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: "default") // cell used if anything goes wrong so we don't crash
+            withReuseIdentifier: TabDisplayView.defaultIdentifier)
 
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
@@ -134,7 +135,9 @@ class TabDisplayView: UIView,
                 withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier,
                 for: indexPath) as? InactiveTabsHeaderView {
                 view.state = tabDisplayState.isInactiveTabsExpanded ? .down : .trailing
-                view.applyTheme(theme: theme)
+                if let theme = theme {
+                    view.applyTheme(theme: theme)
+                }
                 view.moreButton.isHidden = false
                 view.moreButton.addTarget(self,
                                           action: #selector(toggleInactiveTab),
@@ -149,19 +152,21 @@ class TabDisplayView: UIView,
                        ofKind: UICollectionView.elementKindSectionFooter,
                        withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
                        for: indexPath) as? InactiveTabsFooterView {
-                footerView.applyTheme(theme: theme)
+                if let theme = theme {
+                    footerView.applyTheme(theme: theme)
+                }
                 footerView.buttonClosure = {}
                 return footerView
             }
 
         default: return collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: "default",
+            withReuseIdentifier: TabDisplayView.defaultIdentifier,
             for: indexPath)
         }
         return collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: "default",
+            withReuseIdentifier: TabDisplayView.defaultIdentifier,
             for: indexPath)
     }
 
@@ -170,7 +175,9 @@ class TabDisplayView: UIView,
         else { return UICollectionViewCell() }
 
         cell.configure(text: inactiveTabsSectionManager.items[indexPath.row])
-        cell.applyTheme(theme: theme)
+        if let theme = theme {
+            cell.applyTheme(theme: theme)
+        }
         return cell
     }
 
