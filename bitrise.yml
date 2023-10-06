@@ -55,8 +55,8 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-            ls /Users/vagrant/git/DerivedData/DerivedData
-            ls /Users/vagrant/git/DerivedData/DerivedData/Build/Products
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
 
             echo "-- compress --"
 
