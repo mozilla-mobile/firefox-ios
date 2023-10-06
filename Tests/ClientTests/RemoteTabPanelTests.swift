@@ -40,7 +40,7 @@ final class RemoteTabPanelTests: XCTestCase {
     // MARK: - Private
 
     private func generateEmptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState.emptyState()
+        return RemoteTabsPanelState()
     }
 
     private func generateStateOneClientTwoTabs() -> RemoteTabsPanelState {
