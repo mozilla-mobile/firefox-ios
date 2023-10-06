@@ -15,6 +15,13 @@ enum AppScreenState: Equatable {
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         }
     }
+
+    var associatedAppScreen: AppScreen {
+        switch self {
+        case .themeSettings: return .themeSettings
+        case .remoteTabsPanel: return .remoteTabsPanel
+        }
+    }
 }
 
 struct ActiveScreensState: Equatable {
@@ -33,20 +40,12 @@ struct ActiveScreensState: Equatable {
 
         if let action = action as? ActiveScreensStateAction {
             switch action {
+            case .closeScreen(let screenType):
+                screens = screens.filter({ return $0.associatedAppScreen != screenType })
             case .showScreen(.themeSettings):
                 screens += [.themeSettings(ThemeSettingsState())]
-            case .closeScreen(.themeSettings):
-                screens = screens.filter({
-                    if case .themeSettings = $0 { return false }
-                    return true
-                })
             case .showScreen(.remoteTabsPanel):
                 screens += [.remoteTabsPanel(RemoteTabsPanelState())]
-            case .closeScreen(.remoteTabsPanel):
-                screens = screens.filter({
-                    if case .remoteTabsPanel = $0 { return false }
-                    return true
-                })
             }
         }
 
