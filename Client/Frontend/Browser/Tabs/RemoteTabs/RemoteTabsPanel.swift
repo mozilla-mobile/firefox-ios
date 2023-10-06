@@ -119,8 +119,8 @@ class RemoteTabsPanel: UIViewController,
 
     private func subscribeRedux() {
         guard isReduxIntegrationEnabled else { return }
-        store.dispatch(RemoteTabsPanelAction.panelDidAppear)
         store.dispatch(ActiveScreensStateAction.showScreen(.remoteTabsPanel))
+        store.dispatch(RemoteTabsPanelAction.panelDidAppear)
         store.subscribe(self, transform: {
             return $0.select(RemoteTabsPanelState.init)
         })
