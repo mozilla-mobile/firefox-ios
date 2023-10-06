@@ -1504,7 +1504,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
 
             cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.6-arm64.xctestrun
+            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
             mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - cache-pull@2.7.2:
         inputs:
