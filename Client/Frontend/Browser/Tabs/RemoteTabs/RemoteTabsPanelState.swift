@@ -7,9 +7,11 @@ import Redux
 import Shared
 import Storage
 
-/// Status of tab refresh.
+/// Status of Sync tab refresh.
 enum RemoteTabsPanelRefreshState {
-    case loaded
+    /// Not performing any type of refresh.
+    case idle
+    /// Currently performing a refresh of the user's tabs.
     case refreshing
 }
 
@@ -54,7 +56,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     }
 
     init() {
-        self.init(refreshState: .loaded,
+        self.init(refreshState: .idle,
                   clientAndTabs: [],
                   allowsRefresh: true,
                   showingEmptyState: .noTabs,
@@ -79,6 +81,17 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         case RemoteTabsPanelAction.refreshTabs:
             // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
             let newState = RemoteTabsPanelState(refreshState: .refreshing,
+                                                clientAndTabs: state.clientAndTabs,
+                                                allowsRefresh: state.allowsRefresh,
+                                                showingEmptyState: state.showingEmptyState,
+                                                syncIsSupported: state.syncIsSupported)
+            return newState
+        case RemoteTabsPanelAction.refreshDidFail:
+            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
+            fallthrough
+        case RemoteTabsPanelAction.refreshDidSucceed:
+            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
+            let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 clientAndTabs: state.clientAndTabs,
                                                 allowsRefresh: state.allowsRefresh,
                                                 showingEmptyState: state.showingEmptyState,
