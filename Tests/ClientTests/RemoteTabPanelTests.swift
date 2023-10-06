@@ -77,6 +77,7 @@ final class RemoteTabPanelTests: XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) -> RemoteTabsPanel {
         let subject = RemoteTabsPanel()
+        subject.newState(state: state)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
