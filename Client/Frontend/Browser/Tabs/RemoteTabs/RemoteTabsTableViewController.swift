@@ -149,6 +149,11 @@ class RemoteTabsTableViewController: UITableViewController,
 
     @objc
     func onRefreshPulled() {
+        guard state.allowsRefresh else {
+            endRefreshing()
+            return
+        }
+        
         refreshControl?.beginRefreshing()
         remoteTabsPanel?.tableViewControllerDidPullToRefresh()
     }
