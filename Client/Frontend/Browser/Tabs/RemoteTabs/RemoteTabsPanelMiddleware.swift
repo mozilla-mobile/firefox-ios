@@ -29,29 +29,31 @@ class RemoteTabsPanelMiddleware {
     // MARK: - Internal Utilities
 
     private func refreshTabs(updateCache: Bool = false) {
-        guard profile.hasSyncableAccount() else {
-            store.dispatch(RemoteTabsPanelAction.refreshDidFail)
-            return
-        }
-        
-        // TODO: Work-in-progress. [FXIOS-7509]
-        profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
-            guard let clientAndTabs = result.successValue else {
+        ensureMainThread { [self] in
+            guard profile.hasSyncableAccount() else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail)
                 return
             }
-
-            if updateCache {
-                self?.profile.getClientsAndTabs().uponQueue(.main) { result in
-                    guard let clientAndTabs = result.successValue else {
-                        store.dispatch(RemoteTabsPanelAction.refreshDidFail)
-                        return
+            
+            // TODO: Work-in-progress. [FXIOS-7509]
+            profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
+                guard let clientAndTabs = result.successValue else {
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail)
+                    return
+                }
+                
+                if updateCache {
+                    self?.profile.getClientsAndTabs().uponQueue(.main) { result in
+                        guard let clientAndTabs = result.successValue else {
+                            store.dispatch(RemoteTabsPanelAction.refreshDidFail)
+                            return
+                        }
+                        
+                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed)
                     }
-
+                } else {
                     store.dispatch(RemoteTabsPanelAction.refreshDidSucceed)
                 }
-            } else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidSucceed)
             }
         }
     }
