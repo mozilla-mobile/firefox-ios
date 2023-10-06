@@ -1504,7 +1504,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
 
             cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
+            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.6-arm64.xctestrun
             mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - cache-pull@2.7.2:
         inputs:
@@ -1538,8 +1538,8 @@ workflows:
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
-            DEVICE_MODEL="iphone13pro"
-            DEVICE_VERSION="15.7"
+            DEVICE_MODEL="iphone14pro" # if updating device model and version, also update firebase-performance.kind
+            DEVICE_VERSION="16.6"
             XCRESULT_PATH="gs://$GOOGLE_CLOUD_BUCKET/$RESULTS_DIR/$DEVICE_MODEL-$DEVICE_VERSION-en-portrait/TestLogs/"
 
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
@@ -1547,16 +1547,13 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
-            # Firebase returns a non-zero exit code on test failure, which causes the script to exit
-            #     leaving FIREBASE_XCRESULT_PATH empty for the next step.
-            # We need to ignore any non-zero exit code for now until Firebase issues are fixed
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test /Users/vagrant/git/Fennec_Enterprise.zip \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
-                --results-dir="$RESULTS_DIR" || true)
+                --results-dir="$RESULTS_DIR")
 
 
             FIREBASE_XCRESULT_PATH=$($HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult")
