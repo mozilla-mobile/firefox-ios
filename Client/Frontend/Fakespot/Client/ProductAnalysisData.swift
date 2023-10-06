@@ -32,7 +32,7 @@ struct ProductAnalysisData: Codable {
     }
 
     var cannotBeAnalyzedCardVisible: Bool {
-        needsAnalysis == false && pageNotSupported == true
+        pageNotSupported == true
     }
 
     var notEnoughReviewsCardVisible: Bool {
