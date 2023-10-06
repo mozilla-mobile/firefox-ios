@@ -24,6 +24,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
         titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .headline,
             size: UX.titleFontSize)
+        titleLabel.text = String.TabsTrayInactiveTabsSectionTitle
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.minimumScaleFactor = UX.titleMinimumScaleFactor
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -67,15 +68,12 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
         ])
     }
 
-    func configure(title: String?) {
-        titleLabel.text = title
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
     }
 
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         moreButton.tintColor = theme.colors.textPrimary
     }

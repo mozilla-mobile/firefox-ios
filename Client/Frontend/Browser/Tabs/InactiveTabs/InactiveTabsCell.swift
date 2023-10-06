@@ -10,7 +10,6 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let imageSize: CGFloat = 28
         static let labelTopBottomMargin: CGFloat = 11
-        static let imageTopBottomMargin: CGFloat = 10
         static let titleFontSize: CGFloat = 14
         static let imageViewLeadingConstant: CGFloat = 16
         static let separatorHeight: CGFloat = 0.5
@@ -26,7 +25,6 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             withTextStyle: .caption1,
             size: UX.titleFontSize)
         label.textAlignment = .natural
-        label.numberOfLines = 1
         label.contentMode = .center
     }
 
@@ -34,12 +32,15 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         setupView()
 
         titleLabel.text = text
+        leftImageView.image = UIImage(systemName: "globe")
     }
 
     func applyTheme(theme: Theme) {
+        containerView.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         backgroundColor = theme.colors.layer2
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
+        selectedView.backgroundColor = .green
     }
 
     private func setupView() {
@@ -60,17 +61,15 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             leftImageView.widthAnchor.constraint(equalToConstant: UX.imageSize),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                    constant: UX.imageViewLeadingConstant),
-            leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
-                                               constant: UX.imageTopBottomMargin),
-            leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
-                                                  constant: UX.imageTopBottomMargin),
+            leftImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            leftImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor,
+                                                    constant: -UX.imageViewLeadingConstant),
 
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
                                             constant: UX.labelTopBottomMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                                constant: -UX.labelTopBottomMargin),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
             bottomSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorHeight),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
@@ -78,6 +77,7 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
         ])
 
+        leftImageView.setContentHuggingPriority(.required, for: .vertical)
         selectedBackgroundView = selectedView
     }
 }

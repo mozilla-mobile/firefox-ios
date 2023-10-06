@@ -86,6 +86,7 @@ class TabDisplayViewController: UIViewController,
 
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: themeManager.currentTheme)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

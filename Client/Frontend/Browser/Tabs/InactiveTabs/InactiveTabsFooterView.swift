@@ -6,31 +6,39 @@ import Common
 import UIKit
 
 class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
-    private struct UX {
+    struct UX {
+        static let imageSize: CGFloat = 29
         static let borderViewMargin: CGFloat = 16
-        static let titleFontSize: CGFloat = 17
         static let buttonInset: CGFloat = 14
         static let buttonImagePadding: CGFloat = 11
+        static let buttonFontSize: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 13.5
+        static let buttonBorderWidth: CGFloat = 1
     }
-
+    // MARK: - Properties
     var buttonClosure: (() -> Void)?
-    private let containerView = UIView()
 
-    private lazy var roundedButton: UIButton = .build { button in
+    let containerView = UIView()
+    var shouldLeftAlignTitle = false
+
+    // MARK: - UI Elements
+    private lazy var roundedButton: UIButton = {
+        let button = UIButton()
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .body,
-            size: UX.titleFontSize)
+            size: UX.buttonFontSize)
+        button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail
-        button.layer.cornerRadius = 13.5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.clear.cgColor
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabDeleteButton
-        button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.layer.borderWidth = UX.buttonBorderWidth
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-    }
+        return button
+    }()
 
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -43,11 +51,17 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
     func setupView() {
         addSubview(roundedButton)
 
-        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: UX.buttonInset,
-                                                                left: UX.buttonInset,
-                                                                bottom: UX.buttonInset,
-                                                                right: UX.buttonInset),
-                                imageTitlePadding: UX.buttonImagePadding)
+        roundedButton.contentEdgeInsets = UIEdgeInsets(
+            top: UX.buttonInset,
+            left: UX.buttonInset,
+            bottom: UX.buttonInset,
+            right: UX.buttonInset)
+        roundedButton.titleEdgeInsets = UIEdgeInsets(
+            top: 0,
+            left: UX.buttonImagePadding,
+            bottom: 0,
+            right: UX.buttonImagePadding
+        )
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
@@ -56,22 +70,22 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
             roundedButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             roundedButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: trailingOffSet),
             roundedButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -leadingOffSet),
-            roundedButton.topAnchor.constraint(equalTo: topAnchor, constant: UX.borderViewMargin),
+            roundedButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             roundedButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
         ])
-    }
-
-    @objc
-    func buttonPressed() {
-        self.buttonClosure?()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
     }
 
+    @objc
+    func buttonPressed() {
+        buttonClosure?()
+    }
+
     func applyTheme(theme: Theme) {
-        backgroundColor = .clear
+        backgroundColor = theme.colors.layer2
         roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
         roundedButton.backgroundColor = theme.colors.layer3
         roundedButton.tintColor = theme.colors.textPrimary
