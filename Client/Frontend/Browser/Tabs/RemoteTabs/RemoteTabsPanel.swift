@@ -134,6 +134,9 @@ class RemoteTabsPanel: UIViewController,
     func newState(state: RemoteTabsPanelState) {
         self.state = state
         tableViewController.newState(state: state)
+        if state.refreshState != .refreshing {
+            tableViewController.endRefreshing()
+        }
     }
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
