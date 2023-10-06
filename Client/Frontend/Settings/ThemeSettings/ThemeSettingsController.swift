@@ -76,6 +76,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if isReduxIntegrationEnabled {
+            store.dispatch(ActiveScreensStateAction.closeScreen(.themeSettings))
             store.unsubscribe(self)
         }
     }

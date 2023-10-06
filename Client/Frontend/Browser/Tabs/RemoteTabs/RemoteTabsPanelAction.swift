@@ -5,7 +5,9 @@
 import Common
 import Redux
 
+/// Defines actions sent to Redux for Sync tab in tab tray
 enum RemoteTabsPanelAction: Action {
+    case panelDidAppear
     case refreshCachedTabs
     case refreshTabs
 }

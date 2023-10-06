@@ -40,7 +40,7 @@ final class RemoteTabPanelTests: XCTestCase {
     // MARK: - Private
 
     private func generateEmptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState.emptyState()
+        return RemoteTabsPanelState()
     }
 
     private func generateStateOneClientTwoTabs() -> RemoteTabsPanelState {
@@ -76,7 +76,8 @@ final class RemoteTabPanelTests: XCTestCase {
     private func createSubject(state: RemoteTabsPanelState,
                                file: StaticString = #file,
                                line: UInt = #line) -> RemoteTabsPanel {
-        let subject = RemoteTabsPanel(state: state)
+        let subject = RemoteTabsPanel()
+        subject.newState(state: state)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
