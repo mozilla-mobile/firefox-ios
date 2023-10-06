@@ -10958,6 +10958,7 @@
 			buildPhases = (
 				3BFE4B031D342FB800DDF53F /* Sources */,
 				3BFE4B041D342FB800DDF53F /* Frameworks */,
+				871F34442AD0A291006E34EE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -11862,6 +11863,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $PWD/bin/nimbus-fml.sh --verbose\nfi\n";
+		};
+		871F34442AD0A291006E34EE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Signing RustMozillaAppServices manually until we find what is replacing binary or stripping signing...\"\ncodesign --force --deep --sign - --preserve-metadata=identifier,entitlements --timestamp=none \"${BUILT_PRODUCTS_DIR}/RustMozillaAppServices.framework/RustMozillaAppServices\"\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
