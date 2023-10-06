@@ -2290,7 +2290,8 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.originalURLFromErrorPage != nil {
+       /// If the selectedTab is showing an error page trigger a reload
+        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
             selected?.reloadPage()
             return
         }
