@@ -77,8 +77,13 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
-            // TODO. Forthcoming. [FXIOS-7509]
-            return state
+            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
+            let newState = RemoteTabsPanelState(refreshState: .refreshing,
+                                                clientAndTabs: state.clientAndTabs,
+                                                allowsRefresh: state.allowsRefresh,
+                                                showingEmptyState: state.showingEmptyState,
+                                                syncIsSupported: state.syncIsSupported)
+            return newState
         default:
             return state
         }
