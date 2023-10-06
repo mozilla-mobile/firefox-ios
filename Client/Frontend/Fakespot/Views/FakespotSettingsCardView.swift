@@ -55,14 +55,6 @@ class FakespotSettingsCardViewModel {
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
         dismissViewController?(.interactionWithALink)
     }
-
-    func recordTelemetryForShoppingOptedOut() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .shoppingSettingsCardTurnOffButton
-        )
-    }
 }
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
@@ -207,7 +199,6 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
         viewModel?.dismissViewController?(.optingOutOfTheFeature)
-        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System
