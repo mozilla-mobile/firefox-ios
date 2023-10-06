@@ -633,7 +633,7 @@ class BrowserViewController: UIViewController,
 
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
+              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
         else { return }
 
         contextHintVC.configure(

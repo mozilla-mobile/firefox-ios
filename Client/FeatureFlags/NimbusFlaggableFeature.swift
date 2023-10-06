@@ -27,7 +27,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reduxIntegration
     case reportSiteIssue
     case searchHighlights
-    case isToolbarCFREnabled
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
@@ -81,7 +80,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .creditCardAutofillStatus,
                 .credentialAutofillCoordinatorRefactor,
                 .fakespotFeature,
-                .isToolbarCFREnabled,
                 .libraryCoordinatorRefactor,
                 .reduxIntegration,
                 .reportSiteIssue,
