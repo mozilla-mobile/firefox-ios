@@ -16,6 +16,7 @@ enum AppScreenState: Equatable {
         }
     }
 
+    /// Returns the matching AppScreen enum for a given AppScreenState
     var associatedAppScreen: AppScreen {
         switch self {
         case .themeSettings: return .themeSettings
