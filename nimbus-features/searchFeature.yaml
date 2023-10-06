@@ -16,6 +16,7 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: true
+              is-toolbar-cfr-on: false
       - channel: developer
         value:
           awesome-bar:
@@ -23,6 +24,7 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
+              is-toolbar-cfr-on: false
       - channel: beta
         value:
           awesome-bar:
@@ -30,6 +32,7 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
+              is-toolbar-cfr-on: false
 
 objects:
     AwesomeBar:
