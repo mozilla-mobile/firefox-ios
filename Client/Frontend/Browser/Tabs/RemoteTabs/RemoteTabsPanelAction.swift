@@ -10,4 +10,6 @@ enum RemoteTabsPanelAction: Action {
     case panelDidAppear
     case refreshCachedTabs
     case refreshTabs
+    case refreshDidFail
+    case refreshDidSucceed
 }

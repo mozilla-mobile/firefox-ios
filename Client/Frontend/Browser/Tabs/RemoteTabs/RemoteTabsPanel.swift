@@ -52,7 +52,17 @@ class RemoteTabsPanel: UIViewController,
         }
     }
 
+    // MARK: - Actions
+
+    func tableViewControllerDidPullToRefresh() {
+        refreshTabs()
+    }
+
     // MARK: - Internal Utilities
+
+    private func refreshTabs() {
+        store.dispatch(RemoteTabsPanelAction.refreshTabs)
+    }
 
     private func observeNotifications() {
         // TODO: State to be provided by forthcoming Redux updates. TBD.
@@ -72,9 +82,7 @@ class RemoteTabsPanel: UIViewController,
     func notificationReceived(_ notification: Notification) {
         let name = notification.name
         if name == .FirefoxAccountChanged || name == .ProfileDidFinishSyncing {
-            ensureMainThread {
-                self.tableViewController.refreshTabs(state: self.state)
-            }
+            refreshTabs()
         }
     }
 
@@ -107,15 +115,12 @@ class RemoteTabsPanel: UIViewController,
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
         tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs(state: state)
+
+        // Matches previous legacy behavior; refresh tabs after theme apply.
+        refreshTabs()
     }
 
     // MARK: - Redux
-
-    private func forceRefreshTabs() {
-        tableViewController.refreshTabs(state: state, updateCache: true)
-    }
 
     private func subscribeRedux() {
         guard isReduxIntegrationEnabled else { return }

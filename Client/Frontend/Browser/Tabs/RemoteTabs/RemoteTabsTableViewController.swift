@@ -94,8 +94,6 @@ class RemoteTabsTableViewController: UITableViewController,
         if state.allowsRefresh && refreshControl == nil {
             addRefreshControl()
         }
-
-        refreshTabs(state: state, updateCache: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -152,7 +150,7 @@ class RemoteTabsTableViewController: UITableViewController,
     @objc
     func onRefreshPulled() {
         refreshControl?.beginRefreshing()
-        refreshTabs(state: state, updateCache: true)
+        remoteTabsPanel?.tableViewControllerDidPullToRefresh()
     }
 
     func endRefreshing() {
@@ -163,30 +161,6 @@ class RemoteTabsTableViewController: UITableViewController,
         if !state.allowsRefresh {
             removeRefreshControl()
         }
-    }
-
-    func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
-        // TODO: Forthcoming as part of ongoing tab tray Redux refactors. [FXIOS-6942] & [FXIOS-7509]
-
-        reloadUI()
-    }
-
-    func refreshTabs(state: RemoteTabsPanelState, updateCache: Bool = false, completion: (() -> Void)? = nil) {
-        ensureMainThread { [self] in
-            self.state = state
-            performRefresh(updateCache: updateCache, completion: completion)
-        }
-    }
-
-    private func performRefresh(updateCache: Bool, completion: (() -> Void)?) {
-        // Short circuit if the user is not logged in
-        guard state.allowsRefresh else {
-            endRefreshing()
-            return
-        }
-
-        // TODO: Send Redux action to get clients & tabs, update once state received. Forthcoming.  [FXIOS-6942] & [FXIOS-7509]
-        // store.dispatch(RemoteTabsPanelAction.refreshCachedTabs)
     }
 
     @objc

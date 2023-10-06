@@ -76,7 +76,11 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
         switch action {
-        default: return state
+        case RemoteTabsPanelAction.refreshTabs:
+            // TODO. Forthcoming. [FXIOS-7509]
+            return state
+        default:
+            return state
         }
     }
 }
