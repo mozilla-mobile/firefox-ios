@@ -106,7 +106,8 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertFalse(app.switches.element.exists)
     }
 
-    func testBasicMoreInfo() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
+    func testProtectionLevelMoreInfoMenu() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
@@ -129,7 +130,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Tracking Protection"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1510468
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307061
     func testLockIconSecureConnection() {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()
