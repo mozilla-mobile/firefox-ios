@@ -411,6 +411,8 @@ extension TelemetryWrapper {
         case shoppingLearnMoreButton = "shopping-learn-more-button"
         case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
+        case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
+        case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1107,10 +1109,15 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
-        case(.information, .view, .shoppingProductPageVisits, _, _):
+        case (.information, .view, .shoppingProductPageVisits, _, _):
             GleanMetrics.Shopping.productPageVisits.add()
         case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
             GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
+        case (.action, .tap, .shoppingNoAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
+        case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
