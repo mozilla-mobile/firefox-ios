@@ -18,6 +18,14 @@ struct FakespotNoAnalysisCardViewModel {
     let inProgressHeadlineText: String = .Shopping.NoAnalysisCardInProgressTitle
     let inProgressBodyText: String = .Shopping.NoAnalysisCardInProgressBodyLabel
     var onTapStartAnalysis: (() -> Void)?
+
+    func recordStartAnalysisTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .shoppingNoAnalysisCardViewPrimaryButton
+        )
+    }
 }
 
 final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
@@ -140,6 +148,7 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     @objc
     private func didTapStartAnalysis() {
         viewModel?.onTapStartAnalysis?()
+        viewModel?.recordStartAnalysisTelemetry()
         updateLayoutForInProgress()
     }
 

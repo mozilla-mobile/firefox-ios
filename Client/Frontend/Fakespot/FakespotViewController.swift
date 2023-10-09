@@ -354,6 +354,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                     guard let self else { return }
                     view?.configure(self.viewModel.analysisProgressViewModel)
                     self.onNeedsAnalysisTap()
+                    self?.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
                 viewModel.onAnalysisStatusChange = { [weak view, weak self] in

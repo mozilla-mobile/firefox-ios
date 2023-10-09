@@ -865,6 +865,32 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-29"
 
+  surface_analyze_reviews_none_available_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      analyzer button from the 'No Analysis Card'.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
+  surface_reanalyze_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      primary button from the 'Needs Analysis Card'.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
 # Key Commands
 key_commands:
   press_key_command_action:
