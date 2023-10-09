@@ -851,6 +851,53 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-29"
+    
+shopping.settings:
+  nimbus_disabled_shopping:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if Nimbus has disabled the use the shopping component.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  component_opted_out:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has opted out of using the shopping component.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  user_has_onboarded:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has completed the Shopping product Onboarding
+      experience.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
 
   surface_analyze_reviews_none_available_clicked:
     type: event
