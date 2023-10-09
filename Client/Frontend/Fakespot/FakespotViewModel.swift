@@ -27,12 +27,14 @@ class FakespotViewModel {
                 }
 
                 if product.cannotBeAnalyzedCardVisible {
+                    recordNoReviewReliabilityAvailableTelemetry()
                     return [
                         .messageCard(.productCannotBeAnalyzed),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
                 } else if product.notAnalyzedCardVisible {
+                    recordNoReviewReliabilityAvailableTelemetry()
                     // Don't show not analyzed message card if analysis is in progress
                     var cards: [ViewElement] = []
 
@@ -48,6 +50,7 @@ class FakespotViewModel {
                     ]
                     return cards
                 } else if product.notEnoughReviewsCardVisible {
+                    recordNoReviewReliabilityAvailableTelemetry()
                     return [
                         .messageCard(.notEnoughReviews),
                         .qualityDeterminationCard,
@@ -311,6 +314,14 @@ class FakespotViewModel {
     }
 
     // MARK: - Telemetry
+    private func recordNoReviewReliabilityAvailableTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet
+        )
+    }
+
     func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -327,14 +338,6 @@ class FakespotViewModel {
                 category: .action,
                 method: .tap,
                 object: .shoppingNeedsAnalysisCardViewPrimaryButton
-            )
-        case .noAnalysisCard,
-             .messageCard(.notEnoughReviews),
-             .messageCard(.productCannotBeAnalyzed):
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .view,
-                object: .shoppingBottomSheet
             )
         default: break
         }
