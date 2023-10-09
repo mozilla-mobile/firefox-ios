@@ -3778,7 +3778,7 @@ extension String {
         public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v118
             tableName: "Shopping",
-            value: "Checking review quality",
+            value: "This could take about 60 seconds.",
             comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Label.Title.v119
