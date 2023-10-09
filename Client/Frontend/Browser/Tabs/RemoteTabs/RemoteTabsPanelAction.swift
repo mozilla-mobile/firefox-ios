@@ -11,6 +11,6 @@ enum RemoteTabsPanelAction: Action {
     case panelDidAppear
     case refreshCachedTabs
     case refreshTabs
-    case refreshDidFail
+    case refreshDidFail(RemoteTabsPanelEmptyStateReason)
     case refreshDidSucceed([ClientAndTabs])
 }

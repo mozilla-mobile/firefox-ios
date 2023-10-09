@@ -31,21 +31,29 @@ class RemoteTabsPanelMiddleware {
     private func refreshTabs(updateCache: Bool = false) {
         ensureMainThread { [self] in
             guard profile.hasSyncableAccount() else {
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail)
+                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
                 return
             }
 
-            // TODO: Work-in-progress. [FXIOS-7509]
+            let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
+
+            guard syncEnabled else {
+                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.syncDisabledByUser))
+                return
+            }
+
             profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
                 guard let clientAndTabs = result.successValue else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail)
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                     return
                 }
+
+                // TODO: Update UI with cached results initially? [FXIOS-7509]
 
                 if updateCache {
                     self?.profile.getClientsAndTabs().uponQueue(.main) { result in
                         guard let clientAndTabs = result.successValue else {
-                            store.dispatch(RemoteTabsPanelAction.refreshDidFail)
+                            store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                             return
                         }
 
