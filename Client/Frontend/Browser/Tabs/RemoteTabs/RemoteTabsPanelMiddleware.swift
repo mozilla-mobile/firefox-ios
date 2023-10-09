@@ -18,7 +18,6 @@ class RemoteTabsPanelMiddleware {
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
-            // TODO: WIP; additional changes forthcoming. [FXIOS-7509]
             self.refreshTabs(updateCache: true)
             break
         default:
