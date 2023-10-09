@@ -27,18 +27,18 @@ final class FakespotOptInCardViewModelTests: XCTestCase {
     func testGetWebsites() {
         viewModel.productSitename = "bestbuy"
         var websites = viewModel.orderWebsites
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.bestbuy.title)
+        XCTAssertEqual(websites[0], PartnerWebsite.bestbuy.title)
 
         viewModel.productSitename = "amazon"
         websites = viewModel.orderWebsites
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.title)
+        XCTAssertEqual(websites[0], PartnerWebsite.amazon.title)
 
         viewModel.productSitename = "walmart"
         websites = viewModel.orderWebsites
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.walmart.title)
+        XCTAssertEqual(websites[0], PartnerWebsite.walmart.title)
 
         viewModel.productSitename = "randomShop"
         websites = viewModel.orderWebsites
-        XCTAssertEqual(websites[0], FakespotOptInCardViewModel.PartnerWebsite.amazon.title) // as "Amazon" is the default
+        XCTAssertEqual(websites[0], PartnerWebsite.amazon.title) // as "Amazon" is the default
     }
 }

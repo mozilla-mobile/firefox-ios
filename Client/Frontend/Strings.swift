@@ -3798,17 +3798,17 @@ extension String {
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Headline.Label.v119
             tableName: "Shopping",
-            value: "We use AI technology from Fakespot by Mozilla to analyze the reliability of product reviews. This analysis will only help you assess review quality, not product quality.",
+            value: "We use AI technology from Fakespot by Mozilla to check the reliability of product reviews. This will only help you assess review quality, not product quality.",
             comment: "Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardSubHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.v119
             tableName: "Shopping",
-            value: "We assign each product’s reviews a letter grade from A to F.",
-            comment: "Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            value: "We assign each product’s reviews a *letter grade* from A to F.",
+            comment: "Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardReliableReviewsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.ReliableReviews.Label.v119
             tableName: "Shopping",
-            value: "We believe the reviews to be reliable",
+            value: "Reliable reviews. We believe the reviews are likely from real customers who left honest, unbiased reviews.",
             comment: "Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardMixedReviewsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.MixedReviews.Label.v119
@@ -3818,18 +3818,18 @@ extension String {
         public static let ReviewQualityCardUnreliableReviewsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.UnreliableReviews.Label.v119
             tableName: "Shopping",
-            value: "We believe the reviews are unreliable",
+            value: "Unreliable reviews. We believe the reviews are likely fake or from biased reviewers.",
             comment: "Unnreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardAdjustedRatingLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.AdjustedRating.Label.v119
             tableName: "Shopping",
-            value: "The adjusted rating is based only on reviews we believe to be reliable.",
-            comment: "Adujusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            value: "*The adjusted rating* is based only on reviews we believe to be reliable.",
+            comment: "Adujusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Highlights.Label.v119
             tableName: "Shopping",
-            value: "Highlights are from Amazon reviews within the last 80 days that we believe to be reliable.",
-            comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
+            comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.LearnMoreButton.Title.v119
             tableName: "Shopping",
