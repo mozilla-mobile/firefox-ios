@@ -317,7 +317,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
-         case .progressAnalysisCard:
+        case .progressAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
              viewModel.onAnalysisStatusChange = { [weak view, weak self] in
                  self?.onAnalysisStatusChange(sender: view)
