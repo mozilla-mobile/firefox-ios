@@ -306,9 +306,25 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             return view
 
         case .noAnalysisCard:
-            let view: FakespotNoAnalysisCardView = .build()
-            view.configure(viewModel.noAnalysisCardViewModel)
-            return view
+             let view: FakespotNoAnalysisCardView = .build()
+             viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak view, weak self] in
+                 view?.updateLayoutForInProgress()
+                 self?.onNeedsAnalysisTap()
+             }
+             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                 self?.onAnalysisStatusChange(sender: view)
+             }
+             view.configure(viewModel.noAnalysisCardViewModel)
+             return view
+
+         case .progressAnalysisCard:
+             let view: FakespotNoAnalysisCardView = .build()
+             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
+                 self?.onAnalysisStatusChange(sender: view)
+             }
+             view.configure(viewModel.noAnalysisCardViewModel)
+             view.updateLayoutForInProgress()
+             return view
 
         case .messageCard(let messageType):
             switch messageType {
@@ -335,7 +351,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             case .needsAnalysis:
                 let view: FakespotMessageCardView = .build()
                 viewModel.needsAnalysisViewModel.primaryAction = { [weak view, weak self] in
-                    self?.onNeedsAnalysisTap(sender: view)
+                    guard let self else { return }
+                    view?.configure(self.viewModel.analysisProgressViewModel)
+                    self.onNeedsAnalysisTap()
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
                 viewModel.onAnalysisStatusChange = { [weak view, weak self] in
@@ -363,8 +381,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         }
     }
 
-    private func onNeedsAnalysisTap(sender: FakespotMessageCardView?) {
-        sender?.configure(self.viewModel.analysisProgressViewModel)
+    private func onNeedsAnalysisTap() {
         viewModel.triggerProductAnalysis()
     }
 
