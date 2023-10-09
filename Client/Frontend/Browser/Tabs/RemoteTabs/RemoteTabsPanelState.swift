@@ -93,6 +93,12 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 clientAndTabs: newClientAndTabs,
                                                 showingEmptyState: nil)
             return newState
+        case RemoteTabsPanelAction.cachedResultsAvailable(let cachedClientAndTabs, let isUpdating):
+            let newState = RemoteTabsPanelState(refreshState: isUpdating ? .refreshing : .idle,
+                                                allowsRefresh: state.allowsRefresh,
+                                                clientAndTabs: cachedClientAndTabs,
+                                                showingEmptyState: nil)
+            return newState
         default:
             return state
         }

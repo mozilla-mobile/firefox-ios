@@ -35,7 +35,6 @@ class RemoteTabsPanelMiddleware {
             }
 
             let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
-
             guard syncEnabled else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(.syncDisabledByUser))
                 return
@@ -47,7 +46,7 @@ class RemoteTabsPanelMiddleware {
                     return
                 }
 
-                // TODO: Update UI with cached results initially? [FXIOS-7509]
+                store.dispatch(RemoteTabsPanelAction.cachedResultsAvailable(clientAndTabs, updateCache))
 
                 if updateCache {
                     self?.profile.getClientsAndTabs().uponQueue(.main) { result in
