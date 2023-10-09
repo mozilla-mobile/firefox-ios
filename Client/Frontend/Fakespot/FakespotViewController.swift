@@ -335,6 +335,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             case .needsAnalysis:
                 let view: FakespotMessageCardView = .build()
                 viewModel.needsAnalysisViewModel.primaryAction = { [weak view, weak self] in
+                    self?.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                     self?.onNeedsAnalysisTap(sender: view)
                 }
                 view.configure(viewModel.needsAnalysisViewModel)

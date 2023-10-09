@@ -309,6 +309,18 @@ class FakespotViewModel {
         )
     }
 
+    func recordTelemetry(for viewElement: ViewElement) {
+        switch viewElement {
+        case .messageCard(.needsAnalysis):
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .shoppingNeedsAnalysisCardViewPrimaryButton
+            )
+        default: break
+        }
+    }
+
     @available(iOS 15.0, *)
     func recordBottomSheetDisplayed(_ presentedController: UIPresentationController?) {
         let currentDetent = getCurrentDetent(for: presentedController)
