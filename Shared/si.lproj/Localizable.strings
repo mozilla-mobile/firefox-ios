@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "පරිලෝකනයට සූදානම්";
+"fxa.signin.ready-to-scan" = "පරිලෝකනයට ඔබන්න";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "වි-තැපෑල යොදාගන්න";
@@ -696,6 +696,9 @@
 
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "සුරැකි පිවිසුම් මෙහි පෙන්වනු ඇත. ෆයර්ෆොක්ස් වෙත පිවිසුම් වෙනත් උපාංගයක සුරැකුවේ නම්, ඔබගේ ෆයර්ෆොක්ස් ගිණුමට පිවිසෙන්න.";
+
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "සුරැකි පිවිසුම් මෙහි පෙන්වනු ඇත. %@ වෙත පිවිසුම් වෙනත් උපාංගයක සුරැකුවේ නම්, ඔබගේ ගිණුමට පිවිසෙන්න.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "පිවිසුම් හමු නොවිණි";
@@ -1100,7 +1103,7 @@
 "SendTo.NavBar.Title" = "පටිත්ත යවන්න";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "සමමුහූර්ත කිරීමට ඔබ මෙම ෆයර්ෆොක්ස් ගිණුමට වෙනත් කිසිදු උපාංගයක් සම්බන්ධ කර නැත.";
+"SendTo.NoDevicesFound.Message" = "සමමුහූර්තය සඳහා ඔබ මෙම ෆයර්ෆොක්ස් ගිණුමට වෙනත් කිසිදු උපාංගයක් සම්බන්ධ කර නැත.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "ෆයර්ෆොක්ස් විවෘත කර, සැකසුම් වෙත ගොස් ඉදිරියට යාමට පිවිසෙන්න.";

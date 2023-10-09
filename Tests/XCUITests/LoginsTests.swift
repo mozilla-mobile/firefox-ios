@@ -64,7 +64,7 @@ class LoginTest: BaseTestCase {
         passcodeInput.typeText("foo\n")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288345
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
         // Make sure you can access empty Login List from Browser Tab Menu
@@ -86,7 +86,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/52768
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306951
     // Smoketest
     func testSaveLogin() {
         closeURLBar()
@@ -126,7 +126,7 @@ class LoginTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288353
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306965
     func testDoNotSaveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
@@ -139,7 +139,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288348
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306962
     func testSavedLoginSelectUnselect() {
         saveLogin(givenUrl: testLoginPage)
         navigator.goto(SettingsScreen)
@@ -159,10 +159,12 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Delete"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288349
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306963
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
         mozWaitForElementToExist(app.alerts["Are you sure?"])
@@ -173,7 +175,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288354
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306966
     func testEditOneLoginEntry() throws {
         throw XCTSkip("This test has been disabled for some time now, investigation required")
             /*
@@ -190,11 +192,13 @@ class LoginTest: BaseTestCase {
             */
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2288351
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306964
     func testSearchLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // Enter on Search mode
+        mozWaitForElementToExist(app.searchFields["Filter"])
+        XCTAssert(app.searchFields["Filter"].isEnabled)
         app.searchFields["Filter"].tap()
         // Type Text that matches user, website
         app.searchFields["Filter"].typeText("test")
@@ -210,7 +214,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/52769
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306952
     // Smoketest
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
@@ -245,13 +249,19 @@ class LoginTest: BaseTestCase {
         // XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1468479
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306953
     // Smoketest
     func testCreateLoginManually() {
         closeURLBar()
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
+        mozWaitForElementToExist(app.navigationBars["Passwords"])
+        mozWaitForElementToExist(app.staticTexts["No logins found"])
+        mozWaitForElementToExist(app.buttons["Add"])
+        mozWaitForElementToExist(app.buttons["Edit"])
+        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertTrue(app.buttons["Add"].isEnabled)
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)

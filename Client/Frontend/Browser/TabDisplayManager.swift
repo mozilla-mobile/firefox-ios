@@ -321,7 +321,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         guard let currentlySelected = currentlySelected else { return nil }
 
         for index in 0..<collectionView.numberOfItems(inSection: inSection) {
-            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? TabTrayCell,
+            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? LegacyTabTrayCell,
                   cell.isSelectedTab,
                   let tab = dataStore.at(index),
                   tab != currentlySelected
@@ -853,16 +853,16 @@ extension LegacyTabDisplayManager: TabEventHandler {
     }
 
     private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell,
+        guard let cell = collectionView.cellForItem(at: indexPath) as? LegacyTabTrayCell,
               let tab = dataStore.at(indexPath.row) else { return }
 
         // Only update from nextTabIndex if needed
         guard forceUpdate || cell.isSelectedTab else { return }
 
         let isSelected = tab == tabManager.selectedTab
-        cell.configureWith(tab: tab,
-                           isSelected: isSelected,
-                           theme: theme)
+        cell.configureLegacyCellWith(tab: tab,
+                                     isSelected: isSelected,
+                                     theme: theme)
     }
 
     func removeAllTabsFromView() {

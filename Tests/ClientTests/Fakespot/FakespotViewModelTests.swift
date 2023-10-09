@@ -38,9 +38,9 @@ final class FakespotViewModelTests: XCTestCase {
         client.shouldThrowError = false
         let viewModel = FakespotViewModel(shoppingProduct: client)
 
-        await viewModel.fetchData()
+        await viewModel.fetchProductAnalysis()
         switch viewModel.state {
-        case .loaded(let data):
+        case .loaded(let data, _):
             XCTAssertNotNil(data)
         default:
             XCTFail("Unexpected state")
@@ -51,7 +51,7 @@ final class FakespotViewModelTests: XCTestCase {
         client.shouldThrowError = true
         let viewModel = FakespotViewModel(shoppingProduct: client)
 
-        await viewModel.fetchData()
+        await viewModel.fetchProductAnalysis()
         switch viewModel.state {
         case .error(let error):
             XCTAssertNotNil(error)

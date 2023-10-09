@@ -18,7 +18,7 @@ public func isIgnoredURL(_ url: URL) -> Bool {
 }
 
 public func isIgnoredURL(_ url: String) -> Bool {
-    if let url = URL(string: url) {
+    if let url = URL(string: url, invalidCharacters: false) {
         return isIgnoredURL(url)
     }
 

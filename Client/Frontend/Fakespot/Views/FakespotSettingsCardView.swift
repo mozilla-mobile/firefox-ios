@@ -23,10 +23,10 @@ class FakespotSettingsCardViewModel {
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl
-    var dismissViewController: (() -> Void)?
+    var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
 
     var isReviewQualityCheckOn: Bool {
-        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? true }
+        get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
         set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
     }
 
@@ -51,14 +51,17 @@ class FakespotSettingsCardViewModel {
 
     func onTapButton() {
         guard let footerActionUrl else { return }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
+        dismissViewController?(.interactionWithALink)
     }
 
     func recordTelemetryForShoppingOptedOut() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .shoppingSettingsCardTurnOffButton)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .shoppingSettingsCardTurnOffButton
+        )
     }
 }
 
@@ -203,7 +206,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
-        viewModel?.dismissViewController?()
+        viewModel?.dismissViewController?(.optingOutOfTheFeature)
         viewModel?.recordTelemetryForShoppingOptedOut()
     }
 

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Bydd mewngofnodi wedi'u cadw yn ymddangos yma. Os ydych wedi cadw eich mewngofnodion i Firefox ar ddyfais wahanol, mewngofnodwch i'ch Cyfrif Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Bydd mewngofnodi wedi'u cadw yn ymddangos yma. Os ydych wedi cadw eich mewngofnodion i %@ ar ddyfais wahanol, mewngofnodwch i'ch Cyfrif Firefox.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Heb ganfod mewngofnodion";
 

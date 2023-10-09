@@ -23,6 +23,14 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
+firefox-suggest-feature:
+  description: Configuration for the Firefox Suggest feature.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    status:
+      type: boolean
+      description: "Whether the feature is enabled. When Firefox Suggest is enabled, Firefox will download and store new search suggestions in the background, and show additional Search settings to control which suggestions appear in the awesomebar. When Firefox Suggest is disabled, Firefox will not download new suggestions, and hide the additional Search settings.\n"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true

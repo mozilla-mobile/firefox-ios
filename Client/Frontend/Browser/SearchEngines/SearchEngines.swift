@@ -169,12 +169,15 @@ class SearchEngines {
     }
 
     private var customEngineFilePath: String {
-        let profilePath = try! self.fileAccessor.getAndEnsureDirectory() as NSString
-        return profilePath.appendingPathComponent(customSearchEnginesFileName)
+        get throws {
+            let profilePath = try self.fileAccessor.getAndEnsureDirectory() as NSString
+            return profilePath.appendingPathComponent(customSearchEnginesFileName)
+        }
     }
 
     private lazy var customEngines: [OpenSearchEngine] = {
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)) {
+        if let customEngineFilePath = try? customEngineFilePath,
+           let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)) {
             do {
                 let unarchiveClasses = [NSArray.self, OpenSearchEngine.self, NSString.self, UIImage.self]
                 let customEngines = try NSKeyedUnarchiver.unarchivedObject(ofClasses: unarchiveClasses,
@@ -196,7 +199,7 @@ class SearchEngines {
             let data = try NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: true)
 
             do {
-                try data.write(to: URL(fileURLWithPath: customEngineFilePath))
+                try data.write(to: URL(fileURLWithPath: try customEngineFilePath))
             } catch {
                 logger.log("Error writing data to file: \(error.localizedDescription)",
                            level: .debug,

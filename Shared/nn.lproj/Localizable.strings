@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Lagra innloggingar vil visast her. Om du har lagra inloggningane dine i Firefox på ei anna eining, loggar du inn på Firefox-kontoen din.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Lagra innloggingar vil visast her. Om du lagra innloggingane dine til %@ på ei anna eining, logg inn på kontoen din.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Fann ingen innloggingar";
 

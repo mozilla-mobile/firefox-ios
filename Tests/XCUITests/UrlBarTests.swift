@@ -7,7 +7,7 @@ let iPadSearchIcon = XCUIApplication().children(matching: .window).element(bound
 let iPhoneSearchIcon = XCUIApplication().children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .image).element
 
 class UrlBarTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2189026
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306888
     func testNewTabUrlBar() {
         // Visit any website and select the URL bar
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
@@ -27,7 +27,7 @@ class UrlBarTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value as! String, "Search or enter address")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1286320
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306887
     func testSearchEngineLogo() {
         tapUrlBarValidateKeyboardAndIcon()
         // Type a search term and hit "go"

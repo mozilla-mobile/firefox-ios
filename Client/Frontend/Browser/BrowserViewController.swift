@@ -1961,7 +1961,7 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         case .some(.link(let url)):
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)") {
+            if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()
@@ -2290,6 +2290,11 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
+       /// If the selectedTab is showing an error page trigger a reload
+        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            selected?.reloadPage()
+            return
+        }
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 

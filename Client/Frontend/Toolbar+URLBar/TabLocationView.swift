@@ -15,6 +15,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton)
+    func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult
@@ -286,11 +287,22 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
+        if product.product != nil && !tab.isPrivate {
+            sendProductPageDetectedTelemetry()
+        }
+
         let shouldHideButton = !product.isShoppingButtonVisible || tab.isPrivate
         shoppingButton.isHidden = shouldHideButton
         if !shouldHideButton {
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
+            delegate?.tabLocationViewPresentCFR(at: shoppingButton)
         }
+    }
+
+    private func sendProductPageDetectedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .shoppingProductPageVisits)
     }
 
     private func updateTextWithURL() {
@@ -340,6 +352,9 @@ private extension TabLocationView {
         self.readerModeButton.readerModeState = newReaderModeState
 
         readerModeButton.isHidden = shoppingButton.isHidden ? newReaderModeState == .unavailable : true
+        // When the user turns on the reader mode we need to hide the trackingProtectionButton (according to 16400), we will hide it once the newReaderModeState == .active
+        self.trackingProtectionButton.isHidden = newReaderModeState == .active
+
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {

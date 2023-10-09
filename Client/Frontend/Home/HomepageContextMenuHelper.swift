@@ -180,7 +180,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
-            guard let url = URL(string: site.url) else { return }
+            guard let url = URL(string: site.url, invalidCharacters: false) else { return }
 
             if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
                 self.browserNavigationHandler?.showShareExtension(
@@ -241,14 +241,17 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let topSiteActions: [PhotonRowActions]
         if let site = site as? PinnedSite {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
+                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         } else if site as? SponsoredTile != nil {
-            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
+            topSiteActions = [getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction()]
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
+                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site)]
         }

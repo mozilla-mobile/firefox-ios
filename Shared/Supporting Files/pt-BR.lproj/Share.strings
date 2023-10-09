@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Não tem nenhum outro dispositivo conectado a esta conta, disponível para sincronização.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Você não entrou na sua conta.";
+

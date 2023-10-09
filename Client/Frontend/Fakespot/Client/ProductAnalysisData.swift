@@ -23,12 +23,16 @@ struct ProductAnalysisData: Codable {
         case pageNotSupported = "page_not_supported"
     }
 
+    var needsAnalysisCardVisible: Bool {
+        productId != nil && needsAnalysis == true
+    }
+
     var notAnalyzedCardVisible: Bool {
         productId == nil && needsAnalysis == true
     }
 
     var cannotBeAnalyzedCardVisible: Bool {
-        needsAnalysis == false && pageNotSupported == true
+        pageNotSupported == true
     }
 
     var notEnoughReviewsCardVisible: Bool {
@@ -76,8 +80,8 @@ struct Highlights: Codable {
         var items = [FakespotHighlightGroup]()
         items.append(FakespotHighlightGroup(type: .price, reviews: price))
         items.append(FakespotHighlightGroup(type: .quality, reviews: quality))
-        items.append(FakespotHighlightGroup(type: .competitiveness, reviews: competitiveness))
         items.append(FakespotHighlightGroup(type: .shipping, reviews: shipping))
+        items.append(FakespotHighlightGroup(type: .competitiveness, reviews: competitiveness))
         items.append(FakespotHighlightGroup(type: .packaging, reviews: packaging))
         return items.compactMap { group in group.reviews.isEmpty ? nil : group }
     }
