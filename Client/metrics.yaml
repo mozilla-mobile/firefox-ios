@@ -851,7 +851,7 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-29"
-    
+
   surface_analyze_reviews_none_available_clicked:
     type: event
     description: |
@@ -899,6 +899,7 @@ shopping.settings:
     lifetime: application
     description: |
       Indicates if the user has opted out of using the shopping component.
+      Set in BrowserViewController and updated when changed by user.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16694
     data_reviews:
@@ -914,7 +915,7 @@ shopping.settings:
     lifetime: application
     description: |
       Indicates if the user has completed the Shopping product Onboarding
-      experience.
+      experience. Set in BrowserViewController and updated when changed by user.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16694
     data_reviews:
@@ -924,32 +925,6 @@ shopping.settings:
     expires: "2024-09-29"
     send_in_pings:
       - metrics
-
-  surface_analyze_reviews_none_available_clicked:
-    type: event
-    description: |
-      Records an event when the user taps on
-      analyzer button from the 'No Analysis Card'.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
-
-  surface_reanalyze_clicked:
-    type: event
-    description: |
-      Records an event when the user taps on
-      primary button from the 'Needs Analysis Card'.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
 
 # Key Commands
 key_commands:
