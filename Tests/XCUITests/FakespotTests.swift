@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import XCTest
-import Shared
 
 class FakespotTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2288332
@@ -28,7 +27,7 @@ class FakespotTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, .Shopping.SheetHeaderTitle)
+            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review checker")
 
             // Close the popover
             app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
