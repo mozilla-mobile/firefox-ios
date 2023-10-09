@@ -317,7 +317,7 @@ class FakespotViewModel {
     private static func recordNoReviewReliabilityAvailableTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
-            method: .view,
+            method: .navigate,
             object: .shoppingBottomSheet
         )
     }
