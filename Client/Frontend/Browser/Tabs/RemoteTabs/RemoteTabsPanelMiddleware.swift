@@ -46,7 +46,9 @@ class RemoteTabsPanelMiddleware {
                     return
                 }
 
-                store.dispatch(RemoteTabsPanelAction.cachedResultsAvailable(clientAndTabs, updateCache))
+                let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
+                                                           isUpdating: updateCache)
+                store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
 
                 if updateCache {
                     self?.profile.getClientsAndTabs().uponQueue(.main) { result in

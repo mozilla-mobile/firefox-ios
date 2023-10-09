@@ -12,6 +12,11 @@ enum RemoteTabsPanelAction: Action {
     case refreshCachedTabs
     case refreshTabs
     case refreshDidFail(RemoteTabsPanelEmptyStateReason)
-    case cachedResultsAvailable([ClientAndTabs], Bool)
+    case cachedTabsAvailable(RemoteTabsPanelCachedResults)
     case refreshDidSucceed([ClientAndTabs])
+}
+
+struct RemoteTabsPanelCachedResults {
+    let clientAndTabs: [ClientAndTabs]
+    let isUpdating: Bool // Whether we are also fetching updates to cached tabs
 }
