@@ -7,6 +7,7 @@ import Redux
 
 enum AppScreen {
     case themeSettings
+    case remoteTabsPanel
 }
 
 enum ActiveScreensStateAction: Action {

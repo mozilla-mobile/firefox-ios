@@ -33,18 +33,50 @@ enum RemoteTabsPanelEmptyState {
 }
 
 /// State for RemoteTabsPanel. WIP.
-struct RemoteTabsPanelState {
+struct RemoteTabsPanelState: ScreenState, Equatable {
     let refreshState: RemoteTabsPanelRefreshState
     let clientAndTabs: [ClientAndTabs]
     let allowsRefresh: Bool                                // True if `hasSyncableAccount()`
     let showingEmptyState: RemoteTabsPanelEmptyState?      // If showing empty (or error) state
     let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
 
-    static func emptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(refreshState: .loaded,
-                                    clientAndTabs: [],
-                                    allowsRefresh: false,
-                                    showingEmptyState: .noTabs,
-                                    syncIsSupported: true)
+    init(_ appState: AppState) {
+        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
+            self.init()
+            return
+        }
+
+        self.init(refreshState: panelState.refreshState,
+                  clientAndTabs: panelState.clientAndTabs,
+                  allowsRefresh: panelState.allowsRefresh,
+                  showingEmptyState: panelState.showingEmptyState,
+                  syncIsSupported: panelState.syncIsSupported)
+    }
+
+    init() {
+        self.init(refreshState: .loaded,
+                  clientAndTabs: [],
+                  allowsRefresh: true,
+                  showingEmptyState: .noTabs,
+                  syncIsSupported: true)
+    }
+
+    init(refreshState: RemoteTabsPanelRefreshState,
+         clientAndTabs: [ClientAndTabs],
+         allowsRefresh: Bool,
+         showingEmptyState: RemoteTabsPanelEmptyState?,
+         syncIsSupported: Bool) {
+        self.refreshState = refreshState
+        self.clientAndTabs = clientAndTabs
+        self.allowsRefresh = allowsRefresh
+        self.showingEmptyState = showingEmptyState
+        self.syncIsSupported = syncIsSupported
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
+        switch action {
+        default: return state
+        }
     }
 }

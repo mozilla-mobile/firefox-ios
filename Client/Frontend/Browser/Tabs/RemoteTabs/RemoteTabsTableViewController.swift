@@ -81,7 +81,7 @@ class RemoteTabsTableViewController: UITableViewController,
         listenForThemeChange(view)
         applyTheme()
 
-        refreshUI()
+        reloadUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -107,13 +107,12 @@ class RemoteTabsTableViewController: UITableViewController,
 
     // MARK: - UI
 
-    func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        emptyView.applyTheme(theme: themeManager.currentTheme)
-        // TODO: Ensure theme applied to any custom cells.
+    func newState(state: RemoteTabsPanelState) {
+        self.state = state
+        reloadUI()
     }
 
-    private func refreshUI() {
+    func reloadUI() {
         emptyView.isHidden = !isShowingEmptyView
 
         if isShowingEmptyView {
@@ -121,6 +120,13 @@ class RemoteTabsTableViewController: UITableViewController,
         }
 
         tableView.reloadData()
+    }
+
+    func applyTheme() {
+        tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
+        let theme = themeManager.currentTheme
+        emptyView.applyTheme(theme: theme)
+        tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
     private func configureEmptyView() {
@@ -162,7 +168,7 @@ class RemoteTabsTableViewController: UITableViewController,
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         // TODO: Forthcoming as part of ongoing tab tray Redux refactors. [FXIOS-6942] & [FXIOS-7509]
 
-        refreshUI()
+        reloadUI()
     }
 
     func refreshTabs(state: RemoteTabsPanelState, updateCache: Bool = false, completion: (() -> Void)? = nil) {
@@ -198,7 +204,7 @@ class RemoteTabsTableViewController: UITableViewController,
             hiddenSections.insert(section)
         }
 
-        refreshUI()
+        reloadUI()
     }
 
     func presentContextMenu(for site: Site, with indexPath: IndexPath,

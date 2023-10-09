@@ -9,9 +9,25 @@ import ComponentLibrary
 
 // MARK: View Model
 final class FakespotReviewQualityCardViewModel {
+    private struct UX {
+        static let labelFontSize: CGFloat = 15
+        static let baseFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                                     size: UX.labelFontSize)
+    }
+
+    let markupUtility = MarkupAttributeUtility(baseFont: UX.baseFont)
     private let tabManager: TabManager
     let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
     var dismissViewController: (() -> Void)?
+    var productSitename: String?
+    var highlightsText: NSAttributedString {
+        let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
+        let highlightedWebsite = currentPartner.title
+        let plainText = String.localizedStringWithFormat(String.Shopping.ReviewQualityCardHighlightsLabel, highlightedWebsite)
+        let result = markupUtility.addAttributesTo(text: plainText)
+
+        return result
+    }
 
     // MARK: Init
     init(tabManager: TabManager = AppContainer.shared.resolve()) {
@@ -38,6 +54,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         static let labelFontSize: CGFloat = 15
         static let ratingsFooterStackViewInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         static let contentStackViewInsets = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
+        static let baseFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                                     size: UX.labelFontSize)
     }
 
     private var viewModel: FakespotReviewQualityCardViewModel?
@@ -69,18 +87,14 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
+        label.font = UX.baseFont
     }
 
     private lazy var subHeadlineLabel: UILabel = .build { label in
-        label.text = .Shopping.ReviewQualityCardSubHeadlineLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.subHeadlineLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
     }
 
     private lazy var ratingsStackView: UIStackView = .build { stackView in
@@ -126,8 +140,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
+        label.font = UX.baseFont
     }
 
     private lazy var mixReliableReviewsLabel: UILabel = .build { label in
@@ -136,8 +149,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
+        label.font = UX.baseFont
     }
 
     private lazy var unreliableReviewsLabel: UILabel = .build { label in
@@ -146,8 +158,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
+        label.font = UX.baseFont
     }
 
     private lazy var footerStackView: UIStackView = .build { stackView in
@@ -159,13 +170,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var adjustedRatingLabel: UILabel = .build { label in
-        let text = String.Shopping.ReviewQualityCardAdjustedRatingLabel
-        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: UX.labelFontSize)
-        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.labelFontSize)
-        label.attributedText = text.attributedText(boldPartsOfString: ["adjusted rating"],
-                                                   initialFont: normalFont,
-                                                   boldFont: boldFont)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.adjustedRatingLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -173,13 +177,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var highlightsLabel: UILabel = .build { label in
-        let text = String.Shopping.ReviewQualityCardHighlightsLabel
-        let normalFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: UX.labelFontSize)
-        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.labelFontSize)
-        label.attributedText = text.attributedText(boldPartsOfString: ["Highlights"],
-                                                   initialFont: normalFont,
-                                                   boldFont: boldFont)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.highlightsLabel
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -194,8 +191,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         button.buttonEdgeSpacing = 0
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                         size: UX.labelFontSize)
+        button.titleLabel?.font = UX.baseFont
     }
 
     override init(frame: CGRect) {
@@ -268,6 +264,10 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     func configure(_ viewModel: FakespotReviewQualityCardViewModel) {
         self.viewModel = viewModel
+        highlightsLabel.attributedText = viewModel.highlightsText
+        subHeadlineLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardSubHeadlineLabel)
+        adjustedRatingLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardAdjustedRatingLabel)
+
         let viewModel = CollapsibleCardViewModel(
             contentView: contentStackView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.card,
