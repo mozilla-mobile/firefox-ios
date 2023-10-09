@@ -19,7 +19,8 @@ class RemoteTabsPanelMiddleware {
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
             self.refreshTabs(updateCache: true)
-            break
+        case RemoteTabsPanelAction.refreshCachedTabs:
+            self.refreshTabs(updateCache: false)
         default:
             break
         }
@@ -30,13 +31,17 @@ class RemoteTabsPanelMiddleware {
     private func refreshTabs(updateCache: Bool = false) {
         ensureMainThread { [self] in
             guard profile.hasSyncableAccount() else {
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
+                DispatchQueue.main.async {
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
+                }
                 return
             }
 
             let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
             guard syncEnabled else {
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.syncDisabledByUser))
+                DispatchQueue.main.async {
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.syncDisabledByUser))
+                }
                 return
             }
 

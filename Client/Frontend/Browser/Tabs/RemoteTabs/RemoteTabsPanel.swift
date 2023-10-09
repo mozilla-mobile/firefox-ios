@@ -99,6 +99,11 @@ class RemoteTabsPanel: UIViewController,
         applyTheme()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTabs() // Matches legacy behavior.
+    }
+
     private func setupLayout() {
         tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(tableViewController)
