@@ -301,7 +301,7 @@ class ReadingListPanel: UITableViewController,
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .semibold)
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
             label.adjustsFontSizeToFitWidth = true
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
