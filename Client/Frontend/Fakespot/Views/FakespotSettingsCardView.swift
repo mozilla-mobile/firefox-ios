@@ -198,6 +198,10 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
+        
         viewModel?.dismissViewController?(.optingOutOfTheFeature)
     }
 

@@ -89,6 +89,10 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingOptIn)
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
+        
         onOptIn?()
     }
 
