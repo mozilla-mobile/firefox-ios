@@ -11,6 +11,7 @@ let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {
