@@ -152,7 +152,7 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         updateLayoutForInProgress()
     }
 
-    private func updateLayoutForInProgress() {
+    public func updateLayoutForInProgress() {
         isAnalysisInProgress = true
 
         contentStackView.removeArrangedSubview(analyzerButton)

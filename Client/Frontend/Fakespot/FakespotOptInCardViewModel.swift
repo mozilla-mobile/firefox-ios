@@ -14,37 +14,6 @@ struct FakespotOptInCardViewModel {
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
     }
 
-    public enum PartnerWebsite: String, CaseIterable {
-        case amazon
-        case walmart
-        case bestbuy
-
-        var title: String {
-            switch self {
-            case .bestbuy: return "Best Buy"
-            default: return self.rawValue.capitalized
-            }
-        }
-
-        var orderWebsites: [String] {
-            let currentPartnerWebsites = PartnerWebsite.allCases.map { $0.title }
-
-            // make sure current website is first
-            var websitesOrder = currentPartnerWebsites.filter { $0 != self.title }
-            websitesOrder.insert(self.title, at: 0)
-
-            return websitesOrder
-        }
-
-        init?(for siteName: String?) {
-            guard let siteName = siteName, let partner = PartnerWebsite(rawValue: siteName) else {
-                return nil
-            }
-
-            self = partner
-        }
-    }
-
     private let tabManager: TabManager
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
