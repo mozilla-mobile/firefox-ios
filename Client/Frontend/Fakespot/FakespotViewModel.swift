@@ -317,6 +317,14 @@ class FakespotViewModel {
                 method: .tap,
                 object: .shoppingNeedsAnalysisCardViewPrimaryButton
             )
+        case .noAnalysisCard,
+             .messageCard(.notEnoughReviews),
+             .messageCard(.productCannotBeAnalyzed):
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .view,
+                object: .shoppingBottomSheet
+            )
         default: break
         }
     }

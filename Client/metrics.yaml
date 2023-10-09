@@ -890,6 +890,17 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-05"
+  surface_no_review_reliability_available:
+    type: event
+    description: |
+      Records an event when the Fakespot API doesn't return a grade.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16630
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16630
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-09"
 
 # Key Commands
 key_commands:
