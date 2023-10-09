@@ -117,6 +117,10 @@ class RemoteTabsTableViewController: UITableViewController,
             configureEmptyView()
         }
 
+        if state.refreshState != .refreshing {
+            endRefreshing()
+        }
+
         tableView.reloadData()
     }
 
@@ -153,12 +157,12 @@ class RemoteTabsTableViewController: UITableViewController,
             endRefreshing()
             return
         }
-        
+
         refreshControl?.beginRefreshing()
         remoteTabsPanel?.tableViewControllerDidPullToRefresh()
     }
 
-    func endRefreshing() {
+    private func endRefreshing() {
         // Always end refreshing, even if we failed!
         refreshControl?.endRefreshing()
 

@@ -139,9 +139,6 @@ class RemoteTabsPanel: UIViewController,
 
             self.state = state
             tableViewController.newState(state: state)
-            if state.refreshState != .refreshing {
-                tableViewController.endRefreshing()
-            }
         }
     }
 
