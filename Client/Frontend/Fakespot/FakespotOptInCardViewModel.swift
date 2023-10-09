@@ -111,7 +111,13 @@ struct FakespotOptInCardViewModel {
                                                           size: UX.bodyFirstParagraphLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyFirstParagraphLabelFontSize)
-        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel, websites[0], websites[1], websites[2])
+        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel,
+                                                         websites[0],
+                                                         websites[1],
+                                                         websites[2],
+                                                         AppName.shortName.rawValue,
+                                                         FakespotName.shortName.rawValue,
+                                                         MozillaName.shortName.rawValue)
         return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
     }
 
