@@ -56,11 +56,9 @@ class RemoteTabsPanelMiddleware {
                             store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                             return
                         }
-
+                        
                         store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                     }
-                } else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                 }
             }
         }
