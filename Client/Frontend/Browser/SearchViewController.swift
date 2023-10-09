@@ -571,10 +571,10 @@ class SearchViewController: SiteTableViewController,
             searchDelegate?.searchViewController(self, didSelectURL: firefoxSuggestion.url, searchTerm: nil)
         }
     }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return super.tableView(tableView, heightForRowAt: indexPath)
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return super.tableView(tableView, heightForRowAt: indexPath)
+//    }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard shouldShowHeader(for: section) else { return 0 }

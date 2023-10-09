@@ -17,9 +17,10 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func tearDown() {
+//        super.tearDown()
+//    }
 
     // MARK: - Tests
     func testExpectedCoreFeatures() {

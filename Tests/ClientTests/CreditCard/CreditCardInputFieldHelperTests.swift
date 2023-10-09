@@ -10,13 +10,14 @@ import XCTest
 class CreditCardInputFieldHelperTests: XCTestCase {
     var helper: CreditCardInputFieldHelper!
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override class func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func setUp() {
+//        super.setUp()
+//    }
+//
+//    override class func tearDown() {
+//        super.tearDown()
+//    }
 
     func configureForTestsWith(_ inputType: CreditCardInputType) {
         helper = CreditCardInputFieldHelper(inputType: inputType)

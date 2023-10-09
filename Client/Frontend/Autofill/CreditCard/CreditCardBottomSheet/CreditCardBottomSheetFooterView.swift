@@ -37,10 +37,10 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//    }
 
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1

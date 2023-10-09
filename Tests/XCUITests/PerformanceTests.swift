@@ -34,9 +34,10 @@ class PerformanceTests: BaseTestCase {
         super.setUp()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func tearDown() {
+//        super.tearDown()
+//    }
 
     // This test run first to install the app in the device
     func testAppStart() {

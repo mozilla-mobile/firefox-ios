@@ -12,6 +12,7 @@ class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         static let BorderViewMargin: CGFloat = 16
         static let ButtonInset: CGFloat = 14
         static let ButtonImagePadding: CGFloat = 11
+        static let buttonFontSize: CGFloat = 16
     }
 
     // MARK: - Properties
@@ -25,10 +26,9 @@ class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .body,
-            weight: .semibold,
-            maxSize: 16)
+            size: UX.buttonFontSize)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail

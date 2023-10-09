@@ -31,9 +31,10 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
         return sectionItems
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

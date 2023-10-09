@@ -7,6 +7,9 @@ import Foundation
 import Shared
 
 class InactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
+    struct UX {
+        static let titleLabelSize: CGFloat = 17
+    }
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)
@@ -15,9 +18,9 @@ class InactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
 
     lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.text = self.title
-        titleLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
+        titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .headline,
-            maxSize: 17)
+            size: UX.titleLabelSize)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1

@@ -7,13 +7,14 @@ import Shared
 import XCTest
 
 class ArrayExtensionTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func setUp() {
+//        super.setUp()
+//    }
+//
+//    override func tearDown() {
+//        super.tearDown()
+//    }
 
     func testUnique() {
         let a = [1, 2, 3, 4, 5, 6, 1, 2]

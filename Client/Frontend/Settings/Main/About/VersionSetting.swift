@@ -23,10 +23,10 @@ class VersionSetting: Setting {
         return NSAttributedString(string: "\(AppName.shortName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
-
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+//        super.onConfigureCell(cell, theme: theme)
+//    }
 
     override func onClick(_ navigationController: UINavigationController?) {
         settingsDelegate?.pressedVersion()

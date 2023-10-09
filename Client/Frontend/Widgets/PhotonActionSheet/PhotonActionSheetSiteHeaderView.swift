@@ -41,10 +41,10 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//    }
 
     func configure(with site: Site) {
         siteImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))

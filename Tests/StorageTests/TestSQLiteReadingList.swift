@@ -18,9 +18,10 @@ class TestSQLiteReadingList: XCTestCase {
         self.readingList = SQLiteReadingList(db: db)
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func tearDown() {
+//        super.tearDown()
+//    }
 
     func testCreateRecord() {
         let result = readingList.createRecordWithURL(

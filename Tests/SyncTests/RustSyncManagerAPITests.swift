@@ -8,10 +8,10 @@ import Common
 
 class RustSyncManagerAPITests: XCTestCase {
     var rustSyncManagerApi: RustSyncManagerAPI!
-
-    override func setUp() {
-        super.setUp()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func setUp() {
+//        super.setUp()
+//    }
 
     func testReportSyncTelemetry() {
         self.rustSyncManagerApi = RustSyncManagerAPI()

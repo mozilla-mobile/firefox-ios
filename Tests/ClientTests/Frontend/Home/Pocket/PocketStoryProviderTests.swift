@@ -8,10 +8,10 @@ import Shared
 
 class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
     var subject: StoryProvider!
-
-    override func setUp() {
-        super.setUp()
-    }
+// Commented to avoid unneed_overide warnings
+//    override func setUp() {
+//        super.setUp()
+//    }
 
     override func tearDown() {
         super.tearDown()

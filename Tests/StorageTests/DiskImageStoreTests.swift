@@ -19,9 +19,10 @@ class DiskImageStoreTests: XCTestCase {
         clearStore()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func tearDown() {
+//        super.tearDown()
+//    }
 
     func testSaveImageForKey() async throws {
         let testKey = "testImageKey"

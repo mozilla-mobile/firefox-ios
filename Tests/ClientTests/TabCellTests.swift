@@ -7,9 +7,10 @@
 import XCTest
 
 class TabCellTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
+//    Commented to avoid unneed_overide warnings
+//    override func setUp() {
+//        super.setUp()
+//    }
 
     func testTabCellDeinit() {
         let subject = TabCell(frame: .zero)
