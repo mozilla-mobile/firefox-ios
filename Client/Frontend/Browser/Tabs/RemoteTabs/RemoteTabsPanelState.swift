@@ -79,7 +79,6 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
-            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
             let newState = RemoteTabsPanelState(refreshState: .refreshing,
                                                 clientAndTabs: state.clientAndTabs,
                                                 allowsRefresh: state.allowsRefresh,
@@ -87,14 +86,19 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 syncIsSupported: state.syncIsSupported)
             return newState
         case RemoteTabsPanelAction.refreshDidFail:
-            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
-            fallthrough
-        case RemoteTabsPanelAction.refreshDidSucceed:
-            // TODO. WIP, add'tl changes forthcoming. [FXIOS-7509]
+            // Refresh failed. Show error empty state.
             let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 clientAndTabs: state.clientAndTabs,
                                                 allowsRefresh: state.allowsRefresh,
-                                                showingEmptyState: state.showingEmptyState,
+                                                showingEmptyState: .failedToSync,
+                                                syncIsSupported: state.syncIsSupported)
+            return newState
+        case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
+            // Send client and tabs state, ensure empty state is nil and refresh is idle
+            let newState = RemoteTabsPanelState(refreshState: .idle,
+                                                clientAndTabs: newClientAndTabs,
+                                                allowsRefresh: state.allowsRefresh,
+                                                showingEmptyState: nil,
                                                 syncIsSupported: state.syncIsSupported)
             return newState
         default:

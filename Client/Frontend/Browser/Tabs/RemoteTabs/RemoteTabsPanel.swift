@@ -61,6 +61,8 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Internal Utilities
 
     private func refreshTabs() {
+        // Ensure we do not already have a refresh in progress
+        guard state.refreshState != .refreshing else { return }
         store.dispatch(RemoteTabsPanelAction.refreshTabs)
     }
 
@@ -93,8 +95,8 @@ class RemoteTabsPanel: UIViewController,
 
         listenForThemeChange(view)
         setupLayout()
-        applyTheme()
         subscribeRedux()
+        applyTheme()
     }
 
     private func setupLayout() {
@@ -132,10 +134,14 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
-        self.state = state
-        tableViewController.newState(state: state)
-        if state.refreshState != .refreshing {
-            tableViewController.endRefreshing()
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            self.state = state
+            tableViewController.newState(state: state)
+            if state.refreshState != .refreshing {
+                tableViewController.endRefreshing()
+            }
         }
     }
 

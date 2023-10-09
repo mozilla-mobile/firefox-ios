@@ -34,25 +34,25 @@ class RemoteTabsPanelMiddleware {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail)
                 return
             }
-            
+
             // TODO: Work-in-progress. [FXIOS-7509]
             profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
                 guard let clientAndTabs = result.successValue else {
                     store.dispatch(RemoteTabsPanelAction.refreshDidFail)
                     return
                 }
-                
+
                 if updateCache {
                     self?.profile.getClientsAndTabs().uponQueue(.main) { result in
                         guard let clientAndTabs = result.successValue else {
                             store.dispatch(RemoteTabsPanelAction.refreshDidFail)
                             return
                         }
-                        
-                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed)
+
+                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                     }
                 } else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidSucceed)
+                    store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                 }
             }
         }
