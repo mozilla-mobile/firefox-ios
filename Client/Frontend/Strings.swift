@@ -3853,8 +3853,8 @@ extension String {
         public static let OptInCardDisclaimerText = MZLocalizedString(
             key: "", // Shopping.OptInCard.DisclaimerText.Title.v119
             tableName: "Shopping",
-            value: "By selecting “Yes, Try It” you agree to Fakespot by Mozilla’s:",
-            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot)")
+            value: "By selecting “Yes, Try It” you agree to the %1$@ by %2$@:",
+            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "", // Shopping.OptInCard.PrivacyPolicyButtonTitle.Title.v119
             tableName: "Shopping",
