@@ -33,11 +33,20 @@ class FakespotViewModel {
                         .settingsCard
                     ]
                 } else if product.notAnalyzedCardVisible {
-                    return [
-                        .noAnalysisCard,
+                    // Don't show not analyzed message card if analysis is in progress
+                    var cards: [ViewElement] = []
+
+                    if analysisStatus?.isAnalyzing == true {
+                        cards.append(.progressAnalysisCard)
+                    } else {
+                        cards.append(.noAnalysisCard)
+                    }
+
+                    cards += [
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
+                    return cards
                 } else if product.notEnoughReviewsCardVisible {
                     return [
                         .messageCard(.notEnoughReviews),
@@ -101,6 +110,7 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
+        case progressAnalysisCard
         case messageCard(MessageType)
         enum MessageType {
             case genericError
@@ -216,14 +226,12 @@ class FakespotViewModel {
     let analysisProgressViewModel = FakespotMessageCardViewModel(
         type: .infoLoading,
         title: .Shopping.InfoCardProgressAnalysisTitle,
-        description: .Shopping.InfoCardProgressAnalysisDescription,
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.card,
-        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title,
-        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.description
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()
-    let noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
+    var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
     var optInCardViewModel = FakespotOptInCardViewModel()
 
