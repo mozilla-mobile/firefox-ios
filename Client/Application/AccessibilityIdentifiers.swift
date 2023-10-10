@@ -360,7 +360,7 @@ public struct AccessibilityIdentifiers {
             static let title = "Search"
             static let customEngineViewButton = "customEngineViewButton"
             static let searchNavigationBar = "Search"
-            static let deleteMozillaEngine = "Delete Mozilla Engine"
+            static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
         }
 
