@@ -66,7 +66,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -307,7 +307,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
-            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
@@ -318,7 +318,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
-            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
             label.numberOfLines = 0
             label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
