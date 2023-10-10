@@ -14,6 +14,10 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         static let buttonFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13.5
         static let buttonBorderWidth: CGFloat = 1
+        static let iPadOffset: CGFloat = 100
+        static let iPhoneOffset: CGFloat = 23
+        static let buttonTopOffset: CGFloat = 16
+        static let buttonBottomOffset: CGFloat = 24
     }
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
@@ -63,20 +67,15 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
             right: UX.buttonImagePadding
         )
 
-        let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
-        let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
+        let horizontalOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.iPadOffset : UX.iPhoneOffset
 
         NSLayoutConstraint.activate([
             roundedButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            roundedButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: trailingOffSet),
-            roundedButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -leadingOffSet),
-            roundedButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            roundedButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+            roundedButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalOffSet),
+            roundedButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -horizontalOffSet),
+            roundedButton.topAnchor.constraint(equalTo: topAnchor, constant: UX.buttonTopOffset),
+            roundedButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.buttonBottomOffset)
         ])
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
     }
 
     @objc
