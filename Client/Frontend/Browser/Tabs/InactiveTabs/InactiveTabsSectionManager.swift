@@ -25,7 +25,6 @@ class InactiveTabsSectionManager {
 
     func layoutSection(
         _ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-
         var sectionConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         sectionConfig.headerMode = .firstItemInSection
         let section = NSCollectionLayoutSection.list(using: sectionConfig,
