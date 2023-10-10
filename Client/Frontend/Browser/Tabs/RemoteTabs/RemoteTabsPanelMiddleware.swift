@@ -45,8 +45,8 @@ class RemoteTabsPanelMiddleware {
                 return
             }
 
-            profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
-                guard let clientAndTabs = result.successValue else {
+            profile.getCachedClientsAndTabs { [weak self] result in
+                guard let clientAndTabs = result else {
                     store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                     return
                 }
@@ -56,8 +56,8 @@ class RemoteTabsPanelMiddleware {
                 store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
 
                 if updateCache {
-                    self?.profile.getClientsAndTabs().uponQueue(.main) { result in
-                        guard let clientAndTabs = result.successValue else {
+                    self?.profile.getClientsAndTabs { result in
+                        guard let clientAndTabs = result else {
                             store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                             return
                         }
