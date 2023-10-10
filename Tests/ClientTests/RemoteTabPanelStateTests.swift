@@ -22,7 +22,10 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     func testTabsRefreshSkippedIfNotAllowed() {
-        let initialState = RemoteTabsPanelState(refreshState: .idle, allowsRefresh: false, clientAndTabs: [], showingEmptyState: nil)
+        let initialState = RemoteTabsPanelState()
+        XCTAssertEqual(initialState.refreshState,
+                       RemoteTabsPanelRefreshState.idle)
+
         let reducer = remoteTabsPanelReducer()
 
         let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs)
