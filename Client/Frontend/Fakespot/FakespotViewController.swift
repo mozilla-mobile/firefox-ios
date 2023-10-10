@@ -241,7 +241,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             contentStackView.addArrangedSubview(view)
 
             if let loadingView = view as? FakespotLoadingView {
-                loadingView.animate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    loadingView.animate()
+                }
             }
         }
         applyTheme()

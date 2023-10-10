@@ -8,16 +8,17 @@ import Shared
 
 class FakespotViewModel {
     enum ViewState {
+        typealias AnalysisCount = Int
         case loading
         case onboarding
-        case loaded(ProductAnalysisData?, AnalysisStatus?)
+        case loaded(ProductAnalysisData?, AnalysisStatus?, AnalysisCount)
         case error(Error)
 
         fileprivate var viewElements: [ViewElement] {
             switch self {
             case .loading:
                 return [.loadingView]
-            case let .loaded(product, analysisStatus):
+            case let .loaded(product, analysisStatus, analysisCount):
                 guard let product else {
                     return [
                         .messageCard(.genericError),
@@ -48,11 +49,19 @@ class FakespotViewModel {
                     ]
                     return cards
                 } else if product.notEnoughReviewsCardVisible {
-                    return [
-                        .messageCard(.notEnoughReviews),
+                    var cards: [ViewElement] = []
+
+                    if analysisCount > 1 {
+                        cards.append(.messageCard(.notEnoughReviews))
+                    } else {
+                        cards.append(.noAnalysisCard)
+                    }
+
+                    cards += [
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
+                    return cards
                 } else if product.needsAnalysisCardVisible {
                     // Don't show needs analysis message card if analysis is in progress
                     var cards: [ViewElement] = []
@@ -96,7 +105,7 @@ class FakespotViewModel {
         fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error, .onboarding: return nil
-            case .loaded(let data, _): return data
+            case .loaded(let data, _, _): return data
             }
         }
     }
@@ -235,6 +244,8 @@ class FakespotViewModel {
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
     var optInCardViewModel = FakespotOptInCardViewModel()
 
+    private var analysisCount = 0
+
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
@@ -259,12 +270,13 @@ class FakespotViewModel {
     }
 
     func fetchProductAnalysis() async {
+        analysisCount += 1
         state = .loading
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
-            state = .loaded(product, analysis)
+            state = .loaded(product, analysis, analysisCount)
         } catch {
             state = .error(error)
         }
