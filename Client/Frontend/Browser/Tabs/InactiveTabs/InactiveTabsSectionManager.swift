@@ -25,16 +25,9 @@ class InactiveTabsSectionManager {
 
     func layoutSection(
         _ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        let availableWidth = layoutEnvironment.container.contentSize.width
-        var cellWidth = (collectionViewWidth - UX.margin * 2) > 0 ? collectionViewWidth - UX.margin * 2 : 0
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            cellWidth = collectionViewWidth/1.5
-        }
 
         var sectionConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         sectionConfig.headerMode = .firstItemInSection
-//        sectionConfig.backgroundColor = .white
         let section = NSCollectionLayoutSection.list(using: sectionConfig,
                                                      layoutEnvironment: layoutEnvironment)
 
