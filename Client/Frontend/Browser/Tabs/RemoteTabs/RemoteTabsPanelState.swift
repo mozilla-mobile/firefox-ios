@@ -55,7 +55,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
 
     init() {
         self.init(refreshState: .idle,
-                  allowsRefresh: true,
+                  allowsRefresh: false,
                   clientAndTabs: [],
                   showingEmptyState: .noTabs)
     }
@@ -71,9 +71,15 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
         switch action {
+        case RemoteTabsPanelAction.syncableAccountStatusChanged(let hasSyncableAccount):
+            let newState = RemoteTabsPanelState(refreshState: state.refreshState,
+                                                allowsRefresh: hasSyncableAccount,
+                                                clientAndTabs: state.clientAndTabs,
+                                                showingEmptyState: state.showingEmptyState)
+            return newState
         case RemoteTabsPanelAction.refreshTabs:
+            guard state.allowsRefresh else { return state }
             let newState = RemoteTabsPanelState(refreshState: .refreshing,
                                                 allowsRefresh: state.allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,

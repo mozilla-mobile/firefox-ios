@@ -16,9 +16,16 @@ class RemoteTabsPanelMiddleware {
     }
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
+        let tabPanelState = state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel)
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
-            self.refreshTabs(updateCache: true)
+            self.updateSyncableAccountState(for: tabPanelState, then: { refreshAllowed in
+                if refreshAllowed {
+                    self.refreshTabs(updateCache: true)
+                } else {
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
+                }
+            })
         case RemoteTabsPanelAction.refreshCachedTabs:
             self.refreshTabs(updateCache: false)
         default:
@@ -28,15 +35,22 @@ class RemoteTabsPanelMiddleware {
 
     // MARK: - Internal Utilities
 
+    private func updateSyncableAccountState(for state: RemoteTabsPanelState?,
+                                            then action: ((Bool) -> Void)? = nil) {
+        guard let state else { return }
+        let allowsRefresh = profile.hasSyncableAccount()
+        if state.allowsRefresh != allowsRefresh {
+            DispatchQueue.main.async {
+                store.dispatch(RemoteTabsPanelAction.syncableAccountStatusChanged(allowsRefresh))
+                action?(allowsRefresh)
+            }
+        } else {
+            action?(allowsRefresh)
+        }
+    }
+
     private func refreshTabs(updateCache: Bool = false) {
         ensureMainThread { [self] in
-            guard profile.hasSyncableAccount() else {
-                DispatchQueue.main.async {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
-                }
-                return
-            }
-
             let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
             guard syncEnabled else {
                 DispatchQueue.main.async {

@@ -14,6 +14,7 @@ enum RemoteTabsPanelAction: Action {
     case refreshDidFail(RemoteTabsPanelEmptyStateReason)
     case cachedTabsAvailable(RemoteTabsPanelCachedResults)
     case refreshDidSucceed([ClientAndTabs])
+    case syncableAccountStatusChanged(Bool)
 }
 
 struct RemoteTabsPanelCachedResults {
