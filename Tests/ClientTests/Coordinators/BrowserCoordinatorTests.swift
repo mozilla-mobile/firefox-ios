@@ -768,10 +768,14 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.isPrivate)
     }
 
-    func testOpenRecentlyClosedTabInSameTab() {
+    func testOpenRecentlyClosedTabInSameTab_callsReletedMethodInBrowserViewController() {
         let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
 
         subject.openRecentlyClosedSiteInSameTab(URL(string: "https://www.google.com")!)
+
+        XCTAssertEqual(mbvc.didOpenRecentlyClosedSiteInSameTab, 1)
     }
 
     func testOpenRecentlyClosedSiteInNewTab_addsOneTabToTabManager() {
