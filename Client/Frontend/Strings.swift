@@ -3631,247 +3631,247 @@ extension String {
 extension String {
     public struct Shopping {
         public static let SheetHeaderTitle = MZLocalizedString(
-            key: "", // Shopping.Sheet.Title.v118
+            key: "", // Shopping.Sheet.Title.v120
             tableName: "Shopping",
-            value: "Review checker",
+            value: "Review Checker",
             comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
         public static let SheetHeaderBetaTitle = MZLocalizedString(
-            key: "", // Shopping.Sheet.Beta.Title.v119
+            key: "", // Shopping.Sheet.Beta.Title.v120
             tableName: "Shopping",
             value: "BETA",
             comment: "Beta label for the header of the Shopping Experience (Fakespot) sheet")
         public static let ReliabilityCardTitle = MZLocalizedString(
-            key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v118
+            key: "", // Shopping.ReviewQuality.ReliabilityCardTitle.v120
             tableName: "Shopping",
             value: "How reliable are these reviews?",
             comment: "Title of the reliability card displayed in the shopping review quality bottom sheet.")
         public static let ReliabilityRatingAB = MZLocalizedString(
-            key: "", // Shopping.ReviewQuality.ReliabilityRating.AB.Description.v118
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120
             tableName: "Shopping",
             value: "Reliable reviews",
             comment: "Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet.")
         public static let ReliabilityRatingC = MZLocalizedString(
-            key: "", // Shopping.ReviewQuality.ReliabilityRating.C.Description.v118
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.C.Description.v120
             tableName: "Shopping",
             value: "Only some reliable reviews",
             comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
         public static let ReliabilityRatingDF = MZLocalizedString(
-            key: "", // Shopping.ReviewQuality.ReliabilityRating.DF.Description.v118
+            key: "", // Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120
             tableName: "Shopping",
             value: "Unreliable reviews",
             comment: "Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet.")
         public static let ConfirmationCardTitle = MZLocalizedString(
-            key: "", // Shopping.ConfirmationCard.Title.v118
+            key: "", // Shopping.ConfirmationCard.Title.v120
             tableName: "Shopping",
             value: "Analysis Is Up To Date",
             comment: "Title of the confirmation displayed in the shopping review quality bottom sheet.")
         public static let ConfirmationCardButtonText = MZLocalizedString(
-            key: "", // Shopping.ConfirmationCard.Button.Text.v118
+            key: "", // Shopping.ConfirmationCard.Button.Text.v120
             tableName: "Shopping",
             value: "Got It",
             comment: "Button text of the confirmation displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Title.v119
+            key: "", // Shopping.HighlightsCard.Title.v120
             tableName: "Shopping",
             value: "Highlights from recent reviews",
             comment: "Title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardMoreButtonTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.MoreButton.Title.v119
+            key: "", // Shopping.HighlightsCard.MoreButton.Title.v120
             tableName: "Shopping",
             value: "Show More",
             comment: "Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardLessButtonTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.LessButton.Title.v119
+            key: "", // Shopping.HighlightsCard.LessButton.Title.v120
             tableName: "Shopping",
             value: "Show Less",
             comment: "Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingTitle = MZLocalizedString(
-            key: "", // Shopping.AdjustedRating.Title.v118
+            key: "", // Shopping.AdjustedRating.Title.v120
             tableName: "Shopping",
             value: "Adjusted rating",
             comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingDescription = MZLocalizedString(
-            key: "", // Shopping.AdjustedRating.Description.v118
+            key: "", // Shopping.AdjustedRating.Description.v120
             tableName: "Shopping",
             value: "Unreliable reviews removed",
             comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingStarsAccessibilityLabel = MZLocalizedString(
-            key: "", // Shopping.AdjustedRating.StarsAccessibilityLabel.v118
+            key: "", // Shopping.AdjustedRating.StarsAccessibilityLabel.v120
             tableName: "Shopping",
             value: "%@ out of 5 stars",
             comment: "Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5).")
         public static let HighlightsCardPriceTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Price.Title.v119
+            key: "", // Shopping.HighlightsCard.Price.Title.v120
             tableName: "Shopping",
             value: "Price",
             comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardQualityTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Quality.Title.v119
+            key: "", // Shopping.HighlightsCard.Quality.Title.v120
             tableName: "Shopping",
             value: "Quality",
             comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardShippingTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Shipping.Title.v119
+            key: "", // Shopping.HighlightsCard.Shipping.Title.v120
             tableName: "Shopping",
             value: "Shipping",
             comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardCompetitivenessTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Competitiveness.Title.v119
+            key: "", // Shopping.HighlightsCard.Competitiveness.Title.v120
             tableName: "Shopping",
             value: "Competitiveness",
             comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let HighlightsCardPackagingTitle = MZLocalizedString(
-            key: "", // Shopping.HighlightsCard.Packaging.Title.v119
+            key: "", // Shopping.HighlightsCard.Packaging.Title.v120
             tableName: "Shopping",
             value: "Packaging",
             comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardLabelTitle = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.Label.Title.v118
+            key: "", // Shopping.SettingsCard.Label.Title.v120
             tableName: "Shopping",
             value: "Settings",
             comment: "Title of the settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v118
+            key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v120
             tableName: "Shopping",
             value: "Show products recommended by Firefox",
             comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardTurnOffButton = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.TurnOff.Buttton.v118
+            key: "", // Shopping.SettingsCard.TurnOff.Button.v120
             tableName: "Shopping",
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v118
+            key: "", // Shopping.SettingsCard.Expanded.AccessibilityLabel.v120
             tableName: "Shopping",
             value: "Settings Card Expanded",
             comment: "Accessibility label for the down chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.Collapsed.AccessibilityLabel.v118
+            key: "", // Shopping.SettingsCard.Collapsed.AccessibilityLabel.v120
             tableName: "Shopping",
             value: "Settings Card Collapsed",
             comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardFooterAction = MZLocalizedString(
-            key: "", // Shopping.SettingsCard.Footer.Action.v119
+            key: "", // Shopping.SettingsCard.Footer.Action.v120
             tableName: "Shopping",
             value: "Review checker is powered by Fakespot by Mozilla",
             comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v118
+            key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v120
             tableName: "Shopping",
             value: "No info about these reviews yet",
             comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v118
+            key: "", // Shopping.NoAnalysisCard.BodyLabel.Title.v120
             tableName: "Shopping",
             value: "To know whether this product’s reviews are reliable, check the review quality. It only takes about 60 seconds.",
             comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v118
+            key: "", // Shopping.NoAnalysisCard.AnalyzerButton.Title.v120
             tableName: "Shopping",
             value: "Check Review Quality",
             comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.InProgress.Headline.Title.v118
+            key: "", // Shopping.NoAnalysisCard.InProgress.Headline.Title.v120
             tableName: "Shopping",
             value: "Checking review quality",
             comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
-            key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v118
+            key: "", // Shopping.NoAnalysisCard.InProgress.Body.Label.v120
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
             comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.Label.Title.v119
+            key: "", // Shopping.ReviewQualityCard.Label.Title.v120
             tableName: "Shopping",
             value: "How we determine review quality",
             comment: "Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardExpandedAccessibilityLabel = MZLocalizedString(
-            key: "", // / Shopping.ReviewQualityCard.Label.Title.v119
+            key: "", // / Shopping.ReviewQualityCard.Label.Title.v120
             tableName: "Shopping",
             value: "How we determine review quality Card Expanded",
             comment: "Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardCollapsedAccessibilityLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v119
+            key: "", // Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v120
             tableName: "Shopping",
             value: "How we determine review quality Card Collapsed",
             comment: "Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.Headline.Label.v119
+            key: "", // Shopping.ReviewQualityCard.Headline.Label.v120
             tableName: "Shopping",
             value: "We use AI technology from Fakespot by Mozilla to check the reliability of product reviews. This will only help you assess review quality, not product quality.",
             comment: "Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardSubHeadlineLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.v119
+            key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.v120
             tableName: "Shopping",
             value: "We assign each product’s reviews a *letter grade* from A to F.",
             comment: "Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardReliableReviewsLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.ReliableReviews.Label.v119
+            key: "", // Shopping.ReviewQualityCard.ReliableReviews.Label.v120
             tableName: "Shopping",
             value: "Reliable reviews. We believe the reviews are likely from real customers who left honest, unbiased reviews.",
             comment: "Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardMixedReviewsLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.MixedReviews.Label.v119
+            key: "", // Shopping.ReviewQualityCard.MixedReviews.Label.v120
             tableName: "Shopping",
             value: "We believe there’s a mix of reliable and unreliable reviews",
             comment: "Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardUnreliableReviewsLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.UnreliableReviews.Label.v119
+            key: "", // Shopping.ReviewQualityCard.UnreliableReviews.Label.v120
             tableName: "Shopping",
             value: "Unreliable reviews. We believe the reviews are likely fake or from biased reviewers.",
             comment: "Unnreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardAdjustedRatingLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.AdjustedRating.Label.v119
+            key: "", // Shopping.ReviewQualityCard.AdjustedRating.Label.v120
             tableName: "Shopping",
             value: "*The adjusted rating* is based only on reviews we believe to be reliable.",
             comment: "Adujusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.Highlights.Label.v119
+            key: "", // Shopping.ReviewQualityCard.Highlights.Label.v120
             tableName: "Shopping",
             value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
             comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
-            key: "", // Shopping.ReviewQualityCard.LearnMoreButton.Title.v119
+            key: "", // Shopping.ReviewQualityCard.LearnMoreButton.Title.v120
             tableName: "Shopping",
             value: "Learn more about how Fakespot determines review quality",
             comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let OptInCardHeaderTitle = MZLocalizedString(
-            key: "", // Shopping.OptInCard.HeaderLabel.Title.v119
+            key: "", // Shopping.OptInCard.HeaderLabel.Title.v120
             tableName: "Shopping",
             value: "Try our trusted guide to product reviews",
             comment: "Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardCopy = MZLocalizedString(
-            key: "", // Shopping.OptInCard.FirstParagraph.Title.v119
+            key: "", // Shopping.OptInCard.FirstParagraph.Title.v120
             tableName: "Shopping",
             value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from Firefox, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
             comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are curently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
-            key: "", // Shopping.OptInCard.LearnMoreButtonTitle.Title.v119
+            key: "", // Shopping.OptInCard.LearnMoreButtonTitle.Title.v120
             tableName: "Shopping",
             value: "Learn more",
             comment: "Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardDisclaimerText = MZLocalizedString(
-            key: "", // Shopping.OptInCard.DisclaimerText.Title.v119
+            key: "", // Shopping.OptInCard.DisclaimerText.Title.v120
             tableName: "Shopping",
             value: "By selecting “Yes, Try It” you agree to Fakespot by Mozilla’s:",
             comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
-            key: "", // Shopping.OptInCard.PrivacyPolicyButtonTitle.Title.v119
+            key: "", // Shopping.OptInCard.PrivacyPolicyButtonTitle.Title.v120
             tableName: "Shopping",
             value: "Privacy policy",
             comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
         public static let OptInCardTermsOfUse = MZLocalizedString(
-            key: "", // Shopping.OptInCard.TermsOfUseButtonTitle.Title.v119
+            key: "", // Shopping.OptInCard.TermsOfUseButtonTitle.Title.v120
             tableName: "Shopping",
             value: "Terms of use",
             comment: "Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
         public static let OptInCardMainButtonTitle = MZLocalizedString(
-            key: "", // Shopping.OptInCard.MainButtonTitle.Title.v119
+            key: "", // Shopping.OptInCard.MainButtonTitle.Title.v120
             tableName: "Shopping",
             value: "Yes, Try It",
             comment: "Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardSecondaryButtonTitle = MZLocalizedString(
-            key: "", // Shopping.OptInCard.SecondaryButtonTitle.Title.v119
+            key: "", // Shopping.OptInCard.SecondaryButtonTitle.Title.v120
             tableName: "Shopping",
             value: "Not now",
             comment: "Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot)")
@@ -3906,32 +3906,32 @@ extension String {
             value: "Unfortunately, we can’t check the review quality for certain types of products. For example, gift cards and streaming video, music, and games.",
             comment: "Title for info card when Fakespot cannot analyze reviews for a certain product type")
         public static let InfoCardNotEnoughReviewsTitle = MZLocalizedString(
-            key: "", // Shopping.InfoCard.NotEnoughReviews.Title.v119
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Title.v120
             tableName: "Shopping",
             value: "Not Enough Reviews Yet",
             comment: "Title for info card when there are not enough reviews for a product")
         public static let InfoCardNotEnoughReviewsDescription = MZLocalizedString(
-            key: "", // Shopping.InfoCard.NotEnoughReviews.Description.v119
+            key: "", // Shopping.InfoCard.NotEnoughReviews.Description.v120
             tableName: "Shopping",
             value: "When this product has more reviews, we’ll be able to analyze them.",
             comment: "Description for info card when there are not enough reviews for a product")
         public static let InfoCardNeedsAnalysisTitle = MZLocalizedString(
-            key: "", // Shopping.InfoCard.NeedsAnalysis.Title.v119
+            key: "", // Shopping.InfoCard.NeedsAnalysis.Title.v120
             tableName: "Shopping",
             value: "New Info To Check",
             comment: "Title for info card when the product needs analysis")
         public static let InfoCardNeedsAnalysisPrimaryAction = MZLocalizedString(
-            key: "", // Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v119
+            key: "", // Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120
             tableName: "Shopping",
             value: "Check Now",
             comment: "Primary action title for info card when the product needs analysis")
         public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
-            key: "", // Shopping.InfoCard.ProgressAnalysis.Title.v119
+            key: "", // Shopping.InfoCard.ProgressAnalysis.Title.v120
             tableName: "Shopping",
             value: "Checking review quality",
             comment: "Title for info card when the product is in analysis mode")
         public static let InfoCardProgressAnalysisDescription = MZLocalizedString(
-            key: "", // Shopping.InfoCard.ProgressAnalysis.Description.v119
+            key: "", // Shopping.InfoCard.ProgressAnalysis.Description.v120
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
             comment: "Description for info card when the product is in analysis mode")
@@ -4533,9 +4533,9 @@ extension String {
         value: "Share this page",
         comment: "Accessibility label for the share button in url bar")
     public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.Shopping.A11y.Label.v119",
+        key: "TabLocation.Shopping.A11y.Label.v120",
         tableName: "TabLocation",
-        value: "Review checker",
+        value: "Review Checker",
         comment: "Accessibility label for the shopping button in url bar")
     public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.ETP.On.Secure.A11y.Label.v119",

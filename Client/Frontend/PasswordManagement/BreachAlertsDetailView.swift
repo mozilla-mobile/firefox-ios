@@ -55,7 +55,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
 
     lazy var learnMoreButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore
@@ -72,7 +72,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         let label = UILabel()
         label.text = .BreachAlertsBreachDate
         label.numberOfLines = 0
-        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
         label.accessibilityLabel = .BreachAlertsBreachDate
@@ -91,7 +91,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
 
     lazy var goToButton: UILabel = {
         let button = UILabel()
-        button.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        button.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
         button.numberOfLines = 0
         button.isUserInteractionEnabled = true
         button.isAccessibilityElement = true
