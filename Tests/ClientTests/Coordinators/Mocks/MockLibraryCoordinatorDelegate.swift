@@ -10,6 +10,8 @@ class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDe
     var didFinishSettingsCalled = 0
     var didRequestToOpenInNewTabCalled = false
     var didSelectURLCalled = false
+    var didOpenRecentlyClosedSiteInSameTab = 0
+    var didOpenRecentlyClosedSiteInNewTab = 0
     var lastOpenedURL: URL?
     var lastVisitType: VisitType?
     var isPrivate = false
@@ -28,5 +30,13 @@ class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDe
         didSelectURLCalled = true
         lastOpenedURL = url
         lastVisitType = visitType
+    }
+
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        didOpenRecentlyClosedSiteInSameTab += 1
+    }
+
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        didOpenRecentlyClosedSiteInNewTab += 1
     }
 }
