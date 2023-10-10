@@ -121,7 +121,7 @@ class DownloadHelper: NSObject {
 
         filenameItem.customRender = { label, contentView in
             label.numberOfLines = 2
-            label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
             label.lineBreakMode = .byCharWrapping
         }
 
