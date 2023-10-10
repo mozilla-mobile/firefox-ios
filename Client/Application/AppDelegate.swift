@@ -91,6 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Configure logger so we can start tracking logs early
         logger.configure(crashManager: DefaultCrashManager())
+        initializeRustErrors(logger: logger)
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)

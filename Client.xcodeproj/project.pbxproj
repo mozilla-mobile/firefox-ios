@@ -1528,6 +1528,10 @@
 		F8AAC1B429663619000BCDEC /* RustAutofill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B329663618000BCDEC /* RustAutofill.swift */; };
 		F8AAC1B7296637CE000BCDEC /* RustAutofillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */; };
 		F8B18F5529EE01A2008724A8 /* RustSyncManagerAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B18F5429EE01A1008724A8 /* RustSyncManagerAPITests.swift */; };
+		F8B7109E2ABE380B0029726E /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
+		F8B7109F2ABE38970029726E /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
+		F8B710A02ABE38980029726E /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
+		F8B710A12ABE38980029726E /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
 		F8DEACC52A3D43DA00C3B19D /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8DEACC42A3D43DA00C3B19D /* Sentry */; };
 		F98CB66E2A4123F1005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98CB66C2A4123E7005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift */; };
 		FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
@@ -6917,6 +6921,7 @@
 		F8AAC1B329663618000BCDEC /* RustAutofill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofill.swift; sourceTree = "<group>"; };
 		F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofillTests.swift; sourceTree = "<group>"; };
 		F8B18F5429EE01A1008724A8 /* RustSyncManagerAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustSyncManagerAPITests.swift; sourceTree = "<group>"; };
+		F8B7109D2ABE380B0029726E /* RustErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustErrors.swift; sourceTree = "<group>"; };
 		F8CA43008FC72296965ED032 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
 		F8DB4306B31FC3DC90685A8C /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		F8EF4290ACE53B2692EA362F /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -9578,6 +9583,7 @@
 				1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */,
 				8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */,
 				F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */,
+				F8B7109D2ABE380B0029726E /* RustErrors.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -12161,6 +12167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				397848DE1ED86605004C0C0B /* NotificationService.swift in Sources */,
+				F8B710A12ABE38980029726E /* RustErrors.swift in Sources */,
 				45355B232A269E7100B1EA8E /* Autopush.swift in Sources */,
 				45355B262A269EAC00B1EA8E /* PushConfiguration.swift in Sources */,
 				396E38CC1EE0816C00CC180F /* Profile.swift in Sources */,
@@ -12337,6 +12344,7 @@
 				C87DF976267246830097E707 /* LegacyThemeManager.swift in Sources */,
 				C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */,
 				F80DF74B270CB9CA00E4C37D /* AppAuthenticator.swift in Sources */,
+				F8B7109F2ABE38970029726E /* RustErrors.swift in Sources */,
 				F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */,
 				60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */,
 				C87DF98A2672468F0097E707 /* LegacyDarkTheme.swift in Sources */,
@@ -12823,6 +12831,7 @@
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
 				E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */,
 				DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */,
+				F8B7109E2ABE380B0029726E /* RustErrors.swift in Sources */,
 				C8124BB129D6F55400540B79 /* Route.swift in Sources */,
 				63306D3921103EAE00F25400 /* LegacySavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
@@ -13364,6 +13373,7 @@
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				EB9407492081353100702E05 /* UXConstants.swift in Sources */,
+				F8B710A02ABE38980029726E /* RustErrors.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */,
 				210E0EBB298D9D6600BB4F33 /* OpenSearchEngine.swift in Sources */,
 				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
