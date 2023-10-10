@@ -66,11 +66,10 @@ final class RemoteTabPanelTests: XCTestCase {
                                   version: "v1.0",
                                   fxaDeviceId: "12345")
         let fakeData = [ClientAndTabs(client: client, tabs: fakeTabs)]
-        return RemoteTabsPanelState(refreshState: .loaded,
-                                    clientAndTabs: fakeData,
+        return RemoteTabsPanelState(refreshState: .idle,
                                     allowsRefresh: true,
-                                    showingEmptyState: nil,
-                                    syncIsSupported: true)
+                                    clientAndTabs: fakeData,
+                                    showingEmptyState: nil)
     }
 
     private func createSubject(state: RemoteTabsPanelState,
