@@ -101,7 +101,7 @@ class RemoteTabsPanel: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshTabs() // Matches legacy behavior.
+        refreshTabs()
     }
 
     private func setupLayout() {
@@ -122,9 +122,6 @@ class RemoteTabsPanel: UIViewController,
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
         tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-
-        // Matches previous legacy behavior; refresh tabs after theme apply.
-        refreshTabs()
     }
 
     // MARK: - Redux
