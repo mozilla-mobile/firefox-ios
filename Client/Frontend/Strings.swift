@@ -3633,7 +3633,7 @@ extension String {
         public static let SheetHeaderTitle = MZLocalizedString(
             key: "", // Shopping.Sheet.Title.v118
             tableName: "Shopping",
-            value: "Review checker",
+            value: "Review Checker",
             comment: "Label for the header of the Shopping Experience (Fakespot) sheet")
         public static let SheetHeaderBetaTitle = MZLocalizedString(
             key: "", // Shopping.Sheet.Beta.Title.v119
@@ -4533,9 +4533,9 @@ extension String {
         value: "Share this page",
         comment: "Accessibility label for the share button in url bar")
     public static let TabLocationShoppingAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.Shopping.A11y.Label.v119",
+        key: "TabLocation.Shopping.A11y.Label.v120",
         tableName: "TabLocation",
-        value: "Review checker",
+        value: "Review Checker",
         comment: "Accessibility label for the shopping button in url bar")
     public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
