@@ -5,9 +5,10 @@
 import XCTest
 import Common
 
-class PhotonActionSheetTest: BaseTestCase {
+class PhotonActionSheetTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306849
     // Smoketest
-    func testPinToTop() {
+    func testPinToShortcuts() {
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
@@ -30,6 +31,8 @@ class PhotonActionSheetTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2322067
+    // Smoketest
     func testShareOptionIsShown() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -37,24 +40,10 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // Wait to see the Share options sheet
-        mozWaitForElementToExist(app.cells["Copy"], timeout: 10)
+        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
     }
 
-    // Smoketest
-    func testShareOptionIsShownFromShortCut() {
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-
-        // Wait to see the Share options sheet
-        if iPad() {
-            mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
-        } else {
-            mozWaitForElementToExist(app.buttons["Close"], timeout: 15)
-        }
-    }
-
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2322667
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -65,30 +54,8 @@ class PhotonActionSheetTest: BaseTestCase {
         app.cells["Send Link to Device"].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
+        XCTAssertTrue(app.staticTexts["Please open Firefox, go to Settings and sign in to continue."].exists)
     }
-    // Disable issue #5554, More button is not accessible
-    /*
-    // Test disabled due to new implementation Bug 1449708 - new share sheet
-    func testSendToDeviceFromShareOption() {
-        // Open and Wait to see the Share options sheet
-        navigator.browserPerformAction(.shareOption)
-        mozWaitForElementToExist(app.buttons["More"])
-        mozWaitForElementToNotExist(app.buttons["Send Tab"])
-        app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
-
-        // Enable Send Tab
-        let sendTabButton = app.tables.cells.switches["Send Tab"]
-        sendTabButton.tap()
-        app.navigationBars["Activities"].buttons["Done"].tap()
-
-        // Send Tab option appears on the Share options sheet
-        mozWaitForElementToExist(app.buttons["Send Tab"])
-        app.buttons["Send Tab"].tap()
-
-        // User not logged in
-        mozWaitForElementToExist(app.images[ImageIdentifiers.emptySyncImageName])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-    }*/
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
@@ -111,6 +78,7 @@ class PhotonActionSheetTest: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
@@ -122,6 +90,7 @@ class PhotonActionSheetTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts["Send to Device"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         app.staticTexts["Send to Device"].tap()
@@ -131,6 +100,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
         openNewShareSheet()
         app.buttons["Cancel"].tap()
