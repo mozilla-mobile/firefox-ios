@@ -16,9 +16,9 @@ class RemoteTabsPanelMiddleware {
     }
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
-        let tabPanelState = state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel)
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
+            let tabPanelState = state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel)
             self.updateSyncableAccountState(for: tabPanelState, then: { refreshAllowed in
                 if refreshAllowed {
                     self.refreshTabs(updateCache: true)
