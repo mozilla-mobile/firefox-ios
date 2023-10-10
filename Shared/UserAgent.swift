@@ -98,10 +98,17 @@ public enum UserAgentPlatform {
 public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    private static let mobileAdsUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     public static let customUAFor = [
         "paypal.com": defaultMobileUA,
         "yahoo.com": defaultMobileUA,
+        "demdex.net": mobileAdsUA,
+        "doubleclick.net": mobileAdsUA,
+        "rfihub.com": mobileAdsUA,
+        "amazon-adsystem.com": mobileAdsUA,
+        "nba.com": mobileAdsUA,
+        "roku.com": mobileAdsUA,
         "disneyplus.com": customDesktopUA]
 }
 
