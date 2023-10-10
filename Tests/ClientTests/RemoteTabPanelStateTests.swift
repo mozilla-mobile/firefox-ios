@@ -30,6 +30,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs)
 
+        // Refresh should fail since Profile.hasSyncableAccount
+        // is false for unit test, expected state is .idle
         XCTAssertEqual(newState.refreshState,
                        RemoteTabsPanelRefreshState.idle)
     }
