@@ -46,23 +46,27 @@ class RemoteTabsPanelMiddleware {
             }
 
             profile.getCachedClientsAndTabs { [weak self] result in
-                guard let clientAndTabs = result else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                    return
-                }
+                ensureMainThread {
+                    guard let clientAndTabs = result else {
+                        store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                        return
+                    }
 
-                let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
-                                                           isUpdating: updateCache)
-                store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
+                    let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
+                                                               isUpdating: updateCache)
+                    store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
 
-                if updateCache {
-                    self?.profile.getClientsAndTabs { result in
-                        guard let clientAndTabs = result else {
-                            store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                            return
+                    if updateCache {
+                        self?.profile.getClientsAndTabs { result in
+                            ensureMainThread {
+                                guard let clientAndTabs = result else {
+                                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                                    return
+                                }
+
+                                store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
+                            }
                         }
-
-                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                     }
                 }
             }
