@@ -768,6 +768,20 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.isPrivate)
     }
 
+    func testOpenRecentlyClosedTabInSameTab() {
+        let subject = createSubject()
+
+        subject.openRecentlyClosedSiteInSameTab(URL(string: "https://www.google.com")!)
+    }
+
+    func testOpenRecentlyClosedSiteInNewTab_addsOneTabToTabManager() {
+        let subject = createSubject()
+
+        subject.openRecentlyClosedSiteInNewTab(URL(string: "https://www.google.com")!, isPrivate: false)
+
+        XCTAssertEqual(tabManager.lastSelectedTabs.count, 1)
+    }
+
     // MARK: - Fakespot
     func testFakespotCoordinatorDelegate_didDidDismiss_removesChild() {
         let subject = createSubject()
