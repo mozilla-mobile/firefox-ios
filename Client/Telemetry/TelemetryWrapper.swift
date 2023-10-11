@@ -177,6 +177,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
+        setSyncDeviceId()
         SponsoredTileTelemetry.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
@@ -193,6 +194,20 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             name: UIApplication.didFinishLaunchingNotification,
             object: nil
         )
+    }
+
+    // Sets hashed fxa sync device id for glean deletion ping
+    func setSyncDeviceId() {
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID for deletion-request ping
+        guard let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
+              let state = accountManager.deviceConstellation()?.state(),
+              let clientGUID = state.localDevice?.id
+        else { return }
+
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, _) in
+            let deviceId = (clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+            GleanMetrics.Deletion.syncDeviceId.set(deviceId)
+        }
     }
 
     @objc
