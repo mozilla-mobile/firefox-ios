@@ -20,6 +20,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController!
     weak var parentCoordinator: LibraryCoordinatorDelegate?
+    override var isDismissable: Bool { false }
 
     init(
         router: Router,
