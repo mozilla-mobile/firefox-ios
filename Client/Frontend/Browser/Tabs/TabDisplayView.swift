@@ -9,6 +9,12 @@ struct TabDisplayViewState {
     var isPrivateTabs: Bool
     var isInactiveTabEmpty: Bool
     var isInactiveTabsExpanded = false
+    var inactiveTabs = ["One",
+                        "Two",
+                        "Three",
+                        "Four",
+                        "Five",
+                        "Six"]
 }
 
 class TabDisplayView: UIView,
@@ -83,8 +89,9 @@ class TabDisplayView: UIView,
             let section = self.getSectionLayout(sectionIndex)
             switch section {
             case .inactiveTabs:
-                return self.inactiveTabsSectionManager.layoutSection(layoutEnvironment,
-                                                                     isExpanded: tabDisplayState.isInactiveTabsExpanded)
+                return self.inactiveTabsSectionManager.layoutSection(
+                    layoutEnvironment,
+                    isExpanded: tabDisplayState.isInactiveTabsExpanded)
             }
         }
         return layout
@@ -113,7 +120,7 @@ class TabDisplayView: UIView,
             guard !tabDisplayState.isInactiveTabEmpty,
                   !tabDisplayState.isPrivateTabs else { return 0 }
 
-            return tabDisplayState.isInactiveTabsExpanded ? inactiveTabsSectionManager.items.count : 0
+            return tabDisplayState.isInactiveTabsExpanded ? tabDisplayState.inactiveTabs.count : 0
         default:
             return 0
         }
@@ -164,7 +171,7 @@ class TabDisplayView: UIView,
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
         else { return UICollectionViewCell() }
 
-        cell.configure(text: inactiveTabsSectionManager.items[indexPath.row])
+        cell.configure(text: tabDisplayState.inactiveTabs[indexPath.row])
         if let theme = theme {
             cell.applyTheme(theme: theme)
         }

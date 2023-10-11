@@ -35,9 +35,9 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
     }
 
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
         contentView.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
-        backgroundColor = theme.colors.layer2
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         selectedView.backgroundColor = .green
     }

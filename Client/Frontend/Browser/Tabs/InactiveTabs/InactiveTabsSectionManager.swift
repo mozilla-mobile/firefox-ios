@@ -11,19 +11,23 @@ class InactiveTabsSectionManager {
         static let footerEstimatedHeight: CGFloat = 88
     }
 
-    var items = ["One",
-                 "Two",
-                 "Three",
-                 "Four",
-                 "Five",
-                 "Six"]
+    private var trailingSwipeClosure: UICollectionLayoutListConfiguration.SwipeActionsConfigurationProvider? = { indexPath in
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
+            // TODO: FXIOS-6936 Handle action
+            completion(true)
+        }
+        deleteAction.backgroundColor = .systemGreen
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment,
                        isExpanded: Bool) -> NSCollectionLayoutSection {
         var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         config.headerMode = .firstItemInSection
         config.footerMode = .supplementary
-        config.showsSeparators = true
+        config.trailingSwipeActionsConfigurationProvider = trailingSwipeClosure
         let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
 
         // Supplementary Item
