@@ -82,8 +82,14 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: state.showingEmptyState)
             return newState
-        case RemoteTabsPanelAction.refreshDidFail:
+        case RemoteTabsPanelAction.refreshDidFail(let reason):
             // Refresh failed. Show error empty state.
+            let allowsRefresh: Bool = {
+                switch reason {
+                case .notLoggedIn, .syncDisabledByUser: return false
+                default: return true
+                }
+            }()
             let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 allowsRefresh: state.allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
@@ -92,13 +98,13 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
             // Send client and tabs state, ensure empty state is nil and refresh is idle
             let newState = RemoteTabsPanelState(refreshState: .idle,
-                                                allowsRefresh: state.allowsRefresh,
+                                                allowsRefresh: true,
                                                 clientAndTabs: newClientAndTabs,
                                                 showingEmptyState: nil)
             return newState
         case RemoteTabsPanelAction.cachedTabsAvailable(let cachedResults):
             let newState = RemoteTabsPanelState(refreshState: cachedResults.isUpdating ? .refreshing : .idle,
-                                                allowsRefresh: state.allowsRefresh,
+                                                allowsRefresh: true,
                                                 clientAndTabs: cachedResults.clientAndTabs,
                                                 showingEmptyState: nil)
             return newState
