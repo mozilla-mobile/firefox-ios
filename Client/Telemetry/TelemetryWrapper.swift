@@ -177,7 +177,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        setSyncDeviceId()
         SponsoredTileTelemetry.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
@@ -194,20 +193,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             name: UIApplication.didFinishLaunchingNotification,
             object: nil
         )
-    }
-
-    // Sets hashed fxa sync device id for glean deletion ping
-    func setSyncDeviceId() {
-        // Grab our token so we can use the hashed_fxa_uid and clientGUID for deletion-request ping
-        guard let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
-              let state = accountManager.deviceConstellation()?.state(),
-              let clientGUID = state.localDevice?.id
-        else { return }
-
-        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, _) in
-            let deviceId = (clientGUID + token.hashedFxAUID).sha256.hexEncodedString
-            GleanMetrics.Deletion.syncDeviceId.set(deviceId)
-        }
     }
 
     @objc
@@ -411,6 +396,8 @@ extension TelemetryWrapper {
         case shoppingLearnMoreButton = "shopping-learn-more-button"
         case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
+        case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
+        case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1107,10 +1094,15 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
-        case(.information, .view, .shoppingProductPageVisits, _, _):
+        case (.information, .view, .shoppingProductPageVisits, _, _):
             GleanMetrics.Shopping.productPageVisits.add()
         case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
             GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
+        case (.action, .tap, .shoppingNoAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
+        case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,

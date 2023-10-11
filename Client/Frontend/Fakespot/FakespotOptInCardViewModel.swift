@@ -14,37 +14,6 @@ struct FakespotOptInCardViewModel {
         static let bodyFirstParagraphLabelFontSize: CGFloat = 15
     }
 
-    public enum PartnerWebsite: String, CaseIterable {
-        case amazon
-        case walmart
-        case bestbuy
-
-        var title: String {
-            switch self {
-            case .bestbuy: return "Best Buy"
-            default: return self.rawValue.capitalized
-            }
-        }
-
-        var orderWebsites: [String] {
-            let currentPartnerWebsites = PartnerWebsite.allCases.map { $0.title }
-
-            // make sure current website is first
-            var websitesOrder = currentPartnerWebsites.filter { $0 != self.title }
-            websitesOrder.insert(self.title, at: 0)
-
-            return websitesOrder
-        }
-
-        init?(for siteName: String?) {
-            guard let siteName = siteName, let partner = PartnerWebsite(rawValue: siteName) else {
-                return nil
-            }
-
-            self = partner
-        }
-    }
-
     private let tabManager: TabManager
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
@@ -55,7 +24,9 @@ struct FakespotOptInCardViewModel {
     let headerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
     let bodyFirstParagraphLabel: String = .Shopping.OptInCardCopy
     let bodyFirstParagraphA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
-    let disclaimerTextLabel: String = .Shopping.OptInCardDisclaimerText
+    let disclaimerTextLabel = String(format: .Shopping.OptInCardDisclaimerText,
+                                     FakespotName.shortName.rawValue,
+                                     MozillaName.shortName.rawValue)
     let disclaimerTextLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
 
     // MARK: Buttons
@@ -142,7 +113,13 @@ struct FakespotOptInCardViewModel {
                                                           size: UX.bodyFirstParagraphLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyFirstParagraphLabelFontSize)
-        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel, websites[0], websites[1], websites[2])
+        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel,
+                                                         websites[0],
+                                                         websites[1],
+                                                         websites[2],
+                                                         AppName.shortName.rawValue,
+                                                         FakespotName.shortName.rawValue,
+                                                         MozillaName.shortName.rawValue)
         return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
     }
 

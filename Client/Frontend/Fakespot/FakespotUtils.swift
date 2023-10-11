@@ -3,12 +3,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// Utility functions related to Fakespot
 public struct FakespotUtils {
     public static var learnMoreUrl: URL? {
         // Returns the predefined URL associated to learn more button action.
-        return URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+        guard let url = SupportUtils.URLForTopic("review_checker_mobile") else { return nil }
+
+        let queryItems = [URLQueryItem(name: "utm_campaign", value: "fakespot-by-mozilla"),
+                          URLQueryItem(name: "utm_term", value: "core-sheet")]
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        urlComponents?.queryItems = queryItems
+
+        return urlComponents?.url
     }
 
     public static var privacyPolicyUrl: URL? {
@@ -23,6 +31,6 @@ public struct FakespotUtils {
 
     public static var fakespotUrl: URL? {
         // Returns the predefined URL associated to Fakespot button action.
-        return URL(string: "https://www.fakespot.com/review-checker?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+        return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
     }
 }

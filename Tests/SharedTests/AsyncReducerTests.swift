@@ -85,7 +85,7 @@ class AsyncReducerTests: XCTestCase {
 
             // Pretend that some new work arrived while we were handling this.
             if let nextUp = addDuring.popLast() {
-                _ = XCTAssertNoThrow(try reducer.append(nextUp))
+                XCTAssertNoThrow(try reducer.append(nextUp))
             }
 
             return deferMaybe(out)

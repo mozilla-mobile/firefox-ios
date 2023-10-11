@@ -40,3 +40,13 @@ def test_homescreen_survey_navigates_correctly(xcodebuild, setup_experiment, sta
     xcodebuild.test(
         "XCUITests/ExperimentIntegrationTests/testHomeScreenMessageNavigatesCorrectly", erase=False
     )
+
+@pytest.mark.parametrize("load_branches", [("branch")], indirect=True)
+def test_homescreen_survey_dismisses_correctly(xcodebuild, setup_experiment, start_app, load_branches):
+    xcodebuild.install()
+    setup_experiment(load_branches)
+    xcodebuild.test("XCUITests/ExperimentIntegrationTests/testVerifyExperimentEnrolled", erase=False)
+    start_app()
+    xcodebuild.test(
+        "XCUITests/ExperimentIntegrationTests/testHomeScreenMessageDismissesCorrectly", erase=False
+    )

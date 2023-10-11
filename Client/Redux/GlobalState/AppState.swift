@@ -17,6 +17,8 @@ struct AppState: StateType {
             .compactMap {
                 switch ($0, screen) {
                 case (.themeSettings(let state), .themeSettings): return state as? S
+                case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
+                default: return nil
                 }
             }
             .first
@@ -31,4 +33,5 @@ extension AppState {
 
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [ThemeManagerMiddleware().themeManagerProvider])
+                  middlewares: [ThemeManagerMiddleware().themeManagerProvider,
+                                RemoteTabsPanelMiddleware().remoteTabsPanelProvider])

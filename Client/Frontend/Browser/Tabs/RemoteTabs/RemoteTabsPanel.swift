@@ -11,19 +11,27 @@ import Redux
 class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
-                       RemotePanelDelegateProvider {
+                       RemotePanelDelegateProvider,
+                       StoreSubscriber {
+    typealias SubscriberStateType = RemoteTabsPanelState
+
+    // MARK: - Properties
+
     private(set) var state: RemoteTabsPanelState
     var tableViewController: RemoteTabsTableViewController
-    var remotePanelDelegate: RemotePanelDelegate?
+    weak var remotePanelDelegate: RemotePanelDelegate?
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
-    init(state: RemoteTabsPanelState,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
+
+    // MARK: - Initializer
+
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.state = state
+        self.state = RemoteTabsPanelState()
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.tableViewController = RemoteTabsTableViewController(state: state)
@@ -37,7 +45,28 @@ class RemoteTabsPanel: UIViewController,
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    func observeNotifications() {
+    deinit {
+        if isReduxIntegrationEnabled {
+            store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
+            store.unsubscribe(self)
+        }
+    }
+
+    // MARK: - Actions
+
+    func tableViewControllerDidPullToRefresh() {
+        refreshTabs()
+    }
+
+    // MARK: - Internal Utilities
+
+    private func refreshTabs() {
+        // Ensure we do not already have a refresh in progress
+        guard state.refreshState != .refreshing else { return }
+        store.dispatch(RemoteTabsPanelAction.refreshTabs)
+    }
+
+    private func observeNotifications() {
         // TODO: State to be provided by forthcoming Redux updates. TBD.
         // For now, continue to observe notifications.
         let notificationCenter = NotificationCenter.default
@@ -51,12 +80,28 @@ class RemoteTabsPanel: UIViewController,
                                        object: nil)
     }
 
+    @objc
+    func notificationReceived(_ notification: Notification) {
+        let name = notification.name
+        if name == .FirefoxAccountChanged || name == .ProfileDidFinishSyncing {
+            refreshTabs()
+        }
+    }
+
+    // MARK: - View & Layout
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         listenForThemeChange(view)
         setupLayout()
+        subscribeRedux()
         applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTabs()
     }
 
     private func setupLayout() {
@@ -77,23 +122,29 @@ class RemoteTabsPanel: UIViewController,
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
         tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs(state: state)
     }
 
-    func forceRefreshTabs() {
-        tableViewController.refreshTabs(state: state, updateCache: true)
+    // MARK: - Redux
+
+    private func subscribeRedux() {
+        guard isReduxIntegrationEnabled else { return }
+        store.dispatch(ActiveScreensStateAction.showScreen(.remoteTabsPanel))
+        store.dispatch(RemoteTabsPanelAction.panelDidAppear)
+        store.subscribe(self, transform: {
+            return $0.select(RemoteTabsPanelState.init)
+        })
     }
 
-    @objc
-    func notificationReceived(_ notification: Notification) {
-        let name = notification.name
-        if name == .FirefoxAccountChanged || name == .ProfileDidFinishSyncing {
-            ensureMainThread {
-                self.tableViewController.refreshTabs(state: self.state)
-            }
+    func newState(state: RemoteTabsPanelState) {
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            self.state = state
+            tableViewController.newState(state: state)
         }
     }
+
+    // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
 
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
         // Pass event along to our delegate

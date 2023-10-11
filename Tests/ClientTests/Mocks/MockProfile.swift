@@ -271,7 +271,11 @@ open class MockProfile: Client.Profile {
 
     var mockClientAndTabs = [ClientAndTabs]()
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+        completion(mockClientAndTabs)
+    }
+
+    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
         completion(mockClientAndTabs)
     }
 

@@ -15,7 +15,7 @@ class TestSwiftData: XCTestCase {
     var testDB: String!
 
     override func setUpWithError() throws {
-        super.setUp()
+        try super.setUpWithError()
         let files = MockFiles()
         do {
             try files.remove("testSwiftData.db")

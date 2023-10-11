@@ -8,7 +8,7 @@
 "DefaultBrowserPopup.SecondLabel.v114" = "2. 点击*默认浏览器应用*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.ThirdLabel.v114" = "3.选择*%@*";
+"DefaultBrowserPopup.ThirdLabel.v114" = "3.选择 *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "切换默认浏览器";

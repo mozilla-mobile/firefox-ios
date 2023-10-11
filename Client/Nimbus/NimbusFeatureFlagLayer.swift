@@ -15,7 +15,8 @@ final class NimbusFeatureFlagLayer {
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights:
+                .searchHighlights,
+                .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .credentialAutofillCoordinatorRefactor:
@@ -97,6 +98,7 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         case .searchHighlights: return config.searchHighlights
+        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
     }
