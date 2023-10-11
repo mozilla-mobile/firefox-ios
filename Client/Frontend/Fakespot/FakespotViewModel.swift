@@ -136,16 +136,9 @@ class FakespotViewModel {
         }
     }
 
-    private(set) var analysisStatus: AnalysisStatus? {
-        didSet {
-            onAnalysisStatusChange?()
-        }
-    }
-
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
     var isSwiping = false
-    var onAnalysisStatusChange: (() -> Void)?
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -256,21 +249,26 @@ class FakespotViewModel {
     func fetchProductIfOptedIn() {
         if isOptedIn {
             fetchProductTask = Task { @MainActor [weak self] in
-                await self?.fetchProductAnalysis()
-                try? await self?.observeProductAnalysisStatus()
+                guard let self else { return }
+                await self.fetchProductAnalysis()
+                do {
+                    for try await status in self.observeProductAnalysisStatus() where status == .completed {
+                        await self.fetchProductAnalysis(showLoading: false)
+                    }
+                } catch {}
             }
         }
     }
 
     func triggerProductAnalysis() {
         observeProductTask = Task { @MainActor [weak self] in
-            await self?.triggerProductAnalyze()
+            try? await self?.triggerProductAnalyze()
         }
     }
 
-    func fetchProductAnalysis() async {
+    func fetchProductAnalysis(showLoading: Bool = true) async {
         analysisCount += 1
-        state = .loading
+        if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
             let needsAnalysis = product?.needsAnalysis ?? false
@@ -281,28 +279,42 @@ class FakespotViewModel {
         }
     }
 
-    private func triggerProductAnalyze() async {
-        analysisStatus = try? await shoppingProduct.triggerProductAnalyze()
-        try? await observeProductAnalysisStatus()
-        await fetchProductAnalysis()
+    private func triggerProductAnalyze() async throws {
+        _ = try? await shoppingProduct.triggerProductAnalyze()
+        for try await status in observeProductAnalysisStatus() where status == .completed {
+            await fetchProductAnalysis()
+        }
     }
 
-    private func observeProductAnalysisStatus() async throws {
-        var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+    private func observeProductAnalysisStatus() -> AsyncThrowingStream<AnalysisStatus, Error> {
+        AsyncThrowingStream<AnalysisStatus, Error> { continuation in
+            Task {
+                do {
+                    var sleepDuration: UInt64 = NSEC_PER_SEC * 30
 
-        while true {
-            let result = try await shoppingProduct.getProductAnalysisStatus()
-            analysisStatus = result?.status
-            guard result?.status.isAnalyzing == true else {
-                break
-            }
+                    while true {
+                        let result = try await shoppingProduct.getProductAnalysisStatus()
+                        guard let result else {
+                            continuation.finish()
+                            break
+                        }
+                        continuation.yield(result.status)
+                        guard result.status.isAnalyzing == true else {
+                            continuation.finish()
+                            break
+                        }
 
-            // Sleep for the current duration
-            try await Task.sleep(nanoseconds: sleepDuration)
+                        // Sleep for the current duration
+                        try await Task.sleep(nanoseconds: sleepDuration)
 
-            // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
-            if sleepDuration > NSEC_PER_SEC * 10 {
-                sleepDuration -= NSEC_PER_SEC * 10
+                        // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
+                        if sleepDuration > NSEC_PER_SEC * 10 {
+                            sleepDuration -= NSEC_PER_SEC * 10
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
             }
         }
     }

@@ -313,17 +313,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                  view?.updateLayoutForInProgress()
                  self?.onNeedsAnalysisTap()
              }
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
         case .progressAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              view.updateLayoutForInProgress()
              return view
@@ -359,26 +353,12 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
                 return view
 
             case .analysisInProgress:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.analysisProgressViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
                 return view
-            }
-        }
-    }
-
-    private func onAnalysisStatusChange(sender: UIView?) {
-        if viewModel.analysisStatus == .completed {
-            ensureMainThread {
-                sender?.removeFromSuperview()
             }
         }
     }
