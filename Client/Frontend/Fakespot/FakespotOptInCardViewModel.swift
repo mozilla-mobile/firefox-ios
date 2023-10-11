@@ -53,6 +53,9 @@ struct FakespotOptInCardViewModel {
          tabManager: TabManager = AppContainer.shared.resolve()) {
         self.tabManager = tabManager
         prefs = profile.prefs
+
+        prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptInSeen)
+        FakespotUtils().addSettingTelemetry()
     }
 
     // MARK: Actions
@@ -88,11 +91,7 @@ struct FakespotOptInCardViewModel {
         prefs.setTimestamp(Date.now(), forKey: PrefsKeys.FakespotLastCFRTimestamp)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .shoppingOptIn)
-
-        // Send settings telemetry for Fakespot
-        FakespotUtils().addSettingTelemetry()
-        
+                                     object: .shoppingOptIn)        
         onOptIn?()
     }
 

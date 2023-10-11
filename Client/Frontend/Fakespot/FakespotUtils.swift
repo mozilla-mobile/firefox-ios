@@ -46,23 +46,23 @@ public struct FakespotUtils: FeatureFlaggable {
             ]
         )
 
-        let isOptedOut = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+        let isOptedOut = profile.prefs.boolForKey(PrefsKeys.Shopping2023ExplicitOptOut) ?? false
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .settings,
             object: .shoppingComponentOptedOut,
             extras: [
-                TelemetryWrapper.ExtraKey.Shopping.isComponentOptedOut.rawValue: !isOptedOut
+                TelemetryWrapper.ExtraKey.Shopping.isComponentOptedOut.rawValue: isOptedOut
             ]
         )
 
-        let isUserOnboarded = featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly)
+        let isUserOnboarded = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptInSeen) ?? false
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .settings,
             object: .shoppingUserHasOnboarded,
             extras: [
-                TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: !isUserOnboarded
+                TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: isUserOnboarded
             ]
         )
     }

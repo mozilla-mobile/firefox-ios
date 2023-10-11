@@ -27,7 +27,13 @@ class FakespotSettingsCardViewModel {
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
-        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
+        set {
+            prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn)
+
+            if !newValue {
+                prefs.setBool(true, forKey: PrefsKeys.Shopping2023ExplicitOptOut)
+            }
+        }
     }
 
     var areAdsEnabled: Bool {
@@ -201,7 +207,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
-        
+
         viewModel?.dismissViewController?(.optingOutOfTheFeature)
     }
 
