@@ -84,6 +84,7 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        // Extra line added in order to debug in bitrise
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306951
