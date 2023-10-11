@@ -19,7 +19,8 @@ class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
                              LibraryPanelDelegate,
-                             RecentlyClosedPanelDelegate {
+                             RecentlyClosedPanelDelegate,
+                             QRCodeViewControllerDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -1847,27 +1848,9 @@ class BrowserViewController: UIViewController,
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
-}
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplay(clipBoardURL url: URL) {
-        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
-                                             descriptionText: url.absoluteDisplayString,
-                                             buttonText: .GoButtonTittle)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { [weak self] buttonPressed in
-            if buttonPressed {
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-                self?.openURLInNewTab(url, isPrivate: isPrivate)
-            }
-        })
-        clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
-    }
-}
+    // MARK: - QRCodeViewControllerDelegate
 
-extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
@@ -1893,6 +1876,24 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         default:
             defaultAction()
         }
+    }
+}
+
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+    func shouldDisplay(clipBoardURL url: URL) {
+        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
+                                             descriptionText: url.absoluteDisplayString,
+                                             buttonText: .GoButtonTittle)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { [weak self] buttonPressed in
+            if buttonPressed {
+                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+                self?.openURLInNewTab(url, isPrivate: isPrivate)
+            }
+        })
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 }
 

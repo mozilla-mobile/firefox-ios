@@ -438,6 +438,20 @@ class BrowserCoordinator: BaseCoordinator,
         return bottomSheetCoordinator
     }
 
+    func showQRCode() {
+        let coordinator = makeQRCodeCoordinator()
+        coordinator.showQRCode(delegate: browserViewController)
+    }
+
+    private func makeQRCodeCoordinator() -> QRCodeCoordinator {
+        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
+            return qrCodeCoordinator
+        }
+        let qrCodeCoordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+        add(child: qrCodeCoordinator)
+        return qrCodeCoordinator
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func didFinish(from childCoordinator: Coordinator) {

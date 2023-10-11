@@ -235,6 +235,17 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
     }
 
+    func testShowQRCode_addsQRCodeCoordinator() {
+        let subject = createSubject()
+
+        subject.showQRCode()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

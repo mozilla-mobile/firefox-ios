@@ -18,7 +18,6 @@ protocol SettingsFlowDelegate: AnyObject,
     func showExperiments()
     func showFirefoxSuggest()
     func showPasswordManager(shouldShowOnboarding: Bool)
-
     func didFinishShowingSettings()
 }
 
