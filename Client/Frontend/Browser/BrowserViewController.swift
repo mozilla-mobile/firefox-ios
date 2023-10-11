@@ -18,7 +18,8 @@ import ComponentLibrary
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
-                             LibraryPanelDelegate {
+                             LibraryPanelDelegate,
+                             RecentlyClosedPanelDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -633,7 +634,7 @@ class BrowserViewController: UIViewController,
 
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
         else { return }
 
         contextHintVC.configure(
@@ -1923,6 +1924,16 @@ class BrowserViewController: UIViewController,
         })
         self.show(toast: toast)
     }
+
+    // MARK: - RecentlyClosedPanelDelegate
+
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
+    }
+
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -2106,17 +2117,6 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 }
 
-// MARK: - RecentlyClosedPanelDelegate
-extension BrowserViewController: RecentlyClosedPanelDelegate {
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        tabTrayOpenRecentlyClosedTab(url)
-    }
-
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
-    }
-}
-
 // MARK: HomePanelDelegate
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
@@ -2290,6 +2290,11 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
+       /// If the selectedTab is showing an error page trigger a reload
+        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            selected?.reloadPage()
+            return
+        }
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 

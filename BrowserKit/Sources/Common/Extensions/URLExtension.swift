@@ -7,7 +7,11 @@ import Foundation
 extension URL {
     /// Temporary init that will be removed with the update to XCode 15 where this URL API is available
     public init?(string: String, invalidCharacters: Bool) {
-        self.init(string: string)
+        if #available(iOS 17, *) {
+            self.init(string: string, encodingInvalidCharacters: invalidCharacters)
+        } else {
+            self.init(string: string)
+        }
     }
 
     /// Returns a shorter displayable string for a domain

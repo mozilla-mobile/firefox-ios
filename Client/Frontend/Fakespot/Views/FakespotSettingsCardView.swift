@@ -13,13 +13,16 @@ class FakespotSettingsCardViewModel {
     private let tabManager: TabManager
 
     let cardA11yId: String = a11yIds.card
-    let showProductsLabelTitle: String = .Shopping.SettingsCardRecommendedProductsLabel
+    let showProductsLabelTitle = String(format: .Shopping.SettingsCardRecommendedProductsLabel,
+                                        AppName.shortName.rawValue)
     let showProductsLabelTitleA11yId: String = a11yIds.productsLabel
     let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
     let turnOffButtonTitleA11yId: String = a11yIds.turnOffButton
     let recommendedProductsSwitchA11yId: String = a11yIds.recommendedProductsSwitch
     let footerTitle: String = ""
-    let footerActionTitle: String = .Shopping.SettingsCardFooterAction
+    let footerActionTitle = String(format: .Shopping.SettingsCardFooterAction,
+                                   FakespotName.shortName.rawValue,
+                                   MozillaName.shortName.rawValue)
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl
@@ -67,7 +70,7 @@ class FakespotSettingsCardViewModel {
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let headerLabelFontSize: CGFloat = 17
+        static let headerLabelFontSize: CGFloat = 15
         static let buttonLabelFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 14
         static let buttonLeadingTrailingPadding: CGFloat = 8
@@ -102,7 +105,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.headerLabelFontSize)
     }
 

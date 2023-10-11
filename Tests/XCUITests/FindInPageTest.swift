@@ -163,11 +163,15 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.menuItems["Copy"], timeout: 5)
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        while !app.collectionViews.menuItems["Find in Page"].exists {
-            app.buttons["Forward"].firstMatch.tap()
-            mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
+        if !iPad() {
             mozWaitForElementToExist(app.buttons["Forward"])
+            app.buttons["Forward"].firstMatch.tap()
+            mozWaitForElementToExist(app.buttons["Forward"])
+            app.buttons["Forward"].firstMatch.tap()
+            mozWaitForElementToExist(app.buttons["Forward"])
+            app.buttons["Forward"].firstMatch.tap()
         }
+        mozWaitForElementToExist(app.menuItems["Find in Page"])
         app.menuItems["Find in Page"].tap()
         mozWaitForElementToExist(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")

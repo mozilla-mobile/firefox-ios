@@ -24,7 +24,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         static let letterHorizontalPadding: CGFloat = 4
         static let descriptionVerticalPadding: CGFloat = 6
         static let descriptionHorizontalPadding: CGFloat = 8
-        static let titleFontSize: CGFloat = 17
+        static let titleFontSize: CGFloat = 15
         static let letterFontSize: CGFloat = 13
         static let descriptionFontSize: CGFloat = 13
         static let descriptionBackgroundAlpha: CGFloat = 0.15
@@ -35,8 +35,9 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                           size: UX.titleFontSize)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                           size: UX.titleFontSize,
+                                                           weight: .semibold)
         view.numberOfLines = 0
     }
 
@@ -51,14 +52,14 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
 
     private lazy var reliabilityLetterLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
                                                            size: UX.letterFontSize,
                                                            weight: .semibold)
     }
 
     private lazy var reliabilityDescriptionLabel: UILabel = .build { view in
         view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1, size: UX.descriptionFontSize)
+        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote, size: UX.descriptionFontSize)
         view.numberOfLines = 0
     }
 
@@ -90,6 +91,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         cardContainer.configure(cardModel)
     }
 
+    // MARK: Theming System
     func applyTheme(theme: Theme) {
         cardContainer.applyTheme(theme: theme)
         reliabilityScoreView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
@@ -103,6 +105,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         }
     }
 
+    // MARK: Layout Setup
     private func setupLayout() {
         addSubview(cardContainer)
 

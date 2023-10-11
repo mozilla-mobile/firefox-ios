@@ -43,7 +43,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(cellType: TopTabCell.self)
-        collectionView.register(cellType: InactiveTabCell.self)
+        collectionView.register(cellType: LegacyInactiveTabCell.self)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false

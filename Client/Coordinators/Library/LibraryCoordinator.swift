@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import Storage
 
-protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate {
+protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
 

@@ -19,5 +19,5 @@ tasks:
         treeherder:
             symbol: firebase-perf
             kind: test
-            platform: ios-physical-iphone13pro-15-7/opt
+            platform: ios-physical-iphone14pro-16-6/opt
             tier: 1
