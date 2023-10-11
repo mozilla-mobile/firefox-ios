@@ -8,10 +8,9 @@ import Shared
 
 class FakespotViewModel {
     enum ViewState {
-        typealias AnalysisCount = Int
         case loading
         case onboarding
-        case loaded(ProductAnalysisData?, AnalysisStatus?, AnalysisCount)
+        case loaded(ProductAnalysisData?, AnalysisStatus?, analysisCount: Int)
         case error(Error)
 
         fileprivate var viewElements: [ViewElement] {
@@ -276,7 +275,7 @@ class FakespotViewModel {
             let product = try await shoppingProduct.fetchProductAnalysisData()
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
-            state = .loaded(product, analysis, analysisCount)
+            state = .loaded(product, analysis, analysisCount: analysisCount)
         } catch {
             state = .error(error)
         }
