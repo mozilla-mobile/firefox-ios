@@ -87,7 +87,7 @@
         "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",
-        "PhotonActionSheetTest",
+        "PhotonActionSheetTests",
         "PocketTest",
         "PrivateBrowsingTest\/testClearIndexedDB()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",

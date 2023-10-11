@@ -226,10 +226,8 @@ class FakespotViewModel {
     let analysisProgressViewModel = FakespotMessageCardViewModel(
         type: .infoLoading,
         title: .Shopping.InfoCardProgressAnalysisTitle,
-        description: .Shopping.InfoCardProgressAnalysisDescription,
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.card,
-        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title,
-        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.description
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()

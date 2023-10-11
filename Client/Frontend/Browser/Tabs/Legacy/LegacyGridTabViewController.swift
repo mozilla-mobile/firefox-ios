@@ -139,7 +139,7 @@ class LegacyGridTabViewController: UIViewController,
         collectionView = UICollectionView(frame: .zero,
                                           collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(cellType: LegacyTabCell.self)
-        collectionView.register(cellType: InactiveTabCell.self)
+        collectionView.register(cellType: LegacyInactiveTabCell.self)
         collectionView.register(
             LabelButtonHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,

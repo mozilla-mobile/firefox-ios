@@ -48,6 +48,7 @@ class MockBrowserViewController: BrowserViewController {
 
     var didRequestToOpenInNewTabCalled = false
     var didSelectURLCalled = false
+    var didOpenRecentlyClosedSiteInSameTab = 0
     var lastOpenedURL: URL?
     var lastVisitType: VisitType?
     var isPrivate = false
@@ -130,5 +131,9 @@ class MockBrowserViewController: BrowserViewController {
         didSelectURLCalled = true
         lastOpenedURL = url
         lastVisitType = visitType
+    }
+
+    override func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        didOpenRecentlyClosedSiteInSameTab += 1
     }
 }

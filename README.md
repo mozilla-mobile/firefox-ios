@@ -7,7 +7,7 @@ Download on the [App Store](https://apps.apple.com/app/firefox-web-browser/id989
 This branch (main)
 -----------
 
-This branch works with [Xcode 14.3.0](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 14 and above.
+This branch works with [Xcode 15](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 14 and above.
 
 *Please note:* Both Intel and M1 macs are supported 🎉 and we use swift package manager.
 

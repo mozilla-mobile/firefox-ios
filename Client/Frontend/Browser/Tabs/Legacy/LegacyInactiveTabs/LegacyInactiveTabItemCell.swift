@@ -7,8 +7,8 @@ import UIKit
 import SiteImageView
 import Shared
 
-class InactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private var viewModel: InactiveTabItemCellModel?
+class LegacyInactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable {
+    private var viewModel: LegacyInactiveTabItemCellModel?
 
     private lazy var selectedView: UIView = .build { _ in }
     private lazy var leftImageView: FaviconImageView = .build { _ in }
@@ -32,20 +32,20 @@ class InactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCell(viewModel: InactiveTabItemCellModel) {
+    func configureCell(viewModel: LegacyInactiveTabItemCellModel) {
         self.viewModel = viewModel
 
         titleLabel.text = viewModel.title
         titleLabel.font = viewModel.fontForLabel
 
         if let urlString = viewModel.website?.absoluteString {
-            let cornerRadius = InactiveTabItemCellModel.UX.FaviconCornerRadius
+            let cornerRadius = LegacyInactiveTabItemCellModel.UX.FaviconCornerRadius
             leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString,
                                                            faviconCornerRadius: cornerRadius))
         }
         separatorInset = UIEdgeInsets(top: 0,
-                                      left: InactiveTabItemCellModel.UX.ImageSize + 2 *
-                                      InactiveTabItemCellModel.UX.BorderViewMargin,
+                                      left: LegacyInactiveTabItemCellModel.UX.ImageSize + 2 *
+                                      LegacyInactiveTabItemCellModel.UX.BorderViewMargin,
                                       bottom: 0,
                                       right: 0)
         backgroundColor = .clear
@@ -69,31 +69,31 @@ class InactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable {
             containerViewLeadingConstraint,
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            leftImageView.heightAnchor.constraint(equalToConstant: InactiveTabItemCellModel.UX.ImageSize),
-            leftImageView.widthAnchor.constraint(equalToConstant: InactiveTabItemCellModel.UX.ImageSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
+            leftImageView.widthAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                   constant: InactiveTabItemCellModel.UX.ImageViewLeadingConstant),
+                                                   constant: LegacyInactiveTabItemCellModel.UX.ImageViewLeadingConstant),
             leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
             leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
-                                               constant: InactiveTabItemCellModel.UX.ImageTopBottomMargin),
+                                               constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
             leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
-                                                  constant: InactiveTabItemCellModel.UX.ImageTopBottomMargin),
+                                                  constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
 
             midView.topAnchor.constraint(equalTo: containerView.topAnchor),
             midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor,
-                                             constant: InactiveTabItemCellModel.UX.MidViewLeadingConstant),
+                                             constant: LegacyInactiveTabItemCellModel.UX.MidViewLeadingConstant),
             midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                              constant: InactiveTabItemCellModel.UX.MidViewTrailingConstant),
+                                              constant: LegacyInactiveTabItemCellModel.UX.MidViewTrailingConstant),
 
             titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
-                                            constant: InactiveTabItemCellModel.UX.LabelTopBottomMargin),
+                                            constant: LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
             titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
-                                               constant: -InactiveTabItemCellModel.UX.LabelTopBottomMargin),
+                                               constant: -LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
             titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
 
-            bottomSeparatorView.heightAnchor.constraint(equalToConstant: InactiveTabItemCellModel.UX.SeparatorHeight),
+            bottomSeparatorView.heightAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.SeparatorHeight),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),

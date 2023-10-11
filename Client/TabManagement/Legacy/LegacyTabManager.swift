@@ -79,8 +79,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     var normalActiveTabs: [Tab] {
-        return InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
-                                                              profile: profile)
+        return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
+                                                                    profile: profile)
     }
 
     var inactiveTabs: [Tab] {
@@ -837,7 +837,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         if !isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
             // only use active tabs as viable tabs
             // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
-            return InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
+            return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             return isPrivate ? privateTabs : normalTabs
         }
