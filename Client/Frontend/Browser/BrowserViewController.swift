@@ -658,11 +658,6 @@ class BrowserViewController: UIViewController,
         super.viewWillDisappear(animated)
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        adjustURLBarHeightBasedOnLocationViewHeight()
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp.remakeConstraints { make in
@@ -841,35 +836,6 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
-    }
-
-    /// Used for dynamic type height adjustment
-    private func adjustURLBarHeightBasedOnLocationViewHeight() {
-        // Make sure that we have a height to actually base our calculations on
-        guard urlBar.locationContainer.bounds.height != 0 else { return }
-        let locationViewHeight = urlBar.locationView.bounds.height
-        let padding: CGFloat = 12
-        let heightWithPadding = locationViewHeight + padding
-
-        // Adjustment for landscape on the urlbar
-        // need to account for inset and remove it when keyboard is showing
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
-        let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
-        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else if !showToolBar, zoomPageBar != nil {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else {
-            overKeyboardContainer.removeBottomInsetSpacer()
-        }
-
-        // We have to deactivate the original constraint, and remake the constraint
-        // or else funky conflicts happen
-        urlBarHeightConstraint.deactivate()
-        urlBar.snp.makeConstraints { make in
-            let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
-            urlBarHeightConstraint = make.height.equalTo(height).constraint
-        }
     }
 
     // MARK: - Tabs Queue
