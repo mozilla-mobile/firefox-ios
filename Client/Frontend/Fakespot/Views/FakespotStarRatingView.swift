@@ -6,7 +6,7 @@ import UIKit
 
 class FakespotStarRatingView: UIView {
     enum UX {
-        static let starSize: CGFloat = 20
+        static let starSize: CGFloat = 24
         static let starCount = 5
     }
 
@@ -49,6 +49,7 @@ class FakespotStarRatingView: UIView {
             let starImageView = UIImageView(
                 image: UIImage(named: starImageName(for: index))
             )
+            starImageView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 starImageView.heightAnchor.constraint(equalToConstant: UX.starSize),
                 starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor)

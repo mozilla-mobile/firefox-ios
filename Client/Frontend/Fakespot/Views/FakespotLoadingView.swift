@@ -28,7 +28,7 @@ class FakespotLoadingView: UIView, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        let viewModel = CardViewModel(view: UIView(), a11yId: "CardView", backgroundColor: { theme in
+        let viewModel = CardViewModel(view: .build(), a11yId: "CardView", backgroundColor: { theme in
             return theme.colors.layer3
         })
         cardViews.forEach { $0.configure(viewModel) }
