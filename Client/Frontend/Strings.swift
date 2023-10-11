@@ -1013,7 +1013,8 @@ extension String {
                 key: "Onboarding.Welcome.Title.TreatementA.v114",
                 tableName: "Onboarding",
                 value: "Make %@ your go-to browser",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 114)
             public static let DescriptionTreatementANotUsed = MZLocalizedString(
                 key: "Onboarding.Welcome.Description.TreatementA.v114",
                 tableName: "Onboarding",
@@ -1023,7 +1024,8 @@ extension String {
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
                 value: "We love keeping you safe",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 114)
             public static let DescriptionTreatementA = MZLocalizedString(
                 key: "Onboarding.Welcome.Description.TreatementA.v120",
                 tableName: "Onboarding",
@@ -1051,12 +1053,14 @@ extension String {
                 key: "Onboarding.Sync.Title.v114",
                 tableName: "Onboarding",
                 value: "Hop from phone to laptop and back",
-                comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
+                lastUsedInVersion: 114)
             public static let DescriptionNotUsed = MZLocalizedString(
                 key: "Onboarding.Sync.Description.v114",
                 tableName: "Onboarding",
                 value: "Grab tabs and passwords from your other devices to pick up where you left off.",
-                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
+                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Sync.Title.v120",
                 tableName: "Onboarding",
@@ -1084,12 +1088,14 @@ extension String {
                 key: "Onboarding.Notification.Title.v114",
                 tableName: "Onboarding",
                 value: "Notifications help you do more with %@",
-                comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 114)
             public static let DescriptionNotUsed = MZLocalizedString(
                 key: "Onboarding.Notification.Description.v114",
                 tableName: "Onboarding",
                 value: "Send tabs between your devices and get tips about how to get the most out of %@.",
-                comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Notification.Title.v120",
                 tableName: "Onboarding",
