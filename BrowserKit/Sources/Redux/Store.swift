@@ -26,6 +26,8 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
+    private var actionQueue: [Action] = []
+    private var isProcessingActions = false
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
@@ -61,6 +63,22 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
+        actionQueue.append(action)
+        processQueuedActions()
+    }
+
+    private func processQueuedActions() {
+        guard !isProcessingActions else { return }
+        isProcessingActions = true
+        while !actionQueue.isEmpty {
+            let action = actionQueue.first!
+            actionQueue.remove(at: 0)
+            processAction(action)
+        }
+        isProcessingActions = false
+    }
+
+    private func processAction(_ action: Action) {
         let newState = reducer(state, action)
 
         middlewares.forEach { middleware in
