@@ -1025,8 +1025,7 @@ extension String {
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
                 value: "We love keeping you safe",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
             public static let DescriptionTreatementA = MZLocalizedString(
                 key: "Onboarding.Welcome.Description.TreatementA.v120",
                 tableName: "Onboarding",
