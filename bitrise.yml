@@ -178,7 +178,7 @@ workflows:
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"ß
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun"
@@ -223,7 +223,7 @@ workflows:
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"ß
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun"
@@ -268,7 +268,7 @@ workflows:
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"ß
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun"
@@ -313,7 +313,7 @@ workflows:
         title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"ß
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun"
