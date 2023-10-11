@@ -376,11 +376,10 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     }
 
     private func onAnalysisStatusChange(sender: UIView?) {
-        guard viewModel.analysisStatus?.isAnalyzing == true else {
+        if viewModel.analysisStatus == .completed {
             ensureMainThread {
                 sender?.removeFromSuperview()
             }
-            return
         }
     }
 

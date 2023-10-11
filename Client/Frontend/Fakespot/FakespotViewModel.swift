@@ -294,7 +294,6 @@ class FakespotViewModel {
             let result = try await shoppingProduct.getProductAnalysisStatus()
             analysisStatus = result?.status
             guard result?.status.isAnalyzing == true else {
-                analysisStatus = nil
                 break
             }
 
