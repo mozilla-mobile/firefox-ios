@@ -15,19 +15,20 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case credentialAutofillCoordinatorRefactor
     case creditCardAutofillStatus
     case fakespotFeature
+    case feltPrivacyUI
     case firefoxSuggestFeature
     case historyHighlights
     case historyGroups
     case inactiveTabs
+    case isToolbarCFREnabled
     case jumpBackIn
     case libraryCoordinatorRefactor
     case pocket
-    case feltPrivacyUI
+    case qrCodeCoordinatorRefactor
     case recentlySaved
     case reduxIntegration
     case reportSiteIssue
     case searchHighlights
-    case isToolbarCFREnabled
     case shareExtensionCoordinatorRefactor
     case shareSheetChanges
     case shareToolbarChanges
@@ -83,6 +84,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotFeature,
                 .isToolbarCFREnabled,
                 .libraryCoordinatorRefactor,
+                .qrCodeCoordinatorRefactor,
                 .reduxIntegration,
                 .reportSiteIssue,
                 .feltPrivacyUI,
