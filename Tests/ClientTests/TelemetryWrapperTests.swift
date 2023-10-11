@@ -383,6 +383,45 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceReanalyzeClicked)
     }
 
+    func test_shoppingNimbusDisabled_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingNimbusDisabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isNimbusDisabled.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.nimbusDisabledShopping, 
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
+    func test_shoppingComponentOptedOut_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingComponentOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isComponentOptedOut.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.componentOptedOut,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
+    func test_shoppingUserHasOnboarded_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingUserHasOnboarded,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.userHasOnboarded,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
