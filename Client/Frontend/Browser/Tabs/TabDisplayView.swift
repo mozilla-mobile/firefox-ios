@@ -27,7 +27,6 @@ class TabDisplayView: UIView,
     var tabDisplayState: TabDisplayViewState
     var inactiveTabsSectionManager: InactiveTabsSectionManager
     var theme: Theme?
-    static let defaultIdentifier = "DefaultCollectionReusableView"
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds,
@@ -42,10 +41,6 @@ class TabDisplayView: UIView,
             InactiveTabsFooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: InactiveTabsFooterView.cellIdentifier)
-        collectionView.register(
-            UICollectionReusableView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: TabDisplayView.defaultIdentifier)
 
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
@@ -61,7 +56,7 @@ class TabDisplayView: UIView,
         tabDisplayState = TabDisplayViewState(isPrivateTabs: false,
                                               isInactiveTabEmpty: false,
                                               isInactiveTabsExpanded: true)
-        self.inactiveTabsSectionManager = InactiveTabsSectionManager(collectionViewWidth: 393)
+        self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         super.init(frame: frame)
         setupLayout()
     }
@@ -88,7 +83,8 @@ class TabDisplayView: UIView,
             let section = self.getSectionLayout(sectionIndex)
             switch section {
             case .inactiveTabs:
-                return self.inactiveTabsSectionManager.layoutSection(layoutEnvironment)
+                return self.inactiveTabsSectionManager.layoutSection(layoutEnvironment,
+                                                                     isExpanded: tabDisplayState.isInactiveTabsExpanded)
             }
         }
         return layout
@@ -159,15 +155,9 @@ class TabDisplayView: UIView,
                 return footerView
             }
 
-        default: return collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: TabDisplayView.defaultIdentifier,
-            for: indexPath)
+        default: return UICollectionReusableView()
         }
-        return collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: TabDisplayView.defaultIdentifier,
-            for: indexPath)
+        return UICollectionReusableView()
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -184,6 +174,7 @@ class TabDisplayView: UIView,
     @objc
     func toggleInactiveTab() {
         toggleInactiveTabSection(hasExpanded: !tabDisplayState.isInactiveTabsExpanded)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     func toggleInactiveTabSection(hasExpanded: Bool) {

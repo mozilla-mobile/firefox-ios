@@ -17,20 +17,16 @@ class InactiveTabsSectionManager {
                  "Four",
                  "Five",
                  "Six"]
-    var collectionViewWidth: Double
 
-    init( collectionViewWidth: Double) {
-        self.collectionViewWidth = collectionViewWidth
-    }
+    func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment,
+                       isExpanded: Bool) -> NSCollectionLayoutSection {
+        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        config.headerMode = .firstItemInSection
+        config.footerMode = .supplementary
+        config.showsSeparators = true
+        let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
 
-    func layoutSection(
-        _ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        var sectionConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        sectionConfig.headerMode = .firstItemInSection
-        let section = NSCollectionLayoutSection.list(using: sectionConfig,
-                                                     layoutEnvironment: layoutEnvironment)
-
-        // Supplementary Items: Header and Footer
+        // Supplementary Item
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                 heightDimension: .estimated(UX.headerEstimatedHeight))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -44,8 +40,8 @@ class InactiveTabsSectionManager {
             layoutSize: footerSize,
             elementKind: UICollectionView.elementKindSectionFooter,
             alignment: .bottom)
-        section.boundarySupplementaryItems = [header, footer]
 
+        section.boundarySupplementaryItems = isExpanded ? [header, footer] : [header]
         return section
     }
 }

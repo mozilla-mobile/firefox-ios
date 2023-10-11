@@ -68,12 +68,6 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
         ])
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        moreButton.setTitle(nil, for: .normal)
-        titleLabel.text = nil
-    }
-
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary

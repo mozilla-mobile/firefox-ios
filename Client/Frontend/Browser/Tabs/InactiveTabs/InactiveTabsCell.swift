@@ -6,7 +6,7 @@ import Common
 import SiteImageView
 import UIKit
 
-class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
+class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let imageSize: CGFloat = 28
         static let labelTopBottomMargin: CGFloat = 11
@@ -18,7 +18,6 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private lazy var selectedView: UIView = .build { _ in }
     private lazy var leftImageView: FaviconImageView = .build { _ in }
     private lazy var bottomSeparatorView: UIView = .build { _ in }
-    private lazy var containerView: UIView = .build { _ in }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredFont(
@@ -36,7 +35,7 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        containerView.backgroundColor = theme.colors.layer2
+        contentView.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         backgroundColor = theme.colors.layer2
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
@@ -44,37 +43,29 @@ class InactiveTabsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private func setupView() {
-        containerView.addSubviews(titleLabel)
-        containerView.addSubviews(bottomSeparatorView)
-        containerView.addSubview(leftImageView)
-
-        contentView.addSubview(containerView)
-        bringSubviewToFront(containerView)
+        contentView.addSubview(leftImageView)
+        contentView.addSubviews(titleLabel)
+        contentView.addSubview(bottomSeparatorView)
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
             leftImageView.heightAnchor.constraint(equalToConstant: UX.imageSize),
             leftImageView.widthAnchor.constraint(equalToConstant: UX.imageSize),
-            leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+            leftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                    constant: UX.imageViewLeadingConstant),
             leftImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             leftImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor,
                                                     constant: -UX.imageViewLeadingConstant),
 
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
                                             constant: UX.labelTopBottomMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                constant: -UX.labelTopBottomMargin),
 
             bottomSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorHeight),
-            bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            bottomSeparatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            bottomSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
 
         leftImageView.setContentHuggingPriority(.required, for: .vertical)
