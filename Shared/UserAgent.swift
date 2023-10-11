@@ -100,6 +100,10 @@ public struct CustomUserAgentConstant {
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     private static let mobileAdsUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
+    // when clicking the videos on nba.com they make requests to
+    // adobe.com, demdex.net ,doubleclick.net, googlesyndication.com, google.com, amazon-adsystem.com, rfihub.com
+    // and if the User Agent is different in most of them, the video on nba.com won't work either.
+    // Rokuchannel didn't have these restrictions
     public static let customUAFor = [
         "paypal.com": defaultMobileUA,
         "yahoo.com": defaultMobileUA,
