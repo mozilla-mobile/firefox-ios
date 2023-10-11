@@ -18,16 +18,7 @@ class RemoteTabsPanelMiddleware {
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
         case RemoteTabsPanelAction.refreshTabs:
-            let tabPanelState = state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel)
-            self.updateSyncableAccountState(for: tabPanelState, then: { refreshAllowed in
-                if refreshAllowed {
-                    self.refreshTabs(updateCache: true)
-                } else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
-                }
-            })
-        case RemoteTabsPanelAction.refreshCachedTabs:
-            self.refreshTabs(updateCache: false)
+            self.refreshTabs(updateCache: true)
         default:
             break
         }
@@ -35,22 +26,16 @@ class RemoteTabsPanelMiddleware {
 
     // MARK: - Internal Utilities
 
-    private func updateSyncableAccountState(for state: RemoteTabsPanelState?,
-                                            then action: ((Bool) -> Void)? = nil) {
-        guard let state else { return }
-        let allowsRefresh = profile.hasSyncableAccount()
-        if state.allowsRefresh != allowsRefresh {
-            DispatchQueue.main.async {
-                store.dispatch(RemoteTabsPanelAction.syncableAccountStatusChanged(allowsRefresh))
-                action?(allowsRefresh)
-            }
-        } else {
-            action?(allowsRefresh)
-        }
-    }
-
     private func refreshTabs(updateCache: Bool = false) {
         ensureMainThread { [self] in
+            let hasSyncableAccount = profile.hasSyncableAccount()
+            guard hasSyncableAccount else {
+                DispatchQueue.main.async {
+                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
+                }
+                return
+            }
+
             let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
             guard syncEnabled else {
                 DispatchQueue.main.async {
@@ -59,26 +44,32 @@ class RemoteTabsPanelMiddleware {
                 return
             }
 
-            profile.getCachedClientsAndTabs { [weak self] result in
-                ensureMainThread {
-                    guard let clientAndTabs = result else {
-                        store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                        return
-                    }
+            // If above checks have succeeded, we know we can perform the tab refresh. We
+            // need to update the State to .refreshing since there are implications for being
+            // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
+            DispatchQueue.main.async {
+                store.dispatch(RemoteTabsPanelAction.refreshDidBegin)
 
-                    let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
-                                                               isUpdating: updateCache)
-                    store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
+                DispatchQueue.main.async {
+                    self.profile.getCachedClientsAndTabs { [weak self] result in
+                        guard let clientAndTabs = result else {
+                            store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                            return
+                        }
 
-                    if updateCache {
-                        self?.profile.getClientsAndTabs { result in
-                            ensureMainThread {
-                                guard let clientAndTabs = result else {
-                                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                                    return
+                        let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
+                                                                   isUpdating: updateCache)
+                        store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
+
+                        if updateCache {
+                            self?.profile.getClientsAndTabs { result in
+                                DispatchQueue.main.async {
+                                    guard let clientAndTabs = result else {
+                                        store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                                        return
+                                    }
+                                    store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                                 }
-
-                                store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
                             }
                         }
                     }
