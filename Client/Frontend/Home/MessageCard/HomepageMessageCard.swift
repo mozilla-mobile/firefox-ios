@@ -104,6 +104,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         }
 
         applyTheme(theme: theme)
+        ctaButton.applyTheme(theme: theme)
     }
 
     // MARK: - Layout
@@ -225,7 +226,6 @@ extension HomepageMessageCardCell: ThemeApplicable {
         bannerTitle.textColor = theme.colors.textPrimary
         descriptionText.textColor = theme.colors.textPrimary
         dismissButton.imageView?.tintColor = theme.colors.textPrimary
-        ctaButton.applyTheme(theme: theme)
         backgroundColor = .clear
 
         adjustBlur(theme: theme)
