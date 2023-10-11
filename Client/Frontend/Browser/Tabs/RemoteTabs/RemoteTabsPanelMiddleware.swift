@@ -50,8 +50,8 @@ class RemoteTabsPanelMiddleware {
             DispatchQueue.main.async {
                 store.dispatch(RemoteTabsPanelAction.refreshDidBegin)
 
-                DispatchQueue.main.async {
-                    self.profile.getCachedClientsAndTabs { [weak self] result in
+                self.profile.getCachedClientsAndTabs { [weak self] result in
+                    DispatchQueue.main.async {
                         guard let clientAndTabs = result else {
                             store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
                             return
