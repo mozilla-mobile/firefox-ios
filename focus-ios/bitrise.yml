@@ -115,7 +115,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build failed to build"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
@@ -184,7 +184,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
 
@@ -230,7 +230,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build run the Klar testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
@@ -275,7 +275,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
 
@@ -546,7 +546,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
@@ -632,7 +632,7 @@ workflows:
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
-        - channel: "#focus-ios-alerts"
+        - channel: "#mobile-alerts-ios"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
