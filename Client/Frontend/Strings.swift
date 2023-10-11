@@ -3733,8 +3733,8 @@ extension String {
         public static let SettingsCardRecommendedProductsLabel = MZLocalizedString(
             key: "", // Shopping.SettingsCard.RecommendedProducts.Label.v120
             tableName: "Shopping",
-            value: "Show products recommended by Firefox",
-            comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet.")
+            value: "Show products recommended by %@",
+            comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name.")
         public static let SettingsCardTurnOffButton = MZLocalizedString(
             key: "", // Shopping.SettingsCard.TurnOff.Button.v120
             tableName: "Shopping",
@@ -3753,8 +3753,8 @@ extension String {
         public static let SettingsCardFooterAction = MZLocalizedString(
             key: "", // Shopping.SettingsCard.Footer.Action.v120
             tableName: "Shopping",
-            value: "Review checker is powered by Fakespot by Mozilla",
-            comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet.")
+            value: "Review checker is powered by %1$@ by %2$@",
+            comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "", // Shopping.NoAnalysisCard.HeadlineLabel.Title.v120
             tableName: "Shopping",
@@ -3798,8 +3798,8 @@ extension String {
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.Headline.Label.v120
             tableName: "Shopping",
-            value: "We use AI technology from Fakespot by Mozilla to check the reliability of product reviews. This will only help you assess review quality, not product quality.",
-            comment: "Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            value: "We use AI technology from %1$@ by %2$@ to check the reliability of product reviews. This will only help you assess review quality, not product quality.",
+            comment: "Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
         public static let ReviewQualityCardSubHeadlineLabel = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.SubHeadline.Label.v120
             tableName: "Shopping",
@@ -3833,8 +3833,8 @@ extension String {
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
             key: "", // Shopping.ReviewQualityCard.LearnMoreButton.Title.v120
             tableName: "Shopping",
-            value: "Learn more about how Fakespot determines review quality",
-            comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            value: "Learn more about how %@ determines review quality",
+            comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name.")
         public static let OptInCardHeaderTitle = MZLocalizedString(
             key: "", // Shopping.OptInCard.HeaderLabel.Title.v120
             tableName: "Shopping",
@@ -3843,8 +3843,8 @@ extension String {
         public static let OptInCardCopy = MZLocalizedString(
             key: "", // Shopping.OptInCard.FirstParagraph.Title.v120
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from Firefox, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
-            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are curently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter")
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %4$@, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fourth parameter will be replaced by the app name. And the fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "", // Shopping.OptInCard.LearnMoreButtonTitle.Title.v120
             tableName: "Shopping",
@@ -3853,8 +3853,8 @@ extension String {
         public static let OptInCardDisclaimerText = MZLocalizedString(
             key: "", // Shopping.OptInCard.DisclaimerText.Title.v120
             tableName: "Shopping",
-            value: "By selecting “Yes, Try It” you agree to Fakespot by Mozilla’s:",
-            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot)")
+            value: "By selecting “Yes, Try It” you agree to the %1$@ by %2$@:",
+            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "", // Shopping.OptInCard.PrivacyPolicyButtonTitle.Title.v120
             tableName: "Shopping",
