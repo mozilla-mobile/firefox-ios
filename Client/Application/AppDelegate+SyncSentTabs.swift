@@ -24,19 +24,24 @@ extension UIApplication {
 class AppSendTabDelegate: SendTabDelegate {
     private let app: UIApplication
     private let logger: Logger
+    private var applicationHelper: ApplicationHelper
 
-    init(app: UIApplication, logger: Logger = DefaultLogger.shared) {
+    init(app: UIApplication, 
+         logger: Logger = DefaultLogger.shared,
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.app = app
         self.logger = logger
+        self.applicationHelper = applicationHelper
     }
 
     func openSendTabs(for urls: [URL]) {
         DispatchQueue.main.async {
-            if self.app.applicationState == .active {
-                for url in urls {
-                    let object = OpenTabNotificationObject(type: .switchToTabForURLOrOpen(url))
-                    NotificationCenter.default.post(name: .OpenTabNotification, object: object)
-                }
+            guard self.app.applicationState == .active else { return }
+            // TODO: Laurie check what happens with multiple URLs
+            for urlToOpen in urls {
+                let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)}"
+                guard let url = URL(string: urlString) else { continue }
+                self.applicationHelper.open(url)
             }
         }
     }
