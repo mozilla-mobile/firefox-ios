@@ -36,15 +36,15 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=16.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.0" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 600
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.4-arm64.xctestrun"
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.0-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
         is_always_run: true
@@ -55,6 +55,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
+
             echo "-- compress --"
 
             exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
@@ -66,10 +69,10 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
             "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
@@ -143,7 +146,7 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   build_and_test_1_SmokeTest2:
     before_run:
@@ -174,19 +177,19 @@ workflows:
         timeout: 1200
         title: UI Smoketest2
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.4-arm64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_2_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   build_and_test_2_SmokeTest:
     before_run:
@@ -220,19 +223,19 @@ workflows:
         timeout: 1200
         title: UI Smoketest
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.4-arm64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   build_and_test_3_SmokeTest3:
     before_run:
@@ -266,19 +269,19 @@ workflows:
         timeout: 1200
         title: UI Smoketest3
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.4-arm64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_3_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   build_and_test_4_SmokeTest4:
     before_run:
@@ -312,19 +315,19 @@ workflows:
         timeout: 1200
         title: UI Smoketest4
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.4-arm64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   send_slack_notification:
     steps:
@@ -734,12 +737,12 @@ workflows:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
-        - simulator_device: iPhone 14
+        - simulator_device: iPhone 15
     - xcode-test@4.5:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
     - deploy-to-bitrise-io@2.2: {}
     - cache-push@2.4: {}
     - slack@3.1:
@@ -752,7 +755,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   RunAllXCUITests:
     steps: []
@@ -764,7 +767,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   RunSmokeXCUITestsiPad:
     steps:
@@ -777,32 +780,32 @@ workflows:
         inputs:
         - scheme: Fennec
         - test_plan: "SmokeXCUITests"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
         description: This Workflow is to run SmokeTest on iPad simulator device
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest2"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest3"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest3
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest4"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=16.4
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest4
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
     before_run:
     - 1_git_clone_and_post_clone
@@ -821,11 +824,11 @@ workflows:
     - xcode-test@4.5:
         inputs:
         - scheme: Fennec
-        - simulator_device: iPhone 14
+        - simulator_device: iPhone 15
         is_always_run: true
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
     before_run:
     - 1_git_clone_and_post_clone
@@ -930,7 +933,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
 
   L10nScreenshotsTests:
@@ -992,7 +995,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
@@ -1118,7 +1121,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Beta_Only:
     steps:
@@ -1215,7 +1218,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   SPM_Nightly_Beta_Only:
     steps:
@@ -1313,7 +1316,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
   Bitrise_Performance_Test:
     steps:
@@ -1322,7 +1325,7 @@ workflows:
     - xcode-test@4.5:
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 14,OS=16.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
         - test_plan: PerformanceTestPlan   
     - script@1.1:
         is_always_run: true
@@ -1359,7 +1362,7 @@ workflows:
     - deploy-to-bitrise-io@1.9: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-14.3.x-ventura
+        stack: osx-xcode-15.0.x
         machine_type_id: g2-m1.8core
     before_run:
     - 1_git_clone_and_post_clone
@@ -1638,7 +1641,7 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-14.3.x-ventura
+    stack: osx-xcode-15.0.x
     machine_type_id: g2-m1.8core
 
 trigger_map:

@@ -87,18 +87,17 @@ final class TabTrayViewControllerTests: XCTestCase {
     private func createSubject(selectedSegment: LegacyTabTrayViewModel.Segment = .tabs,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayViewController {
-        let navigationController = createNavigationController()
         let subject = TabTrayViewController(selectedSegment: selectedSegment,
                                             delegate: delegate)
-        navigationController.setViewControllers([subject], animated: false)
+        let navigationController = createNavigationController(root: subject)
         navigationController.isNavigationBarHidden = false
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
-    private func createNavigationController() -> UINavigationController {
-        let navigationController = DismissableNavigationViewController()
+    private func createNavigationController(root: UIViewController) -> UINavigationController {
+        let navigationController = DismissableNavigationViewController(rootViewController: root)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle

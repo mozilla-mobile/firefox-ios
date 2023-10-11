@@ -17902,7 +17902,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
@@ -17926,7 +17926,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
@@ -17950,7 +17950,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
@@ -17975,7 +17975,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
@@ -18041,7 +18041,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-lxml2",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -18293,7 +18293,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-lxml2",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FennecEnterprise;
 				PRODUCT_MODULE_NAME = Client;
@@ -18542,7 +18542,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-lxml2",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -19030,7 +19030,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-lxml2",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -19391,7 +19391,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.9.3;
+				version = 8.13.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
