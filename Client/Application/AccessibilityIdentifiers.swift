@@ -252,14 +252,21 @@ public struct AccessibilityIdentifiers {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
         static let syncedTabs = "Synced Tabs"
-        static let inactiveTabHeader = "InactiveTabs.header"
-        static let inactiveTabDeleteButton = "InactiveTabs.deleteButton"
         static let closeAllTabsButton = "closeAllTabsButtonTabTray"
         static let newTabButton = "newTabButtonTabTray"
         static let doneButton = "doneButtonTabTray"
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
+
+        struct InactiveTabs {
+            static let headerLabel = "InactiveTabs.headerLabel"
+            static let headerButton = "InactiveTabs.headerButton"
+            static let headerView = "InactiveTabs.header"
+            static let cellLabel = "InactiveTabs.cell.label"
+            static let footerView = "InactiveTabs.footer"
+            static let deleteButton = "InactiveTabs.deleteButton"
+        }
     }
 
     struct LibraryPanels {

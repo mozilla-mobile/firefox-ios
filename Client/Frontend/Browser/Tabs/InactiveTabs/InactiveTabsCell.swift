@@ -23,6 +23,8 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
         label.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .caption1,
             size: UX.titleFontSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.cellLabel
         label.textAlignment = .natural
         label.contentMode = .center
     }

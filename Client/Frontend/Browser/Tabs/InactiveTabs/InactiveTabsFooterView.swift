@@ -29,8 +29,10 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.layer.borderWidth = UX.buttonBorderWidth
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
         button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
     }
 
@@ -60,6 +62,7 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         )
 
         let horizontalOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.iPadOffset : UX.iPhoneOffset
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.footerView
 
         NSLayoutConstraint.activate([
             roundedButton.centerXAnchor.constraint(equalTo: centerXAnchor),
