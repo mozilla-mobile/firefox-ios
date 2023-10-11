@@ -30,7 +30,7 @@ class TabDisplayView: UIView,
         case inactiveTabs
     }
 
-    var tabDisplayState: TabDisplayViewState
+    var state: TabDisplayViewState
     var inactiveTabsSectionManager: InactiveTabsSectionManager
     var theme: Theme?
 
@@ -59,7 +59,7 @@ class TabDisplayView: UIView,
     }()
 
     override init(frame: CGRect) {
-        tabDisplayState = TabDisplayViewState(isPrivateTabs: false,
+        state = TabDisplayViewState(isPrivateTabs: false,
                                               isInactiveTabEmpty: false,
                                               isInactiveTabsExpanded: true)
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
@@ -91,7 +91,7 @@ class TabDisplayView: UIView,
             case .inactiveTabs:
                 return self.inactiveTabsSectionManager.layoutSection(
                     layoutEnvironment,
-                    isExpanded: tabDisplayState.isInactiveTabsExpanded)
+                    isExpanded: state.isInactiveTabsExpanded)
             }
         }
         return layout
@@ -117,10 +117,10 @@ class TabDisplayView: UIView,
         switch TabDisplaySection(rawValue: section) {
         case .inactiveTabs:
             // Hide inactive tray if there are no inactive tabs or if is PrivateTabs
-            guard !tabDisplayState.isInactiveTabEmpty,
-                  !tabDisplayState.isPrivateTabs else { return 0 }
+            guard !state.isInactiveTabEmpty,
+                  !state.isPrivateTabs else { return 0 }
 
-            return tabDisplayState.isInactiveTabsExpanded ? tabDisplayState.inactiveTabs.count : 0
+            return state.isInactiveTabsExpanded ? state.inactiveTabs.count : 0
         default:
             return 0
         }
@@ -137,7 +137,7 @@ class TabDisplayView: UIView,
                 ofKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier,
                 for: indexPath) as? InactiveTabsHeaderView {
-                view.state = tabDisplayState.isInactiveTabsExpanded ? .down : .trailing
+                view.state = state.isInactiveTabsExpanded ? .down : .trailing
                 if let theme = theme {
                     view.applyTheme(theme: theme)
                 }
@@ -145,12 +145,15 @@ class TabDisplayView: UIView,
                 view.moreButton.addTarget(self,
                                           action: #selector(toggleInactiveTab),
                                           for: .touchUpInside)
+                view.accessibilityLabel = state.isInactiveTabsExpanded ?
+                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
+                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
                 let tapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                                   action: #selector(toggleInactiveTab))
                 view.addGestureRecognizer(tapGestureRecognizer)
                 return view
             } else if kind == UICollectionView.elementKindSectionFooter,
-                      tabDisplayState.isInactiveTabsExpanded,
+                      state.isInactiveTabsExpanded,
                       let footerView = collectionView.dequeueReusableSupplementaryView(
                        ofKind: UICollectionView.elementKindSectionFooter,
                        withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
@@ -171,7 +174,7 @@ class TabDisplayView: UIView,
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
         else { return UICollectionViewCell() }
 
-        cell.configure(text: tabDisplayState.inactiveTabs[indexPath.row])
+        cell.configure(text: state.inactiveTabs[indexPath.row])
         if let theme = theme {
             cell.applyTheme(theme: theme)
         }
@@ -180,12 +183,12 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        toggleInactiveTabSection(hasExpanded: !tabDisplayState.isInactiveTabsExpanded)
+        toggleInactiveTabSection(hasExpanded: !state.isInactiveTabsExpanded)
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
     func toggleInactiveTabSection(hasExpanded: Bool) {
-        tabDisplayState.isInactiveTabsExpanded = hasExpanded
+        state.isInactiveTabsExpanded = hasExpanded
         collectionView.reloadData()
     }
 }

@@ -74,7 +74,6 @@ public struct ImageIdentifiers {
     public static let syncedDevicesIcon = "synced_devices"
     public static let upgradeBackground = "onboardingBackground"
     public static let trash = "trash"
-    public static let warning = "menu-warning"
     public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
     public static let zoomIn = "menu-ZoomIn"
