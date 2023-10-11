@@ -1019,7 +1019,8 @@ extension String {
                 key: "Onboarding.Welcome.Description.TreatementA.v114",
                 tableName: "Onboarding",
                 value: "%@ puts people over profits and defends your privacy as you browse.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 114)
             public static let TitleTreatmentA = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
