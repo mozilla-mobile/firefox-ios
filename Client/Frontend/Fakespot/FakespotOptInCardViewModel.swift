@@ -91,7 +91,7 @@ struct FakespotOptInCardViewModel {
         prefs.setTimestamp(Date.now(), forKey: PrefsKeys.FakespotLastCFRTimestamp)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .shoppingOptIn)        
+                                     object: .shoppingOptIn)
         onOptIn?()
     }
 
