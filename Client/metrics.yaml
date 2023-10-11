@@ -4314,8 +4314,8 @@ credit_card:
     type: event
     description: |
       Recorded when a user taps a card from bottom sheet
-      select a card flow and the credit card does not
-      get autofilled on the webpage page
+      select a card flow and the credit card gets 
+      autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:
@@ -4328,7 +4328,7 @@ credit_card:
     description: |
       Recorded when a user taps a card from bottom sheet
       select a card flow and the credit card does not
-      get autofilled on the webpage page
+      get autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:
