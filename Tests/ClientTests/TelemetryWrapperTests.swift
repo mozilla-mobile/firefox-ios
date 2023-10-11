@@ -391,7 +391,7 @@ class TelemetryWrapperTests: XCTestCase {
             extras: [
                 TelemetryWrapper.ExtraKey.Shopping.isNimbusDisabled.rawValue: true
             ])
-        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.nimbusDisabledShopping, 
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.nimbusDisabledShopping,
                               expectedValue: true,
                               failureMessage: "Should be true")
     }
