@@ -20,7 +20,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         static let betaCornerRadius: CGFloat = 8
         static let betaHorizontalSpace: CGFloat = 6
         static let betaVerticalSpace: CGFloat = 4
-        static let betaMinWidth: CGFloat = 30
+        static let betaMinWidth: CGFloat = 36.5
         static let closeButtonWidthHeight: CGFloat = 30
         static let scrollViewTopSpacing: CGFloat = 12
         static let scrollContentTopPadding: CGFloat = 16
@@ -28,7 +28,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
     }
-
+    private var hasViewAppeared = false
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -45,7 +45,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = .Shopping.SheetHeaderTitle
+        label.text = .Shopping.SheetHeaderTitle // + " " + .Shopping.SheetHeaderTitle + " " + .Shopping.SheetHeaderTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
@@ -72,6 +72,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.betaLabelFontSize)
+        label.textAlignment = .center
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
     }
 
@@ -131,12 +132,14 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         adjustLayout()
+        hasViewAppeared = true
         guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        hasViewAppeared = false
         notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
     }
 
@@ -218,8 +221,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace),
             betaLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.betaMinWidth)
         ])
-
-        adjustLayout()
     }
 
     private func adjustLayout() {
@@ -402,7 +403,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
+        if hasViewAppeared {
+            adjustLayout()
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
