@@ -201,6 +201,11 @@ private class MockSentryWrapper: SentryWrapper {
         savedMessage = message
     }
 
+    var savedError: Error?
+    func captureError(error: Error) {
+        savedError = error
+    }
+
     var savedBreadcrumb: Breadcrumb?
     func addBreadcrumb(crumb: Breadcrumb) {
         savedBreadcrumb = crumb

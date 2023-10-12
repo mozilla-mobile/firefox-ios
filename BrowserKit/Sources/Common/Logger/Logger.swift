@@ -9,6 +9,7 @@ public protocol Logger {
 
     func setup(sendUsageData: Bool)
     func configure(crashManager: CrashManager)
+    func logCustomError(error: Error)
 
     /// Log a new message to the logging system
     /// - Parameters:

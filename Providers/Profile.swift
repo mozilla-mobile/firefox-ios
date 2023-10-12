@@ -282,40 +282,8 @@ open class BrowserProfile: Profile {
             prefs.clearAll()
         }
 
-        // Set up logging from Rust.
-        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            let logString = "[RUST][\(tag ?? "no-tag")] \(message)"
-
-            switch level {
-            case .trace:
-                break
-            case .debug:
-                logger.log(logString,
-                           level: .debug,
-                           category: .sync)
-            case .info:
-                logger.log(logString,
-                           level: .info,
-                           category: .sync)
-            case .warn:
-                logger.log(logString,
-                           level: .warning,
-                           category: .sync)
-            case .error:
-                logger.log(logString,
-                           level: .warning,
-                           category: .sync)
-            }
-
-            return true
-        }) {
-            logger.log("Unable to enable logging from Rust",
-                       level: .warning,
-                       category: .setup)
-        }
-
-        // By default, filter logging from Rust below `.info` level.
-        try? RustLog.shared.setLevelFilter(filter: .info)
+        setLogger(logger: ForwardOnLog(logger: self.logger))
+        setMaxLevel(level: Level.info)
 
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
