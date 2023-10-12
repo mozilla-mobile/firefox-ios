@@ -26,6 +26,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
+    private var actionRunning = false
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
@@ -61,6 +62,12 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
+        guard Thread.isMainThread && !actionRunning else {
+            DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
+            return
+        }
+        actionRunning = true; defer { actionRunning = false }
+
         let newState = reducer(state, action)
 
         middlewares.forEach { middleware in
