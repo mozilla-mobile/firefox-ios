@@ -544,6 +544,8 @@
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
+		8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */; };
+		8A13FA8B2AD82E6D007527AB /* ApplicationStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */; };
 		8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */; };
 		8A171A6329F82B0E0085770E /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A171A6129F82AE20085770E /* SceneDelegateTests.swift */; };
 		8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */; };
@@ -4897,6 +4899,8 @@
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
 		8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleTests.swift; sourceTree = "<group>"; };
 		8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensionsTests.swift; sourceTree = "<group>"; };
+		8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSendTabDelegateTests.swift; sourceTree = "<group>"; };
+		8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStateProvider.swift; sourceTree = "<group>"; };
 		8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeHomepageSectionViewModel.swift; sourceTree = "<group>"; };
 		8A171A6129F82AE20085770E /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationHandler.swift; sourceTree = "<group>"; };
@@ -8182,6 +8186,7 @@
 			isa = PBXGroup;
 			children = (
 				8A171A6129F82AE20085770E /* SceneDelegateTests.swift */,
+				8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -9816,6 +9821,7 @@
 				21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */,
 				C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */,
 				8A93F86129D36F0F004159D9 /* NavigationController.swift */,
+				8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -12803,6 +12809,7 @@
 				C8656D79270F866700E199EA /* CustomizeHomepageSectionCell.swift in Sources */,
 				ABE4393E2AC432040074FFE1 /* PartnerWebsites.swift in Sources */,
 				C84655FB28879FC600861B4A /* WallpaperStorageUtility.swift in Sources */,
+				8A13FA8B2AD82E6D007527AB /* ApplicationStateProvider.swift in Sources */,
 				4347B39A298DA5BB0045F677 /* CreditCardInputViewModel.swift in Sources */,
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
@@ -13097,6 +13104,7 @@
 				8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */,
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
 				213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */,
+				8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */,
 				8A7653C228A2E57D00924ABF /* PocketDataAdaptorTests.swift in Sources */,
 				C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */,
 				E1AEC176286E0CF500062E29 /* JumpBackInViewModelTests.swift in Sources */,

@@ -230,19 +230,12 @@ class BrowserViewController: UIViewController,
 
     @objc
     func openTabNotification(notification: Notification) {
+        // Remove this notification only used for debug settings with FXIOS-7550
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
 
         switch openTabObject.type {
-        case .loadQueuedTabs(let urls):
-            loadQueuedTabs(receivedURLs: urls)
-        case .openNewTab:
-            openBlankNewTab(focusLocationField: true)
-        case .openSearchNewTab(let searchTerm):
-            openSearchNewTab(searchTerm)
-        case .switchToTabForURLOrOpen(let url):
-            switchToTabForURLOrOpen(url)
         case .debugOption(let numberOfTabs, let url):
             debugOpen(numberOfNewTabs: numberOfTabs, at: url)
         }
