@@ -241,7 +241,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             contentStackView.addArrangedSubview(view)
 
             if let loadingView = view as? FakespotLoadingView {
-                loadingView.animate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    loadingView.animate()
+                }
             }
         }
         applyTheme()
@@ -311,17 +313,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                  view?.updateLayoutForInProgress()
                  self?.onNeedsAnalysisTap()
              }
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
         case .progressAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              view.updateLayoutForInProgress()
              return view
@@ -357,29 +353,14 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
                 TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
                 return view
 
             case .analysisInProgress:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.analysisProgressViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
                 return view
             }
-        }
-    }
-
-    private func onAnalysisStatusChange(sender: UIView?) {
-        guard viewModel.analysisStatus?.isAnalyzing == true else {
-            ensureMainThread {
-                sender?.removeFromSuperview()
-            }
-            return
         }
     }
 
