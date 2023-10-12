@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "dip",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AliSoftware/Dip.git",
-      "state" : {
-        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
-        "version" : "7.1.1"
-      }
-    },
-    {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nbhasin2/Fuzi.git",
@@ -64,15 +55,6 @@
       }
     },
     {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher.git",
-      "state" : {
-        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
-        "version" : "7.9.1"
-      }
-    },
-    {
       "identity" : "mappamundi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
@@ -106,15 +88,6 @@
       "state" : {
         "revision" : "f222cbdf325885926566172f6f5f06af95473158",
         "version" : "5.6.0"
-      }
-    },
-    {
-      "identity" : "swiftybeaver",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
-      "state" : {
-        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
-        "version" : "2.0.0"
       }
     },
     {
