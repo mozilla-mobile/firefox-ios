@@ -1515,7 +1515,7 @@ workflows:
                 echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
                 echo "The files in $PRODUCTS_DIR are:"
                 ls -l "$PRODUCTS_DIR"
-                echo "The available test plans in this environment are:"
+                echo "The available test plans for this scheme are:"
                 awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
                     $PROJECT/xcshareddata/xcschemes/$SCHEME.xcscheme | \
                     grep "reference" | \
