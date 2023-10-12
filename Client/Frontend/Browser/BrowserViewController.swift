@@ -230,7 +230,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     func openTabNotification(notification: Notification) {
-        // TODO: remove this notification with FXIOS-7550
+        // Remove this notification only used for debug settings with FXIOS-7550
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
