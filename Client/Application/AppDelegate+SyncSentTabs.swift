@@ -15,31 +15,32 @@ extension UIApplication {
     }
 }
 
-/**
- Sent tabs can be displayed not only by receiving push notifications, but by sync.
- Sync will get the list of sent tabs, and try to display any in that list.
- Thus, push notifications are not needed to receive sent tabs, they can be handled
- when the app performs a sync.
- */
+/// Sent tabs can be displayed not only by receiving push notifications, but by sync.
+/// Sync will get the list of sent tabs, and try to display any in that list.
+/// Thus, push notifications are not needed to receive sent tabs, they can be handled
+/// when the app performs a sync.
 class AppSendTabDelegate: SendTabDelegate {
     private let app: UIApplication
     private let logger: Logger
     private var applicationHelper: ApplicationHelper
+    private var mainQueue: DispatchQueueInterface
 
     init(app: UIApplication,
          logger: Logger = DefaultLogger.shared,
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.app = app
         self.logger = logger
         self.applicationHelper = applicationHelper
+        self.mainQueue = mainQueue
     }
 
     func openSendTabs(for urls: [URL]) {
-        DispatchQueue.main.async {
+        mainQueue.async {
             guard self.app.applicationState == .active else { return }
-            // TODO: Laurie check what happens with multiple URLs
+
             for urlToOpen in urls {
-                let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)}"
+                let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"
                 guard let url = URL(string: urlString) else { continue }
                 self.applicationHelper.open(url)
             }
