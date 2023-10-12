@@ -19369,7 +19369,7 @@
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
 			requirement = {
 				kind = exactVersion;
-				version = 4.33.4;
+				version = 4.35.2;
 			};
 		};
 		433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */ = {
