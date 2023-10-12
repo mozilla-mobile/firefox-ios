@@ -33,4 +33,5 @@ extension AppState {
 
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [ThemeManagerMiddleware().themeManagerProvider])
+                  middlewares: [ThemeManagerMiddleware().themeManagerProvider,
+                                RemoteTabsPanelMiddleware().remoteTabsPanelProvider])

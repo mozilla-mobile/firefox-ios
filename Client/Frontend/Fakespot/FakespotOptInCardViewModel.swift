@@ -24,7 +24,9 @@ struct FakespotOptInCardViewModel {
     let headerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
     let bodyFirstParagraphLabel: String = .Shopping.OptInCardCopy
     let bodyFirstParagraphA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
-    let disclaimerTextLabel: String = .Shopping.OptInCardDisclaimerText
+    let disclaimerTextLabel = String(format: .Shopping.OptInCardDisclaimerText,
+                                     FakespotName.shortName.rawValue,
+                                     MozillaName.shortName.rawValue)
     let disclaimerTextLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
 
     // MARK: Buttons
@@ -53,6 +55,9 @@ struct FakespotOptInCardViewModel {
          tabManager: TabManager = AppContainer.shared.resolve()) {
         self.tabManager = tabManager
         prefs = profile.prefs
+
+        prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptInSeen)
+        FakespotUtils().addSettingTelemetry()
     }
 
     // MARK: Actions
@@ -111,7 +116,13 @@ struct FakespotOptInCardViewModel {
                                                           size: UX.bodyFirstParagraphLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyFirstParagraphLabelFontSize)
-        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel, websites[0], websites[1], websites[2])
+        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel,
+                                                         websites[0],
+                                                         websites[1],
+                                                         websites[2],
+                                                         AppName.shortName.rawValue,
+                                                         FakespotName.shortName.rawValue,
+                                                         MozillaName.shortName.rawValue)
         return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
     }
 

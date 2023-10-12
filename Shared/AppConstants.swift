@@ -21,6 +21,22 @@ public enum PocketAppName: String, CustomStringConvertible {
     }
 }
 
+public enum FakespotName: String, CustomStringConvertible {
+    case shortName = "Fakespot"
+
+    public var description: String {
+        return self.rawValue
+    }
+}
+
+public enum MozillaName: String, CustomStringConvertible {
+    case shortName = "Mozilla"
+
+    public var description: String {
+        return self.rawValue
+    }
+}
+
 public enum KVOConstants: String {
     case loading
     case estimatedProgress

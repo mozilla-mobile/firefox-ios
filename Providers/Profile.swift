@@ -119,8 +119,10 @@ protocol Profile: AnyObject {
     func removeAccount()
 
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
-    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+
+    func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
+    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
 
     func cleanupHistoryIfNeeded()
 
@@ -538,10 +540,17 @@ open class BrowserProfile: Profile {
         return self.syncManager.syncTabs() >>> { self.retrieveTabData() }
     }
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+        let deferredResponse = self.syncManager.syncTabs() >>> { self.retrieveTabData() }
+        deferredResponse.upon { result in
+            completion(result.successValue)
+        }
+    }
+
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
         let defferedResponse = self.retrieveTabData()
         defferedResponse.upon { result in
-            completion(result.successValue ?? [])
+            completion(result.successValue)
         }
     }
 

@@ -154,7 +154,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return await withCheckedContinuation { continuation in
             // Get cached tabs
             profile.getCachedClientsAndTabs { result in
-                continuation.resume(returning: result)
+                continuation.resume(returning: result ?? [])
             }
         }
     }
