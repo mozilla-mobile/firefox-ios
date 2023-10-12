@@ -487,6 +487,9 @@ class BrowserViewController: UIViewController,
         profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
     }
 
     private func setupAccessibleActions() {

@@ -30,7 +30,13 @@ class FakespotSettingsCardViewModel {
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
-        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn) }
+        set {
+            prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023OptIn)
+
+            if !newValue {
+                prefs.setBool(true, forKey: PrefsKeys.Shopping2023ExplicitOptOut)
+            }
+        }
     }
 
     var areAdsEnabled: Bool {
@@ -57,14 +63,6 @@ class FakespotSettingsCardViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
         dismissViewController?(.interactionWithALink)
-    }
-
-    func recordTelemetryForShoppingOptedOut() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .shoppingSettingsCardTurnOffButton
-        )
     }
 }
 
@@ -209,8 +207,11 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     @objc
     private func didTapTurnOffButton() {
         viewModel?.isReviewQualityCheckOn = false
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
+
         viewModel?.dismissViewController?(.optingOutOfTheFeature)
-        viewModel?.recordTelemetryForShoppingOptedOut()
     }
 
     // MARK: - Theming System
