@@ -412,6 +412,7 @@ extension TelemetryWrapper {
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
         case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
+        case shoppingSurfaceStaleAnalysisShown = "shopping-surface-stale-analysis-shown"
         case shoppingNimbusDisabled = "shopping-nimbus-disabled"
         case shoppingComponentOptedOut = "shopping-component-opted-out"
         case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
@@ -1120,6 +1121,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
         case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
+            GleanMetrics.Shopping.surfaceStaleAnalysisShown.record()
         case(.information, .settings, .shoppingNimbusDisabled, _, let extras):
             if let isDisabled = extras?[EventExtraKey.Shopping.isNimbusDisabled.rawValue]
                 as? Bool {

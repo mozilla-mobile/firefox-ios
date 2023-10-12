@@ -383,6 +383,11 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceReanalyzeClicked)
     }
 
+    func test_shoppingShoppingSurfaceStaleAnalysisShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceStaleAnalysisShown)
+    }
+
     func test_shoppingNimbusDisabled_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .information,

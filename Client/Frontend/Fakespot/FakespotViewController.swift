@@ -360,6 +360,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 viewModel.onAnalysisStatusChange = { [weak view, weak self] in
                     self?.onAnalysisStatusChange(sender: view)
                 }
+                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
                 return view
 
             case .analysisInProgress:

@@ -877,7 +877,19 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-05"
-    
+
+  surface_stale_analysis_shown:
+    type: event
+    description: |
+      Records an event when the "New info to check" card is shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16632
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16782
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
 shopping.settings:
   nimbus_disabled_shopping:
     type: boolean
